@@ -40,6 +40,12 @@ love.update = function(dt)
    elseif(love.keyboard.isDown("right")) then
       player.heading = player.heading - dt
    end
+
+   for _, b in ipairs(bodies) do
+      local ddx, ddy = body.gravitate(b, player.x, player.y)
+      player.dx = player.dx + ddx
+      player.dy = player.dy + ddy
+   end
 end
 
 love.draw = function()
