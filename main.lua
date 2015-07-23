@@ -2,12 +2,15 @@ local breen = {w = love.graphics:getWidth(),
                h = love.graphics:getHeight()}
 
 local starfield = require "starfield"
+local body = require "body"
 
-local player = {x = breen.w / 2,
-                y = breen.h / 2,
-                dx = 0,
-                dy = 0,
+local bodies = body.load()
+
+local player = {x = 0, y = 0,
+                dx = 0, dy = 0,
                 heading = math.pi, }
+
+local scale = 0.2
 
 love.load = function()
    breen.star1 = starfield.new(10, breen.w, breen.h, 1, 100)
@@ -26,22 +29,16 @@ love.update = function(dt)
       player.dy = player.dy + (math.cos(player.heading) * dt)
    end
 
-   if(love.keyboard.isDown("down")) then
-      local reverse = math.atan(player.dx / player.dy)
-      if(reverse - player.heading < 0) then
-         player.heading = player.heading - dt
-      else
-         player.heading = player.heading + dt
-      end
-   elseif(love.keyboard.isDown("left")) then
+   if(love.keyboard.isDown("=")) then
+      scale = scale + (dt * 0.5)
+   elseif(love.keyboard.isDown("-")) then
+      scale = scale - (dt * 0.5)
+   end
+
+   if(love.keyboard.isDown("left")) then
       player.heading = player.heading + dt
    elseif(love.keyboard.isDown("right")) then
       player.heading = player.heading - dt
-   end
-   if(player.heading > math.pi) then -- TODO: got to be a better way for this
-      player.heading = player.heading - (2 * math.pi)
-   elseif(player.heading < -math.pi) then
-      player.heading = player.heading + (2 * math.pi)
    end
 end
 
@@ -50,8 +47,14 @@ love.draw = function()
    starfield.render(breen.star2, player.x, player.y)
    starfield.render(breen.star3, player.x, player.y)
 
-   love.graphics.setColor(255, 50, 50);
    love.graphics.translate(breen.w / 2, breen.h / 2)
+   love.graphics.scale(scale, scale)
+
+   for _, b in ipairs(bodies) do
+      body.draw(b, player.x, player.y)
+   end
+
+   love.graphics.setColor(255, 50, 50);
    love.graphics.rotate(math.pi - player.heading)
-   love.graphics.triangle("fill", 0, -10, -3, 10, 3, 10)
+   love.graphics.triangle("fill", 0, -30, -20, 50, 20, 50)
 end
