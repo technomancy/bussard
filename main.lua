@@ -27,11 +27,21 @@ love.update = function(dt)
    end
 
    if(love.keyboard.isDown("down")) then
-      -- turn towards reverse
+      local reverse = math.atan(player.dx / player.dy)
+      if(reverse - player.heading < 0) then
+         player.heading = player.heading - dt
+      else
+         player.heading = player.heading + dt
+      end
    elseif(love.keyboard.isDown("left")) then
       player.heading = player.heading + dt
    elseif(love.keyboard.isDown("right")) then
       player.heading = player.heading - dt
+   end
+   if(player.heading > math.pi) then -- TODO: got to be a better way for this
+      player.heading = player.heading - (2 * math.pi)
+   elseif(player.heading < -math.pi) then
+      player.heading = player.heading + (2 * math.pi)
    end
 end
 
