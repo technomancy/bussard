@@ -3,3 +3,6 @@ check:
 
 run:
 	love .
+
+count:
+	cloc *.lua

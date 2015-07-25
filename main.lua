@@ -20,7 +20,7 @@ local bodies = body.load()
 
 local hud = require "hud"
 
-local scale = 1
+local scale = 0.5
 local paused = false
 
 local font = love.graphics.newFont("jura-demibold.ttf", 20)
