@@ -1,6 +1,7 @@
 -- love-repl - an interactive lua repl for love games
 -- Copyright (c) 2013-2014 ioddly
 -- Released under the Boost License: <http://www.boost.org/LICENSE_1_0.txt>
+-- Adapted for love 0.8.0 by Phil Hagelberg
 
 -- Module
 local repl = {
@@ -41,8 +42,6 @@ local editline = ""
 local cursor = 0
 -- Current position in history
 local histpos = 0
--- Save the game's keyboard settings
-local kprepeat
 -- Line display offset (in case of scrolling up and down)
 local offset = 1
 
@@ -122,9 +121,9 @@ end
 
 function repl.on_close() end
 
-function repl.append(history, value)
+function repl.append(h, value)
    value = tostring(value)
-   lines:append(history and ('> ' .. value) or value)
+   lines:append(h and ('> ' .. value) or value)
 end
 
 function repl.print(text)
@@ -181,7 +180,7 @@ function repl.eval(text, add_to_history)
    return false
 end
 
-function repl.mousepressed(x, y, button)
+function repl.mousepressed(_, _, button)
    if button == 'wu' then
       if offset <= (lines.entries - DISPLAY_ROWS) then
          offset = offset + 1
@@ -209,9 +208,8 @@ local function get_history()
 end
 
 local function ctrlp() return love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl') end
-local function shiftp() return love.keyboard.isDown('lshift') or love.keyboard.isDown('rshift') end
 
-function repl.keypressed(k, isrepeat)
+function repl.keypressed(k)
    -- Line editing
    if k == 'backspace' then
       editline = editline:sub(0, cursor - 1) .. editline:sub(cursor + 1, #editline)
@@ -295,7 +293,6 @@ function repl.draw()
    end
 
    -- Leave some room for text entry
-   local width, height = love.graphics:getWidth(), love.graphics:getHeight()
    local limit = height - (ROW_HEIGHT * 2)
 
    -- print edit line
@@ -312,12 +309,12 @@ function repl.draw()
    -- maximum characters in a rendered line of text
 
 
-   local render_line = function(ln, row)
-      love.graphics.print(ln, repl.padding_left, limit - (ROW_HEIGHT * (row + 1)))
+   local render_line = function(ln2, row)
+      love.graphics.print(ln2, repl.padding_left, limit - (ROW_HEIGHT * (row + 1)))
    end
 
-   local render_lines = function(ln, row, rows)
-      love.graphics.printf(ln, repl.padding_left, limit - (ROW_HEIGHT * (row + rows)), DISPLAY_WIDTH)
+   local render_lines = function(ln2, row, rows)
+      love.graphics.printf(ln2, repl.padding_left, limit - (ROW_HEIGHT * (row + rows)), DISPLAY_WIDTH)
    end
 
    if repl.wrapping then

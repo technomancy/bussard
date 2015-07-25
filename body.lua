@@ -12,15 +12,10 @@ return {
                   "Earth")}
    end,
 
-   draw = function(body, x, y, selected)
+   draw = function(body, x, y)
       local bx = body.x - body.image:getWidth() / 2
       local by = body.y - body.image:getHeight() / 2
       love.graphics.draw(body.image, bx - x, by - y)
-      love.graphics.setColor(100, 100, 100);
-      if(selected) then
-         love.graphics.rectangle("line", body.x, body.y,
-                                 body.image:getWidth(), body.image:getHeight())
-      end
    end,
 
    gravitate = function(body, x, y)

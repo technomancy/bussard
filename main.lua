@@ -20,7 +20,7 @@ local hud = require "hud"
 local scale = 5
 local paused = false
 
-local font = love.graphics.newFont("jura-demibold.ttf", font_size)
+local font = love.graphics.newFont("jura-demibold.ttf", 24)
 love.graphics.setFont(font)
 
 repl = require "love-repl"
@@ -97,5 +97,5 @@ love.draw = function()
 
    love.graphics.pop()
    love.graphics.setColor(255, 255, 255);
-   hud.render(w,h, player, bodies[player.target])
+   hud.render(player, bodies[player.target])
 end
