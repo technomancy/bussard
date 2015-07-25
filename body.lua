@@ -1,15 +1,18 @@
--- x, y, gravity, image
-local new = function(x, y, gravity, image, name)
-   return {x = x, y = y, gravity = gravity, image = image, name = name}
+local new = function(x, y, dx, dy, mass, scale, image, name)
+   return {x = x, y = y, dx = 0, dy = 0,
+           mass = mass, scale = scale,
+           image = image, name = name}
 end
 
 local g = 0.02
-local distance_factor = 20
+local distance_factor = 100
 
 return {
    load = function()
-      return {new(0, 0, 12, love.graphics.newImage('assets/planet-1.png'),
-                  "Earth")}
+      return {new(3500, 0, 0, 50000, 5, 0.3,
+                  love.graphics.newImage('assets/planet-1.png'), "Earth"),
+              new(0, 0, 0, 0, 30, 1,
+                  love.graphics.newImage('assets/sun.png'), "Sol")}
    end,
 
    draw = function(body, x, y)
@@ -19,11 +22,11 @@ return {
    end,
 
    gravitate = function(body, x, y)
-      local dx = x -- TODO: don't assume body lies at origin
-      local dy = y
+      local dx = x - body.x
+      local dy = y - body.x
       local distance = math.sqrt(dx*dx + dy*dy)
       local theta = math.atan2(dx, dy) + math.pi
-      local f = (body.gravity * g) / math.log(distance * distance_factor)
+      local f = (body.mass * g) / math.log(distance * distance_factor)
       return (f * math.sin(theta)), (f * math.cos(theta))
    end,
 }
