@@ -1,5 +1,5 @@
 local hud_text = "speed: %0.2f | target: %s | distance: %0.2f " ..
-   "| pos: %5.2f %5.2f"
+   "| fuel: %0.2f | pos: %5.2f %5.2f"
 local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 
 return {
@@ -14,6 +14,7 @@ return {
       end
 
       love.graphics.print(string.format(hud_text, speed, target_name,
-                                        distance, player.x, player.y), 5, 5)
+                                        distance, player.fuel,
+                                        player.x, player.y), 5, 5)
    end
 }

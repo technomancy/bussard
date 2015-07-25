@@ -5,7 +5,10 @@ player = { x = 0, y = 0,
            heading = math.pi,
            engine = 3,
            turning = 3,
-           target = 0 }
+           target = 0,
+           fuel = 100,
+           mass = 1,
+}
 
 local starfield = require "starfield"
 local star1 = starfield.new(10, w, h, 0.01, 100)
@@ -37,9 +40,12 @@ love.update = function(dt)
 
    if(paused or repl.toggled()) then return end
 
-   if(love.keyboard.isDown("up")) then
+   if(love.keyboard.isDown("up") and player.fuel > 0) then
       player.dx = player.dx + (math.sin(player.heading) * dt * player.engine)
       player.dy = player.dy + (math.cos(player.heading) * dt * player.engine)
+      player.fuel = player.fuel - 0.5
+   elseif(player.fuel < 100) then
+      player.fuel = player.fuel + 0.1
    end
 
    if(love.keyboard.isDown("left")) then
