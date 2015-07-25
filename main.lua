@@ -1,5 +1,13 @@
-local starfield = require "starfield"
 local w,h = love.graphics:getWidth(), love.graphics:getHeight()
+
+player = { x = 0, y = 0,
+           dx = 0, dy = -2,
+           heading = math.pi,
+           engine = 300,
+           turning = 3,
+           target = 0 }
+
+local starfield = require "starfield"
 local star1 = starfield.new(10, w, h, 0.1, 100)
 local star2 = starfield.new(10, w, h, 0.5, 175)
 local star3 = starfield.new(10, w, h, 1, 255)
@@ -7,20 +15,21 @@ local star3 = starfield.new(10, w, h, 1, 255)
 local body = require "body"
 local bodies = body.load()
 
-local player = { x = 0, y = 0,
-                 dx = 0, dy = -2,
-                 heading = math.pi,
-                 engine = 300,
-                 turning = 3,
-                 target = 0 }
-
 local hud = require "hud"
 
 local scale = 5
 local paused = false
 
+local font = love.graphics.newFont("jura-demibold.ttf", font_size)
+love.graphics.setFont(font)
+
+repl = require "love-repl"
+
+repl.font = font
+love.load = repl.initialize
+
 love.update = function(dt)
-   if(paused) then return end
+   if(paused or repl.toggled()) then return end
 
    if(love.keyboard.isDown("up")) then
       player.dx = player.dx + (math.sin(player.heading) * dt)
@@ -50,15 +59,23 @@ love.update = function(dt)
 end
 
 love.keypressed = function(key)
-   if(key == "escape") then love.event.push('quit')
+   if(repl.toggled() and key:len() == 1) then repl.textinput(key)
+   elseif(repl.toggled() and key:len() > 1) then repl.keypressed(key)
+   elseif(key == "escape") then love.event.push('quit')
    elseif(key == "p") then paused = not paused
    elseif(key == "tab") then
       player.target = player.target + 1
       if(player.target > #bodies) then player.target = 0 end
+   elseif(key == "f2") then repl.toggle()
    end
 end
 
 love.draw = function()
+   if(repl.toggled()) then
+      repl.draw()
+      return
+   end
+
    starfield.render(star1, player.x, player.y)
    starfield.render(star2, player.x, player.y)
    starfield.render(star3, player.x, player.y)
