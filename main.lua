@@ -20,7 +20,7 @@ local bodies = body.load()
 
 local hud = require "hud"
 
-local scale = 50
+local scale = 1
 local paused = false
 
 local font = love.graphics.newFont("jura-demibold.ttf", 20)
@@ -32,10 +32,10 @@ repl.font = font
 love.load = repl.initialize
 
 love.update = function(dt)
-   if(love.keyboard.isDown("-")) then
-      scale = scale + dt
-   elseif(love.keyboard.isDown("=") and scale > dt * 0.5) then
-      scale = scale - dt
+   if(love.keyboard.isDown("=")) then
+      scale = scale + (dt / 2)
+   elseif(love.keyboard.isDown("-") and scale > dt * 0.5) then
+      scale = scale - (dt / 2)
    end
 
    if(paused or repl.toggled()) then return end
@@ -54,23 +54,26 @@ love.update = function(dt)
       player.heading = player.heading - (dt * player.turning)
    end
 
+   -- calculate movement
    player.x = player.x + (player.dx * dt * 100)
    player.y = player.y + (player.dy * dt * 100)
 
    for _, b in ipairs(bodies) do
       b.x = b.x + (b.dx * dt * 50)
       b.y = b.y + (b.dy * dt * 50)
-      local ddx, ddy = body.gravitate(b, player.x, player.y)
+      local ddx, ddy = body.gravitate(b, player.x, player.y, player.mass)
       player.dx = player.dx + ddx
       player.dy = player.dy + ddy
       for _, b2 in ipairs(bodies) do
-         local ddx, ddy = body.gravitate(b, b2.x, b2.y)
+         local ddx, ddy = body.gravitate(b, b2.x, b2.y, b2.mass)
+         b2.theta_v = theta
          b2.dx = b2.dx + ddx
          b2.dy = b2.dy + ddy
       end
    end
 end
 
+-- for commands that don't need repeat
 love.keypressed = function(key)
    if(repl.toggled() and key:len() == 1) then repl.textinput(key)
    elseif(repl.toggled() and key:len() > 1) then repl.keypressed(key)
@@ -84,10 +87,7 @@ love.keypressed = function(key)
 end
 
 love.draw = function()
-   if(repl.toggled()) then
-      repl.draw()
-      return
-   end
+   if(repl.toggled()) then repl.draw() return end
 
    starfield.render(star1, player.x, player.y)
    starfield.render(star2, player.x, player.y)
@@ -98,7 +98,7 @@ love.draw = function()
 
    love.graphics.push()
    love.graphics.translate(w / 2, h / 2)
-   love.graphics.scale(1/scale, 1/scale)
+   love.graphics.scale(scale*scale, scale*scale)
 
    for i, b in ipairs(bodies) do
       body.draw(b, player.x, player.y, i == player.target)
