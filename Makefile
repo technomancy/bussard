@@ -1,8 +1,8 @@
-check:
-	luacheck --no-color -g *.lua
-
 run:
 	love .
+
+check:
+	luacheck --no-color -g *.lua
 
 count:
 	cloc *.lua

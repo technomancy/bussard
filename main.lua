@@ -74,15 +74,16 @@ love.update = function(dt)
 end
 
 -- for commands that don't need repeat
-love.keypressed = function(key)
-   if(repl.toggled() and key:len() == 1) then repl.textinput(key)
+love.keypressed = function(key, unicode)
+   if(repl.toggled() and key:len() == 1) then repl.textinput(string.char(unicode))
+   elseif(repl.toggled() and key == "escape") then repl.toggle()
    elseif(repl.toggled() and key:len() > 1) then repl.keypressed(key)
    elseif(key == "escape") then love.event.push('quit')
    elseif(key == "p") then paused = not paused
    elseif(key == "tab") then
       player.target = player.target + 1
       if(player.target > #bodies) then player.target = 0 end
-   elseif(key == "f2") then repl.toggle()
+   elseif(key == "`" and love.keyboard.isDown("lshift")) then repl.toggle()
    end
 end
 

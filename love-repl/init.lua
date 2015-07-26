@@ -10,8 +10,7 @@ local repl = {
    _URL = "https://github.com/ioddly/love-repl",
    _LICENSE = "Boost 1.0",
 
-   toggle_key = 'f2',
-   clear_key = 'escape',
+   toggle_key = 'escape',
    padding_left = 10,
    max_lines = 1000,
    max_history = 1000,
@@ -243,7 +242,7 @@ function repl.keypressed(k)
       offset = math.min(lines.entries - DISPLAY_ROWS + 1, offset + DISPLAY_ROWS)
    elseif k == 'pagedown' then
       offset = math.max(1, offset - DISPLAY_ROWS)
-   elseif k == repl.clear_key then
+   elseif k == "l" and ctrlp() then
       reset_editline()
    elseif k == 'down' then
       if histpos - 1 > 0 then

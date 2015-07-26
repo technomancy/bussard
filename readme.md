@@ -6,7 +6,14 @@ Spaceships, planets, orbits, etc. in Lua.
 
 ## Usage
 
-Use `make run` to launch. Requires [LÖVE](http://love2d.org) 0.8.0.
+Use `make` to launch.
+
+* `up` to accelerate
+* `left`/`right` to turn
+* `+`/`-` to zoom
+* `~` to enter the repl
+
+Requires [LÖVE](http://love2d.org) 0.8.0.
 
 ## License
 
