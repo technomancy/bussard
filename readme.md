@@ -10,8 +10,9 @@ Use `make` to launch.
 
 * `up` to accelerate
 * `left`/`right` to turn
+* `enter` to land
 * `+`/`-` to zoom
-* `~` to enter the repl
+* `~` to activate the repl
 
 Requires [LÖVE](http://love2d.org) 0.8.0.
 

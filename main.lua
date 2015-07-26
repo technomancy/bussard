@@ -1,4 +1,11 @@
+local body = require "body"
+local starfield = require "starfield"
+local hud = require "hud"
+repl = require "love-repl"
+
 local w,h = love.graphics:getWidth(), love.graphics:getHeight()
+
+bodies = body.load()
 
 player = { x = 0, y = 0,
            dx = 0, dy = -2,
@@ -8,17 +15,12 @@ player = { x = 0, y = 0,
            target = 0,
            fuel = 100,
            mass = 1,
+           landed = false,
 }
 
-local starfield = require "starfield"
 local star1 = starfield.new(10, w, h, 0.01, 100)
 local star2 = starfield.new(10, w, h, 0.05, 175)
 local star3 = starfield.new(10, w, h, 0.1, 255)
-
-local body = require "body"
-local bodies = body.load()
-
-local hud = require "hud"
 
 local scale = 0.5
 local paused = false
@@ -26,10 +28,25 @@ local paused = false
 local font = love.graphics.newFont("jura-demibold.ttf", 20)
 love.graphics.setFont(font)
 
-repl = require "love-repl"
-
 repl.font = font
 love.load = repl.initialize
+
+calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
+
+local landing_speed_max = 10
+
+local can_land = function(player)
+   local target = bodies[player.target]
+   local dist_max = target and target.image:getWidth() / 2
+   print(target and (not player.landed) and target.can_land)
+   print(calculate_distance(player.dx - target.dx, player.dy - target.dy))
+   print(calculate_distance(player.x - target.x, player.y - target.y))
+   return(target and (not player.landed) and target.can_land and
+             (calculate_distance(player.dx - target.dx, player.dy - target.dy))
+             < landing_speed_max and
+             (calculate_distance(player.x - target.x, player.y - target.y)) <
+             dist_max)
+end
 
 love.update = function(dt)
    if(love.keyboard.isDown("=")) then
@@ -38,7 +55,7 @@ love.update = function(dt)
       scale = scale - (dt / 2)
    end
 
-   if(paused or repl.toggled()) then return end
+   if(paused or repl.toggled() or player.landed) then return end
 
    if(love.keyboard.isDown("up") and player.fuel > 0) then
       player.dx = player.dx + (math.sin(player.heading) * dt * player.engine)
@@ -78,6 +95,8 @@ love.keypressed = function(key, unicode)
    if(repl.toggled() and key:len() == 1) then repl.textinput(string.char(unicode))
    elseif(repl.toggled() and key == "escape") then repl.toggle()
    elseif(repl.toggled() and key:len() > 1) then repl.keypressed(key)
+   elseif(key == "return" and can_land(player)) then player.landed = bodies[player.target]
+   elseif(player.landed and key == "escape") then player.landed = false
    elseif(key == "escape") then love.event.push('quit')
    elseif(key == "p") then paused = not paused
    elseif(key == "tab") then
@@ -112,4 +131,12 @@ love.draw = function()
    love.graphics.pop()
    love.graphics.setColor(255, 255, 255);
    hud.render(player, bodies[player.target])
+
+   if(player.landed) then
+      love.graphics.setColor(0,0,0, 200);
+      love.graphics.rectangle("fill", 100, 100, 400, 300)
+      love.graphics.setColor(255, 255, 255);
+      love.graphics.rectangle("line", 100, 100, 400, 300)
+      love.graphics.print("You landed on " .. player.landed.name, 150, 150)
+   end
 end
