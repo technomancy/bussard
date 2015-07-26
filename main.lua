@@ -38,10 +38,7 @@ local landing_speed_max = 10
 local can_land = function(player)
    local target = bodies[player.target]
    local dist_max = target and target.image:getWidth() / 2
-   print(target and (not player.landed) and target.can_land)
-   print(calculate_distance(player.dx - target.dx, player.dy - target.dy))
-   print(calculate_distance(player.x - target.x, player.y - target.y))
-   return(target and (not player.landed) and target.can_land and
+   return(target and (not player.landed) and target.description and
              (calculate_distance(player.dx - target.dx, player.dy - target.dy))
              < landing_speed_max and
              (calculate_distance(player.x - target.x, player.y - target.y)) <
@@ -95,7 +92,8 @@ love.keypressed = function(key, unicode)
    if(repl.toggled() and key:len() == 1) then repl.textinput(string.char(unicode))
    elseif(repl.toggled() and key == "escape") then repl.toggle()
    elseif(repl.toggled() and key:len() > 1) then repl.keypressed(key)
-   elseif(key == "return" and can_land(player)) then player.landed = bodies[player.target]
+   elseif(key == "return" and can_land(player)) then
+      player.landed = bodies[player.target]
    elseif(player.landed and key == "escape") then player.landed = false
    elseif(key == "escape") then love.event.push('quit')
    elseif(key == "p") then paused = not paused
@@ -137,6 +135,7 @@ love.draw = function()
       love.graphics.rectangle("fill", 100, 100, 400, 300)
       love.graphics.setColor(255, 255, 255);
       love.graphics.rectangle("line", 100, 100, 400, 300)
-      love.graphics.print("You landed on " .. player.landed.name, 150, 150)
+      love.graphics.print("You landed on " .. player.landed.name .. "\n\n" ..
+                             player.landed.description, 150, 150)
    end
 end

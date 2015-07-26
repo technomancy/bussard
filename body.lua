@@ -1,6 +1,6 @@
-local new = function(x, y, dx, dy, mass, image, name, can_land)
+local new = function(x, y, dx, dy, mass, image, name, description)
    return {x = x, y = y, dx = dx, dy = dy,
-           mass = mass, image = image, name = name, can_land = can_land}
+           mass = mass, image = image, name = name, description = description,}
 end
 
 local g = 0.002
@@ -9,7 +9,8 @@ local distance_factor = 10000
 return {
    load = function()
       return {new(3500, 0, 0, 20, 5,
-                  love.graphics.newImage('assets/planet-1.png'), "Earth", true),
+                  love.graphics.newImage('assets/planet-1.png'), "Earth",
+                 "This is a pretty great planet."),
               new(0, 0, 0, 0, 30,
                   love.graphics.newImage('assets/sun.png'), "Sol")}
    end,
