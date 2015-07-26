@@ -59,7 +59,7 @@ love.update = function(dt)
       player.dy = player.dy + (math.cos(player.heading) * dt * player.engine)
       player.fuel = player.fuel - 0.5
    elseif(player.fuel < 100) then
-      player.fuel = player.fuel + 0.1
+      player.fuel = player.fuel + 0.05
    end
 
    if(love.keyboard.isDown("left")) then

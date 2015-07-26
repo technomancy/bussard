@@ -1,6 +1,6 @@
-local hud_text = "speed: %0.2f | pos: %5.2f %5.2f\n" ..
-   "target: %s | distance: %0.2f\n" ..
-   "fuel: %0.2f"
+local hud_text = "speed: %0.2f | pos: %5.2f, %5.2f\n" ..
+   "target: %s | distance: %0.2f"
+
 local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 
 return {
@@ -14,9 +14,14 @@ return {
          target_name, distance = "none", 0
       end
 
-      -- TODO: graphical fuel readout
       love.graphics.print(string.format(hud_text, speed, player.x, player.y,
-                                        target_name, distance, player.fuel),
+                                        target_name, distance),
                           5, 5)
+
+      -- fuel readout
+      love.graphics.setColor(255, 50, 50);
+      love.graphics.rectangle("fill", 5, 50, player.fuel * 2, 20)
+      love.graphics.setColor(255, 200, 200);
+      love.graphics.rectangle("line", 5, 50, 200, 20)
    end
 }
