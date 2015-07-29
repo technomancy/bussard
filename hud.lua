@@ -3,6 +3,8 @@ local hud_text = "speed: %0.2f | pos: %5.2f, %5.2f\n" ..
 
 local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 
+local vector_size = 50
+
 return {
    render = function(player, target)
       local speed = calculate_distance(player.dx, player.dy)
@@ -20,8 +22,23 @@ return {
 
       -- fuel readout
       love.graphics.setColor(255, 50, 50);
-      love.graphics.rectangle("fill", 5, 50, player.fuel * 2, 20)
+      love.graphics.rectangle("fill", 5, 50, math.min(player.fuel * 2, 200), 20)
       love.graphics.setColor(255, 200, 200);
       love.graphics.rectangle("line", 5, 50, 200, 20)
-   end
+   end,
+
+   vector = function(x, y, at_x, at_y)
+      local half = vector_size / 2
+      love.graphics.push()
+      love.graphics.setColor(255, 255, 255);
+      love.graphics.rectangle("line", at_x, at_y, vector_size, vector_size)
+      love.graphics.setLineWidth(3)
+      love.graphics.setColor(50, 255, 50);
+      -- TODO: scale length of vector non-linearly
+      love.graphics.line(at_x + half, at_y + half,
+                         at_x + half + x, at_y + half + y)
+      love.graphics.pop()
+   end,
+
+   vector_size = vector_size,
 }

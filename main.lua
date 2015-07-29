@@ -7,8 +7,8 @@ local w,h = love.graphics:getWidth(), love.graphics:getHeight()
 
 bodies = body.load()
 
-player = { x = 0, y = 0,
-           dx = 0, dy = -2,
+player = { x = -200, y = 0,
+           dx = 0, dy = 0,
            heading = math.pi,
            engine = 3,
            turning = 3,
@@ -16,6 +16,7 @@ player = { x = 0, y = 0,
            fuel = 100,
            mass = 1,
            landed = false,
+           gravitate = true,
 }
 
 local star1 = starfield.new(10, w, h, 0.01, 100)
@@ -75,9 +76,11 @@ love.update = function(dt)
    for _, b in ipairs(bodies) do
       b.x = b.x + (b.dx * dt * 50)
       b.y = b.y + (b.dy * dt * 50)
-      local ddx, ddy = body.gravitate(b, player.x, player.y, player.mass)
-      player.dx = player.dx + ddx
-      player.dy = player.dy + ddy
+      if(player.gravitate) then
+         local ddx, ddy = body.gravitate(b, player.x, player.y, player.mass)
+         player.dx = player.dx + ddx
+         player.dy = player.dy + ddy
+      end
       for _, b2 in ipairs(bodies) do
          local ddx, ddy = body.gravitate(b, b2.x, b2.y, b2.mass)
          b2.theta_v = theta
@@ -111,13 +114,20 @@ love.draw = function()
    starfield.render(star2, player.x, player.y)
    starfield.render(star3, player.x, player.y)
 
-   -- momentum indicator
-   love.graphics.circle("fill", player.dx * 20 + w/2, h/2 + player.dy * 20, 1)
-
    love.graphics.push()
    love.graphics.translate(w / 2, h / 2)
-   love.graphics.scale(scale*scale, scale*scale)
+   love.graphics.scale(scale*scale)
 
+   if(bodies[player.target]) then -- directional target indicator
+      love.graphics.setLineWidth(scale*scale*5) -- TODO: scale linearly
+      local px, py = bodies[player.target].x, bodies[player.target].y
+      local dx, dy = px - player.x, py - player.y
+      love.graphics.setColor(10, 100, 10)
+      love.graphics.line(0, 0, dx, dy)
+      love.graphics.setLineWidth(1)
+   end
+
+   love.graphics.setColor(255, 255, 255)
    for i, b in ipairs(bodies) do
       body.draw(b, player.x, player.y, i == player.target)
    end
@@ -127,8 +137,12 @@ love.draw = function()
    love.graphics.triangle("fill", 0, -30, -20, 50, 20, 50)
 
    love.graphics.pop()
+   love.graphics.setLineWidth(1)
+
    love.graphics.setColor(255, 255, 255);
    hud.render(player, bodies[player.target])
+   hud.vector(player.dx, player.dy, w - 10 - hud.vector_size, 10)
+   -- TODO: show velocity of target body
 
    if(player.landed) then
       love.graphics.setColor(0,0,0, 200);
