@@ -5,9 +5,9 @@ repl = require "love-repl"
 
 local w,h = love.graphics:getWidth(), love.graphics:getHeight()
 
-bodies = body.load()
+bodies = bodies or {}
 
-player = { x = -200, y = 0,
+player = player or { x = -200, y = 0,
            dx = 0, dy = 0,
            heading = math.pi,
            engine = 3,
@@ -19,18 +19,12 @@ player = { x = -200, y = 0,
            gravitate = true,
 }
 
-local star1 = starfield.new(10, w, h, 0.01, 100)
-local star2 = starfield.new(10, w, h, 0.05, 175)
-local star3 = starfield.new(10, w, h, 0.1, 255)
+local star1 = star1 or starfield.new(10, w, h, 0.01, 100)
+local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
+local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
-local scale = 0.5
-local paused = false
-
-local font = love.graphics.newFont("jura-demibold.ttf", 20)
-love.graphics.setFont(font)
-
-repl.font = font
-love.load = repl.initialize
+local scale = scale or 0.5
+local paused = paused or false
 
 calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 
@@ -44,6 +38,15 @@ local can_land = function(player)
              < landing_speed_max and
              (calculate_distance(player.x - target.x, player.y - target.y)) <
              dist_max)
+end
+
+love.load = function()
+  if arg[#arg] == "-debug" then require("mobdebug").start() end
+   local font = love.graphics.newFont("jura-demibold.ttf", 20)
+   love.graphics.setFont(font)
+   repl.font = font
+   repl.initialize()
+   bodies = body.load()
 end
 
 love.update = function(dt)
@@ -90,15 +93,18 @@ love.update = function(dt)
    end
 end
 
+love.textinput = function(text)
+   if(repl.toggled()) then repl.textinput(text) end
+end
+
 -- for commands that don't need repeat
-love.keypressed = function(key, unicode)
-   if(repl.toggled() and key:len() == 1) then repl.textinput(string.char(unicode))
-   elseif(repl.toggled() and key == "escape") then repl.toggle()
+love.keypressed = function(key, is_repeat)
+   if(repl.toggled() and key == "escape") then repl.toggle()
    elseif(repl.toggled() and key:len() > 1) then repl.keypressed(key)
    elseif(key == "return" and can_land(player)) then
       player.landed = bodies[player.target]
    elseif(player.landed and key == "escape") then player.landed = false
-   elseif(key == "escape") then love.event.push('quit')
+   elseif(key == "escape") then love.event.push("quit")
    elseif(key == "p") then paused = not paused
    elseif(key == "tab") then
       player.target = player.target + 1
@@ -134,7 +140,7 @@ love.draw = function()
 
    love.graphics.setColor(255, 50, 50);
    love.graphics.rotate(math.pi - player.heading)
-   love.graphics.triangle("fill", 0, -30, -20, 50, 20, 50)
+   love.graphics.polygon("fill", 0, -30, -20, 50, 20, 50)
 
    love.graphics.pop()
    love.graphics.setLineWidth(1)

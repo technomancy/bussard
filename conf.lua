@@ -1,6 +1,6 @@
 love.conf = function(t)
-   t.title = "Breen"
-   t.version = "0.8.0"
-   t.screen.width = 800
-   t.screen.height = 600
+   t.title = "Bussard"
+   t.version = "0.9.1"
+   t.window.width = 800
+   t.window.height = 600
 end
