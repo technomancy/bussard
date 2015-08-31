@@ -148,7 +148,10 @@ love.draw = function()
    love.graphics.setColor(255, 255, 255);
    hud.render(player, bodies[player.target])
    hud.vector(player.dx, player.dy, w - 10 - hud.vector_size, 10)
-   -- TODO: show velocity of target body
+   if(bodies[player.target]) then
+      local body = bodies[player.target]
+      hud.vector(body.dx, body.dy, w - 10 - hud.vector_size, 70)
+   end
 
    if(player.landed) then
       love.graphics.setColor(0,0,0, 200);

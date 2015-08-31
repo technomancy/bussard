@@ -30,6 +30,7 @@ return {
    vector = function(x, y, at_x, at_y)
       local half = vector_size / 2
       love.graphics.push()
+      love.graphics.setLineWidth(1)
       love.graphics.setColor(255, 255, 255);
       love.graphics.rectangle("line", at_x, at_y, vector_size, vector_size)
       love.graphics.setLineWidth(3)
