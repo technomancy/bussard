@@ -6,23 +6,23 @@ local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 local vector_size = 50
 
 return {
-   render = function(player, target)
-      local speed = calculate_distance(player.dx, player.dy)
+   render = function(ship_status, target)
+      local speed = calculate_distance(ship_status.dx, ship_status.dy)
       local distance, target_name
       if(target) then
-         distance = calculate_distance(player.x - target.x, player.y - target.y)
+         distance = calculate_distance(ship_status.x - target.x, ship_status.y - target.y)
          target_name = target.name
       else
          target_name, distance = "none", 0
       end
 
-      love.graphics.print(string.format(hud_text, speed, player.x, player.y,
+      love.graphics.print(string.format(hud_text, speed, ship_status.x, ship_status.y,
                                         target_name, distance),
                           5, 5)
 
       -- fuel readout
       love.graphics.setColor(255, 50, 50);
-      love.graphics.rectangle("fill", 5, 50, math.min(player.fuel * 2, 200), 20)
+      love.graphics.rectangle("fill", 5, 50, math.min(ship_status.fuel * 2, 200), 20)
       love.graphics.setColor(255, 200, 200);
       love.graphics.rectangle("line", 5, 50, 200, 20)
    end,

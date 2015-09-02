@@ -1,23 +1,11 @@
 local body = require "body"
 local starfield = require "starfield"
 local hud = require "hud"
-repl = require "love-repl"
+local ship = require "ship"
 
-local w,h = love.graphics:getWidth(), love.graphics:getHeight()
+local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
-bodies = bodies or {}
-
-player = player or { x = -200, y = 0,
-           dx = 0, dy = 0,
-           heading = math.pi,
-           engine = 3,
-           turning = 3,
-           target = 0,
-           fuel = 100,
-           mass = 1,
-           landed = false,
-           gravitate = true,
-}
+local bodies = bodies or {}
 
 local star1 = star1 or starfield.new(10, w, h, 0.01, 100)
 local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
@@ -30,23 +18,22 @@ calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 
 local landing_speed_max = 10
 
-local can_land = function(player)
-   local target = bodies[player.target]
+local can_land = function(ship)
+   local target = bodies[ship.target]
    local dist_max = target and target.image:getWidth() / 2
-   return(target and (not player.landed) and target.description and
-             (calculate_distance(player.dx - target.dx, player.dy - target.dy))
-             < landing_speed_max and
-             (calculate_distance(player.x - target.x, player.y - target.y)) <
-             dist_max)
+   return(target and (not ship.landed) and target.description and
+          (calculate_distance(ship.dx - target.dx, ship.dy - target.dy))
+          < landing_speed_max and
+          (calculate_distance(ship.x - target.x, ship.y - target.y)) <
+          dist_max)
 end
 
 love.load = function()
   if arg[#arg] == "-debug" then require("mobdebug").start() end
    local font = love.graphics.newFont("jura-demibold.ttf", 20)
    love.graphics.setFont(font)
-   repl.font = font
-   repl.initialize()
    bodies = body.load()
+   ship.configure(ship.config)
 end
 
 love.update = function(dt)
@@ -56,33 +43,33 @@ love.update = function(dt)
       scale = scale - (dt / 2)
    end
 
-   if(paused or repl.toggled() or player.landed) then return end
+   if(paused or ship.landed) then return end
 
-   if(love.keyboard.isDown("up") and player.fuel > 0) then
-      player.dx = player.dx + (math.sin(player.heading) * dt * player.engine)
-      player.dy = player.dy + (math.cos(player.heading) * dt * player.engine)
-      player.fuel = player.fuel - 0.5
-   elseif(player.fuel < 100) then
-      player.fuel = player.fuel + 0.05
+   if(love.keyboard.isDown("up") and ship.fuel > 0) then
+      ship.dx = ship.dx + (math.sin(ship.heading) * dt * ship.engine)
+      ship.dy = ship.dy + (math.cos(ship.heading) * dt * ship.engine)
+      ship.fuel = ship.fuel - 0.5
+   elseif(ship.fuel < 100) then
+      ship.fuel = ship.fuel + 0.05
    end
 
    if(love.keyboard.isDown("left")) then
-      player.heading = player.heading + (dt * player.turning)
+      ship.heading = ship.heading + (dt * ship.turning)
    elseif(love.keyboard.isDown("right")) then
-      player.heading = player.heading - (dt * player.turning)
+      ship.heading = ship.heading - (dt * ship.turning)
    end
 
    -- calculate movement
-   player.x = player.x + (player.dx * dt * 100)
-   player.y = player.y + (player.dy * dt * 100)
+   ship.x = ship.x + (ship.dx * dt * 100)
+   ship.y = ship.y + (ship.dy * dt * 100)
 
    for _, b in ipairs(bodies) do
       b.x = b.x + (b.dx * dt * 50)
       b.y = b.y + (b.dy * dt * 50)
-      if(player.gravitate) then
-         local ddx, ddy = body.gravitate(b, player.x, player.y, player.mass)
-         player.dx = player.dx + ddx
-         player.dy = player.dy + ddy
+      if(ship.gravitate) then
+         local ddx, ddy = body.gravitate(b, ship.x, ship.y, ship.mass)
+         ship.dx = ship.dx + ddx
+         ship.dy = ship.dy + ddy
       end
       for _, b2 in ipairs(bodies) do
          local ddx, ddy = body.gravitate(b, b2.x, b2.y, b2.mass)
@@ -93,41 +80,32 @@ love.update = function(dt)
    end
 end
 
-love.textinput = function(text)
-   if(repl.toggled()) then repl.textinput(text) end
-end
-
 -- for commands that don't need repeat
 love.keypressed = function(key, is_repeat)
-   if(repl.toggled() and key == "escape") then repl.toggle()
-   elseif(repl.toggled() and key:len() > 1) then repl.keypressed(key)
-   elseif(key == "return" and can_land(player)) then
-      player.landed = bodies[player.target]
-   elseif(player.landed and key == "escape") then player.landed = false
+   if(key == "return" and can_land(ship)) then
+      ship.landed = bodies[ship.target]
+   elseif(ship.landed and key == "escape") then ship.landed = false
    elseif(key == "escape") then love.event.push("quit")
    elseif(key == "p") then paused = not paused
    elseif(key == "tab") then
-      player.target = player.target + 1
-      if(player.target > #bodies) then player.target = 0 end
-   elseif(key == "`" and love.keyboard.isDown("lshift")) then repl.toggle()
+      ship.target = ship.target + 1
+      if(ship.target > #bodies) then ship.target = 0 end
    end
 end
 
 love.draw = function()
-   if(repl.toggled()) then repl.draw() return end
-
-   starfield.render(star1, player.x, player.y)
-   starfield.render(star2, player.x, player.y)
-   starfield.render(star3, player.x, player.y)
+   starfield.render(star1, ship.x, ship.y)
+   starfield.render(star2, ship.x, ship.y)
+   starfield.render(star3, ship.x, ship.y)
 
    love.graphics.push()
    love.graphics.translate(w / 2, h / 2)
    love.graphics.scale(scale*scale)
 
-   if(bodies[player.target]) then -- directional target indicator
+   if(bodies[ship.target]) then -- directional target indicator
       love.graphics.setLineWidth(scale*scale*5) -- TODO: scale linearly
-      local px, py = bodies[player.target].x, bodies[player.target].y
-      local dx, dy = px - player.x, py - player.y
+      local px, py = bodies[ship.target].x, bodies[ship.target].y
+      local dx, dy = px - ship.x, py - ship.y
       love.graphics.setColor(10, 100, 10)
       love.graphics.line(0, 0, dx, dy)
       love.graphics.setLineWidth(1)
@@ -135,30 +113,30 @@ love.draw = function()
 
    love.graphics.setColor(255, 255, 255)
    for i, b in ipairs(bodies) do
-      body.draw(b, player.x, player.y, i == player.target)
+      body.draw(b, ship.x, ship.y, i == ship.target)
    end
 
    love.graphics.setColor(255, 50, 50);
-   love.graphics.rotate(math.pi - player.heading)
+   love.graphics.rotate(math.pi - ship.heading)
    love.graphics.polygon("fill", 0, -30, -20, 50, 20, 50)
 
    love.graphics.pop()
    love.graphics.setLineWidth(1)
 
    love.graphics.setColor(255, 255, 255);
-   hud.render(player, bodies[player.target])
-   hud.vector(player.dx, player.dy, w - 10 - hud.vector_size, 10)
-   if(bodies[player.target]) then
-      local body = bodies[player.target]
+   hud.render(ship, bodies[ship.target])
+   hud.vector(ship.dx, ship.dy, w - 10 - hud.vector_size, 10)
+   if(bodies[ship.target]) then
+      local body = bodies[ship.target]
       hud.vector(body.dx, body.dy, w - 10 - hud.vector_size, 70)
    end
 
-   if(player.landed) then
+   if(ship.landed) then
       love.graphics.setColor(0,0,0, 200);
       love.graphics.rectangle("fill", 100, 100, 400, 300)
       love.graphics.setColor(255, 255, 255);
       love.graphics.rectangle("line", 100, 100, 400, 300)
-      love.graphics.print("You landed on " .. player.landed.name .. "\n\n" ..
-                             player.landed.description, 150, 150)
+      love.graphics.print("You landed on " .. ship.landed.name .. "\n\n" ..
+                             ship.landed.description, 150, 150)
    end
 end
