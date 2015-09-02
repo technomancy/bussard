@@ -103,7 +103,7 @@ ship.api = {
                end,
                next_target = function()
                   local bodies = ship.api.sensors.bodies()
-                  ship.target_number = ((ship.target_number + 1) % #bodies)
+                  ship.target_number = ((ship.target_number) % #bodies) + 1
                   ship.target = bodies[ship.target_number]
                end,
    },

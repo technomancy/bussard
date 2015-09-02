@@ -24,10 +24,12 @@ local gravitate = function(bodies, ship, dt)
       ship.dy = ship.dy + ddy * ship.mass
 
       for _, b2 in ipairs(bodies) do
-         local ddx, ddy = body.gravitate(b, b2.x, b2.y)
-         b2.theta_v = theta
-         b2.dx = b2.dx + ddx
-         b2.dy = b2.dy + ddy
+         if(not b == b2) then
+            local ddx, ddy = body.gravitate(b, b2.x, b2.y)
+            b2.theta_v = theta
+            b2.dx = b2.dx + ddx
+            b2.dy = b2.dy + ddy
+         end
       end
    end
 end
@@ -41,6 +43,19 @@ love.load = function()
 end
 
 love.update = function(dt)
+   -- debug
+   if(love.keyboard.isDown("w")) then
+      ship.y = ship.y - (dt*1000)
+   elseif(love.keyboard.isDown("a")) then
+      ship.x = ship.x - (dt*1000)
+   elseif(love.keyboard.isDown("s")) then
+      ship.y = ship.y + (dt*1000)
+   elseif(love.keyboard.isDown("d")) then
+      ship.x = ship.x - (dt*1000)
+   elseif(love.keyboard.isDown("0")) then
+      ship.x, ship.y = 0, 0
+   end
+
    -- zoom
    if(love.keyboard.isDown("=")) then
       scale = scale + (dt / 2)
