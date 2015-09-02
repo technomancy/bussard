@@ -14,17 +14,17 @@ local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 local scale = scale or 0.5
 local paused = paused or false
 
-local gravitate = function(dt)
+local gravitate = function(bodies, ship, dt)
    for _, b in ipairs(bodies) do
       b.x = b.x + (b.dx * dt * 50)
       b.y = b.y + (b.dy * dt * 50)
-      local ddx, ddy = body.gravitate(b, ship.x, ship.y, ship.mass)
+      local ddx, ddy = body.gravitate(b, ship.x, ship.y)
 
-      ship.dx = ship.dx + ddx
-      ship.dy = ship.dy + ddy
+      ship.dx = ship.dx + ddx * ship.mass
+      ship.dy = ship.dy + ddy * ship.mass
 
       for _, b2 in ipairs(bodies) do
-         local ddx, ddy = body.gravitate(b, b2.x, b2.y, b2.mass)
+         local ddx, ddy = body.gravitate(b, b2.x, b2.y)
          b2.theta_v = theta
          b2.dx = b2.dx + ddx
          b2.dy = b2.dy + ddy
@@ -52,7 +52,7 @@ love.update = function(dt)
 
    ship:update(dt)
 
-   gravitate(dt)
+   gravitate(bodies, ship, dt)
 end
 
 -- for commands that don't need repeat

@@ -12,9 +12,8 @@ Use `make` to launch.
 * `left`/`right` to turn
 * `enter` to land
 * `+`/`-` to zoom
-* `~` to activate the repl
 
-Requires [LÖVE](http://love2d.org) 0.8.0.
+Requires [LÖVE](http://love2d.org) 0.9.x; tested on 0.9.1.
 
 ## License
 

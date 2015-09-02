@@ -1,4 +1,7 @@
 local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
+local default_config_file = io.open("default_config.lua", "r")
+local default_config = default_config_file:read("*all")
+default_config_file:close()
 
 local ship = { x = -200, y = 0,
                dx = 0, dy = 0,
@@ -20,7 +23,7 @@ local ship = { x = -200, y = 0,
                target_number = 0,
                target = nil,
 
-               config = "ship.controls[\"up\"] = ship.actions.forward\nship.controls[\"left\"] = ship.actions.left\nship.controls[\"right\"] = ship.actions.right\nship.commands[\"enter\"] = ship.actions.land\nship.commands[\"tab\"] = ship.actions.next_target",
+               config = default_config,
 
                configure = function(ship, bodies)
                   ship.api.sensors.bodies = function() return bodies end
@@ -28,7 +31,7 @@ local ship = { x = -200, y = 0,
                   local box = { pairs = pairs,
                                 ipairs = ipairs,
                                 unpack = unpack,
-                                print = print, -- TODO: route to HUD
+                                print = print, -- TODO: route to messages
                                 coroutine = { yield = coroutine.yield,
                                               status = coroutine.status },
                                 io = { write = write, read = read },

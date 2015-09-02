@@ -21,7 +21,7 @@ return {
       love.graphics.draw(body.image, bx - x, by - y)
    end,
 
-   gravitate = function(body, x, y, mass)
+   gravitate = function(body, x, y)
       local dx = x - body.x
       local dy = y - body.x
       local distance = math.sqrt(dx*dx + dy*dy)
