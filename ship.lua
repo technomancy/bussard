@@ -1,14 +1,84 @@
+local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
+
 local ship = { x = -200, y = 0,
                dx = 0, dy = 0,
                heading = math.pi,
+
                engine = 3,
-               turning = 3,
+               engine_on = false,
+               turning_speed = 3,
+               turning_right = false,
+               turning_left = false,
+
                fuel = 100,
+               recharge_rate = 1,
+               burn_rate = 5,
                mass = 1,
+
                landed = false,
-               gravitate = true,
-               target = 0,
-               config = "ship.controls[\"up\"] = ship.actions.forward\nship.controls[\"left\"] = ship.actions.left\nship.controls[\"right\"] = ship.actions.right\nship.controls[\"enter\"] = ship.actions.land\nship.controls[\"=\"] = ship.actions.zoom\nship.controls[\"-\"] = ship.actions.unzoom"
+               landing_speed_max = 10,
+               target_number = 0,
+               target = nil,
+
+               config = "ship.controls[\"up\"] = ship.actions.forward\nship.controls[\"left\"] = ship.actions.left\nship.controls[\"right\"] = ship.actions.right\nship.commands[\"enter\"] = ship.actions.land\nship.commands[\"tab\"] = ship.actions.next_target",
+
+               configure = function(ship, bodies)
+                  ship.api.sensors.bodies = function() return bodies end
+                  local chunk = assert(loadstring(ship.config))
+                  local box = { pairs = pairs,
+                                ipairs = ipairs,
+                                unpack = unpack,
+                                print = print, -- TODO: route to HUD
+                                coroutine = { yield = coroutine.yield,
+                                              status = coroutine.status },
+                                io = { write = write, read = read },
+                                tonumber = tonumber,
+                                tostring = tostring,
+                                math = math,
+                                type = type,
+                                table = { concat = table.concat,
+                                          remove = table.remove,
+                                          insert = table.insert,
+                                },
+                                ship = ship.api,
+                  }
+                  setfenv(chunk, box)
+                  chunk()
+               end,
+
+               update = function(ship, dt)
+                  -- calculate movement
+                  ship.x = ship.x + (ship.dx * dt * 100)
+                  ship.y = ship.y + (ship.dy * dt * 100)
+
+                  -- activate controls
+                  for k,f in pairs(ship.api.controls) do
+                     f(love.keyboard.isDown(k))
+                  end
+
+                  if(ship.engine_on and ship.fuel > 0) then
+                     ship.dx = ship.dx + (math.sin(ship.heading) * dt * ship.engine)
+                     ship.dy = ship.dy + (math.cos(ship.heading) * dt * ship.engine)
+                     ship.fuel = ship.fuel - (ship.burn_rate * dt)
+                  elseif(ship.fuel < 100) then
+                     ship.fuel = ship.fuel + (ship.recharge_rate * dt)
+                  end
+
+                  if(ship.turning_left) then
+                     ship.heading = ship.heading + (dt * ship.turning_speed)
+                  elseif(ship.turning_right) then
+                     ship.heading = ship.heading - (dt * ship.turning_speed)
+                  end
+               end,
+
+               can_land = function(ship, target)
+                  local dist_max = target and target.image:getWidth() / 2
+                  return(target and (not ship.landed) and target.description and
+                         (calculate_distance(ship.dx - target.dx, ship.dy - target.dy))
+                         < landing_speed_max and
+                         (calculate_distance(ship.x - target.x, ship.y - target.y)) <
+                         dist_max)
+               end,
 }
 
 ship.api = {
@@ -19,43 +89,21 @@ ship.api = {
                heading = function() return ship.heading end,
                fuel = function() return ship.fuel end,
                landed = function() return ship.landed end,
-               bodies = function() return {} end, -- TODO
    },
    controls = {},
-   actions = { forward = function() end,
-               left = function() end,
-               right = function() end,
-               land = function() end,
-               zoom = function() end,
-               unzoom = function() end,
+   commands = {},
+   actions = { forward = function(down) ship.engine_on = down end,
+               left = function(down) ship.turning_left = down end,
+               right = function(down) ship.turning_right = down end,
+               land = function()
+                  if(ship:can_land(ship.target)) then ship.landed = ship.target end
+               end,
+               next_target = function()
+                  local bodies = ship.api.sensors.bodies()
+                  ship.target_number = ((ship.target_number + 1) % #bodies)
+                  ship.target = bodies[ship.target_number]
+               end,
    },
-   hud = {},
 }
-
-ship.configure = function(config)
-   local chunk = assert(loadstring(config))
-   local box = { pairs = pairs,
-                 ipairs = ipairs,
-                 unpack = unpack,
-                 print = print, -- TODO: route to HUD
-                 coroutine = { yield = coroutine.yield,
-                               status = coroutine.status },
-                 io = { write = write, read = read },
-                 tonumber = tonumber,
-                 tostring = tostring,
-                 math = math,
-                 type = type,
-                 table = { concat = table.concat,
-                           remove = table.remove,
-                           insert = table.insert,
-                 },
-                 ship = ship.api,
-   }
-   setfenv(chunk, box)
-   chunk()
-end
-
-ship.update = function(dt)
-end
 
 return ship
