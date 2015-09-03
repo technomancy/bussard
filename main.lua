@@ -73,7 +73,6 @@ end
 -- for commands that don't need repeat
 love.keypressed = function(key, is_repeat)
    if(ship.api.commands[key]) then ship.api.commands[key]()
-   elseif(key == "escape") then love.event.push("quit")
    elseif(key == "p") then paused = not paused
    end
 end

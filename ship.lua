@@ -16,7 +16,7 @@ local ship = { x = -200, y = 0,
                fuel = 100,
                recharge_rate = 1,
                burn_rate = 5,
-               mass = 0,
+               mass = 1,
 
                comm_connected = false,
                comm_range = 100,
@@ -31,7 +31,7 @@ local ship = { x = -200, y = 0,
                   local box = { pairs = pairs,
                                 ipairs = ipairs,
                                 unpack = unpack,
-                                print = print, -- TODO: route to messages
+                                print = ship.api.message,
                                 coroutine = { yield = coroutine.yield,
                                               status = coroutine.status },
                                 io = { write = write, read = read },
@@ -44,6 +44,8 @@ local ship = { x = -200, y = 0,
                                           insert = table.insert,
                                 },
                                 ship = ship.api,
+                                game = {quit = function()
+                                           love.event.push("quit") end},
                   }
                   setfenv(chunk, box)
                   chunk()
@@ -82,7 +84,7 @@ ship.api = {
                dy = function() return ship.dy end,
                heading = function() return ship.heading end,
                fuel = function() return ship.fuel end,
-   },
+             },
    controls = {},
    commands = {},
    actions = { forward = function(down) ship.engine_on = down end,
@@ -90,10 +92,17 @@ ship.api = {
                right = function(down) ship.turning_right = down end,
                next_target = function()
                   local bodies = ship.api.sensors.bodies()
-                  ship.target_number = ((ship.target_number) % #bodies) + 1
+                  ship.target_number = (ship.target_number + 1) % (#bodies + 1)
                   ship.target = bodies[ship.target_number]
                end,
-   },
+               connect = function()
+                  ship.api.message("Could not connect.")
+               end,
+             },
+   messages = {},
+   message = function(msg)
+      table.insert(ship.api.messages, msg)
+   end,
 }
 
 return ship

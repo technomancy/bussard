@@ -1,28 +1,39 @@
+local utils = require "utils"
+
 local hud_text = "speed: %0.2f | pos: %5.2f, %5.2f\n" ..
    "target: %s | distance: %0.2f"
 
 local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 
 local vector_size = 50
+local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 return {
-   render = function(ship_status, target)
-      local speed = calculate_distance(ship_status.dx, ship_status.dy)
+   render = function(ship, target)
+      local speed = calculate_distance(ship.dx, ship.dy)
       local distance, target_name
       if(target) then
-         distance = calculate_distance(ship_status.x - target.x, ship_status.y - target.y)
+         distance = calculate_distance(ship.x - target.x, ship.y - target.y)
          target_name = target.name
       else
          target_name, distance = "none", 0
       end
 
-      love.graphics.print(string.format(hud_text, speed, ship_status.x, ship_status.y,
+      love.graphics.print(string.format(hud_text, speed, ship.x, ship.y,
                                         target_name, distance),
                           5, 5)
 
+      local messages = utils.take(3, ship.api.messages)
+      if(#messages < 3) then
+         table.insert(messages, 1, "")
+         table.insert(messages, 1, "")
+      end
+      love.graphics.print(table.concat(messages, "\n"), 5, h-90)
+
       -- fuel readout
       love.graphics.setColor(255, 50, 50);
-      love.graphics.rectangle("fill", 5, 50, math.min(ship_status.fuel * 2, 200), 20)
+      love.graphics.rectangle("fill", 5, 50,
+                              math.min(ship.fuel * 2, 200), 20)
       love.graphics.setColor(255, 200, 200);
       love.graphics.rectangle("line", 5, 50, 200, 20)
    end,
