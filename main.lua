@@ -88,10 +88,14 @@ love.draw = function()
    love.graphics.scale(game_api.scale*game_api.scale)
 
    if(ship.target) then -- directional target indicator
-      love.graphics.setLineWidth(scale*scale*5) -- TODO: scale linearly
+      if(ship:in_range(ship.target)) then
+         love.graphics.setColor(10, 100, 10)
+      else
+         love.graphics.setColor(100, 100, 100)
+      end
+      love.graphics.setLineWidth(game_api.scale*game_api.scale*5)
       local px, py = ship.target.x, ship.target.y
       local dx, dy = px - ship.x, py - ship.y
-      love.graphics.setColor(10, 100, 10)
       love.graphics.line(0, 0, dx, dy)
       love.graphics.setLineWidth(1)
    end

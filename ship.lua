@@ -19,7 +19,7 @@ local ship = { x = -200, y = 0,
                mass = 1,
 
                comm_connected = false,
-               comm_range = 100,
+               comm_range = 450,
                target_number = 0,
                target = nil,
 
@@ -73,6 +73,11 @@ local ship = { x = -200, y = 0,
                   elseif(ship.turning_right) then
                      ship.heading = ship.heading - (dt * ship.turning_speed)
                   end
+               end,
+
+               in_range = function(ship, body)
+                  return calculate_distance(ship.x - body.x, ship.y - body.y) <
+                     ship.comm_range
                end,
 }
 
