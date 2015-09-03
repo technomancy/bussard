@@ -63,7 +63,7 @@ love.update = function(dt)
       scale = scale - (dt / 2)
    end
 
-   if(paused or ship.landed) then return end
+   if(paused) then return end
 
    ship:update(dt)
 
@@ -73,7 +73,6 @@ end
 -- for commands that don't need repeat
 love.keypressed = function(key, is_repeat)
    if(ship.api.commands[key]) then ship.api.commands[key]()
-   elseif(ship.landed and key == "escape") then ship.landed = false
    elseif(key == "escape") then love.event.push("quit")
    elseif(key == "p") then paused = not paused
    end
@@ -115,14 +114,5 @@ love.draw = function()
    hud.vector(ship.dx, ship.dy, w - 10 - hud.vector_size, 10)
    if(ship.target) then
       hud.vector(ship.target.dx, ship.target.dy, w - 10 - hud.vector_size, 70)
-   end
-
-   if(ship.landed) then
-      love.graphics.setColor(0,0,0, 200);
-      love.graphics.rectangle("fill", 100, 100, 400, 300)
-      love.graphics.setColor(255, 255, 255);
-      love.graphics.rectangle("line", 100, 100, 400, 300)
-      love.graphics.print("You landed on " .. ship.landed.name .. "\n\n" ..
-                          ship.landed.description, 150, 150)
    end
 end

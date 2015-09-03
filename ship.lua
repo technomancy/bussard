@@ -16,10 +16,10 @@ local ship = { x = -200, y = 0,
                fuel = 100,
                recharge_rate = 1,
                burn_rate = 5,
-               mass = 1,
+               mass = 0,
 
-               landed = false,
-               landing_speed_max = 10,
+               comm_connected = false,
+               comm_range = 100,
                target_number = 0,
                target = nil,
 
@@ -73,15 +73,6 @@ local ship = { x = -200, y = 0,
                      ship.heading = ship.heading - (dt * ship.turning_speed)
                   end
                end,
-
-               can_land = function(ship, target)
-                  local dist_max = target and target.image:getWidth() / 2
-                  return(target and (not ship.landed) and target.description and
-                         (calculate_distance(ship.dx - target.dx, ship.dy - target.dy))
-                         < landing_speed_max and
-                         (calculate_distance(ship.x - target.x, ship.y - target.y)) <
-                         dist_max)
-               end,
 }
 
 ship.api = {
@@ -91,16 +82,12 @@ ship.api = {
                dy = function() return ship.dy end,
                heading = function() return ship.heading end,
                fuel = function() return ship.fuel end,
-               landed = function() return ship.landed end,
    },
    controls = {},
    commands = {},
    actions = { forward = function(down) ship.engine_on = down end,
                left = function(down) ship.turning_left = down end,
                right = function(down) ship.turning_right = down end,
-               land = function()
-                  if(ship:can_land(ship.target)) then ship.landed = ship.target end
-               end,
                next_target = function()
                   local bodies = ship.api.sensors.bodies()
                   ship.target_number = ((ship.target_number) % #bodies) + 1
