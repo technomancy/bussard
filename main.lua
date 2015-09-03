@@ -11,8 +11,10 @@ local star1 = star1 or starfield.new(10, w, h, 0.01, 100)
 local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
 local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
-local scale = scale or 0.5
-local paused = paused or false
+local game_api = { quit = function() love.event.push("quit") end,
+                   scale = 0.5,
+                   paused = false
+                 }
 
 local gravitate = function(bodies, ship, dt)
    for _, b in ipairs(bodies) do
@@ -36,10 +38,11 @@ end
 
 love.load = function()
    if arg[#arg] == "-debug" then require("mobdebug").start() end
+   -- love.graphics.setDefaultFilter('nearest', 'nearest')
    local font = love.graphics.newFont("jura-demibold.ttf", 20)
    love.graphics.setFont(font)
    bodies = body.load()
-   ship:configure(bodies)
+   ship:configure(bodies, game_api)
 end
 
 love.update = function(dt)
@@ -58,12 +61,12 @@ love.update = function(dt)
 
    -- zoom
    if(love.keyboard.isDown("=")) then
-      scale = scale + (dt / 2)
-   elseif(love.keyboard.isDown("-") and scale > dt * 0.5) then
-      scale = scale - (dt / 2)
+      game_api.scale = game_api.scale + (dt / 2)
+   elseif(love.keyboard.isDown("-") and game_api.scale > dt * 0.5) then
+      game_api.scale = game_api.scale - (dt / 2)
    end
 
-   if(paused) then return end
+   if(game_api.paused) then return end
 
    ship:update(dt)
 
@@ -72,9 +75,7 @@ end
 
 -- for commands that don't need repeat
 love.keypressed = function(key, is_repeat)
-   if(ship.api.commands[key]) then ship.api.commands[key]()
-   elseif(key == "p") then paused = not paused
-   end
+   if(ship.api.commands[key]) then ship.api.commands[key]() end
 end
 
 love.draw = function()
@@ -84,7 +85,7 @@ love.draw = function()
 
    love.graphics.push()
    love.graphics.translate(w / 2, h / 2)
-   love.graphics.scale(scale*scale)
+   love.graphics.scale(game_api.scale*game_api.scale)
 
    if(ship.target) then -- directional target indicator
       love.graphics.setLineWidth(scale*scale*5) -- TODO: scale linearly

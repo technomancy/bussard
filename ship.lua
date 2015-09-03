@@ -25,7 +25,7 @@ local ship = { x = -200, y = 0,
 
                config = default_config,
 
-               configure = function(ship, bodies)
+               configure = function(ship, bodies, game_api)
                   ship.api.sensors.bodies = function() return bodies end
                   local chunk = assert(loadstring(ship.config))
                   local box = { pairs = pairs,
@@ -44,8 +44,7 @@ local ship = { x = -200, y = 0,
                                           insert = table.insert,
                                 },
                                 ship = ship.api,
-                                game = {quit = function()
-                                           love.event.push("quit") end},
+                                game = game_api,
                   }
                   setfenv(chunk, box)
                   chunk()
