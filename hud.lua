@@ -19,16 +19,16 @@ return {
          target_name, distance = "none", 0
       end
 
+      love.graphics.setColor(255, 255, 255)
+
       love.graphics.print(string.format(hud_text, speed, ship.x, ship.y,
                                         target_name, distance),
                           5, 5)
 
-      local messages = utils.take(3, ship.api.messages)
-      if(#messages < 3) then
-         table.insert(messages, 1, "")
-         table.insert(messages, 1, "")
-      end
-      love.graphics.print(table.concat(messages, "\n"), 5, h-90)
+      local messages = utils.drop(#ship.api.messages - 3, ship.api.messages)
+      if(#messages < 3) then table.insert(messages, 1, "") end
+      if(#messages < 3) then table.insert(messages, 1, "") end
+      love.graphics.print(table.concat(messages, "\n"), 15, h-90)
 
       -- fuel readout
       love.graphics.setColor(255, 50, 50);

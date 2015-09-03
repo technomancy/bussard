@@ -13,7 +13,7 @@ local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
 local game_api = { quit = function() love.event.push("quit") end,
                    scale = 0.5,
-                   paused = false
+                   paused = false,
                  }
 
 local gravitate = function(bodies, ship, dt)
@@ -105,6 +105,7 @@ love.draw = function()
       body.draw(b, ship.x, ship.y, b == ship.target)
    end
 
+   -- the ship itself
    love.graphics.setColor(255, 50, 50);
    love.graphics.rotate(math.pi - ship.heading)
    love.graphics.polygon("fill", 0, -30, -20, 50, 20, 50)
@@ -112,7 +113,6 @@ love.draw = function()
    love.graphics.pop()
    love.graphics.setLineWidth(1)
 
-   love.graphics.setColor(255, 255, 255);
    -- TODO: data-driven hud
    hud.render(ship, ship.target)
    hud.vector(ship.dx, ship.dy, w - 10 - hud.vector_size, 10)
