@@ -1,18 +1,20 @@
-local new = function(x, y, dx, dy, mass, image, name, description)
+local new = function(x, y, dx, dy, mass, image, name, description, star)
    return {x = x, y = y, dx = dx, dy = dy,
-           mass = mass, image = image, name = name, description = description,}
+           mass = mass, image = image, name = name, description = description,
+           star = star
+   }
 end
 
-local g = 0.002
+local g = 0.2
 local distance_factor = 1000
 
 return {
    load = function()
-      return {new(3500, 0, -1, 10, 5,
+      return {new(3500, 2000, -3, 10, 20,
                   love.graphics.newImage('assets/planet-1.png'), "Earth",
                  "This is a pretty great planet."),
-              new(0, 0, 0, 0, 50,
-                  love.graphics.newImage('assets/sun.png'), "Sol")}
+              new(0, 0, 0, 0, 200,
+                  love.graphics.newImage('assets/sun.png'), "Sol", nil, true)}
    end,
 
    draw = function(body, x, y)
@@ -27,6 +29,6 @@ return {
       local distance = math.sqrt(dx*dx + dy*dy)
       local theta = math.atan2(dx, dy) + math.pi
       local f = (body.mass * g) / math.log(distance)
-      return (f * math.sin(theta)), (f * math.cos(theta)), theta
+      return (f * math.sin(theta)), (f * math.cos(theta)), f
    end,
 }

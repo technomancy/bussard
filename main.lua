@@ -20,17 +20,18 @@ local gravitate = function(bodies, ship, dt)
    for _, b in ipairs(bodies) do
       b.x = b.x + (b.dx * dt * 50)
       b.y = b.y + (b.dy * dt * 50)
-      local ddx, ddy = body.gravitate(b, ship.x, ship.y)
+      local ddx, ddy, f = body.gravitate(b, ship.x, ship.y)
 
-      ship.dx = ship.dx + ddx * ship.mass
-      ship.dy = ship.dy + ddy * ship.mass
+      ship.dx = ship.dx + ddx / ship.mass
+      ship.dy = ship.dy + ddy / ship.mass
 
       for _, b2 in ipairs(bodies) do
-         if(not b == b2) then
-            local ddx, ddy = body.gravitate(b, b2.x, b2.y)
+         if(b ~= b2 and (not b2.star)) then
+            local ddx, ddy, f2 = body.gravitate(b, b2.x, b2.y)
             b2.theta_v = theta
-            b2.dx = b2.dx + ddx
-            b2.dy = b2.dy + ddy
+            b2.dx = b2.dx + (ddx / b2.mass)
+            b2.dy = b2.dy + (ddy / b2.mass)
+            -- print(string.format("%s gravitating %0.2f, %0.2f", b.name, f, f2))
          end
       end
    end
@@ -46,36 +47,18 @@ love.load = function()
 end
 
 love.update = function(dt)
-   -- debug
-   if(love.keyboard.isDown("w")) then
-      ship.y = ship.y - (dt*1000)
-   elseif(love.keyboard.isDown("a")) then
-      ship.x = ship.x - (dt*1000)
-   elseif(love.keyboard.isDown("s")) then
-      ship.y = ship.y + (dt*1000)
-   elseif(love.keyboard.isDown("d")) then
-      ship.x = ship.x - (dt*1000)
-   elseif(love.keyboard.isDown("0")) then
-      ship.x, ship.y = 0, 0
-   end
-
-   -- zoom
-   if(love.keyboard.isDown("=")) then
-      game_api.scale = game_api.scale + (dt / 2)
-   elseif(love.keyboard.isDown("-") and game_api.scale > dt * 0.5) then
-      game_api.scale = game_api.scale - (dt / 2)
-   end
-
    if(game_api.paused) then return end
-
    ship:update(dt)
-
    gravitate(bodies, ship, dt)
 end
 
 -- for commands that don't need repeat
 love.keypressed = function(key, is_repeat)
-   if(ship.api.commands[key]) then ship.api.commands[key]() end
+   if(ship.api.commands[key]) then
+      ship.api.commands[key]()
+   elseif(not ship.api.controls[key]) then
+      -- ship.ui.input(key)
+   end
 end
 
 love.draw = function()

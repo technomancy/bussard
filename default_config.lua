@@ -1,7 +1,9 @@
 ship.controls = {
    up = ship.actions.forward,
    left = ship.actions.left,
-   right = ship.actions.right
+   right = ship.actions.right,
+   ["="] = function(d) if d then game.scale = game.scale + (ship.dt / 2) end end,
+   ["-"] = function(d) if d then game.scale = game.scale - (ship.dt / 2) end end,
 }
 
 ship.commands = {

@@ -8,7 +8,7 @@ local ship = {
    dx = 0, dy = 0,
    heading = math.pi,
 
-   engine = 3,
+   engine = 10,
    engine_on = false,
    turning_speed = 3,
    turning_right = false,
@@ -17,7 +17,7 @@ local ship = {
    fuel = 100,
    recharge_rate = 1,
    burn_rate = 5,
-   mass = 1,
+   mass = 10,
 
    comm_connected = false,
    comm_range = 450,
@@ -52,6 +52,7 @@ local ship = {
    end,
 
    update = function(ship, dt)
+      ship.api.dt = dt
       -- calculate movement
       ship.x = ship.x + (ship.dx * dt * 100)
       ship.y = ship.y + (ship.dy * dt * 100)
