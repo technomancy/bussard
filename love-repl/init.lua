@@ -19,7 +19,6 @@ local repl = {
    font = nil,
    screenshot = true,
    background = false,
-   dark_factor = 0.6,
    wrapping = false
 }
 -- How many pixels of padding are on either side
@@ -92,7 +91,7 @@ function buffer:get(idx)
 end
 
 function repl.initialize()
-   lines = buffer:new({"! love-repl"})
+   lines = buffer:new({})
    lines.max = repl.max_lines
    history = buffer:new()
    history.max = repl.max_history
@@ -176,6 +175,7 @@ function repl.eval(text, add_to_history)
             results = results .. ', ' .. tostring(result[i])
             i = i + 1
          end
+         repl.last_result = results
          repl.print(results)
          return true
       else
@@ -269,6 +269,7 @@ function repl.keypressed(k)
 end
 
 function repl.textinput(t)
+   repl.last_result = nil
    editline = editline:sub(0, cursor) .. t .. editline:sub(cursor + 1)
    cursor = cursor + 1
 end
@@ -286,34 +287,42 @@ function repl.draw()
    love.graphics.setFont(font)
 
    -- Draw background
-   if repl.screenshot then
-      local c = 255 * repl.dark_factor
-      love.graphics.setColor(c,c,c,c)
-      love.graphics.draw(repl.background, 0, 0)
-      love.graphics.setColor(255, 255, 255, 255)
-   elseif repl.background then
-      love.graphics.draw(repl.background, 0, 0)
+   love.graphics.setColor(0, 0, 0, 150)
+   if(repl.toggled()) then
+      love.graphics.rectangle("fill", 0, 0, 800, 600)
    else
-      love.graphics.clear()
+      love.graphics.rectangle("fill", 0, 560, 800, 600)
    end
+   love.graphics.setColor(0, 200, 0)
 
    -- Leave some room for text entry
    local limit = height - (ROW_HEIGHT * 2)
 
-   -- print edit line
-   local prefix = "> "
-   local ln = prefix .. editline
-   love.graphics.print(ln, repl.padding_left, limit)
+   local print_edit_line = function()
+      local prefix = "> "
+      local ln = prefix .. editline
+      love.graphics.print(ln, repl.padding_left, limit)
 
-   -- draw cursor
-   local cx, cy = repl.padding_left + 1 + font:getWidth(prefix .. editline:sub(0, cursor)),
-   limit + font:getHeight() + 2
-   love.graphics.line(cx, cy, cx + 5, cy)
+      -- draw cursor
+      local cx, cy = repl.padding_left + 1 + font:getWidth(prefix .. editline:sub(0, cursor)),
+      limit + font:getHeight() + 2
+      love.graphics.line(cx, cy, cx + 5, cy)
+   end
+
+   -- show edit line, unless the non-toggled repl has a last-value to show
+   if(not toggled) then
+      if(repl.last_result) then
+         love.graphics.print(repl.last_result, repl.padding_left, limit)
+      else
+         print_edit_line()
+      end
+      return
+   end
+
+   print_edit_line()
 
    -- draw history
    -- maximum characters in a rendered line of text
-
-
    local render_line = function(ln2, row)
       love.graphics.print(ln2, repl.padding_left, limit - (ROW_HEIGHT * (row + 1)))
    end

@@ -40,7 +40,7 @@ end
 love.load = function()
    if arg[#arg] == "-debug" then require("mobdebug").start() end
    -- love.graphics.setDefaultFilter('nearest', 'nearest')
-   local font = love.graphics.newFont("jura-demibold.ttf", 20)
+   local font = love.graphics.newFont("mensch.ttf", 14)
    love.graphics.setFont(font)
    bodies = body.load()
    ship:configure(bodies, ui)
@@ -57,11 +57,15 @@ love.keypressed = function(key, is_repeat)
    if(ship.api.commands[key]) then
       ship.api.commands[key]()
    elseif(not ship.api.controls[key]) then
-      ship.api.repl.keypressed(key)
+      ship.api.repl.keypressed(key, is_repeat)
    end
 end
 
-love.textinput = function(t) ship.api.repl.textinput(t) end
+love.textinput = function(t)
+   if(not ship.api.controls[t]) then
+      ship.api.repl.textinput(t)
+   end
+end
 
 love.draw = function()
    starfield.render(star1, ship.x, ship.y)
@@ -107,5 +111,6 @@ love.draw = function()
    if(ship.target) then
       hud.vector(ship.target.dx, ship.target.dy, w - 10 - hud.vector_size, 70)
    end
-   if(ship.api.repl.toggled()) then ship.api.repl.draw() end
+
+   ship.api.repl.draw()
 end

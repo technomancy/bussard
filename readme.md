@@ -2,16 +2,11 @@
 
 <img src="http://p.hagelb.org/bussard.png" alt="screenshot" />
 
-Spaceships, planets, orbits, etc. in Lua.
+A space-flight adventure exploration game, with a programmable space ship.
 
 ## Usage
 
 Use `make` to launch.
-
-* `up` to accelerate
-* `left`/`right` to turn
-* `enter` to land
-* `+`/`-` to zoom
 
 Requires [LÖVE](http://love2d.org) 0.9.x; tested on 0.9.1.
 

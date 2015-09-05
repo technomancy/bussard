@@ -1,34 +1,29 @@
+-- This code runs inside your ship's own computer.
+
 ship.controls = {
    up = ship.actions.forward,
    left = ship.actions.left,
    right = ship.actions.right,
-   ["="] = function(d) if d then game.scale = game.scale + (ship.dt / 2) end end,
-   ["-"] = function(d) if d then game.scale = game.scale - (ship.dt / 2) end end,
+   ["="] = function(d) if d then ui.scale = ui.scale + (ship.dt/2) end end,
+   ["-"] = function(d) if d then ui.scale = ui.scale - (ship.dt/2) end end,
 }
 
 ship.commands = {
    -- TODO: support declaration of modifier keybindings
    ["`"] = function()
-      if(game.keyboard.isDown("lctrl", "rctrl")) then
+      if(ui.keyboard.isDown("lctrl", "rctrl", "capslock")) then
          ship.repl.toggle()
       else
-         ship.repl.keypressed("~")
-      end
-   end,
-   tab = ship.actions.next_target,
-   ["return"] = function()
-      if(ship.repl.toggled()) then
-         ship.repl.keypressed("return")
-      else
-         ship.actions.connect()
+         ship.repl.keypressed("`")
       end
    end,
    escape = function()
       if(ship.repl.toggled()) then
          ship.repl.toggle()
       else
-         game.quit()
+         ui.quit()
       end
    end,
-   -- p = function() game.paused = (not game.paused) end,
+   tab = ship.actions.next_target,
+   pause = function() ui.paused = (not ui.paused) end,
 }

@@ -19,7 +19,7 @@ return {
          target_name, distance = "none", 0
       end
 
-      love.graphics.setColor(255, 255, 255)
+      love.graphics.setColor(255, 255, 255, 150)
 
       love.graphics.print(string.format(hud_text, speed, ship.x, ship.y,
                                         target_name, distance),

@@ -10,7 +10,7 @@ local distance_factor = 1000
 
 return {
    load = function()
-      return {new(3500, 2000, -3, 10, 20,
+      return {new(35000, 0, 0, 30, 20,
                   love.graphics.newImage('assets/planet-1.png'), "Earth",
                  "This is a pretty great planet."),
               new(0, 0, 0, 0, 200,

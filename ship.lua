@@ -4,6 +4,7 @@ local default_config = default_config_file:read("*all")
 default_config_file:close()
 
 local repl = require("love-repl")
+repl.last_result = "Press control-` to open the repl or just start typing code."
 
 local sandbox = {
    pairs = pairs,
@@ -25,8 +26,8 @@ local sandbox = {
 }
 
 local ship = {
-   x = -200, y = 0,
-   dx = 0, dy = 0,
+   x = 0, y = 10000,
+   dx = 50, dy = 0,
    heading = math.pi,
 
    engine = 10,
@@ -67,8 +68,10 @@ local ship = {
       ship.y = ship.y + (ship.dy * dt * 100)
 
       -- activate controls
-      for k,f in pairs(ship.api.controls) do
-         f(love.keyboard.isDown(k))
+      if(not ship.api.repl.toggled()) then
+         for k,f in pairs(ship.api.controls) do
+            f(love.keyboard.isDown(k))
+         end
       end
 
       if(ship.engine_on and ship.fuel > 0) then
