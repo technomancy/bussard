@@ -3,6 +3,27 @@ local default_config_file = io.open("default_config.lua", "r")
 local default_config = default_config_file:read("*all")
 default_config_file:close()
 
+local repl = require("love-repl")
+
+local sandbox = {
+   pairs = pairs,
+   ipairs = ipairs,
+   unpack = unpack,
+   print = repl.print,
+   realprint = print,
+   coroutine = { yield = coroutine.yield,
+                 status = coroutine.status },
+   io = { write = write, read = read },
+   tonumber = tonumber,
+   tostring = tostring,
+   math = math,
+   type = type,
+   table = { concat = table.concat,
+             remove = table.remove,
+             insert = table.insert,
+   },
+}
+
 local ship = {
    x = -200, y = 0,
    dx = 0, dy = 0,
@@ -27,27 +48,16 @@ local ship = {
    config = default_config,
 
    configure = function(ship, bodies, game_api)
+      local font = love.graphics.newFont("mensch.ttf", 20)
+      repl.initialize()
+      repl.screenshot = false
+      repl.font = font
+      repl.sandbox = sandbox
       ship.api.sensors.bodies = function() return bodies end
       local chunk = assert(loadstring(ship.config))
-      local box = { pairs = pairs,
-                    ipairs = ipairs,
-                    unpack = unpack,
-                    print = ship.api.message,
-                    coroutine = { yield = coroutine.yield,
-                                  status = coroutine.status },
-                    io = { write = write, read = read },
-                    tonumber = tonumber,
-                    tostring = tostring,
-                    math = math,
-                    type = type,
-                    table = { concat = table.concat,
-                              remove = table.remove,
-                              insert = table.insert,
-                    },
-                    ship = ship.api,
-                    game = game_api,
-      }
-      setfenv(chunk, box)
+      sandbox.ship = ship.api
+      sandbox.game = game_api
+      setfenv(chunk, sandbox)
       chunk()
    end,
 
@@ -84,6 +94,7 @@ local ship = {
 }
 
 ship.api = {
+   repl = repl,
    sensors = {
       x = function() return ship.x end,
       y = function() return ship.y end,
@@ -92,8 +103,6 @@ ship.api = {
       heading = function() return ship.heading end,
       fuel = function() return ship.fuel end,
    },
-   controls = {},
-   commands = {},
    actions = {
       forward = function(down) ship.engine_on = down end,
       left = function(down) ship.turning_left = down end,
@@ -105,16 +114,15 @@ ship.api = {
       end,
       connect = function()
          if(ship.target and ship:in_range(ship.target)) then
-            ship.api.message("Connecting to " .. ship.target.name .. "... TODO")
+            repl.print("Connecting to " .. ship.target.name .. "... TODO")
          else
-            ship.api.message("Could not connect.")
+            repl.print("Could not connect.")
          end
       end,
    },
-   messages = {},
-   message = function(msg)
-      table.insert(ship.api.messages, msg)
-   end,
+   -- added by loading config
+   controls = {},
+   commands = {},
 }
 
 return ship

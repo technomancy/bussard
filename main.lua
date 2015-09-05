@@ -14,6 +14,7 @@ local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 local game_api = { quit = function() love.event.push("quit") end,
                    scale = 0.5,
                    paused = false,
+                   keyboard = love.keyboard,
                  }
 
 local gravitate = function(bodies, ship, dt)
@@ -57,9 +58,11 @@ love.keypressed = function(key, is_repeat)
    if(ship.api.commands[key]) then
       ship.api.commands[key]()
    elseif(not ship.api.controls[key]) then
-      -- ship.ui.input(key)
+      ship.api.repl.keypressed(key)
    end
 end
+
+love.textinput = function(t) ship.api.repl.textinput(t) end
 
 love.draw = function()
    starfield.render(star1, ship.x, ship.y)
@@ -102,4 +105,5 @@ love.draw = function()
    if(ship.target) then
       hud.vector(ship.target.dx, ship.target.dy, w - 10 - hud.vector_size, 70)
    end
+   if(ship.api.repl.toggled()) then ship.api.repl.draw() end
 end

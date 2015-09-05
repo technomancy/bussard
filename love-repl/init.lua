@@ -3,6 +3,8 @@
 -- Released under the Boost License: <http://www.boost.org/LICENSE_1_0.txt>
 -- Adapted for love 0.8.0 by Phil Hagelberg
 
+local love = love
+
 -- Module
 local repl = {
    _VERSION = 'love-repl v0.2',
@@ -150,6 +152,10 @@ function repl.eval(text, add_to_history)
       else
          repl.print('! Unknown compilation error')
       end
+   end
+
+   if repl.sandbox then
+      setfenv(func, repl.sandbox)
    end
 
    -- Try evaluating
