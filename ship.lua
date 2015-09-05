@@ -26,11 +26,11 @@ local sandbox = {
 }
 
 local ship = {
-   x = 0, y = 10000,
-   dx = 50, dy = 0,
+   x = 10000, y = 10000,
+   dx = 1, dy = 0,
    heading = math.pi,
 
-   engine = 10,
+   engine = 25,
    engine_on = false,
    turning_speed = 3,
    turning_right = false,
@@ -38,8 +38,8 @@ local ship = {
 
    fuel = 100,
    recharge_rate = 1,
-   burn_rate = 5,
-   mass = 10,
+   burn_rate = 3,
+   mass = 100,
 
    comm_connected = false,
    comm_range = 450,
@@ -57,6 +57,7 @@ local ship = {
       local chunk = assert(loadstring(ship.config))
       sandbox.ship = ship.api
       sandbox.ui = ui
+      sandbox.refuel = function() ship.fuel = 100 end
       setfenv(chunk, sandbox)
       chunk()
    end,
@@ -125,6 +126,7 @@ ship.api = {
    -- added by loading config
    controls = {},
    commands = {},
+   cheat = ship,
 }
 
 return ship

@@ -289,9 +289,9 @@ function repl.draw()
    -- Draw background
    love.graphics.setColor(0, 0, 0, 150)
    if(repl.toggled()) then
-      love.graphics.rectangle("fill", 0, 0, 800, 600)
+      love.graphics.rectangle("fill", 0, 0, width, height)
    else
-      love.graphics.rectangle("fill", 0, 560, 800, 600)
+      love.graphics.rectangle("fill", 0, height - 40, width, height)
    end
    love.graphics.setColor(0, 200, 0)
 

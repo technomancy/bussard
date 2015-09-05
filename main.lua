@@ -54,6 +54,7 @@ end
 
 -- for commands that don't need repeat
 love.keypressed = function(key, is_repeat)
+   if(key == "pageup") then ship.dx, ship.dy = 0, 0 end
    if(ship.api.commands[key]) then
       ship.api.commands[key]()
    elseif(not ship.api.controls[key]) then
@@ -62,7 +63,7 @@ love.keypressed = function(key, is_repeat)
 end
 
 love.textinput = function(t)
-   if(not ship.api.controls[t]) then
+   if(ship.api.repl.toggled() or (not ship.api.controls[t])) then
       ship.api.repl.textinput(t)
    end
 end
@@ -109,7 +110,11 @@ love.draw = function()
    hud.render(ship, ship.target)
    hud.vector(ship.dx, ship.dy, w - 10 - hud.vector_size, 10)
    if(ship.target) then
+      -- target velocity
       hud.vector(ship.target.dx, ship.target.dy, w - 10 - hud.vector_size, 70)
+      -- target gravitation on ship
+      dx, dy = body.gravitate(ship.target, ship.x, ship.y)
+      hud.vector(dx, dy, w - 10 - hud.vector_size, 130)
    end
 
    ship.api.repl.draw()
