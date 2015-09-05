@@ -11,11 +11,11 @@ local star1 = star1 or starfield.new(10, w, h, 0.01, 100)
 local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
 local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
-local game_api = { quit = function() love.event.push("quit") end,
-                   scale = 0.5,
-                   paused = false,
-                   keyboard = love.keyboard,
-                 }
+local ui = { quit = function() love.event.push("quit") end,
+             scale = 0.5,
+             paused = false,
+             keyboard = love.keyboard,
+           }
 
 local gravitate = function(bodies, ship, dt)
    for _, b in ipairs(bodies) do
@@ -32,7 +32,6 @@ local gravitate = function(bodies, ship, dt)
             b2.theta_v = theta
             b2.dx = b2.dx + (ddx / b2.mass)
             b2.dy = b2.dy + (ddy / b2.mass)
-            -- print(string.format("%s gravitating %0.2f, %0.2f", b.name, f, f2))
          end
       end
    end
@@ -44,11 +43,11 @@ love.load = function()
    local font = love.graphics.newFont("jura-demibold.ttf", 20)
    love.graphics.setFont(font)
    bodies = body.load()
-   ship:configure(bodies, game_api)
+   ship:configure(bodies, ui)
 end
 
 love.update = function(dt)
-   if(game_api.paused) then return end
+   if(ui.paused) then return end
    ship:update(dt)
    gravitate(bodies, ship, dt)
 end
@@ -71,7 +70,8 @@ love.draw = function()
 
    love.graphics.push()
    love.graphics.translate(w / 2, h / 2)
-   love.graphics.scale(game_api.scale*game_api.scale)
+   love.graphics.push()
+   love.graphics.scale(ui.scale*ui.scale)
 
    if(ship.target) then -- directional target indicator
       if(ship:in_range(ship.target)) then
@@ -79,7 +79,7 @@ love.draw = function()
       else
          love.graphics.setColor(100, 100, 100)
       end
-      love.graphics.setLineWidth(game_api.scale*game_api.scale*5)
+      love.graphics.setLineWidth(ui.scale*ui.scale*5)
       local px, py = ship.target.x, ship.target.y
       local dx, dy = px - ship.x, py - ship.y
       love.graphics.line(0, 0, dx, dy)
@@ -91,10 +91,12 @@ love.draw = function()
       body.draw(b, ship.x, ship.y, b == ship.target)
    end
 
+   love.graphics.pop()
+
    -- the ship itself
    love.graphics.setColor(255, 50, 50);
    love.graphics.rotate(math.pi - ship.heading)
-   love.graphics.polygon("fill", 0, -30, -20, 50, 20, 50)
+   love.graphics.polygon("fill", 0, -6, -4, 10, 4, 10)
 
    love.graphics.pop()
    love.graphics.setLineWidth(1)

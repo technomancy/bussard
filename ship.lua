@@ -47,16 +47,15 @@ local ship = {
 
    config = default_config,
 
-   configure = function(ship, bodies, game_api)
-      local font = love.graphics.newFont("mensch.ttf", 20)
+   configure = function(ship, bodies, ui)
       repl.initialize()
       repl.screenshot = false
-      repl.font = font
+      repl.font = love.graphics.getFont()
       repl.sandbox = sandbox
       ship.api.sensors.bodies = function() return bodies end
       local chunk = assert(loadstring(ship.config))
       sandbox.ship = ship.api
-      sandbox.game = game_api
+      sandbox.ui = ui
       setfenv(chunk, sandbox)
       chunk()
    end,
