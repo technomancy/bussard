@@ -1,16 +1,32 @@
 local shallow_copy = function(orig)
-      local orig_type = type(orig)
-      local copy
-      if orig_type == 'table' then
-         copy = {}
-         for orig_key, orig_value in pairs(orig) do
-            copy[orig_key] = orig_value
-         end
-      else -- number, string, boolean, etc
-         copy = orig
+   local orig_type = type(orig)
+   local copy
+   if orig_type == 'table' then
+      copy = {}
+      for orig_key, orig_value in pairs(orig) do
+         copy[orig_key] = orig_value
       end
-      return copy
+   else -- number, string, boolean, etc
+      copy = orig
    end
+   return copy
+end
+
+local includes = function(tab, val)
+   for _,x in pairs(tab) do
+      if(x == val) then return true end
+   end
+   return false
+end
+
+local make_readonly = function(t, table_name)
+   table_name = table_name or "table"
+   local mt = {
+      __newindex = function(_, _, _) error(table_name .. " is read-only") end
+   }
+   setmetatable(t, mt)
+   return t
+end
 
 return {
    shallow_copy = shallow_copy,
@@ -18,7 +34,7 @@ return {
    partial = function(f, ...)
       local partial_args = {...}
       return function(...)
-         local new_args = orb.utils.shallow_copy(partial_args)
+         local new_args = shallow_copy(partial_args)
          local inner_args = {...}
          for _,v in ipairs(inner_args) do table.insert(new_args, v) end
          return f(unpack(new_args))
@@ -37,12 +53,7 @@ return {
       return vs
    end,
 
-   includes = function(tab, val)
-      for _,x in orb.utils.mtpairs(tab) do
-         if(x == val) then return true end
-      end
-      return false
-   end,
+   includes = includes,
 
    split = function(str,div)
       if(div=='') then return {str} end
@@ -80,4 +91,27 @@ return {
       end
       return new
    end,
+
+   whitelist_table = function(source, whitelist, table_name)
+      table_name = table_name or "table"
+      local t = {}
+      local mt = {
+         __index = function(_, key)
+            if(includes(whitelist, key)) then
+               if(type(source[key]) == "table") then
+                  return make_readonly(shallow_copy(source[key]))
+               else
+                  return source[key]
+               end
+            end
+         end,
+         __newindex = function(_, _, _) error(table_name .. " are read-only") end
+      }
+      setmetatable(t, mt)
+      return t
+   end,
+
+   make_readonly = make_readonly,
+
+   calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end,
 }
