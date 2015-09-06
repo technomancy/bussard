@@ -134,10 +134,7 @@ local function pack(...) return {...} end
 
 function repl.eval(text, add_to_history)
    -- Evaluate string
-   if text:sub(0,1) == '=' then
-      text = 'return ' .. text:sub(2)
-   end
-   local func, err = loadstring(text)
+   local func, err = loadstring("return " .. text)
    -- Compilation error
    if not func then
       if err then
