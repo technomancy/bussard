@@ -3,17 +3,15 @@ local utils = require "utils"
 local hud_text = "speed: %0.2f | pos: %5.2f, %5.2f\n" ..
    "target: %s | distance: %0.2f"
 
-local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
-
 local vector_size = 50
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 return {
    render = function(ship, target)
-      local speed = calculate_distance(ship.dx, ship.dy)
+      local speed = utils.calculate_distance(ship.dx, ship.dy)
       local distance, target_name
       if(target) then
-         distance = calculate_distance(ship.x - target.x, ship.y - target.y)
+         distance = utils.calculate_distance(ship.x - target.x, ship.y - target.y)
          target_name = target.name
       else
          target_name, distance = "none", 0

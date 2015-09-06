@@ -19,19 +19,20 @@ local ui = { quit = function() love.event.push("quit") end,
 
 local gravitate = function(bodies, ship, dt)
    for _, b in ipairs(bodies) do
-      b.x = b.x + (b.dx * dt * 50)
-      b.y = b.y + (b.dy * dt * 50)
-      local ddx, ddy, f = body.gravitate(b, ship.x, ship.y)
+      b.x = b.x + (b.dx * dt * 100)
+      b.y = b.y + (b.dy * dt * 100)
 
-      ship.dx = ship.dx + ddx / ship.mass
-      ship.dy = ship.dy + ddy / ship.mass
+      local ddx, ddy = body.gravitate(b, ship.x, ship.y)
+      ship.dx = ship.dx + dt * ddx / ship.mass
+      ship.dy = ship.dy + dt * ddy / ship.mass
 
+      -- body-to-body
       for _, b2 in ipairs(bodies) do
          if(b ~= b2 and (not b2.star)) then
             local ddx, ddy, f2 = body.gravitate(b, b2.x, b2.y)
             b2.theta_v = theta
-            b2.dx = b2.dx + (ddx / b2.mass)
-            b2.dy = b2.dy + (ddy / b2.mass)
+            b2.dx = b2.dx + (dt * ddx / b2.mass)
+            b2.dy = b2.dy + (dt * ddy / b2.mass)
          end
       end
    end
