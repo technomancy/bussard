@@ -7,7 +7,7 @@ end
 
 return {
    load = function()
-      return {new(3500, 0, 0, 5, 1000,
+      return {new(5000, 0, 0, 5, 1000,
                   love.graphics.newImage('assets/planet-1.png'), "Earth",
                  "This is a pretty great planet."),
               new(0, 0, 0, 0, 20000,

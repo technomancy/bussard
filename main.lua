@@ -102,9 +102,13 @@ love.draw = function()
    love.graphics.setColor(255, 50, 50);
    love.graphics.rotate(math.pi - ship.heading)
    love.graphics.polygon("fill", 0, -6, -4, 10, 4, 10)
+   if(ship.engine_on) then
+      love.graphics.setColor(255, 255, 255);
+      love.graphics.setLineWidth(1)
+      love.graphics.line(-4, 11, 4, 11)
+   end
 
    love.graphics.pop()
-   love.graphics.setLineWidth(1)
 
    -- TODO: data-driven hud
    hud.render(ship, ship.target)
