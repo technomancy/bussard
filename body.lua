@@ -1,9 +1,13 @@
+local utils = require "utils"
+
 local new = function(x, y, dx, dy, mass, image, name, description, star)
    return {x = x, y = y, dx = dx, dy = dy,
            mass = mass, image = image, name = name, description = description,
            star = star
    }
 end
+
+local g = 100000
 
 return {
    load = function()
@@ -22,13 +26,14 @@ return {
 
    gravitate = function(body, x, y)
       local dx = (x - body.x)
-      local dy = (y - body.x)
-      local distance = math.sqrt(dx*dx + dy*dy)
+      local dy = (y - body.y)
 
+      local distance = utils.calculate_distance(dx, dy)
       local theta = math.atan2(dx, dy) + math.pi
-      local g = 5000
 
       local f = (body.mass * g) / (distance * distance)
-      return (f * math.sin(theta)), (f * math.cos(theta)), f
+      return (f * math.sin(theta)), (f * math.cos(theta))
+   end,
+
    end,
 }
