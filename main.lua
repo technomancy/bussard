@@ -2,6 +2,7 @@ local body = require "body"
 local starfield = require "starfield"
 local hud = require "hud"
 local ship = require "ship"
+local asteroid = require "asteroid"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 

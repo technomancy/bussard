@@ -70,7 +70,7 @@ local ship = {
       ship.bodies = bodies
       sandbox.ship = ship.api
       sandbox.ui = ui
-      sandbox.refuel = function() ship.fuel = 100 end -- cheat
+      sandbox.refuel = function() ship.fuel = ship.fuel_capacity end -- cheat
       setfenv(chunk, sandbox)
       chunk()
    end,

@@ -7,6 +7,15 @@ local new = function(x, y, dx, dy, mass, image, name, star, os)
    }
 end
 
+local asteroid_image = love.graphics.newImage('assets/asteroid.png')
+local asteroid = function(name)
+   local x, y, dx, dy = math.random(200000)-100000, math.random(200000)-100000
+   local dx, dy = math.random(32) - 16, math.random(32) - 16
+   local mass = math.random(64)
+   return { x = x, y = y, dx = dx, dy = dy, name = name,
+            mass = mass, image = asteroid_image }
+end
+
 local seed = function(os)
    local raw = os.fs.new_raw()
    os.fs.seed(os.fs.proxy(raw, "root", raw), {guest = ""})
@@ -19,11 +28,17 @@ local g = 100000
 
 return {
    load = function()
-      return {new(0, 0, 0, 0, 200000,
-                  love.graphics.newImage('assets/sun.png'), "Wolf 294", nil, true),
-              new(30000, 27000, -5, 5, 100,
-                  love.graphics.newImage('assets/station-1.png'),
-                  "Trine station", false, orb)}
+      local bodies = {new(0, 0, 0, 0, 200000,
+                          love.graphics.newImage('assets/sun.png'),
+                          "Wolf 294", nil, true),
+                      new(30000, 27000, -5, 5, 100,
+                          love.graphics.newImage('assets/station-1.png'),
+                          "Trine station", false, orb)
+      }
+      for i = 0, 8 do
+         table.insert(bodies, asteroid("asteroid" .. i))
+      end
+      return bodies
    end,
 
    draw = function(body, x, y)
