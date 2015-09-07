@@ -19,14 +19,11 @@ local g = 100000
 
 return {
    load = function()
-      return {new(5000, 0, 0, 5, 5000,
-                  love.graphics.newImage('assets/planet-1.png'), "Earth",
-                  false, orb),
-              new(0, 0, 0, 0, 200000,
-                  love.graphics.newImage('assets/sun.png'), "Sol", nil, true),
+      return {new(0, 0, 0, 0, 200000,
+                  love.graphics.newImage('assets/sun.png'), "Wolf 294", nil, true),
               new(30000, 27000, -5, 5, 100,
                   love.graphics.newImage('assets/station-1.png'),
-                  "Tandoori station", false, orb)}
+                  "Trine station", false, orb)}
    end,
 
    draw = function(body, x, y)

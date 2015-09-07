@@ -129,6 +129,8 @@ ship.api = {
    commands = {},
    comm = comm,
    helm = love.keyboard,
+   trajectory = 256,
+   step_size = 0.05,
 
    cheat = ship,
 }

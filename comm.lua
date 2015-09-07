@@ -18,19 +18,7 @@ return {
          fs[env.OUT] = function(output)
             -- repl doesn't have an io:write equivalent
             output = output:gsub("\n$", "")
-            if(ship.sensors.in_range(ship.sensors, target)) then
-               ship.repl.print(output)
-            else
-               print("out of range, buffering")
-               -- TODO: readonly proxy is interfering with updates to target
-               print(ship.sensors.x .. ", " .. ship.sensors.y)
-               print(target.x .. ", " .. target.y)
-               print(target)
-               table.insert(out_buffer, function()
-                               assert(target)
-                               if(ship.sensors.in_range(ship.sensors, target)) then
-                                  ship.repl.print(output) end end)
-            end
+            ship.repl.print(output)
          end
 
          sessions[target.name] = {fs, env, out_buffer}

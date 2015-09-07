@@ -1,4 +1,5 @@
 local utils = require "utils"
+local body = require "body"
 
 local hud_text = "speed: %0.2f | pos: %5.2f, %5.2f\n" ..
    "target: %s | distance: %0.2f"
@@ -23,11 +24,46 @@ return {
                           5, 5)
 
       -- fuel readout
+      love.graphics.setLineWidth(1)
       love.graphics.setColor(255, 50, 50);
       love.graphics.rectangle("fill", 5, 50,
                               math.min(ship.fuel * 2, ship.fuel_capacity*2), 20)
       love.graphics.setColor(255, 200, 200);
       love.graphics.rectangle("line", 5, 50, ship.fuel_capacity*2, 20)
+   end,
+
+   trajectory = function(ship, bodies, steps)
+      local last_x, last_y = nil, nil
+      local x, y, dx, dy = ship.x, ship.y, ship.dx, ship.dy
+      local body_points = {}
+      for _, b in pairs(bodies) do
+         body_points[b.name] = {x = b.x, y = b.y, dx = b.dx, dy = b.dy, mass = b.mass}
+      end
+
+      love.graphics.setLineWidth(5)
+      love.graphics.setColor(200, 200, 200, 200)
+      for i=0, steps do
+         for _, b in pairs(body_points) do
+            local ddx, ddy = body.gravitate(b, x, y)
+            dx = dx + ddx * ship.api.step_size / ship.mass
+            dy = dy + ddy * ship.api.step_size / ship.mass
+            b.x = b.x + (b.dx * ship.api.step_size * 100)
+            b.y = b.y + (b.dy * ship.api.step_size * 100)
+         end
+
+         for _, b2 in ipairs(body_points) do
+            if(b ~= b2 and (not b2.star)) then
+               local ddx2, ddy2 = body.gravitate(b, b2.x, b2.y)
+               b2.dx = b2.dx + (dt * ddx2 / b2.mass)
+               b2.dy = b2.dy + (dt * ddy2 / b2.mass)
+            end
+         end
+         last_x, last_y = x, y
+         x = x + (dx * ship.api.step_size * 100)
+         y = y + (dy * ship.api.step_size * 100)
+
+         love.graphics.line(last_x - ship.x, last_y - ship.y, x - ship.x, y - ship.y)
+      end
    end,
 
    vector = function(x, y, at_x, at_y)

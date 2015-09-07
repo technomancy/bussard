@@ -29,7 +29,6 @@ local gravitate = function(bodies, ship, dt)
       for _, b2 in ipairs(bodies) do
          if(b ~= b2 and (not b2.star)) then
             local ddx2, ddy2 = body.gravitate(b, b2.x, b2.y)
-            b2.theta_v = theta
             b2.dx = b2.dx + (dt * ddx2 / b2.mass)
             b2.dy = b2.dy + (dt * ddy2 / b2.mass)
          end
@@ -55,8 +54,9 @@ end
 
 -- for commands that don't need repeat
 love.keypressed = function(key, is_repeat)
-   if(key == "pageup") then ship.dx, ship.dy = 0, 0 end
-   if(ship.api.commands[key]) then
+   if(key == "pageup" and (not ship.api.repl.toggled())) then
+      ship.dx, ship.dy = 0, 0
+   elseif(ship.api.commands[key]) then
       ship.api.commands[key]()
    elseif(not ship.api.controls[key]) then
       ship.api.repl.keypressed(key, is_repeat)
@@ -91,6 +91,8 @@ love.draw = function()
       love.graphics.line(0, 0, dx, dy)
       love.graphics.setLineWidth(1)
    end
+
+   hud.trajectory(ship, bodies, ship.api.trajectory)
 
    love.graphics.setColor(255, 255, 255)
    for _,b in pairs(bodies) do
