@@ -2,7 +2,6 @@ local body = require "body"
 local starfield = require "starfield"
 local hud = require "hud"
 local ship = require "ship"
-local asteroid = require "asteroid"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
@@ -16,6 +15,8 @@ local ui = { quit = function() love.event.push("quit") end,
              scale = 0.5,
              paused = false,
            }
+
+local time_factor = 1
 
 local gravitate = function(bodies, ship, dt)
    for _, b in ipairs(bodies) do
@@ -48,9 +49,9 @@ end
 
 love.update = function(dt)
    if(ui.paused) then return end
-   ship:update(dt)
+   ship:update(dt * time_factor)
    body.schedule(bodies)
-   gravitate(bodies, ship, dt)
+   gravitate(bodies, ship, dt * time_factor)
 end
 
 -- for commands that don't need repeat
