@@ -30,7 +30,8 @@ orb.process = {
                   if(coroutine.status(p.thread) == "dead") then
                      procs[k] = nil
                   else
-                     coroutine.resume(p.thread)
+                     local live, err = coroutine.resume(p.thread)
+                     if err then print(err) end
                   end
                end
             end

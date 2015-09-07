@@ -33,5 +33,5 @@ login = function()
 end
 
 send = function(input)
-   ship.comm.send_input(ship.sensors.target, input)
+   ship.comm.send_input(ship, ship.sensors.target, input)
 end

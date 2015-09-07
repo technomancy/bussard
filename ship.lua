@@ -9,7 +9,7 @@ default_config_file:close()
 repl.last_result = "Press control-` to open the repl or just start typing code."
 
 local sensor_whitelist = {
-   "x", "y", "dx", "dy", "heading", "target", "fuel", "mass", "bodies",
+   "x", "y", "dx", "dy", "heading", "target", "fuel", "mass", "bodies", "in_range",
    -- maybe these don't belong as sensors?
    -- ship status
    "engine_on", "turning_right", "turning_left",
@@ -55,7 +55,7 @@ local ship = {
    mass = 128,
 
    comm_connected = false,
-   comm_range = 1024,
+   comm_range = 2048,
    target_number = 0,
    target = nil,
 
@@ -101,12 +101,13 @@ local ship = {
       elseif(ship.turning_right) then
          ship.heading = ship.heading - (dt * ship.turning_speed)
       end
+
+      comm.flush()
    end,
 
    in_range = function(ship, body)
-      return true
-      -- return calculate_distance(ship.x - body.x, ship.y - body.y) <
-      --    ship.comm_range
+      return utils.calculate_distance(ship.x - body.x, ship.y - body.y) <
+         ship.comm_range
    end,
 }
 
