@@ -11,7 +11,7 @@ ship.controls = {
 ship.commands = {
    -- TODO: support declaration of modifier keybindings
    ["`"] = function()
-      if(ui.keyboard.isDown("lctrl", "rctrl", "capslock")) then
+      if(ship.helm.isDown("lctrl", "rctrl", "capslock")) then
          ship.repl.toggle()
       else
          ship.repl.keypressed("`")

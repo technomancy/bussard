@@ -127,6 +127,8 @@ ship.api = {
    controls = {},
    commands = {},
    comm = comm,
+   helm = love.keyboard,
+
    cheat = ship,
 }
 

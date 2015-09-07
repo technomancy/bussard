@@ -6,3 +6,6 @@ check:
 
 count:
 	cloc *.lua
+
+todo:
+	rgrep TODO .

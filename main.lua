@@ -14,7 +14,6 @@ local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 local ui = { quit = function() love.event.push("quit") end,
              scale = 0.5,
              paused = false,
-             keyboard = love.keyboard,
            }
 
 local gravitate = function(bodies, ship, dt)
