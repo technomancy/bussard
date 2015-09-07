@@ -29,10 +29,10 @@ local gravitate = function(bodies, ship, dt)
       -- body-to-body
       for _, b2 in ipairs(bodies) do
          if(b ~= b2 and (not b2.star)) then
-            local ddx, ddy, f2 = body.gravitate(b, b2.x, b2.y)
+            local ddx2, ddy2 = body.gravitate(b, b2.x, b2.y)
             b2.theta_v = theta
-            b2.dx = b2.dx + (dt * ddx / b2.mass)
-            b2.dy = b2.dy + (dt * ddy / b2.mass)
+            b2.dx = b2.dx + (dt * ddx2 / b2.mass)
+            b2.dy = b2.dy + (dt * ddy2 / b2.mass)
          end
       end
    end

@@ -60,16 +60,16 @@ return {
       if(div==str) then return {} end
       local pos,res = 0,{}
       for st,sp in function() return str:find(div,pos) end do
-         local str = string.sub(str,pos,st-1)
-         if(str ~= "") then table.insert(res,str) end
+         local str2 = string.sub(str,pos,st-1)
+         if(str2 ~= "") then table.insert(res,str2) end
          pos = sp + 1
       end
       table.insert(res,string.sub(str,pos))
       return res
    end,
 
-   concat = function(t1, t2)
-      local t1 = shallow_copy(t1)
+   concat = function(t1_orig, t2)
+      local t1 = shallow_copy(t1_orig)
       for i=1,#t2 do
          t1[#t1+1] = t2[i]
       end

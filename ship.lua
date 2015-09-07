@@ -2,10 +2,10 @@ local utils = require("utils")
 local comm = require("comm")
 local repl = require("love-repl")
 
-local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 local default_config_file = io.open("default_config.lua", "r")
 local default_config = default_config_file:read("*all")
 default_config_file:close()
+
 repl.last_result = "Press control-` to open the repl or just start typing code."
 
 local sensor_whitelist = {
@@ -121,13 +121,6 @@ ship.api = {
          ship.target_number = ((ship.target_number + 1) %
                (#ship.api.sensors.bodies + 1))
          ship.target = ship.api.sensors.bodies[ship.target_number]
-      end,
-      connect = function()
-         if(ship.target and ship:in_range(ship.target)) then
-            repl.print("Connecting to " .. ship.target.name .. "... TODO")
-         else
-            repl.print("Could not connect.")
-         end
       end,
    },
    -- added by loading config

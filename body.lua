@@ -44,6 +44,12 @@ return {
       return (f * math.sin(theta)), (f * math.cos(theta))
    end,
 
+   escape_velocity = function(body, escapee)
+      local distance = utils.calculate_distance(body.x - escapee.x,
+                                                body.y - escapee.y)
+      return math.sqrt(2*g*body.mass / distance)
+   end,
+
    -- currently you can log into any body that's not a star
    login = function(body, username, password)
       if((not body) or body.star) then return false end
