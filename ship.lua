@@ -1,6 +1,6 @@
 local utils = require("utils")
 local comm = require("comm")
-local repl = require("love-repl")
+local repl = require("repl")
 
 local default_config_file = io.open("default_config.lua", "r")
 local default_config = default_config_file:read("*all")
