@@ -4,6 +4,8 @@
 
 A space-flight adventure exploration game, with a programmable space ship.
 
+<img src="http://p.hagelb.org/bussard-repl.png" alt="screenshot" />
+
 ## Usage
 
 Use `make` to launch.
