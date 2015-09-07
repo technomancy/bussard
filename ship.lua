@@ -38,7 +38,7 @@ local sandbox = {
 }
 
 local ship = {
-   x = 10000, y = 10000,
+   x = 30000, y = 30000,
    dx = 1, dy = 0,
    heading = math.pi,
 

@@ -18,4 +18,6 @@ Code copyright © 2015 Phil Hagelberg and contributors
 
 Distributed under the GNU General Public License version 3; see file COPYING.
 
-[Planet graphics](http://opengameart.org/content/planets-and-stars-set-high-res) © Rawdanitsu, CC0-licensed.
+[Planet graphics](http://opengameart.org/content/planets-and-stars-set-high-res) © Rawdanitsu, CC0 licensed.
+
+Station graphics by [MillionthVector](http://millionthvector.blogspot.de/p/free-sprites_12.html), CC-BY licensed.
