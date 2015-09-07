@@ -12,7 +12,7 @@ local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
 local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
 local ui = { quit = function() love.event.push("quit") end,
-             scale = 0.5,
+             scale = 1, scale_min = 0.1,
              paused = false,
            }
 
@@ -79,7 +79,10 @@ love.draw = function()
    love.graphics.push()
    love.graphics.translate(w / 2, h / 2)
    love.graphics.push()
-   love.graphics.scale(ui.scale*ui.scale)
+
+   if(ui.scale < 1) then ui.scale = 1 end
+   local scale = math.pow(1/ui.scale, 8)
+   love.graphics.scale(scale)
 
    if(ship.target) then -- directional target indicator
       if(ship:in_range(ship.target) and ship.target.os) then
@@ -87,7 +90,7 @@ love.draw = function()
       else
          love.graphics.setColor(100, 100, 100)
       end
-      love.graphics.setLineWidth(ui.scale*ui.scale*5)
+      love.graphics.setLineWidth(5*scale)
       local px, py = ship.target.x, ship.target.y
       local dx, dy = px - ship.x, py - ship.y
       love.graphics.line(0, 0, dx, dy)
@@ -116,7 +119,7 @@ love.draw = function()
    love.graphics.pop()
 
    -- TODO: data-driven hud
-   hud.render(ship, ship.target)
+   hud.render(ship, ship.target, ui.scale)
    hud.vector(ship.dx, ship.dy, w - 10 - hud.vector_size, 10)
    if(ship.target) then
       -- target velocity

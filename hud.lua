@@ -5,11 +5,13 @@ local hud_text = "speed: %0.2f | pos: %5.2f, %5.2f\n" ..
    "target: %s | distance: %0.2f"
 
 local vector_size = 50
+local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 return {
-   render = function(ship, target)
+   render = function(ship, target, scale)
       local speed = utils.calculate_distance(ship.dx, ship.dy)
       local distance, target_name
+
       if(target) then
          distance = utils.calculate_distance(ship.x - target.x, ship.y - target.y)
          target_name = target.name
@@ -18,10 +20,12 @@ return {
       end
 
       love.graphics.setColor(255, 255, 255, 150)
-
       love.graphics.print(string.format(hud_text, speed, ship.x, ship.y,
-                                        target_name, distance),
-                          5, 5)
+                                        target_name, distance), 5, 5)
+
+      local scale_y = math.log(scale) * h
+      print(scale_y)
+      love.graphics.line(w - 5, scale_y, w, scale_y)
 
       -- fuel readout
       love.graphics.setLineWidth(1)
