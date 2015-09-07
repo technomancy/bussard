@@ -1,0 +1,10 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+
+for k,v in pairs(f.proc[env.USER]) do
+   if(type(v) == "table") then
+      print(v.id .. " " .. coroutine.status(v.thread) .. ": " .. v.command)
+   end
+end
+

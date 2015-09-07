@@ -1,0 +1,6 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+for _,filename in pairs(args) do
+   print(orb.read(orb.normalize(filename, env.CWD)))
+end

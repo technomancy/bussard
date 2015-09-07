@@ -1,0 +1,16 @@
+ -- -*- lua -*-
+
+local f, env, args = ...
+local perms = args[1]
+local dirname = args[2] or env.CWD
+local dir = f[orb.normalize(dirname, env.CWD)]
+
+if(not dir) then
+   print("Not found: " .. dir)
+elseif(perms == "+") then
+   dir._group_write = "true"
+elseif(perms == "-") then
+   table.remove(dir, "_group_write")
+else
+   print("Usage: chmod +/- [DIR]")
+end

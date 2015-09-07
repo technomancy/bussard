@@ -1,0 +1,4 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+orb.mkdir(f, args[1], env)

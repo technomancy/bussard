@@ -1,0 +1,9 @@
+ -- -*- lua -*-
+
+local f, env, args = ...
+
+if(f.proc[env.USER][args[1]]) then
+   f.proc[env.USER][args[1]] = nil
+else
+   print("Process " .. args[1] .. " not found".)
+end

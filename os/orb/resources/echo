@@ -1,0 +1,10 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+
+if(args[1] == "-n") then
+   table.remove(args, 1)
+   io.write(table.concat(args, " "))
+else
+   print(table.concat(args, " "))
+end

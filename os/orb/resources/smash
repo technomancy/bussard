@@ -1,0 +1,33 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+local env = orb.utils.shallow_copy(env)
+
+local smashrc = f[env.HOME .. "/.smashrc"]
+if(smashrc) then local f = loadstring(smashrc) assert(f) return f() end
+
+while true do
+   io.write(orb.utils.interp(env.PROMPT, env))
+   local input = orb.utils.interp(io.read(), env)
+   if not input or input == "exit" or input == "logout" then return end
+
+   local var, value = input:match("export (.+)=(.*)")
+   local change_dir = input:match("cd +(.+)")
+
+   -- inlining primitives this way is kinda tacky
+   if(input == "cd") then
+      env.CWD = env.HOME
+   elseif(change_dir) then
+      env.CWD = orb.normalize(change_dir, env.CWD)
+   elseif(var) then
+      env[var] = value
+   elseif(not input:match("^ *$")) then
+      local success, msg = orb.pexec(f, env, input, orb.extra_sandbox)
+      if(not success) then
+         print(msg)
+         env.LAST_ERROR = msg
+      else
+         env.LAST_ERROR = nil
+      end
+   end
+end

@@ -1,0 +1,5 @@
+ -- -*- lua -*-
+
+local f, env, args = ...
+
+orb.add_user(f, args[1], args[2])

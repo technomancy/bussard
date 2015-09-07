@@ -1,0 +1,15 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+local group = args[1]
+local dirname = args[2] or env.CWD
+local dir = f[orb.normalize(dirname, env.CWD)]
+
+-- TODO: assert arg is an actual group
+if(not dir) then
+   print("Not found: " .. dir)
+elseif(not group) then
+   print("Usage: chgrp GROUP [DIR]")
+else
+   dir._group = group
+end

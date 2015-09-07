@@ -1,0 +1,13 @@
+ -- -*- lua -*-
+
+local f, env, args = ...
+
+local group = table.remove(args,1)
+
+if(env.USER == "root" or orb.in_group(f, env.USER, group)) then
+   for _,user in ipairs(args) do
+      orb.add_to_group(f, user, group)
+   end
+else
+   print("Not a member of " .. group)
+end

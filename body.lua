@@ -1,5 +1,5 @@
 local utils = require "utils"
-local orb = require "orb"
+local orb = require "os/orb"
 
 local new = function(x, y, dx, dy, mass, image, name, description, star, os)
    return { x = x, y = y, dx = dx, dy = dy,

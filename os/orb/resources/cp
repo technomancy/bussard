@@ -1,0 +1,6 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+local to_dir, to_base = orb.dirname(orb.normalize(args[2], env.CWD))
+
+f[to_dir][to_base] = f[orb.normalize(args[1], env.CWD)]

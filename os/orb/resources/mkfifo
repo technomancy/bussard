@@ -1,0 +1,22 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+local dir, base = orb.dirname(orb.normalize(args[1], env.CWD))
+
+local buffer = {}
+local max_buffer_size = 1024
+
+f[dir][base] = function(...)
+   local arg = {...}
+   if(#arg == 0) then
+      while #buffer == 0 do coroutine.yield() end
+      return table.remove(buffer, 1)
+   elseif(arg[1] == "*buffer") then
+      return buffer
+   else -- write
+      while(#buffer > max_buffer_size) do coroutine.yield() end
+      for _,output in pairs(arg) do
+         table.insert(buffer, output)
+      end
+   end
+end

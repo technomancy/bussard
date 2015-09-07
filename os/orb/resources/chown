@@ -1,0 +1,15 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+local user = args[1]
+local dirname = args[2] or env.CWD
+local dir = f[orb.normalize(dirname, env.CWD)]
+
+-- TODO: assert arg is an actual user
+if(not dir) then
+   print("Not found: " .. dir)
+elseif(not user) then
+   print("Usage: chown USER [DIR]")
+else
+   dir._user = user
+end

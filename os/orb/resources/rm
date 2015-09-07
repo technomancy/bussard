@@ -1,0 +1,7 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+for _,filename in pairs(args) do
+   local dir, base = orb.dirname(orb.normalize(filename, env.CWD))
+   f[orb.normalize(dir, env.CWD)][base] = nil
+end
