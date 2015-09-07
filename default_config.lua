@@ -27,3 +27,11 @@ ship.commands = {
    tab = ship.actions.next_target,
    pause = function() ui.paused = (not ui.paused) end,
 }
+
+login = function()
+   return ship.comm.login(ship, ship.sensors.target, "guest", "")
+end
+
+send = function(input)
+   ship.comm.send_input(ship.sensors.target, input)
+end

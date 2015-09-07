@@ -1,10 +1,22 @@
+local utils = require("utils")
+local comm = require("comm")
+local repl = require("love-repl")
+
 local calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end
 local default_config_file = io.open("default_config.lua", "r")
 local default_config = default_config_file:read("*all")
 default_config_file:close()
-
-local repl = require("love-repl")
 repl.last_result = "Press control-` to open the repl or just start typing code."
+
+local sensor_whitelist = {
+   "x", "y", "dx", "dy", "heading", "target", "fuel", "mass", "bodies",
+   -- maybe these don't belong as sensors?
+   -- ship status
+   "engine_on", "turning_right", "turning_left",
+   -- ship capabilities
+   "engine_strength", "turning_speed",
+   "recharge_rate", "burn_rate", "comm_range",
+}
 
 local sandbox = {
    pairs = pairs,
@@ -30,19 +42,20 @@ local ship = {
    dx = 1, dy = 0,
    heading = math.pi,
 
-   engine = 25,
+   engine_strength = 16,
    engine_on = false,
-   turning_speed = 3,
+   turning_speed = 4,
    turning_right = false,
    turning_left = false,
 
-   fuel = 100,
+   fuel = 128,
+   fuel_capacity = 128,
    recharge_rate = 1,
-   burn_rate = 3,
-   mass = 100,
+   burn_rate = 4,
+   mass = 128,
 
    comm_connected = false,
-   comm_range = 450,
+   comm_range = 1024,
    target_number = 0,
    target = nil,
 
@@ -53,11 +66,11 @@ local ship = {
       repl.screenshot = false
       repl.font = love.graphics.getFont()
       repl.sandbox = sandbox
-      ship.api.sensors.bodies = function() return bodies end
       local chunk = assert(loadstring(ship.config))
+      ship.bodies = bodies
       sandbox.ship = ship.api
       sandbox.ui = ui
-      sandbox.refuel = function() ship.fuel = 100 end
+      sandbox.refuel = function() ship.fuel = 100 end -- cheat
       setfenv(chunk, sandbox)
       chunk()
    end,
@@ -76,10 +89,10 @@ local ship = {
       end
 
       if(ship.engine_on and ship.fuel > 0) then
-         ship.dx = ship.dx + (math.sin(ship.heading) * dt * ship.engine)
-         ship.dy = ship.dy + (math.cos(ship.heading) * dt * ship.engine)
+         ship.dx = ship.dx + (math.sin(ship.heading) * dt * ship.engine_strength)
+         ship.dy = ship.dy + (math.cos(ship.heading) * dt * ship.engine_strength)
          ship.fuel = ship.fuel - (ship.burn_rate * dt)
-      elseif(ship.fuel < 100) then
+      elseif(ship.fuel < ship.fuel_capacity) then
          ship.fuel = ship.fuel + (ship.recharge_rate * dt)
       end
 
@@ -91,29 +104,23 @@ local ship = {
    end,
 
    in_range = function(ship, body)
-      return calculate_distance(ship.x - body.x, ship.y - body.y) <
-         ship.comm_range
+      return true
+      -- return calculate_distance(ship.x - body.x, ship.y - body.y) <
+      --    ship.comm_range
    end,
 }
 
 ship.api = {
    repl = repl,
-   sensors = {
-      x = function() return ship.x end,
-      y = function() return ship.y end,
-      dx = function() return ship.dx end,
-      dy = function() return ship.dy end,
-      heading = function() return ship.heading end,
-      fuel = function() return ship.fuel end,
-   },
+   sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),
    actions = {
       forward = function(down) ship.engine_on = down end,
       left = function(down) ship.turning_left = down end,
       right = function(down) ship.turning_right = down end,
       next_target = function()
-         local bodies = ship.api.sensors.bodies()
-         ship.target_number = (ship.target_number + 1) % (#bodies + 1)
-         ship.target = bodies[ship.target_number]
+         ship.target_number = ((ship.target_number + 1) %
+               (#ship.api.sensors.bodies + 1))
+         ship.target = ship.api.sensors.bodies[ship.target_number]
       end,
       connect = function()
          if(ship.target and ship:in_range(ship.target)) then
@@ -126,6 +133,7 @@ ship.api = {
    -- added by loading config
    controls = {},
    commands = {},
+   comm = comm,
    cheat = ship,
 }
 

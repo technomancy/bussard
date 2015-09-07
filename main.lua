@@ -50,6 +50,7 @@ end
 love.update = function(dt)
    if(ui.paused) then return end
    ship:update(dt)
+   body.schedule(bodies)
    gravitate(bodies, ship, dt)
 end
 

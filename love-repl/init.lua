@@ -1,17 +1,13 @@
 -- love-repl - an interactive lua repl for love games
--- Copyright (c) 2013-2014 ioddly
+-- Originally Copyright (c) 2013-2014 ioddly
 -- Released under the Boost License: <http://www.boost.org/LICENSE_1_0.txt>
--- Adapted for love 0.8.0 by Phil Hagelberg
+
+-- Adapted for this specific game by Phil Hagelberg
 
 local love = love
 
 -- Module
 local repl = {
-   _VERSION = 'love-repl v0.2',
-   _DESCRIPTION = "An interactive lua REPL for Love games",
-   _URL = "https://github.com/ioddly/love-repl",
-   _LICENSE = "Boost 1.0",
-
    toggle_key = 'escape',
    padding_left = 10,
    max_lines = 1000,
@@ -34,7 +30,8 @@ local toggled = false
 -- Console contents
 -- History is just a list of strings
 local history
--- List of {boolean, string} where boolean is true if the string is part of user-navigable history (a > will be prepended before rendering if true)
+-- List of {boolean, string} where boolean is true if the string is part of user
+-- -navigable history (a > will be prepended before rendering if true)
 local lines
 -- Line that is currently being edited
 local editline = ""
@@ -138,16 +135,11 @@ function repl.eval(text, add_to_history)
    -- Compilation error
    if not func then
       if err then
-         -- Could be an expression instead of a statement -- try auto-adding return before it
-         local err2
-         func, err2 = loadstring("return " .. text)
-         if err2 then
-            repl.print('! Compilation error: ' .. err)
-            return false
-         end
+         repl.print('! Compilation error: ' .. err)
       else
          repl.print('! Unknown compilation error')
       end
+      return false
    end
 
    if repl.sandbox then
@@ -156,8 +148,12 @@ function repl.eval(text, add_to_history)
 
    -- Try evaluating
    if func then
-      local result = pack(pcall(func))
-      local ret = result[2]
+      local traceback = nil
+      local err_msg = nil
+      local result = pack(xpcall(func, function(e)
+                                    traceback = debug.traceback()
+                                    err_msg = e end))
+      -- local result = pack(xpcall(func, debug.debug))
       if result[1] then
          repl.append(true, text)
          local results, i = tostring(result[2]), 3
@@ -176,22 +172,12 @@ function repl.eval(text, add_to_history)
          repl.print(results)
          return true
       else
-         repl.print('! Evaluation error: ' .. ret)
+         print(err_msg)
+         print(traceback)
+         repl.print('! Evaluation error: ' .. err_msg)
       end
    end
    return false
-end
-
-function repl.mousepressed(_, _, button)
-   if button == 'wu' then
-      if offset <= (lines.entries - DISPLAY_ROWS) then
-         offset = offset + 1
-      end
-   elseif button == 'wd' then
-      if offset - 1 ~= 0 then
-         offset = offset - 1
-      end
-   end
 end
 
 -- Line editing functionality and key handling
@@ -209,7 +195,7 @@ local function get_history()
    end
 end
 
-local function ctrlp() return love.keyboard.isDown('lctrl') or love.keyboard.isDown('rctrl') end
+local function ctrlp() return love.keyboard.isDown('lctrl', 'rctrl') end
 
 function repl.keypressed(k)
    -- Line editing
@@ -301,7 +287,8 @@ function repl.draw()
       love.graphics.print(ln, repl.padding_left, limit)
 
       -- draw cursor
-      local cx, cy = repl.padding_left + 1 + font:getWidth(prefix .. editline:sub(0, cursor)),
+      local cx, cy = repl.padding_left + 1 +
+         font:getWidth(prefix .. editline:sub(0, cursor)),
       limit + font:getHeight() + 2
       love.graphics.line(cx, cy, cx + 5, cy)
    end
@@ -321,11 +308,13 @@ function repl.draw()
    -- draw history
    -- maximum characters in a rendered line of text
    local render_line = function(ln2, row)
-      love.graphics.print(ln2, repl.padding_left, limit - (ROW_HEIGHT * (row + 1)))
+      love.graphics.print(ln2, repl.padding_left, limit -
+                             (ROW_HEIGHT * (row + 1)))
    end
 
    local render_lines = function(ln2, row, rows)
-      love.graphics.printf(ln2, repl.padding_left, limit - (ROW_HEIGHT * (row + rows)), DISPLAY_WIDTH)
+      love.graphics.printf(ln2, repl.padding_left, limit -
+                              (ROW_HEIGHT * (row + rows)), DISPLAY_WIDTH)
    end
 
    if repl.wrapping then
@@ -350,8 +339,8 @@ function repl.draw()
 
    -- draw scroll bar
 
-   -- this only gives you an estimate since it uses the amount of lines entered rather than the lines drawn, but close
-   -- enough
+   -- this only gives you an estimate since it uses the amount of
+   -- lines entered rather than the lines drawn, but close enough
 
    -- height is percentage of the possible lines
    local bar_height = math.min(100, (DISPLAY_ROWS * 100) / lines.entries)
@@ -363,7 +352,9 @@ function repl.draw()
    if bar_height_pixels >= height - 10 then
       love.graphics.line(sx, 5, sx, height - 5)
    else
-      -- now determine location on the screen by taking the offset in history and converting it first to a percentage of total lines and then a pixel offset on the screen
+      -- now determine location on the screen by taking the offset in
+      -- history and converting it first to a percentage of total
+      -- lines and then a pixel offset on the screen
       local bar_end = (offset * 100) / lines.entries
       bar_end = ((height - 10) * bar_end) / 100
       bar_end = height - bar_end
