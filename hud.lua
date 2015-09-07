@@ -4,7 +4,6 @@ local hud_text = "speed: %0.2f | pos: %5.2f, %5.2f\n" ..
    "target: %s | distance: %0.2f"
 
 local vector_size = 50
-local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 return {
    render = function(ship, target)
@@ -26,9 +25,9 @@ return {
       -- fuel readout
       love.graphics.setColor(255, 50, 50);
       love.graphics.rectangle("fill", 5, 50,
-                              math.min(ship.fuel * 2, 200), 20)
+                              math.min(ship.fuel * 2, ship.fuel_capacity*2), 20)
       love.graphics.setColor(255, 200, 200);
-      love.graphics.rectangle("line", 5, 50, 200, 20)
+      love.graphics.rectangle("line", 5, 50, ship.fuel_capacity*2, 20)
    end,
 
    vector = function(x, y, at_x, at_y)
