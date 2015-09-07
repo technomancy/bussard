@@ -41,7 +41,7 @@ return {
       end
 
       love.graphics.setLineWidth(5)
-      love.graphics.setColor(200, 200, 200, 200)
+      love.graphics.setColor(150, 150, 255)
       for i=0, steps do
          for _, b in pairs(body_points) do
             local ddx, ddy = body.gravitate(b, x, y)

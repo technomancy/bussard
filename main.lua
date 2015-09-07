@@ -82,7 +82,7 @@ love.draw = function()
    love.graphics.scale(ui.scale*ui.scale)
 
    if(ship.target) then -- directional target indicator
-      if(ship:in_range(ship.target)) then
+      if(ship:in_range(ship.target) and ship.target.os) then
          love.graphics.setColor(10, 100, 10)
       else
          love.graphics.setColor(100, 100, 100)
