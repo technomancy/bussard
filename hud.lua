@@ -1,8 +1,9 @@
 local utils = require "utils"
 local body = require "body"
 
-local hud_text = "speed: %0.2f | pos: %5.2f, %5.2f\n" ..
-   "target: %s | distance: %0.2f"
+local hud_text = "speed: %0.2f     pos: %5.2f, %5.2f\n" ..
+   "target: %s     distance: %0.2f\n" ..
+   "credits: %s     time: %s"
 
 local vector_size = 50
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
@@ -21,19 +22,19 @@ return {
 
       love.graphics.setColor(255, 255, 255, 150)
       love.graphics.print(string.format(hud_text, speed, ship.x, ship.y,
-                                        target_name, distance), 5, 5)
+                                        target_name, distance,
+                                        ship.credits, ship.time), 5, 5)
 
       local scale_y = math.log(scale) * h
-      print(scale_y)
       love.graphics.line(w - 5, scale_y, w, scale_y)
 
       -- fuel readout
       love.graphics.setLineWidth(1)
       love.graphics.setColor(255, 50, 50);
-      love.graphics.rectangle("fill", 5, 50,
-                              math.min(ship.fuel * 2, ship.fuel_capacity*2), 20)
+      love.graphics.rectangle("fill", 5, 60,
+                              math.min(ship.fuel * 2, ship.fuel_capacity*2), 15)
       love.graphics.setColor(255, 200, 200);
-      love.graphics.rectangle("line", 5, 50, ship.fuel_capacity*2, 20)
+      love.graphics.rectangle("line", 5, 60, ship.fuel_capacity*2, 15)
    end,
 
    trajectory = function(ship, bodies, steps)

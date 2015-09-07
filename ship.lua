@@ -23,10 +23,9 @@ local sandbox = {
    ipairs = ipairs,
    unpack = unpack,
    print = repl.print,
-   realprint = print,
+   realprint = print, -- for debugging
    coroutine = { yield = coroutine.yield,
                  status = coroutine.status },
-   io = { write = write, read = read },
    tonumber = tonumber,
    tostring = tostring,
    math = math,
@@ -58,6 +57,9 @@ local ship = {
    comm_range = 2048,
    target_number = 0,
    target = nil,
+
+   credits = 1024,
+   time = 157654,g
 
    config = default_config,
 

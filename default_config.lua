@@ -9,7 +9,7 @@ ship.controls = {
 }
 
 ship.commands = {
-   -- TODO: support declaration of modifier keybindings
+   -- TODO: separate keymap for ctrl, alt
    ["`"] = function()
       if(ship.helm.isDown("lctrl", "rctrl", "capslock")) then
          ship.repl.toggle()
@@ -28,8 +28,9 @@ ship.commands = {
    pause = function() ui.paused = (not ui.paused) end,
 }
 
-login = function()
-   return ship.comm.login(ship, ship.sensors.target, "guest", "")
+login = function(username, password)
+   return ship.comm.login(ship, ship.sensors.target,
+                          username or "guest", password or "")
 end
 
 send = function(input)
