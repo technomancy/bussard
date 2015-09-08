@@ -1,22 +1,22 @@
-# Operating manual for Bussard-class spacecraft
+# Operating manual for Kosaga shipyards Bussard-class spacecraft
 
 Congratulations on the purchase of your spacecraft. Your ship is
-equipped with state of the art systems as well as the capacity to
-upgrade in the future to add new and exciting capabilities.
+equipped with state of the art components as well as the capacity to
+dynamically reconfigure to add new capabilities.
 
 Please review this manual to ensure you have a complete understanding
 of your ship's operation, and you will enjoy many safe travels on board.
 
 ## Display
 
-The first thing you'll see when you launch your ship is its HUD. At
-the right you'll see a readout indicating your current velocity
-vector. Once you set a target, (`tab` by default) you'll see below the
-velocity of your target, and below that the gravitation acceleration
-your target is applying to your ship. A targeting indicator will also
-point from your ship in the direction of your current target. The
-upper left shows basic speed, coordinates, target details, fuel
-readout, credits, and a clock.
+The first thing you'll see when you launch your ship is its
+heads-up-display. At the right you'll see a readout indicating your
+current velocity vector. Once you set a target, (`tab` by default)
+you'll see below the velocity of your target, and below that the
+gravitation acceleration your target is applying to your ship. A
+targeting indicator will also point from your ship in the direction of
+your current target. The upper left shows basic speed, coordinates,
+target details, fuel readout, credits, and a clock.
 
 ## Helm control
 
@@ -71,13 +71,14 @@ only the username and password (defaulting to `"guest"` and `""` if
 omitted) and the `send` function will send input to the
 currently-selected target if a login session is active.
 
-You can use the `ship.comm.login` function to initiate a session. Most
-stations allow limited access via a `guest` account with an empty
+Most stations allow limited access via a `guest` account with an empty
 password. Once you are logged in as a guest, you will have the option
 to purchase an account on that station or planet's computer system,
 which will grant you access to the rest of the services. Please note
 that attempting to access accounts of others is strictly forbidden by
 interstellar law.
+
+TODO: copying files to/from your ship
 
 ### API list
 
@@ -96,8 +97,8 @@ interstellar law.
 
 ### Upgrades
 
-Certain stations will sell you upgrades to your ship.
+Certain stations will sell you upgrades to your ship. These can either
+introduce completely new components or improve the effectiveness of
+existing components.
 
-TODO: describe upgrades
-
-TODO: describe how to read documentation for upgrades
+TODO: describe how to install upgrades, read documentation for them

@@ -1,10 +1,9 @@
 local utils = require("utils")
 local comm = require("comm")
 local repl = require("repl")
+local help = require("help")
 
-local default_config_file = io.open("default_config.lua", "r")
-local default_config = default_config_file:read("*all")
-default_config_file:close()
+local default_config = utils.read_file("default_config.lua")
 
 repl.last_result = "Press control-` to open the repl or just start typing code."
 
@@ -34,6 +33,8 @@ local sandbox = {
              remove = table.remove,
              insert = table.insert,
    },
+   help = help.message,
+   man = help.man,
 }
 
 local ship = {

@@ -122,4 +122,11 @@ return {
       end
       return formatted
    end,
+
+   read_file = function(filename)
+      local f = io.open(filename, "r")
+      local content = f:read("*all")
+      f:close()
+      return content
+   end,
 }
