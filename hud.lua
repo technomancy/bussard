@@ -3,7 +3,7 @@ local body = require "body"
 
 local hud_text = "speed: %0.2f     pos: %5.2f, %5.2f\n" ..
    "target: %s     distance: %0.2f\n" ..
-   "credits: %s     time: %s"
+   "epoch: %s     credits: %s"
 
 local vector_size = 50
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
@@ -11,6 +11,7 @@ local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 return {
    render = function(ship, target, scale)
       local speed = utils.calculate_distance(ship.dx, ship.dy)
+      local formatted_time = utils.format_seconds(os.time() + ship.time_offset)
       local distance, target_name
 
       if(target) then
@@ -23,7 +24,7 @@ return {
       love.graphics.setColor(255, 255, 255, 150)
       love.graphics.print(string.format(hud_text, speed, ship.x, ship.y,
                                         target_name, distance,
-                                        ship.credits, ship.time), 5, 5)
+                                        formatted_time, ship.credits), 5, 5)
 
       local scale_y = math.log(scale) * h
       love.graphics.line(w - 5, scale_y, w, scale_y)

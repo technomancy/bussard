@@ -59,7 +59,7 @@ local ship = {
    target = nil,
 
    credits = 1024,
-   time = 157654,g
+   time_offset = 4383504000, -- roughly 139 years ahead
 
    config = default_config,
 
