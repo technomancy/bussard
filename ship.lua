@@ -66,6 +66,7 @@ local ship = {
       repl.font = love.graphics.getFont()
       repl.sandbox = sandbox
 
+      ship.systems = systems
       sandbox.ship = ship.api
       sandbox.ui = ui
       sandbox.refuel = function() ship.fuel = ship.fuel_capacity end -- cheat
@@ -114,12 +115,22 @@ local ship = {
          ship.heading = ship.heading - (dt * ship.turning_speed)
       end
 
+      for _,b in pairs(ship.bodies) do
+         if(b.portal and ship:cleared_for(b) and ship:in_range(b, 75)) then
+            ship:enter(ship.systems, b.portal)
+         end
+      end
+
       comm.flush()
    end,
 
-   in_range = function(ship, body)
+   cleared_for = function(ship, body)
+      return not body.requires_clearance
+   end,
+
+   in_range = function(ship, body, range)
       return utils.calculate_distance(ship.x - body.x, ship.y - body.y) <
-         ship.comm_range
+         (range or ship.comm_range)
    end,
 }
 
@@ -131,8 +142,13 @@ ship.api = {
       left = function(down) ship.turning_left = down end,
       right = function(down) ship.turning_right = down end,
       next_target = function()
-         ship.target_number = ((ship.target_number + 1) %
-               (#ship.api.sensors.bodies + 1))
+         if(love.keyboard.isDown("lshift", "rshift")) then
+            ship.target_number = ((ship.target_number - 1) %
+                  (#ship.api.sensors.bodies + 1))
+         else
+            ship.target_number = ((ship.target_number + 1) %
+                  (#ship.api.sensors.bodies + 1))
+         end
          ship.target = ship.api.sensors.bodies[ship.target_number]
       end,
    },
