@@ -81,6 +81,14 @@ love.draw = function()
    love.graphics.translate(w / 2, h / 2)
    love.graphics.push()
 
+   if(ship.laser) then
+      love.graphics.push()
+      love.graphics.rotate(math.pi - ship.heading)
+      love.graphics.setLineWidth(3)
+      love.graphics.line(0, 0, 0, -1000)
+      love.graphics.pop()
+   end
+
    if(ui.scale < 1) then ui.scale = 1 end
    local scale = math.pow(1/ui.scale, 8)
    love.graphics.scale(scale)

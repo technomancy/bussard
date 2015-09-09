@@ -1,26 +1,42 @@
 local orb = require("os/orb")
 local img = love.graphics.newImage
 
+-- TODO: specify an orbit distance for bodies and calculate x, y, dx, and dy
+
 return {
    -- Tana
    ["Wolf 1453"] = {civ="Tana", capitol = true,
                     x = -5.8, y=-2.4,
-                    bodies = {},
+                    asteroids = 2,
+                    bodies = {
+                       {x=0, y=0, dx=0, dy=0, mass=230000,
+                        image=img('assets/sun.png'),
+                        name="Wolf 1453", star=true },
+                      {x=30000, y=-27000, dx=-5, dy=5, mass=700,
+                       image=img('assets/planet-1.png'),
+                       name="Koria", os=orb,
+                      },
+                      {x=10000, y=-29000, dx=-5, dy=5, mass=500,
+                       image=img('assets/planet-3.png'),
+                       name="Lioboro", os=orb,
+                      },
+                      {name = "Portal: L 668-21",
+                       image = img("assets/portal-1.png"),
+                       x=-28000, y=20000, dx=5, dy=-3,
+                       mass=75, portal="L 668-21"}},
    },
-   ["Wolf 294"] = {civ="Tana",
-                   x=-5.3, y=-0.3,
-                   bodies = {},
+   ["Wolf 294"] = {civ="Tana", x=-5.3, y=-0.3,
+                   bodies = {}, -- second-largest Tana system
    },
-   ["Luyten's Star"] = {civ="Tana",
-                        x=-3.3, y=-2,
-                        bodies = {},
+   ["Luyten's Star"] = {civ="Tana", x=-3.3, y=-2,
+                        bodies = {}, -- gateway to sol
    },
    ["L 668-21"] = {civ="Tana",
                    x=-3.6, y=-4.1,
                    asteroids = 8,
                    bodies = { {x=0, y=0, dx=0, dy=0, mass=200000,
                                image=img('assets/sun.png'),
-                               name="Wolf 294", star=true },
+                               name="L 668-21", star=true },
                       {x=30000, y=27000, dx=-5, dy=5, mass=100,
                        image=img('assets/station-pointed.png'),
                        name="Mirduka station", os=orb,
@@ -29,13 +45,17 @@ return {
                        image = img("assets/portal-1.png"),
                        x=-28000, y=20000, dx=5, dy=-15,
                        mass=75, portal="Wolf 1453", }
-                   },
+                   }, -- remote mining system
    },
+
+
    -- Sol
    ["Sol"] = {civ="Sol", capitol = true,
               x=0, y=0,
-              bodies = {},
+              bodies = {}, -- it's Sol.
    },
+
+
    -- Moyla
    ["Lalande 25372"] = {civ="Moyla", capitol = true,
                         x=1.6, y=-0.4,
@@ -45,6 +65,8 @@ return {
                    x=0, y=-1.7,
                    bodies = {},
    },
+
+
    -- Bohk
    ["L 354-89"] = {civ="Bohk", capitol = true,
                    x=4.3, y=-0.6,
@@ -52,21 +74,25 @@ return {
    },
    ["BD-12°4623"] = {civ="Bohk",
                      x=3.9, y=0.2,
-                     bodies = {},
+                     bodies = {}, -- tourism center
    },
    ["Lacaille 8760"] = {civ="Bohk",
                         x=2.8, y=0.2,
-                        bodies = {},
+                        bodies = {}, -- smaller border town
    },
+
+
    -- Wadee
    ["Hip 103039"] = {civ="Wadee", capitol = true,
                      x=3.9, y=2.3,
-                     bodies = {},
+                     bodies = {}, -- rather backwater
    },
+
+
    -- Yueh
    ["Delta Pavonis"] = {civ="Yueh", capitol = true,
                         x=4.5, y=-2.6,
-                        bodies = {},
+                        bodies = {}, -- bustling trade hub
    },
    ["Sigma Draconis"] = {civ="Yueh",
                          x=4.3, y=-1.3,
@@ -78,14 +104,14 @@ return {
    },
    ["LHS 451"] = {civ="Yueh",
                   x=4.9,y=-1.1,
-                  bodies = {},
+                  bodies = {}, -- mostly uninhabited
    },
    ["L 205-128"] = {civ="Yueh",
                     x= 5.2, y=-2.3,
-                    bodies = {},
+                    bodies = {}, -- mostly uninhabited
    },
    ["CD-40 9712"] = {civ="Yueh",
                      x=5.3, y=-2.8,
-                     bodies = {},
+                     bodies = {}, -- mostly uninhabited
    },
 }

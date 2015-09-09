@@ -37,27 +37,31 @@ local sandbox = {
 }
 
 local ship = {
-   engine_strength = 16,
+   -- ephemeral
+   x=0, y=0, dx=0, dy=0, heading = math.pi,
    engine_on = false,
-   turning_speed = 4,
    turning_right = false,
    turning_left = false,
-
-   fuel = 128,
-   fuel_capacity = 128,
-   recharge_rate = 1,
-   burn_rate = 4,
-   mass = 128,
-
    comm_connected = false,
-   comm_range = 2048,
    target_number = 0,
    target = nil,
 
+   -- keep around
+   fuel = 128,
    credits = 1024,
    time_offset = 4383504000, -- roughly 139 years ahead
-
    system_name = "L 668-21",
+   upgrades = {},
+   cargo = {},
+
+   fuel_capacity = 128,
+   recharge_rate = 1,
+   burn_rate = 12,
+   mass = 128,
+
+   engine_strength = 16,
+   turning_speed = 4,
+   comm_range = 2048,
 
    config = default_config,
 
@@ -80,11 +84,16 @@ local ship = {
 
    enter = function(ship, systems, system_name)
       ship.api.repl.last_result = "Entering the " .. system_name .. " system."
+
+      -- stuff these things in there to expose to in-ship APIs
       ship.system = systems[system_name]
       ship.bodies = ship.system.bodies
+
+      -- reset
       ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
-      ship.dx, ship.dy, ship.heading = 0, 0, math.pi
       ship.engine_on, ship.turning_right, ship.turning_left = false,false,false
+      ship.comm_connected, ship.target_number, ship.target = false, 0, nil
+
       system.populate_asteroids(ship.system)
    end,
 
@@ -151,6 +160,7 @@ ship.api = {
          end
          ship.target = ship.api.sensors.bodies[ship.target_number]
       end,
+      laser = function(down) ship.laser = down end,
    },
    -- added by loading config
    controls = {},
