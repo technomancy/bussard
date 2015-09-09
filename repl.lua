@@ -4,6 +4,7 @@
 
 -- Adapted for this specific game by Phil Hagelberg
 
+local utils = require("utils")
 local love = love
 
 -- Module
@@ -118,9 +119,12 @@ end
 
 function repl.on_close() end
 
-function repl.append(h, value)
+function repl.append(prefix, value)
    value = tostring(value)
-   lines:append(h and ('> ' .. value) or value)
+   for _, line in pairs(utils.split(value, "\n")) do
+      if(line ~= "") then repl.last_result = line end
+      lines:append(prefix and ('> ' .. line) or line)
+   end
 end
 
 function repl.print(text)
@@ -168,7 +172,6 @@ function repl.eval(text, add_to_history)
             results = results .. ', ' .. tostring(result[i])
             i = i + 1
          end
-         repl.last_result = results
          repl.print(results)
          return true
       else

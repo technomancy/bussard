@@ -61,7 +61,7 @@ return {
       local pos,res = 0,{}
       for st,sp in function() return str:find(div,pos) end do
          local str2 = string.sub(str,pos,st-1)
-         if(str2 ~= "") then table.insert(res,str2) end
+         table.insert(res,str2)
          pos = sp + 1
       end
       table.insert(res,string.sub(str,pos))
