@@ -2,13 +2,12 @@ local utils = require("utils")
 local comm = require("comm")
 local repl = require("repl")
 local help = require("help")
+local system = require("system")
 
 local default_config = utils.read_file("default_config.lua")
 
-repl.last_result = "Press control-` to open the repl or just start typing code."
-
 local sensor_whitelist = {
-   "x", "y", "dx", "dy", "heading", "target", "fuel", "mass", "bodies", "in_range",
+   "x", "y", "dx", "dy", "heading", "target", "fuel", "mass", "in_range", "bodies",
    -- maybe these don't belong as sensors?
    -- ship status
    "engine_on", "turning_right", "turning_left",
@@ -38,10 +37,6 @@ local sandbox = {
 }
 
 local ship = {
-   x = 30000, y = 30000,
-   dx = 1, dy = 0,
-   heading = math.pi,
-
    engine_strength = 16,
    engine_on = false,
    turning_speed = 4,
@@ -62,20 +57,34 @@ local ship = {
    credits = 1024,
    time_offset = 4383504000, -- roughly 139 years ahead
 
+   system_name = "L 668-21",
+
    config = default_config,
 
-   configure = function(ship, bodies, ui)
+   configure = function(ship, systems, ui)
       repl.initialize()
-      repl.screenshot = false
       repl.font = love.graphics.getFont()
       repl.sandbox = sandbox
-      local chunk = assert(loadstring(ship.config))
-      ship.bodies = bodies
+
       sandbox.ship = ship.api
       sandbox.ui = ui
       sandbox.refuel = function() ship.fuel = ship.fuel_capacity end -- cheat
+
+      local chunk = assert(loadstring(ship.config))
       setfenv(chunk, sandbox)
       chunk()
+
+      ship:enter(systems, ship.system_name)
+   end,
+
+   enter = function(ship, systems, system_name)
+      ship.api.repl.last_result = "Entering the " .. system_name .. " system."
+      ship.system = systems[system_name]
+      ship.bodies = ship.system.bodies
+      ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
+      ship.dx, ship.dy, ship.heading = 0, 0, math.pi
+      ship.engine_on, ship.turning_right, ship.turning_left = false,false,false
+      system.populate_asteroids(ship.system)
    end,
 
    update = function(ship, dt)

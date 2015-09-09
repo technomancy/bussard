@@ -1,11 +1,10 @@
-local body = require "body"
 local starfield = require "starfield"
+local body = require "body"
 local hud = require "hud"
 local ship = require "ship"
+local system = require "system"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
-
-local bodies = bodies or {}
 
 local star1 = star1 or starfield.new(10, w, h, 0.01, 100)
 local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
@@ -43,15 +42,17 @@ love.load = function()
    -- love.graphics.setDefaultFilter('nearest', 'nearest')
    local font = love.graphics.newFont("mensch.ttf", 14)
    love.graphics.setFont(font)
-   bodies = body.load()
-   ship:configure(bodies, ui)
+   systems = system.load()
+   ship:configure(systems, ui)
+   ship.api.repl.last_result =
+      "Press control-` to open the repl or just start typing code."
 end
 
 love.update = function(dt)
    if(ui.paused) then return end
    ship:update(dt * time_factor)
-   body.schedule(bodies)
-   gravitate(bodies, ship, dt * time_factor)
+   body.schedule(ship.bodies)
+   gravitate(ship.bodies, ship, dt * time_factor)
 end
 
 -- for commands that don't need repeat
@@ -97,10 +98,10 @@ love.draw = function()
       love.graphics.setLineWidth(1)
    end
 
-   hud.trajectory(ship, bodies, ship.api.trajectory)
+   hud.trajectory(ship, ship.bodies, ship.api.trajectory)
 
    love.graphics.setColor(255, 255, 255)
-   for _,b in pairs(bodies) do
+   for _,b in pairs(ship.bodies) do
       body.draw(b, ship.x, ship.y, b == ship.target)
    end
 

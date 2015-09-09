@@ -14,7 +14,6 @@ local repl = {
    max_lines = 1000,
    max_history = 1000,
    font = nil,
-   screenshot = true,
    background = false,
    wrapping = false
 }
@@ -104,13 +103,6 @@ end
 
 function repl.toggle()
    toggled = not toggled
-   if toggled then
-      if repl.screenshot then
-         repl.background = love.graphics.newImage(love.graphics.newScreenshot())
-      end
-   else
-      repl.on_close()
-   end
 end
 
 function repl.toggled()

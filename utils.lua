@@ -68,6 +68,10 @@ return {
       return res
    end,
 
+   starts_with = function(s, start)
+      return string.sub(s,1,string.len(start))==start
+   end,
+
    concat = function(t1_orig, t2)
       local t1 = shallow_copy(t1_orig)
       for i=1,#t2 do
