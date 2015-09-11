@@ -3,13 +3,12 @@
 local f = function() end
 local o = function() return 1 end
 
-love = { graphics = { newImage = f, getWidth = o, getHeight = o,
-                      newFont = f, setFont = f, getFont = f,
-                    },
-         keyboard = {
-            isDown = f,
-         },
-       }
+love = love or { graphics = { newImage = f, getWidth = o, getHeight = o,
+                              newFont = f, setFont = f, getFont = f, },
+                 keyboard = {
+                    isDown = f,
+                 },
+               }
 
 package.path = package.path .. ";?/init.lua"
 local ship = require "main"
@@ -39,9 +38,13 @@ ship = require "headless"
 m = ship.system.bodies[2]
 ship.target = m
 ship.x, ship.y = m.x, m.y
+ship.api.comm.headless_login(ship.api, ship.target, "guest", "", "lua")
+
+-- for backgrounded login sessions
 ship.api.comm.login(ship.api, ship.target, "guest", "")
 ship.api.comm.send_input(ship.api, "echo ohai > /tmp/hi")
 
 fs = ship.api.comm.sessions["Mirduka station"][1]
+m.os.process.scheduler(fs)
 fs.tmp.hi
 ]]--

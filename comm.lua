@@ -8,7 +8,7 @@ local sandbox = function(station, ship)
    return { buy = utils.partial(cargo.buy, station, ship),
             sell = utils.partial(cargo.sell, station, ship),
             station = utils.readonly_proxy(station),
-            ship = ship.api,
+            ship = ship,
    }
 end
 
@@ -27,7 +27,9 @@ local send_input = function(ship, input)
 end
 
 return {
-   login = function(ship, target, username, password)
+   sessions = sessions, -- for debugging
+
+   login = function(ship, target, username, password, command)
       local fs_raw = body.login(target, username, password)
       if(fs_raw) then
          local fs = target.os.fs.proxy(fs_raw, username, fs_raw)
@@ -49,13 +51,21 @@ return {
          end
 
          sessions[target.name] = {fs, env, out_buffer}
-         target.os.process.spawn(fs, env, "smash", sandbox(target, ship))
+         target.os.process.spawn(fs, env, command or "smash",
+                                 sandbox(target, ship))
          ship.repl.read = utils.partial(send_input, ship)
 
          return "Login succeeded."
       else
          return "Login failed."
       end
+   end,
+
+   headless_login = function(ship, target, username, password, command)
+      local fs_raw = body.login(target, username, password)
+      local fs = target.os.fs.proxy(fs_raw, username, fs_raw)
+      local env = target.os.shell.new_env(username)
+      target.os.shell.exec(fs, env, command or "smash", sandbox(target, ship))
    end,
 
    send_input = send_input,
