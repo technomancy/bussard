@@ -128,6 +128,12 @@ local ship = {
          if(b.portal and ship:cleared_for(b) and ship:in_range(b, 75)) then
             ship:enter(ship.systems, b.portal)
          end
+         local distance = utils.calculate_distance(ship.x - b.x, ship.y - b.y)
+         if(ship.laser and b.asteroid and ship:laser_hits(b, distance)) then
+            print(b.name .. " hit, remaining: " .. b.strength)
+            b.strength = b.strength - dt * ship.laser_power / distance
+            if(b.strength < 0) then b:split() end
+         end
       end
 
       comm.flush()
@@ -140,6 +146,15 @@ local ship = {
    in_range = function(ship, body, range)
       return utils.calculate_distance(ship.x - body.x, ship.y - body.y) <
          (range or ship.comm_range)
+   end,
+
+   laser_hits = function(ship, body, distance)
+      -- assuming circular images
+      local diameter = body.image:getWidth() / 2
+      local theta = math.atan2(body.y - ship.y, body.x - ship.x)
+      local angular_divergence = math.abs(ship.heading - theta)
+      local divergence = math.abs(math.sin(angular_divergence) * distance)
+      return divergence < diameter
    end,
 }
 
