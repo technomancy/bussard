@@ -35,7 +35,3 @@ login = function(username, password)
    return ship.comm.login(ship, ship.sensors.target,
                           username or "guest", password or "")
 end
-
-send = function(input)
-   ship.comm.send_input(ship, ship.sensors.target, input)
-end

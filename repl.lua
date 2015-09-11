@@ -209,7 +209,10 @@ function repl.keypressed(k)
       histpos = 0
       offset = 1
       if editline == '' then return end
-      if repl.eval(editline, true) then
+      if repl.read then
+         repl.read(editline)
+         reset_editline()
+      elseif repl.eval(editline, true) then
          reset_editline()
       end
    elseif k == 'up' then

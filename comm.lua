@@ -1,6 +1,21 @@
 local body = require("body")
+local utils = require("utils")
 
 local sessions = {}
+
+local send_input = function(ship, input)
+   if(not ship.sensors.in_range(ship.sensors, ship.sensors.target)) then
+      ship.repl.print("| Out of range.")
+   elseif(input == "logout") then -- TODO: need to get the OS to send EOF/nil
+      ship.repl.read = nil
+      ship.repl.print("Logged out.")
+   else
+      local fs, env = unpack(sessions[ship.sensors.target.name])
+      assert(fs and env and fs[env.IN], "Not logged into " ..
+                ship.sensors.target.name)
+      fs[env.IN](input)
+   end
+end
 
 return {
    login = function(ship, target, username, password)
@@ -16,29 +31,25 @@ return {
 
          -- buffer output that happens when out of range
          fs[env.OUT] = function(output)
-            -- repl doesn't have an io:write equivalent
-            output = output:gsub("\n$", "")
-            ship.repl.print(output)
+            if(output) then
+               -- repl doesn't have an io:write equivalent
+               ship.repl.print(output:gsub("\n$", ""))
+            else
+               ship.repl.read = nil -- EOF means terminate session
+            end
          end
 
          sessions[target.name] = {fs, env, out_buffer}
          target.os.process.spawn(fs, env, "smash")
+         ship.repl.read = utils.partial(send_input, ship)
+
          return "Login succeeded."
       else
          return "Login failed."
       end
    end,
 
-   send_input = function(ship, target, input)
-      if(not ship.sensors.in_range(ship.sensors, target)) then
-         ship.repl.print("| Out of range.")
-         return
-      end
-
-      local fs, env = unpack(sessions[target.name])
-      assert(fs and env and fs[env.IN], "Not logged into " .. target.name)
-      fs[env.IN](input)
-   end,
+   send_input = send_input,
 
    flush = function()
       for _,v in pairs(sessions) do
