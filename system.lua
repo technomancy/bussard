@@ -1,5 +1,3 @@
-local utils = require("utils")
-
 local asteroid_image = love.graphics.newImage('assets/asteroid.png')
 
 local min_mass = 2
@@ -10,7 +8,7 @@ local function asteroid(name, mass_max, bodies, parent)
       print("Destroyed " .. name)
       bodies[name] = nil
       if(self.mass < min_mass) then
-         -- TODO: collect minerals
+         print("TODO: collect minerals")
       else
          asteroid(name .. "-", self.mass / 2, bodies, self)
          asteroid(name .. "+", self.mass / 2, bodies, self)

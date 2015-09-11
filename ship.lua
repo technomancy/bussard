@@ -149,7 +149,7 @@ local ship = {
       comm.flush()
    end,
 
-   cleared_for = function(ship, b)
+   cleared_for = function(_, b)
       return not b.requires_clearance
    end,
 

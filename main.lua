@@ -17,14 +17,14 @@ local ui = { quit = function() love.event.push("quit") end,
 
 local time_factor = 1
 
-local gravitate = function(bodies, ship, dt)
+local gravitate = function(bodies, s, dt)
    for _, b in ipairs(bodies) do
       b.x = b.x + (b.dx * dt * 100)
       b.y = b.y + (b.dy * dt * 100)
 
-      local ddx, ddy = body.gravitate(b, ship.x, ship.y)
-      ship.dx = ship.dx + dt * ddx / ship.mass
-      ship.dy = ship.dy + dt * ddy / ship.mass
+      local ddx, ddy = body.gravitate(b, s.x, s.y)
+      s.dx = s.dx + dt * ddx / s.mass
+      s.dy = s.dy + dt * ddy / s.mass
 
       -- body-to-body
       for _, b2 in ipairs(bodies) do
