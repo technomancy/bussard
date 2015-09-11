@@ -50,8 +50,8 @@ return {
    end,
 
    seed_cargo = function(b)
-      b.cargo = {}
       if(not b.prices) then return end
+      b.cargo = {}
       for name,info in pairs(b.prices) do
          b.cargo[name] = math.random(info.stock)
       end

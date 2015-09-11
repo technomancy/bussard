@@ -140,3 +140,5 @@ love.draw = function()
 
    ship.api.repl.draw()
 end
+
+return ship -- for headless.lua

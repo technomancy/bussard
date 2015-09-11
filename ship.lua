@@ -1,6 +1,6 @@
 local utils = require("utils")
 local comm = require("comm")
-local repl = require("repl")
+local repl = require("srepl")
 local help = require("help")
 local system = require("system")
 local body = require("body")
