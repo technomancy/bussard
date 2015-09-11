@@ -277,7 +277,7 @@ function repl.draw()
    local limit = height - (ROW_HEIGHT * 2)
 
    local print_edit_line = function()
-      local prefix = "> "
+      local prefix = repl.prompt or "> "
       local ln = prefix .. editline
       love.graphics.print(ln, repl.padding_left, limit)
 

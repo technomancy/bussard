@@ -58,6 +58,7 @@ local ship = {
    recharge_rate = 1,
    burn_rate = 12,
    mass = 128,
+   laser_power = 1024,
 
    engine_strength = 16,
    turning_speed = 4,
@@ -111,9 +112,11 @@ local ship = {
       end
 
       if(ship.engine_on and ship.fuel > 0) then
-         ship.dx = ship.dx + (math.sin(ship.heading) * dt * ship.engine_strength)
-         ship.dy = ship.dy + (math.cos(ship.heading) * dt * ship.engine_strength)
-         ship.fuel = ship.fuel - (ship.burn_rate * dt)
+         ship.dx = ship.dx + (math.sin(ship.heading) * dt *
+                                 ship.engine_strength * ship.api.throttle)
+         ship.dy = ship.dy + (math.cos(ship.heading) * dt *
+                                 ship.engine_strength * ship.api.throttle)
+         ship.fuel = ship.fuel - (ship.burn_rate * dt * ship.api.throttle)
       elseif(ship.fuel < ship.fuel_capacity) then
          ship.fuel = ship.fuel + (ship.recharge_rate * dt)
       end
@@ -135,6 +138,9 @@ local ship = {
             if(b.strength < 0) then b:split() end
          end
       end
+
+      if(ship.api.throttle > 1) then ship.throttle.api = 1 end
+      if(ship.api.throttle < 0) then ship.throttle.api = 0 end
 
       comm.flush()
    end,
@@ -184,6 +190,7 @@ ship.api = {
    helm = love.keyboard,
    trajectory = 256,
    step_size = 0.05,
+   throttle = 1,
 
    cheat = ship,
 }

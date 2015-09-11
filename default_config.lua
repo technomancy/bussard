@@ -7,6 +7,8 @@ ship.controls = {
    ["lctrl"] = ship.actions.laser,
    ["="] = function(d) if d then ui.scale = ui.scale - (ship.dt/2) end end,
    ["-"] = function(d) if d then ui.scale = ui.scale + (ship.dt/2) end end,
+   ["["] = function(d) if d then ship.throttle = ship.throttle - (ship.dt/2) end end,
+   ["]"] = function(d) if d then ship.throttle = ship.throttle - (ship.dt/2) end end,
 }
 
 ship.commands = {

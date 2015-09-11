@@ -26,6 +26,9 @@ return {
                                         target_name, distance,
                                         formatted_time, ship.credits), 5, 5)
 
+      -- TODO: throttle indicator
+
+      -- scale indicator
       local scale_y = math.log(scale) * h
       love.graphics.line(w - 5, scale_y, w, scale_y)
 
