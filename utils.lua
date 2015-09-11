@@ -115,7 +115,22 @@ return {
       return t
    end,
 
-   make_readonly = make_readonly,
+   readonly_proxy = function(source, table_name)
+      table_name = table_name or "table"
+      local t = {}
+      local mt = {
+         __index = function(_, key)
+            if(type(source[key]) == "table") then
+               return make_readonly(shallow_copy(source[key]))
+            else
+               return source[key]
+            end
+         end,
+         __newindex = function(_, _, _) error(table_name .. " are read-only") end
+      }
+      setmetatable(t, mt)
+      return t
+   end,
 
    calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end,
 

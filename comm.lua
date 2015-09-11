@@ -1,7 +1,16 @@
 local body = require("body")
 local utils = require("utils")
+local cargo = require("cargo")
 
 local sessions = {}
+
+local sandbox = function(station, ship)
+   return { buy = utils.partial(cargo.buy, station, ship),
+            sell = utils.partial(cargo.sell, station, ship),
+            station = utils.readonly_proxy(station),
+            ship = ship.api,
+   }
+end
 
 local send_input = function(ship, input)
    if(not ship.sensors.in_range(ship.sensors, ship.sensors.target)) then
@@ -40,7 +49,7 @@ return {
          end
 
          sessions[target.name] = {fs, env, out_buffer}
-         target.os.process.spawn(fs, env, "smash")
+         target.os.process.spawn(fs, env, "smash", sandbox(target, ship))
          ship.repl.read = utils.partial(send_input, ship)
 
          return "Login succeeded."
