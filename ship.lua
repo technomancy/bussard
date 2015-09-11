@@ -8,11 +8,12 @@ local body = require("body")
 local default_config = utils.read_file("default_config.lua")
 
 local sensor_whitelist = {
-   "x", "y", "dx", "dy", "heading", "target", "fuel", "mass", "in_range", "bodies",
-   -- maybe these don't belong as sensors?
-   -- ship status
-   "engine_on", "turning_right", "turning_left", "credits",
-   -- ship capabilities
+   "x", "y", "dx", "dy", "heading", "target", "fuel", "mass",
+   "in_range", "bodies",
+}
+
+local status_whitelist = {
+   "engine_on", "turning_right", "turning_left", "credits", "cargo",
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_range",
 }
@@ -178,6 +179,7 @@ local ship = {
 ship.api = {
    repl = repl,
    sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),
+   status = utils.whitelist_table(ship, status_whitelist, "status"),
    actions = {
       forward = function(down) ship.engine_on = down end,
       left = function(down) ship.turning_left = down end,
