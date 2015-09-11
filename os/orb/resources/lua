@@ -1,0 +1,17 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+
+if(#args > 0) then
+   local chunk = assert(loadstring(f[args[1]]))
+   chunk()
+else
+   while true do
+      io.write("> ")
+      local input = io.read()
+      if(not input) then return end
+
+      local chunk = assert(loadstring(input))
+      chunk()
+   end
+end

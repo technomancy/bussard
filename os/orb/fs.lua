@@ -113,6 +113,7 @@ orb.fs = {
                                        cp = "/bin/cp",
                                        rm = "/bin/rm",
                                        echo = "/bin/echo",
+                                       lua = "/bin/lua",
                                        smash = "/bin/smash",
                                        chmod = "/bin/chmod",
                                        chgrp = "/bin/chgrp",

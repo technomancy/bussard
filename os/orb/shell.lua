@@ -146,8 +146,15 @@ orb.shell = {
                               remove = table.remove,
                               insert = table.insert,
                     },
+                    assert = assert,
                   }
       for k,v in pairs(extra_sandbox or {}) do box[k] = v end
+
+      box.loadstring = function(s)
+         local chunk = loadstring(s)
+         if(chunk) then setfenv(chunk, box) end
+         return chunk
+      end
       return box
    end,
 
