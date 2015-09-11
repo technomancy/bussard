@@ -3,6 +3,7 @@ local comm = require("comm")
 local repl = require("repl")
 local help = require("help")
 local system = require("system")
+local body = require("body")
 
 local default_config = utils.read_file("default_config.lua")
 
@@ -10,7 +11,7 @@ local sensor_whitelist = {
    "x", "y", "dx", "dy", "heading", "target", "fuel", "mass", "in_range", "bodies",
    -- maybe these don't belong as sensors?
    -- ship status
-   "engine_on", "turning_right", "turning_left",
+   "engine_on", "turning_right", "turning_left", "credits",
    -- ship capabilities
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_range",
@@ -54,6 +55,7 @@ local ship = {
    upgrades = {},
    cargo = {},
 
+   cargo_capacity = 128,
    fuel_capacity = 128,
    recharge_rate = 1,
    burn_rate = 12,
@@ -95,7 +97,9 @@ local ship = {
       ship.engine_on, ship.turning_right, ship.turning_left = false,false,false
       ship.comm_connected, ship.target_number, ship.target = false, 0, nil
 
+      -- re-seed system-level things
       system.populate_asteroids(ship.system)
+      for _,b in pairs(ship.system.bodies) do body.seed_cargo(b) end
    end,
 
    update = function(ship, dt)
@@ -145,25 +149,32 @@ local ship = {
       comm.flush()
    end,
 
-   cleared_for = function(ship, body)
-      return not body.requires_clearance
+   cleared_for = function(ship, b)
+      return not b.requires_clearance
    end,
 
-   in_range = function(ship, body, range)
-      return utils.calculate_distance(ship.x - body.x, ship.y - body.y) <
+   in_range = function(ship, b, range)
+      return utils.calculate_distance(ship.x - b.x, ship.y - b.y) <
          (range or ship.comm_range)
    end,
 
-   laser_hits = function(ship, body, distance)
+   laser_hits = function(ship, b, distance)
       -- assuming circular images
       local diameter = body.image:getWidth() / 2
-      local theta = math.atan2(body.y - ship.y, body.x - ship.x)
+      local theta = math.atan2(b.y - ship.y, b.x - ship.x)
       local angular_divergence = math.abs(ship.heading - theta)
       local divergence = math.abs(math.sin(angular_divergence) * distance)
       return divergence < diameter
    end,
+
+   cargo_amount = function(ship)
+      local amt = 0
+      for _,v in pairs(ship.cargo) do amt = amt + v end
+      return amt
+   end,
 }
 
+-- everything in here is exposed to the sandbox
 ship.api = {
    repl = repl,
    sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),

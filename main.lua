@@ -58,7 +58,7 @@ end
 -- for commands that don't need repeat
 love.keypressed = function(key, is_repeat)
    if(key == "pageup" and (not ship.api.repl.toggled())) then
-      ship.dx, ship.dy = 0, 0
+      ship.dx, ship.dy = 0, 0 -- cheat
    elseif(ship.api.commands[key]) then
       ship.api.commands[key]()
    elseif(not ship.api.controls[key]) then

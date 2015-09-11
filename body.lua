@@ -1,5 +1,4 @@
 local utils = require "utils"
-local orb = require "os/orb"
 
 local seed = function(os)
    local raw = os.fs.new_raw()
@@ -44,10 +43,17 @@ return {
    end,
 
    schedule = function(bodies)
-      for name,b in pairs(bodies) do
+      for _,b in pairs(bodies) do
          local fs = filesystems[b.name]
          if b.os and fs then b.os.process.scheduler(fs) end
       end
    end,
 
+   seed_cargo = function(b)
+      b.cargo = {}
+      if(not b.prices) then return end
+      for name,info in pairs(b.prices) do
+         b.cargo[name] = math.random(info.stock)
+      end
+   end,
 }

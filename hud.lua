@@ -42,7 +42,7 @@ return {
    end,
 
    trajectory = function(ship, bodies, steps)
-      local last_x, last_y = nil, nil
+      local last_x, last_y
       local x, y, dx, dy = ship.x, ship.y, ship.dx, ship.dy
       local body_points = {}
       for _, b in pairs(bodies) do
@@ -51,7 +51,7 @@ return {
 
       love.graphics.setLineWidth(5)
       love.graphics.setColor(150, 150, 255)
-      for i=0, steps do
+      for _=0, steps do
          for _, b in pairs(body_points) do
             local ddx, ddy = body.gravitate(b, x, y)
             dx = dx + ddx * ship.api.step_size / ship.mass
