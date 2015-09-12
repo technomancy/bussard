@@ -32,6 +32,5 @@ ship.commands = {
 }
 
 login = function(username, password)
-   return ship.comm.login(ship, ship.sensors.target,
-                          username or "guest", password or "")
+   return ship.actions.login(username or "guest", password or "")
 end

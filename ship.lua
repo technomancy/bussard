@@ -195,11 +195,11 @@ ship.api = {
          ship.target = ship.api.sensors.bodies[ship.target_number]
       end,
       laser = function(down) ship.laser = down end,
+      login = utils.partial(comm.login, ship),
    },
    -- added by loading config
    controls = {},
    commands = {},
-   comm = comm,
    helm = love.keyboard,
    trajectory = 256,
    step_size = 0.05,

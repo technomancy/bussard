@@ -4,11 +4,10 @@ local cargo = require("cargo")
 
 local sessions = {}
 
-local sandbox = function(station, ship)
-   return { buy = utils.partial(cargo.buy, station, ship),
-            sell = utils.partial(cargo.sell, station, ship),
-            station = utils.readonly_proxy(station),
-            ship = ship,
+local sandbox = function(ship)
+   return { cargo_transfer = utils.partial(cargo.transfer, ship.target, ship),
+            station = utils.readonly_proxy(ship.target),
+            ship = ship.api,
    }
 end
 
@@ -29,16 +28,16 @@ end
 return {
    sessions = sessions, -- for debugging
 
-   login = function(ship, target, username, password, command)
-      local fs_raw = body.login(target, username, password)
+   login = function(ship, username, password, command)
+      local fs_raw = body.login(ship.target, username, password)
       if(fs_raw) then
-         local fs = target.os.fs.proxy(fs_raw, username, fs_raw)
-         local env = target.os.shell.new_env(username)
+         local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
+         local env = ship.target.os.shell.new_env(username)
          local out_buffer = {}
 
          env.IN = "/tmp/in"
          env.OUT = "/tmp/out"
-         target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
+         ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
 
          -- buffer output that happens when out of range
          fs[env.OUT] = function(output)
@@ -50,9 +49,8 @@ return {
             end
          end
 
-         sessions[target.name] = {fs, env, out_buffer}
-         target.os.process.spawn(fs, env, command or "smash",
-                                 sandbox(target, ship))
+         sessions[ship.target.name] = {fs, env, out_buffer}
+         ship.target.os.process.spawn(fs, env, command or "smash", sandbox(ship))
          ship.repl.read = utils.partial(send_input, ship)
 
          return "Login succeeded."
@@ -61,11 +59,11 @@ return {
       end
    end,
 
-   headless_login = function(ship, target, username, password, command)
-      local fs_raw = body.login(target, username, password)
-      local fs = target.os.fs.proxy(fs_raw, username, fs_raw)
-      local env = target.os.shell.new_env(username)
-      target.os.shell.exec(fs, env, command or "smash", sandbox(target, ship))
+   headless_login = function(ship, username, password, command)
+      local fs_raw = body.login(ship.target, username, password)
+      local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
+      local env = ship.target.os.shell.new_env(username)
+      ship.target.os.shell.exec(fs, env, command or "smash", sandbox(ship))
    end,
 
    send_input = send_input,
