@@ -1,3 +1,5 @@
+require "metatable_monkey"
+
 local keys = function(t)
    local ks = {}
    for k,_ in pairs(t) do table.insert(ks, k) end
@@ -39,10 +41,24 @@ local function distance(x, y)
    end
 end
 
-local iterator_for = function(raw, wrap)
+local pairs_for = function(raw, wrap)
    return function(_)
       local t = {}
       for k,v in pairs(raw) do
+         if(type(v) == "table") then
+            t[k] = wrap(v)
+         else
+            t[k] = v
+         end
+      end
+      return next,t,nil
+   end
+end
+
+local ipairs_for = function(raw, wrap)
+   return function(_)
+      local t = {}
+      for k,v in ipairs(raw) do
          if(type(v) == "table") then
             t[k] = wrap(v)
          else
@@ -64,7 +80,8 @@ local function readonly_proxy(source, table_name)
             return source[key]
          end
       end,
-      __iterator = iterator_for(source, readonly_proxy),
+      __pairs = pairs_for(source, readonly_proxy),
+      __ipairs = ipairs_for(source, readonly_proxy),
       __newindex = function(_, _, _) error(table_name .. " are read-only") end
    }
    setmetatable(t, mt)
@@ -109,8 +126,8 @@ return {
 
    concat = function(t1_orig, t2)
       local t1 = shallow_copy(t1_orig)
-      for i=1,#t2 do
-         t1[#t1+1] = t2[i]
+      for i=1,table.length(t2) do
+         t1[table.length(t1)+1] = t2[i]
       end
       return t1
    end,
@@ -125,7 +142,7 @@ return {
 
    drop = function(n, t)
       local new = {}
-      for i=n+1,#t do
+      for i=n+1,table.length(t) do
          table.insert(new, t[i])
       end
       return new
@@ -144,7 +161,8 @@ return {
                end
             end
          end,
-         __iterator = function() error("TODO: Need an iterator here!") end,
+         __pairs = function() error("TODO: Need an iterator here!") end,
+         __ipairs = ipairs_for(source, readonly_proxy),
          __newindex = function(_, _, _) error(table_name .. " are read-only") end
       }
       setmetatable(t, mt)
@@ -152,6 +170,8 @@ return {
    end,
 
    readonly_proxy = readonly_proxy,
+
+   mtlength = mtlength,
 
    distance = distance,
 

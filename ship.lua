@@ -200,10 +200,10 @@ ship.api = {
       next_target = function()
          if(love.keyboard.isDown("lshift", "rshift")) then
             ship.target_number = ((ship.target_number - 1) %
-                  (#ship.api.sensors.bodies + 1))
+                  (utils.mtlength(ship.api.sensors.bodies) + 1))
          else
             ship.target_number = ((ship.target_number + 1) %
-                  (#ship.api.sensors.bodies + 1))
+                  (utils.mtlength(ship.api.sensors.bodies) + 1))
          end
          ship.target = ship.api.sensors.bodies[ship.target_number]
       end,
