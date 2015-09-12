@@ -2,20 +2,25 @@ local utils = require("utils")
 
 local asteroid_image = love.graphics.newImage('assets/asteroid.png')
 
-local min_mass = 2
+local min_mass = 10
 
 local function asteroid(name, mass_max, bodies, parent)
    local mass = math.random(mass_max)
    local split = function(self, ship)
       print("Destroyed " .. name)
       bodies[name] = nil
+      if(ship.target == self) then ship.target = nil end
       if(self.mass < min_mass) then
          if(utils.distance(ship, self) <= ship.scoop_range) then
-            ship:move_cargo("Ore", 1)
+            ship.api.repl.print("Scooped up " .. self.name)
+            ship:move_cargo("Ore", 10)
+         else
+            ship.api.repl.print("Destroyed " .. self.name ..
+                                   " but out of scoop range.")
          end
       else
-         asteroid(name .. "-", self.mass / 2, bodies, self)
-         asteroid(name .. "+", self.mass / 2, bodies, self)
+         asteroid(name .. "-", self.mass / 8, bodies, self)
+         asteroid(name .. "+", self.mass / 8, bodies, self)
       end
    end
 
@@ -25,7 +30,9 @@ local function asteroid(name, mass_max, bodies, parent)
    }
 
    if(parent) then
-      a.x, a.y, a.dx, a.dy = parent.x, parent.y, parent.dx, parent.dy
+      -- if two new asteroids spawn in exactly the same place, gravity bugs out
+      local o = math.random(20) - 10
+      a.x, a.y, a.dx, a.dy = parent.x + o, parent.y + o, parent.dx, parent.dy
    else
       a.x, a.y = math.random(200000)-100000, math.random(200000)-100000
       a.dx, a.dy = math.random(32) - 16, math.random(32) - 16

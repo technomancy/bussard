@@ -14,7 +14,7 @@ return {
       local formatted_time = utils.format_seconds(os.time() + ship.time_offset)
       local distance, target_name
 
-      -- TODO: move target indicators to upper right
+      -- TODO: move target indicators to upper right, add mass
       if(target) then
          distance = utils.distance(ship.x - target.x, ship.y - target.y)
          target_name = target.name
