@@ -22,10 +22,10 @@ local transfer = function(station, ship, direction, good, amount)
       ship.credits = ship.credits - price
       if(direction == "sell") then
          station.cargo[good] = station.cargo[good] + amount
-         ship.cargo[good] = ship.cargo[good] - amount
+         ship:move_cargo(good, -amount)
       else
          station.cargo[good] = station.cargo[good] - amount
-         ship.cargo[good] = (ship.cargo[good] or 0) + amount
+         ship:move_cargo(good, amount)
       end
       return price
    end

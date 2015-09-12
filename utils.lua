@@ -28,6 +28,14 @@ local make_readonly = function(t, table_name)
    return t
 end
 
+local function distance(x, y)
+   if(type(x) == "number" and type(y) == "number") then
+      return math.sqrt(x*x+y*y)
+   else -- accept tables
+      return distance(x.x - y.x, x.y - y.y)
+   end
+end
+
 return {
    shallow_copy = shallow_copy,
 
@@ -132,7 +140,7 @@ return {
       return t
    end,
 
-   distance = function(x, y) return math.sqrt(x*x+y*y) end,
+   distance = distance,
 
    format_seconds = function(s)
       local formatted, k = tostring(s)

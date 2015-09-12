@@ -15,7 +15,7 @@ local sensor_whitelist = {
 local status_whitelist = {
    "engine_on", "turning_right", "turning_left", "credits", "cargo",
    "engine_strength", "turning_speed",
-   "recharge_rate", "burn_rate", "comm_range",
+   "recharge_rate", "burn_rate", "comm_range", "scoop_range",
 }
 
 local sandbox = {
@@ -47,6 +47,7 @@ local ship = {
    comm_connected = false,
    target_number = 0,
    target = nil,
+   mass = 128,
 
    -- keep around
    fuel = 128,
@@ -58,14 +59,15 @@ local ship = {
 
    cargo_capacity = 128,
    fuel_capacity = 128,
+   scoop_range = 512,
+   comm_range = 1024,
    recharge_rate = 1,
    burn_rate = 12,
-   mass = 128,
+   base_mass = 128,
    laser_power = 1024,
 
    engine_strength = 16,
    turning_speed = 4,
-   comm_range = 2048,
 
    config = default_config,
 
@@ -140,7 +142,7 @@ local ship = {
          if(ship.laser and b.asteroid and ship:laser_hits(b, distance)) then
             print(b.name .. " hit, remaining: " .. b.strength)
             b.strength = b.strength - dt * ship.laser_power / distance
-            if(b.strength < 0) then b:split() end
+            if(b.strength < 0) then b:split(ship) end
          end
       end
 
@@ -161,7 +163,7 @@ local ship = {
 
    laser_hits = function(ship, b, distance)
       -- assuming circular images
-      local diameter = body.image:getWidth() / 2
+      local diameter = b.image:getWidth() / 2
       local theta = math.atan2(b.y - ship.y, b.x - ship.x)
       local angular_divergence = math.abs(ship.heading - theta)
       local divergence = math.abs(math.sin(angular_divergence) * distance)
@@ -172,6 +174,17 @@ local ship = {
       local amt = 0
       for _,v in pairs(ship.cargo) do amt = amt + v end
       return amt
+   end,
+
+   move_cargo = function(ship, good, amount)
+      assert((ship.cargo[good] or 0) >= -amount, "Not enough " .. good)
+      ship.cargo[good] = (ship.cargo[good] or 0) + amount
+      ship:recalculate_mass()
+   end,
+
+   recalculate_mass = function(ship)
+      ship.mass = ship.base_mass
+      for _,v in pairs(ship.cargo) do ship.mass = ship.mass + v end
    end,
 }
 
