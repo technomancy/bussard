@@ -219,6 +219,12 @@ ship.api = {
    throttle = 1,
 
    cheat = ship,
+   teleport = function(self)
+      local target = self.sensors.target
+      if(not target) then return end
+      self.cheat.x, self.cheat.y, self.cheat.dx, self.cheat.dy =
+         target.x + 100, target.y + 100, target.dx, target.dy
+   end,
 }
 
 return ship

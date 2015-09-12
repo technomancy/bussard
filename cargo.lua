@@ -1,5 +1,3 @@
-local utils = require("utils")
-
 local get_price = function(good, amount, prices, direction)
    return amount * prices[good][direction .. "_price"]
 end
