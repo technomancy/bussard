@@ -31,6 +31,4 @@ ship.commands = {
    pause = function() ui.paused = (not ui.paused) end,
 }
 
-login = function(username, password)
-   return ship.actions.login(username or "guest", password or "")
-end
+login = ship.actions.login

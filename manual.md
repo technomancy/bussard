@@ -55,28 +55,26 @@ When you are in range of a planet or space station with an active
 computer, you can initiate a login session using your ship's
 communication system. This will allow you to access any of the
 station's services, including refueling, cargo transactions,
-purchasing upgrades, downloading new libraries, and communicating with
-others on board the station.
+purchasing upgrades, downloading new libraries, renting cargo storage,
+and communicating with others on board the station.
 
-Sessions are initiated using the `ship.comm.login` function, which
-takes the `ship`, a target station or planet, a username, and a
-password. Once you are logged in, output from commands run on the
-remote server will be shown in your HUD's REPL, but sending input must
-be done using the `ship.comm.send_input` function. Please see the API
-reference below for details.
-
-Your init file comes preconfigured with a few helper functions for
-your convenience; in particular `login` allows direct logins taking
-only the username and password (defaulting to `"guest"` and `""` if
-omitted) and the `send` function will send input to the
-currently-selected target if a login session is active.
+Sessions are initiated using the `ship.actions.login` function, which
+will log you into the currently-targeted planet or station with the
+provided username and password if you are within communications range.
 
 Most stations allow limited access via a `guest` account with an empty
-password. Once you are logged in as a guest, you will have the option
-to purchase an account on that station or planet's computer system,
-which will grant you access to the rest of the services. Please note
-that attempting to access accounts of others is strictly forbidden by
-interstellar law.
+password, which is the default if no username and password are
+provided. Files on guest accounts are wiped upon logout. Once you are
+logged in as a guest, you will have the option to purchase an account
+on that station or planet's computer system, which will grant you
+access to the rest of the services as well as persistent file
+storage. Please note that attempting to access accounts of others is
+strictly forbidden by interstellar law.
+
+Services offered on stations vary by locale, but most stations at
+least offer to buy and sell cargo. The `cargo` executable takes
+`list`, `buy`, and `sell` subcommands; see its online help for usage
+details.
 
 TODO: copying files to/from your ship
 
