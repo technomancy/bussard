@@ -132,7 +132,7 @@ return {
       return t
    end,
 
-   calculate_distance = function(x, y) return math.sqrt(x*x+y*y) end,
+   distance = function(x, y) return math.sqrt(x*x+y*y) end,
 
    format_seconds = function(s)
       local formatted, k = tostring(s)

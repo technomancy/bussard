@@ -21,7 +21,7 @@ return {
       local dx = (x - body.x)
       local dy = (y - body.y)
 
-      local distance = utils.calculate_distance(dx, dy)
+      local distance = utils.distance(dx, dy)
       local theta = math.atan2(dx, dy) + math.pi
 
       local f = (body.mass * g) / (distance * distance)
@@ -29,8 +29,8 @@ return {
    end,
 
    escape_velocity = function(body, escapee)
-      local distance = utils.calculate_distance(body.x - escapee.x,
-                                                body.y - escapee.y)
+      local distance = utils.distance(body.x - escapee.x,
+                                      body.y - escapee.y)
       return math.sqrt(2*g*body.mass / distance)
    end,
 
