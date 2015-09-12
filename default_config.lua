@@ -24,7 +24,7 @@ ship.commands = {
       if(ship.repl.toggled()) then
          ship.repl.toggle()
       else
-         ui.quit()
+         ui.quit(ui)
       end
    end,
    tab = ship.actions.next_target,

@@ -8,6 +8,7 @@ love = love or { graphics = { newImage = f, getWidth = o, getHeight = o,
                  keyboard = {
                     isDown = f,
                  },
+                 filesystem = { save = f, newFile = f,}
                }
 
 package.path = package.path .. ";?/init.lua"

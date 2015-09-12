@@ -4,6 +4,7 @@ local hud = require "hud"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local systems = require "data/systems"
+local save = require "save"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
@@ -11,10 +12,16 @@ local star1 = star1 or starfield.new(10, w, h, 0.01, 100)
 local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
 local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
-local ui = { quit = function() love.event.push("quit") end,
-             scale = 1, scale_min = 0.1,
-             paused = false,
-           }
+local ui = {
+   -- TODO: restart function
+   quit = function(ui)
+      save.save(ship, ui)
+      love.event.push("quit")
+   end,
+   -- this stuff should be moved to a subtable of ship
+   scale = 1, scale_min = 0.1,
+   paused = false,
+}
 
 local time_factor = 1
 
@@ -44,6 +51,7 @@ love.load = function()
    local font = love.graphics.newFont("mensch.ttf", 14)
    love.graphics.setFont(font)
    ship:configure(systems, ui)
+   save.load_into(ship, ui)
    ship.api.repl.last_result =
       "Press control-` to open the repl or just start typing code."
 end
