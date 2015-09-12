@@ -5,7 +5,7 @@ local asteroid_image = love.graphics.newImage('assets/asteroid.png')
 
 local min_mass = 10
 
-local max_asteroid_distance = 100000
+local max_asteroid_distance = 1000000
 
 local retarget = function(a, ship)
    if(ship.target == a) then
@@ -37,8 +37,8 @@ local function asteroid(name, mass_max, bodies, parent)
    end
 
    local a = { x = x, y = y, dx = dx, dy = dy, name = name,
-               -- TODO: smaller image for smaller asteroids
                mass = mass, image = asteroid_image,
+               scale = (mass / 64) + 0.5,
                asteroid = true, strength = mass, split = split,
    }
 
@@ -47,8 +47,8 @@ local function asteroid(name, mass_max, bodies, parent)
       local o = math.random(20) - 10
       a.x, a.y, a.dx, a.dy = parent.x + o, parent.y + o, parent.dx, parent.dy
    else
-      a.x = math.random(max_asteroid_distance * 2)-max_asteroid_distance
-      a.y = math.random(max_asteroid_distance * 2)-max_asteroid_distance
+      a.x = (math.random(max_asteroid_distance * 2)-max_asteroid_distance) * 0.7
+      a.y = (math.random(max_asteroid_distance * 2)-max_asteroid_distance) * 0.7
       a.dx, a.dy = math.random(32) - 16, math.random(32) - 16
    end
 

@@ -12,9 +12,12 @@ local g = 1000
 
 return {
    draw = function(body, x, y)
-      local bx = body.x - body.image:getWidth() / 2
-      local by = body.y - body.image:getHeight() / 2
-      love.graphics.draw(body.image, bx - x, by - y)
+      local scale = body.scale or 1
+      local bx = body.x - body.image:getWidth() * scale / 2
+      local by = body.y - body.image:getHeight() * scale / 2
+      love.graphics.draw(body.image, bx - x, by - y,
+                         -- these are almost always nil
+                         body.rotation, scale, scale)
    end,
 
    gravitate = function(body, x, y)

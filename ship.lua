@@ -145,7 +145,7 @@ local ship = {
          if(ship.laser and b.asteroid and ship:laser_hits(b, distance)) then
             -- TODO: firing laser uses up fuel?
             print(b.name .. " hit, remaining: " .. b.strength)
-            b.strength = b.strength - dt * ship.laser_power / distance
+            b.strength = b.strength - dt * ship.laser_power / math.sqrt(distance)
             if(b.strength < 0) then b:split(ship) end
          end
       end
