@@ -200,10 +200,18 @@ ship.api = {
       next_target = function()
          if(love.keyboard.isDown("lshift", "rshift")) then
             ship.target_number = ((ship.target_number - 1) %
-                  (utils.mtlength(ship.api.sensors.bodies) + 1))
+                  (table.length(ship.api.sensors.bodies) + 1))
+         elseif(love.keyboard.isDown("lctrl")) then
+            local min_distance = 1000000000000
+            for i,b in ipairs(ship.api.sensors.bodies) do
+               if(utils.distance(ship, b) < min_distance) then
+                  ship.target_number = i
+                  min_distance = utils.distance(ship, b)
+               end
+            end
          else
             ship.target_number = ((ship.target_number + 1) %
-                  (utils.mtlength(ship.api.sensors.bodies) + 1))
+                  (table.length(ship.api.sensors.bodies) + 1))
          end
          ship.target = ship.api.sensors.bodies[ship.target_number]
       end,
