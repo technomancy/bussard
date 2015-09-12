@@ -130,12 +130,17 @@ function repl.eval(text, add_to_history)
    local func, err = loadstring("return " .. text)
    -- Compilation error
    if not func then
-      if err then
-         repl.print('! Compilation error: ' .. err)
-      else
-         repl.print('! Unknown compilation error')
+      if err then -- maybe it's a statement?
+         func, err = loadstring(text)
+         if not func then
+            if err then
+               repl.print('! Compilation error: ' .. err)
+            else
+               repl.print('! Unknown compilation error')
+            end
+            return false
+         end
       end
-      return false
    end
 
    if repl.sandbox then
