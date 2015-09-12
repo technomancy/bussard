@@ -8,7 +8,7 @@ end
 
 local filesystems = {}
 
-local g = 100000
+local g = 1000
 
 return {
    draw = function(body, x, y)

@@ -23,15 +23,15 @@ local gravitate = function(bodies, s, dt)
       b.y = b.y + (b.dy * dt * 100)
 
       local ddx, ddy = body.gravitate(b, s.x, s.y)
-      s.dx = s.dx + dt * ddx / s.mass
-      s.dy = s.dy + dt * ddy / s.mass
+      s.dx = s.dx + dt * ddx
+      s.dy = s.dy + dt * ddy
 
       -- body-to-body
       for _, b2 in ipairs(bodies) do
          if(b ~= b2 and (not b2.star)) then
             local ddx2, ddy2 = body.gravitate(b, b2.x, b2.y)
-            b2.dx = b2.dx + (dt * ddx2 / b2.mass)
-            b2.dy = b2.dy + (dt * ddy2 / b2.mass)
+            b2.dx = b2.dx + (dt * ddx2)
+            b2.dy = b2.dy + (dt * ddy2)
          end
       end
    end

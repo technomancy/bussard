@@ -14,6 +14,7 @@ return {
       local formatted_time = utils.format_seconds(os.time() + ship.time_offset)
       local distance, target_name
 
+      -- TODO: move target indicators to upper right
       if(target) then
          distance = utils.distance(ship.x - target.x, ship.y - target.y)
          target_name = target.name
@@ -27,6 +28,7 @@ return {
                                         formatted_time, ship.credits), 5, 5)
 
       -- TODO: throttle indicator
+      -- TODO: cargo indicator
 
       -- scale indicator
       local scale_y = math.log(scale) * h
@@ -54,8 +56,8 @@ return {
       for _=0, steps do
          for _, b in pairs(body_points) do
             local ddx, ddy = body.gravitate(b, x, y)
-            dx = dx + ddx * ship.api.step_size / ship.mass
-            dy = dy + ddy * ship.api.step_size / ship.mass
+            dx = dx + ddx * ship.api.step_size
+            dy = dy + ddy * ship.api.step_size
             b.x = b.x + (b.dx * ship.api.step_size * 100)
             b.y = b.y + (b.dy * ship.api.step_size * 100)
          end
@@ -63,8 +65,8 @@ return {
          for _, b2 in ipairs(body_points) do
             if(b ~= b2 and (not b2.star)) then
                local ddx2, ddy2 = body.gravitate(b, b2.x, b2.y)
-               b2.dx = b2.dx + (dt * ddx2 / b2.mass)
-               b2.dy = b2.dy + (dt * ddy2 / b2.mass)
+               b2.dx = b2.dx + (dt * ddx2)
+               b2.dy = b2.dy + (dt * ddy2)
             end
          end
          last_x, last_y = x, y
