@@ -102,7 +102,10 @@ local ship = {
 
       -- re-seed system-level things
       system.populate_asteroids(ship.system)
-      for _,b in pairs(ship.system.bodies) do body.seed_cargo(b) end
+      for _,b in pairs(ship.system.bodies) do
+         body.seed_cargo(b)
+         body.seed_pos(b, ship.system.bodies[1])
+      end
    end,
 
    update = function(ship, dt)
@@ -140,6 +143,7 @@ local ship = {
          end
          local distance = utils.distance(ship.x - b.x, ship.y - b.y)
          if(ship.laser and b.asteroid and ship:laser_hits(b, distance)) then
+            -- TODO: firing laser uses up fuel?
             print(b.name .. " hit, remaining: " .. b.strength)
             b.strength = b.strength - dt * ship.laser_power / distance
             if(b.strength < 0) then b:split(ship) end

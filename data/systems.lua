@@ -10,45 +10,47 @@ return {
        x = -5.8, y=-2.4,
        asteroids = 2,
        bodies = {
-          {x=0, y=0, dx=0, dy=0, mass=230000,
+          {r=0, x=0, y=0, dx=0, dy=0, mass=230000,
            image=img('assets/sun.png'),
            name="Wolf 1453", star=true },
-          {x=30000, y=-27000, dx=-5, dy=5, mass=700,
+          {r=35000, mass=700,
            image=img('assets/planet-1.png'),
            name="Koria", os=orb,
           },
-          {x=10000, y=-29000, dx=-5, dy=5, mass=500,
+          {r=21000, mass=500,
            image=img('assets/planet-3.png'),
            name="Lioboro", os=orb,
           },
           {name = "Portal: L 668-21",
            image = img("assets/portal-1.png"),
-           x=-28000, y=20000, dx=5, dy=-3,
-           mass=75, portal="L 668-21"}},
+           r=26000, mass=75, portal="L 668-21"}},
       },
-   ["Wolf 294"] = {civ="Tana", x=-5.3, y=-0.3,
-                   bodies = {}, -- second-largest Tana system
+   ["Wolf 294"] = -- second-largest Tana system
+      {civ="Tana", x=-5.3, y=-0.3, bodies = {},
    },
-   ["Luyten's Star"] = {civ="Tana", x=-3.3, y=-2,
-                        bodies = {}, -- gateway to sol
+   ["Luyten's Star"] = -- gateway to sol
+      {civ="Tana", x=-3.3, y=-2, bodies = {},
    },
-   ["L 668-21"] =
+   ["L 668-21"] = -- remote mining system
       {civ="Tana",
        x=-3.6, y=-4.1,
        asteroids = 8,
-       bodies = { {x=0, y=0, dx=0, dy=0, mass=200000,
-                   image=img('assets/sun.png'),
-                   name="L 668-21", star=true },
-          {x=30000, y=27000, dx=-5, dy=5, mass=100,
+       bodies = {
+          {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
+           image=img('assets/sun.png'),
+           name="L 668-21", star=true },
+          {r=23000, mass=100,
            image=img('assets/station-pointed.png'),
            name="Mirduka station", os=orb,
-           prices={["Food"]={stock=10, buy_price=100, sell_price=110}},
+           prices={
+              ["Food"]={stock=10, buy_price=100, sell_price=110,},
+              ["Ore"]={stock=8, buy_price = 90, sell_price = 50,}
+           },
           },
           {name = "Portal: Wolf 1453",
            image = img("assets/portal-1.png"),
-           x=-28000, y=20000, dx=5, dy=-15,
-           mass=75, portal="Wolf 1453", }
-       }, -- remote mining system
+           r=26000, mass=75, portal="Wolf 1453", }
+       },
       },
 
 

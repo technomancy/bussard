@@ -56,4 +56,17 @@ return {
          b.cargo[name] = math.random(info.stock)
       end
    end,
+
+   seed_pos = function(b, star)
+      if(b.star or b.asteroid) then return end
+      assert(star.star, star.name .. " is not a star.")
+
+      local theta = math.random(math.pi * 2)
+      local v = math.sqrt((g*star.mass)/b.r) / 8
+
+      b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
+      -- the velocity calculations here are not quite right, but close
+      b.dx = math.sin(theta + math.pi / 2) * v
+      b.dy = math.cos(theta + math.pi / 2) * v
+   end,
 }
