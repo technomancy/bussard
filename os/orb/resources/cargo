@@ -1,0 +1,11 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+
+local direction, good, amount = unpack(args)
+
+local success_price = cargo_transfer(direction, good, tonumber(amount))
+
+if(success_price) then
+   print("Sold " .. amount .. " of " .. good .. " for " .. success_price .. ".")
+end

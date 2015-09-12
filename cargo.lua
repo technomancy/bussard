@@ -14,22 +14,21 @@ local in_stock = function(station, ship, good, amount, direction)
    return from.cargo[good] and (from.cargo[good] >= amount)
 end
 
-local transfer = function(direction, station, ship, good, amount)
+local transfer = function(station, ship, direction, good, amount)
    assert(station.prices[good], station.name .. " does not trade in " .. good)
-   local price = get_price(good, amount, station.prices)
+   local price = get_price(good, amount, station.prices, direction)
    if(ship.credits >= price and space_for(amount, ship, direction) and
       in_stock(station, ship, good, amount, direction)) then
+      ship.credits = ship.credits - price
       if(direction == "sell") then
          station.cargo[good] = station.cargo[good] + amount
          ship.cargo[good] = ship.cargo[good] - amount
       else
          station.cargo[good] = station.cargo[good] - amount
-         ship.cargo[good] = ship.cargo[good] + amount
+         ship.cargo[good] = (ship.cargo[good] or 0) + amount
       end
+      return price
    end
 end
 
-return {
-   buy = utils.partial(transfer, "buy"),
-   sell = utils.partial(transfer, "sell"),
-}
+return { transfer = transfer }

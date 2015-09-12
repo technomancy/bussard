@@ -34,11 +34,12 @@ return ship
 
 --[[
 ship = require "headless"
+comm = require "comm"
 
 m = ship.system.bodies[2]
 ship.target = m
 ship.x, ship.y = m.x, m.y
-ship.api.comm.headless_login(ship.api, ship.target, "guest", "", "lua")
+comm.headless_login(ship, "guest", "", "cargo buy Food 2")
 
 -- for backgrounded login sessions
 ship.api.comm.login(ship.api, ship.target, "guest", "")
