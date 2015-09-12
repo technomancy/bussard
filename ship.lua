@@ -55,7 +55,7 @@ local ship = {
    time_offset = 4383504000, -- roughly 139 years ahead
    system_name = "L 668-21",
    upgrades = {},
-   cargo = {},
+   cargo = {["Food"] = 2},
 
    cargo_capacity = 128,
    fuel_capacity = 128,

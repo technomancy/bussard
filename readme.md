@@ -2,15 +2,23 @@
 
 <img src="http://p.hagelb.org/bussard.png" alt="screenshot" />
 
-A space-flight adventure exploration game, with a programmable space ship.
+A space-flight adventure exploration game, with a programmable space ship and space stations.
 
-<img src="http://p.hagelb.org/bussard-repl.png" alt="screenshot" />
+Read the [in-game manual](manual.md) for a taste of how the game works.
 
 ## Usage
 
 Use `make` to launch.
 
 Requires [LÖVE](http://love2d.org) 0.9.x; tested on 0.9.1.
+
+Recommended soundtrack:
+[Contingency](http://music.biggiantcircles.com/album/contingency) by
+[Big Giant Circles](http://www.biggiantcircles.com/) though the
+[FTL soundtrack](https://benprunty.bandcamp.com/album/ftl) is a great
+fit too.
+
+<img src="http://p.hagelb.org/bussard-repl.png" alt="repl screenshot" />
 
 ## License
 
