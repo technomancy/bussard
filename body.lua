@@ -69,4 +69,8 @@ return {
       b.dx = math.sin(theta + math.pi / 2) * v
       b.dy = math.cos(theta + math.pi / 2) * v
    end,
+
+   find = function(bodies,name)
+      for _,b in pairs(bodies) do if(b.name == name) then return b end end
+   end,
 }

@@ -2,6 +2,7 @@ local starfield = require "starfield"
 local body = require "body"
 local hud = require "hud"
 local ship = require "ship"
+local asteroid = require "asteroid"
 local systems = require "data/systems"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
@@ -51,6 +52,7 @@ love.update = function(dt)
    if(ui.paused) then return end
    ship:update(dt * time_factor)
    body.schedule(ship.bodies)
+   asteroid.recycle(ship)
    gravitate(ship.bodies, ship, dt * time_factor)
 end
 
