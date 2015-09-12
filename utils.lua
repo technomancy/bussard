@@ -1,3 +1,15 @@
+local keys = function(t)
+   local ks = {}
+   for k,_ in pairs(t) do table.insert(ks, k) end
+   return ks
+end
+
+local vals = function(t)
+   local vs = {}
+   for _,v in pairs(t) do table.insert(vs, v) end
+   return vs
+end
+
 local shallow_copy = function(orig)
    local orig_type = type(orig)
    local copy
@@ -19,21 +31,44 @@ local includes = function(tab, val)
    return false
 end
 
-local make_readonly = function(t, table_name)
-   table_name = table_name or "table"
-   local mt = {
-      __newindex = function(_, _, _) error(table_name .. " is read-only") end
-   }
-   setmetatable(t, mt)
-   return t
-end
-
 local function distance(x, y)
    if(type(x) == "number" and type(y) == "number") then
       return math.sqrt(x*x+y*y)
    else -- accept tables
       return distance(x.x - y.x, x.y - y.y)
    end
+end
+
+local iterator_for = function(raw, wrap)
+   return function(_)
+      local t = {}
+      for k,v in pairs(raw) do
+         if(type(v) == "table") then
+            t[k] = wrap(v)
+         else
+            t[k] = v
+         end
+      end
+      return next,t,nil
+   end
+end
+
+local function readonly_proxy(source, table_name)
+   table_name = table_name or "table"
+   local t = {}
+   local mt = {
+      __index = function(_, key)
+         if(type(source[key]) == "table") then
+            return readonly_proxy(source[key])
+         else
+            return source[key]
+         end
+      end,
+      __iterator = iterator_for(source, readonly_proxy),
+      __newindex = function(_, _, _) error(table_name .. " are read-only") end
+   }
+   setmetatable(t, mt)
+   return t
 end
 
 return {
@@ -49,17 +84,9 @@ return {
       end
    end,
 
-   keys = function(t)
-      local ks = {}
-      for k,_ in pairs(t) do table.insert(ks, k) end
-      return ks
-   end,
+   keys = keys,
 
-   vals = function(t)
-      local vs = {}
-      for _,v in pairs(t) do table.insert(vs, v) end
-      return vs
-   end,
+   vals = vals,
 
    includes = includes,
 
@@ -111,34 +138,20 @@ return {
          __index = function(_, key)
             if(includes(whitelist, key)) then
                if(type(source[key]) == "table") then
-                  return make_readonly(shallow_copy(source[key]))
+                  return readonly_proxy(source[key])
                else
                   return source[key]
                end
             end
          end,
+         __iterator = function() error("TODO: Need an iterator here!") end,
          __newindex = function(_, _, _) error(table_name .. " are read-only") end
       }
       setmetatable(t, mt)
       return t
    end,
 
-   readonly_proxy = function(source, table_name)
-      table_name = table_name or "table"
-      local t = {}
-      local mt = {
-         __index = function(_, key)
-            if(type(source[key]) == "table") then
-               return make_readonly(shallow_copy(source[key]))
-            else
-               return source[key]
-            end
-         end,
-         __newindex = function(_, _, _) error(table_name .. " are read-only") end
-      }
-      setmetatable(t, mt)
-      return t
-   end,
+   readonly_proxy = readonly_proxy,
 
    distance = distance,
 

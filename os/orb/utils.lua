@@ -43,7 +43,7 @@ orb.utils = {
 
    mtpairs = function(tab)
       local mt = getmetatable(tab)
-      if(mt) then
+      if(mt and mt.__iterator) then
          return mt.__iterator(tab)
       else
          return pairs(tab)

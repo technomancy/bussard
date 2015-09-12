@@ -2,10 +2,32 @@
 
 local f, env, args = ...
 
-local direction, good, amount = unpack(args)
+if(args[1] == "list") then
+   print("Prices: (buy/sell)")
+   for good, prices in pairs(station.prices) do
+      print("  " .. good .. ": " .. prices.buy_price .. "/" .. prices.sell_price)
+   end
 
-local success_price = cargo_transfer(direction, good, tonumber(amount))
+   print("Stock:")
+   for good, amount in pairs(station.cargo) do
+      print("  " .. good .. ": " .. amount)
+   end
 
-if(success_price) then
-   print("Sold " .. amount .. " of " .. good .. " for " .. success_price .. ".")
+   print("Your hold:")
+   for good, amount in pairs(ship.status.cargo) do
+      print("  " .. good .. ": " .. amount)
+   end
+elseif(args[1] == "buy" or args[1] == "sell") then
+   local direction, good, amount = unpack(args)
+   local success_price = cargo_transfer(direction, good, tonumber(amount))
+
+   if(success_price) then
+      print("Sold " .. amount .. " of " .. good .. " for " ..
+               success_price .. ".")
+   end
+else
+   print("Usage:")
+   print("  cargo list")
+   print("  cargo buy GOOD AMOUNT")
+   print("  cargo sell GOOD AMOUNT")
 end
