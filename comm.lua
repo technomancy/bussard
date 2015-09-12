@@ -12,15 +12,14 @@ local sandbox = function(ship)
 end
 
 local send_input = function(ship, input)
-   if(not ship.sensors.in_range(ship.sensors, ship.sensors.target)) then
-      ship.repl.print("| Out of range.")
+   if(not ship:in_range(ship.target)) then
+      ship.api.repl.print("| Out of range.")
    elseif(input == "logout") then -- TODO: need to get the OS to send EOF/nil
-      ship.repl.read = nil
-      ship.repl.print("Logged out.")
+      ship.api.repl.read = nil
+      ship.api.repl.print("Logged out.")
    else
-      local fs, env = unpack(sessions[ship.sensors.target.name])
-      assert(fs and env and fs[env.IN], "Not logged into " ..
-                ship.sensors.target.name)
+      local fs, env = unpack(sessions[ship.target.name])
+      assert(fs and env and fs[env.IN], "Not logged into " .. ship.target.name)
       fs[env.IN](input)
    end
 end
@@ -43,15 +42,15 @@ return {
          fs[env.OUT] = function(output)
             if(output) then
                -- repl doesn't have an io:write equivalent
-               ship.repl.print(output:gsub("\n$", ""))
+               ship.api.repl.print(output:gsub("\n$", ""))
             else
-               ship.repl.read = nil -- EOF means terminate session
+               ship.api.repl.read = nil -- EOF means terminate session
             end
          end
 
          sessions[ship.target.name] = {fs, env, out_buffer}
          ship.target.os.process.spawn(fs, env, command or "smash", sandbox(ship))
-         ship.repl.read = utils.partial(send_input, ship)
+         ship.api.repl.read = utils.partial(send_input, ship)
 
          return "Login succeeded."
       else
