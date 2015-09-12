@@ -161,7 +161,7 @@ return {
                end
             end
          end,
-         __pairs = function() error("TODO: Need an iterator here!") end,
+         __pairs = pairs_for(source, readonly_proxy),
          __ipairs = ipairs_for(source, readonly_proxy),
          __newindex = function(_, _, _) error(table_name .. " are read-only") end
       }

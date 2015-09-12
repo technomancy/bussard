@@ -42,9 +42,7 @@ local function asteroid(name, mass_max, bodies, parent)
 end
 
 return {
-   load = function() return require("data/systems") end,
-
-   populate_asteroids = function(system)
+   populate = function(system)
       if(not system.asteroids) then return end
       for _,b in pairs(system.bodies) do
          if(b.asteroid) then system.bodies[b.name] = nil end

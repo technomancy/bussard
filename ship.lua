@@ -2,7 +2,7 @@ local utils = require("utils")
 local comm = require("comm")
 local repl = require("srepl")
 local help = require("help")
-local system = require("system")
+local asteroid = require("asteroid")
 local body = require("body")
 
 local default_config = utils.read_file("default_config.lua")
@@ -101,7 +101,7 @@ local ship = {
       ship.comm_connected, ship.target_number, ship.target = false, 0, nil
 
       -- re-seed system-level things
-      system.populate_asteroids(ship.system)
+      asteroid.populate(ship.system)
       for _,b in pairs(ship.system.bodies) do
          body.seed_cargo(b)
          body.seed_pos(b, ship.system.bodies[1])

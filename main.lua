@@ -2,7 +2,7 @@ local starfield = require "starfield"
 local body = require "body"
 local hud = require "hud"
 local ship = require "ship"
-local system = require "system"
+local systems = require "data/systems"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
@@ -42,7 +42,6 @@ love.load = function()
    -- love.graphics.setDefaultFilter('nearest', 'nearest')
    local font = love.graphics.newFont("mensch.ttf", 14)
    love.graphics.setFont(font)
-   systems = system.load()
    ship:configure(systems, ui)
    ship.api.repl.last_result =
       "Press control-` to open the repl or just start typing code."
