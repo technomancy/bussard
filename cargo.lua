@@ -18,14 +18,14 @@ local transfer = function(station, ship, direction, good, amount)
    if(ship.credits >= price and space_for(amount, ship, direction) and
       in_stock(station, ship, good, amount, direction)) then
       if(direction == "sell") then
-         -- TODO: bug: read-only table
          station.cargo[good] = station.cargo[good] + amount
          ship:move_cargo(good, -amount)
+         ship.credits = ship.credits + price
       else
          station.cargo[good] = station.cargo[good] - amount
          ship:move_cargo(good, amount)
+         ship.credits = ship.credits - price
       end
-      ship.credits = ship.credits - price
       return price
    end
 end

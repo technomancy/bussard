@@ -12,16 +12,16 @@ local sandbox = function(ship)
 end
 
 local send_input = function(ship, input)
-   if(not ship:in_range(ship.target)) then
-      ship.api.repl.print("| Out of range.")
-   elseif(input == "logout") then -- TODO: need to get the OS to send EOF/nil
+   if(input == "logout") then -- TODO: need to get the OS to send EOF/nil
       ship.api.repl.read = nil
       ship.api.repl.print("Logged out.")
       -- TODO: wipe guest account on logout
+   elseif(not ship:in_range(ship.target)) then
+      ship.api.repl.print("| Out of range.")
    else
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env and fs[env.IN], "Not logged into " .. ship.target.name)
-      ship.repl.print(input)
+      ship.api.repl.print(input)
       fs[env.IN](input)
    end
 end
@@ -30,7 +30,13 @@ return {
    sessions = sessions, -- for debugging
 
    login = function(ship, username, password, command)
-      local fs_raw = body.login(ship.target, username or "guest", password or "")
+      if(not ship:in_range(ship.target)) then
+         ship.api.repl.print("| Out of range.")
+         return
+      end
+
+      username, password = username or "guest", password or ""
+      local fs_raw = body.login(ship.target, username, password)
       if(fs_raw) then
          local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
          local env = ship.target.os.shell.new_env(username)

@@ -217,7 +217,7 @@ ship.api = {
             ship.target_number = ((ship.target_number + 1) %
                   (table.length(ship.api.sensors.bodies) + 1))
          end
-         ship.target = ship.api.sensors.bodies[ship.target_number]
+         ship.target = ship.bodies[ship.target_number]
       end,
       laser = function(down) ship.laser = down end,
       login = utils.partial(comm.login, ship),
