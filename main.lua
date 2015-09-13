@@ -13,11 +13,20 @@ local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
 local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
 local ui = {
-   -- TODO: restart function
    quit = function(ui)
       save.save(ship, ui)
       love.event.push("quit")
    end,
+   abort = function(confirm)
+      if(not confirm) then
+         ship.repl.print("Aborting will wipe your in-process game. Call " ..
+                            "abort(true) to confirm.")
+         return
+      end
+      save.abort()
+      love.event.push("quit")
+   end,
+
    -- this stuff should be moved to a subtable of ship
    scale = 1, scale_min = 0.1,
    paused = false,

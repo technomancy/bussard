@@ -24,4 +24,8 @@ return {
          ship.target = ship.api.sensors.bodies[ship.target_number]
       end
    end,
+
+   abort = function()
+      love.filesystem.remove(filename)
+   end,
 }
