@@ -42,7 +42,7 @@ m = ship.system.bodies[2]
 s = ship.system.bodies[1]
 ship.target = m
 ship.x, ship.y = m.x, m.y
-comm.headless_login(ship, "guest", "", "cargo buy Food 2")
+comm.headless_login(ship, "guest", "", "cargo buy food 2")
 
 -- for backgrounded login sessions
 ship.api.comm.login(ship.api, ship.target, "guest", "")

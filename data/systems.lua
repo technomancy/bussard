@@ -43,8 +43,8 @@ return {
            image=img('assets/station-pointed.png'),
            name="Mirduka station", os=orb,
            prices={
-              ["Food"]={stock=10, buy_price=100, sell_price=110,},
-              ["Ore"]={stock=8, buy_price = 90, sell_price = 50,}
+              ["food"]={stock=10, buy_price=100, sell_price=110,},
+              ["ore"]={stock=8, buy_price = 90, sell_price = 50,}
            },
           },
           {name = "Portal: Wolf 1453",

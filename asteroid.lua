@@ -25,7 +25,7 @@ local function asteroid(name, mass_max, bodies, parent)
       if(self.mass < min_mass) then
          if(utils.distance(ship, self) <= ship.scoop_range) then
             ship.api.repl.print("Scooped up " .. self.name)
-            ship:move_cargo("Ore", 10)
+            ship:move_cargo("ore", 10)
          else
             ship.api.repl.print("Destroyed " .. self.name ..
                                    " but out of scoop range.")
@@ -47,6 +47,7 @@ local function asteroid(name, mass_max, bodies, parent)
       local o = math.random(20) - 10
       a.x, a.y, a.dx, a.dy = parent.x + o, parent.y + o, parent.dx, parent.dy
    else
+      -- TODO: make it more likely that asteroids start near the sun
       a.x = (math.random(max_asteroid_distance * 2)-max_asteroid_distance) * 0.7
       a.y = (math.random(max_asteroid_distance * 2)-max_asteroid_distance) * 0.7
       a.dx, a.dy = math.random(32) - 16, math.random(32) - 16
