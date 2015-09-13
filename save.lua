@@ -12,6 +12,9 @@ return {
    save = function(ship, ui)
       local ship_fields = lume.pick(ship, unpack(fields))
       local game_fields = {scale = ui.scale}
+      -- TODO1: write ship config
+      -- TODO1: write filesystems
+      -- TODO1: write body positions/velocities
       love.filesystem.write(filename, lume.serialize({ship_fields, game_fields}))
    end,
 

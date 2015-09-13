@@ -9,12 +9,13 @@ local vector_size = 50
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 return {
+   -- TODO: data-driven hud
    render = function(ship, target, scale)
       local speed = utils.distance(ship.dx, ship.dy)
       local formatted_time = utils.format_seconds(os.time() + ship.time_offset)
       local distance, target_name
 
-      -- TODO: move target indicators to upper right, add mass
+      -- TODO: move target indicators to upper right, add mass, time to target
       if(target) then
          distance = utils.distance(ship.x - target.x, ship.y - target.y)
          target_name = target.name

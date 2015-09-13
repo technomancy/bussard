@@ -147,7 +147,6 @@ love.draw = function()
 
    love.graphics.pop()
 
-   -- TODO: data-driven hud
    hud.render(ship, ship.target, ui.scale)
    hud.vector(ship.dx, ship.dy, w - 10 - hud.vector_size, 10)
    if(ship.target) then
