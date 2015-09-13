@@ -19,9 +19,8 @@ local ui = {
    end,
    abort = function(confirm)
       if(not confirm) then
-         ship.repl.print("Aborting will wipe your in-process game. Call " ..
-                            "abort(true) to confirm.")
-         return
+         return("Aborting will wipe your in-process game. Call " ..
+                   "abort(true) to confirm.")
       end
       save.abort()
       love.event.push("quit")

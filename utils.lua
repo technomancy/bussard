@@ -189,4 +189,10 @@ return {
       f:close()
       return content
    end,
+
+   gaussian_random = function(r)
+      local x = 1 + math.sqrt(-2 * math.log(math.random()))
+      local y = math.cos(2 * math.pi * math.random()) / 2
+      return x * y * r
+   end,
 }

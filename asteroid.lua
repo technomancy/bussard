@@ -31,8 +31,8 @@ local function asteroid(name, mass_max, bodies, parent)
                                    " but out of scoop range.")
          end
       else
-         asteroid(name .. "-", self.mass / 8, bodies, self)
-         asteroid(name .. "+", self.mass / 8, bodies, self)
+         asteroid(name .. "-", self.mass / 2, bodies, self)
+         asteroid(name .. "+", self.mass / 2, bodies, self)
       end
    end
 
@@ -47,9 +47,10 @@ local function asteroid(name, mass_max, bodies, parent)
       local o = math.random(20) - 10
       a.x, a.y, a.dx, a.dy = parent.x + o, parent.y + o, parent.dx, parent.dy
    else
-      -- TODO1: make it more likely that asteroids start near the sun
-      a.x = (math.random(max_asteroid_distance * 2)-max_asteroid_distance) * 0.7
-      a.y = (math.random(max_asteroid_distance * 2)-max_asteroid_distance) * 0.7
+      -- try to get them to spawn clustered near the sun with some outliers
+      local r = utils.gaussian_random(30000)
+      local theta = math.random(math.pi * 2)
+      a.x, a.y = math.sin(theta) * r, math.cos(theta) * r
       a.dx, a.dy = math.random(32) - 16, math.random(32) - 16
    end
 
