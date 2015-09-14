@@ -14,23 +14,23 @@ local system_fields = {
 local ship_filename = "ship_data.lua"
 local system_filename = "system_data.lua"
 
-local system_data = function(bodies)
+local get_system_data = function(bodies)
    local data = {}
-   for i,b in ipairs(bodies) do
+   for _,b in ipairs(bodies) do
       data[b.name] = lume.pick(b, unpack(system_fields))
    end
    return data
 end
 
 return {
-   save = function(ship, ui)
+   save = function(ship)
       -- TODO: write ship config
       -- TODO: write filesystems
       local ship_data = lume.pick(ship, unpack(ship_fields))
       ship_data.scale = ship.api.scale
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
-                            lume.serialize(system_data(ship.bodies)))
+                            lume.serialize(get_system_data(ship.bodies)))
    end,
 
    load_into = function(ship)
@@ -44,7 +44,7 @@ return {
       if(love.filesystem.exists(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)
          local system_data = lume.deserialize(system_data_string)
-         for i,b in ipairs(ship.bodies) do
+         for _,b in ipairs(ship.bodies) do
             lume.extend(b, system_data[b.name])
          end
       end

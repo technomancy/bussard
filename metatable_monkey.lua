@@ -23,14 +23,14 @@ end
 local patched, ipatched, t = false, false, {}
 setmetatable(t, {__pairs = function() return next,{1},nil end})
 
-for k,v in pairs(t) do patched = true end
+for _ in pairs(t) do patched = true end
 if(not patched) then pairs = mtpairs end
-for k,v in ipairs(t) do ipatched = true end
+for _ in ipairs(t) do ipatched = true end
 if(not ipatched) then ipairs = mtipairs end
 
-table.length = function(t)
-   if(not getmetatable(t)) then return #t end
+table.length = function(tab)
+   if(not getmetatable(tab)) then return #tab end
    local n = 0
-   for _ in mtipairs(t) do n = n + 1 end
+   for _ in mtipairs(tab) do n = n + 1 end
    return n
 end
