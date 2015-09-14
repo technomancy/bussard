@@ -19,11 +19,14 @@ if(args[1] == "list") then
    end
 elseif(args[1] == "buy" or args[1] == "sell") then
    local direction, good, amount = unpack(args)
-   local success_price = cargo_transfer(direction, good, tonumber(amount))
+   local success_price, msg = cargo_transfer(direction, good, tonumber(amount))
 
    if(success_price) then
-      print("Sold " .. amount .. " of " .. good .. " for " ..
+      local verb = direction == "buy" and "Bought" or "Sold"
+      print(verb .. " " .. amount .. " of " .. good .. " for " ..
                success_price .. ".")
+   else
+      print(msg)
    end
 else
    print("Usage:")
