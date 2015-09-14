@@ -87,26 +87,28 @@ local ship = {
       setfenv(chunk, sandbox)
       chunk()
 
-      ship:enter(systems, ship.system_name)
+      ship:enter(ship.system_name, true)
    end,
 
-   enter = function(ship, systems, system_name)
+   enter = function(ship, system_name, reseed)
       ship.api.repl.last_result = "Entering the " .. system_name .. " system."
 
       -- stuff these things in there to expose to in-ship APIs
-      ship.system = systems[system_name]
-      ship.bodies = ship.system.bodies
+      ship.bodies = ship.systems[system_name].bodies
+      ship.system_name = system_name
 
+      if(reseed) then
       -- reset
-      ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
-      ship.engine_on, ship.turning_right, ship.turning_left = false,false,false
-      ship.comm_connected, ship.target_number, ship.target = false, 0, nil
+         ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
+         ship.engine_on, ship.turning_right, ship.turning_left = false,false,false
+         ship.comm_connected, ship.target_number, ship.target = false, 0, nil
 
-      -- re-seed system-level things
-      asteroid.populate(ship.system)
-      for _,b in pairs(ship.system.bodies) do
-         body.seed_cargo(b)
-         body.seed_pos(b, ship.system.bodies[1])
+         -- re-seed system-level things
+         asteroid.populate(ship.systems[ship.system_name])
+         for _,b in pairs(ship.bodies) do
+            body.seed_cargo(b)
+            body.seed_pos(b, ship.bodies[1])
+         end
       end
    end,
 
@@ -142,12 +144,11 @@ local ship = {
 
       for _,b in pairs(ship.bodies) do
          if(b.portal and ship:cleared_for(b) and ship:in_range(b, 75)) then
-            ship:enter(ship.systems, b.portal)
+            ship:enter(b.portal, true)
          end
          local distance = utils.distance(ship.x - b.x, ship.y - b.y)
          if(ship.laser and b.asteroid and ship:laser_hits(b, distance)) then
-            -- TODO: firing laser uses up fuel?
-            print(b.name .. " hit, remaining: " .. b.strength)
+            -- TODO: firing laser uses up power?
             b.strength = b.strength - dt * ship.laser_power / math.sqrt(distance)
             if(b.strength < 0) then b:split(ship) end
          end

@@ -16,7 +16,6 @@ end
 local function asteroid(name, mass_max, bodies, parent)
    local mass = math.random(mass_max)
    local split = function(self, ship)
-      print("Destroyed " .. name)
       for i,b in ipairs(bodies) do
          if(b == self) then table.remove(bodies, i) end
       end
@@ -61,20 +60,20 @@ return {
    -- if asteroids get too far from the player cycle them out and introduce more
    recycle = function(ship)
       local asteroid_count = 0
-      for i,b in pairs(ship.system.bodies) do
+      for i,b in pairs(ship.bodies) do
          if(b.asteroid) then
-            if(utils.distance(b, ship.system.bodies[1]) > max_asteroid_distance) then
-               table.remove(ship.system.bodies, i)
+            if(utils.distance(b, ship.bodies[1]) > max_asteroid_distance) then
+               table.remove(ship.bodies, i)
                retarget(b, ship)
             else
                asteroid_count = asteroid_count + 1
             end
          end
       end
-      if(asteroid_count < ship.system.asteroids) then
+      if(asteroid_count < (ship.systems[ship.system_name].asteroids or 0)) then
          local i = 1
-         while(body.find(ship.system.bodies, "asteroid" .. i)) do i = i + 1 end
-         asteroid("asteroid" .. i, 64, ship.system.bodies)
+         while(body.find(ship.bodies, "asteroid" .. i)) do i = i + 1 end
+         asteroid("asteroid" .. i, 64, ship.bodies)
       end
    end,
 

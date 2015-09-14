@@ -40,6 +40,7 @@ return {
          ship.api.scale = ship_data.scale or ship.api.scale
          lume.extend(ship, ship_data)
          ship.target = ship.bodies[ship.target_number]
+         ship:enter(ship.system_name)
       end
       if(love.filesystem.exists(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)
