@@ -15,7 +15,7 @@ local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 local ui = {
    quit = function(ui)
       save.save(ship, ui)
-      love.event.push("quit")
+      love.event.quit()
    end,
    abort = function(confirm)
       if(not confirm) then
@@ -23,7 +23,7 @@ local ui = {
                    "abort(true) to confirm.")
       end
       save.abort()
-      love.event.push("quit")
+      love.event.quit()
    end,
 }
 
