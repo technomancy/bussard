@@ -55,11 +55,10 @@ end
 
 love.load = function()
    if arg[#arg] == "-debug" then require("mobdebug").start() end
-   -- love.graphics.setDefaultFilter('nearest', 'nearest')
    local font = love.graphics.newFont("mensch.ttf", 14)
    love.graphics.setFont(font)
    ship:configure(systems, ui)
-   save.load_into(ship, ui)
+   save.load_into(ship)
    ship.api.repl.last_result =
       "Press control-` to open the repl or just start typing code."
 end
