@@ -25,10 +25,6 @@ local ui = {
       save.abort()
       love.event.push("quit")
    end,
-
-   -- this stuff should be moved to a subtable of ship
-   scale = 1, scale_min = 0.1,
-   paused = false,
 }
 
 local time_factor = 1
@@ -64,7 +60,7 @@ love.load = function()
 end
 
 love.update = function(dt)
-   if(ui.paused) then return end
+   if(ship.api.paused) then return end
    ship:update(dt * time_factor)
    body.schedule(ship.bodies)
    asteroid.recycle(ship)
@@ -105,8 +101,7 @@ love.draw = function()
       love.graphics.pop()
    end
 
-   if(ui.scale < 1) then ui.scale = 1 end
-   local scale = math.pow(1/ui.scale, 8)
+   local scale = math.pow(1/ship.api.scale, 8)
    love.graphics.scale(scale)
 
    if(ship.target) then -- directional target indicator
@@ -145,7 +140,7 @@ love.draw = function()
 
    love.graphics.pop()
 
-   hud.render(ship, ship.target, ui.scale)
+   hud.render(ship, ship.target)
    hud.vector(ship.dx, ship.dy, w - 10 - hud.vector_size, 10)
    if(ship.target) then
       -- target velocity

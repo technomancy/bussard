@@ -7,6 +7,8 @@ local body = require("body")
 
 local default_config = utils.read_file("default_config.lua")
 
+local scale_min = 1
+
 local sensor_whitelist = {
    "x", "y", "dx", "dy", "heading", "target", "fuel", "mass",
    "in_range", "bodies",
@@ -121,6 +123,7 @@ local ship = {
          end
       end
 
+      -- TODO: engine strength is in terms of force, not accel
       if(ship.engine_on and ship.fuel > 0) then
          ship.dx = ship.dx + (math.sin(ship.heading) * dt *
                                  ship.engine_strength * ship.api.throttle)
@@ -150,8 +153,7 @@ local ship = {
          end
       end
 
-      if(ship.api.throttle > 1) then ship.throttle.api = 1 end
-      if(ship.api.throttle < 0) then ship.throttle.api = 0 end
+      ship:enforce_limits()
 
       comm.flush()
    end,
@@ -189,6 +191,12 @@ local ship = {
    recalculate_mass = function(ship)
       ship.mass = ship.base_mass
       for _,v in pairs(ship.cargo) do ship.mass = ship.mass + v end
+   end,
+
+   enforce_limits = function(ship)
+      if(ship.api.throttle > 1) then ship.throttle.api = 1 end
+      if(ship.api.throttle < 0) then ship.throttle.api = 0 end
+      if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
    end,
 }
 
@@ -229,6 +237,7 @@ ship.api = {
    trajectory = 256,
    step_size = 0.05,
    throttle = 1,
+   scale = 1,
 
    cheat = ship,
    teleport = function(self)

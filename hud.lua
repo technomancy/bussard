@@ -10,7 +10,7 @@ local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 return {
    -- TODO: data-driven hud
-   render = function(ship, target, scale)
+   render = function(ship, target)
       local speed = utils.distance(ship.dx, ship.dy)
       local formatted_time = utils.format_seconds(os.time() + ship.time_offset)
       local distance, target_name
@@ -32,7 +32,7 @@ return {
       -- TODO: cargo indicator
 
       -- scale indicator
-      local scale_y = math.log(scale) * h
+      local scale_y = math.log(ship.api.scale) * h
       love.graphics.line(w - 5, scale_y, w, scale_y)
 
       -- fuel readout

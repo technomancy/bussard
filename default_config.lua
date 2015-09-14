@@ -5,8 +5,8 @@ ship.controls = {
    left = ship.actions.left,
    right = ship.actions.right,
    ["lalt"] = ship.actions.laser,
-   ["="] = function(d) if d then ui.scale = ui.scale - (ship.dt/2) end end,
-   ["-"] = function(d) if d then ui.scale = ui.scale + (ship.dt/2) end end,
+   ["="] = function(d) if d then ship.scale = ship.scale - (ship.dt/2) end end,
+   ["-"] = function(d) if d then ship.scale = ship.scale + (ship.dt/2) end end,
    ["["] = function(d) if d then ship.throttle = ship.throttle - (ship.dt/2) end end,
    ["]"] = function(d) if d then ship.throttle = ship.throttle - (ship.dt/2) end end,
 }
@@ -28,7 +28,7 @@ ship.commands = {
       end
    end,
    tab = ship.actions.next_target,
-   pause = function() ui.paused = (not ui.paused) end,
+   pause = function() ship.paused = (not ship.paused) end,
 }
 
 login = ship.actions.login
