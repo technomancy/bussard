@@ -1,5 +1,6 @@
 local get_price = function(good, amount, prices, direction)
-   return amount * prices[good][direction .. "_price"]
+   other_direction = direction == "sell" and "buy" or "sell"
+   return amount * prices[good][other_direction]
 end
 
 local space_for = function(amount, ship, direction)

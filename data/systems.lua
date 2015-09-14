@@ -1,7 +1,12 @@
 local orb = require("os/orb")
 local img = love.graphics.newImage
 
--- TODO: specify an orbit distance for bodies and calculate x, y, dx, and dy
+-- cargo types:
+-- ore
+-- food
+-- medicine
+-- equipment
+-- water
 
 return {
    -- Tana
@@ -14,22 +19,91 @@ return {
            image=img('assets/sun.png'),
            name="Wolf 1453", star=true },
           {r=35000, mass=700,
-           image=img('assets/planet-1.png'),
-           name="Koria", os=orb,
+           image=img('assets/planet-3.png'),
+           name="Tana Prime", os=orb,
+           prices={food = {stock=90, buy=100, sell=120},
+                   ore = {stock=65, buy=150, sell=130},
+                   medicine = {stock=40, buy=220, sell=200},
+                   equipment = {stock=20, buy=200, sell=180},
+                  },
           },
           {r=21000, mass=500,
-           image=img('assets/planet-3.png'),
+           image=img('assets/planet-1.png'),
            name="Lioboro", os=orb,
+           prices={food = {stock=120, buy=90, sell=110},
+                   ore = {stock=65, buy=150, sell=130},
+                   medicine = {stock=30, buy=230, sell=210},
+                   equipment = {stock=10, buy=210, sell=190},
+                   water = {stock=50, buy=30, sell=45},
+                  }
+          },
+          {r=35000, mass=700,
+           image=img('assets/station-pointed.png'),
+           name="Kenapa Station", os=orb,
+           prices={food = {stock=20, buy=100, sell=120},
+                   ore = {stock=40, buy=150, sell=130},
+                   medicine = {stock=5, buy=230, sell=200},
+                   equipment = {stock=10, buy=210, sell=180},
+                  },
           },
           {name = "Portal: L 668-21",
            image = img("assets/portal-1.png"),
-           r=26000, mass=75, portal="L 668-21"}},
+           r=26000, mass=75, portal="L 668-21"},
+          {name = "Portal: Wolf 294",
+           image = img("assets/portal-1.png"),
+           r=36000, mass=75, portal="Wolf 294"},
+          {name = "Portal: Luyten's Star",
+           image = img("assets/portal-1.png"),
+           r=20000, mass=75, portal="Luyten's Star"}},
       },
    ["Wolf 294"] = -- second-largest Tana system
-      {civ="Tana", x=-5.3, y=-0.3, bodies = {},
+      {civ="Tana", x=-5.3, y=-0.3, bodies = {
+          {r=0, x=0, y=0, dx=0, dy=0, mass=160000,
+           image=img('assets/sun.png'),
+           name="Wolf 294", star=true},
+          {r=31000, mass=350,
+           image=img('assets/planet-9.png'),
+           fame="Belanda", os=orb,
+           prices={food = {stock=60, buy=90, sell=110},
+                   ore = {stock=40, buy=160, sell=140},
+                   medicine = {stock=20, buy=240, sell=200},
+                  }
+          },
+          {r=31000, mass=500,
+           image=img('assets/planet-14.png'),
+           name="Solotogo", os=orb,
+           prices={food = {stock=120, buy=90, sell=110},
+                   medicine = {stock=30, buy=240, sell=210},
+                   equipment = {stock=10, buy=210, sell=190},
+                   water = {stock=60, buy=20, sell=30},
+                  }
+          },
+          {name = "Portal: Wolf 1453",
+           image = img("assets/portal-1.png"),
+           r=26000, mass=75, portal="Wolf 1453", }
+      },
    },
    ["Luyten's Star"] = -- gateway to sol
-      {civ="Tana", x=-3.3, y=-2, bodies = {},
+      {civ="Tana", x=-3.3, y=-2, bodies = {
+          {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
+           image=img('assets/sun.png'),
+           name="Luyten's Star", star=true },
+          {r=29000, mass=120,
+           image=img('assets/station-pointed.png'),
+           name="Apkabar station", os=orb,
+           prices={
+              food={stock=10, buy=90, sell=110,},
+              ore={stock=8, buy=120, sell=100},
+              water={stock=2, buy=45, sell=65},
+           },
+          },
+          {name = "Portal: Wolf 1453",
+           image = img("assets/portal-1.png"),
+           r=25000, mass=75, portal="Wolf 1453", },
+          {name = "Portal: Sol",
+           image = img("assets/portal-2.png"),
+           r=20000, mass=75, portal=nil, },
+      },
    },
    ["L 668-21"] = -- remote mining system
       {civ="Tana",
@@ -43,8 +117,9 @@ return {
            image=img('assets/station-pointed.png'),
            name="Mirduka station", os=orb,
            prices={
-              ["food"]={stock=10, buy_price=100, sell_price=110,},
-              ["ore"]={stock=8, buy_price = 90, sell_price = 50,}
+              food={stock=10, buy=100, sell=110,},
+              ore={stock=8, buy=90, sell=50},
+              water={stock=2, buy=45, sell=65},
            },
           },
           {name = "Portal: Wolf 1453",
