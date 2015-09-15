@@ -18,7 +18,7 @@ local sensor_whitelist = {
 
 local status_whitelist = {
    "engine_on", "turning_right", "turning_left", "credits", "cargo",
-   "engine_strength", "turning_speed",
+   "engine_strength", "turning_speed", "system_name",
    "recharge_rate", "burn_rate", "comm_range", "scoop_range",
 }
 
@@ -27,6 +27,7 @@ local sandbox = {
    ipairs = ipairs,
    unpack = unpack,
    print = repl.print,
+   pp = lume.serialize,
    realprint = print, -- for debugging
    coroutine = { yield = coroutine.yield,
                  status = coroutine.status },

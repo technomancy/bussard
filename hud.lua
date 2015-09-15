@@ -35,13 +35,19 @@ return {
       local scale_y = math.log(ship.api.scale) * h
       love.graphics.line(w - 5, scale_y, w, scale_y)
 
-      -- fuel readout
+      -- remaining fuel
       love.graphics.setLineWidth(1)
-      love.graphics.setColor(255, 50, 50);
+      love.graphics.setColor(255, 20, 20);
       love.graphics.rectangle("fill", 5, 60,
-                              math.min(ship.fuel * 2, ship.fuel_capacity*2), 15)
+                              math.min(ship.fuel, ship.fuel_capacity), 10)
       love.graphics.setColor(255, 200, 200);
-      love.graphics.rectangle("line", 5, 60, ship.fuel_capacity*2, 15)
+      love.graphics.rectangle("line", 5, 60, ship.fuel_capacity, 10)
+
+      -- how much fuel will we use to stop?
+      local speed = utils.distance(ship.dx, ship.dy)
+      local fuel_to_stop = speed * ship.engine_strength / ship.burn_rate
+      love.graphics.setColor(150, 50, 50);
+      love.graphics.rectangle("fill", 5, 60, fuel_to_stop, 5)
    end,
 
    trajectory = function(ship, bodies, steps)

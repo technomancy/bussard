@@ -5,7 +5,7 @@ local f, env, args = ...
 if(args[1] == "list") then
    print("Prices: (buy/sell)")
    for good, prices in pairs(station.prices) do
-      print("  " .. good .. ": " .. prices.buy_price .. "/" .. prices.sell_price)
+      print("  " .. good .. ": " .. prices.buy .. "/" .. prices.sell)
    end
 
    print("Stock:")
