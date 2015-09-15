@@ -4,7 +4,9 @@ local hud = require "hud"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local systems = require "data/systems"
+
 local save = require "save"
+local keymap = require "keymap"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
@@ -53,6 +55,7 @@ love.load = function()
    if arg[#arg] == "-debug" then require("mobdebug").start() end
    local font = love.graphics.newFont("mensch.ttf", 14)
    love.graphics.setFont(font)
+   love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    save.load_into(ship)
    ship.api.repl.last_result =
@@ -68,21 +71,9 @@ love.update = function(dt)
 end
 
 -- for commands that don't need repeat
-love.keypressed = function(key, is_repeat)
-   if(key == "pageup" and (not ship.api.repl.toggled())) then
-      ship.dx, ship.dy = 0, 0 -- cheat
-   elseif(ship.api.commands[key]) then
-      ship.api.commands[key]()
-   elseif(not ship.api.controls[key]) then
-      ship.api.repl.keypressed(key, is_repeat)
-   end
-end
+love.keypressed = keymap.handle
 
-love.textinput = function(t)
-   if(ship.api.repl.toggled() or (not ship.api.controls[t])) then
-      ship.api.repl.textinput(t)
-   end
-end
+love.textinput = keymap.textinput
 
 love.draw = function()
    starfield.render(star1, ship.x, ship.y)

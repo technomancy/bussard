@@ -4,6 +4,8 @@ local repl = require("srepl")
 local help = require("help")
 local asteroid = require("asteroid")
 local body = require("body")
+local lume = require("lume")
+local keymap = require("keymap")
 
 local default_config = utils.read_file("default_config.lua")
 
@@ -38,6 +40,7 @@ local sandbox = {
    },
    help = help.message,
    man = help.man,
+   keymap = keymap,
 }
 
 local ship = {
@@ -118,14 +121,15 @@ local ship = {
       ship.x = ship.x + (ship.dx * dt * 100)
       ship.y = ship.y + (ship.dy * dt * 100)
 
-      -- activate controls
-      if(not ship.api.repl.toggled()) then
+      -- activate controls TODO: move these to a keymap too?
+      if(keymap.current_mode == "flight") then
          for k,f in pairs(ship.api.controls) do
             f(love.keyboard.isDown(k))
          end
       end
 
       -- TODO: engine strength is in terms of force, not accel
+      -- TODO: calculate oberth effect
       if(ship.engine_on and ship.fuel > 0) then
          ship.dx = ship.dx + (math.sin(ship.heading) * dt *
                                  ship.engine_strength * ship.api.throttle)
@@ -214,22 +218,25 @@ ship.api = {
          if(love.keyboard.isDown("lshift", "rshift")) then
             ship.target_number = ((ship.target_number - 1) %
                   (table.length(ship.api.sensors.bodies) + 1))
-         elseif(love.keyboard.isDown("lctrl")) then
-            local min_distance = 1000000000000
-            for i,b in ipairs(ship.api.sensors.bodies) do
-               if(utils.distance(ship, b) < min_distance) then
-                  ship.target_number = i
-                  min_distance = utils.distance(ship, b)
-               end
-            end
          else
             ship.target_number = ((ship.target_number + 1) %
                   (table.length(ship.api.sensors.bodies) + 1))
          end
          ship.target = ship.bodies[ship.target_number]
       end,
+      closest_target = function()
+         local min_distance = 1000000000000
+         for i,b in ipairs(ship.api.sensors.bodies) do
+            if(utils.distance(ship, b) < min_distance) then
+               ship.target_number = i
+               min_distance = utils.distance(ship, b)
+            end
+         end
+         ship.target = ship.bodies[ship.target_number]
+      end,
       laser = function(down) ship.laser = down end,
       login = utils.partial(comm.login, ship),
+      anchor = function(ship) ship.dx, ship.dy = 0, 0 end, -- cheat
    },
    -- added by loading config
    controls = {},

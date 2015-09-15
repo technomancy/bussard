@@ -9,13 +9,12 @@ local love = love
 
 -- Module
 local repl = {
-   toggle_key = 'escape',
    padding_left = 10,
    max_lines = 1000,
    max_history = 1000,
    font = nil,
    background = false,
-   wrapping = false
+   wrapping = false,
 }
 -- How many pixels of padding are on either side
 local PADDING = 20
@@ -25,8 +24,6 @@ local ROW_HEIGHT
 local DISPLAY_ROWS
 -- Width of the display available for text, in pixels
 local DISPLAY_WIDTH
--- True when open, false when closed
-local toggled = false
 -- Console contents
 -- History is just a list of strings
 local history
@@ -41,6 +38,8 @@ local cursor = 0
 local histpos = 0
 -- Line display offset (in case of scrolling up and down)
 local offset = 1
+-- currently enabled?
+local on = false
 
 -- Circular buffer functionality
 local buffer = {}
@@ -101,12 +100,20 @@ function repl.initialize()
    end
 end
 
-function repl.toggle()
-   toggled = not toggled
+function repl.on()
+   on = true
 end
 
-function repl.toggled()
-   return toggled
+function repl.off()
+   on = false
+end
+
+function repl.enable(onoff)
+   on = onoff
+end
+
+function repl.is_on()
+   return on
 end
 
 function repl.on_close() end
@@ -195,63 +202,72 @@ local function get_history()
    end
 end
 
-local function ctrlp() return love.keyboard.isDown('lctrl', 'rctrl') end
-
-function repl.keypressed(k)
-   -- Line editing
-   if k == 'backspace' then
-      editline = editline:sub(0, cursor - 1) .. editline:sub(cursor + 1, #editline)
-      if cursor > 0 then
-         cursor = cursor - 1
-      end
-   elseif k == 'delete' then
-      editline = editline:sub(0, cursor) .. editline:sub(cursor + 2, #editline)
-   elseif ctrlp() and k == 'a' then
-      cursor = 0
-   elseif ctrlp() and k == 'e' then
-      cursor = #editline
-   elseif k == 'return' then
-      histpos = 0
-      offset = 1
-      if editline == '' then return end
-      if repl.read then
-         repl.read(editline)
-         reset_editline()
-      elseif repl.eval(editline, true) then
-         reset_editline()
-      end
-   elseif k == 'up' then
-      if histpos + 1 <= history.entries then
-         histpos = histpos + 1
-         get_history()
-      end
-      -- Navigation
-   elseif k == 'home' then
-      offset = math.max(1, lines.entries - DISPLAY_ROWS + 1)
-   elseif k == 'end' then
-      offset = 1
-   elseif k == 'pageup' then
-      offset = math.min(lines.entries - DISPLAY_ROWS + 1, offset + DISPLAY_ROWS)
-   elseif k == 'pagedown' then
-      offset = math.max(1, offset - DISPLAY_ROWS)
-   elseif k == "l" and ctrlp() then
-      reset_editline()
-   elseif k == 'down' then
-      if histpos - 1 > 0 then
-         histpos = histpos - 1
-         get_history()
-      else
-         histpos = 0
-         reset_editline()
-      end
-   elseif k == 'left' and cursor > 0 then
+function repl.delete_backwards()
+   editline = editline:sub(0, cursor - 1) .. editline:sub(cursor + 1, #editline)
+   if cursor > 0 then
       cursor = cursor - 1
-   elseif k == 'right' and cursor ~= #editline then
-      cursor = cursor + 1
-   elseif k == repl.toggle_key then
-      repl.toggle()
-      assert(toggled == false)
    end
+end
+
+function repl.delete_forwards()
+   editline = editline:sub(0, cursor) .. editline:sub(cursor + 2, #editline)
+end
+
+function repl.move_beginning_of_line()
+   cursor = 0
+end
+
+function repl.move_end_of_line()
+   cursor = #editline
+end
+
+function repl.eval_line()
+   histpos = 0
+   offset = 1
+   if editline == '' then return end
+   if repl.read then
+      repl.read(editline)
+      reset_editline()
+   elseif repl.eval(editline, true) then
+      reset_editline()
+   end
+end
+
+function repl.history_prev()
+   if histpos + 1 <= history.entries then
+      histpos = histpos + 1
+      get_history()
+   end
+end
+
+function repl.history_next()
+   if histpos - 1 > 0 then
+      histpos = histpos - 1
+      get_history()
+   else
+      histpos = 0
+      reset_editline()
+   end
+end
+
+function repl.scroll_up()
+   offset = math.min(lines.entries - DISPLAY_ROWS + 1, offset + DISPLAY_ROWS)
+end
+
+function repl.scroll_down()
+   offset = math.max(1, offset - DISPLAY_ROWS)
+end
+
+function repl.clear()
+   reset_editline()
+end
+
+function repl.forward_char()
+   cursor = cursor + 1
+end
+
+function repl.backward_char()
+   cursor = cursor - 1
 end
 
 function repl.textinput(t)
@@ -274,7 +290,7 @@ function repl.draw()
 
    -- Draw background
    love.graphics.setColor(0, 0, 0, 150)
-   if(repl.toggled()) then
+   if(on) then
       love.graphics.rectangle("fill", 0, 0, width, height)
    else
       love.graphics.rectangle("fill", 0, height - 40, width, height)
@@ -296,8 +312,8 @@ function repl.draw()
       love.graphics.line(cx, cy, cx + 5, cy)
    end
 
-   -- show edit line, unless the non-toggled repl has a last-value to show
-   if(not toggled) then
+   -- show edit line, unless the disabled repl has a last-value to show
+   if(not on) then
       if(repl.last_result) then
          love.graphics.print(repl.last_result, repl.padding_left, limit)
       else

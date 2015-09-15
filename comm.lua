@@ -21,6 +21,7 @@ local send_input = function(ship, input)
    else
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env and fs[env.IN], "Not logged into " .. ship.target.name)
+      -- TODO: insert into history
       ship.api.repl.print(input)
       fs[env.IN](input)
    end
