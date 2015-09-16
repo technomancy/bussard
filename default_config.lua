@@ -8,21 +8,12 @@ ship.controls = {
    ["lalt"] = ship.actions.laser,
    ["="] = function(d) if d then ship.scale = ship.scale - (ship.dt/2) end end,
    ["-"] = function(d) if d then ship.scale = ship.scale + (ship.dt/2) end end,
-   ["["] = function(d) if d then ship.throttle = ship.throttle - (ship.dt/2) end end,
-   ["]"] = function(d) if d then ship.throttle = ship.throttle - (ship.dt/2) end end,
-
-      -- TODO: new bindings can shadow old ones!
-   h = ship.actions.left,
-   t = ship.actions.forward,
-   n = ship.actions.right,
-   space = ship.actions.laser,
-   ["/"] = function(d) if d then ship.scale = ship.scale - (ship.dt/2) end end,
-
 }
 
 local pause = function() ship.paused = (not ship.paused) end
 local mode = function(mode)
    return function()
+      if(keymap.current_mode == "edit") then ship.edit.save() end
       ship.repl.enable(mode == "repl")
       if(mode ~= "edit") then ship.edit.off() end
       keymap.change_mode(mode)
@@ -73,8 +64,6 @@ keymap.define({"repl", "flight"}, "ctrl-n", ship.repl.history_next)
 -- Not part of flight mode
 keymap.define("repl", "pageup", ship.repl.scroll_up)
 keymap.define("repl", "pagedown", ship.repl.scroll_down)
-keymap.define("repl", "alt-v", ship.repl.scroll_up)
-keymap.define("repl", "ctrl-v", ship.repl.scroll_down)
 
 keymap.define("repl", "ctrl-`", mode("flight"))
 keymap.define("repl", "escape", mode("flight"))
@@ -113,6 +102,11 @@ keymap.define("edit", "down", ship.edit.next_line)
 keymap.define("edit", "ctrl-n", ship.edit.next_line)
 
 keymap.define("edit", "ctrl-s", ship.edit.save)
+
+-- TODO
+keymap.define("edit", "ctrl-backspace", ship.edit.backward_kill_word)
+keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
+keymap.define("edit", "ctrl-r", ship.edit.revert)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
 

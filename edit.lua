@@ -138,7 +138,6 @@ return {
 
       local edge = 15
       local offset = (current < edge and 0) or (current - edge)
-      print(current, offset, DISPLAY_ROWS)
       for i,line in ipairs(lines) do
          if(i >= offset) then
             local y = ROW_HEIGHT * (i - offset)
