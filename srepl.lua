@@ -40,6 +40,8 @@ local histpos = 0
 local offset = 1
 -- currently enabled?
 local on = false
+-- pattern used to determine word boundaries
+local word_break = "[ _-]"
 
 -- Circular buffer functionality
 local buffer = {}
@@ -213,6 +215,10 @@ function repl.delete_forwards()
    editline = editline:sub(0, cursor) .. editline:sub(cursor + 2, #editline)
 end
 
+function repl.kill_line()
+   editline = editline:sub(0, cursor)
+end
+
 function repl.move_beginning_of_line()
    cursor = 0
 end
@@ -268,6 +274,21 @@ end
 
 function repl.backward_char()
    cursor = cursor - 1
+end
+
+function repl.forward_word()
+   local match = editline:find(word_break, cursor + 2)
+   cursor = match and match - 1 or string.len(editline)
+end
+
+function repl.backward_word()
+   local back_line = editline:sub(0, math.max(cursor - 1, 0)):reverse()
+   print(cursor, back_line:find(word_break), editline)
+   if(back_line:find(word_break)) then
+      cursor = string.len(back_line) - back_line:find(word_break) + 1
+   else
+      cursor = 0
+   end
 end
 
 function repl.textinput(t)
