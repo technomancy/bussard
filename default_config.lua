@@ -15,7 +15,7 @@ local mode = function(mode)
    return function()
       if(keymap.current_mode == "edit") then ship.edit.save() end
       ship.repl.enable(mode == "repl")
-      if(mode ~= "edit") then ship.edit.off() end
+      ship.edit.on(mode == "edit")
       keymap.change_mode(mode)
    end
 end
@@ -112,15 +112,6 @@ keymap.modes["edit"].textinput = ship.edit.textinput
 
 -- convenience functions
 login = ship.actions.login
-edit = function(path)
-   if(ship[path]) then
-      keymap.change_mode("edit")
-      ship.repl.off()
-      ship.edit.open(ship, path)
-   else
-      print(path .. " not found.")
-   end
-end
 
 -- testing
-keymap.define("flight", "ctrl-x", function() edit("config") end)
+keymap.define("flight", "ctrl-x", function() ship:e("config.lua") end)

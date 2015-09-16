@@ -9,16 +9,18 @@ Read the [in-game manual](manual.md) for a taste of how the game works.
 ## Status
 
 Currently the game supports flying around, mining asteroids, trading
-cargo, and running some code in the in-game REPL.
+cargo, and running some code in the in-game REPL. You can also edit
+your ship's config file in order to reprogram it, change key bindings,
+and add convenience functions.
 
-Without having an in-game text editor available, the heart of the game
-(reprogramming your ship's systems to automate) is still not
-achieved. Also the interaction with the planet and station computers
-is very limited at this time. (Basically just running vanilla Unix
-commands and cargo transactions.) No ship hardware/software upgrades
-have been implemented.
+The interaction with the planet and station computers is very limited
+at this time. (Basically just running vanilla Unix commands and cargo
+transactions.) No ship hardware/software upgrades have been
+implemented.
 
 See the list of [open issues](https://gitlab.com/technomancy/bussard/issues).
+
+<img src="http://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
 
 ## Usage
 

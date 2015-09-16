@@ -29,9 +29,17 @@ return {
    end,
 
    open = function(current_fs, current_path)
-      -- TODO: subpaths
+      -- reset position if opening a different file
+      if(current_path ~= path) then
+         cursor, current = 0, 1
+      end
+
       fs, path = current_fs, current_path
-      lines = lume.split(fs[current_path], "\n")
+      if(fs[path]) then
+         lines = lume.split(fs[path], "\n")
+      else
+         lines = {""}
+      end
       on = true
    end,
 
@@ -39,7 +47,7 @@ return {
       (current_fs or fs)[current_path or path] = table.concat(lines, "\n")
    end,
 
-   off = function() on = false end,
+   on = function(or_not) on = or_not ~= false end,
 
    -- edit commands
    delete_backwards = function()
@@ -136,7 +144,7 @@ return {
          love.graphics.print(ln2, PADDING, y)
       end
 
-      local edge = 15
+      local edge = math.ceil(DISPLAY_ROWS * 0.3)
       local offset = (current < edge and 0) or (current - edge)
       for i,line in ipairs(lines) do
          if(i >= offset) then
