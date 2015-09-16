@@ -60,7 +60,7 @@ love.load = function()
    save.load_into(ship)
    ship.api.load_config(ship.api)
    ship.api.repl.last_result =
-      "Press control-` to open the repl or just start typing code."
+      "Press control-enter to open the repl or just start typing code."
 end
 
 love.update = function(dt)

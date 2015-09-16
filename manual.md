@@ -34,15 +34,15 @@ spacecraft is equipped with a LuaJIT-based control unit, offering a
 high degree of flexibility and customization without sacrificing
 performance.
 
-At the bottom of the screen is the REPL where you can interact directly
-with your ship's onboard computer. By default a single line is shown,
-which displays either the current line of input (if applicable) or the
-last line of output. Pressing `ctrl-backtick` toggles the full
-repl, which allows you to scroll through the previous output. While
-the full repl is active, the piloting controls for your ship will be
-unavailable. Enter any Lua code into the REPL to have it
-evaluated. See the API section below to learn how to control your ship
-from code.
+At the bottom of the screen is the REPL (interactive code console)
+where you can interact directly with your ship's onboard computer. By
+default a single line is shown, which displays either the current line
+of input (if applicable) or the last line of output. Pressing
+`ctrl-enter` toggles the full repl, which allows you to scroll
+through the previous output. While the full repl is active, the
+piloting controls for your ship will be unavailable. Enter any Lua
+code into the REPL to have it evaluated. See the API section below to
+learn how to control your ship from code.
 
 When your ship starts, it will load its init file in order to create
 key bindings, define helper functions, and perform any other setup.

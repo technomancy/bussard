@@ -22,7 +22,7 @@ end
 
 -- Flight mode
 keymap.define_mode("flight")
-keymap.define("flight", "ctrl-`", mode("repl"))
+keymap.define("flight", "ctrl-return", mode("repl"))
 
 keymap.define("flight", "escape", ship.ui.quit)
 keymap.define("flight", "tab", ship.actions.next_target)
@@ -65,7 +65,7 @@ keymap.define({"repl", "flight"}, "ctrl-n", ship.repl.history_next)
 keymap.define("repl", "pageup", ship.repl.scroll_up)
 keymap.define("repl", "pagedown", ship.repl.scroll_down)
 
-keymap.define("repl", "ctrl-`", mode("flight"))
+keymap.define("repl", "ctrl-return", mode("flight"))
 keymap.define("repl", "escape", mode("flight"))
 
 keymap.define("repl", "ctrl-l", ship.repl.clear)
