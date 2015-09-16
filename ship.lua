@@ -14,14 +14,14 @@ local default_config = utils.read_file("default_config.lua")
 local scale_min = 1
 
 local sensor_whitelist = {
-   "x", "y", "dx", "dy", "heading", "target", "fuel", "mass",
-   "in_range", "bodies",
+   "x", "y", "dx", "dy", "heading", "target", "system_name", "bodies",
 }
 
 local status_whitelist = {
+   "fuel", "fuel_capacity", "mass", "in_range",
    "engine_on", "turning_right", "turning_left", "credits", "cargo",
-   "engine_strength", "turning_speed", "system_name",
-   "recharge_rate", "burn_rate", "comm_range", "scoop_range",
+   "engine_strength", "turning_speed", "laser_power",
+   "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
 }
 
 local sandbox = {
@@ -200,10 +200,14 @@ local ship = {
 
 -- everything in here is exposed to the sandbox
 ship.api = {
+   -- components
    repl = repl,
    edit = edit,
+
+   -- data tables (read-only)
    sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),
    status = utils.whitelist_table(ship, status_whitelist, "status"),
+
    actions = {
       forward = function(down) ship.engine_on = down end,
       left = function(down) ship.turning_left = down end,
@@ -230,23 +234,38 @@ ship.api = {
       end,
       laser = function(down) ship.laser = down end,
       login = utils.partial(comm.login, ship),
-      anchor = function(ship) ship.dx, ship.dy = 0, 0 end, -- cheat
+      anchor = function(ship) ship.cheat.dx, ship.cheat.dy = 0, 0 end,
    },
    load_config = function(ship)
       ship.repl.sandbox = sandbox
       sandbox.ship = ship
 
-      local chunk = assert(loadstring(ship.config))
+      local chunk = assert(loadstring(ship["config.lua"]))
       setfenv(chunk, sandbox)
       chunk()
    end,
-   config = default_config,
+   e = function(ship, path)
+      if(ship[path]) then
+         keymap.change_mode("edit")
+         ship.repl.on(false)
+         ship.edit.open(ship, path)
+      else
+         print(path .. " not found.")
+      end
+   end,
+
+   -- TODO: allow customization of which fields to persist
+   ["config.lua"] = default_config,
+
    -- added by loading config
    controls = {},
    commands = {},
    helm = love.keyboard,
+
+   -- you can adjust these to improve performance
    trajectory = 256,
-   step_size = 0.05,
+   trajectory_step_size = 0.05,
+
    throttle = 1,
    scale = 1,
 

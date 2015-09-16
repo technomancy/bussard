@@ -63,10 +63,10 @@ return {
       for _=0, steps do
          for _, b in pairs(body_points) do
             local ddx, ddy = body.gravitate(b, x, y)
-            dx = dx + ddx * ship.api.step_size
-            dy = dy + ddy * ship.api.step_size
-            b.x = b.x + (b.dx * ship.api.step_size * 100)
-            b.y = b.y + (b.dy * ship.api.step_size * 100)
+            dx = dx + ddx * ship.api.trajectory_step_size
+            dy = dy + ddy * ship.api.trajectory_step_size
+            b.x = b.x + (b.dx * ship.api.trajectory_step_size * 100)
+            b.y = b.y + (b.dy * ship.api.trajectory_step_size * 100)
          end
 
          for _, b2 in ipairs(body_points) do
@@ -77,8 +77,8 @@ return {
             end
          end
          last_x, last_y = x, y
-         x = x + (dx * ship.api.step_size * 100)
-         y = y + (dy * ship.api.step_size * 100)
+         x = x + (dx * ship.api.trajectory_step_size * 100)
+         y = y + (dy * ship.api.trajectory_step_size * 100)
 
          love.graphics.line(last_x - ship.x, last_y - ship.y, x - ship.x, y - ship.y)
       end

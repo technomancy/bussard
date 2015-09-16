@@ -25,7 +25,7 @@ end
 
 return {
    save = function(ship)
-      -- TODO: write ship config
+      -- TODO1: persist arbitrary ship.api fields
       -- TODO: write filesystems
       local ship_data = lume.pick(ship, unpack(ship_fields))
       ship_data.scale = ship.api.scale

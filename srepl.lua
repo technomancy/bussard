@@ -101,8 +101,8 @@ function repl.initialize()
    ROW_HEIGHT = font:getHeight()
 end
 
-function repl.on()
-   on = true
+function repl.on(or_not)
+   on = or_not ~= false
 end
 
 function repl.off()
