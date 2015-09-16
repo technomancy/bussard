@@ -1,11 +1,13 @@
 local utils = require("utils")
 local comm = require("comm")
-local repl = require("srepl")
 local help = require("help")
 local asteroid = require("asteroid")
 local body = require("body")
+
 local lume = require("lume")
 local keymap = require("keymap")
+local repl = require("srepl")
+local edit = require("edit")
 
 local default_config = utils.read_file("default_config.lua")
 
@@ -75,22 +77,12 @@ local ship = {
    engine_strength = 16,
    turning_speed = 4,
 
-   config = default_config,
-
    configure = function(ship, systems, ui)
       repl.initialize()
-      repl.font = love.graphics.getFont()
-      repl.sandbox = sandbox
+      edit.initialize()
 
+      ship.api.ui = ui
       ship.systems = systems
-      sandbox.ship = ship.api
-      sandbox.ui = ui
-      sandbox.refuel = function() ship.fuel = ship.fuel_capacity end -- cheat
-
-      local chunk = assert(loadstring(ship.config))
-      setfenv(chunk, sandbox)
-      chunk()
-
       ship:enter(ship.system_name, true)
    end,
 
@@ -209,6 +201,7 @@ local ship = {
 -- everything in here is exposed to the sandbox
 ship.api = {
    repl = repl,
+   edit = edit,
    sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),
    status = utils.whitelist_table(ship, status_whitelist, "status"),
    actions = {
@@ -239,6 +232,15 @@ ship.api = {
       login = utils.partial(comm.login, ship),
       anchor = function(ship) ship.dx, ship.dy = 0, 0 end, -- cheat
    },
+   load_config = function(ship)
+      ship.repl.sandbox = sandbox
+      sandbox.ship = ship
+
+      local chunk = assert(loadstring(ship.config))
+      setfenv(chunk, sandbox)
+      chunk()
+   end,
+   config = default_config,
    -- added by loading config
    controls = {},
    commands = {},

@@ -58,6 +58,7 @@ love.load = function()
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    save.load_into(ship)
+   ship.api.load_config(ship.api)
    ship.api.repl.last_result =
       "Press control-` to open the repl or just start typing code."
 end
@@ -142,6 +143,7 @@ love.draw = function()
    end
 
    ship.api.repl.draw()
+   ship.api.edit.draw()
 end
 
 return ship -- for headless.lua

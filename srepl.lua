@@ -12,7 +12,6 @@ local repl = {
    padding_left = 10,
    max_lines = 1000,
    max_history = 1000,
-   font = nil,
    background = false,
    wrapping = false,
 }
@@ -42,6 +41,8 @@ local offset = 1
 local on = false
 -- pattern used to determine word boundaries
 local word_break = "[ _-]"
+-- current font
+local font
 
 -- Circular buffer functionality
 local buffer = {}
@@ -96,10 +97,8 @@ function repl.initialize()
    -- Expose these in case somebody wants to use them
    repl.lines = lines
    repl.history = history
-
-   if not repl.font then
-      repl.font = love.graphics.newFont(12)
-   end
+   font = love.graphics.getFont()
+   ROW_HEIGHT = font:getHeight()
 end
 
 function repl.on()
@@ -283,7 +282,6 @@ end
 
 function repl.backward_word()
    local back_line = editline:sub(0, math.max(cursor - 1, 0)):reverse()
-   print(cursor, back_line:find(word_break), editline)
    if(back_line:find(word_break)) then
       cursor = string.len(back_line) - back_line:find(word_break) + 1
    else
@@ -301,13 +299,8 @@ end
 
 function repl.draw()
    local width, height = love.graphics:getWidth(), love.graphics:getHeight()
-   local font = repl.font
-   ROW_HEIGHT = font:getHeight()
    DISPLAY_WIDTH = width - PADDING
    DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
-
-   local saved_font = love.graphics.getFont()
-   love.graphics.setFont(font)
 
    -- Draw background
    love.graphics.setColor(0, 0, 0, 150)
@@ -409,9 +402,6 @@ function repl.draw()
          love.graphics.line(sx, bar_begin, sx, bar_end)
       end
    end
-
-   -- reset font
-   love.graphics.setFont(saved_font)
 end
 
 return repl
