@@ -14,7 +14,9 @@ end
 local send_input = function(ship, input)
    if(input == "logout") then -- TODO: need to get the OS to send EOF/nil
       ship.api.repl.read = nil
+      ship.api.repl.prompt = nil
       ship.api.repl.print("Logged out.")
+      ship.comm_connected = false
       -- TODO: wipe guest account on logout
    elseif(not ship:in_range(ship.target)) then
       ship.api.repl.print("| Out of range.")
@@ -60,6 +62,8 @@ return {
          sessions[ship.target.name] = {fs, env, out_buffer}
          ship.target.os.process.spawn(fs, env, command or "smash", sandbox(ship))
          ship.api.repl.read = utils.partial(send_input, ship)
+         ship.api.repl.prompt = "$ "
+         ship.comm_connected = true
 
          return "Login succeeded."
       else
