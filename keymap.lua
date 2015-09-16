@@ -1,36 +1,38 @@
 local keymap
 
-local ctrlp = function()
-   return love.keyboard.isDown("lctrl", "rctrl", "capslock")
-end
-
-local altp = function()
-   return love.keyboard.isDown("lalt") or love.keyboard.isDown("ralt")
-end
-
 local find_binding = function(key, mode)
    local mode = keymap.modes[mode or keymap.current_mode]
-   local map = (ctrlp() and mode.ctrl_map) or (altp() and mode.alt_map) or mode.map
+   local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
+   local alt = love.keyboard.isDown("lalt", "ralt")
+   local map = (ctrl and alt and mode["ctrl-alt"]) or
+      (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
 
    return map[key] or map["__any"]
 end
 
 keymap = {
    modes = {},
-   current_mode = "flight",
+   current_mode = nil,
 
    define_mode = function(name)
-      keymap.modes[name] = {map = {}, ctrl_map = {}, alt_map = {}}
+      keymap.modes[name] = {map = {}, ctrl = {}, alt = {},
+                            ["ctrl-alt"] = {}}
+      -- first mode to be defined becomes active
+      keymap.current_mode = keymap.current_mode or name
    end,
 
-   define = function(mode, mod, key, fn)
+   define = function(mode, keycode, fn)
       if(type(mode) == "table") then
          for _,m in ipairs(mode) do
-            keymap.define(m, mod, key, fn)
+            keymap.define(m, keycode, fn)
          end
       else
-         local map = mod and mod .. "_map" or "map"
-         keymap.modes[mode][map][key] = fn
+         -- lua regexes don't support |
+         local map, key = keycode:match("(ctrl\\-alt)-(%S+)")
+         if not map then map, key = keycode:match("(ctrl)-(%S+)") end
+         if not map then map, key = keycode:match("(alt)-(%S+)") end
+         if map == "alt-ctrl" then map = "ctrl-alt" end
+         keymap.modes[mode][map or "map"][key or keycode] = fn
       end
    end,
 
