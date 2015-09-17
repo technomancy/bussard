@@ -21,6 +21,8 @@ local on = false
 local em
 -- where did this text come from?
 local fs, path
+-- pattern for word breaks
+local word_break = "[%s%p]+"
 
 return {
    initialize = function()
@@ -50,6 +52,7 @@ return {
    on = function(or_not) on = or_not ~= false end,
 
    -- edit commands
+   -- TODO: edits that work across lines
    delete_backwards = function()
       local l = lines[current]
       lines[current] = l:sub(0, cursor - 1) .. l:sub(cursor + 1, #l)
@@ -107,7 +110,7 @@ return {
 
    backward_word = function()
       local back_line = lines[current]:sub(0, math.max(cursor - 1, 0)):reverse()
-      if(back_line:find(word_break)) then
+      if(back_line and back_line:find(word_break)) then
          cursor = string.len(back_line) - back_line:find(word_break) + 1
       else
          cursor = 0
