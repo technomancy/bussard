@@ -105,14 +105,6 @@ function repl.on(or_not)
    on = or_not ~= false
 end
 
-function repl.off()
-   on = false
-end
-
-function repl.enable(onoff)
-   on = onoff
-end
-
 function repl.is_on()
    return on
 end
@@ -127,8 +119,9 @@ function repl.append(prefix, value)
    end
 end
 
-function repl.print(text)
-   repl.append(false, text)
+function repl.print(...)
+   local texts = {...}
+   for _,text in ipairs(texts) do repl.append(false, text) end
 end
 
 local function pack(...) return {...} end

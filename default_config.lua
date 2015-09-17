@@ -14,7 +14,7 @@ local pause = function() ship.paused = (not ship.paused) end
 local mode = function(mode)
    return function()
       if(keymap.current_mode == "edit") then ship.edit.save() end
-      ship.repl.enable(mode == "repl")
+      ship.repl.on(mode == "repl")
       ship.edit.on(mode == "edit")
       keymap.change_mode(mode)
    end

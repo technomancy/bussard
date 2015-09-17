@@ -3,8 +3,7 @@ local lume = require "lume"
 local ship_fields = {
    "x", "y", "dx", "dy", "heading",
    "fuel", "credits", "system_name",
-   "upgrades", "cargo", "config", "target_number",
-   -- TODO: way to save off subtable things like scale
+   "upgrades", "cargo", "target_number",
 }
 
 local system_fields = {
@@ -25,12 +24,11 @@ end
 
 return {
    save = function(ship)
-      -- TODO1: persist arbitrary ship.api fields
       -- TODO: write filesystems
       local ship_data = lume.pick(ship, unpack(ship_fields))
-      ship_data.scale = ship.api.scale
-      ship_data.config = ship.api.config
+      ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
+      love.filesystem.write(config_filename, ship.api["config.lua"])
       love.filesystem.write(system_filename,
                             lume.serialize(get_system_data(ship.bodies)))
    end,
@@ -39,8 +37,13 @@ return {
       if(love.filesystem.exists(ship_filename)) then
          local ship_data_string = love.filesystem.read(ship_filename)
          local ship_data = lume.deserialize(ship_data_string)
-         ship.api.scale = ship_data.scale or ship.api.scale
-         ship.api.config = ship_data.config or ship.api.config
+         local config_data = love.filesystem.read(config_filename)
+         local api_data = ship_data.api
+
+         lume.extend(ship.api, api_data)
+         ship.api["config.lua"] = config_data or ship.api.config
+         ship_data.api = nil
+
          lume.extend(ship, ship_data)
          ship.target = ship.bodies[ship.target_number]
          ship:enter(ship.system_name)

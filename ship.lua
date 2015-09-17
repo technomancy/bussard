@@ -254,7 +254,7 @@ ship.api = {
       end
    end,
 
-   -- TODO: allow customization of which fields to persist
+   persist = {"throttle", "scale", "trajectory"},
    ["config.lua"] = default_config,
 
    -- added by loading config
