@@ -53,7 +53,8 @@ return {
          fs[env.OUT] = function(output)
             if(output) then
                -- repl doesn't have an io:write equivalent
-               ship.api.repl.print(output:gsub("\n$", ""))
+               output = output:gsub("\n\n", "")
+               ship.api.repl.print(output)
             else
                ship.api.repl.read = nil -- EOF means terminate session
             end

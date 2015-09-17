@@ -286,9 +286,10 @@ ship.api = {
    cheat = ship,
    teleport = function(self)
       local target = self.sensors.target
+      local dist = self.sensors.target * 10
       if(not target) then return end
       self.cheat.x, self.cheat.y, self.cheat.dx, self.cheat.dy =
-         target.x + 100, target.y + 100, target.dx, target.dy
+         target.x + dist, target.y + dist, target.dx, target.dy
    end,
 }
 
