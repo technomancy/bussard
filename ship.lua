@@ -19,7 +19,8 @@ local sensor_whitelist = {
 
 local status_whitelist = {
    "fuel", "fuel_capacity", "mass", "in_range",
-   "engine_on", "turning_right", "turning_left", "credits", "cargo",
+   "engine_on", "turning_right", "turning_left", "credits",
+   "cargo", "cargo_capacity",
    "engine_strength", "turning_speed", "laser_power",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
 }
@@ -65,7 +66,7 @@ local ship = {
    upgrades = {},
    cargo = {["food"] = 2},
 
-   cargo_capacity = 128,
+   cargo_capacity = 64,
    fuel_capacity = 128,
    scoop_range = 512,
    comm_range = 1024,
@@ -180,15 +181,28 @@ local ship = {
       return amt
    end,
 
-   move_cargo = function(ship, good, amount)
+   move_cargo = function(ship, good, amount, discard_remainder)
       assert((ship.cargo[good] or 0) >= -amount, "Not enough " .. good)
+      local available_mass = ship.cargo_capacity - ship:cargo_mass()
+
+      if(discard_remainder) then
+         amount = math.min(amount, available_mass)
+      else
+         assert(amount <= available_mass, "Can't fit " .. amount .. " in hold.")
+      end
+
       ship.cargo[good] = (ship.cargo[good] or 0) + amount
       ship:recalculate_mass()
    end,
 
    recalculate_mass = function(ship)
-      ship.mass = ship.base_mass
-      for _,v in pairs(ship.cargo) do ship.mass = ship.mass + v end
+      ship.mass = ship.base_mass + ship:cargo_mass()
+   end,
+
+   cargo_mass = function(ship)
+      local m = 0
+      for _,c in pairs(ship.cargo) do m = m + c end
+      return m
    end,
 
    enforce_limits = function(ship)

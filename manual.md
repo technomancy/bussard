@@ -143,6 +143,7 @@ its upgrades.
 * `turning_right`, `turning_left`: booleans for turning thrusters.
 * `credits`: how many credits you have in the ship.
 * `cargo`: a table of good names to tons of that good in your hold.
+* `cargo_capacity`: the maximum total tonnage you can fit in your hold.
 * `engine_strength`, `turning_speed`: capabilities of engine/turn thrusters.
 * `burn_rate`: how quickly your engine consumes fuel.
 * `recharge_rate`: how quickly your collector replenishes your fuel.

@@ -24,7 +24,7 @@ local function asteroid(name, mass_max, bodies, parent)
       if(self.mass < min_mass) then
          if(utils.distance(ship, self) <= ship.scoop_range) then
             ship.api.repl.print("Scooped up " .. self.name)
-            ship:move_cargo("ore", 10)
+            ship:move_cargo("ore", 10, true)
          else
             ship.api.repl.print("Destroyed " .. self.name ..
                                    " but out of scoop range.")
