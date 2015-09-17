@@ -4,8 +4,27 @@ local cargo = require("cargo")
 
 local sessions = {}
 
+local refuel = function(ship, target, amount)
+   if(target.fuel_price) then
+      local cost = target.fuel_price * amount
+      local open_fuel_capacity = ship.fuel_capacity - ship.fuel
+      if(amount > open_fuel_capacity) then
+         return false, "Fuel tank only has room for " .. open_fuel_capacity .. "."
+      elseif(cost < ship.credits) then
+         ship.fuel = ship.fuel + amount
+         ship.credits = ship.credits - cost
+         return amount, "Purchased " .. amount .. " fuel for " .. cost .. "."
+      else
+         return false, "Insufficient credits."
+      end
+   else
+      return false, "This station does not sell fuel."
+   end
+end
+
 local sandbox = function(ship)
    return { cargo_transfer = utils.partial(cargo.transfer, ship.target, ship),
+            refuel = utils.partial(refuel, ship, ship.target),
             station = utils.readonly_proxy(ship.target),
             ship = ship.api,
    }

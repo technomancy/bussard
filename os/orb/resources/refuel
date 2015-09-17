@@ -1,0 +1,16 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+
+if(tonumber(args[1])) then
+   local success, msg = refuel(tonumber(args[1]))
+   assert(success, msg)
+   print(msg)
+else
+   print("USAGE: refuel AMOUNT")
+   if(station.fuel_price) then
+      print("Fuel here is sold for " .. station.fuel_price)
+   else
+      print("This station does not sell fuel.")
+   end
+end
