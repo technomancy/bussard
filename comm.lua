@@ -1,32 +1,17 @@
 local body = require("body")
 local utils = require("utils")
 local cargo = require("cargo")
+local services = require("services")
 
 local sessions = {}
 
-local refuel = function(ship, target, amount)
-   if(target.fuel_price) then
-      local cost = target.fuel_price * amount
-      local open_fuel_capacity = ship.fuel_capacity - ship.fuel
-      if(amount > open_fuel_capacity) then
-         return false, "Fuel tank only has room for " .. open_fuel_capacity .. "."
-      elseif(cost < ship.credits) then
-         ship.fuel = ship.fuel + amount
-         ship.credits = ship.credits - cost
-         return amount, "Purchased " .. amount .. " fuel for " .. cost .. "."
-      else
-         return false, "Insufficient credits."
-      end
-   else
-      return false, "This station does not sell fuel."
-   end
-end
-
 local sandbox = function(ship)
-   return { cargo_transfer = utils.partial(cargo.transfer, ship.target, ship),
-            refuel = utils.partial(refuel, ship, ship.target),
-            station = utils.readonly_proxy(ship.target),
-            ship = ship.api,
+   return {
+      buy_user = utils.partial(services.buy_user, ship, ship.target, sessions),
+      refuel = utils.partial(services.refuel, ship, ship.target),
+      cargo_transfer = utils.partial(cargo.transfer, ship.target, ship),
+      station = utils.readonly_proxy(ship.target),
+      ship = ship.api,
    }
 end
 
@@ -79,7 +64,7 @@ return {
             end
          end
 
-         sessions[ship.target.name] = {fs, env, out_buffer}
+         sessions[ship.target.name] = {fs, env, fs_raw, out_buffer}
          ship.target.os.process.spawn(fs, env, command or "smash", sandbox(ship))
          ship.api.repl.read = utils.partial(send_input, ship)
          ship.api.repl.prompt = "$ "
@@ -102,7 +87,7 @@ return {
 
    flush = function()
       for _,v in pairs(sessions) do
-         local _, _, out_buffer = unpack(v)
+         local _, _, _, out_buffer = unpack(v)
          for _,f in ipairs(out_buffer) do f() end
       end
    end

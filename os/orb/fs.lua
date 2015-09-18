@@ -129,6 +129,7 @@ orb.fs = {
 
                                        cargo = "/bin/cargo",
                                        refuel = "/bin/refuel",
+                                       account = "/bin/account",
       }) do
          orb.fs.copy_to_fs(f, fs_path, real_path, orb.dir.."/resources/")
       end

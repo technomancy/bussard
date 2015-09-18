@@ -191,9 +191,10 @@ orb.shell = {
       orb.shell.exec(new_f, new_env, args, extra_sandbox)
    end,
 
-   change_password = function(f, user, old_password, new_password)
+   change_password = function(f, user, old_password, new_password, repeat_new)
       assert(orb.shell.auth(f, user, old_password),
              "Incorrect password for "..user)
+      assert(new_password == repeat_new, "New passwords do not match.")
       local raw = getmetatable(f).raw_root
       raw.etc.passwords[user] = orb.utils.get_password_hash(user, new_password)
    end,

@@ -1,0 +1,28 @@
+ -- -*- lua -*-
+
+local f, env, args = ...
+
+local command, username, password = unpack(args)
+
+if(args[1] == "price") then
+   if(station.account_price) then
+      print("Buying an account costs " .. station.account_price)
+   else
+      print("This server does not allow buying accounts.")
+   end
+elseif(args[1] == "buy") then
+   local success, msg = buy_user(username, password)
+
+   if(success) then
+      print("Successfully created account " .. username .. " for " ..
+               station.account_price .. ".")
+      print("Log out and log back in to use your new account.")
+      print("Please do not forget your password.")
+   else
+      print(msg)
+   end
+else
+   print("Usage:")
+   print("  account price")
+   print("  account buy USERNAME PASSWORD")
+end
