@@ -13,8 +13,6 @@ local PADDING = 20
 local ROW_HEIGHT
 -- Maximum amount of rows that can be displayed on the screen
 local DISPLAY_ROWS
--- Width of the display available for text, in pixels
-local DISPLAY_WIDTH
 -- enabled?
 local on = false
 -- width of an m

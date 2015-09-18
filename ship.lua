@@ -248,21 +248,21 @@ ship.api = {
       end,
       laser = function(down) ship.laser = down end,
       login = utils.partial(comm.login, ship),
-      anchor = function(ship) ship.cheat.dx, ship.cheat.dy = 0, 0 end,
+      anchor = function(s) s.cheat.dx, s.cheat.dy = 0, 0 end,
    },
-   load_config = function(ship)
-      ship.repl.sandbox = sandbox
-      sandbox.ship = ship
+   load_config = function(s)
+      s.repl.sandbox = sandbox
+      sandbox.ship = s
 
-      local chunk = assert(loadstring(ship["config.lua"]))
+      local chunk = assert(loadstring(s["config.lua"]))
       setfenv(chunk, sandbox)
       chunk()
    end,
-   e = function(ship, path)
-      if(ship[path]) then
+   e = function(s, path)
+      if(s[path]) then
          keymap.change_mode("edit")
-         ship.repl.on(false)
-         ship.edit.open(ship, path)
+         s.repl.on(false)
+         s.edit.open(s, path)
       else
          print(path .. " not found.")
       end

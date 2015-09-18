@@ -44,7 +44,6 @@ return {
       love.graphics.rectangle("line", 5, 60, ship.fuel_capacity, 10)
 
       -- how much fuel will we use to stop?
-      local speed = utils.distance(ship.dx, ship.dy)
       local fuel_to_stop = speed * ship.engine_strength / ship.burn_rate
       love.graphics.setColor(150, 50, 50);
       love.graphics.rectangle("fill", 5, 60, fuel_to_stop, 5)
