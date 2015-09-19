@@ -6,11 +6,23 @@ local lume = require("lume")
 
 local sessions = {}
 
+local scp = function(ship, from, to)
+   assert(ship:in_range(ship.target), "| Out of range.")
+   local username, pwpath = unpack(lume.split(from, ":"))
+   local password, path = pwpath:match("(%a+)/(.+)")
+   local fs_raw = body.login(ship.target, username, password or "")
+   assert(fs_raw, "Incorrect login.")
+   local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
+   print(username, password, path, fs[path])
+   ship.api[to] = fs[path]
+end
+
 local sandbox = function(ship)
    return {
       buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
       refuel = lume.fn(services.refuel, ship, ship.target),
       cargo_transfer = lume.fn(cargo.transfer, ship.target, ship),
+      scp = lume.fn(scp, ship),
       station = utils.readonly_proxy(ship.target),
       ship = ship.api,
    }
@@ -91,5 +103,7 @@ return {
          local _, _, _, out_buffer = unpack(v)
          for _,f in ipairs(out_buffer) do f() end
       end
-   end
+   end,
+
+   scp = scp,
 }

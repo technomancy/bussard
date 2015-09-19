@@ -253,6 +253,7 @@ ship.api = {
    load_config = function(s)
       s.repl.sandbox = sandbox
       sandbox.ship = s
+      sandbox.scp = lume.fn(comm.scp, ship)
 
       local chunk = assert(loadstring(s["config.lua"]))
       setfenv(chunk, sandbox)
