@@ -247,7 +247,7 @@ ship.api = {
          ship.target = ship.bodies[ship.target_number]
       end,
       laser = function(down) ship.laser = down end,
-      login = utils.partial(comm.login, ship),
+      login = lume.fn(comm.login, ship),
       anchor = function(s) s.cheat.dx, s.cheat.dy = 0, 0 end,
    },
    load_config = function(s)

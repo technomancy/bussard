@@ -2,14 +2,15 @@ local body = require("body")
 local utils = require("utils")
 local cargo = require("cargo")
 local services = require("services")
+local lume = require("lume")
 
 local sessions = {}
 
 local sandbox = function(ship)
    return {
-      buy_user = utils.partial(services.buy_user, ship, ship.target, sessions),
-      refuel = utils.partial(services.refuel, ship, ship.target),
-      cargo_transfer = utils.partial(cargo.transfer, ship.target, ship),
+      buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
+      refuel = lume.fn(services.refuel, ship, ship.target),
+      cargo_transfer = lume.fn(cargo.transfer, ship.target, ship),
       station = utils.readonly_proxy(ship.target),
       ship = ship.api,
    }
@@ -66,7 +67,7 @@ return {
 
          sessions[ship.target.name] = {fs, env, fs_raw, out_buffer}
          ship.target.os.process.spawn(fs, env, command or "smash", sandbox(ship))
-         ship.api.repl.read = utils.partial(send_input, ship)
+         ship.api.repl.read = lume.fn(send_input, ship)
          ship.api.repl.prompt = "$ "
          ship.comm_connected = true
 

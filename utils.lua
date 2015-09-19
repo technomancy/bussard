@@ -91,16 +91,6 @@ end
 return {
    shallow_copy = shallow_copy,
 
-   partial = function(f, ...)
-      local partial_args = {...}
-      return function(...)
-         local new_args = shallow_copy(partial_args)
-         local inner_args = {...}
-         for _,v in ipairs(inner_args) do table.insert(new_args, v) end
-         return f(unpack(new_args))
-      end
-   end,
-
    keys = keys,
 
    vals = vals,
