@@ -203,7 +203,7 @@ orb.fs = {
       for k,v in orb.utils.mtpairs(f) do
          if(type(v) == "table") then
             orb.fs.strip_special(v)
-         elseif(type(v) ~= "string") then
+         elseif(type(v) ~= "string" and type(v) ~= "number") then
             f[k] = nil
          end
       end

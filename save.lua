@@ -1,4 +1,5 @@
 local lume = require "lume"
+local body = require "body"
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading",
@@ -14,6 +15,10 @@ local ship_filename = "ship_data.lua"
 local config_filename = "ship_config.lua"
 local system_filename = "system_data.lua"
 
+local fs_filename = function(b)
+   return b.name .. "_fs.lua"
+end
+
 local get_system_data = function(bodies)
    local data = {}
    for _,b in ipairs(bodies) do
@@ -24,13 +29,22 @@ end
 
 return {
    save = function(ship)
-      -- TODO: write filesystems
       local ship_data = lume.pick(ship, unpack(ship_fields))
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(config_filename, ship.api["config.lua"])
       love.filesystem.write(system_filename,
                             lume.serialize(get_system_data(ship.bodies)))
+      for _,s in pairs(ship.systems) do
+         for _,b in pairs(s.bodies) do
+            local fs = body.filesystems[b.name]
+            if(fs) then
+               orb.fs.strip_special(fs)
+               local fs_data = lume.serialize(fs)
+               love.filesystem.write(fs_filename(b), fs_data)
+            end
+         end
+      end
    end,
 
    load_into = function(ship)
@@ -55,9 +69,24 @@ return {
             lume.extend(b, system_data[b.name])
          end
       end
+      for _,s in pairs(ship.systems) do
+         for _,b in pairs(s.bodies) do
+            if(love.filesystem.exists(fs_filename(b))) then
+               local fs_data = love.filesystem.read(fs_filename(b))
+               body.filesystems[b.name] = lume.deserialize(fs_data)
+            end
+         end
+      end
    end,
 
    abort = function()
       love.filesystem.remove(ship_filename)
+      love.filesystem.remove(config_filename)
+      love.filesystem.remove(ship_filename)
+      for _,s in pairs(ship.systems) do
+         for _,b in pairs(s.bodies) do
+            love.filesystem.remove(fs_filename(b))
+         end
+      end
    end,
 }

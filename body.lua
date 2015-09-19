@@ -76,4 +76,6 @@ return {
    find = function(bodies,name)
       for _,b in pairs(bodies) do if(b.name == name) then return b end end
    end,
+
+   filesystems = filesystems,
 }
