@@ -84,7 +84,7 @@ computer, you can initiate a login session using your ship's
 communication system. This will allow you to access any of the
 station's services, including refueling, cargo transactions,
 purchasing upgrades, downloading new libraries, renting cargo storage,
-and communicating with others on board the station.
+and communicating with others on board the station or elsewhere.
 
 Your targeting indicator will turn green when you are within range of
 a station that allows logins.
@@ -109,7 +109,7 @@ details.
 
 While your session is active, you will not be able to enter any code
 into your ship's REPL, and the REPL prompt will change to `$`. Enter
-`logout` to terminate your session.
+`logout` to terminate your session and return to your ship's REPL.
 
 If you have an account on a station server, you can copy files to and
 from the targeted station using
@@ -128,7 +128,7 @@ through space and other objects in space around it.
 
 * `x`, `y`, `dx`, `dy`: position and velocity.
 * `heading`: direction pointing, in radians.
-* `target`: name of the body (planet, star, station, portal, etc.) targeted.
+* `target`: table representing the body (planet, star, station, portal, etc.) targeted.
 * `system_name`: the name of the current system.
 * `bodies`: an array of bodies present in the current system.
 
@@ -158,20 +158,21 @@ its upgrades.
 
 * `forward`, `left`, `right`: accepts a boolean indicating whether to
   fire the given engine/thruster.
-* `next_target`: cycle sequentially through all the targets in the system.
-* `closest_target`: select the closest available target.
+* `next_target`: cycle sequentially through all the targets in the system. `tab` by default, `shift-tab` to cycle in reverse.
+* `closest_target`: select the closest available target. `ctrl-tab` by default.
 * `laser`: accepts a boolean indicating whether to fire the mining laser.
 * `login`: accepts optional username/password, attempts to establish a
   login session with the target if possible.
 
 #### controls (flight)
 
-This is a table of keys to functions. These function slightly
-differently from the keymap functionality described above. Keymaps can
-only be used for commands that are triggered once per key
-press. Controls must be used when the ship will behave differently
-based on how long the key is held. All piloting functionality must use
-this table. The zoom functions for changing the scale should use it too.
+This is a table of keys to functions; usually functions in the
+`ship.actions` table above. These function slightly differently from
+the keymap functionality described above. Keymaps can only be used for
+commands that are triggered once per key press. Controls must be used
+when the ship will behave differently based on how long the key is
+held. All piloting functionality should use this table. The zoom
+functions for changing the scale should use it too.
 
 #### scale
 

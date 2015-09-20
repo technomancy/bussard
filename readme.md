@@ -2,7 +2,9 @@
 
 <img src="http://p.hagelb.org/bussard.png" alt="screenshot" />
 
-A space-flight adventure exploration game, with a programmable space ship and space stations.
+A space flight open-world exploration game, with a programmable space
+ship and space stations. Mine, trade, upgrade, and unlock the potential of your
+spacecraft by hacking on the code that makes it tick.
 
 Read the [in-game manual](manual.md) for a taste of how the game works.
 
@@ -18,7 +20,9 @@ at this time. (Basically just running vanilla Unix commands and cargo
 transactions.) No ship hardware/software upgrades have been
 implemented.
 
-See the list of [open issues](https://gitlab.com/technomancy/bussard/issues).
+See the list of
+[open issues](https://gitlab.com/technomancy/bussard/issues) to see
+upcoming features.
 
 <img src="http://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
 
