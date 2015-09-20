@@ -113,8 +113,8 @@ into your ship's REPL, and the REPL prompt will change to `$`. Enter
 
 If you have an account on a station server, you can copy files to and
 from the targeted station using
-`ship.comm.scp_to(username, password, filename, path_on_server)`
-and `ship.comm.scp_from(username, password, path_on_server, filename)`.
+`ship.comm.scp("username:password/path/to/file", "path.in.ship")`
+and `ship.comm.scp("path.in.ship", "username:password/path/to/file")`.
 
 ### API list
 

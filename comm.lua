@@ -6,13 +6,17 @@ local lume = require("lume")
 
 local sessions = {}
 
-local scp = function(ship, from, to)
-   assert(ship:in_range(ship.target), "| Out of range.")
-   local username, pwpath = unpack(lume.split(from, ":"))
+local scp_login = function(ship, orig_path)
+   local username, pwpath = unpack(lume.split(orig_path, ":"))
    local password, path = pwpath:match("(%a+)/(.+)")
    local fs_raw = body.login(ship.target, username, password or "")
    assert(fs_raw, "Incorrect login.")
    local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
+   return fs, path
+end
+
+local scp_from = function(ship, from, to)
+   local fs, path = scp_login(ship, from)
    local dest_components, target = lume.split(to, "."), ship.api
    local file = table.remove(dest_components)
    for _,d in pairs(dest_components) do
@@ -20,6 +24,28 @@ local scp = function(ship, from, to)
       target = target[d]
    end
    target[file] = fs[path]
+end
+
+local scp_to = function(ship, from, to)
+   local fs, path = scp_login(ship, to)
+   local from_components, source = lume.split(from, "."), ship.api
+   for _,f in pairs(from_components) do
+      source = source[f]
+      assert(source, from .. " not found.")
+   end
+   fs[path] = source
+end
+
+local scp = function(ship, from, to)
+   assert(ship:in_range(ship.target), "| Out of range.")
+   if(from:find("/")) then
+      scp_from(ship, from, to)
+   elseif(to:find("/")) then
+      scp_to(ship, from, to)
+   else
+      error("Neither " .. from .. " nor " .. " to " .. "are remote files.")
+   end
+   ship.api.repl.print("Copied successfully.")
 end
 
 local sandbox = function(ship)
