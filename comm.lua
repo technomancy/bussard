@@ -13,8 +13,13 @@ local scp = function(ship, from, to)
    local fs_raw = body.login(ship.target, username, password or "")
    assert(fs_raw, "Incorrect login.")
    local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
-   print(username, password, path, fs[path])
-   ship.api[to] = fs[path]
+   local dest_components, target = lume.split(to, "."), ship.api
+   local file = table.remove(dest_components)
+   for _,d in pairs(dest_components) do
+      if(target[d] == nil) then target[d] = {} end
+      target = target[d]
+   end
+   target[file] = fs[path]
 end
 
 local sandbox = function(ship)
