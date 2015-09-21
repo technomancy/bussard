@@ -8,6 +8,7 @@ local lume = require("lume")
 local keymap = require("keymap")
 local repl = require("srepl")
 local edit = require("edit")
+local upgrade = require("upgrade")
 
 local default_config = utils.read_file("default_config.lua")
 
@@ -21,8 +22,20 @@ local status_whitelist = {
    "fuel", "fuel_capacity", "mass", "in_range",
    "engine_on", "turning_right", "turning_left", "credits",
    "cargo", "cargo_capacity",
-   "engine_strength", "turning_speed", "laser_power",
+   "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
+}
+
+local base_stats = {
+   mass = 128,
+   cargo_capacity = 64,
+   fuel_capacity = 128,
+   scoop_range = 512,
+   comm_range = 1024,
+   recharge_rate = 1,
+   burn_rate = 12,
+   engine_strength = 16,
+   turning_speed = 4,
 }
 
 local sandbox = {
@@ -74,18 +87,17 @@ local ship = {
    credits = 1024,
    time_offset = 4383504000, -- roughly 139 years ahead
    system_name = "L 668-21",
-   upgrades = {},
    cargo = {["food"] = 2},
+   upgrade_names = {"laser"},
 
+   -- upgrades can change these
+   upgrades = {},
    cargo_capacity = 64,
    fuel_capacity = 128,
    scoop_range = 512,
    comm_range = 1024,
    recharge_rate = 1,
    burn_rate = 12,
-   base_mass = 128,
-   laser_power = 1024,
-
    engine_strength = 16,
    turning_speed = 4,
 
@@ -104,6 +116,8 @@ local ship = {
       -- stuff these things in there to expose to in-ship APIs
       ship.bodies = ship.systems[system_name].bodies
       ship.system_name = system_name
+
+      ship:recalculate()
 
       if(reseed) then
       -- reset
@@ -156,14 +170,12 @@ local ship = {
             ship:enter(b.portal, true)
          end
          local distance = utils.distance(ship.x - b.x, ship.y - b.y)
-         if(ship.laser and b.asteroid and ship:laser_hits(b, distance)) then
-            -- TODO: firing laser uses up power?
-            b.strength = b.strength - dt * ship.laser_power / math.sqrt(distance)
-            if(b.strength < 0) then b:split(ship) end
-         end
       end
 
       ship:enforce_limits()
+      for _,u in pairs(ship.upgrades) do
+         if(u.update) then u.update(ship, dt) end
+      end
 
       comm.flush()
    end,
@@ -175,15 +187,6 @@ local ship = {
    in_range = function(ship, b, range)
       return utils.distance(ship.x - b.x, ship.y - b.y) <
          (range or ship.comm_range)
-   end,
-
-   laser_hits = function(ship, b, distance)
-      -- assuming circular images
-      local diameter = b.image:getWidth() / 2
-      local theta = math.atan2(b.y - ship.y, b.x - ship.x)
-      local angular_divergence = math.abs(ship.heading - theta)
-      local divergence = math.abs(math.sin(angular_divergence) * distance)
-      return divergence < diameter
    end,
 
    cargo_amount = function(ship)
@@ -203,11 +206,28 @@ local ship = {
       end
 
       ship.cargo[good] = (ship.cargo[good] or 0) + amount
-      ship:recalculate_mass()
+      ship:recalculate()
    end,
 
-   recalculate_mass = function(ship)
-      ship.mass = ship.base_mass + ship:cargo_mass()
+   recalculate = function(ship)
+      ship.target = ship.bodies[ship.target_number]
+
+      for k,v in pairs(base_stats) do
+         ship[k] = v
+      end
+
+      for _,u in ipairs(ship.upgrade_names) do
+         ship.upgrades[u] = upgrade[u]
+      end
+
+      for name,u in pairs(ship.upgrades) do
+         for k,v in pairs(u.stats) do
+            ship[k] = (ship[k] or 0) + v
+         end
+         ship.api.actions[name] = lume.fn(u.action, ship)
+      end
+
+      ship.mass = ship.mass + ship:cargo_mass()
    end,
 
    cargo_mass = function(ship)
@@ -225,7 +245,6 @@ local ship = {
 
 -- everything in here is exposed to the sandbox
 ship.api = {
-   -- components
    repl = repl,
    edit = edit,
 
@@ -257,7 +276,6 @@ ship.api = {
          end
          ship.target = ship.bodies[ship.target_number]
       end,
-      laser = function(down) ship.laser = down end,
       login = lume.fn(comm.login, ship),
       anchor = function(s) s.cheat.dx, s.cheat.dy = 0, 0 end,
    },
@@ -269,6 +287,7 @@ ship.api = {
 
       local chunk = assert(loadstring(s["config.lua"]))
       setfenv(chunk, sandbox)
+      -- TODO: stack trace on error
       pcall(chunk)
    end,
    e = function(s, path)

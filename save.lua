@@ -4,7 +4,7 @@ local body = require "body"
 local ship_fields = {
    "x", "y", "dx", "dy", "heading",
    "fuel", "credits", "system_name",
-   "upgrades", "cargo", "target_number",
+   "upgrade_names", "cargo", "target_number",
 }
 
 local system_fields = {
@@ -60,7 +60,6 @@ return {
 
          lume.extend(ship, ship_data)
          ship:enter(ship.system_name)
-         ship.target = ship.bodies[ship.target_number]
       end
       if(love.filesystem.exists(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)

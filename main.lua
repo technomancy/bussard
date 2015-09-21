@@ -76,7 +76,7 @@ love.keypressed = keymap.handle
 
 love.textinput = keymap.textinput
 
-love.draw = function()
+love.draw = function(dt)
    starfield.render(star1, ship.x, ship.y)
    starfield.render(star2, ship.x, ship.y)
    starfield.render(star3, ship.x, ship.y)
@@ -85,12 +85,8 @@ love.draw = function()
    love.graphics.translate(w / 2, h / 2)
    love.graphics.push()
 
-   if(ship.laser) then
-      love.graphics.push()
-      love.graphics.rotate(math.pi - ship.heading)
-      love.graphics.setLineWidth(3)
-      love.graphics.line(0, 0, 0, -1000)
-      love.graphics.pop()
+   for _,u in pairs(ship.upgrades) do
+      if(u.draw) then u.draw(ship, dt) end
    end
 
    local scale = math.pow(1/ship.api.scale, 8)
@@ -99,7 +95,8 @@ love.draw = function()
    if(ship.target) then -- directional target indicator
       if(ship:in_range(ship.target) and ship.target.os) then
          love.graphics.setColor(10, 100, 10)
-      elseif(ship:in_range(ship.target, ship.scoop_range) and ship.target.asteroid) then
+      elseif(ship:in_range(ship.target, ship.scoop_range) and
+             ship.target.asteroid) then
          love.graphics.setColor(100, 10, 10)
       else
          love.graphics.setColor(100, 100, 100)
