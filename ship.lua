@@ -169,7 +169,6 @@ local ship = {
          if(b.portal and ship:cleared_for(b) and ship:in_range(b, 75)) then
             ship:enter(b.portal, true)
          end
-         local distance = utils.distance(ship.x - b.x, ship.y - b.y)
       end
 
       ship:enforce_limits()

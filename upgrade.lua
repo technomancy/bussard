@@ -34,7 +34,7 @@ return {
             end
          end
       end,
-      draw = function(ship, dt)
+      draw = function(ship)
          if(ship.laser) then
             love.graphics.push()
             love.graphics.rotate(math.pi - ship.heading)

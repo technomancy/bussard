@@ -2,7 +2,7 @@ run:
 	love .
 
 check:
-	luacheck --no-color -g *.lua os/orb/*.lua os/orb/resources/*.lua
+	luacheck --no-color -g *.lua os/orb/*.lua
 
 count:
 	cloc *.lua

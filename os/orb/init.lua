@@ -10,7 +10,7 @@ dofile(orb.dir .. "/shell.lua")
 dofile(orb.dir .. "/process.lua")
 
 -- for interactive use, but also as a sample of how the API works:
-if(false) then
+if(arg[1] == "--test") then
    -- start with an empty filesystem
    f_raw = orb.fs.new_raw()
    f0 = orb.fs.seed(orb.fs.proxy(f_raw, "root", f_raw),
