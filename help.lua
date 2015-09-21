@@ -1,7 +1,8 @@
 local utils = require("utils")
 
 local pages = {ual = "manual.md",
-               keycodes = "keycodes.md",
+               keycodes = "doc/keycodes.md",
+               laser = "doc/laser.md"
 }
 
 return {

@@ -130,6 +130,9 @@ return {
            name="Mirduka station", os=orb,
            fuel_price = 1,
            account_price = 128,
+           upgrade_prices = {
+              laser = 256,
+           },
            prices={
               food={stock=10, buy=100, sell=110,},
               ore={stock=8, buy=90, sell=50},

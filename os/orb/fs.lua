@@ -10,11 +10,12 @@ orb.fs = {
 
    mkdir = function(f, path, env)
       assert(f and path)
+
       if(path == "/") then return end
       local dir,base = orb.fs.dirname(orb.fs.normalize(path, env and env.CWD))
-      local parent = f[dir]
+      if(not f[dir]) then orb.fs.mkdir(f, dir, env) end
 
-      if(not parent) then orb.fs.mkdir(f, dir, env) end
+      local parent = f[dir]
       if(parent[base]) then return parent[base] end
 
       parent[base] = {
@@ -130,6 +131,7 @@ orb.fs = {
                                        cargo = "/bin/cargo",
                                        refuel = "/bin/refuel",
                                        account = "/bin/account",
+                                       upgrade = "/bin/upgrade",
       }) do
          orb.fs.copy_to_fs(f, fs_path, real_path, orb.dir.."/resources/")
       end

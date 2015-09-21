@@ -6,6 +6,7 @@ local seed = function(os, body_name)
    local raw = os.fs.new_raw()
    local proxy = os.fs.proxy(raw, "root", raw)
    os.fs.seed(proxy, {guest = ""})
+
    for k,v in pairs(filesystems[body_name]) do
       local dir,_ = os.fs.dirname(k)
       os.fs.mkdir(proxy, dir)

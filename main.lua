@@ -24,7 +24,7 @@ local ui = {
          return("Aborting will wipe your in-process game. Call " ..
                    "abort(true) to confirm.")
       end
-      save.abort()
+      save.abort(ship)
       love.event.quit()
    end,
 }

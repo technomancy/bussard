@@ -5,7 +5,6 @@ ship.controls = {
    up = ship.actions.forward,
    left = ship.actions.left,
    right = ship.actions.right,
-   ["lalt"] = ship.actions.laser,
    ["="] = function(d) if d then ship.scale = ship.scale - (ship.dt/2) end end,
    ["-"] = function(d) if d then ship.scale = ship.scale + (ship.dt/2) end end,
 }

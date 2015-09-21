@@ -78,7 +78,7 @@ return {
       end
    end,
 
-   abort = function()
+   abort = function(ship)
       love.filesystem.remove(ship_filename)
       love.filesystem.remove(config_filename)
       love.filesystem.remove(ship_filename)

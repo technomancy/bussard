@@ -1,0 +1,23 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+
+if(args[1] == "list") then
+   print("Prices:")
+   for name,price in pairs(station.upgrade_prices) do
+      print("  " .. name .. ": " .. price)
+   end
+elseif(args[1] == "buy") then
+   local success_price, msg = buy_upgrade(args[2])
+
+   if(success_price) then
+      print("Bought " .. args[2] .. " for " .. success_price .. ".")
+      print("Use man(\"" .. args[2].. "\") on your ship computer to read documentation.")
+   else
+      print(msg)
+   end
+else
+   print("Usage:")
+   print("  upgrade list")
+   print("  upgrade buy NAME")
+end

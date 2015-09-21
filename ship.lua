@@ -20,7 +20,7 @@ local sensor_whitelist = {
 
 local status_whitelist = {
    "fuel", "fuel_capacity", "mass", "in_range",
-   "engine_on", "turning_right", "turning_left", "credits",
+   "engine_on", "turning_right", "turning_left", "credits", "upgrade_names",
    "cargo", "cargo_capacity",
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
@@ -30,7 +30,7 @@ local base_stats = {
    mass = 128,
    cargo_capacity = 64,
    fuel_capacity = 128,
-   scoop_range = 512,
+   scoop_range = 0,
    comm_range = 1024,
    recharge_rate = 1,
    burn_rate = 12,
@@ -88,7 +88,7 @@ local ship = {
    time_offset = 4383504000, -- roughly 139 years ahead
    system_name = "L 668-21",
    cargo = {["food"] = 2},
-   upgrade_names = {"laser"},
+   upgrade_names = {},
 
    -- upgrades can change these
    upgrades = {},

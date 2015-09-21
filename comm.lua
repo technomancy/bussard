@@ -1,8 +1,9 @@
+local lume = require("lume")
 local body = require("body")
 local utils = require("utils")
 local cargo = require("cargo")
 local services = require("services")
-local lume = require("lume")
+local upgrade = require("upgrade")
 
 local sessions = {}
 
@@ -51,6 +52,7 @@ end
 local sandbox = function(ship)
    return {
       buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
+      buy_upgrade = lume.fn(upgrade.buy, ship),
       refuel = lume.fn(services.refuel, ship, ship.target),
       cargo_transfer = lume.fn(cargo.transfer, ship.target, ship),
       scp = lume.fn(scp, ship),
