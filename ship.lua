@@ -47,6 +47,17 @@ local sandbox = {
    keymap = keymap,
 }
 
+local sandbox_dofile = function(ship, filename)
+   local contents = ship
+   for _,path in ipairs(lume.split(filename, ".")) do
+      contents = contents[path]
+   end
+   assert(type(contents) == "string", filename .. " is not a file.")
+   local chunk = assert(loadstring(contents))
+   setfenv(chunk, sandbox)
+   chunk()
+end
+
 local ship = {
    -- ephemeral
    x=0, y=0, dx=0, dy=0, heading = math.pi,
@@ -253,20 +264,17 @@ ship.api = {
    load_config = function(s)
       s.repl.sandbox = sandbox
       sandbox.ship = s
+      sandbox.dofile = lume.fn(sandbox_dofile, s)
       sandbox.scp = lume.fn(comm.scp, ship)
 
       local chunk = assert(loadstring(s["config.lua"]))
       setfenv(chunk, sandbox)
-      chunk()
+      pcall(chunk)
    end,
    e = function(s, path)
-      if(s[path]) then
-         keymap.change_mode("edit")
-         s.repl.on(false)
-         s.edit.open(s, path)
-      else
-         print(path .. " not found.")
-      end
+      keymap.change_mode("edit")
+      s.repl.on(false)
+      s.edit.open(s, path)
    end,
 
    persist = {"throttle", "scale", "trajectory"},
