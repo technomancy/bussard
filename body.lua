@@ -1,8 +1,16 @@
 local utils = require "utils"
 
-local seed = function(os)
+local filesystems = require "data/filesystems"
+
+local seed = function(os, body_name)
    local raw = os.fs.new_raw()
-   os.fs.seed(os.fs.proxy(raw, "root", raw), {guest = ""})
+   local proxy = os.fs.proxy(raw, "root", raw)
+   os.fs.seed(proxy, {guest = ""})
+   for k,v in pairs(filesystems[body_name]) do
+      local dir,_ = os.fs.dirname(k)
+      os.fs.mkdir(proxy, dir)
+      proxy[k] = v
+   end
    return raw
 end
 
@@ -40,7 +48,7 @@ return {
    -- currently you can log into any body that's not a star
    login = function(body, username, password)
       if((not body) or body.star) then return false end
-      filesystems[body.name] = filesystems[body.name] or seed(body.os)
+      filesystems[body.name] = filesystems[body.name] or seed(body.os, body.name)
       return body.os.shell.auth(filesystems[body.name], username, password) and
          filesystems[body.name]
    end,

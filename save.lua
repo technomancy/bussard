@@ -59,8 +59,8 @@ return {
          ship_data.api = nil
 
          lume.extend(ship, ship_data)
-         ship.target = ship.bodies[ship.target_number]
          ship:enter(ship.system_name)
+         ship.target = ship.bodies[ship.target_number]
       end
       if(love.filesystem.exists(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)
