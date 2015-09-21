@@ -50,23 +50,39 @@ return {
    on = function(or_not) on = or_not ~= false end,
 
    -- edit commands
-   -- TODO: edits that work across lines
    delete_backwards = function()
-      local l = lines[current]
-      lines[current] = l:sub(0, cursor - 1) .. l:sub(cursor + 1, #l)
-      if cursor > 0 then
-         cursor = cursor - 1
+      if(cursor == 0) then
+         current = current - 1
+         cursor = #lines[current]
+         lines[current] = lines[current] .. lines[current+1]
+         table.remove(lines, current+1)
+      else
+         local l = lines[current]
+         lines[current] = l:sub(0, cursor - 1) .. l:sub(cursor + 1, #l)
+         if cursor > 0 then
+            cursor = cursor - 1
+         end
       end
    end,
 
    delete_forwards = function()
-      local l = lines[current]
-      lines[current] = l:sub(0, cursor) .. l:sub(cursor + 2, #l)
+      if(cursor == #lines[current]) then
+         local next_line = table.remove(lines, current+1)
+         lines[current] = lines[current] .. next_line
+      else
+         local l = lines[current]
+         lines[current] = l:sub(0, cursor) .. l:sub(cursor + 2, #l)
+      end
    end,
 
    -- TODO: kill ring
    kill_line = function()
-      lines[current] = lines[current]:sub(0, cursor)
+      if(cursor == #lines[current]) then
+         local next_line = table.remove(lines, current+1)
+         lines[current] = lines[current] .. next_line
+      else
+         lines[current] = lines[current]:sub(0, cursor)
+      end
    end,
 
    move_beginning_of_line = function()
@@ -78,13 +94,14 @@ return {
    end,
 
    prev_line = function()
-      if(current > 0) then current = current - 1 end
+      if(current > 1) then current = current - 1 end
    end,
 
    next_line = function()
       if(current < #lines) then current = current + 1 end
    end,
 
+   -- TODO: scroll doesn't work
    scroll_up = function()
       current = math.max(0, current - scroll_size)
    end,
@@ -94,31 +111,52 @@ return {
    end,
 
    forward_char = function()
-      cursor = cursor + 1
+      if(cursor == #lines[current]) then
+         cursor, current = 0, current+1
+      else
+         cursor = cursor + 1
+      end
    end,
 
    backward_char = function()
-      cursor = cursor - 1
+      if(cursor == 0) then
+         cursor = #lines[current-1]
+         current = current-1
+      else
+         cursor = cursor - 1
+      end
    end,
 
    forward_word = function()
-      local match = lines[current]:find(word_break, cursor + 2)
-      cursor = match and match - 1 or string.len(lines[current])
+      local remainder = lines[current]:sub(cursor + 1, -1)
+      if(not remainder:find("%S")) then
+         cursor, current = 0, current+1
+      end
+      local _, match = lines[current]:find(word_break, cursor + 2)
+      cursor = match and match - 1 or #lines[current]
    end,
 
    backward_word = function()
+      local before = lines[current]:sub(0, cursor)
+      if(not before:find("%S")) then
+         current = current - 1
+         cursor = #lines[current]
+      end
       local back_line = lines[current]:sub(0, math.max(cursor - 1, 0)):reverse()
       if(back_line and back_line:find(word_break)) then
-         cursor = string.len(back_line) - back_line:find(word_break) + 1
+         local _, match = back_line:find(word_break)
+         cursor = string.len(back_line) - match + 1
       else
          cursor = 0
       end
    end,
 
    newline = function()
+      local remainder = lines[current]:sub(cursor + 1, -1)
+      lines[current] = lines[current]:sub(0, cursor)
       cursor = 0
       current = current + 1
-      table.insert(lines, current, "")
+      table.insert(lines, current, remainder)
    end,
 
    -- internal functions
