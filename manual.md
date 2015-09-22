@@ -77,6 +77,10 @@ By default your ship has a `"flight"` mode active by default and a
 also an `"edit"` mode where the editor key bindings are defined. You
 can check the current mode with `keymap.current_mode`.
 
+Take a look at the default config code that came with your ship for an
+example of how to create modes and bind new keys in them; it will come
+in very handy to add in new keys when operating your ship.
+
 ### Communication system
 
 When you are in range of a planet or space station with an active
@@ -160,7 +164,6 @@ its upgrades.
   fire the given engine/thruster.
 * `next_target`: cycle sequentially through all the targets in the system. `tab` by default, `shift-tab` to cycle in reverse.
 * `closest_target`: select the closest available target. `ctrl-tab` by default.
-* `laser`: accepts a boolean indicating whether to fire the mining laser.
 * `login`: accepts optional username/password, attempts to establish a
   login session with the target if possible.
 
@@ -178,21 +181,18 @@ functions for changing the scale should use it too.
 
 A numeric indicator of how far out the display should be zoomed.
 
-#### libraries
-
-TODO: document these
-
-* repl
-* edit
-* helm
-
 ### Upgrades
 
 Certain stations will sell you upgrades to your ship. These can either
 introduce completely new components or improve the effectiveness of
 existing components.
 
-TODO: describe how to install upgrades, read documentation for them
+Once you have logged into a station that sells upgrades, you can run
+the `upgrade` script to see their prices. Run `upgrade buy laser`, for
+instance, to purchase a laser, provided you have enough credits. Once
+you have purchased an upgrade, you can usually view its documentation
+by logging out of the station and accessing its manual page with
+`man("laser")`, etc.
 
 ## Footer
 
