@@ -34,7 +34,7 @@ local base_stats = {
    comm_range = 1024,
    recharge_rate = 1,
    burn_rate = 12,
-   engine_strength = 16,
+   engine_strength = 1024,
    turning_speed = 4,
 }
 
@@ -99,7 +99,7 @@ local ship = {
    comm_range = 1024,
    recharge_rate = 1,
    burn_rate = 12,
-   engine_strength = 16,
+   engine_strength = 1024,
    turning_speed = 4,
 
    configure = function(ship, systems, ui)
@@ -141,20 +141,21 @@ local ship = {
       ship.x = ship.x + (ship.dx * dt * 100)
       ship.y = ship.y + (ship.dy * dt * 100)
 
-      -- activate controls TODO: move these to a keymap too?
+      -- activate controls
       if(keymap.current_mode == "flight") then
          for k,f in pairs(ship.api.controls) do
             f(love.keyboard.isDown(k))
          end
       end
 
-      -- TODO: engine strength is in terms of force, not accel
       -- TODO: calculate oberth effect
       if(ship.engine_on and ship.fuel > 0) then
-         ship.dx = ship.dx + (math.sin(ship.heading) * dt *
-                                 ship.engine_strength * ship.api.throttle)
-         ship.dy = ship.dy + (math.cos(ship.heading) * dt *
-                                 ship.engine_strength * ship.api.throttle)
+         local fx = (math.sin(ship.heading) * dt *
+                        ship.engine_strength * ship.api.throttle)
+         local fy = (math.cos(ship.heading) * dt *
+                        ship.engine_strength * ship.api.throttle)
+         ship.dx = ship.dx + fx / ship.mass
+         ship.dy = ship.dy + fy / ship.mass
          ship.fuel = ship.fuel - (ship.burn_rate * dt * ship.api.throttle)
       elseif(ship.fuel < ship.fuel_capacity) then
          ship.fuel = ship.fuel + (ship.recharge_rate * dt)
@@ -285,9 +286,12 @@ ship.api = {
       sandbox.dofile = lume.fn(sandbox_dofile, s)
       sandbox.scp = lume.fn(comm.scp, ship)
 
+      -- for debugging
+      sandbox.body = body
+
       local chunk = assert(loadstring(s[filename or "config.lua"]))
       setfenv(chunk, sandbox)
-      -- TODO: stack trace on error
+      -- TODO1: stack trace on error
       pcall(chunk)
    end,
    e = function(s, path)

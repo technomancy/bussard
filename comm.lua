@@ -67,7 +67,7 @@ local send_input = function(ship, input)
       ship.api.repl.prompt = nil
       ship.api.repl.print("Logged out.")
       ship.comm_connected = false
-      -- TODO: wipe guest account on logout
+      fs["/home/guest"] = nil
    elseif(not ship:in_range(ship.target)) then
       ship.api.repl.print("| Out of range.")
    else

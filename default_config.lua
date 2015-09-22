@@ -1,6 +1,5 @@
 -- This code runs inside your ship's own computer.
 
--- TODO: unify these with keymap stuff?
 ship.controls = {
    up = ship.actions.forward,
    left = ship.actions.left,

@@ -28,7 +28,6 @@ return {
             local distance = utils.distance(ship.x - b.x, ship.y - b.y)
             local power = ship.laser_power * 16
             if(ship.laser and b.asteroid and laser_hits(ship, b, distance)) then
-               -- TODO: firing laser uses up power?
                b.strength = b.strength - dt * power / math.sqrt(distance)
                if(b.strength < 0) then b:split(ship) end
             end
