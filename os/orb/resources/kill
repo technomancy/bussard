@@ -2,7 +2,11 @@
 
 local f, env, args = ...
 
-if(f.proc[env.USER][args[1]]) then
+if(args[1] == "--help" or #args == 0) then
+   print("Kill a process. Use `ps' to list processes.\n")
+   print("Usage:")
+   print("  kill PROCESS_ID")
+elseif(f.proc[env.USER][args[1]]) then
    f.proc[env.USER][args[1]] = nil
 else
    print("Process " .. args[1] .. " not found".)

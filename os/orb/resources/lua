@@ -5,6 +5,11 @@ local f, env, args = ...
 if(#args > 0) then
    local chunk = assert(loadstring(f[args[1]]))
    chunk()
+elseif(args[1] == "--help") then
+   print("An interpreter for executing Lua code.\n")
+   print("Usage:")
+   print("  lua # to begin an interactive session")
+   print("  lua PATH_TO_FILE_TO_RUN")
 else
    while true do
       io.write("> ")

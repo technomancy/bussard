@@ -77,7 +77,7 @@ return {
       local v = math.sqrt((g*star.mass)/b.r) / 8
 
       b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
-      -- the velocity calculations here are not quite right, but close
+      -- TODO1: the velocity calculations here are not quite right, but close
       b.dx = math.sin(theta + math.pi / 2) * v
       b.dy = math.cos(theta + math.pi / 2) * v
    end,

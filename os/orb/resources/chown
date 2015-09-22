@@ -5,11 +5,13 @@ local user = args[1]
 local dirname = args[2] or env.CWD
 local dir = f[orb.normalize(dirname, env.CWD)]
 
--- TODO: assert arg is an actual user
-if(not dir) then
+if(not args[1] or args[1] == "--help") then
+   print("Change the owner of a given directory or current directory.\n")
+   print("Usage:")
+   print("  chown USER [DIR]")
+elseif(not dir) then
    print("Not found: " .. dir)
-elseif(not user) then
-   print("Usage: chown USER [DIR]")
 else
+   -- TODO: assert arg is an actual user
    dir._user = user
 end

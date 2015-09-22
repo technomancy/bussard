@@ -29,6 +29,7 @@ elseif(args[1] == "buy" or args[1] == "sell") then
       print(msg)
    end
 else
+   print("Buy, sell, and list prices for cargo.\n")
    print("Usage:")
    print("  cargo list")
    print("  cargo buy GOOD AMOUNT")

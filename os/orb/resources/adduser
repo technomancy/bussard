@@ -2,4 +2,10 @@
 
 local f, env, args = ...
 
-orb.add_user(f, args[1], args[2])
+if(#args == 2) then
+   orb.add_user(f, args[1], args[2])
+else
+   print("Add a new user. Requires sudo privileges.\n")
+   print("Usage:")
+   print("  adduser USER PASSWORD")
+end

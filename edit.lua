@@ -47,7 +47,7 @@ local region = function()
    end
 end
 
--- TODO: lots of edge cases here still not handled correctly
+-- TODO1: lots of edge cases here still not handled correctly
 local insert = function(text)
    local line = lines[point_line]
    local before, after = line:sub(0, point), line:sub(point + 1)
@@ -162,7 +162,7 @@ return {
       if(point_line < #lines) then point_line = point_line + 1 end
    end,
 
-   -- TODO: scroll doesn't work
+   -- TODO1: scroll doesn't work
    scroll_up = function()
       point_line = math.max(0, point_line - scroll_size)
    end,
@@ -234,7 +234,7 @@ return {
 
    kill_region = function()
       if(mark == nil or mark_line == nil) then return end
-      local r, start_line, start, finish_line, finish = region()
+      local _, start_line, start, finish_line, finish = region()
       push(kill_ring, region(), kill_ring_max)
       delete(start_line, start, finish_line, finish)
    end,

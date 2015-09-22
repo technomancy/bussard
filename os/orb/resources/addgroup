@@ -2,12 +2,18 @@
 
 local f, env, args = ...
 
-local group = table.remove(args,1)
+if(#args > 1) then
+   local group = table.remove(args,1)
 
-if(env.USER == "root" or orb.in_group(f, env.USER, group)) then
-   for _,user in ipairs(args) do
-      orb.add_to_group(f, user, group)
+   if(env.USER == "root" or orb.in_group(f, env.USER, group)) then
+      for _,user in ipairs(args) do
+         orb.add_to_group(f, user, group)
+      end
+   else
+      print("Not a member of " .. group)
    end
 else
-   print("Not a member of " .. group)
+   print("Add users to a group.\n")
+   print("Usage:")
+   print("  addgroup GROUP USER1 [USER2 ...]")
 end

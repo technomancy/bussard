@@ -2,9 +2,11 @@
 
 local f, env, args = ...
 
-if(orb.utils.includes(args, "--help")) then
-   print("Usage: sudo USER COMMAND [ARG]...")
-   print("You may only run sudo if you are a member of the sudoers group.")
+if(#args == 0 or orb.utils.includes(args, "--help")) then
+   print("Run a command as another user.")
+   print("You may only run sudo if you are a member of the sudoers group.\n")
+   print("Usage:")
+   print("  sudo USER COMMAND [ARG]...")
    if(orb.in_group(f, env.USER, "sudoers")) then
       print("You are a member of sudoers.")
    else
