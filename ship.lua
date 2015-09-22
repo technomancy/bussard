@@ -310,7 +310,7 @@ ship.api = {
 
    -- you can adjust these to improve performance
    trajectory = 256,
-   trajectory_step_size = 0.05,
+   trajectory_step_size = 0.1,
 
    throttle = 1,
    scale = 1,

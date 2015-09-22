@@ -50,23 +50,26 @@ return {
       love.graphics.rectangle("fill", 5, 60, fuel_to_stop, 5)
    end,
 
-   trajectory = function(ship, bodies, steps)
+   trajectory = function(ship, bodies, steps, step_size, color)
       local last_x, last_y
       local x, y, dx, dy = ship.x, ship.y, ship.dx, ship.dy
       local body_points = {}
       for _, b in pairs(bodies) do
-         body_points[b.name] = {x = b.x, y = b.y, dx = b.dx, dy = b.dy, mass = b.mass}
+         if(b ~= ship) then
+            body_points[b.name] = {x = b.x, y = b.y, dx = b.dx, dy = b.dy,
+                                   mass = b.mass}
+         end
       end
 
       love.graphics.setLineWidth(5)
-      love.graphics.setColor(150, 150, 255)
+      love.graphics.setColor(color)
       for _=0, steps do
          for _, b in pairs(body_points) do
             local ddx, ddy = body.gravitate(b, x, y)
-            dx = dx + ddx * ship.api.trajectory_step_size
-            dy = dy + ddy * ship.api.trajectory_step_size
-            b.x = b.x + (b.dx * ship.api.trajectory_step_size * 100)
-            b.y = b.y + (b.dy * ship.api.trajectory_step_size * 100)
+            dx = dx + ddx * step_size
+            dy = dy + ddy * step_size
+            b.x = b.x + (b.dx * step_size * 100)
+            b.y = b.y + (b.dy * step_size * 100)
          end
 
          for _, b2 in ipairs(body_points) do
@@ -77,8 +80,8 @@ return {
             end
          end
          last_x, last_y = x, y
-         x = x + (dx * ship.api.trajectory_step_size * 100)
-         y = y + (dy * ship.api.trajectory_step_size * 100)
+         x = x + (dx * step_size * 100)
+         y = y + (dy * step_size * 100)
 
          love.graphics.line(last_x - ship.x, last_y - ship.y, x - ship.x, y - ship.y)
       end

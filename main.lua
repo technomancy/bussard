@@ -108,7 +108,16 @@ love.draw = function(dt)
       love.graphics.setLineWidth(1)
    end
 
-   hud.trajectory(ship, ship.bodies, ship.api.trajectory)
+   hud.trajectory(ship, ship.bodies, ship.api.trajectory,
+                  ship.api.trajectory_step_size, {150, 150, 255})
+
+   if(ship.target) then
+      love.graphics.push()
+      love.graphics.translate(ship.target.x - ship.x, ship.target.y - ship.y)
+      hud.trajectory(ship.target, ship.bodies, ship.api.trajectory,
+                     ship.api.trajectory_step_size, {90, 90, 155})
+      love.graphics.pop()
+   end
 
    love.graphics.setColor(255, 255, 255)
    for _,b in pairs(ship.bodies) do
