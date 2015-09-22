@@ -47,19 +47,23 @@ local region = function()
    end
 end
 
--- TODO1: lots of edge cases here still not handled correctly
 local insert = function(text)
-   if(not text) then return end
-   local line = lines[point_line]
-   local before, after = line:sub(0, point), line:sub(point + 1)
+   if(not text or #text == 0) then return end
+   local this_line = lines[point_line]
+   local before, after = this_line:sub(0, point), this_line:sub(point + 1)
    local first_line = text[1]
 
-   lines[point_line] = (before or "") .. (first_line or "")
-   for i,l in ipairs(text) do
-      if(i ~= 1) then table.insert(lines, i+point_line, l) end
+   if(#text == 1) then
+      lines[point_line] = (before or "") .. (first_line or "") .. (after or "")
+   else
+      lines[point_line] = (before or "") .. (first_line or "")
+      for i,l in ipairs(text) do
+         if(i > 1 and i < #text) then
+            table.insert(lines, i+point_line-1, l)
+         end
+      end
+      table.insert(lines, point_line+#text-1, text[#text] .. (after or ""))
    end
-   -- special-case for one-line inserts?
-   lines[point_line + #text-1] = (after or "") .. lines[point_line + #text-1]
 end
 
 local delete = function(start_line, start, finish_line, finish)
@@ -67,11 +71,11 @@ local delete = function(start_line, start, finish_line, finish)
       local line = lines[point_line]
       lines[point_line] = line:sub(0, start) .. line:sub(finish + 1)
    else
-      lines[finish_line] = lines[finish_line]:sub(finish, -1)
-      for i = finish_line - 1, start_line + 1, -1 do
+      local after = lines[finish_line]:sub(finish+1, -1)
+      for i = finish_line, start_line + 1, -1 do
          table.remove(lines, i)
       end
-      lines[start_line] = lines[start_line]:sub(0, start)
+      lines[start_line] = lines[start_line]:sub(0, start) .. after
    end
    point, point_line, mark, mark_line = start, start_line, start, start_line
 end
@@ -139,7 +143,7 @@ return {
       if(point == #lines[point_line]) then
          local next_line = table.remove(lines, point_line+1)
          lines[point_line] = lines[point_line] .. next_line
-         push(kill_ring, {"\n"}, kill_ring_max)
+         push(kill_ring, {""}, kill_ring_max)
       else
          local killed = lines[point_line]:sub(point + 1, -1)
          lines[point_line] = lines[point_line]:sub(0, point)
