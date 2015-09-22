@@ -9,3 +9,26 @@ count:
 
 todo:
 	rgrep TODO .
+
+clean:
+	rm -rf releases/
+
+REL=".love-release/build/love-release.sh"
+FLAGS=-t bussard-$(VERSION) --author 'Phil Hagelberg' --description 'A space flight open-world exploration game, with a programmable ship and stations.' --love 0.9.1 --url https://gitlab.com/technomancy/bussard --version $(VERSION)
+
+love:
+	$(REL) $(FLAGS) -L
+
+mac:
+	$(REL) $(FLAGS) -M
+
+windows:
+	$(REL) $(FLAGS) -W
+
+release: love mac windows
+
+sign:
+	gpg -ab releases/bussard-*
+
+upload: release sign
+	scp releases/* p.hagelb.org:p/bussard/
