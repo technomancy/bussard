@@ -50,7 +50,7 @@ key bindings, define helper functions, and perform any other setup.
 You can make changes to your init file using the onboard editor. Run
 this code in your REPL: `ship:e("config.lua")`. Once you're done with
 your edits, press `esc` and load your changes with
-`ship:load_config()`. You can edit other files in your ship by passing
+`ship:load()`. You can edit other files in your ship by passing
 another filename to `ship:e`, but files will not persist after your
 ship is power cycled unless the filenames are in the `ship.persist`
 table.

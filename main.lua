@@ -58,7 +58,7 @@ love.load = function()
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    save.load_into(ship)
-   ship.api.load_config(ship.api)
+   ship.api.load(ship.api)
    ship.api.repl.last_result =
       "Press control-enter to open the repl and `man()` for more help."
 end

@@ -91,6 +91,8 @@ keymap.define("edit", "ctrl- ", ship.edit.mark)
 keymap.define("edit", "ctrl-c", ship.edit.kill_ring_save)
 keymap.define("edit", "ctrl-x", ship.edit.kill_region)
 keymap.define("edit", "ctrl-v", ship.edit.yank)
+keymap.define("edit", "pageup", ship.edit.scroll_up)
+keymap.define("edit", "pagedown", ship.edit.scroll_down)
 
 -- Emacs keys
 

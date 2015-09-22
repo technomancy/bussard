@@ -279,13 +279,13 @@ ship.api = {
       login = lume.fn(comm.login, ship),
       anchor = function(s) s.cheat.dx, s.cheat.dy = 0, 0 end,
    },
-   load_config = function(s)
+   load = function(s, filename)
       s.repl.sandbox = sandbox
       sandbox.ship = s
       sandbox.dofile = lume.fn(sandbox_dofile, s)
       sandbox.scp = lume.fn(comm.scp, ship)
 
-      local chunk = assert(loadstring(s["config.lua"]))
+      local chunk = assert(loadstring(s[filename or "config.lua"]))
       setfenv(chunk, sandbox)
       -- TODO: stack trace on error
       pcall(chunk)
