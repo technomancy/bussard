@@ -75,37 +75,50 @@ keymap.modes["repl"].textinput = ship.repl.textinput
 keymap.define_mode("edit")
 keymap.define("edit", "escape", mode("flight"))
 keymap.define("edit", "pause", pause)
-
-keymap.define("edit", "backspace", ship.edit.delete_backwards)
-keymap.define("edit", "ctrl-h", ship.edit.delete_backwards)
-keymap.define("edit", "delete", ship.edit.delete_forwards)
-keymap.define("edit", "ctrl-d", ship.edit.delete_forwards)
-keymap.define("edit", "ctrl-k", ship.edit.kill_line)
 keymap.define("edit", "return", ship.edit.newline)
 
-keymap.define("edit", "ctrl-a", ship.edit.move_beginning_of_line)
+-- "Conventional" keys
+keymap.define("edit", "backspace", ship.edit.delete_backwards)
+keymap.define("edit", "delete", ship.edit.delete_forwards)
 keymap.define("edit", "home", ship.edit.move_beginning_of_line)
-keymap.define("edit", "ctrl-e", ship.edit.move_end_of_line)
 keymap.define("edit", "end", ship.edit.move_end_of_line)
-
 keymap.define("edit", "left", ship.edit.backward_char)
-keymap.define("edit", "ctrl-b", ship.edit.backward_char)
 keymap.define("edit", "right", ship.edit.forward_char)
+keymap.define("edit", "up", ship.edit.prev_line)
+keymap.define("edit", "down", ship.edit.next_line)
+
+keymap.define("edit", "ctrl- ", ship.edit.mark)
+keymap.define("edit", "ctrl-c", ship.edit.kill_ring_save)
+keymap.define("edit", "ctrl-x", ship.edit.kill_region)
+keymap.define("edit", "ctrl-v", ship.edit.yank)
+
+-- Emacs keys
+
+keymap.define("edit", "ctrl-h", ship.edit.delete_backwards)
+keymap.define("edit", "ctrl-d", ship.edit.delete_forwards)
+keymap.define("edit", "ctrl-k", ship.edit.kill_line)
+keymap.define("edit", "ctrl-a", ship.edit.move_beginning_of_line)
+keymap.define("edit", "ctrl-e", ship.edit.move_end_of_line)
+keymap.define("edit", "ctrl-b", ship.edit.backward_char)
 keymap.define("edit", "ctrl-f", ship.edit.forward_char)
 keymap.define("edit", "alt-f", ship.edit.forward_word)
 keymap.define("edit", "alt-b", ship.edit.backward_word)
-
-keymap.define("edit", "up", ship.edit.prev_line)
 keymap.define("edit", "ctrl-p", ship.edit.prev_line)
-keymap.define("edit", "down", ship.edit.next_line)
 keymap.define("edit", "ctrl-n", ship.edit.next_line)
 
-keymap.define("edit", "ctrl-s", ship.edit.save)
+keymap.define("edit", "ctrl- ", ship.edit.mark)
+keymap.define("edit", "ctrl-g", ship.edit.no_mark)
+keymap.define("edit", "alt-w", ship.edit.kill_ring_save)
+keymap.define("edit", "ctrl-w", ship.edit.kill_region)
+keymap.define("edit", "ctrl-y", ship.edit.yank)
+keymap.define("edit", "alt-y", ship.edit.yank_pop)
 
 -- TODO
 keymap.define("edit", "ctrl-backspace", ship.edit.backward_kill_word)
 keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
 keymap.define("edit", "ctrl-r", ship.edit.revert)
+keymap.define("edit", "alt-,", ship.edit.beginning_of_buffer)
+keymap.define("edit", "alt-.", ship.edit.end_of_buffer)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
 

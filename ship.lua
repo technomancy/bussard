@@ -58,6 +58,7 @@ local sandbox = {
    help = help.message,
    man = help.man,
    keymap = keymap,
+   default_config = default_config,
 }
 
 local sandbox_dofile = function(ship, filename)
