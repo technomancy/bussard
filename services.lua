@@ -11,6 +11,7 @@ return {
          local fs_raw = session[3]
          local fs = target.os.fs.proxy(fs_raw, "root", fs_raw)
          orb.fs.add_user(fs, username, password)
+         ship.credits = ship.credits - target.account_price
          return true
       elseif(target.account_price) then
          return false, "Insufficient credits."
