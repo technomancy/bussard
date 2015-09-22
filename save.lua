@@ -60,6 +60,7 @@ return {
 
          lume.extend(ship, ship_data)
          ship:enter(ship.system_name)
+         ship.api.repl.last_result = nil
       end
       if(love.filesystem.exists(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)

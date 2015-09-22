@@ -59,7 +59,7 @@ love.load = function()
    ship:configure(systems, ui)
    save.load_into(ship)
    ship.api.load(ship.api)
-   ship.api.repl.last_result =
+   ship.api.repl.last_result = ship.api.repl.last_result or
       "Press control-enter to open the repl and `man()` for more help."
 end
 

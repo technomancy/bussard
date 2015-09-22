@@ -11,6 +11,7 @@ local edit = require("edit")
 local upgrade = require("upgrade")
 
 local default_config = utils.read_file("default_config.lua")
+local fallback_config = utils.read_file("fallback_config.lua")
 
 local scale_min = 1
 
@@ -289,10 +290,25 @@ ship.api = {
       -- for debugging
       sandbox.body = body
 
-      local chunk = assert(loadstring(s[filename or "config.lua"]))
-      setfenv(chunk, sandbox)
-      -- TODO1: stack trace on error
-      pcall(chunk)
+      local fallback = function()
+         s.repl.last_result = "Error loading config; falling back to safe code."
+         local chunk = assert(loadstring(fallback_config))
+         setfenv(chunk, sandbox)
+         pcall(chunk)
+      end
+      local chunk, err = loadstring(s[filename or "config.lua"])
+      if(chunk) then
+         setfenv(chunk, sandbox)
+         local traceback, error_msg
+         xpcall(chunk, function(e)
+                   s.repl.print(e)
+                   s.repl.print(debug.traceback())
+                   fallback()
+         end)
+      else
+         s.repl.print(err)
+         fallback()
+      end
    end,
    e = function(s, path)
       keymap.change_mode("edit")
