@@ -95,6 +95,7 @@ function repl.initialize()
    -- Expose these in case somebody wants to use them
    repl.lines = lines
    font = love.graphics.getFont()
+   repl.font_width = font:getWidth('a')
    ROW_HEIGHT = font:getHeight()
 end
 
@@ -311,7 +312,7 @@ function repl.draw()
 
       -- draw cursor
       local cx, cy = repl.padding_left + 1 +
-         font:getWidth(prefix .. editline:sub(0, cursor)),
+         (repl.font_width * string.len(prefix .. editline:sub(0, cursor))),
       limit + font:getHeight() + 2
       love.graphics.line(cx, cy, cx + 5, cy)
    end
@@ -342,7 +343,7 @@ function repl.draw()
 
    if repl.wrapping then
       -- max chars in a line
-      local line_max = (width - (repl.padding_left * 2)) / font:getWidth('a')
+      local line_max = (width - (repl.padding_left * 2)) / repl.font_width
       local pos, lines_drawn = offset, 0
       while lines_drawn < DISPLAY_ROWS do
          local line = lines:get(-pos)
