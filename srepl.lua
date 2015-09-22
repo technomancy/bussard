@@ -24,8 +24,6 @@ local DISPLAY_ROWS
 -- Width of the display available for text, in pixels
 local DISPLAY_WIDTH
 -- Console contents
--- History is just a list of strings
-local history
 -- List of {boolean, string} where boolean is true if the string is part of user
 -- -navigable history (a > will be prepended before rendering if true)
 local lines
@@ -92,11 +90,10 @@ end
 function repl.initialize()
    lines = buffer:new({})
    lines.max = repl.max_lines
-   history = buffer:new()
-   history.max = repl.max_history
+   repl.history = buffer:new()
+   repl.history.max = repl.max_history
    -- Expose these in case somebody wants to use them
    repl.lines = lines
-   repl.history = history
    font = love.graphics.getFont()
    ROW_HEIGHT = font:getHeight()
 end
@@ -161,9 +158,9 @@ function repl.eval(text, add_to_history)
          local results, i = tostring(result[2]), 3
          if add_to_history then
             if text:sub(0,1) == '=' then
-               history:append('return ' .. text:sub(2))
+               repl.history:append('return ' .. text:sub(2))
             else
-               history:append(text)
+               repl.history:append(text)
             end
          end
          while i <= #result do
@@ -191,7 +188,7 @@ end
 
 local function get_history()
    if histpos > 0 then
-      editline = history:get(-histpos)
+      editline = repl.history:get(-histpos)
       cursor = #editline
    end
 end
@@ -232,7 +229,7 @@ function repl.eval_line()
 end
 
 function repl.history_prev()
-   if histpos + 1 <= history.entries then
+   if histpos + 1 <= repl.history.entries then
       histpos = histpos + 1
       get_history()
    end
