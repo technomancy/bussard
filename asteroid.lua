@@ -62,7 +62,8 @@ return {
       local asteroid_count = 0
       for i,b in pairs(ship.bodies) do
          if(b.asteroid) then
-            if(utils.distance(b, ship.bodies[1]) > max_asteroid_distance) then
+            if(utils.distance(b, ship.bodies[1]) > max_asteroid_distance and
+               utils.distance(b, ship) > max_asteroid_distance) then
                table.remove(ship.bodies, i)
                retarget(b, ship)
             else
