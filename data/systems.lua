@@ -21,6 +21,7 @@ return {
           {r=35000, mass=700,
            image=img('assets/planet-3.png'),
            name="Tana Prime", os=orb,
+           upgrade_prices = { engine = 512, cargo_bay = 1024, },
            fuel_price = 1,
            account_price = 128,
            prices={food = {stock=90, buy=100, sell=120},
@@ -33,6 +34,7 @@ return {
            image=img('assets/planet-1.png'),
            name="Lioboro", os=orb,
            fuel_price = 1,
+           upgrade_prices = { engine = 500, },
            account_price = 128,
            prices={food = {stock=120, buy=90, sell=110},
                    ore = {stock=65, buy=150, sell=130},
@@ -45,6 +47,7 @@ return {
            image=img('assets/station-pointed.png'),
            name="Kenapa Station", os=orb,
            fuel_price = 1,
+           upgrade_prices = { engine = 512, },
            account_price = 172,
            prices={food = {stock=20, buy=100, sell=120},
                    ore = {stock=40, buy=150, sell=130},
@@ -63,7 +66,9 @@ return {
            r=20000, mass=75, portal="Luyten's Star"}},
       },
    ["Wolf 294"] = -- second-largest Tana system
-      {civ="Tana", x=-5.3, y=-0.3, bodies = {
+      {civ="Tana", x=-5.3, y=-0.3,
+       asteroids = 4,
+       bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=160000,
            image=img('assets/sun.png'),
            name="Wolf 294", star=true},
@@ -71,6 +76,7 @@ return {
            image=img('assets/planet-9.png'),
            name="Belanda", os=orb,
            fuel_price = 1,
+           upgrade_prices = { laser = 312, engine = 640 },
            account_price = 148,
            prices={food = {stock=60, buy=90, sell=110},
                    ore = {stock=40, buy=160, sell=140},
@@ -82,6 +88,7 @@ return {
            name="Solotogo", os=orb,
            fuel_price = 1,
            account_price = 148,
+           upgrade_prices = { laser = 312, engine = 640 },
            prices={food = {stock=120, buy=90, sell=110},
                    medicine = {stock=30, buy=240, sell=210},
                    equipment = {stock=10, buy=210, sell=190},
@@ -102,6 +109,7 @@ return {
            image=img('assets/station-pointed.png'),
            name="Apkabar station", os=orb,
            fuel_price = 1,
+           upgrade_prices = { engine = 600, fuel_tank = 768, },
            account_price = 148,
            prices={
               food={stock=10, buy=90, sell=110,},
