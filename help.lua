@@ -10,6 +10,6 @@ return {
    message = "Type `man()` to view your ship's operating manual.",
    man = function(page)
       page = pages[page] or "manual.md"
-      return utils.read_file(page)
+      return love.filesystem.read(page)
    end
 }

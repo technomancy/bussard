@@ -10,8 +10,8 @@ local repl = require("srepl")
 local edit = require("edit")
 local upgrade = require("upgrade")
 
-local default_config = utils.read_file("default_config.lua")
-local fallback_config = utils.read_file("fallback_config.lua")
+local default_config = love.filesystem.read("default_config.lua")
+local fallback_config = love.filesystem.read("fallback_config.lua")
 
 local scale_min = 1
 

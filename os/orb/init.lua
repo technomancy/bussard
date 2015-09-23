@@ -2,12 +2,12 @@
 
 assert(setfenv, "Needs lua 5.1; sorry.")
 
-orb = { dir = "os/orb" }
+orb = {}
 
-dofile(orb.dir .. "/utils.lua")
-dofile(orb.dir .. "/fs.lua")
-dofile(orb.dir .. "/shell.lua")
-dofile(orb.dir .. "/process.lua")
+require("os/orb/utils")
+require("os/orb/fs")
+require("os/orb/shell")
+require("os/orb/process")
 
 -- for interactive use, but also as a sample of how the API works:
 if(arg[1] == "--test") then

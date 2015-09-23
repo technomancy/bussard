@@ -173,13 +173,6 @@ return {
       return formatted
    end,
 
-   read_file = function(filename)
-      local f = io.open(filename, "r")
-      local content = f:read("*all")
-      f:close()
-      return content
-   end,
-
    gaussian_random = function(r)
       local x = 1 + math.sqrt(-2 * math.log(math.random()))
       local y = math.cos(2 * math.pi * math.random()) / 2
