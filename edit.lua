@@ -91,24 +91,31 @@ return {
       em = love.graphics.getFont():getWidth('a')
    end,
 
-   open = function(point_line_fs, point_line_path)
+   open = function(this_fs, this_path)
       -- reset position if opening a different file
-      if(point_line_path ~= path) then
+      if(this_path ~= path) then
          point, point_line = 0, 1
       end
 
       mark, mark_line = nil, nil
-      fs, path = point_line_fs, point_line_path
-      if(fs[path]) then
-         lines = lume.split(fs[path], "\n")
+      fs, path = this_fs, this_path
+      local content = fs:find(path)
+      if(content) then
+         lines = lume.split(content, "\n")
       else
          lines = {""}
       end
       on = true
    end,
 
-   save = function(point_line_fs, point_line_path)
-      (point_line_fs or fs)[point_line_path or path] = table.concat(lines, "\n")
+   save = function(this_fs, this_path)
+      local parts = lume.split(this_path or path, ".")
+      local filename = table.remove(parts, #parts)
+      local target = this_fs or fs
+      for _,part in ipairs(parts) do
+         target = target[part]
+      end
+      target[filename] = table.concat(lines, "\n")
    end,
 
    on = function(or_not) on = or_not ~= false end,

@@ -127,4 +127,4 @@ keymap.modes["edit"].textinput = ship.edit.textinput
 login = ship.actions.login
 
 -- testing
-keymap.define("flight", "ctrl-x", function() ship:e("config.lua") end)
+keymap.define("flight", "ctrl-x", function() ship:e("src.config") end)

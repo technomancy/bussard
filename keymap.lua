@@ -1,7 +1,7 @@
 local keymap
 
 local find_binding = function(key, mode_name)
-   local mode = keymap.modes[mode_name or keymap.current_mode]
+   local mode = assert(keymap.modes[mode_name or keymap.current_mode], "No mode")
    local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
    local alt = love.keyboard.isDown("lalt", "ralt")
    local map = (ctrl and alt and mode["ctrl-alt"]) or
