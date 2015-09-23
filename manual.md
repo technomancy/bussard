@@ -48,12 +48,13 @@ When your ship starts, it will load its init file in order to create
 key bindings, define helper functions, and perform any other setup.
 
 You can make changes to your init file using the onboard editor. Run
-this code in your REPL: `ship:e("config.lua")`. Once you're done with
+this code in your REPL: `ship:e("src.config")`. Once you're done with
 your edits, press `esc` and load your changes with
-`ship:load()`. You can edit other files in your ship by passing
-another filename to `ship:e`, but files will not persist after your
-ship is power cycled unless the filenames are in the `ship.persist`
-table.
+`ship:load("src.config")`. You can edit other files in your ship by
+passing another filename to `ship:e`, but by default only files in the
+`ship.src` and `ship.docs` tables will stay after your ship is
+restarted. You can configure it to save other tables by adding their
+names to the `ship.persist` table.
 
 ### Keymaps and Modes
 

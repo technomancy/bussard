@@ -110,6 +110,14 @@ local ship = {
       ship.api.ui = ui
       ship.systems = systems
       ship:enter(ship.system_name, true)
+
+      ship.api.repl.sandbox = sandbox
+      sandbox.ship = ship.api
+      sandbox.dofile = lume.fn(sandbox_dofile, ship.api)
+      sandbox.scp = lume.fn(comm.scp, ship)
+
+      -- for debugging
+      sandbox.body = body
    end,
 
    enter = function(ship, system_name, reseed)
@@ -281,43 +289,35 @@ ship.api = {
       login = lume.fn(comm.login, ship),
       anchor = function(s) s.cheat.dx, s.cheat.dy = 0, 0 end,
    },
+
    load = function(s, filename)
-      s.repl.sandbox = sandbox
-      sandbox.ship = s
-      sandbox.dofile = lume.fn(sandbox_dofile, s)
-      sandbox.scp = lume.fn(comm.scp, ship)
-
-      -- for debugging
-      sandbox.body = body
-
-      local fallback = function()
-         s.repl.last_result = "Error loading config; falling back to safe code."
-         local chunk = assert(loadstring(fallback_config))
-         setfenv(chunk, sandbox)
-         pcall(chunk)
-      end
-      local chunk, err = loadstring(s[filename or "config.lua"])
-      if(chunk) then
-         setfenv(chunk, sandbox)
-         local traceback, error_msg
-         xpcall(chunk, function(e)
-                   s.repl.print(e)
-                   s.repl.print(debug.traceback())
-                   fallback()
-         end)
-      else
-         s.repl.print(err)
-         fallback()
-      end
+      local chunk = assert(loadstring(s:find(filename)))
+      setfenv(chunk, sandbox)
+      chunk()
    end,
+
    e = function(s, path)
       keymap.change_mode("edit")
       s.repl.on(false)
       s.edit.open(s, path)
    end,
 
-   persist = {"throttle", "scale", "trajectory"},
-   ["config.lua"] = default_config,
+   find = function(s, path)
+      local parts = lume.split(path, ".")
+      local target = s
+      for _,p in ipairs(parts) do
+         target = target[p]
+      end
+      return target
+   end,
+
+   -- for user files
+   src = {
+      ["config"] = default_config,
+      ["fallback_config"] = fallback_config,
+   },
+   docs = {},
+   persist = {"persist", "throttle", "scale", "trajectory", "src", "docs"},
 
    -- added by loading config
    controls = {},

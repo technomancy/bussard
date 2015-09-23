@@ -58,9 +58,20 @@ love.load = function()
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    save.load_into(ship)
-   ship.api.load(ship.api)
-   ship.api.repl.last_result = ship.api.repl.last_result or
+
+   ship.api.repl.last_result =
       "Press control-enter to open the repl and `man()` for more help."
+   xpcall(function() ship.api:load("src.config") end,
+      function(e)
+         print("Initial load failed:", e)
+         s.repl.print(e)
+         s.repl.print(debug.traceback())
+         s.repl.last_result = "Error loading config; falling back to " ..
+            "ship.src.fallback_config."
+         local chunk = assert(loadstring("src.fallback_config"))
+         setfenv(chunk, ship.api.repl.sandbox)
+         pcall(chunk)
+   end)
 end
 
 love.update = function(dt)
