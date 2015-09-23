@@ -55,6 +55,8 @@ return {
          return false, target.name .. " does not sell " .. name
       elseif(ship.credits < price) then
          return false, "Insufficient credits; need " .. price
+      elseif(utils.includes(ship.upgrade_names, name)) then
+         return false, "You already have this upgrade."
       else
          table.insert(ship.upgrade_names, name)
          ship:recalculate()
