@@ -36,14 +36,8 @@ return {
       local distance = utils.distance(dx, dy)
       local theta = math.atan2(dx, dy) + math.pi
 
-      local f = (body.mass * g) / (distance * distance)
-      return (f * math.sin(theta)), (f * math.cos(theta))
-   end,
-
-   escape_velocity = function(body, escapee)
-      local distance = utils.distance(body.x - escapee.x,
-                                      body.y - escapee.y)
-      return math.sqrt(2*g*body.mass / distance)
+      local accel = (body.mass * g) / (distance * distance)
+      return (accel * math.sin(theta)), (accel * math.cos(theta))
    end,
 
    -- currently you can log into any body that's not a star
@@ -73,11 +67,13 @@ return {
       if(b.star or b.asteroid) then return end
       assert(star.star, star.name .. " is not a star.")
 
+      -- Unclear why it's necessary to divide by ten here; standard orbital
+      -- calculations do not include this factor, but without it we cannot
+      -- achieve orbit.
+      local v = math.sqrt((g*star.mass)/b.r) / 10
       local theta = math.random(math.pi * 2)
-      local v = math.sqrt((g*star.mass)/b.r) / 8
 
       b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
-      -- TODO1: the velocity calculations here are not quite right, but close
       b.dx = math.sin(theta + math.pi / 2) * v
       b.dy = math.cos(theta + math.pi / 2) * v
    end,
