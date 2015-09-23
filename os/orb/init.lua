@@ -2,7 +2,7 @@
 
 assert(setfenv, "Needs lua 5.1; sorry.")
 
-orb = { dir = (minetest and minetest.get_modpath("orb")) or ... }
+orb = { dir = "os/orb" }
 
 dofile(orb.dir .. "/utils.lua")
 dofile(orb.dir .. "/fs.lua")

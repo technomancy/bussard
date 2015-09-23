@@ -7,7 +7,7 @@ local seed = function(os, body_name)
    local proxy = os.fs.proxy(raw, "root", raw)
    os.fs.seed(proxy, {guest = ""})
 
-   for k,v in pairs(filesystem_overlays[body_name]) do
+   for k,v in pairs(filesystem_overlays[body_name] or {}) do
       local dir,_ = os.fs.dirname(k)
       os.fs.mkdir(proxy, dir)
       proxy[k] = v

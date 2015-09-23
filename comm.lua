@@ -67,7 +67,8 @@ local send_input = function(ship, input)
       ship.api.repl.prompt = nil
       ship.api.repl.print("Logged out.")
       ship.comm_connected = false
-      fs["/home/guest"] = nil
+      local fs_env = table.remove(sessions, ship.target.name)
+      fs_env[1]["/home/guest"] = nil
    elseif(not ship:in_range(ship.target)) then
       ship.api.repl.print("| Out of range.")
    else
