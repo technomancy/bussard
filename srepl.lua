@@ -4,7 +4,7 @@
 
 -- Adapted for this specific game by Phil Hagelberg
 
-local utils = require("utils")
+local lume = require("lume")
 local love = love
 
 -- Module
@@ -111,7 +111,7 @@ function repl.on_close() end
 
 function repl.append(prefix, value)
    value = tostring(value)
-   for _, line in pairs(utils.split(value, "\n")) do
+   for _, line in pairs(lume.split(value, "\n")) do
       if(line ~= "") then repl.last_result = line end
       lines:append(prefix and ('> ' .. line) or line)
    end
