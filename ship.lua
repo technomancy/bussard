@@ -329,7 +329,7 @@ ship.api = {
    trajectory_step_size = 0.1,
 
    throttle = 1,
-   scale = 1,
+   scale = 1.9,
 
    cheat = ship,
    teleport = function(self)

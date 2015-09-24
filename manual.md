@@ -180,7 +180,9 @@ functions for changing the scale should use it too.
 
 #### scale
 
-A numeric indicator of how far out the display should be zoomed.
+A numeric indicator of how far out the display should be zoomed. Zoom
+scales out exponentially with this number, so it should usually be
+between 1 and 2.
 
 ### Upgrades
 
