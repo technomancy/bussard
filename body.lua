@@ -19,6 +19,16 @@ local filesystems = {}
 
 local g = 1000
 
+-- Without capping gravity accel, you run into a weird bug caused by
+-- the fact that we calculate gravitation discretely instead of
+-- continuously. If the point of calculation is one at which you are very close
+-- to a star, you'll be given a very high velocity, and the next point of
+-- calculation won't happen till you're further away, so gravity won't get
+-- a chance to slow you back down. This is only noticeable when you pass over
+-- what is essentially the heart of a star, but it's very annoying when you do.
+
+local max_accel = 100
+
 return {
    draw = function(body, x, y)
       local scale = body.scale or 1
@@ -36,7 +46,7 @@ return {
       local distance = utils.distance(dx, dy)
       local theta = math.atan2(dx, dy) + math.pi
 
-      local accel = (body.mass * g) / (distance * distance)
+      local accel = math.min((body.mass * g) / (distance * distance), max_accel)
       return (accel * math.sin(theta)), (accel * math.cos(theta))
    end,
 
