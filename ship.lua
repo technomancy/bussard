@@ -247,8 +247,8 @@ local ship = {
    end,
 
    enforce_limits = function(ship)
-      if(ship.api.throttle > 1) then ship.throttle.api = 1 end
-      if(ship.api.throttle < 0) then ship.throttle.api = 0 end
+      if(ship.api.throttle > 1) then ship.api.throttle = 1 end
+      if(ship.api.throttle < 0) then ship.api.throttle = 0 end
       if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
    end,
 }
