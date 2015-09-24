@@ -297,9 +297,11 @@ ship.api = {
    end,
 
    e = function(s, path)
-      keymap.change_mode("edit")
-      s.repl.on(false)
-      s.edit.open(s, path)
+      if(type(path) == "string") then
+         keymap.change_mode("edit")
+         s.repl.on(false)
+         s.edit.open(s, path)
+      end
    end,
 
    find = function(s, path)
