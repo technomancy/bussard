@@ -67,6 +67,19 @@ upcoming features.
 
 <img src="http://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
 
+Planned features:
+
+* accept missions at stations
+* power mechanics system (battery, solar panel charging)
+* many, many more systems under various governments
+* many more ship upgrades
+* reconfigurable HUD
+* tutorials for writing autopilot code
+* exploits to break into accounts you don't own
+* stations that use different OSes
+* virtualization to allow you to run station code on your ship
+* abandoned civilizations and artifacts
+
 ## License
 
 Code copyright © 2015 Phil Hagelberg and contributors
@@ -76,3 +89,5 @@ Distributed under the GNU General Public License version 3; see file COPYING.
 [Planet graphics](http://opengameart.org/content/planets-and-stars-set-high-res) © Rawdanitsu, CC0 licensed.
 
 Station graphics by [MillionthVector](http://millionthvector.blogspot.de/p/free-sprites_12.html), CC-BY licensed.
+
+Mensch font by [Robey Pointer](http://robey.lag.net/2010/06/21/mensch-font.html), distributed under the [Bitstream Vera](https://www.gnome.org/fonts/) license.

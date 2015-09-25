@@ -7,7 +7,8 @@ to be used for mining of metallic asteroids.
 ## Control
 
 In order to fire your laser, it's recommended to bind it in the
-`ship.controls` table. Left Alt is a common choice:
+`ship.controls` table. Left Alt is a common choice. Put this in your
+ship's config file (normally accessible with `ctrl-x`):
 
     ship.controls["lalt"] = ship.actions.laser
 
