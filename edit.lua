@@ -26,6 +26,8 @@ local fs, path
 local word_break = "[%s%p]+"
 
 local region = function()
+   mark = math.min(string.len(lines[mark_line]), mark)
+
    if(point_line == mark_line) then
       local start, finish = math.min(point, mark), math.max(point, mark)
       return {lines[point_line]:sub(start+1, finish)}, point_line, start, point_line, finish
@@ -282,7 +284,7 @@ return {
          point = string.len(lines[point_line]) end
 
       -- Draw background
-      love.graphics.setColor(0, 0, 0, 200)
+      love.graphics.setColor(0, 0, 0, 170)
       love.graphics.rectangle("fill", 0, 0, width, height)
 
       -- maximum characters in a rendered line of text

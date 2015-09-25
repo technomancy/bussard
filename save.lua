@@ -46,7 +46,7 @@ return {
    end,
 
    load_into = function(ship)
-      if(love.filesystem.exists(ship_filename)) then
+      if(love.filesystem.isFile(ship_filename)) then
          local ship_data_string = love.filesystem.read(ship_filename)
          local ship_data = lume.deserialize(ship_data_string)
          local api_data = ship_data.api

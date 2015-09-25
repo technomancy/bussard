@@ -36,9 +36,9 @@ keymap = {
       end
    end,
 
-   handle = function(key, is_repeat)
+   handle = function(key, ...)
       local fn = find_binding(key)
-      if(fn) then fn(is_repeat) end
+      if(fn) then fn(...) end
    end,
 
    change_mode = function(mode_name)
