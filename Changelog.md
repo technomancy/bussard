@@ -1,6 +1,6 @@
 # Bussard changelog: history of user-visible changes
 
-## alpha-2 / ???
+## alpha-2 / 2015-9-25
 
 * Rudimentary text editor for onboard config.
 * Add onboard help system and some manual pages.
@@ -10,6 +10,7 @@
 * Allow copying of files to/from station accounts.
 * Customizable keyboard commands.
 * Upgrades available for purchasing from station computers.
+* Increased ship mass makes acceleration more sluggish.
 
 ## alpha-1 / 2015-9-15
 
