@@ -1,7 +1,7 @@
 -- These functions will be called by programs running on station OSes, but they
 -- have access to functionality that isn't exposed inside the OS sandbox.
 
-local orb = require("os/orb")
+local orb = require("os.orb")
 
 return {
    buy_user = function(ship, target, sessions, username, password)

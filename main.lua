@@ -3,12 +3,11 @@ local body = require "body"
 local hud = require "hud"
 local ship = require "ship"
 local asteroid = require "asteroid"
-local systems = require "data/systems"
-
 local save = require "save"
 local keymap = require "keymap"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
+local systems = require("data.systems")
 
 local star1 = star1 or starfield.new(10, w, h, 0.01, 100)
 local star2 = star2 or starfield.new(10, w, h, 0.05, 175)

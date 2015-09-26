@@ -58,7 +58,7 @@ return {
          ship:enter(ship.system_name)
          ship.api.repl.last_result = nil
       end
-      if(love.filesystem.exists(system_filename)) then
+      if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)
          local system_data = lume.deserialize(system_data_string)
          for _,b in ipairs(ship.bodies) do
@@ -67,7 +67,7 @@ return {
       end
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do
-            if(love.filesystem.exists(fs_filename(b))) then
+            if(love.filesystem.isFile(fs_filename(b))) then
                local fs_data = love.filesystem.read(fs_filename(b))
                body.filesystems[b.name] = lume.deserialize(fs_data)
             end

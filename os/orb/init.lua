@@ -4,10 +4,10 @@ assert(setfenv, "Needs lua 5.1; sorry.")
 
 orb = {}
 
-require("os/orb/utils")
-require("os/orb/fs")
-require("os/orb/shell")
-require("os/orb/process")
+require("os.orb.utils")
+require("os.orb.fs")
+require("os.orb.shell")
+require("os.orb.process")
 
 -- for interactive use, but also as a sample of how the API works:
 if(arg[1] == "--test") then

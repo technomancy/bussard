@@ -1,6 +1,6 @@
 local utils = require "utils"
 
-local filesystem_overlays = require "data/filesystems"
+local filesystem_overlays = require("data.filesystems")
 
 local seed = function(os, body_name)
    local raw = os.fs.new_raw()

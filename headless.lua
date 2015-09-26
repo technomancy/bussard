@@ -4,11 +4,18 @@ local f = function() end
 local o = function() return 1 end
 
 love = love or { graphics = { newImage = f, getWidth = o, getHeight = o,
-                              newFont = f, setFont = f, getFont = f, },
-                 keyboard = {
-                    isDown = f,
-                 },
-                 filesystem = { save = f, newFile = f,}
+                              newFont = f, setFont = f, getFont = function()
+                                 return { getWidth = f, getHeight = f,} end, },
+                 keyboard = { isDown = f, setKeyRepeat = f, },
+                 filesystem = { save = f, newFile = f, write = f,
+                                isFile = f,
+                                read = function(filename)
+                                   local f = io.open(filename, "r")
+                                   local content = f:read("*all")
+                                   f:close()
+                                   return content
+                                end,
+                 }
                }
 
 package.path = package.path .. ";?/init.lua"
