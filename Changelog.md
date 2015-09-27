@@ -1,6 +1,12 @@
 # Bussard changelog: history of user-visible changes
 
-## alpha-2 / 2015-9-25
+## alpha-3 / 2015-09-27
+
+* Boost range at which you can log in to stations.
+* Fix a bug where files in station OSes couldn't load from releases.
+* Other minor bugfixes.
+
+## alpha-2 / 2015-09-25
 
 * Rudimentary text editor for onboard config.
 * Add onboard help system and some manual pages.
@@ -12,7 +18,7 @@
 * Upgrades available for purchasing from station computers.
 * Increased ship mass makes acceleration more sluggish.
 
-## alpha-1 / 2015-9-15
+## alpha-1 / 2015-09-15
 
 * Initial alpha functionality.
 * Flight works with realistic gravity/thrust mechanics.
