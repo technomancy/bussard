@@ -1,4 +1,4 @@
-local orb = require("os/orb")
+local orb = require("os.orb")
 local img = love.graphics.newImage
 
 -- cargo types:

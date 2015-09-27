@@ -99,10 +99,8 @@ orb.fs = {
    copy_to_fs = function(f, fs_path, real_path, resources)
       local dir, base = orb.fs.dirname(fs_path)
       local path = resources .. real_path
-      local file = io.open(path, "r")
       dir = dir:gsub("^/", "")
-      f[dir][base] = file:read("*all")
-      file:close()
+      f[dir][base] = love.filesystem.read(path)
    end,
 
    load_bin = function(f)
