@@ -63,12 +63,21 @@ end
 
 local send_input = function(ship, input)
    if(input == "logout") then -- TODO: need to get the OS to send EOF/nil
-      ship.api.repl.read = nil
-      ship.api.repl.prompt = nil
-      ship.api.repl.print("Logged out.")
-      ship.comm_connected = false
-      local fs_env = table.remove(sessions, ship.target.name)
-      fs_env[1]["/home/guest"] = nil
+      if(ship.target and sessions[ship.target.name]) then
+         ship.api.repl.read = nil
+         ship.api.repl.prompt = nil
+         ship.api.repl.print("Logged out.")
+         ship.comm_connected = false
+         local fs_env = sessions[ship.target.name]
+         sessions[ship.target.name] = nil
+         for k,_ in pairs(fs_env[1]["/home/guest"]) do
+            fs_env[1]["/home/guest"][k]= nil
+         end
+      elseif(ship.target.name) then
+         ship.api.repl.print("| Not logged in to " .. ship.target.name)
+      else
+         ship.api.repl.print("| Not logged in.")
+      end
    elseif(not ship:in_range(ship.target)) then
       ship.api.repl.print("| Out of range.")
    else

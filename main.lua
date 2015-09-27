@@ -14,6 +14,8 @@ local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
 local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
 local ui = {
+   version = "alpha-3",
+
    quit = function(ui)
       save.save(ship, ui)
       love.event.quit()
@@ -69,7 +71,10 @@ love.load = function()
             "ship.src.fallback_config."
          local chunk = assert(loadstring("src.fallback_config"))
          setfenv(chunk, ship.api.repl.sandbox)
-         pcall(chunk)
+         local success, msg = pcall(chunk)
+         if(not success) then
+            s.repl.print(msg)
+         end
    end)
 end
 

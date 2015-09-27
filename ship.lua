@@ -291,7 +291,9 @@ ship.api = {
    },
 
    load = function(s, filename)
-      local chunk = assert(loadstring(s:find(filename)))
+      local content = assert(filename and s:find(filename),
+                             "File not found: " .. filename)
+      local chunk = assert(loadstring(content), "Failed to load " .. filename)
       setfenv(chunk, sandbox)
       chunk()
    end,
