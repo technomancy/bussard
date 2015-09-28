@@ -47,19 +47,20 @@ keymap.define({"repl", "flight"}, "home", ship.repl.move_beginning_of_line)
 keymap.define({"repl", "flight"}, "ctrl-e", ship.repl.move_end_of_line)
 keymap.define({"repl", "flight"}, "end", ship.repl.move_end_of_line)
 
-keymap.define({"repl", "flight"}, "left", ship.repl.backward_char)
 keymap.define({"repl", "flight"}, "ctrl-b", ship.repl.backward_char)
-keymap.define({"repl", "flight"}, "right", ship.repl.forward_char)
 keymap.define({"repl", "flight"}, "ctrl-f", ship.repl.forward_char)
 keymap.define({"repl", "flight"}, "alt-f", ship.repl.forward_word)
 keymap.define({"repl", "flight"}, "alt-b", ship.repl.backward_word)
 
-keymap.define({"repl", "flight"}, "up", ship.repl.history_prev)
 keymap.define({"repl", "flight"}, "ctrl-p", ship.repl.history_prev)
 keymap.define({"repl", "flight"}, "down", ship.repl.history_next)
 keymap.define({"repl", "flight"}, "ctrl-n", ship.repl.history_next)
 
 -- Not part of flight mode
+keymap.define("repl", "up", ship.repl.history_prev)
+keymap.define("repl", "right", ship.repl.forward_char)
+keymap.define("repl", "left", ship.repl.backward_char)
+
 keymap.define("repl", "pageup", ship.repl.scroll_up)
 keymap.define("repl", "pagedown", ship.repl.scroll_down)
 
