@@ -95,43 +95,11 @@ orb.fs = {
       group_dir[user] = user
    end,
 
-   -- This is for copying stuff from the host OS into the virtualized OS.
-   copy_to_fs = function(f, fs_path, real_path, resources)
-      local dir, base = orb.fs.dirname(fs_path)
-      local path = resources .. real_path
-      dir = dir:gsub("^/", "")
-      f[dir][base] = love.filesystem.read(path)
-   end,
-
    load_bin = function(f)
-      for real_path, fs_path in pairs({ls = "/bin/ls",
-                                       mkdir = "/bin/mkdir",
-                                       cat = "/bin/cat",
-                                       env = "/bin/env",
-                                       mv = "/bin/mv",
-                                       cp = "/bin/cp",
-                                       rm = "/bin/rm",
-                                       echo = "/bin/echo",
-                                       lua = "/bin/lua",
-                                       smash = "/bin/smash",
-                                       chmod = "/bin/chmod",
-                                       chgrp = "/bin/chgrp",
-                                       chown = "/bin/chown",
-                                       ps = "/bin/ps",
-                                       grep = "/bin/grep",
-                                       reload = "/bin/reload",
-                                       mkfifo = "/bin/mkfifo",
-                                       sudo = "/bin/sudo",
-                                       adduser = "/bin/adduser",
-                                       addgroup = "/bin/addgroup",
-                                       passwd = "/bin/passwd",
-
-                                       cargo = "/bin/cargo",
-                                       refuel = "/bin/refuel",
-                                       account = "/bin/account",
-                                       upgrade = "/bin/upgrade",
-      }) do
-         orb.fs.copy_to_fs(f, fs_path, real_path, orb.dir.."/resources/")
+      local files = love.filesystem.getDirectoryItems(orb.dir.."/resources/")
+      for _,path in ipairs(files) do
+         local real_path = orb.dir .. "/resources/" .. path
+         f.bin[path] = assert(love.filesystem.read(real_path))
       end
    end,
 
