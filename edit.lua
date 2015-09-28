@@ -1,11 +1,11 @@
 local lume = require("lume")
 
+-- buffer data
+local fs, path
 local lines = {""}
 local point, point_line = 0, 1
 local mark, mark_line = nil, nil
 local kill_ring = {}
-
-local kill_ring_max = 32
 
 -- how many lines do pageup/pagedown scroll?
 local scroll_size = 20
@@ -18,12 +18,14 @@ local ROW_HEIGHT
 local DISPLAY_ROWS
 -- enabled?
 local on = false
+-- size of the kill ring
+local kill_ring_max = 32
 -- width of an m
 local em
--- where did this text come from?
-local fs, path
 -- pattern for word breaks
 local word_break = "[%s%p]+"
+-- need to replace this when cycling yank
+local last_yank = nil
 
 local region = function()
    mark = math.min(string.len(lines[mark_line]), mark)
@@ -85,6 +87,13 @@ end
 local push = function(ring, text, max)
    table.insert(ring, text)
    if(#ring > max) then table.remove(ring, 1) end
+end
+
+local yank = function()
+   local text = kill_ring[#kill_ring]
+   last_yank = {point_line, point,
+                point_line + #text - 1, string.len(text[#text])}
+   insert(text)
 end
 
 return {
@@ -225,6 +234,16 @@ return {
       end
    end,
 
+   beginning_of_buffer = function()
+      point, point_line = 0, 1
+      mark, mark_line = nil, nil
+   end,
+
+   end_of_buffer = function()
+      point, point_line = #lines[#lines], #lines
+      mark, mark_line = nil, nil
+   end,
+
    newline = function()
       local remainder = lines[point_line]:sub(point + 1, -1)
       lines[point_line] = lines[point_line]:sub(0, point)
@@ -252,13 +271,13 @@ return {
       delete(start_line, start, finish_line, finish)
    end,
 
-   yank = function()
-      insert(kill_ring[#kill_ring])
-   end,
+   yank = yank,
 
    yank_pop = function()
-      insert(kill_ring[#kill_ring])
       table.insert(kill_ring, 1, table.remove(kill_ring))
+      local ly_line1, ly_point1, ly_line2, ly_point2 = unpack(last_yank)
+      delete(ly_line1, ly_point1, ly_line2, ly_point2)
+      yank()
    end,
 
    print_kill_ring = function()
@@ -266,6 +285,11 @@ return {
       for i,l in ipairs(kill_ring) do
          print(i, lume.serialize(l))
       end
+   end,
+
+   eval_buffer = function()
+      assert(fs and fs.load, "No loading context available.")
+      fs:load(path)
    end,
 
    -- internal functions

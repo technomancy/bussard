@@ -107,6 +107,8 @@ keymap.define("edit", "alt-f", ship.edit.forward_word)
 keymap.define("edit", "alt-b", ship.edit.backward_word)
 keymap.define("edit", "ctrl-p", ship.edit.prev_line)
 keymap.define("edit", "ctrl-n", ship.edit.next_line)
+keymap.define("edit", "alt-,", ship.edit.beginning_of_buffer)
+keymap.define("edit", "alt-.", ship.edit.end_of_buffer)
 
 keymap.define("edit", "ctrl- ", ship.edit.mark)
 keymap.define("edit", "ctrl-g", ship.edit.no_mark)
@@ -119,8 +121,6 @@ keymap.define("edit", "alt-y", ship.edit.yank_pop)
 keymap.define("edit", "ctrl-backspace", ship.edit.backward_kill_word)
 keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
 keymap.define("edit", "ctrl-r", ship.edit.revert)
-keymap.define("edit", "alt-,", ship.edit.beginning_of_buffer)
-keymap.define("edit", "alt-.", ship.edit.end_of_buffer)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
 
