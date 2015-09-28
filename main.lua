@@ -1,6 +1,6 @@
 local starfield = require "starfield"
 local body = require "body"
-local hud = require "hud"
+local hud = require "ship.hud"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local save = require "save"
@@ -54,7 +54,7 @@ end
 
 love.load = function()
    if arg[#arg] == "-debug" then require("mobdebug").start() end
-   local font = love.graphics.newFont("mensch.ttf", 14)
+   local font = love.graphics.newFont("assets/mensch.ttf", 14)
    love.graphics.setFont(font)
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)

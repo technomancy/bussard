@@ -50,21 +50,4 @@ return {
       cargo_bay = { stats = { cargo_capacity = 64 } },
       fuel_tank = { stats = { fuel_capacity = 128 } }
    },
-
-   buy = function(ship, name)
-      local target = ship.target
-      local price = target.upgrade_prices and target.upgrade_prices[name]
-      if(not price) then
-         return false, target.name .. " does not sell " .. name
-      elseif(ship.credits < price) then
-         return false, "Insufficient credits; need " .. price
-      elseif(utils.includes(ship.upgrade_names, name)) then
-         return false, "You already have this upgrade."
-      else
-         table.insert(ship.upgrade_names, name)
-         ship:recalculate()
-         ship.credits = ship.credits - price
-         return price
-      end
-   end,
 }

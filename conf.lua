@@ -2,7 +2,7 @@ love.conf = function(t)
    t.title = "Bussard"
    t.version = "0.9.1"
 
-   if(os.getenv("NO_FULLSCREEN")) then
+   if(os.getenv("USER") == "phil") then
       t.window.width = 1400
       t.window.height = 800
       -- for screenshots

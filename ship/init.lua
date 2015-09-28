@@ -1,17 +1,20 @@
 local utils = require("utils")
-local comm = require("comm")
-local help = require("help")
+local lume = require("lume")
+
+local default_config = love.filesystem.read("ship/default_config.lua")
+local fallback_config = love.filesystem.read("ship/fallback_config.lua")
+
+local comm = require("ship.comm")
+local help = require("ship.help")
+local repl = require("ship.repl")
+local upgrade = require("ship.upgrade")
+
+local keymap = require("keymap")
+local edit = require("edit")
+
+-- for shuffling systems upon entry
 local asteroid = require("asteroid")
 local body = require("body")
-
-local lume = require("lume")
-local keymap = require("keymap")
-local repl = require("srepl")
-local edit = require("edit")
-local upgrade = require("upgrade")
-
-local default_config = love.filesystem.read("default_config.lua")
-local fallback_config = love.filesystem.read("fallback_config.lua")
 
 local scale_min = 1
 
