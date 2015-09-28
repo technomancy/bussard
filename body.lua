@@ -81,7 +81,7 @@ return {
       -- calculations do not include this factor, but without it we cannot
       -- achieve orbit.
       local v = math.sqrt((g*star.mass)/b.r) / 10
-      local theta = math.random(math.pi * 2)
+      local theta = math.random() * math.pi * 2
 
       b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
       b.dx = math.sin(theta + math.pi / 2) * v
