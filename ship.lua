@@ -168,6 +168,10 @@ local ship = {
          ship.battery = ship.battery + (dt / math.log(dist*2)) * 30
       end
 
+      for _,f in pairs(ship.api.updaters or {}) do
+         f(ship.api, dt)
+      end
+
       if(ship.turning_left) then
          ship.heading = ship.heading + (dt * ship.turning_speed)
       elseif(ship.turning_right) then
