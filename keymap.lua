@@ -28,7 +28,7 @@ keymap = {
          end
       else
          -- lua regexes don't support |
-         local map, key = keycode:match("(ctrl\\-alt)-(.+)")
+         local map, key = keycode:match("(ctrl-alt)-(.+)")
          if not map then map, key = keycode:match("(ctrl)-(.+)") end
          if not map then map, key = keycode:match("(alt)-(.+)") end
          if map == "alt-ctrl" then map = "ctrl-alt" end

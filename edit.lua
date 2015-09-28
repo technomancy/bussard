@@ -6,6 +6,7 @@ local lines = {""}
 local point, point_line = 0, 1
 local mark, mark_line = nil, nil
 local kill_ring = {}
+local mark_ring = {}
 
 -- how many lines do pageup/pagedown scroll?
 local scroll_size = 20
@@ -18,14 +19,15 @@ local ROW_HEIGHT
 local DISPLAY_ROWS
 -- enabled?
 local on = false
--- size of the kill ring
-local kill_ring_max = 32
 -- width of an m
 local em
 -- pattern for word breaks
 local word_break = "[%s%p]+"
 -- need to replace this when cycling yank
 local last_yank = nil
+
+local kill_ring_max = 32
+local mark_ring_max = 32
 
 local region = function()
    mark = math.min(string.len(lines[mark_line]), mark)
@@ -91,9 +93,11 @@ end
 
 local yank = function()
    local text = kill_ring[#kill_ring]
-   last_yank = {point_line, point,
-                point_line + #text - 1, string.len(text[#text])}
-   insert(text)
+   if(text) then
+      last_yank = {point_line, point,
+                   point_line + #text - 1, string.len(text[#text])}
+      insert(text)
+   end
 end
 
 return {
@@ -253,7 +257,16 @@ return {
    end,
 
    mark = function()
+      push(mark_ring, {point, point_line}, mark_ring_max)
       mark, mark_line = point, point_line
+   end,
+
+   jump_to_mark = function()
+      point, point_line = mark or point, mark_line or point_line
+      if(#mark_ring > 0) then
+         table.insert(mark_ring, 1, table.remove(mark_ring))
+         mark, mark_line = unpack(mark_ring[1])
+      end
    end,
 
    no_mark = function()
