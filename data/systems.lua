@@ -10,14 +10,14 @@ local img = love.graphics.newImage
 
 return {
    -- Tana
-   ["Wolf 1453"] =
+   ["Tana"] =
       {civ="Tana", capitol = true,
        x = -5.8, y=-2.4,
        asteroids = 2,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=230000,
            image=img('assets/sun.png'),
-           name="Wolf 1453", star=true },
+           name="Tana", star=true },
           {r=39000, mass=700,
            image=img('assets/planet-3.png'),
            name="Tana Prime", os=orb,
@@ -95,9 +95,9 @@ return {
                    water = {stock=60, buy=20, sell=30},
                   }
           },
-          {name = "Portal: Wolf 1453",
+          {name = "Portal: Tana",
            image = img("assets/portal-1.png"),
-           r=26000, mass=75, portal="Wolf 1453", }
+           r=26000, mass=75, portal="Tana", }
       },
    },
    ["Luyten's Star"] = -- gateway to sol
@@ -117,9 +117,9 @@ return {
               water={stock=2, buy=45, sell=65},
            },
           },
-          {name = "Portal: Wolf 1453",
+          {name = "Portal: Tana",
            image = img("assets/portal-1.png"),
-           r=25000, mass=75, portal="Wolf 1453", },
+           r=25000, mass=75, portal="Tan", },
           {name = "Portal: Sol",
            image = img("assets/portal-2.png"),
            r=20000, mass=75, portal=nil, },
@@ -147,7 +147,7 @@ return {
               water={stock=2, buy=45, sell=65},
            },
           },
-          {name = "Portal: Wolf 1453",
+          {name = "Portal: Tana",
            image = img("assets/portal-1.png"),
            r=29000, mass=75, portal="Wolf 1453", }
        },
@@ -173,7 +173,7 @@ return {
 
 
    -- Bohk
-   ["L 354-89"] = {civ="Bohk", capitol = true,
+   ["Bohk"] = {civ="Bohk", capitol = true,
                    x=4.3, y=-0.6,
                    bodies = {},
    },
@@ -188,14 +188,14 @@ return {
 
 
    -- Wadee
-   ["Hip 103039"] = {civ="Wadee", capitol = true,
-                     x=3.9, y=2.3,
-                     bodies = {}, -- rather backwater
+   ["Wadee"] = {civ="Wadee", capitol = true,
+                x=3.9, y=2.3,
+                bodies = {}, -- rather backwater
    },
 
 
    -- Yueh
-   ["Delta Pavonis"] = {civ="Yueh", capitol = true,
+   ["Yueh"] = {civ="Yueh", capitol = true,
                         x=4.5, y=-2.6,
                         bodies = {}, -- bustling trade hub
    },
