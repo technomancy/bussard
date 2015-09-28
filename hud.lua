@@ -35,8 +35,16 @@ return {
       local scale_y = math.log(ship.api.scale) * h
       love.graphics.line(w - 5, scale_y, w, scale_y)
 
-      -- remaining fuel
       love.graphics.setLineWidth(1)
+
+      -- battery
+      love.graphics.setColor(20, 255, 20);
+      love.graphics.rectangle("fill", 5, 75,
+                              math.min(ship.battery, ship.battery_capacity), 10)
+      love.graphics.setColor(200, 255, 200);
+      love.graphics.rectangle("line", 5, 75, ship.battery_capacity, 10)
+
+      -- remaining fuel
       love.graphics.setColor(255, 20, 20);
       love.graphics.rectangle("fill", 5, 60,
                               math.min(ship.fuel, ship.fuel_capacity), 10)
@@ -44,8 +52,9 @@ return {
       love.graphics.rectangle("line", 5, 60, ship.fuel_capacity, 10)
 
       -- how much fuel will we use to stop?
-      local fuel_to_stop = speed * ship.engine_strength /
-         (ship.burn_rate * ship.mass)
+      local fuel_to_stop = speed * ship.engine_strength * ship.burn_rate /
+         -- no idea where this 20 factor comes from
+         (ship.mass * 20)
       love.graphics.setColor(150, 50, 50);
       love.graphics.rectangle("fill", 5, 60, fuel_to_stop, 5)
    end,

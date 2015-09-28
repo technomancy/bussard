@@ -24,12 +24,15 @@ return {
          end
       end,
       update = function(ship, dt)
-         for _,b in pairs(ship.bodies) do
-            local distance = utils.distance(ship.x - b.x, ship.y - b.y)
-            local power = ship.laser_power * 16
-            if(ship.laser and b.asteroid and laser_hits(ship, b, distance)) then
-               b.strength = b.strength - dt * power / math.sqrt(distance)
-               if(b.strength < 0) then b:split(ship) end
+         if(ship.laser and ship.battery > 0) then
+            ship.battery = ship.battery - dt * ship.laser_power * 0.1
+            for _,b in pairs(ship.bodies) do
+               local distance = utils.distance(ship.x - b.x, ship.y - b.y)
+               local power = ship.laser_power * 16
+               if(b.asteroid and laser_hits(ship, b, distance)) then
+                  b.strength = b.strength - dt * power / math.sqrt(distance)
+                  if(b.strength < 0) then b:split(ship) end
+               end
             end
          end
       end,

@@ -3,7 +3,7 @@ local body = require "body"
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading",
-   "fuel", "credits", "system_name",
+   "battery", "fuel", "credits", "system_name",
    "upgrade_names", "cargo", "target_number",
 }
 

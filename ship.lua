@@ -20,7 +20,7 @@ local sensor_whitelist = {
 }
 
 local status_whitelist = {
-   "fuel", "fuel_capacity", "mass", "in_range",
+   "fuel", "fuel_capacity", "battery", "battery_capacity", "mass", "in_range",
    "engine_on", "turning_right", "turning_left", "credits", "upgrade_names",
    "cargo", "cargo_capacity",
    "engine_strength", "turning_speed",
@@ -33,10 +33,11 @@ local base_stats = {
    fuel_capacity = 128,
    scoop_range = 0,
    comm_range = 2048,
-   recharge_rate = 1,
-   burn_rate = 12,
+   recharge_rate = 1.4,
+   burn_rate = 8,
    engine_strength = 1024,
    turning_speed = 4,
+   battery_capacity = 128,
 }
 
 local sandbox = {
@@ -60,6 +61,7 @@ local sandbox = {
    man = help.man,
    keymap = keymap,
    default_config = default_config,
+   utils = {distance = utils.distance},
 }
 
 local sandbox_dofile = function(ship, filename)
@@ -83,6 +85,8 @@ local ship = {
    target_number = 0,
    target = nil,
    mass = 128,
+   battery = 128,
+   upgrades = {},
 
    -- keep around
    fuel = 128,
@@ -90,18 +94,7 @@ local ship = {
    time_offset = 4383504000, -- roughly 139 years ahead
    system_name = "L 668-21",
    cargo = {["food"] = 2},
-   upgrade_names = {},
-
-   -- upgrades can change these
-   upgrades = {},
-   cargo_capacity = 64,
-   fuel_capacity = 128,
-   scoop_range = 512,
-   comm_range = 2048,
-   recharge_rate = 1,
-   burn_rate = 12,
-   engine_strength = 1024,
-   turning_speed = 4,
+   upgrade_names = {"laser"},
 
    configure = function(ship, systems, ui)
       repl.initialize()
@@ -168,6 +161,11 @@ local ship = {
          ship.fuel = ship.fuel - (ship.burn_rate * dt * ship.api.throttle)
       elseif(ship.fuel < ship.fuel_capacity) then
          ship.fuel = ship.fuel + (ship.recharge_rate * dt)
+      end
+
+      if(ship.battery < ship.battery_capacity) then
+         local dist = utils.distance(ship.x, ship.y)
+         ship.battery = ship.battery + (dt / math.log(dist*2)) * 30
       end
 
       if(ship.turning_left) then

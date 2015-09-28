@@ -125,6 +125,8 @@ return {
          ship.api.repl.read = lume.fn(send_input, ship)
          ship.api.repl.prompt = "$ "
          ship.comm_connected = true
+         -- free recharge upon connect
+         ship.battery = ship.battery_capacity
 
          return "Login succeeded."
       else
