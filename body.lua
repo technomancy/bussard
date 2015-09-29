@@ -31,6 +31,8 @@ local max_accel = 100
 
 return {
    draw = function(body, x, y)
+      body.image = body.image or love.graphics.newImage("assets/" ..
+                                                           body.image_name .. ".png")
       local scale = body.scale or 1
       local bx = body.x - body.image:getWidth() * scale / 2
       local by = body.y - body.image:getHeight() * scale / 2
