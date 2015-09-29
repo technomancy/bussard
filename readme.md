@@ -86,7 +86,9 @@ Code copyright © 2015 Phil Hagelberg and contributors
 
 Distributed under the GNU General Public License version 3; see file COPYING.
 
-[Planet graphics](http://opengameart.org/content/planets-and-stars-set-high-res) © Rawdanitsu, CC0 licensed.
+[Some planet graphics](http://opengameart.org/content/planets-and-stars-set-high-res) © Rawdanitsu, CC0 licensed.
+
+[Solar system graphics](http://www.solarsystemscope.com/nexus/resources/planet_images/) © Inove, CC-BY licensed.
 
 Station graphics by [MillionthVector](http://millionthvector.blogspot.de/p/free-sprites_12.html), CC-BY licensed.
 
