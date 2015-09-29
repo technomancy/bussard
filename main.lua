@@ -58,6 +58,7 @@ love.load = function()
    love.graphics.setFont(font)
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
+   if arg[#arg] == "-abort" then save.abort(ship) end
    save.load_into(ship)
 
    ship.api.repl.last_result =
