@@ -200,7 +200,7 @@ local ship = {
    end,
 
    in_range = function(ship, b, range)
-      return utils.distance(ship.x - b.x, ship.y - b.y) <
+      return b and utils.distance(ship.x - b.x, ship.y - b.y) <
          (range or ship.comm_range)
    end,
 
