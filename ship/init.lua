@@ -142,9 +142,6 @@ local ship = {
 
    update = function(ship, dt)
       ship.api.dt = dt
-      -- calculate movement
-      ship.x = ship.x + (ship.dx * dt * 100)
-      ship.y = ship.y + (ship.dy * dt * 100)
 
       -- activate controls
       if(keymap.current_mode == "flight") then

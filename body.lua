@@ -55,6 +55,8 @@ return {
    gravitate = gravitate,
 
    gravitate_all = function(bodies, ship, dt)
+      ship.x = ship.x + (ship.dx * dt * 100)
+      ship.y = ship.y + (ship.dy * dt * 100)
       for _, b in ipairs(bodies) do
          b.x = b.x + (b.dx * dt * 100)
          b.y = b.y + (b.dy * dt * 100)

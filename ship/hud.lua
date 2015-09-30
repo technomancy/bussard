@@ -75,8 +75,6 @@ return {
       for _=0, steps do
          last_x, last_y = sim_ship.x, sim_ship.y
          body.gravitate_all(sim_bodies, sim_ship, step_size)
-         sim_ship.x = sim_ship.x + (sim_ship.dx * step_size * 100)
-         sim_ship.y = sim_ship.y + (sim_ship.dy * step_size * 100)
          love.graphics.line(last_x - ship.x, last_y - ship.y, sim_ship.x - ship.x, sim_ship.y - ship.y)
       end
    end,
