@@ -59,7 +59,7 @@ return {
       love.graphics.rectangle("fill", 5, 60, fuel_to_stop, 5)
    end,
 
-   trajectory = function(ship, bodies, steps, step_size, color)
+   trajectory = function(ship, bodies, steps, step_size, color1, color2)
       local last_x, last_y
       local sim_ship = {x = ship.x, y = ship.y, dx = ship.dx, dy = ship.dy, mass = ship.mass}
       local sim_bodies = {}
@@ -71,8 +71,11 @@ return {
       end
 
       love.graphics.setLineWidth(5)
-      love.graphics.setColor(color)
-      for _=0, steps do
+      for i=0, steps do
+         if i % 10 == 0 then
+            love.graphics.setColor(color1)
+            color1, color2 = color2, color1
+         end
          last_x, last_y = sim_ship.x, sim_ship.y
          body.gravitate_all(sim_bodies, sim_ship, step_size)
          love.graphics.line(last_x - ship.x, last_y - ship.y, sim_ship.x - ship.x, sim_ship.y - ship.y)
