@@ -61,11 +61,11 @@ return {
 
    trajectory = function(ship, bodies, steps, step_size, color)
       local last_x, last_y
-      local x, y, dx, dy = ship.x, ship.y, ship.dx, ship.dy
-      local body_points = {}
+      local sim_ship = {x = ship.x, y = ship.y, dx = ship.dx, dy = ship.dy, mass = ship.mass}
+      local sim_bodies = {}
       for _, b in pairs(bodies) do
          if(b ~= ship) then
-            body_points[b.name] = {x = b.x, y = b.y, dx = b.dx, dy = b.dy,
+            sim_bodies[#sim_bodies+1] = {x = b.x, y = b.y, dx = b.dx, dy = b.dy,
                                    mass = b.mass}
          end
       end
@@ -73,26 +73,11 @@ return {
       love.graphics.setLineWidth(5)
       love.graphics.setColor(color)
       for _=0, steps do
-         for _, b in pairs(body_points) do
-            local ddx, ddy = body.gravitate(b, x, y)
-            dx = dx + ddx * step_size
-            dy = dy + ddy * step_size
-            b.x = b.x + (b.dx * step_size * 100)
-            b.y = b.y + (b.dy * step_size * 100)
-         end
-
-         for _, b2 in ipairs(body_points) do
-            if(b ~= b2 and (not b2.star)) then
-               local ddx2, ddy2 = body.gravitate(b, b2.x, b2.y)
-               b2.dx = b2.dx + (dt * ddx2)
-               b2.dy = b2.dy + (dt * ddy2)
-            end
-         end
-         last_x, last_y = x, y
-         x = x + (dx * step_size * 100)
-         y = y + (dy * step_size * 100)
-
-         love.graphics.line(last_x - ship.x, last_y - ship.y, x - ship.x, y - ship.y)
+         last_x, last_y = sim_ship.x, sim_ship.y
+         body.gravitate_all(sim_bodies, sim_ship, step_size)
+         sim_ship.x = sim_ship.x + (sim_ship.dx * step_size * 100)
+         sim_ship.y = sim_ship.y + (sim_ship.dy * step_size * 100)
+         love.graphics.line(last_x - ship.x, last_y - ship.y, sim_ship.x - ship.x, sim_ship.y - ship.y)
       end
    end,
 

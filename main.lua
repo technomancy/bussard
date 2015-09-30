@@ -32,26 +32,6 @@ local ui = {
 
 local time_factor = 1
 
-local gravitate = function(bodies, s, dt)
-   for _, b in ipairs(bodies) do
-      b.x = b.x + (b.dx * dt * 100)
-      b.y = b.y + (b.dy * dt * 100)
-
-      local ddx, ddy = body.gravitate(b, s.x, s.y)
-      s.dx = s.dx + dt * ddx
-      s.dy = s.dy + dt * ddy
-
-      -- body-to-body
-      for _, b2 in ipairs(bodies) do
-         if(b ~= b2 and (not b2.star)) then
-            local ddx2, ddy2 = body.gravitate(b, b2.x, b2.y)
-            b2.dx = b2.dx + (dt * ddx2)
-            b2.dy = b2.dy + (dt * ddy2)
-         end
-      end
-   end
-end
-
 love.load = function()
    if arg[#arg] == "-debug" then require("mobdebug").start() end
    local font = love.graphics.newFont("assets/mensch.ttf", 14)
@@ -84,7 +64,7 @@ love.update = function(dt)
    ship:update(dt * time_factor)
    body.schedule(ship.bodies)
    asteroid.recycle(ship)
-   gravitate(ship.bodies, ship, dt * time_factor)
+   body.gravitate_all(ship.bodies, ship, dt * time_factor)
 end
 
 -- for commands that don't need repeat

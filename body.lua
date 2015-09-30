@@ -29,6 +29,17 @@ local g = 1000
 
 local max_accel = 100
 
+local gravitate = function(body, x, y)
+   local dx = (x - body.x)
+   local dy = (y - body.y)
+
+   local distance = utils.distance(dx, dy)
+   local theta = math.atan2(dx, dy) + math.pi
+
+   local accel = math.min((body.mass * g) / (distance * distance), max_accel)
+   return (accel * math.sin(theta)), (accel * math.cos(theta))
+end
+
 return {
    draw = function(body, x, y)
       body.image = body.image or love.graphics.newImage("assets/" ..
@@ -41,15 +52,26 @@ return {
                          body.rotation, scale, scale)
    end,
 
-   gravitate = function(body, x, y)
-      local dx = (x - body.x)
-      local dy = (y - body.y)
+   gravitate = gravitate,
 
-      local distance = utils.distance(dx, dy)
-      local theta = math.atan2(dx, dy) + math.pi
+   gravitate_all = function(bodies, ship, dt)
+      for _, b in ipairs(bodies) do
+         b.x = b.x + (b.dx * dt * 100)
+         b.y = b.y + (b.dy * dt * 100)
 
-      local accel = math.min((body.mass * g) / (distance * distance), max_accel)
-      return (accel * math.sin(theta)), (accel * math.cos(theta))
+         local ddx, ddy = gravitate(b, ship.x, ship.y)
+         ship.dx = ship.dx + dt * ddx
+         ship.dy = ship.dy + dt * ddy
+
+         -- body-to-body
+         for _, b2 in ipairs(bodies) do
+            if(b ~= b2 and (not b2.star)) then
+               local ddx2, ddy2 = gravitate(b, b2.x, b2.y)
+               b2.dx = b2.dx + (dt * ddx2)
+               b2.dy = b2.dy + (dt * ddy2)
+            end
+         end
+      end
    end,
 
    -- currently you can log into any body that's not a star
