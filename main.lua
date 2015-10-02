@@ -110,8 +110,9 @@ love.draw = function(dt)
    if(ship.target) then
       love.graphics.push()
       love.graphics.translate(ship.target.x - ship.x, ship.target.y - ship.y)
-      hud.trajectory(ship.target, ship.bodies, ship.api.trajectory,
-                     ship.api.trajectory_step_size, {90, 90, 155}, {60, 60, 102})
+      hud.trajectory(ship.target, ship.bodies, ship.api.trajectory / 4,
+                     ship.api.trajectory_step_size * 4,
+                     {90, 90, 155}, {60, 60, 102})
       love.graphics.pop()
    end
 
