@@ -97,7 +97,7 @@ local ship = {
    time_offset = 4383504000, -- roughly 139 years ahead
    system_name = "L 668-21",
    cargo = {["food"] = 2},
-   upgrade_names = {"laser"},
+   upgrade_names = {},
 
    configure = function(ship, systems, ui)
       repl.initialize()
@@ -105,7 +105,6 @@ local ship = {
 
       ship.api.ui = ui
       ship.systems = systems
-      ship:enter(ship.system_name, true)
 
       ship.api.repl.sandbox = sandbox
       sandbox.ship = ship.api
@@ -117,6 +116,7 @@ local ship = {
    end,
 
    enter = function(ship, system_name, reseed)
+      assert(ship.systems[system_name], system_name .. " not found.")
       ship.api.repl.last_result = "Entering the " .. system_name .. " system."
 
       -- stuff these things in there to expose to in-ship APIs
@@ -229,14 +229,14 @@ local ship = {
       end
 
       for _,u in ipairs(ship.upgrade_names) do
-         ship.upgrades[u] = upgrade[u]
+         ship.upgrades[u] = assert(upgrade[u], u .. " not found.")
       end
 
       for name,u in pairs(ship.upgrades) do
          for k,v in pairs(u.stats) do
             ship[k] = (ship[k] or 0) + v
          end
-         ship.api.actions[name] = lume.fn(u.action, ship)
+         ship.api.actions[name] = u.action and lume.fn(u.action, ship)
       end
 
       ship.mass = ship.mass + ship:cargo_mass()

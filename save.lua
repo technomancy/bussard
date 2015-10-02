@@ -73,6 +73,7 @@ return {
             end
          end
       end
+      ship:enter(ship.system_name, true)
    end,
 
    abort = function(ship)

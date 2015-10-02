@@ -5,7 +5,15 @@ local orb = require("os.orb")
 -- food
 -- medicine
 -- equipment
--- water
+
+---- inputs: (1 to 10 scale)
+-- industry
+-- remote
+-- agri
+-- mineral
+-- tech
+-- pop
+-- upgrades
 
 return {
    -- Tana
@@ -20,39 +28,29 @@ return {
           {r=39000, mass=700,
            image_name = "planet-3",
            name="Tana Prime", os=orb,
-           upgrade_prices = { engine = 512, cargo_bay = 1024, },
-           fuel_price = 1,
-           account_price = 128,
-           prices={food = {stock=90, buy=100, sell=120},
-                   ore = {stock=65, buy=150, sell=130},
-                   medicine = {stock=40, buy=220, sell=200},
-                   equipment = {stock=20, buy=200, sell=180},
-                  },
+
+           industry=8,tech=6,
+           remote=2, pop=8,
+           agri=4, mineral=2,
+           upgrades={"engine", "cargo_bay"},
           },
           {r=21000, mass=500,
            image_name = "planet-1",
            name="Lioboro", os=orb,
-           fuel_price = 1,
-           upgrade_prices = { engine = 500, },
-           account_price = 128,
-           prices={food = {stock=120, buy=90, sell=110},
-                   ore = {stock=65, buy=150, sell=130},
-                   medicine = {stock=30, buy=230, sell=210},
-                   equipment = {stock=10, buy=210, sell=190},
-                   water = {stock=50, buy=30, sell=45},
-                  }
+
+           industry=7,tech=5,
+           remote=2, pop=5,
+           agri=5, mineral=2,
+           upgrades={"cargo_bay"},
           },
           {r=35000, mass=700,
            image_name="station-pointed",
            name="Kenapa Station", os=orb,
-           fuel_price = 1,
-           upgrade_prices = { engine = 512, },
-           account_price = 172,
-           prices={food = {stock=20, buy=100, sell=120},
-                   ore = {stock=40, buy=150, sell=130},
-                   medicine = {stock=5, buy=230, sell=200},
-                   equipment = {stock=10, buy=210, sell=180},
-                  },
+
+           industry=8,tech=6,
+           remote=2, pop=3,
+           agri=0, mineral=3,
+           upgrades={"cargo_bay"},
           },
           {name = "Portal: L 668-21",
            image_name="portal-1",
@@ -72,27 +70,22 @@ return {
            image_name="sun",
            name="Wolf 294", star=true},
           {r=37000, mass=350,
-           image_name="planet-9",
+           image_name="planet-9", -- green
            name="Belanda", os=orb,
-           fuel_price = 1,
-           upgrade_prices = { laser = 312, engine = 640 },
-           account_price = 148,
-           prices={food = {stock=60, buy=90, sell=110},
-                   ore = {stock=40, buy=160, sell=140},
-                   medicine = {stock=20, buy=240, sell=200},
-                  }
+
+           industry=5,tech=4,
+           remote=4, pop=1,
+           agri=0, mineral=6,
+           upgrades={},
           },
           {r=31000, mass=500,
-           image_name="planet-14",
+           image_name="planet-14", -- ice
            name="Solotogo", os=orb,
-           fuel_price = 1,
-           account_price = 148,
-           upgrade_prices = { laser = 312, engine = 640 },
-           prices={food = {stock=120, buy=90, sell=110},
-                   medicine = {stock=30, buy=240, sell=210},
-                   equipment = {stock=10, buy=210, sell=190},
-                   water = {stock=60, buy=20, sell=30},
-                  }
+
+           industry=5,tech=4,
+           remote=4, pop=2,
+           agri=0, mineral=4,
+           upgrades={"laser"},
           },
           {name = "Portal: Tana",
            image_name="portal-1",
@@ -107,20 +100,17 @@ return {
           {r=32000, mass=120,
            image_name="station-pointed",
            name="Apkabar station", os=orb,
-           fuel_price = 1,
-           upgrade_prices = { engine = 600, fuel_tank = 768, },
-           account_price = 148,
-           prices={
-              food={stock=10, buy=90, sell=110,},
-              ore={stock=8, buy=120, sell=100},
-              water={stock=2, buy=45, sell=65},
-           },
+
+           industry=6,tech=6,
+           remote=6, pop=3,
+           agri=0, mineral=2,
+           upgrades={"fuel_tank"},
           },
           {name = "Portal: Tana",
            image_name="portal-1",
-           r=25000, mass=75, portal="Tan", },
+           r=25000, mass=75, portal="Tana", },
           {name = "Portal: Sol",
-           image_name="portal-2",
+           image_name="portal-2", interportal=true,
            r=20000, mass=75, portal="Sol", },
       },
    },
@@ -135,16 +125,11 @@ return {
           {r=23000, mass=100,
            image_name="station-pointed",
            name="Mirduka station", os=orb,
-           fuel_price = 1,
-           account_price = 128,
-           upgrade_prices = {
-              laser = 256,
-           },
-           prices={
-              food={stock=10, buy=100, sell=110,},
-              ore={stock=8, buy=90, sell=50},
-              water={stock=2, buy=45, sell=65},
-           },
+
+           industry=4,tech=3,
+           remote=9, pop=3,
+           agri=0, mineral=6,
+           upgrades={"laser"},
           },
           {name = "Portal: Tana",
            image_name="portal-1",
@@ -157,7 +142,6 @@ return {
    ["Sol"] = {civ="Sol", capitol = true,
               x=0, y=0,
               bodies = {
-                 -- TODO: sizes of the images here are way off
                  {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
                   image_name="sol",
                   name="Sol", star=true},
@@ -169,33 +153,31 @@ return {
                   name="Venus"},
                  {r=25000, mass=500,
                   image_name="earth",
-                  name="Earth",
-                  os=orb,
-                  upgrade_prices = { engine = 765, cargo_bay = 1224, },
-                  fuel_price = 1.5,
-                  account_price = 512,
-                  prices={food = {stock=110, buy=90, sell=105},
-                          ore = {stock=45, buy=190, sell=170},
-                          medicine = {stock=40, buy=250, sell=220},
-                          equipment = {stock=20, buy=230, sell=200},
-                         },
+                  name="Earth", os=orb,
+
+                  industry=9,tech=7,
+                  remote=1, pop=9,
+                  agri=6, mineral=2,
+                  upgrades={},
                  },
                  {r=28000, mass=120,
-                  image_name="traxus",
-                  name="Traxus Station",
-                  os=orb,
-                  upgrade_prices = { engine = 765, cargo_bay = 1224, },
-                  fuel_price = 1.3,
-                  account_price = 356,
-                  prices={food = {stock=110, buy=95, sell=110},
-                          ore = {stock=45, buy=195, sell=180},
-                          medicine = {stock=40, buy=270, sell=230},
-                          equipment = {stock=20, buy=230, sell=200},
-                         },
-},
+                  image_name="newton",
+                  name="Newton Station", os=orb,
+
+                  industry=7,tech=9,
+                  remote=1, pop=4,
+                  agri=0, mineral=4,
+                  upgrades={},
+                 },
                  {r=31000, mass=310,
                   image_name="mars",
-                  name="Mars"},
+                  name="Mars", os=orb,
+
+                  industry=8,tech=6,
+                  remote=1, pop=6,
+                  agri=0, mineral=5,
+                  upgrades={},
+                 },
                  {r=39000, mass=1000,
                   image_name="jupiter",
                   name="Jupiter"},
@@ -203,8 +185,14 @@ return {
                   image_name="saturn",
                   name="Saturn"},
                  {r=49000, mass=100,
-                  image_name="strauss",
-                  name="Strauss Station"},
+                  image_name="nee-soon",
+                  name="Nee Soon Station", os=orb,
+
+                  industry=5,tech=4,
+                  remote=2, pop=2,
+                  agri=0, mineral=6,
+                  upgrades={"laser"},
+                 },
                  {r=55000, mass=700,
                   image_name="uranus",
                   name="Uranus"},
@@ -213,7 +201,8 @@ return {
                   name="Neptune"},
                  {name = "Portal: Luyten's Star",
                   image_name="portal-2",
-                  r=20000, mass=75, portal="Luyten's Star"}
+                  r=20000, mass=75, portal="Luyten's Star",
+                  interportal=true,}
               }, -- it's Sol.
    },
 

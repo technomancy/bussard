@@ -2,6 +2,11 @@
 
 local f, env, args = ...
 
+if(not station.prices) then
+   print("This station does not sell cargo.")
+   return
+end
+
 if(args[1] == "list") then
    print("Prices: (buy/sell)")
    for good, prices in pairs(station.prices) do

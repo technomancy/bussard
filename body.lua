@@ -17,6 +17,21 @@ end
 
 local filesystems = {}
 
+local base_prices = {
+   fuel = 1,
+   ore = 8,
+   food = 5,
+   equipment = 10,
+   medicine = 20,
+   account = 512,
+   upgrades = {
+      laser = 512,
+      engine = 1024,
+      cargo_bay = 768,
+      fuel_tank = 1024,
+   },
+}
+
 local g = 1000
 
 -- Without capping gravity accel, you run into a weird bug caused by
@@ -92,11 +107,42 @@ return {
    end,
 
    seed_cargo = function(b)
-      if(not b.prices) then return end
-      b.cargo = {}
-      for name,info in pairs(b.prices) do
-         b.cargo[name] = math.random(info.stock)
+      if(not b.os) then return end
+      local equipment_factor = (math.log(b.remote / 2) + 4) *
+         (3 / (b.industry + b.tech)) + 0.5
+
+      b.fuel_price = math.ceil(base_prices.fuel *
+                                  (math.log(b.remote / 2) + 1) * (5 / b.industry))
+      b.account_price = math.floor(base_prices.account *
+                                      (math.log(b.remote / 2 + b.pop) + 1))
+
+      b.upgrade_prices = {}
+      for _,u in ipairs(b.upgrades) do
+         b.upgrade_prices[u] = math.floor(base_prices.upgrades[u] *
+                                             equipment_factor)
       end
+
+      b.prices = {}
+      local price_difference = 1.2 -- should be dynamic?
+      local price = function(good, base)
+         b.prices[good] = { buy = base, sell = math.ceil(base * price_difference) }
+      end
+      price("ore", math.floor(base_prices.ore * (math.log(10 - b.mineral) +1)))
+      price("food", math.floor(base_prices.food * (math.log(10 - b.agri) +1)))
+      price("medicine", math.floor(base_prices.medicine *
+                                      (math.log(b.pop / 4 + b.remote + 2) + 1)))
+      price("equipment", math.floor(base_prices.equipment * equipment_factor))
+
+      b.cargo = {}
+      for _,name in ipairs({"ore", "food", "equipment", "medicine"}) do
+         b.cargo[name] = math.random(20)
+      end
+
+      -- print("\n" .. b.name, equipment_factor)
+      -- for k,v in pairs(b.prices) do print(k,v) end
+      -- print("fuel", b.fuel_price)
+      -- print("account", b.account_price)
+      -- for k,v in pairs(b.upgrade_prices) do print(k,v) end
    end,
 
    seed_pos = function(b, star)

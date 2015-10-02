@@ -45,9 +45,10 @@ return {
             love.graphics.pop()
          end
       end,
-      -- purely stat upgrades
-      engine = { stats = { engine_power = 512 } },
-      cargo_bay = { stats = { cargo_capacity = 64 } },
-      fuel_tank = { stats = { fuel_capacity = 128 } }
    },
+   -- purely stat upgrades
+   engine = { stats = { engine_power = 512, burn_rate = 3 } },
+   cargo_bay = { stats = { cargo_capacity = 64 } },
+   fuel_tank = { stats = { fuel_capacity = 128 } }
+
 }
