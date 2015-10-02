@@ -81,12 +81,12 @@ love.draw = function(dt)
    love.graphics.translate(w / 2, h / 2)
    love.graphics.push()
 
+   local scale = math.pow(1/ship.api.scale, 8)
+   love.graphics.scale(scale)
+
    for _,u in pairs(ship.upgrades) do
       if(u.draw) then u.draw(ship, dt) end
    end
-
-   local scale = math.pow(1/ship.api.scale, 8)
-   love.graphics.scale(scale)
 
    if(ship.target) then -- directional target indicator
       if(ship:in_range(ship.target) and ship.target.os) then

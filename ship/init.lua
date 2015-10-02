@@ -41,6 +41,10 @@ local base_stats = {
    engine_strength = 1024,
    turning_speed = 4,
    battery_capacity = 128,
+
+   passponder_range = 0,
+   passponder_time = 0,
+   passponder_power = 0,
 }
 
 local sandbox = {
@@ -178,22 +182,12 @@ local ship = {
          ship.heading = ship.heading - (dt * ship.turning_speed)
       end
 
-      for _,b in pairs(ship.bodies) do
-         if(b.portal and ship:cleared_for(b) and ship:in_range(b, 75)) then
-            ship:enter(b.portal, true)
-         end
-      end
-
       ship:enforce_limits()
       for _,u in pairs(ship.upgrades) do
          if(u.update) then u.update(ship, dt) end
       end
 
       comm.flush()
-   end,
-
-   cleared_for = function(_, b)
-      return not b.requires_clearance
    end,
 
    in_range = function(ship, b, range)
@@ -331,8 +325,8 @@ ship.api = {
    helm = love.keyboard,
 
    -- you can adjust these to improve performance
-   trajectory = 128,
-   trajectory_step_size = 0.1,
+   trajectory = 64,
+   trajectory_step_size = 0.2,
 
    throttle = 1,
    scale = 1.9,

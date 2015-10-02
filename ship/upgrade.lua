@@ -9,6 +9,13 @@ local laser_hits = function(ship, b, distance)
    return divergence < diameter
 end
 
+local portal_offsets = {
+   [0] = {0, -200},
+   [0.25] = {-200, 0},
+   [0.50] = {0, 200},
+   [0.75] = {200, 0},
+}
+
 return {
    laser = {
       stats = {
@@ -43,6 +50,55 @@ return {
             love.graphics.setLineWidth(3)
             love.graphics.line(0, 0, 0, -1000)
             love.graphics.pop()
+         end
+      end,
+   },
+   passponder = {
+      stats = {
+         passponder_range = 1024,
+         passponder_time = 4,
+         passponder_power = 64,
+      },
+      action = function(ship, down)
+         if(not ship.target or not ship.target.portal) then return end
+         if(utils.distance(ship, ship.target) <= ship.passponder_range) then
+            if(ship.battery >= ship.passponder_power) then
+               ship.passponder_countdown = ship.passponder_time
+               ship.passponder_target = ship.target
+            else
+               ship.api.repl.print("Insufficient power for jump; need " ..
+                                      ship.passponder_power)
+            end
+         end
+      end,
+      update = function(ship, dt)
+         if(not ship.passponder_countdown) then return end
+         if(ship.battery <= 0 or
+            utils.distance(ship, ship.target) > ship.passponder_range) then
+            ship.passponder_countdown = nil return end
+
+         ship.battery = ship.battery - ship.passponder_power *
+            (dt / ship.passponder_time)
+         ship.passponder_countdown = ship.passponder_countdown - dt
+
+         if(ship.passponder_countdown <= 0) then
+            ship:enter(ship.passponder_target.portal, true)
+            ship.passponder_target = nil
+            ship.passponder_countdown = nil
+         end
+      end,
+      draw = function(ship)
+         -- TODO: change targeting color when in range
+         if(not ship.passponder_countdown) then return end
+         local progress = 1 - (ship.passponder_countdown / ship.passponder_time)
+         for i = 0,1,0.25 do
+            if(progress > i) then
+               love.graphics.line(0,0,
+                                  ship.passponder_target.x - ship.x +
+                                     portal_offsets[i][1],
+                                  ship.passponder_target.y - ship.y +
+                                     portal_offsets[i][2])
+            end
          end
       end,
    },

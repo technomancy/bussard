@@ -73,7 +73,8 @@ return {
             end
          end
       end
-      ship:enter(ship.system_name, true)
+      -- TODO: needs a true 2nd arg if not actually restoring
+      ship:enter(ship.system_name)
    end,
 
    abort = function(ship)
