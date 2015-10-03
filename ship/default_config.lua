@@ -124,6 +124,44 @@ keymap.define("edit", "ctrl-r", ship.edit.revert)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
 
+-- HUD
+ship.hud = {
+   ["60:5"] = {
+      type="text", format="x: %5.2f y: %5.2f", values={"sensors.x", "sensors.y"}
+   },
+   ["60:20"] = {
+      type="text", format="epoch: %s  credits: %s",
+      values={function(ship)
+            return utils.format_seconds(os.time() + ship.status.time_offset) end,
+         "status.credits"}
+   },
+   ["5:5"] = {
+      type="vector", values={"sensors.dx", "sensors.dy"},
+      width=3, color={50, 255, 50}
+   },
+   ["-5:5"] = {
+      type="vector", values={"sensors.target.dx", "sensors.target.dy"},
+      width=3, color={50, 255, 150}
+   },
+
+   ["-180:5"] = {
+      type="text", format="target: %s\ndistance: %0.2f",
+      values={"sensors.target.name", function(s)
+                 return s.sensors.target and utils.distance(s.sensors,
+                                                            s.sensors.target)
+      end}
+   },
+   ["5:60"] = {
+      type="bar", values={"status.fuel", "status.fuel_capacity", ship.fuel_to_stop},
+      color={255, 20, 20}
+   },
+   ["5:75"] = {
+      type="bar", values={"status.battery", "status.battery_capacity"},
+      color={20, 255, 20}
+   },
+   -- TODO: cargo
+}
+
 -- convenience functions
 login = ship.actions.login
 

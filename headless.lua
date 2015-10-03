@@ -10,9 +10,9 @@ love = love or { graphics = { newImage = f, getWidth = o, getHeight = o,
                  filesystem = { save = f, newFile = f, write = f,
                                 isFile = f,
                                 read = function(filename)
-                                   local f = io.open(filename, "r")
-                                   local content = f:read("*all")
-                                   f:close()
+                                   local file = io.open(filename, "r")
+                                   local content = file:read("*all")
+                                   file:close()
                                    return content
                                 end,
                  }

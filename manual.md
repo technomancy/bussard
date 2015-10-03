@@ -184,6 +184,14 @@ A numeric indicator of how far out the display should be zoomed. Zoom
 scales out exponentially with this number, so it should usually be
 between 1 and 2.
 
+#### updaters
+
+TODO: document
+
+#### hud
+
+TODO: document
+
 ### Upgrades
 
 Certain stations will sell you upgrades to your ship. These can either

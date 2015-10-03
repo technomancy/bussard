@@ -104,10 +104,11 @@ love.draw = function(dt)
       love.graphics.setLineWidth(1)
    end
 
+   -- TODO: how can we move this to hud?
    hud.trajectory(ship, ship.bodies, ship.api.trajectory,
                   ship.api.trajectory_step_size, {150, 150, 255}, {99, 99, 168})
 
-   if(ship.target) then
+   if(ship.target and not ship.target.star) then
       love.graphics.push()
       love.graphics.translate(ship.target.x - ship.x, ship.target.y - ship.y)
       hud.trajectory(ship.target, ship.bodies, ship.api.trajectory / 4,
@@ -135,16 +136,7 @@ love.draw = function(dt)
 
    love.graphics.pop()
 
-   hud.render(ship, ship.target)
-   hud.vector(ship.dx, ship.dy, w - 10 - hud.vector_size, 10)
-   if(ship.target) then
-      -- target velocity
-      hud.vector(ship.target.dx, ship.target.dy, w - 10 - hud.vector_size, 70)
-      -- target gravitation on ship
-      dx, dy = body.gravitate(ship.target, ship.x, ship.y)
-      hud.vector(dx, dy, w - 10 - hud.vector_size, 130)
-   end
-
+   hud.render(ship)
    ship.api.repl.draw()
    ship.api.edit.draw()
 end

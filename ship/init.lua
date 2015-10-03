@@ -25,7 +25,7 @@ local sensor_whitelist = {
 local status_whitelist = {
    "fuel", "fuel_capacity", "battery", "battery_capacity", "mass", "in_range",
    "engine_on", "turning_right", "turning_left", "credits", "upgrade_names",
-   "cargo", "cargo_capacity",
+   "cargo", "cargo_capacity", "time_offset",
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
 }
@@ -64,11 +64,16 @@ local sandbox = {
              remove = table.remove,
              insert = table.insert,
    },
+   -- TODO: sandboxed time
+   os = {time = os.time},
    help = help.message,
    man = help.man,
    keymap = keymap,
    default_config = default_config,
-   utils = {distance = utils.distance},
+   utils = {
+      distance = utils.distance,
+      format_seconds = utils.format_seconds,
+   },
 }
 
 local sandbox_dofile = function(ship, filename)
@@ -156,13 +161,11 @@ local ship = {
 
       -- TODO: calculate oberth effect
       if(ship.engine_on and ship.fuel > 0) then
-         local fx = (math.sin(ship.heading) * dt *
-                        ship.engine_strength * ship.api.throttle)
-         local fy = (math.cos(ship.heading) * dt *
-                        ship.engine_strength * ship.api.throttle)
+         local fx = (math.sin(ship.heading) * dt * ship.engine_strength)
+         local fy = (math.cos(ship.heading) * dt * ship.engine_strength)
          ship.dx = ship.dx + fx / ship.mass
          ship.dy = ship.dy + fy / ship.mass
-         ship.fuel = ship.fuel - (ship.burn_rate * dt * ship.api.throttle)
+         ship.fuel = ship.fuel - (ship.burn_rate * dt)
       elseif(ship.fuel < ship.fuel_capacity) then
          ship.fuel = ship.fuel + (ship.recharge_rate * dt)
       end
@@ -243,8 +246,6 @@ local ship = {
    end,
 
    enforce_limits = function(ship)
-      if(ship.api.throttle > 1) then ship.api.throttle = 1 end
-      if(ship.api.throttle < 0) then ship.api.throttle = 0 end
       if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
    end,
 }
@@ -317,7 +318,7 @@ ship.api = {
       ["fallback_config"] = fallback_config,
    },
    docs = {},
-   persist = {"persist", "throttle", "scale", "trajectory", "src", "docs"},
+   persist = {"persist", "scale", "trajectory", "src", "docs"},
 
    -- added by loading config
    controls = {},
@@ -328,17 +329,15 @@ ship.api = {
    trajectory = 64,
    trajectory_step_size = 0.2,
 
-   throttle = 1,
+   fuel_to_stop = function(ship)
+      -- no idea where this 20 factor comes from
+      return utils.distance(ship.sensors.dx, ship.sensors.dy) *
+         ship.status.engine_strength * ship.status.burn_rate / (ship.status.mass * 20)
+   end,
+
    scale = 1.9,
 
    cheat = ship,
-   teleport = function(self)
-      local target = self.sensors.target
-      local dist = self.sensors.target * 10
-      if(not target) then return end
-      self.cheat.x, self.cheat.y, self.cheat.dx, self.cheat.dy =
-         target.x + dist, target.y + dist, target.dx, target.dy
-   end,
 }
 
 return ship

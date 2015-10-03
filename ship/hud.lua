@@ -1,100 +1,99 @@
-local utils = require "utils"
-local body = require "body"
-
-local hud_text = "speed: %0.2f     pos: %5.2f, %5.2f\n" ..
-   "target: %s     distance: %0.2f\n" ..
-   "epoch: %s     credits: %s"
+local utils = require("utils")
+local lume = require("lume")
+local body = require("body")
 
 local vector_size = 50
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
+local get_pos = function(pos_str)
+   local x, y = unpack(lume.map(lume.split(pos_str, ":"), tonumber))
+   if(x < 0) then x = (w+x)-vector_size end
+   if(y < 0) then y = (h+y)-vector_size end
+   return x, y
+end
+
+local get_data = function(ship, field)
+   if(type(field) == "function") then
+      return field(ship)
+   elseif(type(field) == "string") then
+      local t = ship
+      for _,f in ipairs(lume.split(field, ".")) do
+         t = t and t[f]
+      end
+      return t
+   else
+      error("Unknown field type " .. type(field))
+   end
+end
+
+local render_vector = function(at_x, at_y, values)
+   if(not values or not values[1]) then return end
+   local half = vector_size / 2
+   local x, y = unpack(values)
+
+   love.graphics.line(at_x + half, at_y + half,
+                      at_x + half + x, at_y + half + y)
+   love.graphics.setLineWidth(1)
+   love.graphics.setColor(255, 255, 255);
+   love.graphics.rectangle("line", at_x, at_y, vector_size, vector_size)
+end
+
+local render_bar = function(x, y, values)
+   local level, max, secondary = unpack(values)
+   love.graphics.rectangle("fill", x, y, math.min(level, max), 10)
+   love.graphics.setColor(255, 200, 200)
+   love.graphics.rectangle("line", x, y, max, 10)
+   if(secondary) then
+      love.graphics.setColor(0,0,0,100)
+      love.graphics.rectangle("fill", x, y, secondary, 5)
+   end
+end
+
+local render_text = function(x, y, format, values)
+   if(values and values[1]) then
+      love.graphics.print(string.format(format, unpack(values)), x, y)
+   end
+end
+
+local trajectory = function(ship, bodies, steps, step_size, color1, color2)
+   local last_x, last_y
+   local sim_ship = {x = ship.x, y = ship.y, dx = ship.dx, dy = ship.dy,
+                     mass = ship.mass}
+   local sim_bodies = {}
+   for _, b in pairs(bodies) do
+      if(b ~= ship) then
+         sim_bodies[#sim_bodies+1] = {x = b.x, y = b.y, dx = b.dx, dy = b.dy,
+                                      mass = b.mass}
+      end
+   end
+
+   love.graphics.setLineWidth(5)
+   for i=0, steps do
+      if i % 10 == 0 then
+         love.graphics.setColor(color1)
+         color1, color2 = color2, color1
+      end
+      last_x, last_y = sim_ship.x, sim_ship.y
+      body.gravitate_all(sim_bodies, sim_ship, step_size)
+      love.graphics.line(last_x - ship.x, last_y - ship.y,
+                         sim_ship.x - ship.x, sim_ship.y - ship.y)
+   end
+end
+
 return {
-   -- TODO: data-driven hud
-   render = function(ship, target)
-      local speed = utils.distance(ship.dx, ship.dy)
-      local formatted_time = utils.format_seconds(os.time() + ship.time_offset)
-      local distance, target_name
-
-      -- TODO: move target indicators to upper right, add mass, time to target
-      if(target) then
-         distance = utils.distance(ship.x - target.x, ship.y - target.y)
-         target_name = target.name
-      else
-         target_name, distance = "none", 0
-      end
-
-      love.graphics.setColor(255, 255, 255, 150)
-      love.graphics.print(string.format(hud_text, speed, ship.x, ship.y,
-                                        target_name, distance,
-                                        formatted_time, ship.credits), 5, 5)
-
-      -- TODO: throttle indicator
-      -- TODO: cargo indicator
-
-      -- scale indicator
-      local scale_y = math.log(ship.api.scale) * h
-      love.graphics.line(w - 5, scale_y, w, scale_y)
-
-      love.graphics.setLineWidth(1)
-
-      -- battery
-      love.graphics.setColor(20, 255, 20);
-      love.graphics.rectangle("fill", 5, 75,
-                              math.min(ship.battery, ship.battery_capacity), 10)
-      love.graphics.setColor(200, 255, 200);
-      love.graphics.rectangle("line", 5, 75, ship.battery_capacity, 10)
-
-      -- remaining fuel
-      love.graphics.setColor(255, 20, 20);
-      love.graphics.rectangle("fill", 5, 60,
-                              math.min(ship.fuel, ship.fuel_capacity), 10)
-      love.graphics.setColor(255, 200, 200);
-      love.graphics.rectangle("line", 5, 60, ship.fuel_capacity, 10)
-
-      -- how much fuel will we use to stop?
-      local fuel_to_stop = speed * ship.engine_strength * ship.burn_rate /
-         -- no idea where this 20 factor comes from
-         (ship.mass * 20)
-      love.graphics.setColor(150, 50, 50);
-      love.graphics.rectangle("fill", 5, 60, fuel_to_stop, 5)
-   end,
-
-   trajectory = function(ship, bodies, steps, step_size, color1, color2)
-      local last_x, last_y
-      local sim_ship = {x = ship.x, y = ship.y, dx = ship.dx, dy = ship.dy, mass = ship.mass}
-      local sim_bodies = {}
-      for _, b in pairs(bodies) do
-         if(b ~= ship) then
-            sim_bodies[#sim_bodies+1] = {x = b.x, y = b.y, dx = b.dx, dy = b.dy,
-                                   mass = b.mass}
-         end
-      end
-
-      love.graphics.setLineWidth(5)
-      for i=0, steps do
-         if i % 10 == 0 then
-            love.graphics.setColor(color1)
-            color1, color2 = color2, color1
-         end
-         last_x, last_y = sim_ship.x, sim_ship.y
-         body.gravitate_all(sim_bodies, sim_ship, step_size)
-         love.graphics.line(last_x - ship.x, last_y - ship.y, sim_ship.x - ship.x, sim_ship.y - ship.y)
+   render = function(ship)
+      for pos,data in pairs(ship.api.hud or {}) do
+         love.graphics.setColor(unpack(data.color or {255, 255, 255, 150}))
+         love.graphics.setLineWidth(data.width or 1)
+         local values = lume.map(data.values, lume.fn(get_data, ship.api))
+         local x,y = get_pos(pos)
+         if(data.type == "text") then render_text(x, y, data.format, values)
+         elseif(data.type == "bar") then render_bar(x, y, values)
+         elseif(data.type == "vector") then render_vector(x, y, values)
+            -- TODO: side slider?
+         else error("Unknown hud type " .. data.type) end
       end
    end,
 
-   vector = function(x, y, at_x, at_y)
-      local half = vector_size / 2
-      love.graphics.push()
-      love.graphics.setLineWidth(1)
-      love.graphics.setColor(255, 255, 255);
-      love.graphics.rectangle("line", at_x, at_y, vector_size, vector_size)
-      love.graphics.setLineWidth(3)
-      love.graphics.setColor(50, 255, 50);
-      -- TODO: scale length of vector non-linearly
-      love.graphics.line(at_x + half, at_y + half,
-                         at_x + half + x, at_y + half + y)
-      love.graphics.pop()
-   end,
-
-   vector_size = vector_size,
+   trajectory = trajectory,
 }
