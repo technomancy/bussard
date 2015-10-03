@@ -89,9 +89,11 @@ return {
          if(data.type == "text") then render_text(x, y, data.format, values)
          elseif(data.type == "bar") then render_bar(x, y, values)
          elseif(data.type == "vector") then render_vector(x, y, values)
-            -- TODO: side slider?
          else error("Unknown hud type " .. data.type) end
       end
+      -- hard-code this for now
+      local scale_y = math.log(ship.api.scale) * h
+      love.graphics.line(w - 5, scale_y, w, scale_y)
    end,
 
    trajectory = trajectory,

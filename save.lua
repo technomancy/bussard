@@ -57,6 +57,8 @@ return {
          lume.extend(ship, ship_data)
          ship:enter(ship.system_name)
          ship.api.repl.last_result = nil
+      else
+         ship:enter(ship.system_name, true)
       end
       if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)
@@ -73,8 +75,6 @@ return {
             end
          end
       end
-      -- TODO: needs a true 2nd arg if not actually restoring
-      ship:enter(ship.system_name)
    end,
 
    abort = function(ship)

@@ -123,6 +123,10 @@ return {
       on = true
    end,
 
+   revert = function()
+      lines = lume.split(fs:find(path), "\n")
+   end,
+
    save = function(this_fs, this_path)
       local parts = lume.split(this_path or path, ".")
       local filename = table.remove(parts, #parts)

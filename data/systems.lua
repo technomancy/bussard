@@ -25,7 +25,7 @@ return {
           {r=0, x=0, y=0, dx=0, dy=0, mass=230000,
            image_name="sun",
            name="Tana", star=true },
-          {r=42000, mass=700,
+          {r=46000, mass=400,
            image_name = "planet-3",
            name="Tana Prime", os=orb,
 

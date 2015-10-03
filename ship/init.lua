@@ -64,7 +64,7 @@ local sandbox = {
              remove = table.remove,
              insert = table.insert,
    },
-   -- TODO: sandboxed time
+   -- TODO1: sandboxed time
    os = {time = os.time},
    help = help.message,
    man = help.man,

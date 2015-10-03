@@ -85,6 +85,7 @@ keymap.define_mode("edit")
 keymap.define("edit", "escape", mode("flight"))
 keymap.define("edit", "pause", pause)
 keymap.define("edit", "return", ship.edit.newline)
+keymap.define("edit", "ctrl-r", ship.edit.revert)
 
 -- "Conventional" keys
 keymap.define("edit", "backspace", ship.edit.delete_backwards)
@@ -129,7 +130,6 @@ keymap.define("edit", "alt-y", ship.edit.yank_pop)
 -- TODO
 keymap.define("edit", "ctrl-backspace", ship.edit.backward_kill_word)
 keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
-keymap.define("edit", "ctrl-r", ship.edit.revert)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
 
@@ -168,7 +168,6 @@ ship.hud = {
       type="bar", values={"status.battery", "status.battery_capacity"},
       color={20, 255, 20}
    },
-   -- TODO: cargo
 }
 
 -- convenience functions
