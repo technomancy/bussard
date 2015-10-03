@@ -25,7 +25,7 @@ local sensor_whitelist = {
 local status_whitelist = {
    "fuel", "fuel_capacity", "battery", "battery_capacity", "mass", "in_range",
    "engine_on", "turning_right", "turning_left", "credits", "upgrade_names",
-   "cargo", "cargo_capacity", "time_offset",
+   "cargo", "cargo_capacity",
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
 }
@@ -47,6 +47,10 @@ local base_stats = {
    passponder_power = 0,
 }
 
+local sandboxed_time = function(ship)
+   return ship.time_offset + (os.time() - ship.load_time)
+end
+
 local sandbox = {
    pairs = pairs,
    ipairs = ipairs,
@@ -64,8 +68,7 @@ local sandbox = {
              remove = table.remove,
              insert = table.insert,
    },
-   -- TODO1: sandboxed time
-   os = {time = os.time},
+   os = {},
    help = help.message,
    man = help.man,
    keymap = keymap,
@@ -118,6 +121,7 @@ local ship = {
       ship.api.repl.sandbox = sandbox
       sandbox.ship = ship.api
       sandbox.dofile = lume.fn(sandbox_dofile, ship.api)
+      sandbox.os.time = lume.fn(sandboxed_time, ship)
       sandbox.scp = lume.fn(comm.scp, ship)
 
       -- for debugging

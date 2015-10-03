@@ -29,6 +29,7 @@ end
 return {
    save = function(ship)
       local ship_data = lume.pick(ship, unpack(ship_fields))
+      ship_data.time_offset = ship.time_offset + (os.time() - ship.load_time)
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
@@ -46,6 +47,7 @@ return {
    end,
 
    load_into = function(ship)
+      ship.load_time = os.time()
       if(love.filesystem.isFile(ship_filename)) then
          local ship_data_string = love.filesystem.read(ship_filename)
          local ship_data = lume.deserialize(ship_data_string)
@@ -58,6 +60,7 @@ return {
          ship:enter(ship.system_name)
          ship.api.repl.last_result = nil
       else
+         ship.time_offset = 8383504000
          ship:enter(ship.system_name, true)
       end
       if(love.filesystem.isFile(system_filename)) then

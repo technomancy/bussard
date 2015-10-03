@@ -140,8 +140,7 @@ ship.hud = {
    },
    ["60:20"] = {
       type="text", format="epoch: %s  credits: %s",
-      values={function(ship)
-            return utils.format_seconds(os.time() + ship.status.time_offset) end,
+      values={function() return utils.format_seconds(os.time()) end,
          "status.credits"}
    },
    ["5:5"] = {
