@@ -127,7 +127,8 @@ and `ship.comm.scp("path.in.ship", "username:password/path/to/file")`.
 Your ship also comes standard-issue with a passponder device. This is
 allows you to power up and travel through interstellar portals. If
 your ship's battery has enough charge, you can fly near a portal and
-press `ctrl-space` when you're in range.
+press `ctrl-space` when you're in range. Note that it takes a moment
+to fully charge a portal before it can be used.
 
 Certain portals which allow travel between civilizations require you
 to receive clearance before you may travel through them. Stations in
@@ -200,11 +201,46 @@ between 1 and 2.
 
 #### updaters
 
-TODO1: document
+Functions in the `ship.updaters` table will be run periodically;
+typically several times per second. They are passed the ship table as
+well as an argument indicating how many seconds it has been since the
+last time they ran. This can be useful for implementing automated
+piloting or any kind of functionality that needs to check the current
+state of the ship as it changes in flight.
 
 #### hud
 
-TODO1: document
+The heads-up-display is configurable by setting `ship.hud`. It should
+be a table of positions to indicator tables. The position is a string
+where the X position and Y position on screen are separated by a
+colon, like `"60:5"`. There are three different valid types of indicators.
+
+First you have just plain `"text"`. These indicators look like this:
+
+    { type="text", format="x: %5.2f y: %5.2f", values={"sensors.x", "sensors.y"} }
+
+The `format` is the template for the text, with the `values` looked up
+in the ship table and then spliced into the format template. Values
+with dots in them indicate that they are nested inside tables.
+
+Second is the `"vector"` type, like this:
+
+    { type="vector", values={"sensors.dx", "sensors.dy"} }
+
+Here the `values` are just the X and Y values displayed by the vector
+indicator; again they are looked up in the ship table before being
+printed.
+
+Finally we have `"bar"` for percentages:
+
+    { type="bar", values={"status.battery", "status.battery_capacity"} }
+
+The first value is the actual value to show, and the second is the
+maximum possible value; it shows a bar that can be fully or partly
+filled in.
+
+Any type can have a `color` field set to customize its color.
+See the default configuration file for an example.
 
 ### Upgrades
 
