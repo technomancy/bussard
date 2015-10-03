@@ -59,7 +59,7 @@ return {
          passponder_time = 4,
          passponder_power = 64,
       },
-      action = function(ship, down)
+      action = function(ship)
          if(not ship.target or not ship.target.portal) then return end
          if(utils.distance(ship, ship.target) <= ship.passponder_range) then
             if(ship.battery >= ship.passponder_power) then
@@ -88,9 +88,9 @@ return {
          end
       end,
       draw = function(ship)
-         -- TODO: change targeting color when in range
          if(not ship.passponder_countdown) then return end
          local progress = 1 - (ship.passponder_countdown / ship.passponder_time)
+         love.graphics.setLineWidth(10)
          for i = 0,1,0.25 do
             if(progress > i) then
                love.graphics.line(0,0,

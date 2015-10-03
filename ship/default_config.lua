@@ -18,6 +18,14 @@ local mode = function(mode)
    end
 end
 
+local pass_or_login = function()
+   if(ship.sensors.target.portal) then
+      ship.actions.passponder()
+   elseif(ship.sensors.target.os) then
+      ship.actions.login()
+   end
+end
+
 -- Flight mode
 keymap.define_mode("flight")
 keymap.define("flight", "ctrl-return", mode("repl"))
@@ -25,6 +33,7 @@ keymap.define("flight", "ctrl-return", mode("repl"))
 keymap.define("flight", "escape", ship.ui.quit)
 keymap.define("flight", "tab", ship.actions.next_target)
 keymap.define("flight", "ctrl-tab", ship.actions.closest_target)
+keymap.define("flight", "ctrl- ", pass_or_login)
 
 keymap.modes["flight"].textinput = function(text)
    if(not ship.controls[text]) then

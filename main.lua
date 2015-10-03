@@ -91,22 +91,24 @@ love.draw = function(dt)
    if(ship.target) then -- directional target indicator
       if(ship:in_range(ship.target) and ship.target.os) then
          love.graphics.setColor(10, 100, 10)
-      elseif(ship:in_range(ship.target, ship.scoop_range) and
-             ship.target.asteroid) then
+      elseif(ship.target.asteroid and
+             ship:in_range(ship.target, ship.scoop_range)) then
          love.graphics.setColor(100, 10, 10)
+      elseif(ship.target.portal and
+             ship:in_range(ship.target, ship.scoop_range)) then
+         love.graphics.setColor(10, 10, 100)
       else
          love.graphics.setColor(100, 100, 100)
       end
       love.graphics.setLineWidth(5*scale)
-      local px, py = ship.target.x, ship.target.y
-      local dx, dy = px - ship.x, py - ship.y
+      local dx, dy = ship.target.x - ship.x, ship.target.y - ship.y
       love.graphics.line(0, 0, dx, dy)
       love.graphics.setLineWidth(1)
    end
 
    -- TODO: how can we move this to hud?
    hud.trajectory(ship, ship.bodies, ship.api.trajectory,
-                  ship.api.trajectory_step_size, {150, 150, 255}, {99, 99, 168})
+                  ship.api.trajectory_step_size, {190, 190, 255}, {99, 99, 168})
 
    if(ship.target and not ship.target.star) then
       love.graphics.push()

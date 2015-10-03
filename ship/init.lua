@@ -329,10 +329,10 @@ ship.api = {
    trajectory = 64,
    trajectory_step_size = 0.2,
 
-   fuel_to_stop = function(ship)
+   fuel_to_stop = function(s)
       -- no idea where this 20 factor comes from
-      return utils.distance(ship.sensors.dx, ship.sensors.dy) *
-         ship.status.engine_strength * ship.status.burn_rate / (ship.status.mass * 20)
+      return utils.distance(s.sensors.dx, s.sensors.dy) *
+         s.status.engine_strength * s.status.burn_rate / (s.status.mass * 20)
    end,
 
    scale = 1.9,

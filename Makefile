@@ -2,7 +2,7 @@ run:
 	love .
 
 check:
-	luacheck --no-color -g *.lua os/orb/*.lua
+	luacheck --no-color -g *.lua os/orb/*.lua ship/*.lua
 
 count:
 	cloc *.lua

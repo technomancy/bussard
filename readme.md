@@ -29,8 +29,9 @@ your config file (`with ctrl-x`) to add a key binding to turn on the
 laser, as explained on the laser's manual page.
 
 From there it's off to find an asteroid to mine, and then the galaxy
-is yours to explore. You'll want to check out the ship's manual with
-`man()` at some point though.
+is yours to explore. To jump to another system, find a portal and
+press `ctrl-space` when you are within range. You'll want to check out
+the ship's manual with `man()` at some point though.
 
 Recommended soundtrack:
 [Contingency](http://music.biggiantcircles.com/album/contingency) by
@@ -70,10 +71,8 @@ upcoming features.
 Planned features:
 
 * accept missions at stations
-* power mechanics system (battery, solar panel charging)
 * many, many more systems under various governments
 * many more ship upgrades
-* reconfigurable HUD
 * tutorials for writing autopilot code
 * exploits to break into accounts you don't own
 * stations that use different OSes

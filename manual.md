@@ -10,13 +10,14 @@ of your ship's operation, and you will enjoy many safe travels on board.
 ## Display
 
 The first thing you'll see when you launch your ship is its
-heads-up-display. At the right you'll see a readout indicating your
-current velocity vector. Once you set a target, (`tab` by default)
-you'll see below the velocity of your target, and below that the
-gravitation acceleration your target is applying to your ship. A
-targeting indicator will also point from your ship in the direction of
-your current target. The upper left shows basic speed, coordinates,
-target details, fuel readout, credits, and a clock.
+heads-up-display. A targeting indicator will point from your ship in
+the direction of your current target. If you are within range of a
+target you can act upon, the indicator will change color depending on
+the type of the target. The upper left shows basic velocity,
+coordinates, fuel and battery readout, credits, and a clock, while the
+upper right shows target details if a target is selected. A light
+blue path plots a trajectory estimate of where you're headed, while a
+darker blue path plots one for your target, if applicable.
 
 ## Helm control
 
@@ -120,6 +121,19 @@ If you have an account on a station server, you can copy files to and
 from the targeted station using
 `ship.comm.scp("username:password/path/to/file", "path.in.ship")`
 and `ship.comm.scp("path.in.ship", "username:password/path/to/file")`.
+
+### Passponder
+
+Your ship also comes standard-issue with a passponder device. This is
+allows you to power up and travel through interstellar portals. If
+your ship's battery has enough charge, you can fly near a portal and
+press `ctrl-space` when you're in range.
+
+Certain portals which allow travel between civilizations require you
+to receive clearance before you may travel through them. Stations in
+the border systems containing these portals usually offer services
+where citizens of one civilization may buy clearance to another for a
+limited time.
 
 ### API list
 
