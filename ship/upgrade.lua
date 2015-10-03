@@ -11,9 +11,13 @@ end
 
 local portal_offsets = {
    [0] = {0, -200},
+   [0.125] = {-141, -141},
    [0.25] = {-200, 0},
+   [0.375] = {-141, 141},
    [0.50] = {0, 200},
+   [0.625] = {141, 141},
    [0.75] = {200, 0},
+   [0.875] = {141, -141}
 }
 
 return {
@@ -91,7 +95,7 @@ return {
          if(not ship.passponder_countdown) then return end
          local progress = 1 - (ship.passponder_countdown / ship.passponder_time)
          love.graphics.setLineWidth(10)
-         for i = 0,1,0.25 do
+         for i = 0,1,0.125 do
             if(progress > i) then
                love.graphics.line(0,0,
                                   ship.passponder_target.x - ship.x +

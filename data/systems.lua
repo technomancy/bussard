@@ -133,7 +133,7 @@ return {
           },
           {name = "Portal: Tana",
            image_name="portal-1",
-           r=29000, mass=75, portal="Wolf 1453", }
+           r=29000, mass=75, portal="Tana", }
        },
       },
 
