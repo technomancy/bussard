@@ -106,7 +106,7 @@ local ship = {
    time_offset = 4383504000, -- roughly 139 years ahead
    system_name = "L 668-21",
    cargo = {["food"] = 2},
-   upgrade_names = {},
+   upgrade_names = {"passponder"},
 
    configure = function(ship, systems, ui)
       repl.initialize()

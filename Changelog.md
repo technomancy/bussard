@@ -1,5 +1,17 @@
 # Bussard changelog: history of user-visible changes
 
+## alpha-4 / ???
+
+* Fix a bug where flying would scramble repl input.
+* Add power mechanics.
+* Fix kill ring commands.
+* Add API for in-game functions to run periodically.
+* Add mark ring and pop-mark command to editor.
+* Add Sol system.
+* Change trajectory plot indicators to striped lines.
+* Require portals be activated before traveling through them.
+* Move HUD definitions to config file; allow reconfiguration.
+
 ## alpha-3 / 2015-09-27
 
 * Boost range at which you can log in to stations.
