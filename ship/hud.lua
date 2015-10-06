@@ -67,6 +67,7 @@ local trajectory = function(ship, bodies, steps, step_size, color1, color2)
    end
 
    love.graphics.setLineWidth(5)
+   -- we end up calculating this twice; could get a perf boost by caching
    for i=0, steps do
       if i % 10 == 0 then
          love.graphics.setColor(color1)
