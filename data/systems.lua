@@ -122,7 +122,7 @@ return {
           {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
            image_name="sun",
            name="L 668-21", star=true },
-          {r=23000, mass=100,
+          {r=20000, mass=100,
            image_name="station-pointed",
            name="Mirduka station", os=orb,
 

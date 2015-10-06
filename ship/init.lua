@@ -330,7 +330,7 @@ ship.api = {
    helm = love.keyboard,
 
    -- you can adjust these to improve performance
-   trajectory = 64,
+   trajectory = 128,
    trajectory_step_size = 0.2,
 
    fuel_to_stop = function(s)
