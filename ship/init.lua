@@ -136,6 +136,7 @@ local ship = {
       ship.bodies = ship.systems[system_name].bodies
       ship.system_name = system_name
 
+      ship.comm.logout_all()
       ship:recalculate()
 
       if(reseed) then

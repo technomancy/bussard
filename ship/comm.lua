@@ -61,25 +61,29 @@ local sandbox = function(ship)
    }
 end
 
+local logout = function(name)
+   session = sessions[name]
+   for k,_ in pairs(session[1]["/home/guest"] or {}) do
+      session[1]["/home/guest"][k]= nil
+   end
+   sessions[name] = nil
+end
+
 local send_input = function(ship, input)
-   if(input == "logout") then -- TODO: need to get the OS to send EOF/nil
-      if(ship.target and sessions[ship.target.name]) then
-         ship.api.repl.read = nil
-         ship.api.repl.prompt = nil
+   if(input == "logout") then
+      local connected_to = ship.comm_connected
+      ship.api.repl.read = nil
+      ship.api.repl.prompt = nil
+      ship.comm_connected = false
+
+      if(sessions[connected_to]) then
          ship.api.repl.print("Logged out.")
-         ship.comm_connected = false
-         local fs_env = sessions[ship.target.name]
-         sessions[ship.target.name] = nil
-         for k,_ in pairs(fs_env[1]["/home/guest"]) do
-            fs_env[1]["/home/guest"][k]= nil
-         end
-      elseif(ship.target.name) then
-         ship.api.repl.print("| Not logged in to " .. ship.target.name)
+         logout(ship.target.name)
       else
          ship.api.repl.print("| Not logged in.")
       end
    elseif(not ship:in_range(ship.target)) then
-      ship.api.repl.print("| Out of range.")
+      ship.api.repl.print("| Out of range. Run `logout` to disconnect.")
    else
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env and fs[env.IN], "Not logged into " .. ship.target.name)
@@ -124,13 +128,19 @@ return {
          ship.target.os.process.spawn(fs, env, command or "smash", sandbox(ship))
          ship.api.repl.read = lume.fn(send_input, ship)
          ship.api.repl.prompt = "$ "
-         ship.comm_connected = true
+         ship.comm_connected = ship.target.name
          -- free recharge upon connect
          ship.battery = ship.battery_capacity
 
-         return "Login succeeded."
+         return "Login succeeded. Run `logout` to disconnect."
       else
          return "Login failed."
+      end
+   end,
+
+   logout_all = function()
+      for _,session in pairs(sessions) do
+         logout(session)
       end
    end,
 

@@ -49,6 +49,12 @@ When running from source, type `love .` from a checkout.
 
 <img src="http://p.hagelb.org/bussard-repl.png" alt="repl screenshot" />
 
+One problem when running from source is that when new features are
+added, key bindings for them are added to the default config, but
+existing saved games will continue on using the same config. You can
+replace your ship's config with the current default config using
+`ship.src.config = default_config`.
+
 ## Status
 
 Currently the game supports flying around, mining asteroids, trading
