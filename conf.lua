@@ -1,19 +1,13 @@
 love.conf = function(t)
-   t.title = "Bussard"
-   t.version = "0.9.1"
+   t.title, t.version, t.identity = "Bussard", "0.9.1", "bussard"
 
-   if(os.getenv("USER") == "phil") then
-      t.window.width = 1400
-      t.window.height = 800
-      -- for screenshots
-      -- t.window.width = 615
-      -- t.window.height = 500
+   if(os.getenv("SCREENSHOT")) then
+      t.window.width, t.window.height = 615, 500
+   elseif(os.getenv("USER") == "phil" or os.getenv("NO_FULLSCREEN")) then
+      t.window.width, t.window.height = 1400, 800
    else
-      t.window.fullscreen = true
-      t.window.fullscreentype = "desktop"
+      t.window.fullscreen, t.window.fullscreentype = true, "desktop"
    end
 
-   t.modules.mouse = false
-   t.modules.joystick = false
-   t.modules.physics = false
+   t.modules.mouse, t.modules.joystick, t.modules.physics = false, false, false
 end
