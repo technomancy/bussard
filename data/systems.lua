@@ -90,8 +90,8 @@ return {
           {name = "Portal: Tana",
            image_name="portal-1",
            r=26000, mass=75, portal="Tana", }
+       },
       },
-   },
    ["Luyten's Star"] = -- gateway to sol
       {civ="Tana", x=-3.3, y=-2, bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
@@ -113,7 +113,7 @@ return {
            image_name="portal-2", interportal=true,
            r=20000, mass=75, portal="Sol", },
       },
-   },
+      },
    ["L 668-21"] = -- remote mining system
       {civ="Tana",
        x=-3.6, y=-4.1,
@@ -202,67 +202,214 @@ return {
                  {name = "Portal: Luyten's Star",
                   image_name="portal-2",
                   r=20000, mass=75, portal="Luyten's Star",
+                  interportal=true,},
+                 {name = "Portal: Ross",
+                  image_name="portal-2",
+                  r=22000, mass=75, portal="Ross",
+                  interportal=true,},
+                 {name = "Portal: Lalande",
+                  image_name="portal-2",
+                  r=27000, mass=75, portal="Lanande",
                   interportal=true,}
               }, -- it's Sol.
    },
 
 
    -- Moyla
-   ["Lalande 25372"] = {civ="Moyla", capitol = true,
-                        x=1.6, y=-0.4,
-                        bodies = {},
+   ["Lalande"] = {civ="Moyla", capitol = true,
+                  x=1.6, y=-0.4,
+                  bodies = {
+                     {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
+                      image_name="sun",
+                      name="Lalande 25372", star=true},
+                     {name = "Portal: Ross",
+                      image_name="portal-1",
+                      r=20000, mass=75, portal="Ross",},
+                     {name = "Portal: Sol",
+                      image_name="portal-2", interportal=true,
+                      r=2500, mass=75, portal="Sol",},
+                     {name = "Portal: Bohk",
+                      image_name="portal-2", interportal=true,
+                      r=27000, mass=75, portal="Bohk",}},
    },
-   ["Ross 128"] = {civ="Moyla",
-                   x=0, y=-1.7,
-                   bodies = {},
+   ["Ross"] = {civ="Moyla",
+               x=0, y=-1.7,
+               bodies = {
+                  {r=0, x=0, y=0, dx=0, dy=0, mass=410000,
+                   image_name="sun",
+                   name="Ross 128", star=true},
+                  {name = "Portal: Sol",
+                   image_name="portal-2", interportal=true,
+                   r=22000, mass=75, portal="Sol",
+                   interportal=true,},
+                  {name = "Portal: Lalande",
+                   image_name="portal-1",
+                   r=22000, mass=75, portal="Lalande",}
+               },
    },
 
 
    -- Bohk
    ["Bohk"] = {civ="Bohk", capitol = true,
-                   x=4.3, y=-0.6,
-                   bodies = {},
+               x=4.3, y=-0.6,
+               bodies = {
+                  {r=0, x=0, y=0, dx=0, dy=0, mass=350000,
+                   image_name="sun",
+                   name="Bohk", star=true},
+                  {name = "Portal: Lalande",
+                   image_name="portal-2", interportal=true,
+                   r=22000, mass=75, portal="Lalande",},
+                  {name = "Portal: Wadee",
+                   image_name="portal-2", interportal=true,
+                   r=22000, mass=75, portal="Wadee",},
+                  {name = "Portal: New Phobos",
+                   image_name="portal-1",
+                   r=22000, mass=75, portal="New Phobos"},
+                  {name = "Portal: Lucaille",
+                   image_name="portal-1",
+                   r=22000, mass=75, portal="Lucaille",},
+               },
    },
-   ["BD-12°4623"] = {civ="Bohk",
+   ["New Phobos"] = {civ="Bohk",
                      x=3.9, y=0.2,
-                     bodies = {}, -- tourism center
+                     bodies = {
+                        {r=0, x=0, y=0, dx=0, dy=0, mass=310000,
+                         image_name="sun",
+                         name="New Phobos", star=true},
+                        {name = "Portal: Lucaille",
+                         image_name="portal-1",
+                         r=22000, mass=75, portal="Lucaille",},
+                        {name = "Portal: Bohk",
+                         image_name="portal-1",
+                         r=22000, mass=75, portal="Bohk"},
+                     }, -- tourism center
    },
-   ["Lacaille 8760"] = {civ="Bohk",
-                        x=2.8, y=0.2,
-                        bodies = {}, -- smaller border town
+   ["Lucaille"] = {civ="Bohk",
+                   x=2.8, y=0.2,
+                   bodies = {
+                      {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
+                       image_name="sun",
+                       name="Lucaille 8760", star=true},
+                      {name = "Portal: New Phobos",
+                       image_name="portal-1",
+                       r=22000, mass=75, portal="New Phobos",},
+                      {name = "Portal: Bohk",
+                       image_name="portal-1",
+                       r=22000, mass=75, portal="Bohk"},
+                      {name = "Portal: Wadee",
+                       image_name="portal-2", interportal=true,
+                       r=22000, mass=75, portal="Wadee",}
+                   }, -- smaller border town
    },
 
 
    -- Wadee
    ["Wadee"] = {civ="Wadee", capitol = true,
                 x=3.9, y=2.3,
-                bodies = {}, -- rather backwater
+                bodies = {
+                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                    image_name="sun",
+                    name="Wadee", star=true},
+                   {name = "Portal: Bohk",
+                    image_name="portal-2", interportal=2,
+                    r=22000, mass=75, portal="Bohk"},
+                   {name = "Portal: Lucaille",
+                    image_name="portal-2", interportal=2,
+                    r=22000, mass=75, portal="Lucaille"}
+                }, -- quiet, isolated. internal conflict.
    },
 
 
    -- Yueh
-   ["Yueh"] = {civ="Yueh", capitol = true,
-                        x=4.5, y=-2.6,
-                        bodies = {}, -- bustling trade hub
-   },
-   ["Sigma Draconis"] = {civ="Yueh",
+   ["Sigma Draconis"] = {civ="Yueh", -- GI 674
                          x=4.3, y=-1.3,
-                         bodies = {},
+                         bodies = {
+                            {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                             image_name="sun",
+                             name="Sigma Draconis", star=true},
+                            {name = "Portal: Bohk",
+                             image_name="portal-2", interportal=true,
+                             r=22000, mass=75, portal="Bohk"},
+                            {name = "Portal: Lalande",
+                             image_name="portal-2", interportal=true,
+                             r=22000, mass=75, portal="Lalande"},
+                            {name = "Portal: Wolf 1481",
+                             image_name="portal-1",
+                             r=22000, mass=75, portal="Wolf 1481"},
+                            {name = "Portal: LHS 451",
+                             image_name="portal-1",
+                             r=22000, mass=75, portal="LHS 451"},
+                            {name = "Portal: Yueh",
+                             image_name="portal-1",
+                             r=22000, mass=75, portal="Yueh"},
+                         }, -- gateway world
    },
-   ["Wolf 1481"] = {civ="Yueh",
-                    x=4.1, y=1.7,
-                    bodies = {},
+   ["Yueh"] = {civ="Yueh", capitol = true, -- GI 693
+               x= 5.2, y=-2.3,
+               bodies = {
+                  {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                   image_name="sun",
+                   name="Yueh", star=true},
+                  {name = "Portal: Delta Pavonis",
+                   image_name="portal-1",
+                   r=22000, mass=75, portal="Delta Pavonis"},
+                  {name = "Portal: Sigma Draconis",
+                   image_name="portal-1",
+                   r=22000, mass=75, portal="Sigma Draconis"}
+               }, -- bustling trade hub
    },
-   ["LHS 451"] = {civ="Yueh",
+   ["Delta Pavonis"] = {civ="Yueh",
+                        x=4.5, y=-2.6,
+                        bodies = {
+                           {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                            image_name="sun",
+                            name="Delta Pavonis", star=true},
+                           {name = "Portal: Wolf 1481",
+                            image_name="portal-1",
+                            r=22000, mass=75, portal="Wolf 1481"},
+                           {name = "Portal: Yueh",
+                            image_name="portal-1",
+                            r=22000, mass=75, portal="Yueh"},
+                           {name = "Portal: CD-40 9712",
+                            image_name="portal-1",
+                            r=22000, mass=75, portal="CD-40 9712"},
+                        }
+   },
+   ["Wolf 1481"] = {civ="Yueh", -- BD
+                    x=4.1, y=-1.7,
+                    bodies = {
+                       {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                        image_name="sun",
+                        name="Wolf 1481", star=true},
+                       {name = "Portal: Sigma Draconis",
+                        image_name="portal-1",
+                        r=22000, mass=75, portal="Sigma Draconis"},
+                       {name = "Portal: Delta Pavonis",
+                        image_name="portal-1",
+                        r=22000, mass=75, portal="Delta Pavonis"}
+                    },
+   }, -- relatively quiet
+
+   ["LHS 451"] = {civ="Yueh", -- GI 682
                   x=4.9,y=-1.1,
-                  bodies = {}, -- mostly uninhabited
+                  bodies = {
+                     {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                      image_name="sun",
+                      name="LHS 451", star=true},
+                     {name = "Portal: Sigma Draconis",
+                      image_name="portal-1",
+                      r=22000, mass=75, portal="Sigma Draconis"},
+                  }, -- mostly uninhabited
    },
-   ["L 205-128"] = {civ="Yueh",
-                    x= 5.2, y=-2.3,
-                    bodies = {}, -- mostly uninhabited
-   },
-   ["CD-40 9712"] = {civ="Yueh",
+   ["CD-40 9712"] = {civ="Yueh", -- GI 588
                      x=5.3, y=-2.8,
-                     bodies = {}, -- mostly uninhabited
+                     bodies = {
+                        {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                         image_name="sun",
+                         name="CD-40 9712", star=true},
+                        {name = "Portal: Delta Pavonis",
+                         image_name="portal-1",
+                         r=22000, mass=75, portal="Delta Pavonis"},
+                     }, -- mostly uninhabited
    },
 }
