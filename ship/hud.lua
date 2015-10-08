@@ -4,8 +4,8 @@ local body = require("body")
 local vector_size = 50
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
-local get_pos = function(pos_str)
-   local x, y = unpack(lume.map(lume.split(pos_str, ":"), tonumber))
+local get_pos = function(value)
+   local x, y = value.x, value.y
    if(x < 0) then x = (w+x)-vector_size end
    if(y < 0) then y = (h+y)-vector_size end
    return x, y
@@ -15,11 +15,7 @@ local get_data = function(ship, field)
    if(type(field) == "function") then
       return field(ship)
    elseif(type(field) == "string") then
-      local t = ship
-      for _,f in ipairs(lume.split(field, ".")) do
-         t = t and t[f]
-      end
-      return t
+      return ship:find(field)
    else
       error("Unknown field type " .. type(field))
    end
@@ -82,11 +78,11 @@ end
 
 return {
    render = function(ship)
-      for pos,data in pairs(ship.api.hud or {}) do
+      for _,data in ipairs(ship.api.hud or {}) do
          love.graphics.setColor(unpack(data.color or {255, 255, 255, 150}))
          love.graphics.setLineWidth(data.width or 1)
          local values = lume.map(data.values, lume.fn(get_data, ship.api))
-         local x,y = get_pos(pos)
+         local x,y = get_pos(data)
          if(data.type == "text") then render_text(x, y, data.format, values)
          elseif(data.type == "bar") then render_bar(x, y, values)
          elseif(data.type == "vector") then render_vector(x, y, values)

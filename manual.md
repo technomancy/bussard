@@ -211,13 +211,14 @@ state of the ship as it changes in flight.
 #### hud
 
 The heads-up-display is configurable by setting `ship.hud`. It should
-be a table of positions to indicator tables. The position is a string
-where the X position and Y position on screen are separated by a
-colon, like `"60:5"`. There are three different valid types of indicators.
+be an array of instrument tables. There are three different valid
+types of instruments; each needs at least `type`, `x`, and
+`y`. Negative `x` and `y` values will count from the right or bottom
+of the screen backwards.
 
 First you have just plain `"text"`. These indicators look like this:
 
-    { type="text", format="x: %5.2f y: %5.2f", values={"sensors.x", "sensors.y"} }
+    { type="text", x=5, y=5, format="x: %5.2f y: %5.2f", values={"sensors.x", "sensors.y"} }
 
 The `format` is the template for the text, with the `values` looked up
 in the ship table and then spliced into the format template. Values
@@ -225,7 +226,7 @@ with dots in them indicate that they are nested inside tables.
 
 Second is the `"vector"` type, like this:
 
-    { type="vector", values={"sensors.dx", "sensors.dy"} }
+    { type="vector", x=5, y=60, values={"sensors.dx", "sensors.dy"} }
 
 Here the `values` are just the X and Y values displayed by the vector
 indicator; again they are looked up in the ship table before being
