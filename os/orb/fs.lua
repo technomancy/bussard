@@ -10,7 +10,9 @@ orb.fs = {
 
    mkdir = function(f, path, env)
       assert(f and path)
-
+      if(not getmetatable(f)) then
+         f = orb.fs.proxy(f, "root", f)
+      end
       if(path == "/") then return end
       local dir,base = orb.fs.dirname(orb.fs.normalize(path, env and env.CWD))
       if(not f[dir]) then orb.fs.mkdir(f, dir, env) end

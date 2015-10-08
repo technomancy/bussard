@@ -1,0 +1,10 @@
+From: cal@eu.earth.sol
+Subject: confused about permissions
+To: comp.os.orb
+
+So I'm considered a bit old-fashioned, but I can't figure out the
+permissions model of Orb. How would you translate an octal permissions
+setting of 644 to the Orb equivalent? I must be missing something
+because this should be obvious.
+
+-Calandria

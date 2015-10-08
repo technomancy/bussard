@@ -1,4 +1,5 @@
-local utils = require "utils"
+local utils = require("utils")
+local news = require("news")
 
 local filesystem_overlays = require("data.filesystems")
 
@@ -91,10 +92,12 @@ return {
       end
    end,
 
-   -- currently you can log into any body that's not a star
    login = function(body, username, password)
-      if((not body) or body.star) then return false end
-      filesystems[body.name] = filesystems[body.name] or seed(body.os, body.name)
+      if((not body) or not body.os) then return false end
+      if(not filesystems[body.name]) then
+         filesystems[body.name] = seed(body.os, body.name)
+         news.seed(b, filesystems[body.name])
+      end
       return body.os.shell.auth(filesystems[body.name], username, password) and
          filesystems[body.name]
    end,
@@ -158,6 +161,12 @@ return {
       b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
       b.dx = math.sin(theta + math.pi / 2) * v
       b.dy = math.cos(theta + math.pi / 2) * v
+   end,
+
+   seed_news = function(b)
+      if(filesystems[b.name]) then
+         news.seed(b, filesystems[b.name])
+      end
    end,
 
    find = function(bodies,name)

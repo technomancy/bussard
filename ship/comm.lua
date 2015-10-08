@@ -112,8 +112,6 @@ return {
          -- buffer output that happens when out of range
          fs[env.OUT] = function(output)
             if(output) then
-               -- repl doesn't have an io:write equivalent
-               output = output:gsub("\n\n", "")
                ship.api.repl.print(output)
             else
                ship.api.repl.read = nil -- EOF means terminate session

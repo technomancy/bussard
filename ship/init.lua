@@ -145,6 +145,7 @@ local ship = {
          -- re-seed system-level things
          asteroid.populate(ship.systems[ship.system_name])
          for _,b in pairs(ship.bodies) do
+            body.seed_news(b)
             body.seed_cargo(b)
             body.seed_pos(b, ship.bodies[1])
          end
