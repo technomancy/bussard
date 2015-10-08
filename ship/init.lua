@@ -80,10 +80,7 @@ local sandbox = {
 }
 
 local sandbox_dofile = function(ship, filename)
-   local contents = ship
-   for _,path in ipairs(lume.split(filename, ".")) do
-      contents = contents[path]
-   end
+   local contents = ship:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
    local chunk = assert(loadstring(contents))
    setfenv(chunk, sandbox)
@@ -255,7 +252,8 @@ local ship = {
    end,
 }
 
--- everything in here is exposed to the sandbox
+-- everything in here is exposed to the sandbox. this table *is* `ship`, as far
+-- as the in-game code is concerned.
 ship.api = {
    repl = repl,
    edit = edit,
@@ -264,6 +262,7 @@ ship.api = {
    sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),
    status = utils.whitelist_table(ship, status_whitelist, "status"),
 
+   -- upgrades can place functions in this table when loaded
    actions = {
       forward = function(down) ship.engine_on = down end,
       left = function(down) ship.turning_left = down end,
@@ -293,8 +292,8 @@ ship.api = {
    },
 
    load = function(s, filename)
-      local content = assert(filename and s:find(filename),
-                             "File not found: " .. filename)
+      filename = filename or "src.config"
+      local content = assert(s:find(filename), "File not found: " .. filename)
       local chunk = assert(loadstring(content), "Failed to load " .. filename)
       setfenv(chunk, sandbox)
       chunk()
@@ -312,7 +311,11 @@ ship.api = {
       local parts = lume.split(path, ".")
       local target = s
       for _,p in ipairs(parts) do
-         target = target[p]
+         if(type(target) == "table") then
+            target = target[p]
+         else
+            return false
+         end
       end
       return target
    end,

@@ -29,11 +29,7 @@ end
 
 local scp_to = function(ship, from, to)
    local fs, path = scp_login(ship, to)
-   local from_components, source = lume.split(from, "."), ship.api
-   for _,f in pairs(from_components) do
-      source = source[f]
-      assert(source, from .. " not found.")
-   end
+   local source = assert(ship:find(from), from .. " not found.")
    fs[path] = source
 end
 
@@ -132,7 +128,9 @@ return {
          -- free recharge upon connect
          ship.battery = ship.battery_capacity
 
-         return "Login succeeded. Run `logout` to disconnect."
+         local motd = "Login succeeded. Run `logout` to disconnect."
+         if(fs_raw.etc.motd) then motd = (motd .. "\n" .. fs_raw.etc.motd) end
+         return motd
       else
          return "Login failed."
       end

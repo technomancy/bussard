@@ -234,7 +234,7 @@ printed.
 
 Finally we have `"bar"` for percentages:
 
-    { type="bar", values={"status.battery", "status.battery_capacity"} }
+    { type="bar", x=20,y=-15, values={"status.battery", "status.battery_capacity"} }
 
 The first value is the actual value to show, and the second is the
 maximum possible value; it shows a bar that can be fully or partly
