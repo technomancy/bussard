@@ -178,7 +178,7 @@ return {
    load = function(systems)
       for system_name,system in pairs(systems) do
          for _,body in ipairs(system.bodies) do
-            body.system, body.civ = system_name, system.civ
+            body.system, body.gov = system_name, system.gov
          end
       end
    end,

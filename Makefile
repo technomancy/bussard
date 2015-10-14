@@ -5,7 +5,7 @@ check:
 	luacheck --no-color -g *.lua os/orb/*.lua ship/*.lua
 
 count:
-	cloc *.lua
+	cloc *.lua ship/*.lua
 
 todo:
 	rgrep TODO .

@@ -1,9 +1,11 @@
+local lume = require("lume")
+
 local include = function(ship, b, meta)
    if(meta.fn) then return(meta.fn(ship, b, meta))
    elseif(meta.chance and math.random(100) < meta.chance) then return false
-   elseif(meta.system and meta.system ~= ship.system_name) then return false
-   elseif(meta.world and meta.world ~= b.name) then return false
-   elseif(meta.civ and meta.civ ~= b.civ) then return false
+   elseif(meta.systems and not lume.find(meta.systems, ship.system_name)) then return false
+   elseif(meta.worlds and not lume.find(meta.worlds, b.name)) then return false
+   elseif(meta.govs and not lume.find(meta.govs, b.gov)) then return false
    else return true end
 end
 

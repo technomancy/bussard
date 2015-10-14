@@ -10,7 +10,6 @@ return {
    end,
 
    render = function(field, x, y)
-      if(not factor) then factor = 1 end
       love.graphics.setColor(field.intensity, field.intensity, field.intensity);
       for _, star in ipairs(field.stars) do
          love.graphics.circle("fill",

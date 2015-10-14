@@ -130,11 +130,11 @@ your ship's battery has enough charge, you can fly near a portal and
 press `ctrl-space` when you're in range. Note that it takes a moment
 to fully charge a portal before it can be used.
 
-Certain portals which allow travel between civilizations require you
-to receive clearance before you may travel through them. Stations in
-the border systems containing these portals usually offer services
-where citizens of one civilization may buy clearance to another for a
-limited time.
+Certain portals which allow travel between systems of different
+governments require you to receive clearance before you may travel
+through them. Stations in the border systems containing these portals
+usually offer services where citizens of one government may buy
+clearance to another for a limited time.
 
 ### API list
 

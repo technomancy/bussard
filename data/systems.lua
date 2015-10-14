@@ -18,7 +18,7 @@ local orb = require("os.orb")
 return {
    -- Tana
    ["Tana"] =
-      {civ="Tana", capitol = true,
+      {gov="Tana", capitol = true,
        x = -5.8, y=-2.4,
        asteroids = 2,
        bodies = {
@@ -63,7 +63,7 @@ return {
            r=22500, mass=75, portal="Luyten's Star"}},
       },
    ["Wolf 294"] = -- second-largest Tana system
-      {civ="Tana", x=-5.3, y=-0.3,
+      {gov="Tana", x=-5.3, y=-0.3,
        asteroids = 4,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=160000,
@@ -93,7 +93,7 @@ return {
        },
       },
    ["Luyten's Star"] = -- gateway to sol
-      {civ="Tana", x=-3.3, y=-2, bodies = {
+      {gov="Tana", x=-3.3, y=-2, bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
            image_name="sun",
            name="Luyten's Star", star=true },
@@ -115,7 +115,7 @@ return {
       },
       },
    ["L 668-21"] = -- remote mining system
-      {civ="Tana",
+      {gov="Tana",
        x=-3.6, y=-4.1,
        asteroids = 8,
        bodies = {
@@ -139,7 +139,7 @@ return {
 
 
    -- Sol
-   ["Sol"] = {civ="Sol", capitol = true,
+   ["Sol"] = {gov="Sol", capitol = true,
               x=0, y=0,
               bodies = {
                  {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
@@ -216,7 +216,7 @@ return {
 
 
    -- Moyla
-   ["Lalande"] = {civ="Moyla", capitol = true,
+   ["Lalande"] = {gov="Moyla", capitol = true,
                   x=1.6, y=-0.4,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
@@ -250,7 +250,7 @@ return {
                       image_name="portal-2", interportal=true,
                       r=29000, mass=75, portal="Bohk",}},
    },
-   ["Ross"] = {civ="Moyla",
+   ["Ross"] = {gov="Moyla",
                x=0, y=-1.7,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=410000,
@@ -286,7 +286,7 @@ return {
 
 
    -- Bohk
-   ["Bohk"] = {civ="Bohk", capitol = true,
+   ["Bohk"] = {gov="Bohk", capitol = true,
                x=4.3, y=-0.6,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=350000,
@@ -306,7 +306,7 @@ return {
                    r=22000, mass=75, portal="Lucaille",},
                },
    },
-   ["New Phobos"] = {civ="Bohk",
+   ["New Phobos"] = {gov="Bohk",
                      x=3.9, y=0.2,
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=310000,
@@ -320,7 +320,7 @@ return {
                          r=22000, mass=75, portal="Bohk"},
                      }, -- tourism center
    },
-   ["Lucaille"] = {civ="Bohk",
+   ["Lucaille"] = {gov="Bohk",
                    x=2.8, y=0.2,
                    bodies = {
                       {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
@@ -340,7 +340,7 @@ return {
 
 
    -- Wadee
-   ["Wadee"] = {civ="Wadee", capitol = true,
+   ["Wadee"] = {gov="Wadee", capitol = true,
                 x=3.9, y=2.3,
                 bodies = {
                    {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
@@ -357,7 +357,7 @@ return {
 
 
    -- Yueh
-   ["Sigma Draconis"] = {civ="Yueh", -- GI 674
+   ["Sigma Draconis"] = {gov="Yueh", -- GI 674
                          x=4.3, y=-1.3,
                          bodies = {
                             {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
@@ -380,7 +380,7 @@ return {
                              r=22000, mass=75, portal="Yueh"},
                          }, -- gateway world
    },
-   ["Yueh"] = {civ="Yueh", capitol = true, -- GI 693
+   ["Yueh"] = {gov="Yueh", capitol = true, -- GI 693
                x= 5.2, y=-2.3,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
@@ -394,7 +394,7 @@ return {
                    r=22000, mass=75, portal="Sigma Draconis"}
                }, -- bustling trade hub
    },
-   ["Delta Pavonis"] = {civ="Yueh",
+   ["Delta Pavonis"] = {gov="Yueh",
                         x=4.5, y=-2.6,
                         bodies = {
                            {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
@@ -411,7 +411,7 @@ return {
                             r=22000, mass=75, portal="CD-40 9712"},
                         }
    },
-   ["Wolf 1481"] = {civ="Yueh", -- BD
+   ["Wolf 1481"] = {gov="Yueh", -- BD
                     x=4.1, y=-1.7,
                     bodies = {
                        {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
@@ -426,7 +426,7 @@ return {
                     },
    }, -- relatively quiet
 
-   ["LHS 451"] = {civ="Yueh", -- GI 682
+   ["LHS 451"] = {gov="Yueh", -- GI 682
                   x=4.9,y=-1.1,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
@@ -437,7 +437,7 @@ return {
                       r=22000, mass=75, portal="Sigma Draconis"},
                   }, -- mostly uninhabited
    },
-   ["CD-40 9712"] = {civ="Yueh", -- GI 588
+   ["CD-40 9712"] = {gov="Yueh", -- GI 588
                      x=5.3, y=-2.8,
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
