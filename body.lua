@@ -92,11 +92,11 @@ return {
       end
    end,
 
-   login = function(body, username, password)
+   login = function(ship, body, username, password)
       if((not body) or not body.os) then return false end
       if(not filesystems[body.name]) then
          filesystems[body.name] = seed(body.os, body.name)
-         news.seed(b, filesystems[body.name])
+         news.seed(ship, body, filesystems[body.name])
       end
       return body.os.shell.auth(filesystems[body.name], username, password) and
          filesystems[body.name]
@@ -163,9 +163,9 @@ return {
       b.dy = math.cos(theta + math.pi / 2) * v
    end,
 
-   seed_news = function(b)
+   seed_news = function(ship, b)
       if(filesystems[b.name]) then
-         news.seed(b, filesystems[b.name])
+         news.seed(ship, b, filesystems[b.name])
       end
    end,
 
@@ -174,4 +174,12 @@ return {
    end,
 
    filesystems = filesystems,
+
+   load = function(systems)
+      for system_name,system in pairs(systems) do
+         for _,body in ipairs(system.bodies) do
+            body.system, body.civ = system_name, system.civ
+         end
+      end
+   end,
 }

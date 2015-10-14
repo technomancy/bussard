@@ -1,9 +1,0 @@
-From: somebody@ucn.newton.sol
-Subject: Question about Lua tables
-To: comp.lang.lua
-
-Hello everyone. I am new to Lua. I wonder if you could tell me the
-best way to put something in a table, but always at the end. Is this easy to do?
-
-Thanks!
-Some body

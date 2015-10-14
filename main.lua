@@ -40,6 +40,7 @@ love.load = function()
    ship:configure(systems, ui)
    if arg[#arg] == "-abort" then save.abort(ship) end
    save.load_into(ship)
+   body.load(systems)
 
    ship.api.repl.last_result =
       "Press control-enter to open the repl and `man()` for more help."

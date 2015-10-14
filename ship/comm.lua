@@ -10,7 +10,7 @@ local sessions = {}
 local scp_login = function(ship, orig_path)
    local username, pwpath = unpack(lume.split(orig_path, ":"))
    local password, path = pwpath:match("(%a+)/(.+)")
-   local fs_raw = body.login(ship.target, username, password or "")
+   local fs_raw = body.login(ship, ship.target, username, password or "")
    assert(fs_raw, "Incorrect login.")
    local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
    return fs, path
@@ -99,7 +99,7 @@ return {
       end
 
       username, password = username or "guest", password or ""
-      local fs_raw = body.login(ship.target, username, password)
+      local fs_raw = body.login(ship, ship.target, username, password)
       if(fs_raw) then
          local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
          local env = ship.target.os.shell.new_env(username)
@@ -141,7 +141,7 @@ return {
    end,
 
    headless_login = function(ship, username, password, command)
-      local fs_raw = body.login(ship.target, username, password)
+      local fs_raw = body.login(ship, ship.target, username, password)
       local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
       local env = ship.target.os.shell.new_env(username)
       ship.target.os.shell.exec(fs, env, command or "smash", sandbox(ship))

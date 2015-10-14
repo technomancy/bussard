@@ -1,0 +1,1 @@
+return { chance = 30 }
