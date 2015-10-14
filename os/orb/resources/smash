@@ -22,6 +22,8 @@ else
       -- inlining primitives this way is kinda tacky
       if(input == "cd") then
          env.CWD = env.HOME
+      elseif(change_dir and not f[orb.normalize(change_dir, env.CWD)]) then
+         print(change_dir .. " not found.")
       elseif(change_dir) then
          env.CWD = orb.normalize(change_dir, env.CWD)
       elseif(var) then

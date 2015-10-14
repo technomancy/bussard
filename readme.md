@@ -93,6 +93,10 @@ Distributed under the GNU General Public License version 3; see file COPYING.
 
 [Some planet graphics](http://opengameart.org/content/planets-and-stars-set-high-res) © Rawdanitsu, CC0 licensed.
 
+[Other planet graphics](http://opengameart.org/content/27-planets-in-hi-res) © Shaber, CC-BY licensed.
+
+[Still more planet graphics](http://opengameart.org/content/more-planets) © cemkalyoncu, CC-BY licensed.
+
 [Solar system graphics](http://www.solarsystemscope.com/nexus/resources/planet_images/) © Inove, CC-BY licensed.
 
 Station graphics by [MillionthVector](http://millionthvector.blogspot.de/p/free-sprites_12.html), CC-BY licensed.
