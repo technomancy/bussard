@@ -58,8 +58,8 @@ local sandbox = function(ship)
 end
 
 local logout = function(name)
-   session = sessions[name]
-   for k,_ in pairs(sessions[1]["/home/guest"] or {}) do
+   local session = assert(sessions[name], "Can't log out; not logged in.")
+   for k,_ in pairs(session[1]["/home/guest"] or {}) do
       session[1]["/home/guest"][k]= nil
    end
    sessions[name] = nil
@@ -83,7 +83,7 @@ local send_input = function(ship, input)
    else
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env and fs[env.IN], "Not logged into " .. ship.target.name)
-      ship.api.repl.history:append(input)
+      ship.api.repl.history:append(input, true)
       ship.api.repl.print(input)
       fs[env.IN](input)
    end
@@ -112,7 +112,7 @@ return {
          -- buffer output that happens when out of range
          fs[env.OUT] = function(output)
             if(output) then
-               ship.api.repl.print(output)
+               ship.api.repl.write(output)
             else
                ship.api.repl.read = nil -- EOF means terminate session
             end

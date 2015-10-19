@@ -133,8 +133,7 @@ orb.shell = {
                     pairs = orb.utils.mtpairs,
                     ipairs = ipairs,
                     unpack = unpack,
-                    -- TODO: add in newline here once we fix it downstream
-                    print = function(...) write(tostring(...))  end,
+                    print = function(...) write(tostring(...) .. "\n") end,
                     coroutine = { yield = coroutine.yield,
                                   status = coroutine.status },
                     io = { write = write, read = read },

@@ -55,18 +55,24 @@ function buffer:new(ob)
    return o
 end
 
-function buffer:append(entry)
+function buffer:append(entry, assume_newline)
    if self[self.cursor] then
       self[self.cursor] = entry
+      self.cursor = self.cursor + 1
+      if self.entries ~= self.max then
+         self.entries = self.entries + 1
+      end
+   elseif(self[#self] and self[#self]:byte(-1) ~= 10 and not assume_newline) then
+      self[#self] = self[#self] .. entry
    else
       table.insert(self, entry)
+      self.cursor = self.cursor + 1
+      if self.entries ~= self.max then
+         self.entries = self.entries + 1
+      end
    end
-   self.cursor = self.cursor + 1
    if self.cursor == self.max + 1 then
       self.cursor = 1
-   end
-   if self.entries ~= self.max then
-      self.entries = self.entries + 1
    end
 end
 
@@ -109,22 +115,24 @@ end
 
 function repl.on_close() end
 
-function repl.append(prefix, value)
-   value = tostring(value)
-   for _, line in pairs(lume.split(value, "\n")) do
-      if(line ~= "") then repl.last_result = line end
-      lines:append(prefix and ('> ' .. line) or line)
+function repl.write(value)
+   for line, ending in tostring(value):gmatch("([^\n]+\n?)") do
+      if(line and line ~= "" and line ~= "\n") then repl.last_result = line end
+      lines:append(line)
    end
 end
 
 function repl.print(...)
-   local texts = {...}
-   for _,text in ipairs(texts) do repl.append(false, text) end
+   local texts = lume.map({...}, tostring)
+   repl.write(table.concat(texts, "\t") .. "\n")
 end
 
 local function pack(...) return {...} end
 
 function repl.eval(text, add_to_history)
+   -- show input
+   repl.print("> " .. text)
+
    -- Evaluate string
    local func, err = loadstring("return " .. text)
    -- Compilation error
@@ -155,13 +163,12 @@ function repl.eval(text, add_to_history)
                                     err_msg = e end))
       -- local result = pack(xpcall(func, debug.debug))
       if result[1] then
-         repl.append(true, text)
          local results, i = tostring(result[2]), 3
          if add_to_history then
             if text:sub(0,1) == '=' then
-               repl.history:append('return ' .. text:sub(2))
+               repl.history:append('return ' .. text:sub(2), true)
             else
-               repl.history:append(text)
+               repl.history:append(text, true)
             end
          end
          while i <= #result do
@@ -330,35 +337,13 @@ function repl.draw()
    print_edit_line()
 
    -- draw history
-   -- maximum characters in a rendered line of text
    local render_line = function(ln2, row)
-      love.graphics.print(ln2, repl.padding_left, limit -
-                             (ROW_HEIGHT * (row + 1)))
+      love.graphics.print(ln2, repl.padding_left, limit - (ROW_HEIGHT*(row+1)))
    end
 
-   local render_lines = function(ln2, row, rows)
-      love.graphics.printf(ln2, repl.padding_left, limit -
-                              (ROW_HEIGHT * (row + rows)), DISPLAY_WIDTH)
-   end
-
-   if repl.wrapping then
-      -- max chars in a line
-      local line_max = (width - (repl.padding_left * 2)) / repl.font_width
-      local pos, lines_drawn = offset, 0
-      while lines_drawn < DISPLAY_ROWS do
-         local line = lines:get(-pos)
-         if line == nil then break end
-         local lines_to_draw = math.ceil(#line / line_max)
-         render_lines(line, lines_drawn, lines_to_draw)
-         lines_drawn = lines_drawn + lines_to_draw
-         pos = pos + 1
-      end
-   else
-      for i = offset, DISPLAY_ROWS + offset do
-         local line = lines:get(-i)
-         if line == nil then break end
-         render_line(line, i - offset)
-      end
+   for i = offset, DISPLAY_ROWS + offset do
+      local line = lines:get(-i)
+      if(line) then render_line(line, i - offset) end
    end
 
    -- draw scroll bar
