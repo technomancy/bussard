@@ -59,7 +59,7 @@ end
 
 local logout = function(name)
    session = sessions[name]
-   for k,_ in pairs(session[1]["/home/guest"] or {}) do
+   for k,_ in pairs(sessions[1]["/home/guest"] or {}) do
       session[1]["/home/guest"][k]= nil
    end
    sessions[name] = nil

@@ -19,7 +19,8 @@ local mode = function(mode)
 end
 
 local pass_or_login = function()
-   if(ship.sensors.target.portal) then
+   if(not ship.sensors.target) then return
+   elseif(ship.sensors.target.portal) then
       ship.actions.passponder()
    elseif(ship.sensors.target.os) then
       ship.actions.login()

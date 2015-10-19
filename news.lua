@@ -12,6 +12,7 @@ end
 return {
    seed = function(ship, b, fs)
       local groups = love.filesystem.getDirectoryItems("data/news")
+      b.os.fs.mkdir(fs, "/usr/news")
       for _,group in ipairs(groups) do
          fs.usr.news[group] = nil
          local msgs = love.filesystem.getDirectoryItems("data/news/" .. group)
