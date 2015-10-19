@@ -215,8 +215,8 @@ return {
    },
 
 
-   -- Moyla
-   ["Lalande"] = {gov="Moyla", capitol = true,
+   -- Terran
+   ["Lalande"] = {gov="Terran", capitol = true,
                   x=1.6, y=-0.4,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
@@ -231,7 +231,7 @@ return {
                       agri=5, mineral=3,
                       upgrades={"laser"},
                      },
-                     {r=35000, mass=200,
+                     {r=37000, mass=200,
                       image_name="planet-15", -- dark with yellow
                       name="Kala Lamar", os=orb,
 
@@ -248,28 +248,34 @@ return {
                       r=25000, mass=75, portal="Sol",},
                      {name = "Portal: Bohk",
                       image_name="portal-2", interportal=true,
-                      r=29000, mass=75, portal="Bohk",}},
+                      r=29000, mass=75, portal="Bohk",},
+                     {name = "Portal: Katulay",
+                      image_name="portal-2", interportal=true,
+                      r=31000, mass=75, portal="Katulay",},
+                     {name = "Portal: Yueh",
+                      image_name="portal-2", interportal=true,
+                      r=33000, mass=75, portal="Yueh",}},
    },
-   ["Ross"] = {gov="Moyla",
+   ["Ross"] = {gov="Terran",
                x=0, y=-1.7,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=410000,
                    image_name="sun",
                    name="Ross 128", star=true},
-                  {r=35000, mass=200,
+                  {r=35000, mass=200, gov="darush",
                    image_name="shaber3", -- dark red volcanic
-                   name="Kurang", os=orb,
+                   name="Darush", os=orb,
 
-                   industry=4,tech=4,
+                   industry=4,tech=6,
                    remote=5, pop=3,
-                   agri=2, mineral=6,
+                   agri=1, mineral=6,
                    upgrades={},
                   },
                   {r=17000, mass=110,
                    image_name="tribase", station=true,
-                   name="Proxima Station", os=orb,
+                   name="Kuchang Station", os=orb,
 
-                   industry=4,tech=4,
+                   industry=3,tech=5,
                    remote=5, pop=2,
                    agri=0, mineral=3,
                    upgrades={},
@@ -295,15 +301,15 @@ return {
                   {name = "Portal: Lalande",
                    image_name="portal-2", interportal=true,
                    r=22000, mass=75, portal="Lalande",},
-                  {name = "Portal: Wadee",
-                   image_name="portal-2", interportal=true,
-                   r=22000, mass=75, portal="Wadee",},
                   {name = "Portal: New Phobos",
                    image_name="portal-1",
                    r=22000, mass=75, portal="New Phobos"},
                   {name = "Portal: Lucaille",
                    image_name="portal-1",
                    r=22000, mass=75, portal="Lucaille",},
+                  {name = "Portal: Yueh",
+                   image_name="portal-2", interportal=true,
+                   r=22000, mass=75, portal="Yueh",}
                },
    },
    ["New Phobos"] = {gov="Bohk",
@@ -312,9 +318,6 @@ return {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=310000,
                          image_name="sun",
                          name="New Phobos", star=true},
-                        {name = "Portal: Lucaille",
-                         image_name="portal-1",
-                         r=22000, mass=75, portal="Lucaille",},
                         {name = "Portal: Bohk",
                          image_name="portal-1",
                          r=22000, mass=75, portal="Bohk"},
@@ -326,73 +329,70 @@ return {
                       {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
                        image_name="sun",
                        name="Lucaille 8760", star=true},
-                      {name = "Portal: New Phobos",
-                       image_name="portal-1",
-                       r=22000, mass=75, portal="New Phobos",},
                       {name = "Portal: Bohk",
                        image_name="portal-1",
                        r=22000, mass=75, portal="Bohk"},
-                      {name = "Portal: Wadee",
+                      {name = "Portal: Katulay",
                        image_name="portal-2", interportal=true,
-                       r=22000, mass=75, portal="Wadee",}
+                       r=22000, mass=75, portal="Katulay",}
                    }, -- smaller border town
    },
 
 
-   -- Wadee
-   ["Wadee"] = {gov="Wadee", capitol = true,
-                x=3.9, y=2.3,
-                bodies = {
-                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
-                    image_name="sun",
-                    name="Wadee", star=true},
-                   {name = "Portal: Bohk",
-                    image_name="portal-2", interportal=2,
-                    r=22000, mass=75, portal="Bohk"},
-                   {name = "Portal: Lucaille",
-                    image_name="portal-2", interportal=2,
-                    r=22000, mass=75, portal="Lucaille"}
-                }, -- quiet, isolated. internal conflict.
+   -- Katulay
+   ["Katulay"] = {gov="Katulay", capitol = true,
+                  x=3.9, y=2.3,
+                  bodies = {
+                     {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                      image_name="sun",
+                      name="Katulay", star=true},
+                     {name = "Portal: Lalande",
+                      image_name="portal-2", interportal=2,
+                      r=22000, mass=75, portal="Lalande"},
+                     {name = "Portal: Lucaille",
+                      image_name="portal-2", interportal=2,
+                      r=22000, mass=75, portal="Lucaille"}
+                  }, -- quiet, isolated. internal conflict.
    },
 
 
    -- Yueh
-   ["Sigma Draconis"] = {gov="Yueh", -- GI 674
-                         x=4.3, y=-1.3,
-                         bodies = {
-                            {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
-                             image_name="sun",
-                             name="Sigma Draconis", star=true},
-                            {name = "Portal: Bohk",
-                             image_name="portal-2", interportal=true,
-                             r=22000, mass=75, portal="Bohk"},
-                            {name = "Portal: Lalande",
-                             image_name="portal-2", interportal=true,
-                             r=22000, mass=75, portal="Lalande"},
-                            {name = "Portal: Wolf 1481",
-                             image_name="portal-1",
-                             r=22000, mass=75, portal="Wolf 1481"},
-                            {name = "Portal: LHS 451",
-                             image_name="portal-1",
-                             r=22000, mass=75, portal="LHS 451"},
-                            {name = "Portal: Yueh",
-                             image_name="portal-1",
-                             r=22000, mass=75, portal="Yueh"},
-                         }, -- gateway world
-   },
-   ["Yueh"] = {gov="Yueh", capitol = true, -- GI 693
-               x= 5.2, y=-2.3,
+   ["Yueh"] = {gov="Yueh", -- GI 674
+               x=4.3, y=-1.3,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                    image_name="sun",
-                   name="Yueh", star=true},
-                  {name = "Portal: Delta Pavonis",
+                   name="Sigma Draconis", star=true},
+                  {name = "Portal: Bohk",
+                   image_name="portal-2", interportal=true,
+                   r=22000, mass=75, portal="Bohk"},
+                  {name = "Portal: Lalande",
+                   image_name="portal-2", interportal=true,
+                   r=22000, mass=75, portal="Lalande"},
+                  {name = "Portal: Wolf 1481",
                    image_name="portal-1",
-                   r=22000, mass=75, portal="Delta Pavonis"},
-                  {name = "Portal: Sigma Draconis",
+                   r=22000, mass=75, portal="Wolf 1481"},
+                  {name = "Portal: LHS 451",
                    image_name="portal-1",
-                   r=22000, mass=75, portal="Sigma Draconis"}
-               }, -- bustling trade hub
+                   r=22000, mass=75, portal="LHS 451"},
+                  {name = "Portal: Kowlu",
+                   image_name="portal-1",
+                   r=22000, mass=75, portal="Kowlu"},
+               }, -- Yueh capital
+   },
+   ["Kowlu"] = {gov="Yueh", capitol = true, -- GI 693
+                x= 5.2, y=-2.3,
+                bodies = {
+                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                    image_name="sun",
+                    name="Kowlu", star=true},
+                   {name = "Portal: Delta Pavonis",
+                    image_name="portal-1",
+                    r=22000, mass=75, portal="Delta Pavonis"},
+                   {name = "Portal: Yueh",
+                    image_name="portal-1",
+                    r=22000, mass=75, portal="Yueh"}
+                }, -- bustling trade hub
    },
    ["Delta Pavonis"] = {gov="Yueh",
                         x=4.5, y=-2.6,
@@ -403,9 +403,9 @@ return {
                            {name = "Portal: Wolf 1481",
                             image_name="portal-1",
                             r=22000, mass=75, portal="Wolf 1481"},
-                           {name = "Portal: Yueh",
+                           {name = "Portal: Kowlu",
                             image_name="portal-1",
-                            r=22000, mass=75, portal="Yueh"},
+                            r=22000, mass=75, portal="Kowlu"},
                            {name = "Portal: CD-40 9712",
                             image_name="portal-1",
                             r=22000, mass=75, portal="CD-40 9712"},
@@ -417,9 +417,9 @@ return {
                        {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                         image_name="sun",
                         name="Wolf 1481", star=true},
-                       {name = "Portal: Sigma Draconis",
+                       {name = "Portal: Yueh",
                         image_name="portal-1",
-                        r=22000, mass=75, portal="Sigma Draconis"},
+                        r=22000, mass=75, portal="Yueh"},
                        {name = "Portal: Delta Pavonis",
                         image_name="portal-1",
                         r=22000, mass=75, portal="Delta Pavonis"}
@@ -432,9 +432,9 @@ return {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                       image_name="sun",
                       name="LHS 451", star=true},
-                     {name = "Portal: Sigma Draconis",
+                     {name = "Portal: Yueh",
                       image_name="portal-1",
-                      r=22000, mass=75, portal="Sigma Draconis"},
+                      r=22000, mass=75, portal="Yueh"},
                   }, -- mostly uninhabited
    },
    ["CD-40 9712"] = {gov="Yueh", -- GI 588
