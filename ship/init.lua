@@ -56,7 +56,6 @@ local sandbox = {
    ipairs = ipairs,
    unpack = unpack,
    print = repl.print,
-   pp = lume.serialize,
    realprint = print, -- for debugging
    coroutine = { yield = coroutine.yield,
                  status = coroutine.status },
@@ -77,6 +76,7 @@ local sandbox = {
       distance = utils.distance,
       format_seconds = utils.format_seconds,
    },
+   lume = lume,
 }
 
 local sandbox_dofile = function(ship, filename)

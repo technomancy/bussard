@@ -1,3 +1,6 @@
+-- need to fix pairs before loading lume
+_, lume = require("metatable_monkey"), require("lume")
+
 local starfield = require "starfield"
 local body = require "body"
 local hud = require "ship.hud"

@@ -163,7 +163,7 @@ function repl.eval(text, add_to_history)
                                     err_msg = e end))
       -- local result = pack(xpcall(func, debug.debug))
       if result[1] then
-         local results, i = tostring(result[2]), 3
+         local results, i = lume.serialize(result[2], true), 3
          if add_to_history then
             if text:sub(0,1) == '=' then
                repl.history:append('return ' .. text:sub(2), true)
@@ -172,7 +172,7 @@ function repl.eval(text, add_to_history)
             end
          end
          while i <= #result do
-            results = results .. ', ' .. tostring(result[i])
+            results = results .. ', ' .. lume.serialize(result[i], true)
             i = i + 1
          end
          repl.print(results)

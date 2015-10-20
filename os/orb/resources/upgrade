@@ -4,7 +4,7 @@ local f, env, args = ...
 
 if(args[1] == "list") then
    print("Prices:")
-   for name,price in pairs(station.upgrade_prices) do
+   for name,price in pairs(station.upgrade_prices or {}) do
       print("  " .. name .. ": " .. price)
    end
 elseif(args[1] == "buy") then

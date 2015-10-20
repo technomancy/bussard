@@ -1,4 +1,4 @@
-require "metatable_monkey"
+local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
 
 local shallow_copy = function(orig)
    local orig_type = type(orig)
@@ -32,7 +32,7 @@ end
 local pairs_for = function(raw, wrap)
    return function(_)
       local t = {}
-      for k,v in pairs(raw) do
+      for k,v in original_pairs(raw) do
          if(type(v) == "table") then
             t[k] = wrap(v)
          else
@@ -46,7 +46,7 @@ end
 local ipairs_for = function(raw, wrap)
    return function(_)
       local t = {}
-      for k,v in ipairs(raw) do
+      for k,v in original_ipairs(raw) do
          if(type(v) == "table") then
             t[k] = wrap(v)
          else
@@ -76,6 +76,20 @@ local function readonly_proxy(source, table_name)
    return t
 end
 
+local whitelist_pairs = function(source, whitelist)
+   return function(_)
+      local trimmed = {}
+      for k,v in pairs(lume.pick(source, unpack(whitelist))) do
+         if(type(v) == "table") then
+            trimmed[k] = readonly_proxy(v, k)
+         else
+            trimmed[k] = v
+         end
+      end
+      return next, trimmed, nil
+   end
+end
+
 return {
    shallow_copy = shallow_copy,
 
@@ -98,9 +112,9 @@ return {
                end
             end
          end,
-         __pairs = pairs_for(source, readonly_proxy),
-         __ipairs = ipairs_for(source, readonly_proxy),
-         __newindex = function(_, _, _) error(table_name .. " are read-only") end
+         __pairs = whitelist_pairs(source, whitelist),
+         __ipairs = whitelist_pairs(source, whitelist),
+         __newindex = function(_, _, _) error(table_name .. " is read-only") end
       }
       setmetatable(t, mt)
       return t

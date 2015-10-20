@@ -15,6 +15,8 @@ local orb = require("os.orb")
 -- pop
 -- upgrades
 
+-- TODO1: scatter more upgrades around the systems
+
 return {
    -- Tana
    ["Tana"] =
@@ -269,7 +271,7 @@ return {
                    industry=4,tech=6,
                    remote=5, pop=3,
                    agri=1, mineral=6,
-                   upgrades={},
+                   upgrades={"laser"},
                   },
                   {r=17000, mass=110,
                    image_name="tribase", station=true,

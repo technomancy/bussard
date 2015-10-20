@@ -554,16 +554,27 @@ local serialize_map = {
   end
 }
 
+local serialize_unreadable = false
+
 setmetatable(serialize_map, {
-  __index = function(_, k) error("unsupported serialize type: " .. k) end
+                __index = function(_, k)
+                   return function(v)
+                      if serialize_unreadable then
+                         return "#<" .. tostring(v) .. ">"
+                      else
+                         error("unsupported serialize type: " .. k)
+                      end
+                   end
+                end
 })
 
 serialize = function(x, stk)
   return serialize_map[type(x)](x, stk)
 end
 
-function lume.serialize(x)
-  return serialize(x)
+function lume.serialize(x, include_unreadable)
+   serialize_unreadable = include_unreadable
+   return serialize(x)
 end
 
 

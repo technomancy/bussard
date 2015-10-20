@@ -34,3 +34,5 @@ table.length = function(tab)
    for _ in mtipairs(tab) do n = n + 1 end
    return n
 end
+
+return {original_pairs, original_ipairs}
