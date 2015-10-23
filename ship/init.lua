@@ -85,6 +85,11 @@ local sandbox_dofile = function(ship, filename)
    chunk()
 end
 
+local epoch_for = function(year)
+   local years = year - 1970
+   return years * 365 * 52 * 7 * 24 * 60 * 60
+end
+
 local ship = {
    -- ephemeral
    x=0, y=0, dx=0, dy=0, heading = math.pi,
@@ -101,7 +106,7 @@ local ship = {
    -- keep around
    fuel = 128,
    credits = 1024,
-   time_offset = 4383504000, -- roughly 139 years ahead
+   time_offset = epoch_for(2431),
    system_name = "L 668-21",
    cargo = {["food"] = 2},
    upgrade_names = {"passponder"},
