@@ -133,6 +133,11 @@ keymap.define("edit", "ctrl-backspace", ship.edit.backward_kill_word)
 keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
+keymap.define("edit", "ctrl-l", function()
+                 ship.edit.newline()
+                 ship.edit.textinput("\f")
+                 ship.edit.newline()
+end)
 
 -- HUD
 ship.hud = {

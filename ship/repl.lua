@@ -337,8 +337,13 @@ function repl.draw()
    print_edit_line()
 
    -- draw history
-   local render_line = function(ln2, row)
-      love.graphics.print(ln2, repl.padding_left, limit - (ROW_HEIGHT*(row+1)))
+   local function render_line(ln2, row)
+      if(ln2 == "\f\n" or ln2 == "\f") then
+         local y = limit - (ROW_HEIGHT*(row+1)) + 0.5 * ROW_HEIGHT
+         love.graphics.line(PADDING, y, width - PADDING, y)
+      else
+         love.graphics.print(ln2, PADDING, limit - (ROW_HEIGHT*(row+1)))
+      end
    end
 
    for i = offset, DISPLAY_ROWS + offset do

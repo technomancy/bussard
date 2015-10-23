@@ -28,6 +28,13 @@ your view. You can fly around the system as your fuel supply
 permits. The ship's onboard collectors will replenish the fuel supply,
 though slowly.
 
+In accordance with interstellar law, your ship is equipped with
+Collision Avoidance System (CAS) which prevent you from plotting a
+course which would result in a collision with another body. If you set
+yourself on a course towards another ship, a station, planet,
+asteroid, or star, the CAS will automatically adjust your course so
+that you will fly harmlessly over it.
+
 ## Computer
 
 The heart of your ship is its onboard computer. The Bussard-class

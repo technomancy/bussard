@@ -330,7 +330,12 @@ return {
 
       -- maximum characters in a rendered line of text
       local render_line = function(ln2, y)
-         love.graphics.print(ln2, PADDING, y)
+         if(ln2 == "\f\n" or ln2 == "\f") then
+            love.graphics.line(PADDING, y + 0.5 * ROW_HEIGHT,
+                               width - PADDING, y + 0.5 * ROW_HEIGHT)
+         else
+            love.graphics.print(ln2, PADDING, y)
+         end
       end
 
       local edge = math.ceil(DISPLAY_ROWS * 0.3)
