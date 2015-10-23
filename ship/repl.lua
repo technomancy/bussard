@@ -114,6 +114,7 @@ end
 function repl.on_close() end
 
 function repl.write(value)
+   -- FIXME: this gmatch does strip out consecutive newlines
    for line,_ in tostring(value):gmatch("([^\n]+\n?)") do
       if(line and line ~= "" and line ~= "\n") then repl.last_result = line end
       lines:append(line)

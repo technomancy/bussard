@@ -21,7 +21,7 @@ return {
          fs.usr.news[group] = nil
          local msgs = love.filesystem.getDirectoryItems("data/news/" .. group)
          for _,basename in ipairs(msgs) do
-            local _,_,name = basename:find("(.*)\\.msg")
+            local _,_,name = basename:find("(.*).msg")
             local group_meta = dofile_if_exists("data/news/" .. group .. ".lua")
             if(name) then
                local filename = "data/news/" .. group .. "/" .. basename
