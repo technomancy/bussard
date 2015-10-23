@@ -1,0 +1,75 @@
+From: Sobomun Mobor
+Subject: What's with these forced CAS upgrades?
+To: soc.tana
+Message-Id: 572264d9-7d4a-4792-aa6f-e847e1dd471f
+
+I got stuck at registration for four hours yesterday when they informed
+me my Collision Avoidance System needed an upgrade. I couldn't believe
+they'd keep my ship stuck there for so long; I nearly missed a delivery
+deadline. Is it just me, or are they becoming more and more strict about
+this? It's getting ridiculous.
+
+
+
+From: Mutebudeder Wezatum
+Subject: Re: What's with these forced CAS upgrades?
+To: soc.tana
+Message-Id: 10a32644-dc4b-4662-9d32-cf7123c08092
+In-Reply-To: 572264d9-7d4a-4792-aa6f-e847e1dd471f
+
+Sobomun Mobor wrote:
+> Is it just me, or are they becoming more and more strict about this?
+> It's getting ridiculous.
+
+Yeah, I've noticed this; the delays are worse than they used to be.
+
+
+
+From: Nelon Pajed
+Subject: Re: What's with these forced CAS upgrades?
+To: soc.tana
+Message-Id: f8ce17f8-7936-11e5-8eab-001f16110e8c
+In-Reply-To: 572264d9-7d4a-4792-aa6f-e847e1dd471f
+
+Sobomun Mobor wrote:
+> I got stuck at registration for four hours yesterday when they informed
+> me my Collision Avoidance System needed an upgrade. I couldn't believe
+> they'd keep my ship stuck there for so long
+
+Listen, I know it may not be the most convenient thing for you space
+cowboys, but those of us who live on an actual planet are quite glad for
+anything that keeps you careless pilots from crashing into us.
+
+
+
+From: Mutebudeder Wezatum
+Subject: Re: What's with these forced CAS upgrades?
+To: soc.tana
+Message-Id: 9ec5fa1b-4d2f-4c83-8575-3e1820b4db07
+In-Reply-To: f8ce17f8-7936-11e5-8eab-001f16110e8c
+
+> those of us who live on an actual planet are quite glad for
+> anything that keeps you careless pilots from crashing into us.
+
+Oh come on; what's the worst that could happen? Some poor sod vaporizing
+in the sky providing you with pretty fireworks?
+
+
+
+From: Nelon Pajed
+Subject: Re: What's with these forced CAS upgrades?
+To: soc.tana
+Message-Id: a4fbee83-c4bb-45c7-a083-651900bb52f3
+In-Reply-To: f8ce17f8-7936-11e5-8eab-001f16110e8c
+
+> Oh come on; what's the worst that could happen?
+
+You really have no idea, do you? Even at a measley 3 km/s, any object
+will impact with the equivalent energy of its own mass in TNT. Speed it
+up by the kind of acceleration you seen in the gravity well of even a
+mid-sized planet, and a typical freighter impact would easily be in the
+hundred-megaton range.
+
+So yeah, let's have a little less whining and a little more being glad
+entire colonies don't get razed when some sleep-deprived captain bumps
+his elbow against his throttle.

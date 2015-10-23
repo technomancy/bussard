@@ -1,0 +1,53 @@
+From: Panan Goubes
+Subject: relations with sol
+To: soc.tana
+Message-Id: 8ed596d9-2bcb-44b1-ab59-6b42ff475bd7
+
+It seems like Sol is benefiting an awful lot from the mining going on
+here in Tana. It makes you wonder if we'll ever get our independence. I
+remember reading that Bohk was granted independence early after it was
+colonized; maybe the same thing will happen here.
+
+
+
+From: Nassoum Tabaried
+Subject: Re: relations with sol
+To: soc.tana
+In-Reply-To: 8ed596d9-2bcb-44b1-ab59-6b42ff475bd7
+Message-Id: e042446b-8427-4644-801b-3f3ce127a4e5
+
+Comparing the situation here with the one in Bohk is really
+misleading. You have to remember most colonies were begun back in the
+days of light-speed communication. Even if the Solar Union did want to
+keep control over the newly-founded Bohk colony, all communications
+would have taken about 12 years to arrive in each direction. You can't
+really maintain a colonial power at that kind of distance.
+
+These days things are different; we have our portals, and you can get
+from Tana Prime to Earth in a single day.
+
+
+
+From: Mafavies Gousellin
+Subject: Re: relations with sol
+To: soc.tana
+In-Reply-To: e042446b-8427-4644-801b-3f3ce127a4e5
+Message-Id: 25aeeed1-e7b4-4bb0-81db-003ceead9a5e
+
+Technically Bohk didn't secede from the Solar Union; it was still the
+Terran Republic at that point. The Solar Union didn't declare
+independence from the republic until over a century later.
+
+But anyway, the other main difference in our case with Tana is that
+we're completely dependent on contact with Sol for our food. Bohk's
+colonists knew they couldn't depend on supplies reaching them, so they
+had to build bigger colony ships that included everything they needed
+for self-sufficient agriculture.
+
+Maybe we'd be better off if the Tana colony ships had done the same, but
+my understanding is that once the Republic authorized sending portals on
+the colony ships, they wanted to get them out as quickly as possible.
+
+Also, posting about gaining independence in a public forum is not the
+smartest thing in the world. Sol is no Terran Republic, but you might
+want to show a little more discretion in the future.
