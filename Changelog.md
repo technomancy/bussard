@@ -2,6 +2,9 @@
 
 ## alpha-4 / ???
 
+* Create news system.
+* Add in-game independent clock.
+* Add portal animation.
 * Fix a bug where flying would scramble repl input.
 * Add power mechanics.
 * Fix kill ring commands.

@@ -85,7 +85,19 @@ Planned features:
 * virtualization to allow you to run station code on your ship
 * abandoned civilizations and artifacts
 
-## License
+## Influences
+
+* [Escape Velocity](http://www.ambrosiasw.com/games/ev/) (gameplay)
+* [Kerbal Space Program](https://kerbalspaceprogram.com/en/) (mechanics)
+* [Marathon Trilogy](http://marathon.bungie.org/story/) (story)
+* [A Fire upon the Deep](http://www.tor.com/2009/06/11/the-net-of-a-million-lies-vernor-vinges-a-fire-upon-the-deep/) (story)
+* [Anathem](http://www.nealstephenson.com/anathem.html) (story, philosophy)
+* [Mindstorms](https://www.goodreads.com/book/show/703532.Mindstorms) (philosophy)
+* [GNU Emacs](https://www.gnu.org/software/emacs/) (architecture)
+* [Unix](https://en.wikipedia.org/wiki/Unix) (architecture)
+* [Atomic Rockets](http://www.projectrho.com/public_html/rocket/) (science)
+
+## Licenses
 
 Code copyright © 2015 Phil Hagelberg and contributors
 

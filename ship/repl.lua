@@ -21,8 +21,6 @@ local PADDING = 20
 local ROW_HEIGHT
 -- Maximum amount of rows that can be displayed on the screen
 local DISPLAY_ROWS
--- Width of the display available for text, in pixels
-local DISPLAY_WIDTH
 -- Console contents
 -- List of {boolean, string} where boolean is true if the string is part of user
 -- -navigable history (a > will be prepended before rendering if true)
@@ -116,7 +114,7 @@ end
 function repl.on_close() end
 
 function repl.write(value)
-   for line, ending in tostring(value):gmatch("([^\n]+\n?)") do
+   for line,_ in tostring(value):gmatch("([^\n]+\n?)") do
       if(line and line ~= "" and line ~= "\n") then repl.last_result = line end
       lines:append(line)
    end
