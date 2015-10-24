@@ -251,9 +251,9 @@ return {
                      {name = "Portal: Bohk",
                       image_name="portal-2", interportal=true,
                       r=29000, mass=75, portal="Bohk",},
-                     {name = "Portal: Katulay",
+                     {name = "Portal: Katilay",
                       image_name="portal-2", interportal=true,
-                      r=31000, mass=75, portal="Katulay",},
+                      r=31000, mass=75, portal="Katilay",},
                      {name = "Portal: Yueh",
                       image_name="portal-2", interportal=true,
                       r=33000, mass=75, portal="Yueh",}},
@@ -334,20 +334,20 @@ return {
                       {name = "Portal: Bohk",
                        image_name="portal-1",
                        r=22000, mass=75, portal="Bohk"},
-                      {name = "Portal: Katulay",
+                      {name = "Portal: Katilay",
                        image_name="portal-2", interportal=true,
-                       r=22000, mass=75, portal="Katulay",}
+                       r=22000, mass=75, portal="Katilay",}
                    }, -- smaller border town
    },
 
 
-   -- Katulay
-   ["Katulay"] = {gov="Katulay", capitol = true,
+   -- Katilay
+   ["Katilay"] = {gov="Katilay", capitol = true,
                   x=3.9, y=2.3,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                       image_name="sun",
-                      name="Katulay", star=true},
+                      name="Katilay", star=true},
                      {name = "Portal: Lalande",
                       image_name="portal-2", interportal=2,
                       r=22000, mass=75, portal="Lalande"},

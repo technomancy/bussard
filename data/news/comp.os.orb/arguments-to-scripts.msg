@@ -1,0 +1,40 @@
+From: Fifod Renoub
+Subject: Arguments to scripts
+To: comp.os.orb
+Message-Id: 721357c2-a6e5-45ab-a8ed-39eb39308b33
+
+I noticed some of the scripts built-in to Orb use the ... notation. How
+does this work?
+
+
+
+From: Nikab Wouvuserar
+Subject: Re: Arguments to scripts
+To: comp.os.orb
+Message-Id: 4fdad4e0-d2cc-4e34-9651-566bc74a986d
+In-Reply-To: 721357c2-a6e5-45ab-a8ed-39eb39308b33
+
+When the OS loads a "chunk" of code like a script off the filesystem, it
+invokes it as a function, so just imagine your script is surrounded with
+something like this.
+
+  local yourscript = function()
+    YOUR_STUFF_HERE
+  end
+
+In order for your function to be useful, it usually needs to interact
+with the filesystem, the table containing environment variables, and
+whatever arguments the user invoked your script with. So if someone runs
+
+  $ yourscript one two three
+
+Orb translates that into something like this invocation of the function
+defined as above:
+
+  yourscript(filesystem, environment, {"one", "two", "three"})
+
+Because of this, most scripts start with this:
+
+  local f, env, args = ...
+
+Then later on they use these locals to read/write the filesystem or env table.

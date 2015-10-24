@@ -3,11 +3,11 @@ Subject: What's with these forced CAS upgrades?
 To: soc.tana
 Message-Id: 572264d9-7d4a-4792-aa6f-e847e1dd471f
 
-I got stuck at registration for four hours yesterday when they informed
-me my Collision Avoidance System needed an upgrade. I couldn't believe
-they'd keep my ship stuck there for so long; I nearly missed a delivery
-deadline. Is it just me, or are they becoming more and more strict about
-this? It's getting ridiculous.
+I got stuck at registration for a hundred kiloseconds yesterday when
+they informed me my Collision Avoidance System needed an upgrade. I
+couldn't believe they'd keep my ship stuck there for so long; I nearly
+missed a delivery deadline. Is it just me, or are they becoming more and
+more strict about this? It's getting ridiculous.
 
 
 
@@ -32,9 +32,9 @@ Message-Id: f8ce17f8-7936-11e5-8eab-001f16110e8c
 In-Reply-To: 572264d9-7d4a-4792-aa6f-e847e1dd471f
 
 Sobomun Mobor wrote:
-> I got stuck at registration for four hours yesterday when they informed
-> me my Collision Avoidance System needed an upgrade. I couldn't believe
-> they'd keep my ship stuck there for so long
+> I got stuck at registration for a hundred kiloseconds yesterday when
+> they informed me my Collision Avoidance System needed an upgrade. I
+> couldn't believe they'd keep my ship stuck there for so long
 
 Listen, I know it may not be the most convenient thing for you space
 cowboys, but those of us who live on an actual planet are quite glad for

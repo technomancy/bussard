@@ -1,0 +1,20 @@
+From: Bugot Fitin
+Subject: Scoop range?
+To: soc.tana
+Message-Id: 5d8e03fc-919a-4827-a9ae-b53e4f9a856e
+
+When I'm out mining, sometimes getting within scoop range is a real
+pain. I've been looking around for upgraded scoops, but they're pretty
+pricey. Does it make sense to drop some serious credits on one of these?
+
+
+
+From: Wubon Tidum
+Subject: Re: Scoop range?
+To: soc.tana
+Message-Id: b2898aa1-b4e9-49b1-927f-2c8bc8a23016
+In-Reply-To: 5d8e03fc-919a-4827-a9ae-b53e4f9a856e
+
+Remember that your laser effectiveness decreases pretty quickly with
+distance. Upgrading your scoop isn't as helpful as it sounds if your
+laser still only works effectively at close distances.

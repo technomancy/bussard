@@ -18,12 +18,13 @@ Message-Id: e042446b-8427-4644-801b-3f3ce127a4e5
 
 Comparing the situation here with the one in Bohk is really
 misleading. You have to remember most colonies were begun back in the
-days of light-speed communication. Even if the Solar Union did want to
+age of light-speed communication. Even if the Solar Union did want to
 keep control over the newly-founded Bohk colony, all communications
-would have taken about 12 years to arrive in each direction. You can't
-really maintain a colonial power at that kind of distance.
+would have taken about half a gigasecond to arrive in each
+direction. You can't really maintain a colonial power at that kind of
+distance.
 
-These days things are different; we have our portals, and you can get
+Now things are different; we have our portals, and you can get
 from Tana Prime to Earth in a single day.
 
 
@@ -49,5 +50,5 @@ my understanding is that once the Republic authorized sending portals on
 the colony ships, they wanted to get them out as quickly as possible.
 
 Also, posting about gaining independence in a public forum is not the
-smartest thing in the world. Sol is no Terran Republic, but you might
+smartest thing in the galaxy. Sol is no Terran Republic, but you might
 want to show a little more discretion in the future.
