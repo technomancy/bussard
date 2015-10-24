@@ -15,7 +15,7 @@ local ship_filename = "ship_data.lua"
 local system_filename = "system_data.lua"
 
 local fs_filename = function(b)
-   return b.name .. "_fs.lua"
+   return "fs/" .. b.name .. ".lua"
 end
 
 local get_system_data = function(bodies)
@@ -34,6 +34,7 @@ return {
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
                             lume.serialize(get_system_data(ship.bodies)))
+      love.filesystem.createDirectory("fs")
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do
             local fs = body.filesystems[b.name]
