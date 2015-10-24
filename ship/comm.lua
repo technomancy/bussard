@@ -128,9 +128,9 @@ return {
 
          local motd = "Login succeeded. Run `logout` to disconnect."
          if(fs_raw.etc.motd) then motd = (motd .. "\n" .. fs_raw.etc.motd) end
-         return motd
+         ship.api.repl.print(motd)
       else
-         return "Login failed."
+         ship.api.repl.print("Login failed.")
       end
    end,
 
