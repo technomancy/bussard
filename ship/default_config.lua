@@ -79,6 +79,8 @@ keymap.define("repl", "escape", mode("flight"))
 
 keymap.define("repl", "ctrl-l", ship.repl.clear)
 
+-- TODO: binding to jump straight to the editor
+
 keymap.modes["repl"].textinput = ship.repl.textinput
 
 -- Edit mode

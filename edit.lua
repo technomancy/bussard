@@ -294,6 +294,7 @@ return {
    end,
 
    kill_ring_save = function()
+      if(mark == nil or mark_line == nil) then return end
       push(kill_ring, region(), kill_ring_max)
    end,
 
