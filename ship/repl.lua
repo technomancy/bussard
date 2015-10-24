@@ -4,6 +4,8 @@
 
 -- Adapted for this specific game by Phil Hagelberg
 
+-- TODO: throw this all away and implement it as a mode inside the editor
+
 local lume = require("lume")
 local love = love
 

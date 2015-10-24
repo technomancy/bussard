@@ -100,6 +100,30 @@ local yank = function()
    end
 end
 
+local forward_word = function()
+   local remainder = lines[point_line]:sub(point + 1, -1)
+   if(not remainder:find("%S")) then
+      point, point_line = 0, point_line+1
+   end
+   local _, match = lines[point_line]:find(word_break, point + 2)
+   point = match and match - 1 or #lines[point_line]
+end
+
+local backward_word = function()
+   local before = lines[point_line]:sub(0, point)
+   if(not before:find("%S")) then
+      point_line = point_line - 1
+      point = #lines[point_line]
+   end
+   local back_line = lines[point_line]:sub(0, math.max(point - 1, 0)):reverse()
+   if(back_line and back_line:find(word_break)) then
+      local _, match = back_line:find(word_break)
+      point = string.len(back_line) - match + 1
+   else
+      point = 0
+   end
+end
+
 return {
    initialize = function()
       ROW_HEIGHT = love.graphics.getFont():getHeight()
@@ -218,28 +242,20 @@ return {
       end
    end,
 
-   forward_word = function()
-      local remainder = lines[point_line]:sub(point + 1, -1)
-      if(not remainder:find("%S")) then
-         point, point_line = 0, point_line+1
-      end
-      local _, match = lines[point_line]:find(word_break, point + 2)
-      point = match and match - 1 or #lines[point_line]
+   forward_word = forward_word,
+
+   backward_word = backward_word,
+
+   backward_kill_word = function()
+      local original_point_line, original_point = point_line, point
+      backward_word()
+      delete(point_line, point, original_point_line, original_point)
    end,
 
-   backward_word = function()
-      local before = lines[point_line]:sub(0, point)
-      if(not before:find("%S")) then
-         point_line = point_line - 1
-         point = #lines[point_line]
-      end
-      local back_line = lines[point_line]:sub(0, math.max(point - 1, 0)):reverse()
-      if(back_line and back_line:find(word_break)) then
-         local _, match = back_line:find(word_break)
-         point = string.len(back_line) - match + 1
-      else
-         point = 0
-      end
+   forward_kill_word = function()
+      local original_point_line, original_point = point_line, point
+      forward_word()
+      delete(original_point_line, original_point, point_line, point)
    end,
 
    beginning_of_buffer = function()
@@ -313,7 +329,6 @@ return {
    draw = function()
       if not on then return end
       local width, height = love.graphics:getWidth(), love.graphics:getHeight()
-      -- TODO: unify with repl
       DISPLAY_WIDTH = width - PADDING
       DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
 

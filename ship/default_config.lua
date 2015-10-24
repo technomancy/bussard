@@ -128,7 +128,6 @@ keymap.define("edit", "ctrl-w", ship.edit.kill_region)
 keymap.define("edit", "ctrl-y", ship.edit.yank)
 keymap.define("edit", "alt-y", ship.edit.yank_pop)
 
--- TODO
 keymap.define("edit", "ctrl-backspace", ship.edit.backward_kill_word)
 keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
 
