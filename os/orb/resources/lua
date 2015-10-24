@@ -2,19 +2,26 @@
 
 local f, env, args = ...
 
-if(#args > 0) then
-   local chunk = assert(loadstring(f[args[1]]))
-   chunk()
-elseif(args[1] == "--help") then
+if(#args == 1) then
+   local contents = f[args[1]]
+   if(contents) then
+      local chunk = assert(loadstring(contents))
+      chunk()
+   else
+      print(args[1] .. " not found.")
+   end
+elseif(args[1] == "--help" or #args > 0) then
    print("An interpreter for executing Lua code.\n")
    print("Usage:")
    print("  lua # to begin an interactive session")
    print("  lua PATH_TO_FILE_TO_RUN")
 else
+   print("Lua 5.1.6259 Copyright (C) 1994-2422 Lua.org, PUC-Rio")
+   print("Run `exit()` to exit.")
    while true do
       io.write("> ")
       local input = io.read()
-      if(not input) then return end
+      if(not input or input == "exit" or input == "exit()") then return end
 
       local chunk = assert(loadstring(input))
       chunk()

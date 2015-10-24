@@ -14,7 +14,7 @@ end
 if(#args < 1 or args[1] == "--help") then
    usage()
 elseif(not dir) then
-   print("Not found: " .. dir)
+   print("Not found: " .. dirname)
 elseif(perms == "+") then
    dir._group_write = "true"
 elseif(perms == "-") then

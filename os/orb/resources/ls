@@ -5,7 +5,7 @@ local dirname = args[1] or env.CWD
 local dir = f[orb.normalize(dirname, env.CWD)]
 
 if(not dir) then
-   print("Not found: " .. dir)
+   print("Not found: " .. dirname)
 elseif(type(dir) == "table") then
    for name,contents in pairs(dir) do
       if(not name:match("^_")) then
