@@ -9,6 +9,7 @@ ship.controls = {
 }
 
 local pause = function() ship.paused = (not ship.paused) end
+
 local mode = function(mode)
    return function()
       if(keymap.current_mode == "edit") then ship.edit.save() end
@@ -18,23 +19,14 @@ local mode = function(mode)
    end
 end
 
-local pass_or_login = function()
-   if(not ship.sensors.target) then return
-   elseif(ship.sensors.target.portal) then
-      ship.actions.passponder()
-   elseif(ship.sensors.target.os) then
-      ship.actions.login()
-   end
-end
-
 -- Flight mode
 keymap.define_mode("flight")
-keymap.define("flight", "ctrl-return", mode("repl"))
-
+keymap.define("flight", "ctrl-`", mode("repl"))
 keymap.define("flight", "escape", ship.ui.quit)
+
 keymap.define("flight", "tab", ship.actions.next_target)
 keymap.define("flight", "ctrl-tab", ship.actions.closest_target)
-keymap.define("flight", "ctrl- ", pass_or_login)
+keymap.define("flight", "ctrl- ", ship.actions.passponder)
 
 keymap.modes["flight"].textinput = function(text)
    if(not ship.controls[text]) then
@@ -50,6 +42,7 @@ keymap.define({"repl", "flight"}, "return", ship.repl.eval_line)
 keymap.define({"repl", "flight"}, "backspace", ship.repl.delete_backwards)
 keymap.define({"repl", "flight"}, "ctrl-h", ship.repl.delete_backwards)
 keymap.define({"repl", "flight"}, "delete", ship.repl.delete_forwards)
+keymap.define({"repl", "flight"}, "ctrl-d", ship.repl.delete_forwards)
 keymap.define({"repl", "flight"}, "ctrl-k", ship.repl.kill_line)
 
 keymap.define({"repl", "flight"}, "ctrl-a", ship.repl.move_beginning_of_line)
@@ -63,8 +56,8 @@ keymap.define({"repl", "flight"}, "alt-f", ship.repl.forward_word)
 keymap.define({"repl", "flight"}, "alt-b", ship.repl.backward_word)
 
 keymap.define({"repl", "flight"}, "ctrl-p", ship.repl.history_prev)
-keymap.define({"repl", "flight"}, "down", ship.repl.history_next)
 keymap.define({"repl", "flight"}, "ctrl-n", ship.repl.history_next)
+keymap.define({"repl", "flight"}, "down", ship.repl.history_next)
 
 -- Not part of flight mode
 keymap.define("repl", "up", ship.repl.history_prev)
@@ -74,18 +67,17 @@ keymap.define("repl", "left", ship.repl.backward_char)
 keymap.define("repl", "pageup", ship.repl.scroll_up)
 keymap.define("repl", "pagedown", ship.repl.scroll_down)
 
-keymap.define("repl", "ctrl-return", mode("flight"))
 keymap.define("repl", "escape", mode("flight"))
+keymap.define({"flight", "repl"}, "ctrl-return", function() ship:e("src.config") end)
 
 keymap.define("repl", "ctrl-l", ship.repl.clear)
-
--- TODO: binding to jump straight to the editor
 
 keymap.modes["repl"].textinput = ship.repl.textinput
 
 -- Edit mode
 keymap.define_mode("edit")
 keymap.define("edit", "escape", mode("flight"))
+keymap.define("edit", "ctrl-`", mode("repl"))
 keymap.define("edit", "pause", pause)
 keymap.define("edit", "return", ship.edit.newline)
 keymap.define("edit", "ctrl-r", ship.edit.revert)
@@ -160,11 +152,11 @@ ship.hud = {
    },
 
    { x=-180, y=5, type="text",
-     format="target: %s\ndistance: %0.2f",
+     format="target: %s\ndistance: %0.2f\nmass: %0.0f",
      values={"sensors.target.name", function(s)
                 return s.sensors.target and utils.distance(s.sensors,
                                                            s.sensors.target)
-     end}
+     end, "sensors.target.mass"}
    },
    { x=5,y=60, type="bar",
      values={"status.fuel", "status.fuel_capacity", ship.fuel_to_stop},
@@ -178,6 +170,3 @@ ship.hud = {
 
 -- convenience functions
 login = ship.actions.login
-
--- testing
-keymap.define("flight", "ctrl-x", function() ship:e("src.config") end)
