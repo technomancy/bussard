@@ -2,15 +2,19 @@
 
 The PTMC Mining Laser Mk. I is a heavy-duty deuterium-flouride laser
 capable of operating at 64 megawatts. Its most popular application is
-to be used for mining of metallic asteroids.
+mining of metallic asteroids.
 
 ## Control
 
 In order to fire your laser, it's recommended to bind it in the
 `ship.controls` table. Left Alt is a common choice. Put this in your
-ship's config file (normally accessible with `ctrl-x`):
+ship's config file (normally accessible with `ctrl-enter`):
 
     ship.controls["lalt"] = ship.actions.laser
+
+Be sure it's below the `ship.controls = { [...] }` section.
+In order to reload your config with the changes you've made, switch to
+the repl (usually `ctrl-backtick`) and run `ship:load("src.config")`.
 
 This will fire the laser as long as the key is held down. However, if
 you'd like a key to toggle it on and off, you can use something like

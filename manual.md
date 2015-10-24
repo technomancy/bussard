@@ -46,7 +46,7 @@ At the bottom of the screen is the REPL (interactive code console)
 where you can interact directly with your ship's onboard computer. By
 default a single line is shown, which displays either the current line
 of input (if applicable) or the last line of output. Pressing
-`ctrl-enter` toggles the full repl, which allows you to scroll
+ctrl-` toggles the full repl, which allows you to scroll
 through the previous output. While the full repl is active, the
 piloting controls for your ship will be unavailable. Enter any Lua
 code into the REPL to have it evaluated. See the API section below to
@@ -56,13 +56,13 @@ When your ship starts, it will load its init file in order to create
 key bindings, define helper functions, and perform any other setup.
 
 You can make changes to your init file using the onboard editor. Run
-this code in your REPL: `ship:e("src.config")`. Once you're done with
-your edits, press `esc` and load your changes with
-`ship:load("src.config")`. You can edit other files in your ship by
-passing another filename to `ship:e`, but by default only files in the
-`ship.src` and `ship.docs` tables will stay after your ship is
-restarted. You can configure it to save other tables by adding their
-names to the `ship.persist` table.
+this code in your REPL: `ship:e("src.config")`. (Also bound to
+`ctrl-enter`) Once you're done with your edits, press `esc` and load
+your changes with `ship:load("src.config")`. You can edit other files
+in your ship by passing another filename to `ship:e`, but by default
+only files in the `ship.src` and `ship.docs` tables will stay after
+your ship is restarted. You can configure it to save other tables by
+adding their names to the `ship.persist` table.
 
 ### Keymaps and Modes
 

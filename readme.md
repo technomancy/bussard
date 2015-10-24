@@ -13,19 +13,21 @@ Read the [in-game manual](manual.md) for a taste of how the game works.
 When you start the game, your first priority is to rendezvous with the
 nearby station. Press `tab` until your targeting indicator in your HUD
 shows the station. The grey line will always point in the direction of
-your target; the blue line indicates your current trajectory. Head
-towards the station, but keep an eye on your velocity and fuel
-supply. If you accelerate too much, you may not have enough fuel to
-match velocity with the station.
+your target; the blue striped line indicates your current
+trajectory. Head towards the station and try to make your trajectory
+match its orbit, but keep an eye on your velocity and fuel supply. If
+you accelerate too much, you may not have enough fuel to match
+velocity with the station. Once you get close, it will be easier to
+match velocity if you zoom in with `+`.
 
-Once you are in orbit around the station, press `ctrl-enter` and type
-`login()` to establish a connection. You can see all the commands
-available on the station by typing `ls /bin`, but at this time you
-only need to concern yourself with the `upgrade` command, and possibly
-`refuel` depending on how much fuel you used getting to the
-station. Run `upgrade buy laser`, then `logout` followed by
+Once you are in orbit around the station, and are in range, the grey
+line pointing towards the station will turn green. Press
+control-backtick and type `login()` to establish a connection. You can
+see all the commands available on the station by typing `ls /bin`, but
+at this time you only need to concern yourself with the `upgrade`
+command. Run `upgrade buy laser`, then `logout` followed by
 `man("laser")` to learn how to use the laser. You will need to edit
-your config file (`with ctrl-x`) to add a key binding to turn on the
+your config file (with `ctrl-enter`) to add a key binding to turn on the
 laser, as explained on the laser's manual page.
 
 From there it's off to find an asteroid to mine, and then the galaxy
@@ -84,6 +86,9 @@ Planned features:
 * stations that use different OSes
 * virtualization to allow you to run station code on your ship
 * abandoned civilizations and artifacts
+
+During development it may be expedient to run `ship.cheat.comm_range = 9999999`
+in order to make testing login interaction easier.
 
 ## Influences
 

@@ -130,6 +130,7 @@ return {
       em = love.graphics.getFont():getWidth('a')
    end,
 
+   -- TODO: need a UI for opening new files
    open = function(this_fs, this_path)
       -- reset position if opening a different file
       if(this_path ~= path) then
