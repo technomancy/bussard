@@ -13,17 +13,18 @@ end
 return {
    -- need to have a string message so just `help' works vs help()
    message = "Type `man()` to view your ship's operating manual.",
-   man = function(page_name)
+   man = function(ship, page_name)
       if(page_name == "list") then
-         return list()
+         ship.repl.print(list())
       elseif(pages[page_name]) then
+         -- can't inline this because read returns multiple values
          local p = love.filesystem.read(pages[page_name])
-         return p
+         ship.repl.print(p)
       elseif(page_name) then
-         return "Page not found.\n" .. list()
+         ship.repl.print("Page not found.\n" .. list())
       else
          local p = love.filesystem.read("manual.md")
-         return p
+         ship.repl.print(p)
       end
    end
 }

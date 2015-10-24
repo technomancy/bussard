@@ -265,7 +265,7 @@ by logging out of the station and accessing its manual page with
 
 ## Footer
 
-Copyright © 2167-2172 Kosaga Shipyards, All Rights Reserved.
+Copyright © 2427-2430 Kosaga Shipyards, All Rights Reserved.
 
 If you are viewing this manual in your ship's onboard computer, press
 the pageup key a few times to scroll to the top and begin reading there.

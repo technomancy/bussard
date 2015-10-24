@@ -67,7 +67,6 @@ local sandbox = {
    string = string,
    os = {},
    help = help.message,
-   man = help.man,
    keymap = keymap,
    default_config = default_config,
    utils = {
@@ -124,6 +123,7 @@ local ship = {
       sandbox.dofile = lume.fn(sandbox_dofile, ship.api)
       sandbox.os.time = lume.fn(sandboxed_time, ship)
       sandbox.scp = lume.fn(comm.scp, ship)
+      sandbox.man = lume.fn(help.man, ship.api)
 
       -- for debugging
       sandbox.body = body
