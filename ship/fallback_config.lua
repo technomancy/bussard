@@ -10,8 +10,9 @@ local mode = function(mode)
 end
 
 keymap.define_mode("flight") -- basically empty
-keymap.define("flight", "ctrl-return", mode("repl"))
+keymap.define("flight", "ctrl-`", mode("repl"))
 keymap.define("flight", "escape", ship.ui.quit)
+keymap.define("flight", "ctrl-return", function() ship:e("config.lua") end)
 
 -- Repl mode
 keymap.define_mode("repl")
@@ -62,6 +63,3 @@ keymap.modes["edit"].textinput = ship.edit.textinput
 
 -- convenience functions
 login = ship.actions.login
-
--- testing
-keymap.define("flight", "ctrl-x", function() ship:e("config.lua") end)
