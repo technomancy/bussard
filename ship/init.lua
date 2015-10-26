@@ -48,7 +48,7 @@ local base_stats = {
 }
 
 local sandboxed_time = function(ship)
-   return ship.time_offset + (os.time() - ship.load_time)
+   return ship.time_offset + (os.time() - ship.load_time) * ship.time_factor
 end
 
 local sandbox = {
@@ -101,6 +101,7 @@ local ship = {
    mass = 128,
    battery = 128,
    upgrades = {},
+   time_factor = 10,
 
    -- keep around
    fuel = 128,

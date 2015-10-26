@@ -33,8 +33,6 @@ local ui = {
    end,
 }
 
-local time_factor = 1
-
 love.load = function()
    if arg[#arg] == "-debug" then require("mobdebug").start() end
    local font = love.graphics.newFont("assets/mensch.ttf", 14)
@@ -46,7 +44,7 @@ love.load = function()
    body.load(systems)
 
    ship.api.repl.last_result =
-      "Press ctrl-` to open the repl and `man()` for more help."
+      "Press ctrl-` to open the repl and run man() for more help."
    xpcall(function() ship.api:load("src.config") end,
       function(e)
          print("Initial load failed:", e)
@@ -65,10 +63,11 @@ end
 
 love.update = function(dt)
    if(ship.api.paused) then return end
-   ship:update(dt * time_factor)
+   local real_time_factor = ship.time_factor * 0.1 * dt
+   ship:update(real_time_factor)
    body.schedule(ship.bodies)
    asteroid.recycle(ship)
-   body.gravitate_all(ship.bodies, ship, dt * time_factor)
+   body.gravitate_all(ship.bodies, ship, real_time_factor)
 end
 
 -- for commands that don't need repeat

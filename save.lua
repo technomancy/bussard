@@ -29,7 +29,7 @@ end
 return {
    save = function(ship)
       local ship_data = lume.pick(ship, unpack(ship_fields))
-      ship_data.time_offset = ship.time_offset + (os.time() - ship.load_time)
+      ship_data.time_offset = ship.api.repl.sandbox.os.time()
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
