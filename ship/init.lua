@@ -132,7 +132,7 @@ local ship = {
 
    enter = function(ship, system_name, reseed)
       assert(ship.systems[system_name], system_name .. " not found.")
-      ship.api.repl.last_result = "Entering the " .. system_name .. " system."
+      ship.api.repl.display_line = "Entering the " .. system_name .. " system."
 
       -- stuff these things in there to expose to in-ship APIs
       ship.bodies = ship.systems[system_name].bodies

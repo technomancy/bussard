@@ -59,7 +59,7 @@ return {
 
          lume.extend(ship, ship_data)
          ship:enter(ship.system_name)
-         ship.api.repl.last_result = nil
+         ship.api.repl.display_line = nil
       else
          ship.time_offset = 8383504000
          ship:enter(ship.system_name, true)

@@ -43,14 +43,14 @@ love.load = function()
    save.load_into(ship)
    body.load(systems)
 
-   ship.api.repl.last_result =
+   ship.api.repl.display_line =
       "Press ctrl-` to open the repl and run man() for more help."
    xpcall(function() ship.api:load("src.config") end,
       function(e)
          print("Initial load failed:", e)
          s.repl.print(e)
          s.repl.print(debug.traceback())
-         s.repl.last_result = "Error loading config; falling back to " ..
+         s.repl.display_line = "Error loading config; falling back to " ..
             "ship.src.fallback_config."
          local chunk = assert(loadstring("src.fallback_config"))
          setfenv(chunk, ship.api.repl.sandbox)

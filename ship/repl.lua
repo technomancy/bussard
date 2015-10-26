@@ -117,7 +117,7 @@ function repl.on_close() end
 
 function repl.write(value)
    for line,_ in tostring(value):gmatch("([^\n]?\n?)") do
-      if(line and line ~= "" and line ~= "\n") then repl.last_result = line end
+      if(line and line ~= "" and line ~= "\n") then repl.display_line = line end
       lines:append(line)
    end
 end
@@ -288,7 +288,7 @@ function repl.backward_word()
 end
 
 function repl.textinput(t)
-   repl.last_result = nil
+   repl.display_line = nil
    editline = editline:sub(0, cursor) .. t .. editline:sub(cursor + 1)
    cursor = cursor + 1
 end
@@ -324,10 +324,10 @@ function repl.draw()
       love.graphics.line(cx, cy, cx + 5, cy)
    end
 
-   -- show edit line, unless the disabled repl has a last-value to show
+   -- show edit line, unless the disabled repl has a display_line to show
    if(not on) then
-      if(repl.last_result) then
-         love.graphics.print(repl.last_result, repl.padding_left, limit)
+      if(repl.display_line) then
+         love.graphics.print(repl.display_line, repl.padding_left, limit)
       else
          print_edit_line()
       end
