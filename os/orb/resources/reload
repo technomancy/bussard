@@ -1,6 +1,0 @@
--- -*- lua -*-
-
-local f, env, args = ...
-
--- TODO: allow reloading just a directory
-orb.reload()

@@ -14,7 +14,7 @@ clean:
 	rm -rf releases/
 
 REL=".love-release/build/love-release.sh"
-FLAGS=-a 'Phil Hagelberg' --description 'A space flight open-world exploration game, with a programmable ship and stations.' --love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
+FLAGS=-a 'Phil Hagelberg' --description 'A space flight open-world exploration game, with a programmable ship and stations.' --love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION) -x spoilers
 
 love:
 	$(REL) $(FLAGS) -L
