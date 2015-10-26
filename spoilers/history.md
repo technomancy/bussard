@@ -4,9 +4,9 @@
 
 The establishment of the Terran Republic.
 
-* 2042 - Mars colonized
+* 2038 - Mars colonized
 
-* 2049 - Newton Station operational, deals mostly with mining
+* 2049 - Newton Station operational, becomes stop-off point for belt miners
 
 * 2099 - First interstellar colony ship (SS Lorentz) launches to
   Lalande (1.7 pc @ 0.3 c, 18y)

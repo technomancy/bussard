@@ -44,7 +44,7 @@ love.load = function()
    body.load(systems)
 
    ship.api.repl.display_line =
-      "Press ~ to open the repl and run man() for more help."
+      "Press ~ to open the repl, and run man() for more help."
    xpcall(function() ship.api:load("src.config") end,
       function(e)
          print("Initial load failed:", e)

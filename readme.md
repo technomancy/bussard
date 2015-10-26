@@ -90,6 +90,11 @@ Planned features:
 During development it may be expedient to run `ship.cheat.comm_range = 9999999`
 in order to make testing login interaction easier.
 
+## FAQ
+
+**Q:** What can I do to improve the frame rate?  
+**A:** The biggest performance drag is calculating trajectories. Reduce the calculations with `ship.trajectory = 128` and you should notice a dramatic speed boost.
+
 ## Influences
 
 * [Escape Velocity](http://www.ambrosiasw.com/games/ev/) (gameplay)

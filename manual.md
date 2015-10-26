@@ -58,11 +58,12 @@ key bindings, define helper functions, and perform any other setup.
 You can make changes to your init file using the onboard editor. Run
 this code in your REPL: `ship:e("src.config")`. (Also bound to
 ctrl-enter) Once you're done with your edits, press `esc` and load
-your changes with `ship:load("src.config")`. You can edit other files
-in your ship by passing another filename to `ship:e`, but by default
-only files in the `ship.src` and `ship.docs` tables will stay after
-your ship is restarted. You can configure it to save other tables by
-adding their names to the `ship.persist` table.
+your changes with `ship:load("src.config")` (Also bound to
+ctrl-r). You can edit other files in your ship by passing another
+filename to `ship:e`, but by default only files in the `ship.src` and
+`ship.docs` tables will stay after your ship is restarted. You can
+configure it to save other tables by adding their names to the
+`ship.persist` table.
 
 ### Keymaps and Modes
 
