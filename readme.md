@@ -21,14 +21,14 @@ velocity with the station. Once you get close, it will be easier to
 match velocity if you zoom in with `+`.
 
 Once you are in orbit around the station, and are in range, the grey
-line pointing towards the station will turn green. Press
-control-backtick and type `login()` to establish a connection. You can
-see all the commands available on the station by typing `ls /bin`, but
-at this time you only need to concern yourself with the `upgrade`
-command. Run `upgrade buy laser`, then `logout` followed by
-`man("laser")` to learn how to use the laser. You will need to edit
-your config file (with `ctrl-enter`) to add a key binding to turn on the
-laser, as explained on the laser's manual page.
+line pointing towards the station will turn green. Press `~` and type
+`login()` to establish a connection. You can see all the commands
+available on the station by typing `ls /bin`, but at this time you
+only need to concern yourself with the `upgrade` command. Run `upgrade
+buy laser`, then `logout` followed by `man("laser")` to learn how to
+use the laser. You will need to edit your config file (with
+`ctrl-enter`) to add a key binding to turn on the laser, as explained
+on the laser's manual page.
 
 From there it's off to find an asteroid to mine, and then the galaxy
 is yours to explore. To jump to another system, find a portal and

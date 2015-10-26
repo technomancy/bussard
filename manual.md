@@ -22,11 +22,11 @@ darker blue path plots one for your target, if applicable.
 ## Helm control
 
 Your ship comes pre-configured with a keymap which allows piloting the
-ship using the `up`, `right`, and `left` arrow keys on your helm
-keyboard. The `+` and `-` keys also allow you to zoom in and out of
-your view. You can fly around the system as your fuel supply
-permits. The ship's onboard collectors will replenish the fuel supply,
-though slowly.
+ship using the up, right, and left arrow keys on your helm
+keyboard. The + and - keys also allow you to zoom in and out of your
+view. You can fly around the system as your fuel supply permits. The
+ship's onboard collectors will replenish the fuel supply, though
+slowly.
 
 In accordance with interstellar law, your ship is equipped with
 Collision Avoidance System (CAS) which prevent you from plotting a
@@ -57,7 +57,7 @@ key bindings, define helper functions, and perform any other setup.
 
 You can make changes to your init file using the onboard editor. Run
 this code in your REPL: `ship:e("src.config")`. (Also bound to
-`ctrl-enter`) Once you're done with your edits, press `esc` and load
+ctrl-enter) Once you're done with your edits, press `esc` and load
 your changes with `ship:load("src.config")`. You can edit other files
 in your ship by passing another filename to `ship:e`, but by default
 only files in the `ship.src` and `ship.docs` tables will stay after
@@ -134,8 +134,8 @@ and `ship.comm.scp("path.in.ship", "username:password/path/to/file")`.
 Your ship also comes standard-issue with a passponder device. This is
 allows you to power up and travel through interstellar portals. If
 your ship's battery has enough charge, you can fly near a portal and
-press `ctrl-space` when you're in range. Note that it takes a moment
-to fully charge a portal before it can be used.
+press ctrl-space when you're in range. Note that it takes a moment
+to fully charge a portal before it activates.
 
 Certain portals which allow travel between systems of different
 governments require you to receive clearance before you may travel
@@ -185,8 +185,9 @@ its upgrades.
 
 * `forward`, `left`, `right`: accepts a boolean indicating whether to
   fire the given engine/thruster.
-* `next_target`: cycle sequentially through all the targets in the system. `tab` by default, `shift-tab` to cycle in reverse.
-* `closest_target`: select the closest available target. `ctrl-tab` by default.
+* `next_target`: cycle sequentially through all the targets in the system.
+  tab by default, shift-tab to cycle in reverse.
+* `closest_target`: select the closest available target. ctrl-tab by default.
 * `login`: accepts optional username/password, attempts to establish a
   login session with the target if possible.
 

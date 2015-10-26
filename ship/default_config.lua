@@ -21,7 +21,7 @@ end
 
 -- Flight mode
 keymap.define_mode("flight")
-keymap.define("flight", "ctrl-`", mode("repl"))
+keymap.define("flight", "`", mode("repl"))
 keymap.define("flight", "escape", ship.ui.quit)
 
 keymap.define("flight", "tab", ship.actions.next_target)
@@ -37,6 +37,7 @@ end
 -- Repl mode
 keymap.define_mode("repl")
 keymap.define({"repl", "flight"}, "pause", pause)
+keymap.define("repl", "`", mode("flight"))
 
 keymap.define({"repl", "flight"}, "return", ship.repl.eval_line)
 keymap.define({"repl", "flight"}, "backspace", ship.repl.delete_backwards)
@@ -77,7 +78,7 @@ keymap.modes["repl"].textinput = ship.repl.textinput
 -- Edit mode
 keymap.define_mode("edit")
 keymap.define("edit", "escape", mode("flight"))
-keymap.define("edit", "ctrl-`", mode("repl"))
+keymap.define("edit", "`", mode("repl"))
 keymap.define("edit", "pause", pause)
 keymap.define("edit", "return", ship.edit.newline)
 keymap.define("edit", "ctrl-r", ship.edit.revert)

@@ -8,13 +8,13 @@ mining of metallic asteroids.
 
 In order to fire your laser, it's recommended to bind it in the
 `ship.controls` table. Left Alt is a common choice. Put this in your
-ship's config file (normally accessible with `ctrl-enter`):
+ship's config file (normally accessible with ctrl-enter):
 
     ship.controls["lalt"] = ship.actions.laser
 
 Be sure it's below the `ship.controls = { [...] }` section.
 In order to reload your config with the changes you've made, switch to
-the repl (usually `ctrl-backtick`) and run `ship:load("src.config")`.
+the repl (usually ~) and run `ship:load("src.config")`.
 
 This will fire the laser as long as the key is held down. However, if
 you'd like a key to toggle it on and off, you can use something like

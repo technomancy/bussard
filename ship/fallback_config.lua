@@ -10,13 +10,14 @@ local mode = function(mode)
 end
 
 keymap.define_mode("flight") -- basically empty
-keymap.define("flight", "ctrl-`", mode("repl"))
+keymap.define("flight", "`", mode("repl"))
 keymap.define("flight", "escape", ship.ui.quit)
 keymap.define("flight", "ctrl-return", function() ship:e("config.lua") end)
 
 -- Repl mode
 keymap.define_mode("repl")
 
+keymap.define("repl", "`", mode("flight"))
 keymap.define("repl", "return", ship.repl.eval_line)
 keymap.define("repl", "backspace", ship.repl.delete_backwards)
 keymap.define("repl", "delete", ship.repl.delete_forwards)
