@@ -98,7 +98,7 @@ love.draw = function(dt)
              ship:in_range(ship.target, ship.scoop_range)) then
          love.graphics.setColor(100, 10, 10)
       elseif(ship.target.portal and
-             ship:in_range(ship.target, ship.scoop_range)) then
+             ship:in_range(ship.target, ship.passponder_range)) then
          love.graphics.setColor(10, 10, 100)
       else
          love.graphics.setColor(100, 100, 100)
