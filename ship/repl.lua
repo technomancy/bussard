@@ -347,7 +347,7 @@ function repl.draw()
          local y = limit - (ROW_HEIGHT*(row+1)) + 0.5 * ROW_HEIGHT
          love.graphics.line(PADDING, y, width - PADDING, y)
       else
-         love.graphics.print(ln2, PADDING, limit - (ROW_HEIGHT*(row+1)))
+         love.graphics.print(ln2, repl.padding_left, limit - (ROW_HEIGHT*(row+1)))
       end
    end
 
