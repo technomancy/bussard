@@ -1,1 +1,1 @@
-return { chance = 70, gov = {"Sol", "Terran", "Tana"}}
+return { gov = {"Sol", "Terran", "Tana"}}
