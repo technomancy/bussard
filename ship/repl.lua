@@ -116,7 +116,7 @@ end
 function repl.on_close() end
 
 function repl.write(value)
-   for line,_ in tostring(value):gmatch("([^\n]?\n?)") do
+   for line,_ in tostring(value):gmatch("([^\n]*\n?)") do
       if(line and line ~= "" and line ~= "\n") then repl.display_line = line end
       lines:append(line)
    end
@@ -132,6 +132,11 @@ local function pack(...) return {...} end
 function repl.eval(text, add_to_history)
    -- show input
    repl.print("> " .. text)
+
+   if(text == "help" or text == "help()") then
+      repl.print("Press ~ to open the console, then run man() for help.")
+      return true
+   end
 
    -- Evaluate string
    local func, err = loadstring("return " .. text)

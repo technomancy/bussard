@@ -37,7 +37,8 @@ end
 -- Repl mode
 keymap.define_mode("repl")
 keymap.define({"repl", "flight"}, "pause", pause)
-keymap.define("repl", "`", mode("flight"))
+keymap.define("repl", "`", function() end)
+keymap.define("repl", "~", function() end)
 
 keymap.define({"repl", "flight"}, "return", ship.repl.eval_line)
 keymap.define({"repl", "flight"}, "backspace", ship.repl.delete_backwards)
