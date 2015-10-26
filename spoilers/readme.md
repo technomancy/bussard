@@ -1,10 +1,8 @@
-# Backstory notes (aka SPOILERS)
+# Back-story notes (aka SPOILERS)
 
 Here's where the notes are kept in order to keep a consistent
-backstory in the Bussard universe.
-
-If you're not working on developing the game, you probably don't want
-to read this; it's basically just pure spoilers.
+back-story in the Bussard universe. If you're not working on
+developing the game, you probably don't want to read this.
 
 Mostly this is used to inform the text of missions and newsgroup
 posts, but some of it is also important when determining how the
@@ -12,8 +10,7 @@ in-game technology works.
 
 ## Guidelines
 
-* Hard science where possible
- * Obviously portals break this, as does the dramatic reduction of solar system distance
+* Hard science where possible (see Crimes against Science below, don't add to that list)
 * News messages use at least from, to, subject, message-id headers, page-break-separated
 * Use metric time for most relative amounts, years are OK for absolute events
 * Don't make newsgroup postings unrealistically knowledgeable
@@ -25,6 +22,38 @@ in-game technology works.
   but the correction should usually be present in the thread
  * It's OK if it's not obvious which of two opposing views presented are correct
 * Widespread mistaken views about big things should usually be part of major plot points
+
+## Crimes against Science
+
+* Portals
+* Bussard collector refuels reaction mass way too quickly
+* Arguably the [high thrust](http://www.projectrho.com/public_html/rocket/torchships.php)
+  with which you zoom around the system could be on this list; however
+  we explain it in-game by showing time go by at a 10x rate. This
+  factor is not enough to explain crossing the whole solar system in
+  under a minute though.
+
+The fact that exoplanets are colonized at all could be listed here,
+but we can consider that more of a crime against economics.
+
+### Causal Domain Injector
+
+The "endgame" is finding an artifact that lets you run code outside
+the game's sandbox. This essentially gives you godlike powers. The
+idea is that those who invented the Injector have "ascended" or
+escaped the game's reality somehow, leaving behind notes and scraps
+you need to decipher to get it operational with your own ship's
+computer.
+
+Still haven't sketched out the details of who created it. They should
+be humans, but we need some explanation for how they were able to
+create it independently of the main human civilization; perhaps
+activating the Injector sent some of the artifacts back in time?
+
+Arguably the existence of the Injector "un-asks" the questions of
+scientific accuracy by acknowledging that yes, even in the game
+universe, it's all just a simulation. So the portals should operate on
+the same principles as the Injector.
 
 ## Code for generating random names (elisp)
 
