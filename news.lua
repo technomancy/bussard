@@ -1,7 +1,9 @@
 local lume = require("lume")
 
 local dofile_if_exists = function(filename)
-   if(love.filesystem.isFile(filename)) then return dofile(filename) end
+   if(love.filesystem.isFile(filename)) then
+      return love.filesystem.load(filename)()
+   end
 end
 
 local include = function(ship, b, meta)

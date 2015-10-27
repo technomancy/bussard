@@ -2,6 +2,9 @@
 
 ## alpha-4 / ???
 
+* Show readable table return values in repl.
+* Change some key bindings invoking for repl and editor.
+* Add tutorial.
 * Create news system.
 * Add in-game independent clock.
 * Add portal animation.
