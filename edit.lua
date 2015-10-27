@@ -100,7 +100,16 @@ local yank = function()
    end
 end
 
+local beginning_of_buffer = function()
+   return point == 0 and point_line == 1
+end
+
+local end_of_buffer = function()
+   return point == #lines[point_line] and point_line == #lines
+end
+
 local forward_word = function()
+   if(end_of_buffer()) then return end
    local remainder = lines[point_line]:sub(point + 1, -1)
    if(not remainder:find("%S")) then
       point, point_line = 0, point_line+1
@@ -110,6 +119,7 @@ local forward_word = function()
 end
 
 local backward_word = function()
+   if(beginning_of_buffer()) then return end
    local before = lines[point_line]:sub(0, point)
    if(not before:find("%S")) then
       point_line = point_line - 1
@@ -227,7 +237,8 @@ return {
    end,
 
    forward_char = function()
-      if(point == #lines[point_line]) then
+      if(end_of_buffer()) then return
+      elseif(point == #lines[point_line]) then
          point, point_line = 0, point_line+1
       else
          point = point + 1
@@ -235,7 +246,8 @@ return {
    end,
 
    backward_char = function()
-      if(point == 0) then
+      if(beginning_of_buffer()) then return
+      elseif(point == 0) then
          point = #lines[point_line-1]
          point_line = point_line-1
       else
