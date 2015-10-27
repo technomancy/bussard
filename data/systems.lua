@@ -66,7 +66,7 @@ return {
       },
    ["Wolf 294"] = -- second-largest Tana system
       {gov="Tana", x=-5.3, y=-0.3,
-       asteroids = 4,
+       asteroids = 7,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=160000,
            image_name="sun",
@@ -95,7 +95,9 @@ return {
        },
       },
    ["Luyten's Star"] = -- gateway to sol
-      {gov="Tana", x=-3.3, y=-2, bodies = {
+      {gov="Tana", x=-3.3, y=-2,
+       asteroids = 3,
+       bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
            image_name="sun",
            name="Luyten's Star", star=true },
@@ -119,7 +121,7 @@ return {
    ["L 668-21"] = -- remote mining system
       {gov="Tana",
        x=-3.6, y=-4.1,
-       asteroids = 8,
+       asteroids = 12,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
            image_name="sun",
@@ -142,7 +144,7 @@ return {
 
    -- Sol
    ["Sol"] = {gov="Sol", capitol = true,
-              x=0, y=0,
+              x=0, y=0, asteroids = 1,
               bodies = {
                  {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
                   image_name="sol",

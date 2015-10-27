@@ -5,6 +5,8 @@ local pages = {
    intro2 = "doc/intro2.md",
    intro3 = "doc/intro3.md",
    intro4 = "doc/intro4.md",
+   intro5 = "doc/intro5.md",
+
    manual = "manual.md",
    keycodes = "doc/keycodes.md",
    laser = "doc/laser.md"

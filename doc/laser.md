@@ -34,6 +34,6 @@ indicator once you get close enough to the asteroid.
 
 The safety features of this laser include a mechanism to automatically
 drop the power levels to a harmless range when it detects that it is
-pointed at an inhabited space station, planet, or space craft.
+pointed at a space station, planet, or spacecraft.
 
 Copyright © 2422 Post-Terran Mining Corporation, All Rights Reserved.
