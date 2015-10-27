@@ -536,6 +536,8 @@ end
 
 local serialize
 
+local serialize_unreadable = false
+
 local serialize_map = {
   [ "number"  ] = tostring,
   [ "boolean" ] = tostring,
@@ -543,7 +545,13 @@ local serialize_map = {
   [ "string"  ] = function(v) return string.format("%q", v) end,
   [ "table"   ] = function(t, stk)
     stk = stk or {}
-    if stk[t] then error("circular reference") end
+    if stk[t] then
+       if serialize_unreadable then
+          return "#<circular " .. tostring(t) .. ">"
+       else
+          error("circular reference")
+       end
+    end
     local rtn = {}
     stk[t] = true
     for k, v in pairs(t) do
@@ -553,8 +561,6 @@ local serialize_map = {
     return "{" .. table.concat(rtn, ",") .. "}"
   end
 }
-
-local serialize_unreadable = false
 
 setmetatable(serialize_map, {
                 __index = function(_, k)
