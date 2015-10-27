@@ -10,6 +10,8 @@ local pages = {
    manual = "manual.md",
    keycodes = "doc/keycodes.md",
    laser = "doc/laser.md"
+
+   -- TODO: editor manual
 }
 
 local list = function()
