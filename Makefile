@@ -31,4 +31,4 @@ sign:
 	gpg -ab releases/bussard-*
 
 upload: release sign
-	scp releases/* p.hagelb.org:p/bussard/
+	rsync -r releases/ p.hagelb.org:p/bussard/

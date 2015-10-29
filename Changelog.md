@@ -1,6 +1,6 @@
 # Bussard changelog: history of user-visible changes
 
-## alpha-4 / ???
+## alpha-4 / 2015-10-29
 
 * Show readable table return values in repl.
 * Change some key bindings invoking for repl and editor.
