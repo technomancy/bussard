@@ -57,8 +57,7 @@ local trajectory = function(ship, bodies, steps, step_size, color1, color2)
    local sim_bodies = {}
    for _, b in pairs(bodies) do
       if(b ~= ship) then
-         sim_bodies[#sim_bodies+1] = {x = b.x, y = b.y, dx = b.dx, dy = b.dy,
-                                      mass = b.mass}
+         table.insert(sim_bodies, lume.pick(b, "x", "y", "dx", "dy", "mass"))
       end
    end
 
