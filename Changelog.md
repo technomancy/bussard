@@ -1,5 +1,9 @@
 # Bussard changelog: history of user-visible changes
 
+## alpha-5 / ???
+
+* Fix a bug where multibyte input would crash the game.
+
 ## alpha-4 / 2015-10-29
 
 * Show readable table return values in repl.

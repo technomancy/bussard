@@ -17,7 +17,7 @@ local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
 local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
 
 local ui = {
-   version = "alpha-4",
+   version = "alpha-5-pre",
 
    quit = function(ui)
       save.save(ship, ui)
