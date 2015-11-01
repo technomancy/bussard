@@ -12,7 +12,7 @@ fuel gauge in the upper left. The faster you're going, the more fuel
 but it takes time. You can't collide with anything, so don't fear.
 
 The striped blue line plots your estimated trajectory, and the box in
-the upper right shows your velocity vector. Use the plus and minus
+the upper right shows your velocity vector. Use the equals and minus
 keys to zoom in and out.
 
 Once you've got a feel for the controls and instrumentation, run this

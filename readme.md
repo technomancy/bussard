@@ -18,7 +18,7 @@ trajectory. Head towards the station and try to make your trajectory
 match its orbit, but keep an eye on your velocity and fuel supply. If
 you accelerate too much, you may not have enough fuel to match
 velocity with the station. Once you get close, it will be easier to
-match velocity if you zoom in with `+`.
+match velocity if you zoom in with `=`.
 
 Once you are in orbit around the station, and are in range, the grey
 line pointing towards the station will turn green. Press `~` and type

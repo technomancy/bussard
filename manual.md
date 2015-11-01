@@ -23,7 +23,7 @@ darker blue path plots one for your target, if applicable.
 
 Your ship comes pre-configured with a keymap which allows piloting the
 ship using the up, right, and left arrow keys on your helm
-keyboard. The + and - keys also allow you to zoom in and out of your
+keyboard. The = and - keys also allow you to zoom in and out of your
 view. You can fly around the system as your fuel supply permits. The
 ship's onboard collectors will replenish the fuel supply, though
 slowly.
