@@ -1,5 +1,7 @@
 -- utils
 
+local md5 = require("md5")
+
 -- mostly functions which are inexplicable omissions from the lua standard lib
 
 orb.utils = {
@@ -95,7 +97,7 @@ orb.utils = {
       if(minetest) then
          return minetest.get_password_hash(u, p)
       else
-         return orb.utils.sha1sum(u .. ":" .. p)
+         return md5.sumhexa(u .. ":" .. p)
       end
    end,
 }
