@@ -50,7 +50,7 @@ keymap = {
    textinput = function(text)
       if(find_binding(text)) then return end
       if(keymap.modes[keymap.current_mode].textinput and
-         string.len(t) == 1) then
+         string.len(text) == 1) then
          keymap.modes[keymap.current_mode].textinput(text)
       end
    end,
