@@ -16,6 +16,8 @@ local get_data = function(ship, field)
       return field(ship)
    elseif(type(field) == "string") then
       return ship:find(field)
+   elseif(type(field) == "number") then
+      return field
    else
       error("Unknown field type " .. type(field))
    end
@@ -26,21 +28,25 @@ local render_vector = function(at_x, at_y, values)
    local half = vector_size / 2
    local x, y = unpack(values)
 
-   love.graphics.line(at_x + half, at_y + half,
-                      at_x + half + x, at_y + half + y)
-   love.graphics.setLineWidth(1)
-   love.graphics.setColor(255, 255, 255);
-   love.graphics.rectangle("line", at_x, at_y, vector_size, vector_size)
+   if(type(x) == "number" and type(y) == "number") then
+      love.graphics.line(at_x + half, at_y + half,
+                         at_x + half + x, at_y + half + y)
+      love.graphics.setLineWidth(1)
+      love.graphics.setColor(255, 255, 255);
+      love.graphics.rectangle("line", at_x, at_y, vector_size, vector_size)
+   end
 end
 
 local render_bar = function(x, y, values)
    local level, max, secondary = unpack(values)
-   love.graphics.rectangle("fill", x, y, math.min(level, max), 10)
-   love.graphics.setColor(255, 200, 200)
-   love.graphics.rectangle("line", x, y, max, 10)
-   if(secondary) then
-      love.graphics.setColor(0,0,0,100)
-      love.graphics.rectangle("fill", x, y, secondary, 5)
+   if(type(level) == "number" and type(max) == "number") then
+      love.graphics.rectangle("fill", x, y, math.min(level, max), 10)
+      love.graphics.setColor(255, 200, 200)
+      love.graphics.rectangle("line", x, y, max, 10)
+      if(type(secondary) == "number") then
+         love.graphics.setColor(0,0,0,100)
+         love.graphics.rectangle("fill", x, y, secondary, 5)
+      end
    end
 end
 

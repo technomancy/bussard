@@ -252,6 +252,9 @@ filled in.
 Any type can have a `color` field set to customize its color.
 See the default configuration file for an example.
 
+The `values` can also include functions instead of strings. The
+function will be passed the ship table.
+
 ### Upgrades
 
 Certain stations will sell you upgrades to your ship. These can either
