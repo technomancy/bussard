@@ -192,6 +192,7 @@ portal. Mostly they carry cargo and passengers; occasionally science.
 * Dr. Soong, credited (miscredited?) with discovery of portals, founded Aperture
 * Captain Jarkad of SS Goddard
 * Dr. Jameson, Yueh Researcher who replicated portal tech
+* Captain Armiger of the original Defiant mission
 * Captain Irons of Lalande bomber squad from the war
 * Captain A.S. of SS Pythagoras killed in coup
 * General who took over afterward?

@@ -59,11 +59,21 @@ deposits lead to it becoming an industrial powerhouse.
 * 2272 - SS Defiant departs to bring portal tech to Lalande
   (2.9 pc, 0.6c, 15.7y)
 
+Dr. Jameson, chief scientists on board the Defiant, is actually from
+Bohk originally. He wants Yueh to be independent the same way Bohk
+was. The remains of the portal research lab are discovered (by Jameson
+or Capt. Armiger; it's historically unclear); Armiger insists the
+findings are property of the military, but Jameson wants to keep it to
+the colonists. Jameson ends up killing Armiger to prevent it falling
+into what he thinks of as the wrong hands.
+
 ## Third Wave: portals
 
 The initial discovery of the portals had enough parts for three
-portals to be constructed. As it was a Lalande ship which discovered
-the portals, they were brought back to Lalande for study.
+portals to be constructed. The Defiant returns to Lalande not because
+they want Lalande to gain access to the portals, but because they are
+worried their colony will not survive without supplies from a more
+established civilization.
 
 * 2287 - SS Defiant returns to Lalande
 
@@ -84,6 +94,10 @@ the portals, they were brought back to Lalande for study.
 
 ## War!
 
+After the war, the story is that Lalande had found and studied the
+portals from the beginning. Everyone on Yueh knows that it was those
+from Yueh (Jameson) that actually discovered how to bring them online.
+
 * 2310 - SS Goddard reaches stranded SS Defiant
 
 * 2311 - Yueh scientists independently replicate portal tech
@@ -92,14 +106,15 @@ the portals, they were brought back to Lalande for study.
   (1.2 pc, 0.7c, 5.5y), launches colonizer SS Kepler to Delta Pavonis
   (2.4 pc, 0.7c, 11y)
 
-* 2313 - Lalande attacks Yueh
+* 2313 - Lalande attacks Yueh, dropping asteroids on them from orbit
 
 * 2314 - Peace between Yueh and Lalande, Yueh becomes independent, but
   under the agreement that Lalande controls all existing portals
   (except Yueh/Bohk and Yueh/Delta Pavonis) and retains a monopoly on
   newly-constructed ones
 
-* 2317 - Bohk, Yueh, and Terrans found Human Worlds League
+* 2317 - Bohk, Yueh, and Terrans found Human Worlds League in an
+  uneasy alliance
 
 * 2318 - SS Oberth arrives in Bohk, first human-constructed portal
   (to Yueh) operational
