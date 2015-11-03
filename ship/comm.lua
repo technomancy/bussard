@@ -57,27 +57,31 @@ local sandbox = function(ship)
    }
 end
 
+local disconnect = function(ship)
+   ship.api.repl.read = nil
+   ship.api.repl.prompt = nil
+   ship.comm_connected = false
+end
+
 local logout = function(name)
    local session = assert(sessions[name], "Can't log out; not logged in.")
-   for k,_ in pairs(session[1]["/home/guest"] or {}) do
-      session[1]["/home/guest"][k]= nil
+   local fs, _ = unpack(session)
+   -- TODO: only clear on non-portals
+   for k,_ in pairs(fs["/home/guest"] or {}) do
+      session[1]["/home/guest"][k] = nil
    end
    sessions[name] = nil
 end
 
 local send_input = function(ship, input)
    if(input == "logout") then
-      local connected_to = ship.comm_connected
-      ship.api.repl.read = nil
-      ship.api.repl.prompt = nil
-      ship.comm_connected = false
-
-      if(sessions[connected_to]) then
+      if(sessions[ship.comm_connected]) then
          ship.api.repl.print("Logged out.")
          logout(ship.target.name)
       else
          ship.api.repl.print("| Not logged in.")
       end
+      disconnect(ship)
    elseif(not ship:in_range(ship.target)) then
       ship.api.repl.print("| Out of range. Run `logout` to disconnect.")
    elseif(not sessions[ship.target.name]) then
@@ -107,6 +111,7 @@ return {
          local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
          local env = ship.target.os.shell.new_env(username)
          local out_buffer = {}
+         local target_name = ship.target.name
 
          env.IN = "/tmp/in"
          env.OUT = "/tmp/out"
@@ -117,7 +122,9 @@ return {
             if(output) then
                ship.api.repl.write(output)
             else
-               ship.api.repl.read = nil -- EOF means terminate session
+               -- EOF means terminate session
+               logout(target_name)
+               disconnect(ship)
             end
          end
 
