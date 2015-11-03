@@ -36,7 +36,7 @@ in-game technology works.
 The fact that exoplanets are colonized at all could be listed here,
 but we can consider that more of a crime against economics.
 
-### Causal Domain Injector
+## Causal Domain Injector
 
 The "endgame" is finding an artifact that lets you run code outside
 the game's sandbox. This essentially gives you godlike powers. The

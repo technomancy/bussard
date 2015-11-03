@@ -8,6 +8,8 @@ spacecraft by hacking on the code that makes it tick.
 
 Read the [in-game manual](manual.md) for a taste of how the game works.
 
+Read [an interview on the motivation and background for the game](http://hifibyapg.com/volume-3.html#A.conversation.with.Phil.Hagelberg.on.Bussard) (possible spoilers).
+
 ## Playing
 
 When you start the game, your first priority is to rendezvous with the
