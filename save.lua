@@ -8,7 +8,8 @@ local ship_fields = {
 }
 
 local system_fields = {
-   "x", "y", "dx", "dy", "cargo"
+   "x", "y", "dx", "dy", "cargo",
+   "prices", "upgrade_prices", "fuel_price", "account_price"
 }
 
 local ship_filename = "ship_data.lua"
