@@ -56,13 +56,13 @@ return {
           },
           {name = "Portal: L 668-21",
            image_name="portal-1",
-           r=26000, mass=75, portal="L 668-21"},
+           r=26000, mass=75, portal="L 668-21", os=orb},
           {name = "Portal: Wolf 294",
            image_name="portal-1",
-           r=38000, mass=75, portal="Wolf 294"},
+           r=38000, mass=75, portal="Wolf 294", os=orb},
           {name = "Portal: Luyten's Star",
            image_name="portal-1",
-           r=22500, mass=75, portal="Luyten's Star"}},
+           r=22500, mass=75, portal="Luyten's Star", os=orb}},
       },
    ["Wolf 294"] = -- second-largest Tana system
       {gov="Tana", x=-5.3, y=-0.3,
@@ -91,7 +91,7 @@ return {
           },
           {name = "Portal: Tana",
            image_name="portal-1",
-           r=16000, mass=75, portal="Tana", }
+           r=16000, mass=75, portal="Tana", os=orb}
        },
       },
    ["Luyten's Star"] = -- gateway to sol
@@ -112,10 +112,10 @@ return {
           },
           {name = "Portal: Tana",
            image_name="portal-1",
-           r=25000, mass=75, portal="Tana", },
+           r=25000, mass=75, portal="Tana", os=orb},
           {name = "Portal: Sol",
            image_name="portal-2", interportal=true,
-           r=20000, mass=75, portal="Sol", },
+           r=20000, mass=75, portal="Sol", os=orb},
       },
       },
    ["L 668-21"] = -- remote mining system
@@ -137,7 +137,7 @@ return {
           },
           {name = "Portal: Tana",
            image_name="portal-1",
-           r=29000, mass=75, portal="Tana", }
+           r=29000, mass=75, portal="Tana", os=orb}
        },
       },
 
@@ -206,15 +206,15 @@ return {
                  {name = "Portal: Luyten's Star",
                   image_name="portal-2",
                   r=33000, mass=75, portal="Luyten's Star",
-                  interportal=true,},
+                  interportal=true, os=orb},
                  {name = "Portal: Ross",
                   image_name="portal-2",
                   r=35000, mass=75, portal="Ross",
-                  interportal=true,},
+                  interportal=true, os=orb},
                  {name = "Portal: Lalande",
                   image_name="portal-2",
                   r=37000, mass=75, portal="Lalande",
-                  interportal=true,}
+                  interportal=true, os=orb}
               }, -- it's Sol.
    },
 
@@ -246,19 +246,19 @@ return {
                      },
                      {name = "Portal: Ross",
                       image_name="portal-1",
-                      r=20000, mass=75, portal="Ross",},
+                      r=20000, mass=75, portal="Ross", os=orb},
                      {name = "Portal: Sol",
                       image_name="portal-2", interportal=true,
-                      r=25000, mass=75, portal="Sol",},
+                      r=25000, mass=75, portal="Sol", os=orb},
                      {name = "Portal: Bohk",
                       image_name="portal-2", interportal=true,
-                      r=29000, mass=75, portal="Bohk",},
+                      r=29000, mass=75, portal="Bohk", os=orb},
                      {name = "Portal: Katilay",
                       image_name="portal-2", interportal=true,
-                      r=31000, mass=75, portal="Katilay",},
+                      r=31000, mass=75, portal="Katilay", os=orb},
                      {name = "Portal: Yueh",
                       image_name="portal-2", interportal=true,
-                      r=33000, mass=75, portal="Yueh",}},
+                      r=33000, mass=75, portal="Yueh", os=orb}},
    },
    ["Ross"] = {gov="Terran",
                x=0, y=-1.7,
@@ -287,10 +287,10 @@ return {
                   {name = "Portal: Sol",
                    image_name="portal-2", interportal=true,
                    r=22000, mass=75, portal="Sol",
-                   interportal=true,},
+                   interportal=true, os=orb},
                   {name = "Portal: Lalande",
                    image_name="portal-1",
-                   r=22000, mass=75, portal="Lalande",}
+                   r=22000, mass=75, portal="Lalande", os=orb}
                },
    },
 
@@ -303,17 +303,17 @@ return {
                    image_name="sun",
                    name="Bohk", star=true},
                   {name = "Portal: Lalande",
-                   image_name="portal-2", interportal=true,
+                   image_name="portal-2", interportal=true, os=orb,
                    r=22000, mass=75, portal="Lalande",},
                   {name = "Portal: New Phobos",
                    image_name="portal-1",
-                   r=22000, mass=75, portal="New Phobos"},
+                   r=22000, mass=75, portal="New Phobos", os=orb,},
                   {name = "Portal: Lucaille",
                    image_name="portal-1",
-                   r=22000, mass=75, portal="Lucaille",},
+                   r=22000, mass=75, portal="Lucaille", os=orb},
                   {name = "Portal: Yueh",
                    image_name="portal-2", interportal=true,
-                   r=22000, mass=75, portal="Yueh",}
+                   r=22000, mass=75, portal="Yueh", os=orb}
                },
    },
    ["New Phobos"] = {gov="Bohk",
@@ -324,7 +324,7 @@ return {
                          name="New Phobos", star=true},
                         {name = "Portal: Bohk",
                          image_name="portal-1",
-                         r=22000, mass=75, portal="Bohk"},
+                         r=22000, mass=75, portal="Bohk", os=orb},
                      }, -- tourism center
    },
    ["Lucaille"] = {gov="Bohk",
@@ -335,10 +335,10 @@ return {
                        name="Lucaille 8760", star=true},
                       {name = "Portal: Bohk",
                        image_name="portal-1",
-                       r=22000, mass=75, portal="Bohk"},
+                       r=22000, mass=75, portal="Bohk", os=orb},
                       {name = "Portal: Katilay",
                        image_name="portal-2", interportal=true,
-                       r=22000, mass=75, portal="Katilay",}
+                       r=22000, mass=75, portal="Katilay", os=orb}
                    }, -- smaller border town
    },
 
@@ -351,11 +351,11 @@ return {
                       image_name="sun",
                       name="Katilay", star=true},
                      {name = "Portal: Lalande",
-                      image_name="portal-2", interportal=2,
-                      r=22000, mass=75, portal="Lalande"},
+                      image_name="portal-2", interportal=true,
+                      r=22000, mass=75, portal="Lalande", os=orb},
                      {name = "Portal: Lucaille",
-                      image_name="portal-2", interportal=2,
-                      r=22000, mass=75, portal="Lucaille"}
+                      image_name="portal-2", interportal=true,
+                      r=22000, mass=75, portal="Lucaille", os=orb}
                   }, -- quiet, isolated. internal conflict.
    },
 
@@ -368,19 +368,19 @@ return {
                    image_name="sun",
                    name="Sigma Draconis", star=true},
                   {name = "Portal: Bohk",
-                   image_name="portal-2", interportal=true,
+                   image_name="portal-2", interportal=true, os=orb,
                    r=22000, mass=75, portal="Bohk"},
                   {name = "Portal: Lalande",
-                   image_name="portal-2", interportal=true,
+                   image_name="portal-2", interportal=true, os=orb,
                    r=22000, mass=75, portal="Lalande"},
                   {name = "Portal: Wolf 1481",
-                   image_name="portal-1",
+                   image_name="portal-1", os=orb,
                    r=22000, mass=75, portal="Wolf 1481"},
                   {name = "Portal: LHS 451",
-                   image_name="portal-1",
+                   image_name="portal-1", os=orb,
                    r=22000, mass=75, portal="LHS 451"},
                   {name = "Portal: Kowlu",
-                   image_name="portal-1",
+                   image_name="portal-1", os=orb,
                    r=22000, mass=75, portal="Kowlu"},
                }, -- Yueh capital
    },
@@ -391,10 +391,10 @@ return {
                     image_name="sun",
                     name="Kowlu", star=true},
                    {name = "Portal: Delta Pavonis",
-                    image_name="portal-1",
+                    image_name="portal-1", os=orb,
                     r=22000, mass=75, portal="Delta Pavonis"},
                    {name = "Portal: Yueh",
-                    image_name="portal-1",
+                    image_name="portal-1", os=orb,
                     r=22000, mass=75, portal="Yueh"}
                 }, -- bustling trade hub
    },
@@ -405,13 +405,13 @@ return {
                             image_name="sun",
                             name="Delta Pavonis", star=true},
                            {name = "Portal: Wolf 1481",
-                            image_name="portal-1",
+                            image_name="portal-1", os=orb,
                             r=22000, mass=75, portal="Wolf 1481"},
                            {name = "Portal: Kowlu",
-                            image_name="portal-1",
+                            image_name="portal-1", os=orb,
                             r=22000, mass=75, portal="Kowlu"},
                            {name = "Portal: CD-40 9712",
-                            image_name="portal-1",
+                            image_name="portal-1", os=orb,
                             r=22000, mass=75, portal="CD-40 9712"},
                         }
    },
@@ -422,10 +422,10 @@ return {
                         image_name="sun",
                         name="Wolf 1481", star=true},
                        {name = "Portal: Yueh",
-                        image_name="portal-1",
+                        image_name="portal-1", os=orb,
                         r=22000, mass=75, portal="Yueh"},
                        {name = "Portal: Delta Pavonis",
-                        image_name="portal-1",
+                        image_name="portal-1", os=orb,
                         r=22000, mass=75, portal="Delta Pavonis"}
                     },
    }, -- relatively quiet
@@ -437,7 +437,7 @@ return {
                       image_name="sun",
                       name="LHS 451", star=true},
                      {name = "Portal: Yueh",
-                      image_name="portal-1",
+                      image_name="portal-1", os=orb,
                       r=22000, mass=75, portal="Yueh"},
                   }, -- mostly uninhabited
    },
@@ -448,7 +448,7 @@ return {
                          image_name="sun",
                          name="CD-40 9712", star=true},
                         {name = "Portal: Delta Pavonis",
-                         image_name="portal-1",
+                         image_name="portal-1", os=orb,
                          r=22000, mass=75, portal="Delta Pavonis"},
                      }, -- mostly uninhabited
    },

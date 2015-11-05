@@ -92,7 +92,9 @@ love.draw = function(dt)
    end
 
    if(ship.target) then -- directional target indicator
-      if(ship:in_range(ship.target) and ship.target.os) then
+      -- you can log into portals, but this isn't obvious at first
+      if(ship:in_range(ship.target) and ship.target.os and
+         not ship.target.portal) then
          love.graphics.setColor(10, 100, 10)
       elseif(ship.target.asteroid and
              ship:in_range(ship.target, ship.scoop_range)) then
