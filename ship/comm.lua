@@ -46,7 +46,7 @@ local scp = function(ship, from, to)
 end
 
 local sandbox = function(ship)
-   return {
+   local sb = {
       buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
       buy_upgrade = lume.fn(services.buy_upgrade, ship),
       refuel = lume.fn(services.refuel, ship, ship.target),
@@ -54,7 +54,17 @@ local sandbox = function(ship)
       scp = lume.fn(scp, ship),
       station = utils.readonly_proxy(ship.target),
       ship = ship.api,
+      distance = lume.fn(utils.distance, ship, ship.target),
+      -- FIXME: stuff from main ship sandbox, like os.time
    }
+   if(ship.target and ship.target.portal) then
+      local target = ship.target
+      sb.trip_cleared = function() return true end -- FIXME
+      sb.set_beam_count = function(n) target.beam_count = n end
+      sb.draw_power = function(power) ship.battery = ship.battery - power end
+      sb.portal_activate = function() ship:enter(target.portal, true) end
+   end
+   return sb
 end
 
 local disconnect = function(ship)
@@ -144,10 +154,11 @@ return {
       end
    end,
 
-   logout_all = function()
+   logout_all = function(ship)
       for _,session in pairs(sessions) do
          logout(session)
       end
+      disconnect(ship)
    end,
 
    headless_login = function(ship, username, password, command)

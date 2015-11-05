@@ -29,6 +29,14 @@ local function distance(x, y)
    end
 end
 
+local format_seconds = function(s)
+   local formatted, k = tostring(s)
+   while k ~= 0 do
+      formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1:%2')
+   end
+   return formatted
+end
+
 local pairs_for = function(raw, wrap)
    return function(_)
       local t = {}
@@ -126,17 +134,35 @@ return {
 
    distance = distance,
 
-   format_seconds = function(s)
-      local formatted, k = tostring(s)
-      while k ~= 0 do
-         formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1:%2')
-      end
-      return formatted
-   end,
+   format_seconds = format_seconds,
 
    gaussian_random = function(r)
       local x = 1 + math.sqrt(-2 * math.log(math.random()))
       local y = math.cos(2 * math.pi * math.random()) / 2
       return x * y * r
    end,
+
+   sandbox = {
+      -- functions
+      type = type,
+      pairs = pairs,
+      ipairs = ipairs,
+      unpack = unpack,
+      tonumber = tonumber,
+      tostring = tostring,
+      realprint = print, -- for debugging
+
+      -- tables
+      coroutine = coroutine,
+      math = math,
+      table = table,
+      string = string,
+
+      -- custom
+      utils = {
+         distance = distance,
+         format_seconds = format_seconds,
+      },
+      lume = lume,
+   }
 }

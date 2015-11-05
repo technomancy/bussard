@@ -28,6 +28,7 @@ local status_whitelist = {
    "cargo", "cargo_capacity",
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
+   "passponder_range", "passponder_power", "passponder_time"
 }
 
 local base_stats = {
@@ -47,41 +48,30 @@ local base_stats = {
    passponder_power = 0,
 }
 
-local sandboxed_time = function(ship)
-   return ship.time_offset + (os.time() - ship.load_time) * ship.time_factor
-end
-
-local sandbox = {
-   pairs = pairs,
-   ipairs = ipairs,
-   unpack = unpack,
-   print = repl.print,
-   realprint = print, -- for debugging
-   coroutine = { yield = coroutine.yield,
-                 status = coroutine.status },
-   tonumber = tonumber,
-   tostring = tostring,
-   math = math,
-   type = type,
-   table = table,
-   string = string,
-   os = {},
-   help = help.message,
-   keymap = keymap,
-   default_config = default_config,
-   utils = {
-      distance = utils.distance,
-      format_seconds = utils.format_seconds,
-   },
-   lume = lume,
-}
-
 local sandbox_dofile = function(ship, filename)
    local contents = ship:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
    local chunk = assert(loadstring(contents))
    setfenv(chunk, sandbox)
    chunk()
+end
+
+local sandboxed_time = function(ship)
+   return ship.time_offset + (os.time() - ship.load_time) * ship.time_factor
+end
+
+local sandbox = function(ship)
+   return lume.merge(utils.sandbox,
+                     {  help = help.message,
+                        keymap = keymap,
+                        default_config = default_config,
+                        print = repl.print,
+                        ship = ship.api,
+                        dofile = lume.fn(sandbox_dofile, ship.api),
+                        os = {time = lume.fn(sandboxed_time, ship)},
+                        scp = lume.fn(comm.scp, ship),
+                        man = lume.fn(help.man, ship.api),
+   })
 end
 
 local epoch_for = function(year)
@@ -119,15 +109,8 @@ local ship = {
       ship.api.ui = ui
       ship.systems = systems
 
-      ship.api.repl.sandbox = sandbox
-      sandbox.ship = ship.api
-      sandbox.dofile = lume.fn(sandbox_dofile, ship.api)
-      sandbox.os.time = lume.fn(sandboxed_time, ship)
-      sandbox.scp = lume.fn(comm.scp, ship)
-      sandbox.man = lume.fn(help.man, ship.api)
-
-      -- for debugging
-      sandbox.body = body
+      ship.sandbox = sandbox(ship)
+      ship.api.repl.sandbox = ship.sandbox
    end,
 
    enter = function(ship, system_name, reseed)
@@ -138,11 +121,11 @@ local ship = {
       ship.bodies = ship.systems[system_name].bodies
       ship.system_name = system_name
 
-      comm.logout_all()
+      comm.logout_all(ship)
       ship:recalculate()
 
       if(reseed) then
-      -- reset
+         -- reset
          ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
          ship.engine_on, ship.turning_right, ship.turning_left = false,false,false
          ship.comm_connected, ship.target_number, ship.target = false, 0, nil
@@ -301,7 +284,7 @@ ship.api = {
       filename = filename or "src.config"
       local content = assert(s:find(filename), "File not found: " .. filename)
       local chunk = assert(loadstring(content), "Failed to load " .. filename)
-      setfenv(chunk, sandbox)
+      setfenv(chunk, ship.sandbox)
       chunk()
    end,
 
