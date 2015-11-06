@@ -56,18 +56,6 @@ return {
          passponder_range = 1024,
          passponder_time = 4 * 10, -- in-game seconds
       },
-      action = function(ship)
-         if(not ship.target or not ship.target.portal) then return end
-         if(utils.distance(ship, ship.target) <= ship.passponder_range) then
-            if(ship.battery >= ship.passponder_power) then
-               ship.passponder_countdown = ship.passponder_time
-               ship.passponder_target = ship.target
-            else
-               ship.api.repl.print("Insufficient power for jump; need " ..
-                                      ship.passponder_power)
-            end
-         end
-      end,
       draw = function(ship)
          if(not (ship.target and ship.target.beam_count)) then return end
 

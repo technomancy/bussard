@@ -26,7 +26,7 @@ keymap.define("flight", "escape", ship.ui.quit)
 
 keymap.define("flight", "tab", ship.actions.next_target)
 keymap.define("flight", "ctrl-tab", ship.actions.closest_target)
-keymap.define("flight", "ctrl- ", ship.actions.passponder)
+keymap.define("flight", "ctrl- ", ship.actions.login)
 
 keymap.modes["flight"].textinput = function(text)
    if(not ship.controls[text]) then

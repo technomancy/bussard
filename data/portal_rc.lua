@@ -16,10 +16,12 @@ if(cleared) then
       local power = os.time() - last_time
 
       if(distance() > ship.status.passponder_range) then
+         set_beam_count(nil)
          print("Out of range.")
          print(nil)
          return
       elseif(ship.status.battery - power <= 0) then
+         set_beam_count(nil)
          print("Insufficient power.")
          print(nil)
          return
