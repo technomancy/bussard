@@ -16,6 +16,8 @@ local repl = {
    max_history = 1000,
    background = false,
    wrapping = false,
+   -- sentinel value for suppressing printing
+   invisible = {}
 }
 -- How many pixels of padding are on either side
 local PADDING = 20
@@ -174,6 +176,7 @@ function repl.eval(text, add_to_history)
                repl.history:append(text, true)
             end
          end
+         if result[2] == repl.invisible then return true end
          while i <= #result do
             results = results .. ', ' .. lume.serialize(result[i], true)
             i = i + 1

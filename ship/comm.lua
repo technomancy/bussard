@@ -153,11 +153,12 @@ return {
          -- free recharge upon connect
          ship.battery = ship.battery_capacity
 
-         local motd = "Login succeeded. Run `logout` to disconnect."
-         if(fs_raw.etc.motd) then motd = (motd .. "\n" .. fs_raw.etc.motd) end
-         ship.api.repl.print(motd)
+         local default_motd = "Login succeeded. Run `logout` to disconnect."
+         ship.api.repl.print(fs_raw.etc.motd or default_motd)
+         return ship.api.repl.invisible
       else
          ship.api.repl.print("Login failed.")
+         return ship.api.repl.invisible
       end
    end,
 
