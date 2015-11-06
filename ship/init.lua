@@ -64,7 +64,7 @@ local sandbox = function(ship)
                         print = repl.print,
                         ship = ship.api,
                         dofile = lume.fn(sandbox_dofile, ship.api),
-                        os = {time = lume.fn(utils.sandboxed_time, ship)},
+                        os = {time = lume.fn(utils.time, ship)},
                         scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
    })

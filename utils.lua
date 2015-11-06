@@ -169,7 +169,7 @@ return {
       lume = lume,
    },
 
-   sandboxed_time = function(ship)
+   time = function(ship)
       return ship.time_offset + (socket.gettime() - ship.load_time)
          * ship.time_factor
    end,

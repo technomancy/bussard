@@ -55,7 +55,7 @@ local sandbox = function(ship)
       station = utils.readonly_proxy(ship.target),
       ship = ship.api,
       distance = lume.fn(utils.distance, ship, ship.target),
-      os = {time = lume.fn(utils.sandboxed_time, ship)},
+      os = {time = lume.fn(utils.time, ship)},
       -- TODO: dofile
    }
    if(ship.target and ship.target.portal) then
