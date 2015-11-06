@@ -152,7 +152,7 @@ either planetary colonies or re-appropriated into orbital stations.
 * Second Wave: SS Bradbury (Bohk, 0.6c),
   SS Eratosthenes † (New Phobos, 0.5c), SS Defiant (Yueh, 0.6c)
 * Third Wave: SS Kepler † (Delta Pavonis)
-* Fourth Wave: SS Las Casas (Katilay), SS Cherenkov † (Lucaille),
+* Fourth Wave: SS Las Casas (Katilay), SS Cherenkov † (Mecalle),
   SS Sagan (Kowlu)
 * Fifth Wave: SS Pythagoras (Luyten), SS Planck (Tana),
   SS Rosen (Wolf), SS Archimedes (L 668-21)
@@ -172,7 +172,7 @@ ships containing just the equipment needed to create the portal.
 * Second portal ship: SS Calandria
  * Lalande->Ross
  * Bohk->New Phobos
- * Lucaille->Katilay
+ * Mecalle->Katilay
 * Defiant Rescue ship: SS Goddard
 * Bohk trade ship: SS Oberth
  * carries portal from Yueh back to Bohk

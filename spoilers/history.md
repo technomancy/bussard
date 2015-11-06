@@ -138,17 +138,17 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2338 - New Phobos portal operational under Lalande supervision
 
-* 2344 - Bohk luanches SS Cherenkov colonizer to Lucaille
+* 2344 - Bohk luanches SS Cherenkov colonizer to Mecalle
   (0.8 pc, 0.7 c, 3.7y)
 
 * 2348 - SS Pythagoras arrives in Katilay and colonizes, but its portal
   proves unstable, coup enacted
 
-* 2351 - SS Cherenkov establishes colony in Lucaille
+* 2351 - SS Cherenkov establishes colony in Mecalle
 
 * 2360 - Lalande learns of Pythagoras's fate
 
-* 2362 - Lalande launches SS Calandria from Lucaille to Katilay (2.4 pc, 0.7c, 11y)
+* 2362 - Lalande launches SS Calandria from Mecalle to Katilay (2.4 pc, 0.7c, 11y)
 
 * 2366 - Lalande launches SS Sagan colonizer from Delta Pavonis to Kowlu
   (0.7 pc, 0.7c, 3.2y)
@@ -157,7 +157,7 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2370 - SS Sagan arrives in Kowlu, colony established
 
-* 2373 - SS Calandria arrives in Katilay, portal to Lucaille
+* 2373 - SS Calandria arrives in Katilay, portal to Mecalle
   established, Lalande portal fixed
 
 ## Fifth wave: Tana and secret colonies

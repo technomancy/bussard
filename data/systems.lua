@@ -308,9 +308,9 @@ return {
                   {name = "Portal: New Phobos",
                    image_name="portal-1",
                    r=22000, mass=75, portal="New Phobos", os=orb,},
-                  {name = "Portal: Lucaille",
+                  {name = "Portal: Mecalle",
                    image_name="portal-1",
-                   r=22000, mass=75, portal="Lucaille", os=orb},
+                   r=22000, mass=75, portal="Mecalle", os=orb},
                   {name = "Portal: Yueh",
                    image_name="portal-2", interportal=true,
                    r=22000, mass=75, portal="Yueh", os=orb}
@@ -327,12 +327,12 @@ return {
                          r=22000, mass=75, portal="Bohk", os=orb},
                      }, -- tourism center
    },
-   ["Lucaille"] = {gov="Bohk",
+   ["Mecalle"] = {gov="Bohk",
                    x=2.8, y=0.2,
                    bodies = {
                       {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
                        image_name="sun",
-                       name="Lucaille 8760", star=true},
+                       name="Mecalle 8760", star=true},
                       {name = "Portal: Bohk",
                        image_name="portal-1",
                        r=22000, mass=75, portal="Bohk", os=orb},
@@ -353,9 +353,9 @@ return {
                      {name = "Portal: Lalande",
                       image_name="portal-2", interportal=true,
                       r=22000, mass=75, portal="Lalande", os=orb},
-                     {name = "Portal: Lucaille",
+                     {name = "Portal: Mecalle",
                       image_name="portal-2", interportal=true,
-                      r=22000, mass=75, portal="Lucaille", os=orb}
+                      r=22000, mass=75, portal="Mecalle", os=orb}
                   }, -- quiet, isolated. internal conflict.
    },
 
