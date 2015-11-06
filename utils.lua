@@ -1,3 +1,5 @@
+require "socket"
+
 local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
 
 local shallow_copy = function(orig)
@@ -30,7 +32,7 @@ local function distance(x, y)
 end
 
 local format_seconds = function(s)
-   local formatted, k = tostring(s)
+   local formatted, k = tostring(math.ceil(s))
    while k ~= 0 do
       formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1:%2')
    end
@@ -165,5 +167,10 @@ return {
          format_seconds = format_seconds,
       },
       lume = lume,
-   }
+   },
+
+   sandboxed_time = function(ship)
+      return ship.time_offset + (socket.gettime() - ship.load_time)
+         * ship.time_factor
+   end,
 }
