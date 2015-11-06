@@ -10,14 +10,8 @@ local laser_hits = function(ship, b, distance)
 end
 
 local portal_offsets = {
-   [0] = {0, -200},
-   [0.125] = {-141, -141},
-   [0.25] = {-200, 0},
-   [0.375] = {-141, 141},
-   [0.50] = {0, 200},
-   [0.625] = {141, 141},
-   [0.75] = {200, 0},
-   [0.875] = {141, -141}
+   {0, -200}, {-141, -141}, {-200, 0}, {-141, 141},
+   {0, 200}, {141, 141}, {200, 0}, {141, -141},
 }
 
 return {
@@ -60,8 +54,7 @@ return {
    passponder = {
       stats = {
          passponder_range = 1024,
-         passponder_time = 4,
-         passponder_power = 64,
+         passponder_time = 4 * 10, -- in-game seconds
       },
       action = function(ship)
          if(not ship.target or not ship.target.portal) then return end
@@ -75,28 +68,12 @@ return {
             end
          end
       end,
-      update = function(ship, dt)
-         if(not ship.passponder_countdown) then return end
-         if(ship.battery <= 0 or
-            utils.distance(ship, ship.target) > ship.passponder_range) then
-            ship.passponder_countdown = nil return end
-
-         ship.battery = ship.battery - ship.passponder_power *
-            (dt / ship.passponder_time)
-         ship.passponder_countdown = ship.passponder_countdown - dt
-
-         if(ship.passponder_countdown <= 0) then
-            ship:enter(ship.passponder_target.portal, true)
-            ship.passponder_target = nil
-            ship.passponder_countdown = nil
-         end
-      end,
       draw = function(ship)
-         if(not ship.passponder_countdown) then return end
-         local progress = 1 - (ship.passponder_countdown / ship.passponder_time)
+         if(not (ship.target and ship.target.beam_count)) then return end
+
          love.graphics.setLineWidth(10)
-         for i = 0,1,0.125 do
-            if(progress > i) then
+         for i = 1,8 do
+            if(ship.target.beam_count > i) then
                love.graphics.line(0,0,
                                   ship.passponder_target.x - ship.x +
                                      portal_offsets[i][1],

@@ -2,8 +2,10 @@ local utils = require("utils")
 local news = require("news")
 
 local filesystem_overlays = require("data.filesystems")
+local portal_rc = love.filesystem.read("data/portal_rc.lua")
+local portal_motd = "Connected to portal, checking for clearance..."
 
-local seed = function(os, body_name)
+local seed = function(os, body_name, portal)
    local raw = os.fs.new_raw()
    local proxy = os.fs.proxy(raw, "root", raw)
    os.fs.seed(proxy, {guest = ""})
@@ -95,9 +97,15 @@ return {
    login = function(ship, body, username, password)
       if((not body) or not body.os) then return false end
       if(not filesystems[body.name]) then
-         filesystems[body.name] = seed(body.os, body.name)
+         filesystems[body.name] = seed(body.os, body.name, body.portal)
          news.seed(ship, body, filesystems[body.name])
       end
+
+      if(body.portal) then
+         filesystems[body.name].home.guest[".smashrc"] = portal_rc
+         filesystems[body.name].etc.motd = portal_motd
+      end
+
       return body.os.shell.auth(filesystems[body.name], username, password) and
          filesystems[body.name]
    end,
@@ -179,6 +187,8 @@ return {
       for system_name,system in pairs(systems) do
          for _,body in ipairs(system.bodies) do
             body.system, body.gov = system_name, system.gov
+            if(body.portal) then assert(body.os, "OS-less portal") end
+            if(body.star) then assert(not body.os, "OS on a star") end
          end
       end
    end,

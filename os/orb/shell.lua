@@ -133,7 +133,10 @@ orb.shell = {
                     pairs = orb.utils.mtpairs,
                     ipairs = ipairs,
                     unpack = unpack,
-                    print = function(...) write(tostring(...) .. "\n") end,
+                    print = function(...)
+                       -- printing false/nil closes the connection
+                       if(...) then write(tostring(...) .. "\n")
+                       else write(...) end end,
                     coroutine = { yield = coroutine.yield,
                                   status = coroutine.status },
                     io = { write = write, read = read },

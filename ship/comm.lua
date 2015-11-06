@@ -55,16 +55,21 @@ local sandbox = function(ship)
       station = utils.readonly_proxy(ship.target),
       ship = ship.api,
       distance = lume.fn(utils.distance, ship, ship.target),
-      -- FIXME: stuff from main ship sandbox, like os.time
+      os = {time = lume.fn(utils.sandboxed_time, ship)},
+      -- TODO: dofile
    }
    if(ship.target and ship.target.portal) then
       local target = ship.target
       sb.trip_cleared = function() return true end -- FIXME
       sb.set_beam_count = function(n) target.beam_count = n end
-      sb.draw_power = function(power) ship.battery = ship.battery - power end
       sb.portal_activate = function() ship:enter(target.portal, true) end
+      sb.draw_power = function(power)
+         assert(ship.battery - power >= 0, "Insufficient power.")
+         ship.passponder_target = target
+         ship.battery = ship.battery - power
+      end
    end
-   return sb
+   return lume.merge(utils.sandbox, sb)
 end
 
 local disconnect = function(ship)
@@ -74,13 +79,14 @@ local disconnect = function(ship)
 end
 
 local logout = function(name)
-   local session = assert(sessions[name], "Can't log out; not logged in.")
-   local fs, _ = unpack(session)
-   -- TODO: only clear on non-portals
-   for k,_ in pairs(fs["/home/guest"] or {}) do
-      session[1]["/home/guest"][k] = nil
+   local session = sessions[name]
+   if(session) then
+      local fs, _ = unpack(session)
+      for k,_ in pairs(fs["/home/guest"] or {}) do
+         session[1]["/home/guest"][k] = nil
+      end
+      sessions[name] = nil
    end
-   sessions[name] = nil
 end
 
 local send_input = function(ship, input)
@@ -132,13 +138,14 @@ return {
             if(output) then
                ship.api.repl.write(output)
             else
-               -- EOF means terminate session
+               -- printing nil means EOF, close session
                logout(target_name)
                disconnect(ship)
             end
          end
 
          sessions[ship.target.name] = {fs, env, fs_raw, out_buffer}
+         -- TODO: improve error handling for problems in smashrc
          ship.target.os.process.spawn(fs, env, command or "smash", sandbox(ship))
          ship.api.repl.read = lume.fn(send_input, ship)
          ship.api.repl.prompt = "$ "

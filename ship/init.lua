@@ -56,10 +56,6 @@ local sandbox_dofile = function(ship, filename)
    chunk()
 end
 
-local sandboxed_time = function(ship)
-   return ship.time_offset + (os.time() - ship.load_time) * ship.time_factor
-end
-
 local sandbox = function(ship)
    return lume.merge(utils.sandbox,
                      {  help = help.message,
@@ -68,7 +64,7 @@ local sandbox = function(ship)
                         print = repl.print,
                         ship = ship.api,
                         dofile = lume.fn(sandbox_dofile, ship.api),
-                        os = {time = lume.fn(sandboxed_time, ship)},
+                        os = {time = lume.fn(utils.sandboxed_time, ship)},
                         scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
    })

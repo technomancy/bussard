@@ -151,6 +151,7 @@ return {
       tonumber = tonumber,
       tostring = tostring,
       realprint = print, -- for debugging
+      pack = pack,
 
       -- tables
       coroutine = coroutine,

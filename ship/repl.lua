@@ -161,12 +161,10 @@ function repl.eval(text, add_to_history)
 
    -- Try evaluating
    if func then
-      local traceback = nil
-      local err_msg = nil
+      local traceback, err_msg = nil, nil
       local result = pack(xpcall(func, function(e)
                                     traceback = debug.traceback()
                                     err_msg = e end))
-      -- local result = pack(xpcall(func, debug.debug))
       if result[1] then
          local results, i = lume.serialize(result[2], true), 3
          if add_to_history then
