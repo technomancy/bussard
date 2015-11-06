@@ -1,4 +1,4 @@
- -- -*- lua -*-
+-- -*- lua -*-
 
 local f, env, args = ...
 

@@ -36,7 +36,7 @@ local base_stats = {
    cargo_capacity = 64,
    fuel_capacity = 128,
    scoop_range = 0,
-   comm_range = 2048,
+   comm_range = 2048 * 9999999,
    recharge_rate = 2,
    burn_rate = 16,
    engine_strength = 1024,
@@ -97,6 +97,8 @@ local ship = {
    cargo = {["food"] = 2},
    upgrade_names = {"passponder"},
    events = {},
+   visas = {},
+   flag = "Tana",
 
    configure = function(ship, systems, ui)
       repl.initialize()

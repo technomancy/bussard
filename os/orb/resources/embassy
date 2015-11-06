@@ -1,0 +1,19 @@
+-- -*- lua -*-
+
+local f, env, args = ...
+
+if((args[1] == "visa" and #args == 2)) then
+   local success, reason, length, price = buy_visa(args[2])
+   if(not success) then
+      print(reason)
+   else
+      print("Visa to " .. args[2] .. " purchased.")
+      print(length / 1000 .. " kiloseconds for " .. price .. " credits.")
+   end
+else
+   print("Access embassy-related services.\n")
+   print("Usage:")
+   print("  embassy visa GOVERNMENT")
+   return
+end
+

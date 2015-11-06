@@ -1,5 +1,6 @@
 local lume = require("lume")
 local utils = require("utils")
+local gov = require("data/gov")
 
 local body = require("body")
 
@@ -45,10 +46,22 @@ local scp = function(ship, from, to)
    ship.api.repl.print("Copied successfully.")
 end
 
+local portal_cleared = function(ship, portal_body)
+   -- TODO: import duties to pay on your cargo
+   local target_gov = assert(ship.systems[portal_body.portal].gov)
+   local current_gov = assert(ship.systems[ship.system_name].gov)
+   local now = utils.time(ship)
+   if(not portal_body.interportal) then return true end
+   if(gov.treaties[target_gov][current_gov]) then return true end
+   local visa = ship.visas[gov] and ship.visas[gov].expiry > now
+   return visa, "no visa to " .. target_gov .. "; please visit station embassy."
+end
+
 local sandbox = function(ship)
    local sb = {
       buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
       buy_upgrade = lume.fn(services.buy_upgrade, ship),
+      buy_visa = lume.fn(services.buy_visa, ship),
       refuel = lume.fn(services.refuel, ship, ship.target),
       cargo_transfer = lume.fn(services.cargo_transfer, ship.target, ship),
       scp = lume.fn(scp, ship),
@@ -60,7 +73,7 @@ local sandbox = function(ship)
    }
    if(ship.target and ship.target.portal) then
       local target = ship.target
-      sb.trip_cleared = function() return true end -- FIXME
+      sb.trip_cleared = lume.fn(portal_cleared, ship, target)
       sb.set_beam_count = function(n) target.beam_count = n end
       sb.portal_activate = function() ship:enter(target.portal, true) end
       sb.draw_power = function(power)

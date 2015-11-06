@@ -3,6 +3,7 @@
 
 local utils = require("utils")
 local orb = require("os.orb")
+local gov = require("data/gov")
 
 local get_price = function(good, amount, prices, direction)
    other_direction = direction == "sell" and "buy" or "sell"
@@ -95,6 +96,24 @@ return {
             ship.credits = ship.credits - price
          end
          return price
+      end
+   end,
+
+   buy_visa = function(ship, gov)
+      local from = ship.systems[ship.system_name].gov
+      if(ship.flag == gov) then
+         return false, "Your ship is already registered under a "..gov.." flag."
+      elseif(gov.treaties[gov][ship.flag]) then
+         return false, "No visa needed for in-treaty travel."
+      elseif(not gov.adjacent[from][gov]) then
+         return false, "No embassy for " .. gov .. " in this system."
+      elseif(gov.visas[gov]) then
+         local visa = gov.visas[gov]
+         ship.credits = ship.credits - visa.price
+         ship.visas[gov] = visa.length + utils.time(ship)
+         return true, "Success", visa.length, visa.price
+      else
+         return false, "Travel to " .. gov .. " is not permitted."
       end
    end,
 

@@ -1,0 +1,16 @@
+return { treaties = {["Sol"] = {["Tana"] = true},
+            ["Tana"] = {["Sol"] = true},},
+         visas = {["Terran"] = {price = 5550, length = 6000},
+                  ["Bohk"] = {price = 2010, length = 10000},
+                  ["Yueh"] = {price = 4215, length = 6800},
+                  ["Katilay"] = {price = 12015, length = 6000}},
+         adjacent = {
+            ["Tana"] = {["Sol"] = true},
+            ["Sol"] = {["Terran"] = true, ["Tana"] = true},
+            ["Terran"] = {["Sol"] = true, ["Katilay"] = true,
+               ["Bohk"] = true, ["Yueh"] = true},
+            ["Katilay"] = {["Terran"] = true, ["Bohk"] = true},
+            ["Bohk"] = {["Terran"] = true, ["Katilay"] = true, ["Yueh"] = true},
+            ["Yueh"] =  {["Terran"] = true, ["Bohk"] = true},
+         },
+}
