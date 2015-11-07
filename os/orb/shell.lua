@@ -130,13 +130,10 @@ orb.shell = {
                             append = orb.fs.append,
                             reload = orb.fs.reloaders[f],
                             extra_sandbox = extra_sandbox, },
-                    pairs = orb.utils.mtpairs,
+                    pairs = pairs,
                     ipairs = ipairs,
                     unpack = unpack,
-                    print = function(...)
-                       -- printing false/nil closes the connection
-                       if(...) then write(tostring(...) .. "\n")
-                       else write(...) end end,
+                    print = function(...) write(tostring(...) .. "\n") end,
                     coroutine = { yield = coroutine.yield,
                                   status = coroutine.status },
                     io = { write = write, read = read },
@@ -163,7 +160,7 @@ orb.shell = {
    groups = function(f, user)
       local dir = f["/etc/groups"]
       local found = {}
-      for group,members in orb.utils.mtpairs(dir) do
+      for group,members in pairs(dir) do
          if(type(members) == "table" and orb.utils.includes(members, user)) then
             table.insert(found, group)
          end

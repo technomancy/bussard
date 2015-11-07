@@ -1,5 +1,3 @@
-local pairs = orb.utils.mtpairs
-
 orb.process = {
    -- Create a coroutine for a command to run inside and place it into the
    -- process table. The process table is stored in the filesystem under

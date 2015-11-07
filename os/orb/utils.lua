@@ -37,19 +37,10 @@ orb.utils = {
    end,
 
    includes = function(tab, val)
-      for _,x in orb.utils.mtpairs(tab) do
+      for _,x in pairs(tab) do
          if(x == val) then return true end
       end
       return false
-   end,
-
-   mtpairs = function(tab)
-      local mt = getmetatable(tab)
-      if(mt and mt.__iterator) then
-         return mt.__iterator(tab)
-      else
-         return pairs(tab)
-      end
    end,
 
    partial = function(f, ...)

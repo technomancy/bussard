@@ -170,7 +170,7 @@ orb.fs = {
    end,
 
    strip_special = function(f)
-      for k,v in orb.utils.mtpairs(f) do
+      for k,v in pairs(f) do
          if(type(v) == "table") then
             orb.fs.strip_special(v)
          elseif(type(v) ~= "string" and type(v) ~= "number") then
@@ -235,8 +235,8 @@ orb.fs = {
          end,
 
          -- Unfortunately Lua 5.1 has no way to specify an iterator from the
-         -- metatable, so this only works with orb.utils.mtpairs. =(
-         __iterator = function(_)
+         -- metatable, so this only works with our monkeypatched pairs. =(
+         __pairs = function(_)
             assert(orb.fs.readable(raw_root, raw, user), "Not readable")
             local f2 = {}
             for k,v in pairs(raw) do
