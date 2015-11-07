@@ -43,6 +43,10 @@ love.load = function()
    save.load_into(ship)
    body.load(systems)
 
+   if(love.filesystem.isFile("localhacks.lua")) then
+      require("localhacks")(ship)
+   end
+
    ship.api.repl.display_line =
       "Press ~ to open the repl, and run man() for more help."
    xpcall(function() ship.api:load("src.config") end,
