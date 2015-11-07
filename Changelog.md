@@ -2,6 +2,10 @@
 
 ## alpha-5 / ???
 
+* Fix a bug where upgrades would not be available.
+* Populated systems for Katilay and Bohk.
+* Implemented clearance system for travel between governments.
+* Portals now function by their own onboard computers too.
 * Fix a bug where multibyte input would crash the game.
 
 ## alpha-4 / 2015-10-29
