@@ -114,7 +114,7 @@ local send_input = function(ship, input)
    elseif(not ship:in_range(ship.target)) then
       ship.api.repl.print("| Out of range. Run `logout` to disconnect.")
    elseif(not sessions[ship.target.name]) then
-      ship.api.repl.print("Not logged in to " .. b.name ..
+      ship.api.repl.print("Not logged in to " .. ship.target.name ..
                              ". Run `logout` to disconnect.")
    else
       local fs, env = unpack(sessions[ship.target.name])
