@@ -15,7 +15,8 @@ local orb = require("os.orb")
 -- pop
 -- upgrades
 
--- TODO1: scatter more upgrades around the systems
+-- TODO: scatter more upgrades around the systems
+-- TODO: more uninhabited planets
 
 return {
    -- Tana
@@ -405,7 +406,7 @@ return {
                      },
                      {r=12000, mass=100, station=true,
                       image_name="station-round",
-                      name="Casas", os=orb,
+                      name="Slork", os=orb,
                       industry=3,tech=3,
                       remote=8, pop=3,
                       agri=1, mineral=3,

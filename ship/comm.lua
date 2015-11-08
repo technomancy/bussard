@@ -96,7 +96,9 @@ local logout = function(name)
    if(session) then
       local fs, _ = unpack(session)
       for k,_ in pairs(fs["/home/guest"] or {}) do
-         session[1]["/home/guest"][k] = nil
+         if(k ~= "_user" and k ~= "_group") then
+            session[1]["/home/guest/" .. k] = nil
+         end
       end
       sessions[name] = nil
    end
