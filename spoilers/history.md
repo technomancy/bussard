@@ -16,7 +16,7 @@ The establishment of the Terran Republic.
 * 2117 - SS Lorentz arrives, colonizes Lalande
 
 * 2123 - SS Copernicus colony ship launches from Sol to Ross
-  (1.6 pc @ 0.5 c, 10y)
+  (1.6 pc @ 0.5 c, 10y, γ=1.2)
 
 * 2133 - SS Copernicus arrives, colonizes Ross
 
@@ -37,7 +37,7 @@ slow-colonized worlds tend to lack close ties with their colonizing
 power, but Ross and Lalande grow close. Lalande's great mineral
 deposits lead to it becoming an industrial powerhouse.
 
-* 2175 - SS Bradbury launched from Lalande to Bohk (2 pc @ 0.6 c, 10.8y)
+* 2175 - SS Bradbury launched from Lalande to Bohk (2 pc @ 0.6 c, 10.8y, γ=1.3)
 
 * 2187 - SS Bradbury colony ship arrives in Bohk, establishes
   independent colony
@@ -82,7 +82,7 @@ established civilization.
 * 2293 - SS Defiant departs to bring portal to Sol (1.7 pc, 0.6c, ...)
 
 * 2294 - SS Calandria departs Lalande for Ross with portal
-  (3 pc, 0.7 c, 14y)
+  (3 pc, 0.7 c, 14y, γ=1.4)
 
 * 2296 - SS Defiant is knocked off course; engines damaged (1.2 pc away)
 
@@ -103,7 +103,7 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 * 2311 - Yueh scientists independently replicate portal tech
 
 * 2312 - Yueh returns cargo ship SS Oberth to Bohk with portal tech
-  (1.2 pc, 0.7c, 5.5y), launches colonizer SS Kepler to Delta Pavonis
+  (1.2 pc, 0.7c, 5.5y, γ=1.4), launches colonizer SS Kepler to Delta Pavonis
   (2.4 pc, 0.7c, 11y)
 
 * 2313 - Lalande attacks Yueh, dropping asteroids on them from orbit

@@ -2,6 +2,8 @@
 local f = function() end
 local o = function() return 1 end
 
+package.path = package.path .. ";./?.lua;./?/init.lua"
+
 love = love or { graphics = { newImage = f, getWidth = o, getHeight = o,
                               newFont = f, setFont = f, getFont = function()
                                  return { getWidth = f, getHeight = f,} end, },
@@ -40,7 +42,7 @@ local proximity_check = function(bodies, max, system_name)
             (not b2.asteroid) and b.r ~= b2.r) then
             local gx, gy = body.gravitate(b, b2.x, b2.y)
             if(math.abs(gx) > max or math.abs(gy) > max) then
-               print(system_name, b.name, b2.name, gx, gy)
+               print("prox warning:", system_name, b.name, b2.name, gx, gy)
             end
          end
       end

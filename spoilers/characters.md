@@ -202,7 +202,6 @@ portal. Mostly they carry cargo and passengers; occasionally science.
 
 * Tana
  * PTMC chairman (very old)
- * Captain of SS Archimedes
  * Mining captain, served on SS Archimedes
  * Kosaga Shipyards engineer
 * Sol

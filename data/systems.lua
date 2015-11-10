@@ -27,7 +27,7 @@ return {
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=230000,
            image_name="sun",
-           name="Tana", star=true },
+           name="Tana", fixed=true },
           {r=45000, mass=400,
            image_name = "planet-3",
            name="Tana Prime", os=orb,
@@ -71,7 +71,7 @@ return {
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=160000,
            image_name="sun",
-           name="Wolf 294", star=true},
+           name="Wolf 294", fixed=true},
           {r=33000, mass=350,
            image_name="planet-9", -- green
            name="Belanda", os=orb,
@@ -101,7 +101,7 @@ return {
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
            image_name="sun",
-           name="Luyten's Star", star=true },
+           name="Luyten's Star", fixed=true },
           {r=32000, mass=120,
            image_name="station-pointed", station=true,
            name="Apkabar station", os=orb,
@@ -126,7 +126,7 @@ return {
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
            image_name="sun",
-           name="L 668-21", star=true },
+           name="L 668-21", fixed=true },
           {r=20000, mass=100, station=true,
            image_name="station-pointed",
            name="Mirduka station", os=orb,
@@ -149,7 +149,7 @@ return {
               bodies = {
                  {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
                   image_name="sol",
-                  name="Sol", star=true},
+                  name="Sol", fixed=true},
                  {r=10000, mass=220,
                   image_name="mercury",
                   name="Mercury"},
@@ -226,7 +226,7 @@ return {
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
                       image_name="sun",
-                      name="Lalande 25372", star=true},
+                      name="Lalande 25372", fixed=true},
                      {r=14000, mass=200,
                       image_name="planet-6", -- kinda green
                       name="Pinan", os=orb,
@@ -266,7 +266,7 @@ return {
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=410000,
                    image_name="sun",
-                   name="Ross 128", star=true},
+                   name="Ross 128", fixed=true},
                   {r=35000, mass=200, gov="darush",
                    image_name="shaber3", -- dark red volcanic
                    name="Darush", os=orb,
@@ -302,7 +302,7 @@ return {
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=350000,
                    image_name="sun",
-                   name="Bohk", star=true},
+                   name="Bohk", fixed=true},
                   {r=15000, mass=500,
                    image_name = "shaber1",
                    name="Bohk Prime", os=orb,
@@ -349,7 +349,7 @@ return {
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=310000,
                          image_name="sun",
-                         name="New Phobos", star=true},
+                         name="New Phobos", fixed=true},
                         {r=18000, mass=630,
                          image_name = "shaber4",
                          name="Galure", os=orb,
@@ -369,7 +369,7 @@ return {
                    bodies = {
                       {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
                        image_name="sun",
-                       name="Mecalle 8760", star=true},
+                       name="Mecalle 8760", fixed=true},
                       {r=26000, mass=342,
                        image_name = "planet-11", -- blue/purple
                        name="Tirakir", os=orb,
@@ -395,7 +395,7 @@ return {
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                       image_name="sun",
-                      name="Katilay", star=true},
+                      name="Katilay", fixed=true},
                      {r=25000, mass=350,
                       image_name="shaber2", -- red plates
                       name="Katilay Prime", os=orb,
@@ -428,7 +428,7 @@ return {
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                    image_name="sun",
-                   name="Sigma Draconis", star=true},
+                   name="Sigma Draconis", fixed=true},
                   {name = "Portal: Bohk",
                    image_name="portal-2", interportal=true, os=orb,
                    r=22000, mass=75, portal="Bohk"},
@@ -451,7 +451,7 @@ return {
                 bodies = {
                    {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                     image_name="sun",
-                    name="Kowlu", star=true},
+                    name="Kowlu", fixed=true},
                    {name = "Portal: Delta Pavonis",
                     image_name="portal-1", os=orb,
                     r=22000, mass=75, portal="Delta Pavonis"},
@@ -465,7 +465,7 @@ return {
                         bodies = {
                            {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                             image_name="sun",
-                            name="Delta Pavonis", star=true},
+                            name="Delta Pavonis", fixed=true},
                            {name = "Portal: Wolf 1481",
                             image_name="portal-1", os=orb,
                             r=22000, mass=75, portal="Wolf 1481"},
@@ -482,7 +482,7 @@ return {
                     bodies = {
                        {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                         image_name="sun",
-                        name="Wolf 1481", star=true},
+                        name="Wolf 1481", fixed=true},
                        {name = "Portal: Yueh",
                         image_name="portal-1", os=orb,
                         r=22000, mass=75, portal="Yueh"},
@@ -497,7 +497,7 @@ return {
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                       image_name="sun",
-                      name="LHS 451", star=true},
+                      name="LHS 451", fixed=true},
                      {name = "Portal: Yueh",
                       image_name="portal-1", os=orb,
                       r=22000, mass=75, portal="Yueh"},
@@ -508,7 +508,7 @@ return {
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                          image_name="sun",
-                         name="CD-40 9712", star=true},
+                         name="CD-40 9712", fixed=true},
                         {name = "Portal: Delta Pavonis",
                          image_name="portal-1", os=orb,
                          r=22000, mass=75, portal="Delta Pavonis"},

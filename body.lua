@@ -85,7 +85,7 @@ return {
 
          -- body-to-body
          for _, b2 in ipairs(bodies) do
-            if(b ~= b2 and (not b2.star)) then
+            if(b ~= b2 and (not b2.fixed)) then
                local ddx2, ddy2 = gravitate(b, b2.x, b2.y)
                b2.dx = b2.dx + (dt * ddx2)
                b2.dy = b2.dy + (dt * ddy2)
@@ -157,8 +157,8 @@ return {
    end,
 
    seed_pos = function(b, star)
-      if(b.star or b.asteroid) then return end
-      assert(star.star, star.name .. " is not a star.")
+      if(b.fixed or b.asteroid) then return end
+      assert(star.fixed, star.name .. " is not a star.")
 
       -- Unclear why it's necessary to divide by ten here; standard orbital
       -- calculations do not include this factor, but without it we cannot
@@ -188,7 +188,7 @@ return {
          for _,body in ipairs(system.bodies) do
             body.system, body.gov = system_name, system.gov
             if(body.portal) then assert(body.os, "OS-less portal") end
-            if(body.star) then assert(not body.os, "OS on a star") end
+            if(body.fixed) then assert(not body.os, "OS on a fixed body") end
          end
       end
    end,
