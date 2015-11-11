@@ -1,8 +1,8 @@
 local utils = require("utils")
 local lume = require("lume")
 
-local default_config = love.filesystem.read("ship/default_config.lua")
-local fallback_config = love.filesystem.read("ship/fallback_config.lua")
+local default_config = love.filesystem.read("data/default_config.lua")
+local fallback_config = love.filesystem.read("data/fallback_config.lua")
 
 local comm = require("ship.comm")
 local help = require("ship.help")
@@ -51,7 +51,7 @@ local sandbox_dofile = function(ship, filename)
    local contents = ship:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
    local chunk = assert(loadstring(contents))
-   setfenv(chunk, sandbox)
+   setfenv(chunk, ship.sandbox)
    chunk()
 end
 

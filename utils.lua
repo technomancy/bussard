@@ -1,4 +1,4 @@
-require "socket"
+local socket = require("socket")
 
 local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
 
@@ -132,8 +132,6 @@ return {
 
    readonly_proxy = readonly_proxy,
 
-   mtlength = mtlength,
-
    distance = distance,
 
    format_seconds = format_seconds,
@@ -153,7 +151,6 @@ return {
       tonumber = tonumber,
       tostring = tostring,
       realprint = print, -- for debugging
-      pack = pack,
 
       -- tables
       coroutine = coroutine,

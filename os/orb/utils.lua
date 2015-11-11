@@ -85,10 +85,6 @@ orb.utils = {
    end,
 
    get_password_hash = function(u, p)
-      if(minetest) then
-         return minetest.get_password_hash(u, p)
-      else
-         return md5.sumhexa(u .. ":" .. p)
-      end
+      return md5.sumhexa(u .. ":" .. p)
    end,
 }

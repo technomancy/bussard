@@ -12,9 +12,14 @@ local keymap = require "keymap"
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 local systems = require("data.systems")
 
-local star1 = star1 or starfield.new(10, w, h, 0.01, 100)
-local star2 = star2 or starfield.new(10, w, h, 0.05, 175)
-local star3 = star3 or starfield.new(10, w, h, 0.1, 255)
+local star1 = starfield.new(10, w, h, 0.01, 100)
+local star2 = starfield.new(10, w, h, 0.05, 175)
+local star3 = starfield.new(10, w, h, 0.1, 255)
+
+local portal_offsets = {
+   {0, -200}, {-141, -141}, {-200, 0}, {-141, 141},
+   {0, 200}, {141, 141}, {200, 0}, {141, -141},
+}
 
 local ui = {
    version = "alpha-5-pre",
@@ -52,15 +57,15 @@ love.load = function()
    xpcall(function() ship.api:load("src.config") end,
       function(e)
          print("Initial load failed:", e)
-         s.repl.print(e)
-         s.repl.print(debug.traceback())
-         s.repl.display_line = "Error loading config; falling back to " ..
+         ship.repl.print(e)
+         ship.repl.print(debug.traceback())
+         ship.repl.display_line = "Error loading config; falling back to " ..
             "ship.src.fallback_config."
          local chunk = assert(loadstring("src.fallback_config"))
          setfenv(chunk, ship.api.repl.sandbox)
          local success, msg = pcall(chunk)
          if(not success) then
-            s.repl.print(msg)
+            ship.repl.print(msg)
          end
    end)
 end

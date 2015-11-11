@@ -9,11 +9,6 @@ local laser_hits = function(ship, b, distance)
    return divergence < diameter
 end
 
-local portal_offsets = {
-   {0, -200}, {-141, -141}, {-200, 0}, {-141, 141},
-   {0, 200}, {141, 141}, {200, 0}, {141, -141},
-}
-
 return {
    laser = {
       stats = {

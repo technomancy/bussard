@@ -35,8 +35,7 @@ local function asteroid(name, mass_max, bodies, parent)
       end
    end
 
-   local a = { x = x, y = y, dx = dx, dy = dy, name = name,
-               mass = mass, image = asteroid_image,
+   local a = { name = name, mass = mass, image = asteroid_image,
                scale = (mass / 64) + 0.5,
                asteroid = true, strength = mass, split = split,
    }
@@ -86,6 +85,5 @@ return {
       for i = 1, system.asteroids do
          asteroid("asteroid" .. i, 64, system.bodies)
       end
-      return bodies
    end,
 }

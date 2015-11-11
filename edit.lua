@@ -343,7 +343,6 @@ return {
    draw = function()
       if not on then return end
       local width, height = love.graphics:getWidth(), love.graphics:getHeight()
-      DISPLAY_WIDTH = width - PADDING
       DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
 
       -- enforce consistency

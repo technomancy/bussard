@@ -5,7 +5,7 @@ local filesystem_overlays = require("data.filesystems")
 local portal_rc = love.filesystem.read("data/portal_rc.lua")
 local portal_motd = "Connected to portal, checking for clearance..."
 
-local seed = function(os, body_name, portal)
+local seed = function(os, body_name)
    local raw = os.fs.new_raw()
    local proxy = os.fs.proxy(raw, "root", raw)
    os.fs.seed(proxy, {guest = ""})

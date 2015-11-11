@@ -197,7 +197,6 @@ end
 local function reset_editline()
    editline = ''
    cursor = 0
-   prompt_prefix = ''
 end
 
 local function get_history()
@@ -303,7 +302,6 @@ end
 
 function repl.draw()
    local width, height = love.graphics:getWidth(), love.graphics:getHeight()
-   DISPLAY_WIDTH = width - PADDING
    DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
 
    -- Draw background

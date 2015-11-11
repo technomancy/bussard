@@ -3,10 +3,9 @@
 
 local utils = require("utils")
 local orb = require("os.orb")
-local gov = require("data/gov")
 
 local get_price = function(good, amount, prices, direction)
-   other_direction = direction == "sell" and "buy" or "sell"
+   local other_direction = direction == "sell" and "buy" or "sell"
    return amount * prices[good][other_direction]
 end
 
@@ -116,6 +115,4 @@ return {
          return false, "Travel to " .. gov .. " is not permitted."
       end
    end,
-
-   -- TODO!: email, mission systems
 }
