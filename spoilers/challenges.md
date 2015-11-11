@@ -27,6 +27,8 @@ to run arbitrary code on the portal's onboard computer.
 
 Yueh servers don't run Orb; they have a Scheme implementation as their OS.
 
+Or should this be the portals?
+
 ## Running Causal Domain Injector
 
 The "OS" of the lab in which the Causal Domain Injector is found (as

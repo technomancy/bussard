@@ -15,7 +15,7 @@ if(cleared) then
       local time_since = os.time() - init_time
       local power = os.time() - last_time
 
-      if(distance() > ship.status.passponder_range) then
+      if(distance() > ship.status.portal_range) then
          set_beam_count(nil)
          print("Out of range.")
          print(nil)
@@ -28,9 +28,9 @@ if(cleared) then
       end
 
       draw_power(power)
-      set_beam_count(8 * time_since / ship.status.passponder_time)
+      set_beam_count(8 * time_since / ship.status.portal_time)
 
-      if(time_since > ship.status.passponder_time) then
+      if(time_since > ship.status.portal_time) then
          set_beam_count(nil)
          portal_activate()
          print(nil)

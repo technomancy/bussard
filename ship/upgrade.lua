@@ -51,26 +51,6 @@ return {
          end
       end,
    },
-   passponder = {
-      stats = {
-         passponder_range = 1024,
-         passponder_time = 4 * 10, -- in-game seconds
-      },
-      draw = function(ship)
-         if(not (ship.target and ship.target.beam_count)) then return end
-
-         love.graphics.setLineWidth(10)
-         for i = 1,8 do
-            if(ship.target.beam_count > i) then
-               love.graphics.line(0,0,
-                                  ship.passponder_target.x - ship.x +
-                                     portal_offsets[i][1],
-                                  ship.passponder_target.y - ship.y +
-                                     portal_offsets[i][2])
-            end
-         end
-      end,
-   },
    -- purely stat upgrades
    engine = { stats = { engine_power = 512, burn_rate = 3 } },
    cargo_bay = { stats = { cargo_capacity = 64 } },

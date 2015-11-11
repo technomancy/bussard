@@ -28,7 +28,7 @@ local status_whitelist = {
    "cargo", "cargo_capacity",
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
-   "passponder_range", "passponder_power", "passponder_time"
+   "portal_range", "portal_time"
 }
 
 local base_stats = {
@@ -43,9 +43,8 @@ local base_stats = {
    turning_speed = 4,
    battery_capacity = 128,
 
-   passponder_range = 0,
-   passponder_time = 0,
-   passponder_power = 0,
+   portal_range = 1024,
+   portal_time = 40, -- in-game seconds
 }
 
 local sandbox_dofile = function(ship, filename)
@@ -95,7 +94,7 @@ local ship = {
    time_offset = epoch_for(2431),
    system_name = "L 668-21",
    cargo = {["food"] = 2},
-   upgrade_names = {"passponder"},
+   upgrade_names = {},
    events = {},
    visas = {},
    flag = "Tana",

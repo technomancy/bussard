@@ -104,7 +104,7 @@ love.draw = function(dt)
              ship:in_range(ship.target, ship.scoop_range)) then
          love.graphics.setColor(100, 10, 10)
       elseif(ship.target.portal and
-             ship:in_range(ship.target, ship.passponder_range)) then
+             ship:in_range(ship.target, ship.portal_range)) then
          love.graphics.setColor(10, 10, 100)
       else
          love.graphics.setColor(100, 100, 100)
@@ -131,6 +131,19 @@ love.draw = function(dt)
    love.graphics.setColor(255, 255, 255)
    for _,b in pairs(ship.bodies) do
       body.draw(b, ship.x, ship.y, b == ship.target)
+   end
+
+   if(ship.target and ship.target.beam_count) then
+      love.graphics.setLineWidth(10)
+      for i = 1,8 do
+         if(ship.target.beam_count > i) then
+            love.graphics.line(0,0,
+                               ship.portal_target.x - ship.x +
+                                  portal_offsets[i][1],
+                               ship.portal_target.y - ship.y +
+                                  portal_offsets[i][2])
+         end
+      end
    end
 
    love.graphics.pop()

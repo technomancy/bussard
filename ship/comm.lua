@@ -78,7 +78,7 @@ local sandbox = function(ship)
       sb.portal_activate = function() ship:enter(target.portal, true) end
       sb.draw_power = function(power)
          assert(ship.battery - power >= 0, "Insufficient power.")
-         ship.passponder_target = target
+         ship.portal_target = target
          ship.battery = ship.battery - power
       end
    end
