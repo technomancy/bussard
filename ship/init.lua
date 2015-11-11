@@ -11,6 +11,7 @@ local upgrade = require("ship.upgrade")
 
 local keymap = require("keymap")
 local edit = require("edit")
+local mission = require("mission")
 
 -- for shuffling systems upon entry
 local asteroid = require("asteroid")
@@ -34,7 +35,7 @@ local status_whitelist = {
 local base_stats = {
    mass = 128,
    cargo_capacity = 64,
-   fuel_capacity = 128,
+   fuel_capacity = 192,
    scoop_range = 0,
    comm_range = 2048,
    recharge_rate = 2,
@@ -95,6 +96,7 @@ local ship = {
    system_name = "L 668-21",
    cargo = {["food"] = 2},
    upgrade_names = {},
+   active_missions={},
    events = {},
    visas = {},
    flag = "Tana",
@@ -158,6 +160,12 @@ local ship = {
          ship.fuel = ship.fuel + (ship.recharge_rate * dt)
       end
 
+      if(ship.turning_left) then
+         ship.heading = ship.heading + (dt * ship.turning_speed)
+      elseif(ship.turning_right) then
+         ship.heading = ship.heading - (dt * ship.turning_speed)
+      end
+
       if(ship.battery < ship.battery_capacity) then
          local dist = utils.distance(ship.x, ship.y)
          ship.battery = ship.battery + (dt / math.log(dist*2)) * 30
@@ -167,17 +175,12 @@ local ship = {
          f(ship.api, dt)
       end
 
-      if(ship.turning_left) then
-         ship.heading = ship.heading + (dt * ship.turning_speed)
-      elseif(ship.turning_right) then
-         ship.heading = ship.heading - (dt * ship.turning_speed)
-      end
-
-      ship:enforce_limits()
       for _,u in pairs(ship.upgrades) do
          if(u.update) then u.update(ship, dt) end
       end
 
+      mission.update(ship)
+      ship:enforce_limits()
       comm.flush()
    end,
 
@@ -244,6 +247,10 @@ ship.api = {
    repl = repl,
    edit = edit,
 
+   mission = {
+      list = lume.fn(mission.list, ship),
+      abort = lume.fn(mission.abort, ship),
+   },
    -- data tables (read-only)
    sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),
    status = utils.whitelist_table(ship, status_whitelist, "status"),

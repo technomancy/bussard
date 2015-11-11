@@ -1,5 +1,18 @@
 # Challenges
 
+## Missions
+
+Fields
+
+* name
+* id
+* objectives (list of world names)
+* events (on success)
+* credits
+* cargo
+* time limit
+* updater function
+
 ## Auto-miner
 
 A mission to mine an asteroid with a particularly rare ore. This

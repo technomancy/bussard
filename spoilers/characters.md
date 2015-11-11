@@ -204,6 +204,8 @@ portal. Mostly they carry cargo and passengers; occasionally science.
  * PTMC chairman (very old)
  * Mining captain, served on SS Archimedes
  * Kosaga Shipyards engineer
+ * University Students
+   * Ricarad Jinod
 * Sol
  * Traxus researcher
 * Yueh

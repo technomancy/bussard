@@ -1,7 +1,7 @@
 local lume = require("lume")
 local utils = require("utils")
 local gov = require("data/gov")
-
+local mission = require("mission")
 local body = require("body")
 
 local services = require("services")
@@ -69,7 +69,7 @@ local sandbox = function(ship)
       ship = ship.api,
       distance = lume.fn(utils.distance, ship, ship.target),
       os = {time = lume.fn(utils.time, ship)},
-      -- TODO: dofile
+      accept_mission = lume.fn(mission.accept, ship),
    }
    if(ship.target and ship.target.portal) then
       local target = ship.target
@@ -165,11 +165,15 @@ return {
          ship.api.repl.read = lume.fn(send_input, ship)
          ship.api.repl.prompt = "$ "
          ship.comm_connected = ship.target.name
+
          -- free recharge upon connect
          ship.battery = ship.battery_capacity
 
          local default_motd = "Login succeeded. Run `logout` to disconnect."
          ship.api.repl.print(fs_raw.etc.motd or default_motd)
+
+         mission.check(ship)
+
          return ship.api.repl.invisible
       else
          ship.api.repl.print("Login failed.")
