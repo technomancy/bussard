@@ -3,8 +3,9 @@ orb.process = {
    -- process table. The process table is stored in the filesystem under
    -- f.proc[user]
    spawn = function(f, env, command, extra_sandbox)
+      command = command or "smash"
       local co = coroutine.create(function()
-            orb.shell.exec(f, env, "smash", extra_sandbox) end)
+            orb.shell.exec(f, env, command, extra_sandbox) end)
       local id = orb.process.id_for(co)
       f.proc[env.USER][id] = { thread = co,
                                command = command,

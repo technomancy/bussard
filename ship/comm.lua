@@ -163,7 +163,7 @@ return {
 
          sessions[ship.target.name] = {fs, env, fs_raw, out_buffer}
          -- TODO: improve error handling for problems in smashrc
-         ship.target.os.process.spawn(fs, env, command or "smash", sandbox(ship))
+         ship.target.os.process.spawn(fs, env, command, sandbox(ship))
          ship.api.repl.read = lume.fn(send_input, ship)
          ship.api.repl.prompt = "$ "
          ship.comm_connected = ship.target.name
