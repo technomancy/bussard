@@ -35,6 +35,7 @@ local check = function(ship)
          end
          ship.credits = ship.credits + (mission.credits or 0)
          ship.api.repl.print("Mission success: " .. mission.success_message)
+         ship.active_missions[mission_id] = nil
       end
    end
 end
