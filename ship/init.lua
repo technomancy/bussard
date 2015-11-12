@@ -179,7 +179,7 @@ local ship = {
          if(u.update) then u.update(ship, dt) end
       end
 
-      mission.update(ship)
+      mission.update(ship, dt)
       ship:enforce_limits()
       comm.flush()
    end,
@@ -209,6 +209,7 @@ local ship = {
       ship:recalculate()
    end,
 
+   -- run when cargo or upgrades change; always idempotent
    recalculate = function(ship)
       ship.target = ship.bodies[ship.target_number]
 

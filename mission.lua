@@ -5,6 +5,9 @@ local fail = function(ship, mission)
    if(mission.fail_function) then
       mission.fail_function(ship)
    end
+   for good, amt in pairs(mission.cargo or {}) do
+      ship.cargo[good] = ship.cargo[good] - amt
+   end
 end
 
 local cargo_check = function(ship, mission)
@@ -33,6 +36,11 @@ local check = function(ship)
          for _,e in ipairs(mission.success_events or {}) do
             ship.events[e] = true
          end
+         for good, amt in pairs(mission.cargo or {}) do
+            ship.cargo[good] = ship.cargo[good] - amt
+            assert(ship.cargo[good] >= 0, "Negative cargo amount.")
+         end
+
          ship.credits = ship.credits + (mission.credits or 0)
          ship.api.repl.print("Mission success: " .. mission.success_message)
          ship.active_missions[mission_id] = nil
@@ -49,15 +57,19 @@ local accept = function(ship, message_id)
       for good, amt in pairs(mission.cargo or {}) do
          ship.cargo[good] = (ship.cargo[good] or 0) + amt
       end
+      if(mission.accept_function) then
+         mission.accept_function(ship)
+      end
       return true
    end
 end
 
-local update = function(ship)
+local update = function(ship, dt)
    for mission_id,start_time in ipairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
-      if(mission.updater) then mission.updater(ship) end
-      if(utils.time(ship) > start_time + mission.time_limit) then
+      if(mission.updater) then mission.updater(ship, dt) end
+      if(mission.time_limit and (utils.time(ship) >
+                                 start_time + mission.time_limit)) then
          ship.api.repl.print("Mission time limit exceeded: " .. mission.name)
          fail(ship, mission)
       end

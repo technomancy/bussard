@@ -1,3 +1,4 @@
 return {
-   worlds = {"Tana Prime"}
+   worlds = {"Tana Prime"},
+   restrictions={"jinod1"},
 }

@@ -102,6 +102,8 @@ return {
       local from = ship.systems[ship.system_name].gov
       if(ship.flag == gov) then
          return false, "Your ship is already registered under a "..gov.." flag."
+      elseif(not lume.find(ship.upgrade_names, "passponder")) then
+         return false, "Need passponder for visa."
       elseif(gov.treaties[gov][ship.flag]) then
          return false, "No visa needed for in-treaty travel."
       elseif(not gov.adjacent[from][gov]) then

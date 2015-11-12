@@ -1,17 +1,14 @@
 # Challenges
 
-## Missions
+## Get a passponder
 
-Fields
+### Jinod missions
 
-* name
-* id
-* objectives (list of world names)
-* events (on success)
-* credits
-* cargo
-* time limit
-* updater function
+* [ ] Deliver sensor equipment to Mars
+* [ ] Take sensors out for a spin; spend 1ksec within 3000 of Wolf 294
+* [ ] Then study New Phobos with sensor (gives you passponder)
+
+Maybe add multiple ways to get this?
 
 ## Auto-miner
 
@@ -25,7 +22,12 @@ times to mine out the asteroid.
 You can also use the Eye of Harmony to slow down time in order to get
 close enough to mine the asteroid, but you don't get that till later.
 
-## Breaking into the portal
+## Blacklisted from portal access
+
+Late in the game, some nefarious conduct gets you blacklisted by
+Aperture; the portals all refuse you access.
+
+### Breaking into the portal
 
 The activation of the portal relies on the .smashrc file in the guest
 account. If you try to run a shell as a guest, it bumps you straight
@@ -36,13 +38,25 @@ However, when logging in, you can provide an alternate command to run
 other than "smash". Replacing your login command with "lua" allows you
 to run arbitrary code on the portal's onboard computer.
 
-## Yueh servers
+### Scheme OS
 
-Yueh servers don't run Orb; they have a Scheme implementation as their OS.
+The portals don't run orb, they use a scheme-based OS instead. You
+have to learn this in order to find the access-control code inside the
+portal and override it to give you clearance.
 
-Or should this be the portals?
+## Endgame
 
-## Running Causal Domain Injector
+### Finding out about the multiportal
+
+One of the Yueh portals is different; it connects to multiple systems.
+
+### Multiportal Credentials
+
+### Names of secret colonies
+
+### Disable portal
+
+### Running Causal Domain Injector
 
 The "OS" of the lab in which the Causal Domain Injector is found (as
 well as the one in which the portals were discovered, but you don't
