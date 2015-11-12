@@ -2,6 +2,7 @@ From: Riesied Mameniet
 Subject: Which relativity is which?
 To: sci.physics
 Message-Id: 28baa1ab-b2e8-4834-9caa-e4ca322d2969
+Content-Type: text/plain; charset=UTF-8
 
 I always get general relativity confused with special relativity. Which
 is which again?
@@ -11,6 +12,7 @@ is which again?
 From: Gugegienan Toqis
 Subject: Re: Which relativity is which?
 To: sci.physics
+Content-Type: text/plain; charset=UTF-8
 In-Reply-To: 28baa1ab-b2e8-4834-9caa-e4ca322d2969
 Message-Id: 17937705-38d5-4325-82db-7cb97f97ba1c
 
@@ -23,6 +25,7 @@ wasn't till later that the ideas of relativity could be applied generally.
 
 From: Fower Diegam
 Subject: Re: Which relativity is which?
+Content-Type: text/plain; charset=UTF-8
 To: sci.physics
 In-Reply-To: 17937705-38d5-4325-82db-7cb97f97ba1c
 Message-Id: 47e6acdd-635d-4705-8948-6f7832169ec6

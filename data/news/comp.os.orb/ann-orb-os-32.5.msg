@@ -1,6 +1,7 @@
 From: GNO Maintainers
 Subject: [ANN] Orb OS 32.5.0 released
 To: comp.os.orb
+Content-Type: text/plain; charset=UTF-8
 Message-Id: e703a0ab-a7f5-404d-9e16-1eeef4d5dab7
 
 We're happy to annouce the release of Orb 32.5.0.

@@ -11,7 +11,7 @@ in-game technology works.
 ## Guidelines
 
 * Hard science where possible (see Crimes against Science below, don't add to that list)
-* News messages use at least from, to, subject, message-id headers, page-break-separated
+* News messages use at least from, to, subject, content-id, message-id headers, page-break-separated
 * Use metric time for most relative amounts, years are OK for absolute events
 * Don't make newsgroup postings unrealistically knowledgeable
 * Or unrealistically polite

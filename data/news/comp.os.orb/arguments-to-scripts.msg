@@ -1,6 +1,7 @@
 From: Fifod Renoub
 Subject: Arguments to scripts
 To: comp.os.orb
+Content-Type: text/plain; charset=UTF-8
 Message-Id: 721357c2-a6e5-45ab-a8ed-39eb39308b33
 
 I noticed some of the scripts built-in to Orb use the ... notation. How
@@ -11,6 +12,7 @@ does this work?
 From: Nikab Wouvuserar
 Subject: Re: Arguments to scripts
 To: comp.os.orb
+Content-Type: text/plain; charset=UTF-8
 Message-Id: 4fdad4e0-d2cc-4e34-9651-566bc74a986d
 In-Reply-To: 721357c2-a6e5-45ab-a8ed-39eb39308b33
 

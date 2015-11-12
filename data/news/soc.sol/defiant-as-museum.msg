@@ -2,6 +2,7 @@ From: Pumirer Horukollad
 Subject: Defiant as a museum?
 To: soc.sol
 Message-Id: 6b460e26-b61e-49d8-9912-8c402c09d417
+Content-Type: text/plain; charset=UTF-8
 
 I heard a rumor that they were taking an ancient decommissioned ship and
 turning it into some kind of museum. Does anyone know if this is true?
@@ -15,6 +16,7 @@ Subject: Re: Defiant as a museum
 To: soc.sol
 Message-Id: 8a15c912-edb9-44b2-8793-0a4a1c77d3ae
 In-Reply-To: 6b460e26-b61e-49d8-9912-8c402c09d417
+Content-Type: text/plain; charset=UTF-8
 
 I bet they'll be sure to clean up all the evidence of the Defiant's
 sabotage if so. Can't have that stuff coming to light!
@@ -24,6 +26,7 @@ sabotage if so. Can't have that stuff coming to light!
 From: Lusod Petuzun
 Subject: Re: Defiant as a museum
 To: soc.sol
+Content-Type: text/plain; charset=UTF-8
 Message-Id: 9d738117-f2ab-472f-b443-9717b228d03c
 In-Reply-To: 6b460e26-b61e-49d8-9912-8c402c09d417
 
@@ -46,6 +49,7 @@ network is pretty cool.
 
 From: Degevier Jarkad
 Subject: Re: Defiant as a museum
+Content-Type: text/plain; charset=UTF-8
 To: soc.sol
 Message-Id: c746c55b-9575-4eef-a4fa-17662318fd9f
 In-Reply-To: 8a15c912-edb9-44b2-8793-0a4a1c77d3ae

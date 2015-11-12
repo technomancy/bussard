@@ -2,6 +2,7 @@ From: Panan Goubes
 Subject: relations with sol
 To: soc.tana
 Message-Id: 8ed596d9-2bcb-44b1-ab59-6b42ff475bd7
+Content-Type: text/plain; charset=UTF-8
 
 It seems like Sol is benefiting an awful lot from the mining going on
 here in Tana. It makes you wonder if we'll ever get our independence. I
@@ -13,6 +14,7 @@ colonized; maybe the same thing will happen here.
 From: Nassoum Tabaried
 Subject: Re: relations with sol
 To: soc.tana
+Content-Type: text/plain; charset=UTF-8
 In-Reply-To: 8ed596d9-2bcb-44b1-ab59-6b42ff475bd7
 Message-Id: e042446b-8427-4644-801b-3f3ce127a4e5
 
@@ -33,6 +35,7 @@ From: Mafavies Gousellin
 Subject: Re: relations with sol
 To: soc.tana
 In-Reply-To: e042446b-8427-4644-801b-3f3ce127a4e5
+Content-Type: text/plain; charset=UTF-8
 Message-Id: 25aeeed1-e7b4-4bb0-81db-003ceead9a5e
 
 Technically Bohk didn't secede from the Solar Union; it was still the

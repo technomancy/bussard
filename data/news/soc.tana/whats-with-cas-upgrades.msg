@@ -1,6 +1,7 @@
 From: Sobomun Mobor
 Subject: What's with these forced CAS upgrades?
 To: soc.tana
+Content-Type: text/plain; charset=UTF-8
 Message-Id: 572264d9-7d4a-4792-aa6f-e847e1dd471f
 
 I got stuck at registration for a hundred kiloseconds yesterday when
@@ -15,6 +16,7 @@ From: Mutebudeder Wezatum
 Subject: Re: What's with these forced CAS upgrades?
 To: soc.tana
 Message-Id: 10a32644-dc4b-4662-9d32-cf7123c08092
+Content-Type: text/plain; charset=UTF-8
 In-Reply-To: 572264d9-7d4a-4792-aa6f-e847e1dd471f
 
 Sobomun Mobor wrote:
@@ -30,6 +32,7 @@ Subject: Re: What's with these forced CAS upgrades?
 To: soc.tana
 Message-Id: f8ce17f8-7936-11e5-8eab-001f16110e8c
 In-Reply-To: 572264d9-7d4a-4792-aa6f-e847e1dd471f
+Content-Type: text/plain; charset=UTF-8
 
 Sobomun Mobor wrote:
 > I got stuck at registration for a hundred kiloseconds yesterday when
@@ -46,6 +49,7 @@ From: Mutebudeder Wezatum
 Subject: Re: What's with these forced CAS upgrades?
 To: soc.tana
 Message-Id: 9ec5fa1b-4d2f-4c83-8575-3e1820b4db07
+Content-Type: text/plain; charset=UTF-8
 In-Reply-To: f8ce17f8-7936-11e5-8eab-001f16110e8c
 
 > those of us who live on an actual planet are quite glad for
@@ -59,6 +63,7 @@ in the sky providing you with pretty fireworks?
 From: Nelon Pajed
 Subject: Re: What's with these forced CAS upgrades?
 To: soc.tana
+Content-Type: text/plain; charset=UTF-8
 Message-Id: a4fbee83-c4bb-45c7-a083-651900bb52f3
 In-Reply-To: f8ce17f8-7936-11e5-8eab-001f16110e8c
 
