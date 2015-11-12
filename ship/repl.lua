@@ -17,14 +17,14 @@ local repl = {
    background = false,
    wrapping = false,
    -- sentinel value for suppressing printing
-   invisible = {}
+   invisible = {},
+   rows = nil,
+   cols = nil,
 }
 -- How many pixels of padding are on either side
 local PADDING = 20
 -- How many pixels are required to display a row
 local ROW_HEIGHT
--- Maximum amount of rows that can be displayed on the screen
-local DISPLAY_ROWS
 -- Console contents
 -- List of {boolean, string} where boolean is true if the string is part of user
 -- -navigable history (a > will be prepended before rendering if true)
@@ -259,11 +259,11 @@ function repl.history_next()
 end
 
 function repl.scroll_up()
-   offset = math.min(lines.entries - DISPLAY_ROWS + 1, offset + DISPLAY_ROWS)
+   offset = math.min(lines.entries - repl.rows + 1, offset + repl.rows)
 end
 
 function repl.scroll_down()
-   offset = math.max(1, offset - DISPLAY_ROWS)
+   offset = math.max(1, offset - repl.rows)
 end
 
 function repl.clear()
@@ -302,7 +302,9 @@ end
 
 function repl.draw()
    local width, height = love.graphics:getWidth(), love.graphics:getHeight()
-   DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
+
+   repl.rows = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
+   repl.cols = math.floor((width - (repl.font_width * 2)) / repl.font_width)
 
    -- Draw background
    love.graphics.setColor(0, 0, 0, 150)
@@ -350,7 +352,7 @@ function repl.draw()
       end
    end
 
-   for i = offset, DISPLAY_ROWS + offset do
+   for i = offset, repl.rows + offset do
       local line = lines:get(-i)
       if(line) then render_line(line, i - offset) end
    end
@@ -361,7 +363,7 @@ function repl.draw()
    -- lines entered rather than the lines drawn, but close enough
 
    -- height is percentage of the possible lines
-   local bar_height = math.min(100, (DISPLAY_ROWS * 100) / lines.entries)
+   local bar_height = math.min(100, (repl.rows * 100) / lines.entries)
    -- convert to pixels (percentage of screen height, minus 10px padding)
    local bar_height_pixels = (bar_height * (height - 10)) / 100
 

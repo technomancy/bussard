@@ -146,6 +146,8 @@ return {
 
          env.IN = "/tmp/in"
          env.OUT = "/tmp/out"
+         env.ROWS = tostring(ship.api.repl.rows)
+         env.COLS = tostring(ship.api.repl.cols)
          ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
 
          -- buffer output that happens when out of range
