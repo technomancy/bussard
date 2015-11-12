@@ -361,7 +361,7 @@ return {
                         }, -- one more here?
                         {name = "Portal: Bohk",
                          image_name="portal-1",
-                         r=22000, mass=75, portal="Bohk", os=orb},
+                         r=26000, mass=75, portal="Bohk", os=orb},
                      }, -- tourism center
    },
    ["Mecalle"] = {gov="Bohk",
@@ -370,7 +370,7 @@ return {
                       {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
                        image_name="sun",
                        name="Mecalle 8760", fixed=true},
-                      {r=26000, mass=342,
+                      {r=27000, mass=342,
                        image_name = "planet-11", -- blue/purple
                        name="Tirakir", os=orb,
 
@@ -381,7 +381,7 @@ return {
                       },
                       {name = "Portal: Bohk",
                        image_name="portal-1",
-                       r=22000, mass=75, portal="Bohk", os=orb},
+                       r=18000, mass=75, portal="Bohk", os=orb},
                       {name = "Portal: Katilay",
                        image_name="portal-2", interportal=true,
                        r=22000, mass=75, portal="Katilay", os=orb}
@@ -438,9 +438,6 @@ return {
                   {name = "Portal: Wolf 1481",
                    image_name="portal-1", os=orb,
                    r=22000, mass=75, portal="Wolf 1481"},
-                  {name = "Portal: LHS 451",
-                   image_name="portal-1", os=orb,
-                   r=22000, mass=75, portal="LHS 451"},
                   {name = "Portal: Kowlu",
                    image_name="portal-1", os=orb,
                    r=22000, mass=75, portal="Kowlu"},
@@ -472,9 +469,6 @@ return {
                            {name = "Portal: Kowlu",
                             image_name="portal-1", os=orb,
                             r=22000, mass=75, portal="Kowlu"},
-                           {name = "Portal: CD-40 9712",
-                            image_name="portal-1", os=orb,
-                            r=22000, mass=75, portal="CD-40 9712"},
                         }
    },
    ["Wolf 1481"] = {gov="Yueh", -- BD

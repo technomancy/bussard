@@ -24,11 +24,8 @@ local objectives_check = function(ship, mission)
 end
 
 local check = function(ship)
-   print("checking missions")
    for mission_id,start_time in pairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
-      print(cargo_check(ship, mission))
-      print(objectives_check(ship, mission))
       if((not mission.time_limit or
              utils.time(ship) < start_time + mission.time_limit) and
          cargo_check(ship, mission) and objectives_check(ship, mission)) then
@@ -67,7 +64,7 @@ local update = function(ship)
 end
 
 local list = function(ship)
-   for mission_id,started_at in pairs(ship.active_missions) do
+   for mission_id,_ in pairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
       ship.api.repl.print("\n")
       ship.api.repl.print(mission.name)
@@ -82,7 +79,7 @@ end
 
 local abort = function(ship, mission_name)
    local mission
-   for mission_id,timestamp in pairs(ship.active_missions) do
+   for mission_id,_ in pairs(ship.active_missions) do
       local this_mission = require("data.missions." .. mission_id)
       if(this_mission.name == mission_name) then
          mission = this_mission
@@ -90,12 +87,11 @@ local abort = function(ship, mission_name)
    end
 
    if(mission) then
-      local mission = require("data.missions." .. mission_id)
-      ship.active_missions[mission_id] = nil
-      ship.api.repl.print("Mission " .. mission_id .. " aborted.")
+      ship.active_missions[mission.id] = nil
+      ship.api.repl.print("Mission " .. mission.id .. " aborted.")
       fail(ship, mission)
    else
-      ship.api.repl.print("Mission " .. mission_id .. " not active.")
+      ship.api.repl.print("Mission " .. mission.id .. " not active.")
    end
 end
 

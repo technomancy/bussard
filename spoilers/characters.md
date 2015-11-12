@@ -36,7 +36,11 @@ the Terran Republic. Has two internal portals under oversight from
 Terrans. Helped Lalande re-establish contact with Katilay, and also
 helped Yueh establish its Delta Pavonis colony.
 
-* TODO
+* Bohk Prime
+* Warnabu Station
+* Banga
+* Galure (New Phobos)
+* Tirakir (Mecalle)
 
 ## Yueh
 
@@ -51,7 +55,8 @@ a point of tension.
 Conflict-wracked even within a single system. Portal was faulty upon
 arrival; contact with Lalande only recently re-established.
 
-* TODO
+* Katilay Prime
+* Slork (station)
 
 ## Tana Protectorates
 

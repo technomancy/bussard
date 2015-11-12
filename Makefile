@@ -2,7 +2,7 @@ run:
 	love .
 
 check:
-	luacheck --no-color --std luajit --exclude-files metatable_monkey.lua \
+	luacheck --no-color --std luajit --exclude-files metatable_monkey.lua headless.lua \
 	  --new-globals love lume orb _ -- *.lua os/orb/*.lua ship/*.lua
 
 count:

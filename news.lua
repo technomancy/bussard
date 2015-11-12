@@ -6,12 +6,16 @@ local dofile_if_exists = function(filename)
    end
 end
 
-local include = function(ship, b, meta)
-   if(meta.fn) then return(meta.fn(ship, b, meta))
-   elseif(meta.chance and math.random(100) < meta.chance) then return false
-   elseif(meta.systems and not lume.find(meta.systems, ship.system_name)) then return false
-   elseif(meta.worlds and not lume.find(meta.worlds, b.name)) then return false
-   elseif(meta.govs and not lume.find(meta.govs, b.gov)) then return false
+local include = function(ship, b, m)
+   local happened = lume.fn(lume.find, ship.events)
+   if(m.fn) then return(m.fn(ship, b, m))
+   elseif(m.chance and math.random(100) < m.chance) then return false
+   elseif(m.systems and not lume.find(m.systems, ship.system_name)) then return false
+   elseif(m.worlds and not lume.find(m.worlds, b.name)) then return false
+   elseif(m.govs and not lume.find(m.govs, b.gov)) then return false
+   elseif(m.prereqs and not lume.all(m.prereqs, happened)) then return false
+   elseif(m.restrictions and not lume.any(m.restrictions, happened)) then return false
+   elseif(m.mission_id and ship.events[m.mission_id]) then return false
    else return true end
 end
 
