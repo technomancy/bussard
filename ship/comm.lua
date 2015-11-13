@@ -53,7 +53,7 @@ local portal_cleared = function(ship, portal_body)
    local now = utils.time(ship)
    if(not portal_body.interportal) then return true end
    if(gov.treaties[target_gov][current_gov]) then return true end
-   local visa = ship.visas[gov] and ship.visas[gov].expiry > now
+   local visa = ship.visas[gov] and ship.visas[gov] > now
    return visa, "no visa to " .. target_gov .. "; please visit station embassy."
 end
 
