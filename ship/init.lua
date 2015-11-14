@@ -113,6 +113,7 @@ local ship = {
    end,
 
    enter = function(ship, system_name, reseed)
+      local from = ship.system_name
       assert(ship.systems[system_name], system_name .. " not found.")
       ship.api.repl.display_line = "Entering the " .. system_name .. " system."
 
@@ -124,8 +125,6 @@ local ship = {
       ship:recalculate()
 
       if(reseed) then
-         -- reset
-         ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
          ship.engine_on, ship.turning_right, ship.turning_left = false,false,false
          ship.comm_connected, ship.target_number, ship.target = false, 0, nil
 
@@ -135,6 +134,13 @@ local ship = {
             body.seed_news(ship, b)
             body.seed_cargo(b)
             body.seed_pos(b, ship.bodies[1])
+         end
+
+         local portal = lume.match(ship.bodies, function(b) return b.portal == from end)
+         if(portal) then
+            ship.x, ship.y = portal.x, portal.y
+         else
+            ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
          end
       end
    end,
