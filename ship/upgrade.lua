@@ -49,6 +49,9 @@ return {
    -- purely stat upgrades
    engine = { stats = { engine_power = 512, burn_rate = 3 } },
    cargo_bay = { stats = { cargo_capacity = 64 } },
-   fuel_tank = { stats = { fuel_capacity = 128 } }
+   fuel_tank = { stats = { fuel_capacity = 128 } },
 
+   passponder = {}, -- placeholder
 }
+
+-- TODO: an upgrade that lets you increase recharge rate by using battery power

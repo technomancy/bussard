@@ -11,12 +11,12 @@ return {
    cargo={["sensor_array"]=2},
    success_message="Thanks; these results should prove helpful!",
 
-   updater=function(ship)
+   updater=function(ship, dt)
       if(ship.system_name == "New Phobos" and
             not ship.events["new-phobos-flyby"] and
          utils.distance(ship.x, ship.y) < 3000) then
-         orbit_time = orbit_time + dt
-         if(orbit_time > 500) then
+         orbit_time = orbit_time + (dt * ship.time_factor)
+         if(orbit_time > 250) then
             ship.api.repl.print("Sensor readings complete.")
             ship.events["new-phobos-flyby"] = true
          end
@@ -25,6 +25,7 @@ return {
       end
    end,
 
+   -- TODO: tweak timing
    accept_function=function(ship)
       local deadline = utils.time(ship) + 20000
       ship.visas["Terran"] = deadline

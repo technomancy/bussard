@@ -133,7 +133,14 @@ orb.shell = {
                     pairs = pairs,
                     ipairs = ipairs,
                     unpack = unpack,
-                    print = function(...) write(tostring(...) .. "\n") end,
+                    print = function(...)
+                       local output = {...}
+                       if(output[1]) then
+                          write(tostring(...) .. "\n")
+                       else
+                          write(nil)
+                       end
+                    end,
                     coroutine = { yield = coroutine.yield,
                                   status = coroutine.status },
                     io = { write = write, read = read },

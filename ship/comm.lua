@@ -52,8 +52,11 @@ local portal_cleared = function(ship, portal_body)
    local current_gov = assert(ship.systems[ship.system_name].gov)
    local now = utils.time(ship)
    if(not portal_body.interportal) then return true end
-   if(gov.treaties[target_gov][current_gov]) then return true end
-   local visa = ship.visas[gov] and ship.visas[gov] > now
+   if(gov.treaties and gov.treaties[target_gov] and
+      gov.treaties[target_gov][current_gov]) then return true end
+   if(gov.treaties and gov.treaties[target_gov] and
+      gov.treaties[target_gov][ship.flag]) then return true end
+   local visa = ship.visas[target_gov] and ship.visas[target_gov] > now
    return visa, "no visa to " .. target_gov .. "; please visit station embassy."
 end
 

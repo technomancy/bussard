@@ -1,4 +1,5 @@
 local utils = require("utils")
+local body = require("body")
 
 local fail = function(ship, mission)
    ship.credits = ship.credits - (mission.fail_credits or 0)
@@ -26,12 +27,20 @@ local objectives_check = function(ship, mission)
    return true
 end
 
+local destination_check = function(ship, mission)
+   for _,destination in ipairs(mission.destinations or {}) do
+      if(destination == ship.comm_connected) then return true end
+   end
+   return false
+end
+
 local check = function(ship)
    for mission_id,start_time in pairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
       if((not mission.time_limit or
              utils.time(ship) < start_time + mission.time_limit) and
-         cargo_check(ship, mission) and objectives_check(ship, mission)) then
+            cargo_check(ship, mission) and objectives_check(ship, mission) and
+         destination_check(ship, mission)) then
          if(mission.success_function) then mission.success_function(ship) end
          for _,e in ipairs(mission.success_events or {}) do
             ship.events[e] = true
@@ -44,6 +53,7 @@ local check = function(ship)
          ship.credits = ship.credits + (mission.credits or 0)
          ship.api.repl.print("Mission success: " .. mission.success_message)
          ship.active_missions[mission_id] = nil
+         body.seed_news(ship, ship.target) -- in case of successive missions
       end
    end
 end
@@ -65,7 +75,7 @@ local accept = function(ship, message_id)
 end
 
 local update = function(ship, dt)
-   for mission_id,start_time in ipairs(ship.active_missions) do
+   for mission_id,start_time in pairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
       if(mission.updater) then mission.updater(ship, dt) end
       if(mission.time_limit and (utils.time(ship) >

@@ -11,12 +11,12 @@ return {
    cargo={["sensor_array"]=2},
    success_message="Thanks; we'll analyze these results immediately!",
 
-   updater=function(ship)
+   updater=function(ship, dt)
       if(ship.system_name == "Wolf 294" and
             not ship.events["wolf-294-flyby"] and
          utils.distance(ship.x, ship.y) < 5000) then
-         orbit_time = orbit_time + dt
-         if(orbit_time > 500) then
+         orbit_time = orbit_time + (dt * ship.time_factor)
+         if(orbit_time > 250) then
             ship.api.repl.print("Sensor readings complete.")
             ship.events["wolf-294-flyby"] = true
          end

@@ -26,10 +26,10 @@ local sensor_whitelist = {
 local status_whitelist = {
    "fuel", "fuel_capacity", "battery", "battery_capacity", "mass", "in_range",
    "engine_on", "turning_right", "turning_left", "credits", "upgrade_names",
-   "cargo", "cargo_capacity",
+   "cargo", "cargo_capacity", "solar",
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
-   "portal_range", "portal_time"
+   "portal_range", "portal_time", "flag", "target"
 }
 
 local base_stats = {
@@ -43,6 +43,7 @@ local base_stats = {
    engine_strength = 1024,
    turning_speed = 4,
    battery_capacity = 128,
+   solar = 30,
 
    portal_range = 1024,
    portal_time = 40, -- in-game seconds
@@ -174,7 +175,7 @@ local ship = {
 
       if(ship.battery < ship.battery_capacity) then
          local dist = utils.distance(ship.x, ship.y)
-         ship.battery = ship.battery + (dt / math.log(dist*2)) * 30
+         ship.battery = ship.battery + (dt / math.log(dist*2)) * ship.solar
       end
 
       for _,f in pairs(ship.api.updaters or {}) do
@@ -227,8 +228,12 @@ local ship = {
          ship.upgrades[u] = assert(upgrade[u], u .. " not found.")
       end
 
+      for good,amt in pairs(ship.cargo) do
+         if(amt == 0) then ship.cargo[good] = nil end
+      end
+
       for name,u in pairs(ship.upgrades) do
-         for k,v in pairs(u.stats) do
+         for k,v in pairs(u.stats or {}) do
             ship[k] = (ship[k] or 0) + v
          end
          ship.api.actions[name] = u.action and lume.fn(u.action, ship)
@@ -288,7 +293,6 @@ ship.api = {
          ship.target = ship.bodies[ship.target_number]
       end,
       login = lume.fn(comm.login, ship),
-      anchor = function(s) s.cheat.dx, s.cheat.dy = 0, 0 end,
    },
 
    load = function(s, filename)

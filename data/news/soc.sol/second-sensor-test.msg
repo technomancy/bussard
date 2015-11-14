@@ -11,8 +11,11 @@ field testing, but it needs a bit more exposure still.
 We've determined from the last test that the optimum range is under
 3000, not the 5000 in the original specs. The kind of radiation under
 study is strongest in the New Phobos system, which is quite a ways from
-Mars. Because of the distance, we are prepared to supply you with a
-passponder device to allow you access to New Phobos and the systems on
-route, though the visas on it will expire if they are not activated in
-20 kiloseconds. The passponder device may be kept as payment once the
+Mars. You will need to spend a quarter of a kilosecond within range of
+the star.
+
+Because of the distance, we are prepared to supply you with a passponder
+device to allow you access to New Phobos and the systems on route,
+though the visas on it will expire if they are not activated in 20
+kiloseconds. The passponder device may be kept as payment once the
 mission is completed.

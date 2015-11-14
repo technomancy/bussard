@@ -13,7 +13,7 @@ if(cleared) then
    local last_time = init_time
    while true do
       local time_since = os.time() - init_time
-      local power = os.time() - last_time
+      local power = (os.time() - last_time) * 2
 
       if(distance() > ship.status.portal_range) then
          set_beam_count(nil)
@@ -28,7 +28,7 @@ if(cleared) then
       end
 
       draw_power(power)
-      set_beam_count(8 * time_since / ship.status.portal_time)
+      set_beam_count(9 * time_since / ship.status.portal_time)
 
       if(time_since > ship.status.portal_time) then
          set_beam_count(nil)

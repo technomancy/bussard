@@ -6,6 +6,7 @@ dynamically reconfigure to add new capabilities.
 
 Please review this manual to ensure you have a complete understanding
 of your ship's operation, and you will enjoy many safe travels on board.
+There are manuals on other topicsas well, use `man("list")` to see them all.
 
 ## Display
 
@@ -13,11 +14,11 @@ The first thing you'll see when you launch your ship is its
 heads-up-display. A targeting indicator will point from your ship in
 the direction of your current target. If you are within range of a
 target you can act upon, the indicator will change color depending on
-the type of the target. The upper left shows basic velocity,
+the type of the target. The upper left shows basic velocity, local
 coordinates, fuel and battery readout, credits, and a clock, while the
-upper right shows target details if a target is selected. A light
-blue path plots a trajectory estimate of where you're headed, while a
-darker blue path plots one for your target, if applicable.
+upper right shows target details if a target is selected. A light blue
+striped path plots a trajectory estimate of where you're headed, while
+a darker blue striped path plots one for your target, if applicable.
 
 ## Helm control
 
@@ -45,12 +46,12 @@ performance.
 At the bottom of the screen is the REPL (interactive code console)
 where you can interact directly with your ship's onboard computer. By
 default a single line is shown, which displays either the current line
-of input (if applicable) or the last line of output. Pressing
-ctrl-` toggles the full repl, which allows you to scroll
-through the previous output. While the full repl is active, the
-piloting controls for your ship will be unavailable. Enter any Lua
-code into the REPL to have it evaluated. See the API section below to
-learn how to control your ship from code.
+of input (if applicable) or the last line of output. Pressing `
+toggles the full repl, which allows you to scroll through the previous
+input and output. While the full repl is active, the piloting controls
+for your ship will be unavailable until you leave the repl with the
+esc key. Enter any Lua code into the repl to have it evaluated. See
+the API section below to learn how to control your ship from code.
 
 When your ship starts, it will load its init file in order to create
 key bindings, define helper functions, and perform any other setup.
@@ -68,28 +69,29 @@ configure it to save other tables by adding their names to the
 ### Keymaps and Modes
 
 The currently active mode and its keymaps will dictate how your ship
-will react to keys on your helm keyboard. Create a new mode with the
-`keymap.define_mode("mymode")` function, which takes a string. Once a
-mode is defined, you can add key bindings to it like so:
-`keymap.define("flight", "ctrl-p", function() ship.ui.paused = true end)`.
-The first argument is the name of the mode you're adding the key
-binding to, the second argument is a string describing the key to
-bind, and the third argument is the function to call when the key is
-pressed. This function is passed a boolean indicating whether it is a
-repeated key or not.
+will react to keys on your helm keyboard. Once a mode is defined, you
+can add key bindings to it like so: `keymap.define("flight", "ctrl-p",
+function() ship.ui.paused = true end)`.  The first argument is the
+name of the mode you're adding the key binding to, the second argument
+is a string describing the key to bind, and the third argument is the
+function to call when the key is pressed. This function is passed a
+boolean indicating whether it is a repeated key or not.
+
+By default your ship has a `"flight"` mode active normally and a
+`"repl"` mode active when the REPL is full-screen. Note that
+`"flight"` mode does have the simple one-line REPL available, but not
+all characters can be entered in this mode as some (like the zoom
+keys) have other flight-related functions. There is also an `"edit"`
+mode where the editor key bindings are defined. You can check the
+current mode with `keymap.current_mode`.
 
 See the `keycodes` manual page for a detailed listing of available key
 names. You can run `man("keycodes")` to view it.
 
-By default your ship has a `"flight"` mode active by default and a
-`"repl"` mode active when the REPL is full-screen. Note that
-`"flight"` mode does have the simple one-line REPL available. There is
-also an `"edit"` mode where the editor key bindings are defined. You
-can check the current mode with `keymap.current_mode`.
-
 Take a look at the default config code that came with your ship for an
 example of how to create modes and bind new keys in them; it will come
-in very handy to add in new keys when operating your ship.
+in very handy to add in new keys when operating your ship; in
+particular when you purchase an upgrade that adds new capabilities.
 
 ### Communication system
 
@@ -97,8 +99,8 @@ When you are in range of a planet or space station with an active
 computer, you can initiate a login session using your ship's
 communication system. This will allow you to access any of the
 station's services, including refueling, cargo transactions,
-purchasing upgrades, downloading new libraries, renting cargo storage,
-and communicating with others on board the station or elsewhere.
+purchasing upgrades, downloading new code, renting cargo storage,
+and communicating with others.
 
 Your targeting indicator will turn green when you are within range of
 a station that allows logins.
@@ -118,8 +120,8 @@ strictly forbidden by interstellar law.
 
 Services offered on stations vary by locale, but most stations at
 least offer to buy and sell cargo. The `cargo` executable takes
-`list`, `buy`, and `sell` subcommands; see its online help for usage
-details.
+`list`, `buy`, and `sell` subcommands; see its online help (`cargo
+--help`) for usage details.
 
 While your session is active, you will not be able to enter any code
 into your ship's REPL, and the REPL prompt will change to `$`. Enter
@@ -130,19 +132,21 @@ from the targeted station using
 `ship.comm.scp("username:password/path/to/file", "path.in.ship")`
 and `ship.comm.scp("path.in.ship", "username:password/path/to/file")`.
 
-### Passponder
+### Portals
 
-Your ship also comes standard-issue with a passponder device. This is
-allows you to power up and travel through interstellar portals. If
-your ship's battery has enough charge, you can fly near a portal and
-press ctrl-space when you're in range. Note that it takes a moment
-to fully charge a portal before it activates.
+Your ship can travel to other star systems using the portal
+network. If your battery has enough charge, fly within range of a
+portal. You'll know when you are close enough because the targeting
+indicator will turn blue. Press ctrl-space to begin the portal
+activation sequence. You will need to stay within range for two
+seconds for it to complete.
 
 Certain portals which allow travel between systems of different
 governments require you to receive clearance before you may travel
 through them. Stations in the border systems containing these portals
 usually offer services where citizens of one government may buy
-clearance to another for a limited time.
+clearance to another for a limited time. Try using the `embassy`
+command on the station computer for details.
 
 ### API list
 
@@ -175,6 +179,7 @@ its upgrades.
 * `engine_strength`, `turning_speed`: capabilities of engine/turn thrusters.
 * `burn_rate`: how quickly your engine consumes fuel.
 * `recharge_rate`: how quickly your collector replenishes your fuel.
+* `solar`: how quickly your battery charges (based on distance from star).
 * `comm_connected`: whether or not the comm system is connected.
 * `comm_range`: the maximum distance at which your comm is effective.
 * `scoop_range`: the maximum distance at which you can collect mined asteroid ore.

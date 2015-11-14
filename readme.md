@@ -8,7 +8,7 @@ spacecraft by hacking on the code that makes it tick.
 
 Read the [in-game manual](manual.md) for a taste of how the game works.
 
-Read [an interview on the motivation and background for the game](http://hifibyapg.com/volume-3.html#A.conversation.with.Phil.Hagelberg.on.Bussard) (possible spoilers).
+Read [an interview on the motivation and background for the game](http://hifibyapg.com/volume-3.html#A.conversation.with.Phil.Hagelberg.on.Bussard) (some spoilers).
 
 ## Playing
 
@@ -23,8 +23,8 @@ velocity with the station. Once you get close, it will be easier to
 match velocity if you zoom in with `=`.
 
 Once you are in orbit around the station, and are in range, the grey
-line pointing towards the station will turn green. Press `~` and type
-`login()` to establish a connection. You can see all the commands
+line pointing towards the station will turn green. Press backtick and
+type `login()` to establish a connection. You can see all the commands
 available on the station by typing `ls /bin`, but at this time you
 only need to concern yourself with the `upgrade` command. Run `upgrade
 buy laser`, then `logout` followed by `man("laser")` to learn how to
@@ -35,7 +35,7 @@ on the laser's manual page.
 From there it's off to find an asteroid to mine, and then the galaxy
 is yours to explore. To jump to another system, find a portal and
 press `ctrl-space` when you are within range. You'll want to check out
-the ship's manual with `man()` at some point though.
+the ship's main manual with `man()` at some point though.
 
 Recommended soundtrack:
 [Contingency](http://music.biggiantcircles.com/album/contingency) by
@@ -61,44 +61,42 @@ replace your ship's config with the current default config using
 
 ## Status
 
-Currently the game supports flying around, mining asteroids, trading
-cargo, and running some code in the in-game REPL. You can also edit
-your ship's config file in order to reprogram it, change key bindings,
-and add convenience functions.
-
-The interaction with the planet and station computers is somewhat
-limited at this time. Basically just running vanilla Unix commands and
-purchasing cargo, refueling, and ship upgrades. Run `ls /bin` when
-logged in to see a listing of all available commands. The `cargo`,
-`refuel`, and `upgrade` commands are of particular interest.
+Currently most of the engine features are coded, albeit with less
+polish than desirable in some cases. However, there are only a handful
+of missions, and the worlds and characters are not sketched out in
+much detail at all yet.
 
 See the list of
 [open issues](https://gitlab.com/technomancy/bussard/issues) to see
-upcoming features.
+upcoming features. The [changelog](Changelog.md) lists when recent
+user-visible changes were added in which releases.
 
 <img src="http://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
 
 Planned features:
 
-* accept missions at stations
-* many, many more systems under various governments
+* many more missions and characters
+* many more systems under various governments
 * many more ship upgrades
-* tutorials for writing autopilot code
+* tutorials for writing ship code (autopilot, price tracking, auto-mining)
 * exploits to break into accounts you don't own
 * stations that use different OSes
 * virtualization to allow you to run station code on your ship
-* abandoned civilizations and artifacts
+* abandoned colonies and artifacts
 
 During development it may be expedient to run `ship.cheat.comm_range = 9999999`
 in order to make testing login interaction easier.
 
 ## FAQ
 
-**Q:** How do I change the controls?
+**Q:** How do I change the controls?  
 **A:** Use `ctrl-enter` to open the config in the editor. Find the key binding you want to change for the mode in question ("flight", "repl", or "edit"), and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` and then `ctrl-r` to load them.
 
 **Q:** What can I do to improve the frame rate?  
 **A:** The biggest performance drag is calculating trajectories. Reduce the calculations with `ship.trajectory = 128` and you should notice a dramatic speed boost.
+
+**Q:** Where are the missions?  
+**A:** There are currently only three missions. The chain starts at Tana Prime and continues on Mars. Future releases will flesh out more missions. You need to read the newsgroup postings (in `/usr/news/`) and indicate your acceptance with the `reply` command.
 
 ## Influences
 

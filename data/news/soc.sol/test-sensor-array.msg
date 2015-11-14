@@ -10,6 +10,6 @@ but it needs some real-world testing.
 
 At this point I need someone to load it aboard and fly it around the
 Wolf 294 star (in a system adjacent to Tana) in order to get some
-readings. It will take half a kilosecond of close orbit (within 5000 of
-the star) in order to complete the measurements we need. Bring the
+readings. It will take a quarter kilosecond of close orbit (within 5000
+of the star) in order to complete the measurements we need. Bring the
 sensor array back to Mars for analysis.
