@@ -6,7 +6,7 @@ dynamically reconfigure to add new capabilities.
 
 Please review this manual to ensure you have a complete understanding
 of your ship's operation, and you will enjoy many safe travels on board.
-There are manuals on other topicsas well, use `man("list")` to see them all.
+There are manuals on other topics as well, use `man("list")` to see them all.
 
 ## Display
 
