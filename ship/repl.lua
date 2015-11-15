@@ -136,7 +136,7 @@ function repl.eval(text, add_to_history)
    repl.print("> " .. text)
 
    if(text == "help" or text == "help()") then
-      repl.print("Press ~ to open the repl, and run man() for more help.")
+      repl.print("Press ` to open the repl, and run man() for more help.")
       return true
    end
 

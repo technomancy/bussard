@@ -73,6 +73,7 @@ local sandbox = function(ship)
       distance = lume.fn(utils.distance, ship, ship.target),
       os = {time = lume.fn(utils.time, ship)},
       accept_mission = lume.fn(mission.accept, ship),
+      set_prompt = function(p) ship.api.repl.prompt = p end,
    }
    if(ship.target and ship.target.portal) then
       local target = ship.target
@@ -125,7 +126,7 @@ local send_input = function(ship, input)
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env and fs[env.IN], "Not logged into " .. ship.target.name)
       ship.api.repl.history:append(input, true)
-      ship.api.repl.print(input)
+      ship.api.repl.print(ship.api.repl.prompt .. input)
       fs[env.IN](input)
    end
 end
@@ -168,7 +169,6 @@ return {
          -- TODO: improve error handling for problems in smashrc
          ship.target.os.process.spawn(fs, env, command, sandbox(ship))
          ship.api.repl.read = lume.fn(send_input, ship)
-         ship.api.repl.prompt = "$ "
          ship.comm_connected = ship.target.name
 
          -- free recharge upon connect
