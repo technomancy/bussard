@@ -53,7 +53,7 @@ local region = function()
    end
 end
 
-local insert = function(text)
+local insert = function(text, point_to_end)
    if(not text or #text == 0) then return end
    local this_line = lines[point_line]
    local before, after = this_line:sub(0, point), this_line:sub(point + 1)
@@ -61,6 +61,9 @@ local insert = function(text)
 
    if(#text == 1) then
       lines[point_line] = (before or "") .. (first_line or "") .. (after or "")
+      if(point_to_end) then
+         point = before:len() + first_line:len()
+      end
    else
       lines[point_line] = (before or "") .. (first_line or "")
       for i,l in ipairs(text) do
@@ -69,6 +72,10 @@ local insert = function(text)
          end
       end
       table.insert(lines, point_line+#text-1, text[#text] .. (after or ""))
+      if(point_to_end) then
+         point = #text[#text]
+         point_line = point_line+#text-1
+      end
    end
 end
 
@@ -96,7 +103,7 @@ local yank = function()
    if(text) then
       last_yank = {point_line, point,
                    point_line + #text - 1, string.len(text[#text])}
-      insert(text)
+      insert(text, true)
    end
 end
 
