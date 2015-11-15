@@ -47,9 +47,9 @@ return {
       end,
    },
    -- purely stat upgrades
-   engine = { stats = { engine_power = 512, burn_rate = 3 } },
-   cargo_bay = { stats = { cargo_capacity = 64 } },
-   fuel_tank = { stats = { fuel_capacity = 128 } },
+   engine = { stats = { engine_power = 512, burn_rate = 3, mass = 64, } },
+   cargo_bay = { stats = { cargo_capacity = 64, mass = 12, } },
+   fuel_tank = { stats = { fuel_capacity = 128, mass = 32, } },
 
    passponder = {}, -- placeholder
 }

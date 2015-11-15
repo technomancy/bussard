@@ -4,9 +4,9 @@
 
 ### Jinod missions
 
-* [ ] Deliver sensor equipment to Mars
-* [ ] Take sensors out for a spin; spend 1ksec within 3000 of Wolf 294
-* [ ] Then study New Phobos with sensor (gives you passponder)
+* [x] Deliver sensor equipment to Mars
+* [x] Take sensors out for a spin; spend 1ksec within 3000 of Wolf 294
+* [x] Then study New Phobos with sensor (gives you passponder)
 
 Maybe add multiple ways to get this?
 

@@ -2,8 +2,8 @@
 
 ## alpha-5 / ???
 
-* Fix a bug where files couldn't be listed on station computers.
-* Add missions.
+* Performance increases.
+* Add mission system and a handful of missions.
 * Fix a bug where upgrades would not be available.
 * Populated systems for Katilay and Bohk.
 * Implemented clearance system for travel between governments.
