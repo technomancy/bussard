@@ -4,6 +4,7 @@
 local utils = require("utils")
 local orb = require("os.orb")
 local gov = require("data.gov")
+local body = require("body")
 
 local get_price = function(good, amount, prices, direction)
    local other_direction = direction == "sell" and "buy" or "sell"
@@ -68,6 +69,23 @@ return {
          table.insert(ship.upgrade_names, name)
          ship:recalculate()
          ship.credits = ship.credits - price
+         return price
+      end
+   end,
+
+   sell_upgrade = function(ship, name)
+      local target = ship.target
+      local price = math.floor(((target.upgrade_prices and
+                                    target.upgrade_prices[name]) or
+               body.base_prices.upgrades[name]) * 0.85)
+      if(not price) then
+         return false, "This upgrade is not for sale."
+      elseif(not utils.includes(ship.upgrade_names, name)) then
+         return false, "You don't have this upgrade."
+      else
+         lume.remove(ship.upgrade_names, name)
+         ship:recalculate()
+         ship.credits = ship.credits + price
          return price
       end
    end,

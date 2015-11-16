@@ -7,7 +7,7 @@ if(args[1] == "list") then
    for name,price in pairs(station.upgrade_prices or {}) do
       print("  " .. name .. ": " .. price)
    end
-elseif(args[1] == "buy") then
+elseif(args[1] == "buy" and args[2]) then
    local success_price, msg = buy_upgrade(args[2])
 
    if(success_price) then
@@ -16,8 +16,17 @@ elseif(args[1] == "buy") then
    else
       print(msg)
    end
+elseif(args[1] == "sell" and args[2]) then
+   local success_price, msg = sell_upgrade(args[2])
+
+   if(success_price) then
+      print("Sold " .. args[2] .. " for " .. success_price .. ".")
+   else
+      print(msg)
+   end
 else
    print("Usage:")
    print("  upgrade list")
    print("  upgrade buy NAME")
+   print("  upgrade sell NAME # for 85% of the purchase price")
 end

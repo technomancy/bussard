@@ -193,4 +193,6 @@ return {
          end
       end
    end,
+
+   base_prices = base_prices,
 }
