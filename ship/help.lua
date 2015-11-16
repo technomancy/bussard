@@ -38,5 +38,10 @@ return {
          local p = love.filesystem.read("doc/intro.md")
          ship.repl.print(p)
       end
+   end,
+
+   get = function(page_name)
+      local p = love.filesystem.read(pages[page_name])
+      return p
    end
 }

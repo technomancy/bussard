@@ -258,6 +258,7 @@ local ship = {
 ship.api = {
    repl = repl,
    edit = edit,
+   help = help,
 
    mission = {
       list = lume.fn(mission.list, ship),

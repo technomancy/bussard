@@ -65,6 +65,7 @@ local sandbox = function(ship)
       buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
       buy_upgrade = lume.fn(services.buy_upgrade, ship),
       sell_upgrade = lume.fn(services.sell_upgrade, ship),
+      upgrade_help = ship.api.help.get,
       buy_visa = lume.fn(services.buy_visa, ship),
       list_visas = lume.fn(services.list_visas, ship),
       refuel = lume.fn(services.refuel, ship, ship.target),
