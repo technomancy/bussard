@@ -10,10 +10,17 @@ if((args[1] == "visa" and #args == 2)) then
       print("Visa to " .. args[2] .. " purchased.")
       print(length / 1000 .. " kiloseconds for " .. price .. " credits.")
    end
+elseif(args[1] == "list" and #args == 1) then
+   print("Visas available:")
+   for k,v in pairs(list_visas()) do
+      print(k .. ": " .. v.price .. " credits for " ..
+               v.length / 1000 .. " kiloseconds.")
+   end
 else
    print("Access embassy-related services.\n")
    print("Usage:")
-   print("  embassy visa GOVERNMENT")
+   print("  embassy list")
+   print("  embassy visa GOVERNMENT # note that this will spend credits")
    return
 end
 

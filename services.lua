@@ -3,6 +3,7 @@
 
 local utils = require("utils")
 local orb = require("os.orb")
+local gov = require("data.gov")
 
 local get_price = function(good, amount, prices, direction)
    local other_direction = direction == "sell" and "buy" or "sell"
@@ -98,23 +99,39 @@ return {
       end
    end,
 
-   buy_visa = function(ship, gov)
+   buy_visa = function(ship, to_gov)
       local from = ship.systems[ship.system_name].gov
-      if(ship.flag == gov) then
-         return false, "Your ship is already registered under a "..gov.." flag."
+      if(not gov.adjacent[to_gov]) then
+         return false, "Government not found."
+      elseif(ship.flag == to_gov) then
+         return false, "Your ship is already registered under a "..to_gov.." flag."
       elseif(not lume.find(ship.upgrade_names, "passponder")) then
          return false, "Need passponder for visa."
-      elseif(gov.treaties[gov][ship.flag]) then
+      elseif(gov.treaties and gov.treaties[to_gov] and
+             gov.treaties[to_gov][ship.flag]) then
          return false, "No visa needed for in-treaty travel."
-      elseif(not gov.adjacent[from][gov]) then
-         return false, "No embassy for " .. gov .. " in this system."
-      elseif(gov.visas[gov]) then
-         local visa = gov.visas[gov]
-         ship.credits = ship.credits - visa.price
-         ship.visas[gov] = visa.length + utils.time(ship)
-         return true, "Success", visa.length, visa.price
+      elseif(not gov.adjacent[from][to_gov]) then
+         return false, "No embassy for " .. to_gov .. " in this system."
+      elseif(gov.visas[to_gov]) then
+         local visa = gov.visas[to_gov]
+         if(ship.credits >= visa.price) then
+            ship.credits = ship.credits - visa.price
+            ship.visas[to_gov] = visa.length + utils.time(ship)
+            return true, "Success", visa.length, visa.price
+         else
+            return false, "Insufficient credits."
+         end
       else
-         return false, "Travel to " .. gov .. " is not permitted."
+         return false, "Travel to " .. to_gov .. " is not permitted."
       end
    end,
+
+   list_visas = function(ship)
+      local current = ship.systems[ship.system_name]
+      local visas = {}
+      for this_gov,_ in pairs(gov.adjacent[current.gov]) do
+         visas[this_gov] = gov.visas[this_gov]
+      end
+      return visas
+   end
 }
