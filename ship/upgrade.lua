@@ -68,5 +68,3 @@ return {
 
    passponder = {}, -- placeholder
 }
-
--- TODO: an upgrade that lets you increase recharge rate by using battery power

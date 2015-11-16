@@ -9,7 +9,11 @@ local pages = {
 
    manual = "manual.md",
    keycodes = "doc/keycodes.md",
-   laser = "doc/laser.md"
+   laser = "doc/laser.md",
+   engine = "doc/engine.md",
+   cargo_bay = "doc/cargo_bay.md",
+   fuel_tank = "doc/fuel_tank.md",
+   fuel_charger = "doc/fuel_charger.md",
 
    -- TODO: editor manual
 }
@@ -29,7 +33,7 @@ return {
          local p = love.filesystem.read(pages[page_name])
          ship.repl.print(p)
       elseif(page_name) then
-         ship.repl.print("Page not found.\n" .. list())
+         ship.repl.print("Page not found.\n\n" .. list())
       else
          local p = love.filesystem.read("doc/intro.md")
          ship.repl.print(p)
