@@ -2,7 +2,6 @@
 -- have access to functionality that isn't exposed inside the OS sandbox.
 
 local utils = require("utils")
-local orb = require("os.orb")
 local gov = require("data.gov")
 local body = require("body")
 
@@ -28,7 +27,7 @@ return {
          assert(session, "Not logged in to " .. ship.target.name)
          local fs_raw = session[3]
          local fs = target.os.fs.proxy(fs_raw, "root", fs_raw)
-         orb.fs.add_user(fs, username, password)
+         target.os.fs.add_user(fs, username, password)
          ship.credits = ship.credits - target.account_price
          return true
       elseif(target.account_price) then

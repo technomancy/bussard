@@ -97,7 +97,7 @@ return {
 
    login = function(ship, body, username, password)
       if((not body) or not body.os) then return false end
-      if(not filesystems[body.name]) then
+      if(not filesystems[body.name] and body.os.fs and body.os.fs.seed) then
          filesystems[body.name] = seed(body.os, body.name, body.portal)
          news.seed(ship, body, filesystems[body.name])
       end
