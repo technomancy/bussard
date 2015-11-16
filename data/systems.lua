@@ -15,7 +15,6 @@ local orb = require("os.orb")
 -- pop
 -- upgrades
 
--- TODO: scatter more upgrades around the systems
 -- TODO: more uninhabited planets
 
 return {
@@ -72,15 +71,6 @@ return {
           {r=0, x=0, y=0, dx=0, dy=0, mass=160000,
            image_name="sun",
            name="Wolf 294", fixed=true},
-          {r=33000, mass=350,
-           image_name="planet-9", -- green
-           name="Belanda", os=orb,
-
-           industry=5,tech=4,
-           remote=4, pop=1,
-           agri=0, mineral=6,
-           upgrades={},
-          },
           {r=25000, mass=500,
            image_name="planet-14", -- ice
            name="Solotogo", os=orb,
@@ -163,7 +153,7 @@ return {
                   industry=9,tech=7,
                   remote=1, pop=9,
                   agri=6, mineral=2,
-                  upgrades={},
+                  upgrades={"fuel_tank",},
                  },
                  {r=25000, mass=120,
                   image_name="newton", station=true,
@@ -172,7 +162,7 @@ return {
                   industry=7,tech=9,
                   remote=1, pop=4,
                   agri=0, mineral=4,
-                  upgrades={},
+                  upgrades={"fuel_charger"},
                  },
                  {r=29000, mass=310,
                   image_name="mars",
@@ -181,7 +171,7 @@ return {
                   industry=8,tech=6,
                   remote=1, pop=6,
                   agri=0, mineral=5,
-                  upgrades={},
+                  upgrades={"engine", "laser"},
                  },
                  {r=44000, mass=900,
                   image_name="jupiter",
@@ -196,7 +186,7 @@ return {
                   industry=5,tech=4,
                   remote=2, pop=2,
                   agri=0, mineral=6,
-                  upgrades={"laser"},
+                  upgrades={"laser", "fuel_charger"},
                  },
                  {r=64000, mass=700,
                   image_name="uranus",
@@ -234,7 +224,7 @@ return {
                       industry=6,tech=7,
                       remote=2, pop=2,
                       agri=5, mineral=3,
-                      upgrades={"laser"},
+                      upgrades={"fuel_tank", "fuel_charger"},
                      },
                      {r=37000, mass=200,
                       image_name="planet-15", -- dark with yellow
@@ -243,7 +233,7 @@ return {
                       industry=7,tech=8,
                       remote=2, pop=6,
                       agri=4, mineral=3,
-                      upgrades={"laser", "cargo_bay"},
+                      upgrades={"cargo_bay", "fuel_charger"},
                      },
                      {name = "Portal: Ross",
                       image_name="portal-1",
@@ -283,7 +273,7 @@ return {
                    industry=3,tech=5,
                    remote=4, pop=2,
                    agri=0, mineral=3,
-                   upgrades={},
+                   upgrades={"fuel_tank", "fuel_charger"},
                   },
                   {name = "Portal: Sol",
                    image_name="portal-2", interportal=true,
@@ -352,16 +342,25 @@ return {
                          name="New Phobos", fixed=true},
                         {r=18000, mass=630,
                          image_name = "shaber4",
-                         name="Galure", os=orb,
+                         name="Sutap", os=orb,
 
                          industry=2,tech=6,
-                         remote=4, pop=6,
-                         agri=5, mineral=4,
+                         remote=4, pop=4,
+                         agri=5, mineral=5,
                          upgrades={"cargo_bay"},
-                        }, -- one more here?
+                        },
+                        {r=30000, mass=440,
+                         image_name = "planet-9",
+                         name="Changlun", os=orb,
+
+                         industry=3,tech=6,
+                         remote=4, pop=6,
+                         agri=6, mineral=4,
+                         upgrades={"cargo_bay", "fuel_tank"},
+                        },
                         {name = "Portal: Bohk",
                          image_name="portal-1",
-                         r=26000, mass=75, portal="Bohk", os=orb},
+                         r=24000, mass=75, portal="Bohk", os=orb},
                      }, -- tourism center
    },
    ["Mecalle"] = {gov="Bohk",

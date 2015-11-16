@@ -71,6 +71,8 @@ return {
          for _,b in ipairs(ship.bodies) do
             lume.extend(b, system_data[b.name])
          end
+      else
+         ship:enter(ship.system_name, true)
       end
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do
