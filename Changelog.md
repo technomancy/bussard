@@ -1,7 +1,9 @@
 # Bussard changelog: history of user-visible changes
 
-## alpha-5 / ???
+## alpha-5 / 2015-11-16
 
+* Add limited support for glob patterns in shell.
+* Create fuel charge booster upgrade.
 * Performance increases.
 * Add mission system and a handful of missions.
 * Fix a bug where upgrades would not be available.

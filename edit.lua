@@ -1,5 +1,13 @@
 local lume = require("lume")
 
+--- Essentially a port of Emacs to Lua/Love.
+-- missing features (a very limited list)
+-- * undo/redo
+-- * search/replace
+-- * indentation
+-- * syntax highlighting
+-- * multiple file support
+
 -- buffer data
 local fs, path
 local lines = {""}
