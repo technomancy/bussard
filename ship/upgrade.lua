@@ -56,7 +56,7 @@ return {
          if(ship.api.fuel_charger_on and
             ship.fuel < ship.fuel_capacity and ship.battery > 0) then
             ship.fuel = ship.fuel + (ship.recharge_rate * dt * 3)
-            ship.battery = ship.battery - (dt * 16)
+            ship.battery = ship.battery - (dt * 12)
          end
       end,
    },
