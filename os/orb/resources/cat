@@ -8,6 +8,8 @@ if(args[1] == "--help") then
    print("  cat FILE1 [FILE2 ...]")
 else
    for _,filename in ipairs(args) do
+      print(filename .. ":")
       print(orb.read(orb.normalize(filename, env.CWD)))
+      print("")
    end
 end

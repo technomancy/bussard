@@ -118,6 +118,7 @@ orb.shell = {
                             mkdir = orb.fs.mkdir,
                             dirname = orb.fs.dirname,
                             normalize = orb.fs.normalize,
+                            expand_globs = orb.fs.expand_globs,
                             add_user = orb.fs.add_user,
                             add_to_group = orb.fs.add_to_group,
                             in_group = orb.shell.in_group,

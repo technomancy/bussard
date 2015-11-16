@@ -1,25 +1,39 @@
 -- -*- lua -*-
 
 local f, env, args = ...
-local dirname = args[1] or env.CWD
-local dir = f[orb.normalize(dirname, env.CWD)]
 
-if(not dir) then
-   print("Not found: " .. dirname)
-elseif(type(dir) == "table") then
-   for name,contents in pairs(dir) do
-      if(not name:match("^_")) then
-         if(type(contents) == "table") then
-            print(name .. "/")
-         elseif(type(contents) == "function") then
-            print("*" .. name)
-         elseif(type(contents) == "thread") then
-            print("%" .. name)
-         else
-            print(name)
+local ls = function(dirname)
+   local dir = f[orb.normalize(dirname, env.CWD)]
+
+   if(not dir) then
+      print("Not found: " .. dirname)
+   elseif(type(dir) == "table") then
+      for name,contents in pairs(dir) do
+         if(not name:match("^_")) then
+            if(type(contents) == "table") then
+               print(name .. "/")
+            elseif(type(contents) == "function") then
+               print("*" .. name)
+            elseif(type(contents) == "thread") then
+               print("%" .. name)
+            else
+               print(name)
+            end
          end
       end
+   else
+      print(dirname)
    end
+end
+
+if(#args == 0) then
+   ls(env.CWD)
+elseif(#args == 1) then
+   ls(args[1])
 else
-   print(dirname)
+   for _,arg in ipairs(args) do
+      print(arg .. ":")
+      ls(arg)
+      print("")
+   end
 end

@@ -1,4 +1,6 @@
 -- fake lil filesystem
+local globtopattern = require("globtopattern").globtopattern
+
 orb.fs = {
 
    -- This gives us a raw filesystem that's just a table with permissions data
@@ -36,6 +38,26 @@ orb.fs = {
       table.remove(t, #t)
 
       return "/" .. table.concat(t, "/"), basename
+   end,
+
+   expand_globs = function(f, cmd, env)
+      local segments = orb.utils.split(cmd, " ")
+      local expand = function(token)
+         local matches = {}
+         if(token:match("*")) then
+            local pattern = globtopattern(token)
+            -- TODO: glob into directories
+            for name,_ in pairs(f[env.CWD]) do
+               if(name:match(pattern) and not name:match("^_")) then
+                  table.insert(matches, name)
+               end
+            end
+            return table.concat(matches, " ")
+         else
+            return token
+         end
+      end
+      return table.concat(lume.map(segments, expand), " ")
    end,
 
    -- read/write/append here are wrappers that help you work with
