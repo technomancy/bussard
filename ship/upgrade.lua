@@ -46,8 +46,23 @@ return {
          end
       end,
    },
+
+   fuel_charger = {
+      stats = { mass = 12 },
+      action = function(ship, down)
+         ship.api.fuel_charger_on = down
+      end,
+      update = function(ship, dt)
+         if(ship.api.fuel_charger_on and
+            ship.fuel < ship.fuel_capacity and ship.battery > 0) then
+            ship.fuel = ship.fuel + (ship.recharge_rate * dt * 3)
+            ship.battery = ship.battery - (dt * 16)
+         end
+      end,
+   },
+
    -- purely stat upgrades
-   engine = { stats = { engine_power = 512, burn_rate = 3, mass = 64, } },
+   engine = { stats = { engine_power = 512, burn_rate = 4, mass = 64, } },
    cargo_bay = { stats = { cargo_capacity = 64, mass = 12, } },
    fuel_tank = { stats = { fuel_capacity = 128, mass = 32, } },
 
