@@ -134,6 +134,35 @@ local send_input = function(ship, input)
    end
 end
 
+local sandbox_out = function(ship, target_name, output)
+   if(output) then
+      ship.api.repl.write(output)
+   else
+      -- printing nil means EOF, close session
+      logout(target_name)
+      disconnect(ship)
+   end
+end
+
+local orb_login = function(fs, env, ship)
+   env.IN, env.OUT = "/tmp/in", "/tmp/out"
+   ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
+   fs[env.OUT] = lume.fn(sandbox_out, ship, ship.target.name)
+
+   -- TODO: improve error handling for problems in smashrc
+   ship.target.os.process.spawn(fs, env, command, sandbox(ship))
+end
+
+local lisp_login = function(fs, env, ship)
+   env["error-handler"] = function(_, result) ship.api.repl.print(result) end
+   env.IN, env.OUT = "in", "out"
+   set_out(fs, env, ship)
+   local buffer = {}
+   fs[env.IN] = function(input) table.insert(buffer, input) end
+   ship.target.os.shell.exec(fs, env, command, sandbox(ship))
+end
+
+
 return {
    sessions = sessions, -- for debugging
 
@@ -148,32 +177,21 @@ return {
       if(fs_raw) then
          local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
          local env = ship.target.os.shell.new_env(username)
-         local out_buffer = {}
-         local target_name = ship.target.name
 
-         env.IN = "/tmp/in"
-         env.OUT = "/tmp/out"
          env.ROWS = tostring(ship.api.repl.rows)
          env.COLS = tostring(ship.api.repl.cols)
-         ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
 
-         -- buffer output that happens when out of range
-         fs[env.OUT] = function(output)
-            if(output) then
-               ship.api.repl.write(output)
-            else
-               -- printing nil means EOF, close session
-               logout(target_name)
-               disconnect(ship)
-            end
-         end
-
-         sessions[ship.target.name] = {fs, env, fs_raw, out_buffer}
-         -- TODO: improve error handling for problems in smashrc
-         ship.target.os.process.spawn(fs, env, command, sandbox(ship))
+         sessions[ship.target.name] = {fs, env, fs_raw}
          ship.api.repl.read = lume.fn(send_input, ship)
          ship.comm_connected = ship.target.name
 
+         if(ship.target.os.name == "orb") then
+            orb_login(fs, env, ship)
+         elseif(ship.target.os.name == "lisp") then
+            lisp_login(fs, env, ship)
+         else
+            error("Unknown OS: " .. ship.target.os.name)
+         end
          -- free recharge upon connect
          ship.battery = ship.battery_capacity
 
@@ -204,13 +222,6 @@ return {
    end,
 
    send_input = send_input,
-
-   flush = function()
-      for _,v in pairs(sessions) do
-         local _, _, _, out_buffer = unpack(v)
-         for _,f in ipairs(out_buffer) do f() end
-      end
-   end,
 
    scp = scp,
 }

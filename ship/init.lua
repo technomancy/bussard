@@ -188,7 +188,6 @@ local ship = {
 
       mission.update(ship, dt)
       ship:enforce_limits()
-      comm.flush()
    end,
 
    in_range = function(ship, b, range)

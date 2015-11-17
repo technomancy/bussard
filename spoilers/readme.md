@@ -26,6 +26,7 @@ in-game technology works.
 ## Crimes against Science
 
 * Portals
+* Collisions are impossible
 * Bussard collector refuels reaction mass way too quickly
 * Arguably the [high thrust](http://www.projectrho.com/public_html/rocket/torchships.php)
   with which you zoom around the system could be on this list; however

@@ -2,7 +2,7 @@
 
 assert(setfenv, "Needs lua 5.1; sorry.")
 
-orb = { dir = "os/orb" }
+orb = { dir = "os/orb", name="orb" }
 
 require("os.orb.utils")
 require("os.orb.fs")

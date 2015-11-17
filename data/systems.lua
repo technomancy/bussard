@@ -1,4 +1,5 @@
 local orb = require("os.orb")
+local lisp = require("os.lisp")
 
 -- cargo types:
 -- ore
@@ -143,7 +144,7 @@ return {
                  {r=10000, mass=220,
                   image_name="mercury",
                   name="Mercury"},
-                 {r=14000, mass=300,
+                 {r=14000, mass=300, os=lisp, -- TODO: just for testing
                   image_name="venus",
                   name="Venus"},
                  {r=20000, mass=400,
