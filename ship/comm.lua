@@ -154,7 +154,7 @@ local orb_login = function(fs, env, ship)
    fs[env.OUT] = lume.fn(sandbox_out, ship, ship.target.name)
 
    -- TODO: improve error handling for problems in smashrc
-   ship.target.os.process.spawn(fs, env, command, sandbox(ship))
+   ship.target.os.process.spawn(fs, env, nil, sandbox(ship))
 end
 
 local lisp_login = function(fs, env, ship)
@@ -183,7 +183,7 @@ end
 return {
    sessions = sessions, -- for debugging
 
-   login = function(ship, username, password, command)
+   login = function(ship, username, password)
       if(not ship:in_range(ship.target)) then
          ship.api.repl.print("| Out of range.")
          return

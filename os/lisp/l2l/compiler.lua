@@ -1,7 +1,7 @@
-local import = require("os.lisp.l2l.import")
-local reader = require("os.lisp.l2l.reader")
-local itertools = require("os.lisp.l2l.itertools")
-local exception = require("os.lisp.l2l.exception")
+local import = require("import")
+local reader = require("reader")
+local itertools = require("itertools")
+local exception = require("exception")
 
 
 local IllegalFunctionCallException =
@@ -21,11 +21,12 @@ local pack = itertools.pack
 local show = itertools.show
 local raise = exception.raise
 
+local _C
 
 -- Keyword table. All symbols that match those in this table will be compiled
 -- down into Lua as a symbol that is valid in Lua. Uniquess probable but not
 -- guaranteed. See `hash`.
-_K ={
+local _K ={
   ["and"] = true, 
   ["break"] = true, 
   ["do"] = true, 
@@ -76,7 +77,7 @@ end
 
 -- Declare `compile` ahead of `compile_parameters`, since these two
 -- functions are mutually dependent.
-local compile;
+local compile
 
 -- Compile the list `data` into Lua parameters.
 local function compile_parameters(block, stream, parent, data)
@@ -148,9 +149,9 @@ compile = function(block, stream, data, position)
   return ""
 end
 
-macro = {}
+local macro = {}
 
-function macroexpand(obj)
+local function macroexpand(obj)
   if getmetatable(obj) ~= list then
     return obj
   end
@@ -353,7 +354,6 @@ local function compile_quote(block, stream, form)
   else
     return _C[hash("table-quote")](block, stream, form)
   end
-  error("quote error ".. tostring(form))
 end
 
 local function compile_quasiquote(block, stream, form)
@@ -465,7 +465,7 @@ local function compile_lambda(block, stream, arguments, ...)
   return "(" .. table.concat(src, "\n") .. ")"
 end
 
-local eval;
+local eval
 local function compile_defcompiler(block, stream, name, arguments, ...)
   local reference = "_C[hash(\""..show(name).."\")]"
   local src = {}
@@ -530,7 +530,7 @@ end
 
 local function build(stream)
   local src = {
-    "require(\'os.lisp.l2l.core\').import(\'core\')"
+    "require(\'core\').import(\'core\')"
   }
   local reference = declare(src)
   local ok, obj
@@ -553,12 +553,13 @@ end
 
 local compiler
 
-eval = function (obj, stream, env)
+eval = function (obj, stream, env, sandbox)
+   sandbox = sandbox or _G
   -- Include the following into the `core` library. The `core` library is
   -- automatically imported into _G in all compiled programs.
   -- See `compiler.build`.
   local core = {
-    import = require("os.lisp.l2l.import"),
+    import = require("import"),
     compile = compile,
     compiler = compiler,
     hash = hash,
@@ -581,10 +582,10 @@ eval = function (obj, stream, env)
     stream=reader.tofile(show(obj))
   end
   local reference = compile(block, stream, obj, _R.position(obj))
-  
+
   local code = table.concat(block, "\n") .. "\nreturn ".. reference
   local f, err = load(code, code, nil, setmetatable(env or {},
-      {__newindex=_G, __index = setmetatable(core, {__index=_G})}))
+      {__newindex=sandbox, __index = setmetatable(core, {__index=sandbox})}))
   if f then
     local objs, count = pack(pcall(f))
     local ok = table.remove(objs, 1)
@@ -803,20 +804,28 @@ compiler = {
   compile_let = compile_let,
 }
 
+local sandbox = {
+   table = table,
+   print = print,
+   tostring = tostring,
+   type = type,
+   getmetatable = getmetatable,
+}
 
 local ok, form
 repeat
-  ok, obj = pcall(reader.read, stream)
+  ok, form = pcall(reader.read, stream)
   if ok then
-    eval(obj, stream, {
+    eval(form, stream, {
       assign = assign,
-      declare = declare
-    })
+      declare = declare,
+      _C = _C,
+    }, sandbox)
   end
 until not ok
 
-if getmetatable(obj) ~= reader.EOFException then
-  error(obj)
+if getmetatable(form) ~= reader.EOFException then
+  error(form)
 end
 
 return compiler

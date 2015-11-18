@@ -1,4 +1,4 @@
-#! /usr/local/bin/lua
+#!/usr/bin/env lua
 
 require("os.lisp.l2l.compat")
 
@@ -22,7 +22,7 @@ _P = ">> "
 -- Only act as a compiler if this file is invoked directly through the shell.
 -- Does not act on any arguments when this file is executed by
 -- `require("core")`.
-local function repl(read, print, set_prompt)
+local function repl(read, print, env)
   print(";; Welcome to Lua-To-Lisp REPL!")
   print(";; Type '(print \"hello world!\") to start.")
   while true do
@@ -30,7 +30,7 @@ local function repl(read, print, set_prompt)
     local form = nil
     local ok = false
     local stream = nil
-    set_prompt(_P)
+    env.set_prompt(_P)
     while ok == false do
       local line = read()
       if line == nil then -- TODO: should be an empty string here but w/e
@@ -55,7 +55,7 @@ local function repl(read, print, set_prompt)
             stream:seek("set", position)
             print("Unexpected input: "..stream:read("*all*"))
          else
-            local ok, result = pcall(compiler.eval, form)
+            local ok, result = pcall(compiler.eval, form, env)
             print(result)
          end
       end
@@ -93,7 +93,7 @@ if debug.getinfo(3) == nil then
 
   if #arg == 0 then
     if not script then
-      repl()
+      repl(io.read, print, { set_prompt = io.write })
     else
       interpret()
     end
