@@ -1,8 +1,8 @@
-local import = require("import")
-local exception = require("exception")
+local import = require("os.lisp.l2l.import")
+local exception = require("os.lisp.l2l.exception")
 local raise = exception.raise
 
-local itertools = require("itertools")
+local itertools = require("os.lisp.l2l.itertools")
 local pack, pair, list = itertools.pack, itertools.pair, itertools.list
 
 

@@ -1,18 +1,18 @@
 #! /usr/local/bin/lua
 
-require("compat")
+require("os.lisp.l2l.compat")
 
-local reader = require("reader")
-local import = require("import")
-local compiler = require("compiler")
-local exception = require("exception")
-local itertools = require("itertools")
+local reader = require("os.lisp.l2l.reader")
+local import = require("os.lisp.l2l.import")
+local compiler = require("os.lisp.l2l.compiler")
+local exception = require("os.lisp.l2l.exception")
+local itertools = require("os.lisp.l2l.itertools")
 
 local hash = compiler.hash
 
-setmetatable(_G, {__index=function(self, key)
-  error("undefined '"..key.."'")
-end})
+-- setmetatable(_G, {__index=function(self, key)
+--   error("undefined '"..key.."'")
+-- end})
 
 _PROMPT = "> "
 
@@ -22,7 +22,7 @@ _P = ">> "
 -- Only act as a compiler if this file is invoked directly through the shell.
 -- Does not act on any arguments when this file is executed by
 -- `require("core")`.
-local function repl()
+local function repl(read, print, set_prompt)
   print(";; Welcome to Lua-To-Lisp REPL!")
   print(";; Type '(print \"hello world!\") to start.")
   while true do
@@ -30,40 +30,41 @@ local function repl()
     local form = nil
     local ok = false
     local stream = nil
-    io.stdout:write(_P)
+    set_prompt(_P)
     while ok == false do
-      local line = io.stdin:read("*line*")
-      if line == nil then
-        os.exit()
-      end
-      str = str .." ".. (line or "")
-      stream = reader.tofile(str)
-      ok, form = pcall(reader.read, stream, true)
-      if not ok then
-        local metatable = getmetatable(form)
-        if metatable ~= reader.UnmatchedLeftBraceException and 
-           metatable ~= reader.UnmatchedLeftParenException then
-          print(form)
-          break
-        end
-      end
-    end
-    if ok then
-      local position = stream:seek("cur")
-      local _ok, _form = pcall(reader.read, stream)
-      if getmetatable(_form) ~= reader.EOFException then
-        stream:seek("set", position)
-        print("Unexpected input: "..stream:read("*all*"))
+      local line = read()
+      if line == nil then -- TODO: should be an empty string here but w/e
+         coroutine.yield()
       else
-        local ok, result = pcall(compiler.eval, form)
-        print("=", result)
+         str = str .." ".. (line or "")
+         stream = reader.tofile(str)
+         ok, form = pcall(reader.read, stream, true)
+         if not ok then
+            local metatable = getmetatable(form)
+            if metatable ~= reader.UnmatchedLeftBraceException and 
+            metatable ~= reader.UnmatchedLeftParenException then
+               print(form)
+               break
+            end
+         end
+      end
+      if ok then
+         local position = stream:seek("cur")
+         local _ok, _form = pcall(reader.read, stream)
+         if getmetatable(_form) ~= reader.EOFException then
+            stream:seek("set", position)
+            print("Unexpected input: "..stream:read("*all*"))
+         else
+            local ok, result = pcall(compiler.eval, form)
+            print(result)
+         end
       end
     end
   end
 end
 
-local function interpret()
-  local src = io.stdin:read("*all*")
+local function interpret(src)
+  src = src or io.stdin:read("*all*")
   local stream = reader.tofile(src)
   local ok, form
   repeat
@@ -126,7 +127,7 @@ end
 
 local core = {
   repl = repl,
-  import = require("import"),
+  import = require("os.lisp.l2l.import"),
   compile = compiler.compile,
   compiler = compiler,
   hash = hash,
