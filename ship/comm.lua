@@ -127,10 +127,14 @@ local send_input = function(ship, input)
                              ". Run `logout` to disconnect.")
    else
       local fs, env = unpack(sessions[ship.target.name])
-      assert(fs and env and fs[env.IN], "Not logged into " .. ship.target.name)
+      assert(fs and env, "Not logged into " .. ship.target.name)
       ship.api.repl.history:append(input, true)
       ship.api.repl.print(ship.api.repl.prompt .. input)
-      fs[env.IN](input)
+      if(fs[env.IN]) then
+         fs[env.IN](input)
+      else
+         env.IN(input)
+      end
    end
 end
 
@@ -154,12 +158,25 @@ local orb_login = function(fs, env, ship)
 end
 
 local lisp_login = function(fs, env, ship)
-   env["error-handler"] = function(_, result) ship.api.repl.print(result) end
-   env.IN, env.OUT = "in", "out"
-   set_out(fs, env, ship)
    local buffer = {}
-   fs[env.IN] = function(input) table.insert(buffer, input) end
-   ship.target.os.shell.exec(fs, env, command, sandbox(ship))
+   local max_buffer_size = 1024
+
+   env.IN = function(...)
+      local arg = {...}
+      if(#arg == 0) then
+         while #buffer == 0 do coroutine.yield() end
+         return table.remove(buffer, 1)
+      elseif(arg[1] == "*buffer") then
+         return buffer
+      else -- write
+         while(#buffer > max_buffer_size) do coroutine.yield() end
+         for _,output in pairs(arg) do
+            table.insert(buffer, output)
+         end
+      end
+   end
+
+   ship.target.os.shell.spawn(fs, env.IN, ship.api.repl.print, sandbox(ship))
 end
 
 
