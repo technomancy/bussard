@@ -129,7 +129,7 @@ local send_input = function(ship, input)
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env, "Not logged into " .. ship.target.name)
       ship.api.repl.history:append(input, true)
-      ship.api.repl.print(ship.api.repl.prompt .. input)
+      ship.api.repl.print((ship.api.repl.prompt or "> ") .. input)
       if(fs[env.IN]) then
          fs[env.IN](input)
       else
@@ -160,10 +160,12 @@ end
 local lisp_login = function(fs, env, ship)
    local buffer = {}
    local max_buffer_size = 1024
-
-   env.IN = function(...)
+   local sandbox = sandbox(ship)
+   sandbox.print = ship.api.repl.print
+   sandbox.io = sandbox.io or {}
+   sandbox.io.read = function(...)
       local arg = {...}
-      if(#arg == 0) then
+      if(#arg == 0 or arg[1] == "*line*") then
          while #buffer == 0 do coroutine.yield() end
          return table.remove(buffer, 1)
       elseif(arg[1] == "*buffer") then
@@ -175,8 +177,9 @@ local lisp_login = function(fs, env, ship)
          end
       end
    end
+   env.IN = sandbox.io.read
 
-   ship.target.os.shell.spawn(fs, env.IN, ship.api.repl.print, sandbox(ship))
+   ship.target.os.shell.spawn(fs, env, sandbox)
 end
 
 
