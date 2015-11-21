@@ -6,7 +6,7 @@ check:
 	  --new-globals love lume orb _ -- *.lua os/orb/*.lua ship/*.lua os/lisp/*.lua
 
 count:
-	cloc *.lua os/orb/*.lua ship/*.lua os/orb/resources/*
+	cloc *.lua os/orb/*.lua os/lisp/*.lua os/lisp/resources/* ship/*.lua os/orb/resources/*
 
 todo:
 	rgrep TODO .

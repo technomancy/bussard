@@ -105,7 +105,6 @@ return {
       end
 
       if(body.portal) then
-         filesystems[body.name].home.guest[".smashrc"] = portal_rc
          filesystems[body.name].etc.motd = portal_motd
       end
 

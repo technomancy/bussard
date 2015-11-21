@@ -57,13 +57,13 @@ return {
           },
           {name = "Portal: L 668-21",
            image_name="portal-1",
-           r=26000, mass=60, portal="L 668-21", os=orb},
+           r=26000, mass=60, portal="L 668-21", os=lisp},
           {name = "Portal: Wolf 294",
            image_name="portal-1",
-           r=38000, mass=60, portal="Wolf 294", os=orb},
+           r=38000, mass=60, portal="Wolf 294", os=lisp},
           {name = "Portal: Luyten's Star",
            image_name="portal-1",
-           r=22500, mass=60, portal="Luyten's Star", os=orb}},
+           r=22500, mass=60, portal="Luyten's Star", os=lisp}},
       },
    ["Wolf 294"] = -- second-largest Tana system
       {gov="Tana", x=-5.3, y=-0.3,
@@ -83,7 +83,7 @@ return {
           },
           {name = "Portal: Tana",
            image_name="portal-1",
-           r=16000, mass=60, portal="Tana", os=orb}
+           r=16000, mass=60, portal="Tana", os=lisp}
        },
       },
    ["Luyten's Star"] = -- gateway to sol
@@ -104,10 +104,10 @@ return {
           },
           {name = "Portal: Tana",
            image_name="portal-1",
-           r=25000, mass=60, portal="Tana", os=orb},
+           r=25000, mass=60, portal="Tana", os=lisp},
           {name = "Portal: Sol",
            image_name="portal-2", interportal=true,
-           r=20000, mass=60, portal="Sol", os=orb},
+           r=20000, mass=60, portal="Sol", os=lisp},
       },
       },
    ["L 668-21"] = -- remote mining system
@@ -129,7 +129,7 @@ return {
           },
           {name = "Portal: Tana",
            image_name="portal-1",
-           r=29000, mass=60, portal="Tana", os=orb}
+           r=29000, mass=60, portal="Tana", os=lisp}
        },
       },
 
@@ -144,7 +144,7 @@ return {
                  {r=10000, mass=220,
                   image_name="mercury",
                   name="Mercury"},
-                 {r=14000, mass=300, os=lisp, -- TODO: just for testing
+                 {r=14000, mass=300,
                   image_name="venus",
                   name="Venus"},
                  {r=20000, mass=400,
@@ -198,15 +198,15 @@ return {
                  {name = "Portal: Luyten's Star",
                   image_name="portal-2",
                   r=33000, mass=60, portal="Luyten's Star",
-                  interportal=true, os=orb},
+                  interportal=true, os=lisp},
                  {name = "Portal: Ross",
                   image_name="portal-2",
                   r=35000, mass=60, portal="Ross",
-                  interportal=true, os=orb},
+                  interportal=true, os=lisp},
                  {name = "Portal: Lalande",
                   image_name="portal-2",
                   r=37000, mass=60, portal="Lalande",
-                  interportal=true, os=orb}
+                  interportal=true, os=lisp}
               }, -- it's Sol.
    },
 
@@ -238,19 +238,19 @@ return {
                      },
                      {name = "Portal: Ross",
                       image_name="portal-1",
-                      r=20000, mass=60, portal="Ross", os=orb},
+                      r=20000, mass=60, portal="Ross", os=lisp},
                      {name = "Portal: Sol",
                       image_name="portal-2", interportal=true,
-                      r=25000, mass=60, portal="Sol", os=orb},
+                      r=25000, mass=60, portal="Sol", os=lisp},
                      {name = "Portal: Bohk",
                       image_name="portal-2", interportal=true,
-                      r=29000, mass=60, portal="Bohk", os=orb},
+                      r=29000, mass=60, portal="Bohk", os=lisp},
                      {name = "Portal: Katilay",
                       image_name="portal-2", interportal=true,
-                      r=31000, mass=60, portal="Katilay", os=orb},
+                      r=31000, mass=60, portal="Katilay", os=lisp},
                      {name = "Portal: Yueh",
                       image_name="portal-2", interportal=true,
-                      r=33000, mass=60, portal="Yueh", os=orb}},
+                      r=33000, mass=60, portal="Yueh", os=lisp}},
    },
    ["Ross"] = {gov="Terran",
                x=0, y=-1.7,
@@ -279,10 +279,10 @@ return {
                   {name = "Portal: Sol",
                    image_name="portal-2", interportal=true,
                    r=22000, mass=60, portal="Sol",
-                   interportal=true, os=orb},
+                   interportal=true, os=lisp},
                   {name = "Portal: Lalande",
                    image_name="portal-1",
-                   r=22000, mass=60, portal="Lalande", os=orb}
+                   r=22000, mass=60, portal="Lalande", os=lisp}
                },
    },
 
@@ -322,17 +322,17 @@ return {
                    upgrades={"cargo_bay"},
                   },
                   {name = "Portal: Lalande",
-                   image_name="portal-2", interportal=true, os=orb,
+                   image_name="portal-2", interportal=true, os=lisp,
                    r=22000, mass=60, portal="Lalande",},
                   {name = "Portal: New Phobos",
                    image_name="portal-1",
-                   r=22000, mass=60, portal="New Phobos", os=orb,},
+                   r=22000, mass=60, portal="New Phobos", os=lisp,},
                   {name = "Portal: Mecalle",
                    image_name="portal-1",
-                   r=22000, mass=60, portal="Mecalle", os=orb},
+                   r=22000, mass=60, portal="Mecalle", os=lisp},
                   {name = "Portal: Yueh",
                    image_name="portal-2", interportal=true,
-                   r=22000, mass=60, portal="Yueh", os=orb}
+                   r=22000, mass=60, portal="Yueh", os=lisp}
                },
    },
    ["New Phobos"] = {gov="Bohk",
@@ -361,7 +361,7 @@ return {
                         },
                         {name = "Portal: Bohk",
                          image_name="portal-1",
-                         r=24000, mass=60, portal="Bohk", os=orb},
+                         r=24000, mass=60, portal="Bohk", os=lisp},
                      }, -- tourism center
    },
    ["Mecalle"] = {gov="Bohk",
@@ -381,10 +381,10 @@ return {
                       },
                       {name = "Portal: Bohk",
                        image_name="portal-1",
-                       r=18000, mass=60, portal="Bohk", os=orb},
+                       r=18000, mass=60, portal="Bohk", os=lisp},
                       {name = "Portal: Katilay",
                        image_name="portal-2", interportal=true,
-                       r=22000, mass=60, portal="Katilay", os=orb}
+                       r=22000, mass=60, portal="Katilay", os=lisp}
                    }, -- smaller border town
    },
 
@@ -414,10 +414,10 @@ return {
                      },
                      {name = "Portal: Lalande",
                       image_name="portal-2", interportal=true,
-                      r=32000, mass=60, portal="Lalande", os=orb},
+                      r=32000, mass=60, portal="Lalande", os=lisp},
                      {name = "Portal: Mecalle",
                       image_name="portal-2", interportal=true,
-                      r=36000, mass=60, portal="Mecalle", os=orb}
+                      r=36000, mass=60, portal="Mecalle", os=lisp}
                   }, -- quiet, isolated. internal conflict.
    },
 
@@ -438,16 +438,13 @@ return {
                    upgrades={}, -- TODO
                   },
                   {name = "Portal: Bohk",
-                   image_name="portal-2", interportal=true, os=orb,
+                   image_name="portal-2", interportal=true, os=lisp,
                    r=22000, mass=60, portal="Bohk"},
                   {name = "Portal: Lalande",
-                   image_name="portal-2", interportal=true, os=orb,
+                   image_name="portal-2", interportal=true, os=lisp,
                    r=22000, mass=60, portal="Lalande"},
-                  {name = "Portal: Wolf 1481",
-                   image_name="portal-1", os=orb,
-                   r=22000, mass=60, portal="Wolf 1481"},
                   {name = "Portal: Kowlu",
-                   image_name="portal-1", os=orb,
+                   image_name="portal-1", os=lisp,
                    r=22000, mass=60, portal="Kowlu"},
                }, -- Yueh capital
    },
@@ -458,10 +455,10 @@ return {
                     image_name="sun",
                     name="Kowlu 693", fixed=true},
                    {name = "Portal: Delta Pavonis",
-                    image_name="portal-1", os=orb,
+                    image_name="portal-1", os=lisp,
                     r=22000, mass=60, portal="Delta Pavonis"},
                    {name = "Portal: Yueh",
-                    image_name="portal-1", os=orb,
+                    image_name="portal-1", os=lisp,
                     r=22000, mass=60, portal="Yueh"}
                 }, -- bustling trade hub
    },
@@ -472,10 +469,10 @@ return {
                             image_name="sun",
                             name="Delta Pavonis", fixed=true},
                            {name = "Portal: Wolf 1481",
-                            image_name="portal-1", os=orb,
+                            image_name="portal-1", os=lisp,
                             r=22000, mass=60, portal="Wolf 1481"},
                            {name = "Portal: Kowlu",
-                            image_name="portal-1", os=orb,
+                            image_name="portal-1", os=lisp,
                             r=22000, mass=60, portal="Kowlu"},
                         }
    },
@@ -485,15 +482,17 @@ return {
                        {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                         image_name="sun",
                         name="Wolf 1481", fixed=true},
-                       {name = "Portal: Yueh",
-                        image_name="portal-1", os=orb,
-                        r=22000, mass=60, portal="Yueh"},
+                       {r=12000, mass=100, station=true,
+                        image_name="station-green",
+                        name="Steele Station", os=lisp,},
                        {name = "Portal: Delta Pavonis",
-                        image_name="portal-1", os=orb,
+                        image_name="portal-1", os=lisp,
                         r=22000, mass=60, portal="Delta Pavonis"}
                     },
-   }, -- relatively quiet
+   }, -- location of experimental lisp station
 
+
+   -- secret colonies
    ["LHS 451"] = {gov="Yueh", -- GI 682
                   x=4.9,y=-1.1,
                   bodies = {
@@ -501,7 +500,7 @@ return {
                       image_name="sun",
                       name="LHS 451", fixed=true},
                      {name = "Portal: Yueh",
-                      image_name="portal-1", os=orb,
+                      image_name="portal-1", os=lisp,
                       r=22000, mass=60, portal="Yueh"},
                   }, -- mostly uninhabited
    },
@@ -512,7 +511,7 @@ return {
                          image_name="sun",
                          name="CD-40 9712", fixed=true},
                         {name = "Portal: Delta Pavonis",
-                         image_name="portal-1", os=orb,
+                         image_name="portal-1", os=lisp,
                          r=22000, mass=60, portal="Delta Pavonis"},
                      }, -- mostly uninhabited
    },

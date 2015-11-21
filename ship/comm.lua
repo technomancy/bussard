@@ -80,8 +80,11 @@ local sandbox = function(ship)
    }
    if(ship.target and ship.target.portal) then
       local target = ship.target
+      sb.portal_target = ship.target.portal
       sb.trip_cleared = lume.fn(portal_cleared, ship, target)
-      sb.set_beam_count = function(n) target.beam_count = n end
+      sb.set_beam = function(n)
+         target.beam_count = (n * 9) / ship.portal_time
+      end
       sb.portal_activate = function() ship:enter(target.portal, true) end
       sb.draw_power = function(power)
          assert(ship.battery - power >= 0, "Insufficient power.")
@@ -161,9 +164,8 @@ local lisp_login = function(fs, env, ship)
    local buffer = {}
    local max_buffer_size = 1024
    local sandbox = sandbox(ship)
-   sandbox.print = ship.api.repl.print
-   sandbox.io = sandbox.io or {}
-   sandbox.io.read = function(...)
+   local write = lume.fn(sandbox_out, ship, ship.target.name)
+   env.IN = function(...)
       local arg = {...}
       if(#arg == 0 or arg[1] == "*line*") then
          while #buffer == 0 do coroutine.yield() end
@@ -177,7 +179,15 @@ local lisp_login = function(fs, env, ship)
          end
       end
    end
-   env.IN = sandbox.io.read
+   sandbox.io = sandbox.io or { read = env.IN, write = write }
+   sandbox.print = function(...)
+      local output = {...}
+      if(output[1]) then
+         write(tostring(...) .. "\n")
+      else
+         write(nil)
+      end
+   end
 
    ship.target.os.shell.spawn(fs, env, sandbox)
 end

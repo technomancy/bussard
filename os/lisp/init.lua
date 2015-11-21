@@ -9,7 +9,6 @@ end
 
 local function repl(fs, env, sandbox)
    local print, io = (sandbox.print or print), (sandbox.io or io)
-   print((fs.etc and fs.etc.motd) or ";; Welcome to the lisp REPL.")
    sandbox.set_prompt(">> ")
    while true do
       local str, complete_form, form, stream = "", false
@@ -36,27 +35,38 @@ local function repl(fs, env, sandbox)
             stream:seek("set", position)
             print("Unexpected input: "..stream:read("*all*"))
          else
-            local ok, result = pcall(compiler.eval, form)
-            print("=", result)
+            local ok, result = pcall(compiler.eval, form, env, sandbox)
+            print("-> " .. tostring(result))
          end
       end
    end
+end
+
+local run = function(fs, env, sandbox, code)
+   local stream = reader.tofile(code)
+   complete_form, form = pcall(reader.read, stream, true)
+   if not complete_form then sandbox.print("Incomplete code.") return end
+   local ok, result = pcall(compiler.eval, form, nil, env, sandbox)
+   return result
 end
 
 return {
    shell = {
       auth = function(fs, username, password)
          if((username == "guest" and password == "") or
-            (username == "admin" and password == "K'chua")) then
+            (username == "root" and password == "K'chua")) then
             return fs
          end
       end,
       new_env = function(user)
-         -- the portal_rc login code should only be applied to guest logins
          return {USER = user, LOGIN = portal_rc}
       end,
       spawn = function(fs, env, sandbox)
-         local co = coroutine.create(lume.fn(repl, fs, env, sandbox))
+         if(sandbox.portal_target and env.USER ~= "root") then
+            co = coroutine.create(lume.fn(run, fs, env, sandbox, portal_rc))
+         else
+            co = coroutine.create(lume.fn(repl, fs, env, sandbox))
+         end
          local id = id_for(co)
          fs.proc[id] = { thread = co, id = id }
       end,
@@ -86,7 +96,7 @@ return {
             portal = love.filesystem.read("os/lisp/resources/portal.scm"),
             repl = love.filesystem.read("os/lisp/resources/repl.scm")
          }
-         fs.etc = { motd = "Welcome to Lisp." }
+         fs.etc = { motd = ";; Welcome to the lisp REPL." }
       end,
       strip_special = function(_) end,
    },

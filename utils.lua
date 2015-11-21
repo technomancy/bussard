@@ -147,6 +147,7 @@ return {
       type = type,
       pairs = pairs,
       ipairs = ipairs,
+      next = next,
       unpack = unpack,
       tonumber = tonumber,
       tostring = tostring,
