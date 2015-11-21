@@ -1,7 +1,8 @@
-local import = require("import")
-local reader = require("reader")
-local itertools = require("itertools")
-local exception = require("exception")
+local module_path = (...):gsub('compiler$', '')
+local import = require(module_path .. "import")
+local reader = require(module_path .. "reader")
+local itertools = require(module_path .. "itertools")
+local exception = require(module_path .. "exception")
 
 
 local IllegalFunctionCallException =
@@ -16,17 +17,17 @@ local FunctionArgumentException =
 local list, pair, last = itertools.list, itertools.pair, itertools.last
 local slice = itertools.slice
 local map, fold, zip = itertools.map, itertools.fold, itertools.zip
+local foreach = itertools.foreach
 local bind = itertools.bind
 local pack = itertools.pack
 local show = itertools.show
 local raise = exception.raise
 
-local _C
 
 -- Keyword table. All symbols that match those in this table will be compiled
 -- down into Lua as a symbol that is valid in Lua. Uniquess probable but not
 -- guaranteed. See `hash`.
-local _K ={
+_K ={
   ["and"] = true, 
   ["break"] = true, 
   ["do"] = true, 
@@ -77,7 +78,7 @@ end
 
 -- Declare `compile` ahead of `compile_parameters`, since these two
 -- functions are mutually dependent.
-local compile
+local compile;
 
 -- Compile the list `data` into Lua parameters.
 local function compile_parameters(block, stream, parent, data)
@@ -149,9 +150,69 @@ compile = function(block, stream, data, position)
   return ""
 end
 
-local macro = {}
+local function declare(block)
+  local reference = "_var" .. #block
+  table.insert(block, "local " .. reference)
+  return reference
+end
 
-local function macroexpand(obj)
+local function assign(block, name, value)
+  if value ~= nil and value ~= "" then
+    table.insert(block, name.."="..tostring(value))
+  end
+  return name
+end
+
+--- Returns whether an argument in list representation can be variadic.
+-- It returns true if the argument is a function call, since it cannot be known
+-- until the call is evaluated before how many returns it has is known.
+-- @argument Argument in list representation to check whether can be variadic.
+-- @return a boolean
+local function is_variadic(argument)
+  if type(argument) == "number" or type(argument) == "string" then
+    return false
+  end
+  if getmetatable(argument) == "symbol" and argument ~= symbol("...") then
+    return false
+  end
+  -- symbol("...") and function calls are variadic arguments.
+  return true
+end
+
+--- Quick way to define a variadic compiler function
+local function variadic(f, step, initial, prefix, suffix)
+  return function(block, stream, ...)
+    local last = select("#", ...) > 0 and select(-1, ...)
+    if not last then
+      return initial
+    elseif not is_variadic(last) then
+      return f(block, stream, {...})
+    else
+      local var = declare(block)
+      local literals = slice({...}, 1, -1)
+      assign(block, var,
+        #literals > 0 and f(block, stream, literals)
+        or initial)
+      if prefix then
+        table.insert(block, prefix(var))
+      end
+      local vararg = compile(block, stream, last)
+      local i = declare(block)
+      local v = declare(block)
+      table.insert(block, "for "..i..", "..v.." in next, {"..vararg.."} do")
+      table.insert(block, var.." = "..step(var, v))
+      table.insert(block, "end")
+      if suffix then
+        table.insert(block, suffix(var))
+      end
+      return var
+    end
+  end
+end
+
+macro = {}
+
+function macroexpand(obj)
   if getmetatable(obj) ~= list then
     return obj
   end
@@ -169,19 +230,6 @@ local function macroexpand(obj)
     form = macroexpand(orig)
   until orig  == form
   return orig
-end
-
-local function declare(block)
-  local reference = "_var" .. #block
-  table.insert(block, "local " .. reference)
-  return reference
-end
-
-local function assign(block, name, value)
-  if value ~= nil and value ~= "" then
-    table.insert(block, name.."="..tostring(value))
-  end
-  return name
 end
 
 local function compile_comparison(operator, block, stream, ...)
@@ -208,82 +256,74 @@ local compile_less_than_equals = bind(compile_comparison, "<=")
 local compile_greater_than = bind(compile_comparison, ">")
 local compile_greater_than_equals = bind(compile_comparison, ">=")
 
-local function compile_and(block, stream, ...)
-  if last({...}) == symbol("...") then
-    local literals = slice({...}, 1, -1)
-    local first = ""
-    if #literals > 0 then
-       first = map(bind(compile, block, stream), literals):concat(" and ")..","
-    end
-    return ("("..hash("and").."("..first.."...))")
-  end
-  return "("..map(bind(compile, block, stream), {...}):concat(" and ")..")"
-end
-
 local function compile_not(block, stream, obj)
   return "(not " .. compile(block, stream, obj) .. ")"
 end
 
-local function compile_or(block, stream, ...)
-  if last({...}) == symbol("...") then
-    local literals = slice({...}, 1, -1)
-    local first = ""
-    if #literals > 0 then
-       first = map(bind(compile, block, stream), literals):concat(" or ")..","
-    end
-    return ("("..hash("or").."("..first.."...))")
-  end
-  return "("..map(bind(compile, block, stream), {...}):concat(" or ")..")"
-end
 
-local function compile_multiply(block, stream, ...)
-  if select("#", ...) == 1 and ... == symbol("...") then
-    return "(".. hash("*").."(...))"
-  end
-  return "("..map(bind(compile, block, stream), {...}):concat(" * ")..")"
-end
+local compile_and = variadic(
+  function(block, stream, parameters)
+    return list.concat(map(bind(compile, block, stream), parameters), " and ")
+  end,
+  function(reference, value)
+    return reference .. " and " .. value
+  end, "true",
+  function(var) return "if "..var.." then" end,
+  function(var) return "end" end)
 
-local function compile_add(block, stream, ...)
-  if last({...}) == symbol("...") then
-    local literals = slice({...}, 1, -1)
-    local first = ""
-    if #literals > 0 then
-       first = map(bind(compile, block, stream), literals):concat(" + ")..","
-    end
-    return ("("..hash("+").."("..first.."...))")
-  end
-  return "("..map(bind(compile, block, stream), false, ...):concat(" + ")..")"
-end
+local compile_or = variadic(
+  function(block, stream, parameters)
+    return list.concat(map(bind(compile, block, stream), parameters), " or ")
+  end,
+  function(reference, value)
+    return reference .. " or " .. value
+  end, "false")
 
-local function compile_subtract(block, stream, ...)
-  if last({...}) == symbol("...") then
-    local literals = slice({...}, 1, -1)
-    local first = ""
-    if #literals > 0 then
-       first = map(bind(compile, block, stream), literals):concat(" - ")..","
-    end
-    return ("("..hash("-").."("..first.."...))")
-  end
-  if select("#", ...) == 1 then
-    return "(-"..compile(block, stream, ...)..")"
-  end
-  return "("..map(bind(compile, block, stream), {...}):concat(" - ")..")"
-end
+local compile_multiply = variadic(
+  function(block, stream, parameters)
+    return list.concat(map(bind(compile, block, stream), parameters), " * ")
+  end,
+  function(reference, value)
+    return reference .. " * " .. value
+  end, "1")
 
-local function compile_divide(block, stream, ...)
-  if last({...}) == symbol("...") then
-    local literals = slice({...}, 1, -1)
-    local first = ""
-    if #literals > 0 then
-       first = map(bind(compile, block, stream), literals):concat(" / ")..","
+local compile_concat = variadic(
+  function(block, stream, parameters)
+    return list.concat(map(bind(compile, block, stream), parameters), " .. ")
+  end,
+  function(reference, value)
+    return reference .. " .. " .. value
+  end, "\"\"")
+
+local compile_add = variadic(
+  function(block, stream, parameters)
+    return list.concat(map(bind(compile, block, stream), parameters), " + ")
+  end,
+  function(reference, value)
+    return reference .. " + " .. value
+  end, "0")
+
+local compile_divide = variadic(
+  function(block, stream, parameters)
+    if #parameters == 1 then
+      return "(1 / ("..compile(block, stream, parameters[1]).."))"
     end
-    return ("("..hash("/").."("..first.."...))")
-  end
-  if select("#", ...) == 1 then
-    return "(1/("..compile(block, stream, ...).."))"
-  end
-  return "("..map(bind(compile, block, stream), {...}):concat(" / ")..")"
-end
+    return list.concat(map(bind(compile, block, stream), parameters), " / ")
+  end,
+  function(reference, value)
+    return reference .. " / " .. value
+  end, "1")
+
+local compile_subtract = variadic(
+  function(block, stream, parameters)
+    if #parameters == 1 then
+      return "(-"..compile(block, stream, parameters[1])..")"
+    end
+    return list.concat(map(bind(compile, block, stream), parameters), " - ")
+  end,
+  function(reference, value)
+    return reference .. " - " .. value
+  end, "0")
 
 local function compile_table_attribute(block, stream, attribute, parent, value)
   local reference = compile(block, stream, parent) .. "[" .. 
@@ -354,6 +394,7 @@ local function compile_quote(block, stream, form)
   else
     return _C[hash("table-quote")](block, stream, form)
   end
+  error("quote error ".. tostring(form))
 end
 
 local function compile_quasiquote(block, stream, form)
@@ -378,7 +419,7 @@ local function compile_cond(block, stream, ...)
   local reference = declare(block)
   local uid = tostring(hash(reference))
   insert("do")
-  map(
+  foreach(
     function(parameter, index)
       local is_condition = index % 2 == 1 and index ~= count
       local expression = compile(block, stream, parameter)
@@ -465,7 +506,7 @@ local function compile_lambda(block, stream, arguments, ...)
   return "(" .. table.concat(src, "\n") .. ")"
 end
 
-local eval
+local eval;
 local function compile_defcompiler(block, stream, name, arguments, ...)
   local reference = "_C[hash(\""..show(name).."\")]"
   local src = {}
@@ -481,15 +522,15 @@ local function compile_defcompiler(block, stream, name, arguments, ...)
 end
 
 local function compile_car(block, stream, form)
-  return "("..compile(block, stream, form) .. "[1])"
+  return "(("..compile(block, stream, form) .. ")[1])"
 end
 
 local function compile_cdr(block, stream, form)
-  return "("..compile(block, stream, form) .. "[2])"
+  return "(("..compile(block, stream, form) .. ")[2])"
 end
 
 local function compile_cadr(block, stream, form)
-  return "("..compile(block, stream, form) .. "[2][1])"
+  return "(("..compile(block, stream, form) .. ")[2][1])"
 end
 
 local function compile_let(block, stream, vars, ...)
@@ -530,7 +571,7 @@ end
 
 local function build(stream)
   local src = {
-    "require(\'core\').import(\'core\')"
+    "require(" .. module_path .. "\'core\').import(\'core\')"
   }
   local reference = declare(src)
   local ok, obj
@@ -553,13 +594,13 @@ end
 
 local compiler
 
-eval = function (obj, stream, env, sandbox)
-   sandbox = sandbox or _G
+eval = function (obj, stream, env, G)
+  G = G or _G
   -- Include the following into the `core` library. The `core` library is
   -- automatically imported into _G in all compiled programs.
   -- See `compiler.build`.
   local core = {
-    import = require("import"),
+    import = require(module_path .. "import"),
     compile = compile,
     compiler = compiler,
     hash = hash,
@@ -582,10 +623,10 @@ eval = function (obj, stream, env, sandbox)
     stream=reader.tofile(show(obj))
   end
   local reference = compile(block, stream, obj, _R.position(obj))
-
+  
   local code = table.concat(block, "\n") .. "\nreturn ".. reference
   local f, err = load(code, code, nil, setmetatable(env or {},
-      {__newindex=sandbox, __index = setmetatable(core, {__index=sandbox})}))
+      {__newindex=G, __index = setmetatable(core, {__index=G})}))
   if f then
     local objs, count = pack(pcall(f))
     local ok = table.remove(objs, 1)
@@ -615,6 +656,7 @@ _C = {
   [hash("and")] = compile_and,
   [hash("or")] = compile_or,
   [hash("not")] = compile_not,
+  [hash("..")] = compile_concat,
   [hash("*")] = compile_multiply,
   [hash("+")] = compile_add,
   [hash("-")] = compile_subtract,
@@ -645,26 +687,18 @@ end
 _D['.'] = reader.read_execute
 
 
-local stream = reader.tofile([[
-  (defun + (a ...)
-    (if (> (select "#" ...) 0) (let (op +) (+ a (op ...))) a))
-  (defun - (a ...)
-    (if (> (select "#" ...) 0) (let (op -) (- a (op ...))) -a))
-  (defun * (a ...)
-    (if (> (select "#" ...) 0) (let (op *) (* a (op ...))) a))
-  (defun / (a ...)
-    (if (> (select "#" ...) 0) (let (op /) (/ a (op ...))) (/ a)))
-  (defun or (a ...)
-    (if (> (select "#" ...) 0) (let (op or) (or a (op ...))) a))
-  (defun and (a ...)
-    (if (> (select "#" ...) 0) (let (op and) (and a (op ...))) a))
+local src = [[
+  (defun + (...) (+ ...))
+  (defun - (...) (- ...))
+  (defun * (...) (- ...))
+  (defun / (...) (- ...))
+  (defun and (...) (- ...))
+  (defun or (...) (- ...))
   (defun not (a) (not a))
   (defun car (a) (car a))
   (defun cdr (a) (cdr a))
   (defun # (a) (# a))
-
-  (defun .. (...)
-    ((.concat list) (map tostring (pack ...)) ""))
+  (defun .. (...) (.. ...))
 
   (defcompiler chunk (block stream _block vars ...)
     ; A small DSL for defining compilers.
@@ -696,15 +730,6 @@ local stream = reader.tofile([[
               (add (hash obj)))))
         (pack ...))
         (or (and @vars (car @vars)) nil)))
-
-  (defcompiler .. (block stream ...)
-    (chunk block (return)
-      return "=(" (@placeholder (map (lambda (obj)
-        (chunk block ()
-          (@value (compile block stream obj))
-          "(" @value ")"
-          "..")) (pack ...)))
-      "\"\"" ")"))
 
   (defcompiler while (block stream condition ...)
     (chunk block (return)
@@ -762,9 +787,9 @@ local stream = reader.tofile([[
           "local" var1 "=" @fn "(" var1 ")"
           "table.insert(" return "," var1 ")"
       "\nend"))
-]])
+]]
 
-compiler = {
+local compiler = {
   chunk = chunk,
   eval = eval,
   compile_parameters = compile_parameters,
@@ -804,28 +829,44 @@ compiler = {
   compile_let = compile_let,
 }
 
-local sandbox = {
-   table = table,
-   print = print,
-   tostring = tostring,
-   type = type,
-   getmetatable = getmetatable,
-}
-
-local ok, form
-repeat
-  ok, form = pcall(reader.read, stream)
-  if ok then
-    eval(form, stream, {
-      assign = assign,
-      declare = declare,
-      _C = _C,
-    }, sandbox)
-  end
-until not ok
-
-if getmetatable(form) ~= reader.EOFException then
-  error(form)
+--- Returns the minimal environment required to bootstrap l2l.
+local function environment()
+  return {
+    table = table,
+    print = print,
+    tostring = tostring,
+    type = type,
+    getmetatable = getmetatable,
+    next = next,
+    symbol = symbol,
+    _C = _C
+  }
 end
 
+--- Modifies the given environment and bootstrap l2l on it.
+-- The given `G` argument must have all elements returned by a table returned
+-- by `minimal()`. For example, bootstrap(environment()).
+-- @G environment table
+-- @return environment table
+local function bootstrap(G)
+  local stream = reader.tofile(src)
+  local ok, form
+  repeat
+    ok, obj = pcall(reader.read, stream)
+    if ok then
+      eval(obj, stream, {
+        assign = assign,
+        declare = declare,
+        _C = _C,
+      }, G)
+    end
+  until not ok
+  if getmetatable(obj) ~= reader.EOFException then
+    error(obj)
+  end
+  return G
+end
+
+compiler.environment = environment
+compiler.bootstrap = bootstrap
 return compiler
