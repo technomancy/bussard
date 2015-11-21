@@ -60,41 +60,6 @@ local portal_cleared = function(ship, portal_body)
    return visa, "no visa to " .. target_gov .. "; please visit station embassy."
 end
 
-local sandbox = function(ship)
-   local sb = {
-      buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
-      buy_upgrade = lume.fn(services.buy_upgrade, ship),
-      sell_upgrade = lume.fn(services.sell_upgrade, ship),
-      upgrade_help = ship.api.help.get,
-      buy_visa = lume.fn(services.buy_visa, ship),
-      list_visas = lume.fn(services.list_visas, ship),
-      refuel = lume.fn(services.refuel, ship, ship.target),
-      cargo_transfer = lume.fn(services.cargo_transfer, ship.target, ship),
-      scp = lume.fn(scp, ship),
-      station = utils.readonly_proxy(ship.target),
-      ship = ship.api,
-      distance = lume.fn(utils.distance, ship, ship.target),
-      os = {time = lume.fn(utils.time, ship)},
-      accept_mission = lume.fn(mission.accept, ship),
-      set_prompt = function(p) ship.api.repl.prompt = p end,
-   }
-   if(ship.target and ship.target.portal) then
-      local target = ship.target
-      sb.portal_target = ship.target.portal
-      sb.trip_cleared = lume.fn(portal_cleared, ship, target)
-      sb.set_beam = function(n)
-         target.beam_count = (n * 9) / ship.portal_time
-      end
-      sb.portal_activate = function() ship:enter(target.portal, true) end
-      sb.draw_power = function(power)
-         assert(ship.battery - power >= 0, "Insufficient power.")
-         ship.portal_target = target
-         ship.battery = ship.battery - power
-      end
-   end
-   return lume.merge(utils.sandbox, sb)
-end
-
 local disconnect = function(ship)
    ship.api.repl.read = nil
    ship.api.repl.prompt = nil
@@ -112,6 +77,45 @@ local logout = function(name)
       end
       sessions[name] = nil
    end
+end
+
+local sandbox = function(ship)
+   local target = ship.target
+   local sb = {
+      buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
+      buy_upgrade = lume.fn(services.buy_upgrade, ship),
+      sell_upgrade = lume.fn(services.sell_upgrade, ship),
+      upgrade_help = ship.api.help.get,
+      buy_visa = lume.fn(services.buy_visa, ship),
+      list_visas = lume.fn(services.list_visas, ship),
+      refuel = lume.fn(services.refuel, ship, ship.target),
+      cargo_transfer = lume.fn(services.cargo_transfer, ship.target, ship),
+      scp = lume.fn(scp, ship),
+      station = utils.readonly_proxy(ship.target),
+      ship = ship.api,
+      distance = lume.fn(utils.distance, ship, ship.target),
+      os = {time = lume.fn(utils.time, ship)},
+      accept_mission = lume.fn(mission.accept, ship),
+      set_prompt = function(p) ship.api.repl.prompt = p end,
+      disconnect = function()
+         disconnect(ship)
+         logout(target.name)
+      end
+   }
+   if(ship.target and ship.target.portal) then
+      sb.portal_target = ship.target.portal
+      sb.trip_cleared = lume.fn(portal_cleared, ship, target)
+      sb.set_beams = function(n)
+         target.beam_count = ((n or 0) * 9) / ship.portal_time
+      end
+      sb.portal_activate = function() ship:enter(target.portal, true) end
+      sb.draw_power = function(power)
+         assert(ship.battery - power >= 0, "Insufficient power.")
+         ship.portal_target = target
+         ship.battery = ship.battery - power
+      end
+   end
+   return lume.merge(utils.sandbox, sb)
 end
 
 local send_input = function(ship, input)
