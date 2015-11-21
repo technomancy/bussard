@@ -7,7 +7,7 @@ local id_for = function(p)
    return tostring(p):match(": 0x(.+)")
 end
 
-local function repl(fs, env, sandbox)
+local function repl(_, env, sandbox)
    local print, io = (sandbox.print or print), (sandbox.io or io)
    sandbox.set_prompt(">> ")
    while true do
@@ -30,23 +30,23 @@ local function repl(fs, env, sandbox)
       end
       if complete_form then
          local position = stream:seek("cur")
-         local _ok, _form = pcall(reader.read, stream)
+         local _, _form = pcall(reader.read, stream)
          if getmetatable(_form) ~= reader.EOFException then
             stream:seek("set", position)
             print("Unexpected input: "..stream:read("*all*"))
          else
-            local ok, result = pcall(compiler.eval, form, env, sandbox)
+            local _, result = pcall(compiler.eval, form, env, sandbox)
             print("-> " .. tostring(result))
          end
       end
    end
 end
 
-local run = function(fs, env, sandbox, code)
+local run = function(_, env, sandbox, code)
    local stream = reader.tofile(code)
-   complete_form, form = pcall(reader.read, stream, true)
+   local complete_form, form = pcall(reader.read, stream, true)
    if not complete_form then sandbox.print("Incomplete code.") return end
-   local ok, result = pcall(compiler.eval, form, nil, env, sandbox)
+   local _, result = pcall(compiler.eval, form, nil, env, sandbox)
    return result
 end
 
@@ -62,6 +62,7 @@ return {
          return {USER = user, LOGIN = portal_rc}
       end,
       spawn = function(fs, env, sandbox)
+         local co
          if(sandbox.portal_target and env.USER ~= "root") then
             co = coroutine.create(lume.fn(run, fs, env, sandbox, portal_rc))
          else

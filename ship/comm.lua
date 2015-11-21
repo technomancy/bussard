@@ -167,8 +167,8 @@ end
 local lisp_login = function(fs, env, ship)
    local buffer = {}
    local max_buffer_size = 1024
-   local sandbox = sandbox(ship)
-   local write = lume.fn(sandbox_out, ship, ship.target.name)
+   local box = sandbox(ship)
+   local write = ship.api.repl.write
    env.IN = function(...)
       local arg = {...}
       if(#arg == 0 or arg[1] == "*line*") then
@@ -183,17 +183,10 @@ local lisp_login = function(fs, env, ship)
          end
       end
    end
-   sandbox.io = sandbox.io or { read = env.IN, write = write }
-   sandbox.print = function(...)
-      local output = {...}
-      if(output[1]) then
-         write(tostring(...) .. "\n")
-      else
-         write(nil)
-      end
-   end
+   box.io = box.io or { read = env.IN, write = write }
+   box.print = function(...) write(lume.map({...}, tostring)) end
 
-   ship.target.os.shell.spawn(fs, env, sandbox)
+   ship.target.os.shell.spawn(fs, env, box)
 end
 
 

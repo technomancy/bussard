@@ -2,7 +2,6 @@ local utils = require("utils")
 local news = require("news")
 
 local filesystem_overlays = require("data.filesystems")
-local portal_rc = love.filesystem.read("data/portal_rc.lua")
 local portal_motd = "Connected to portal, checking for clearance..."
 
 local seed = function(os, body_name)
