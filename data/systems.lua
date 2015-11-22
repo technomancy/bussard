@@ -145,7 +145,7 @@ return {
                   image_name="mercury",
                   name="Mercury"},
                  {r=14000, mass=300,
-                  image_name="venus",
+                  image_name="venus", os=lisp,
                   name="Venus"},
                  {r=20000, mass=400,
                   image_name="earth",
