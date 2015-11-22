@@ -184,7 +184,7 @@ local lisp_login = function(fs, env, ship)
       end
    end
    box.io = box.io or { read = env.IN, write = write }
-   box.print = function(...) write(lume.map({...}, tostring)) end
+   box.print = function(...) write(unpack(lume.map({...}, tostring))) write("\n") end
 
    ship.target.os.shell.spawn(fs, env, box)
 end
