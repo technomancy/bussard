@@ -119,7 +119,7 @@ return {
    end,
 
    seed_cargo = function(b)
-      if(not b.os or b.portal) then return end
+      if(not b.os or b.os.name ~= "orb") then return end
       local equipment_factor = (math.log(b.remote / 2) + 4) *
          (3 / (b.industry + b.tech)) + 0.5
 

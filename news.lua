@@ -21,6 +21,7 @@ end
 
 return {
    seed = function(ship, b, fs)
+      if(b.os.name ~= "orb") then return end
       local groups = love.filesystem.getDirectoryItems("data/news")
       b.os.fs.mkdir(fs, "/usr/news")
       for _,group in ipairs(groups) do
