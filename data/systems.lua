@@ -25,8 +25,6 @@ local _ = {r=0, mass=0,
 -- pop
 -- upgrades
 
--- TODO: more uninhabited planets (9, 15)
-
 return {
    -- Tana
    ["Tana"] =
@@ -111,6 +109,9 @@ return {
            agri=0, mineral=2,
            upgrades={"fuel_tank"},
           },
+          {r=12000, mass=520,
+           image_name="planet-9",
+           name="Malong",},
           {name = "Portal: Tana",
            image_name="portal-1",
            r=25000, mass=60, portal="Tana", os=lisp},
@@ -245,6 +246,8 @@ return {
                       agri=4, mineral=3,
                       upgrades={"cargo_bay", "fuel_charger"},
                      },
+                     {r=42000, mass=440,
+                      image_name="planet-15", name="Ipah"},
                      {name = "Portal: Ross",
                       image_name="portal-1",
                       r=20000, mass=60, portal="Ross", os=lisp},
@@ -361,12 +364,7 @@ return {
                         },
                         {r=30000, mass=440,
                          image_name = "shaber7",
-                         name="Changlun", os=orb,
-
-                         industry=3,tech=6,
-                         remote=4, pop=6,
-                         agri=6, mineral=4,
-                         upgrades={"cargo_bay", "fuel_tank"},
+                         name="Changlun",
                         },
                         {name = "Portal: Bohk",
                          image_name="portal-1",
@@ -438,7 +436,7 @@ return {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                    image_name="sun",
                    name="Yueh 674", fixed=true},
-                  {r=12000, mass=350, asteroids=4,
+                  {r=14000, mass=350, asteroids=4,
                    image_name="shaber8",
                    name="Yueh Prime", os=lisp,
                    industry=7,tech=8,
@@ -446,7 +444,7 @@ return {
                    agri=3, mineral=3,
                    upgrades={}, -- TODO
                   },
-                  {r=18000, mass=100, station=true,
+                  {r=19000, mass=100, station=true,
                    image_name="station-green",
                    name="Da Kau Station", os=lisp,
                    industry=6,tech=8,
@@ -454,6 +452,8 @@ return {
                    agri=0, mineral=3,
                    upgrades={}, -- TODO
                   },
+                  {r=9000, mass=220,
+                   image_name="planet-3", name="Ha'nur"},
                   {name = "Portal: Bohk",
                    image_name="portal-2", interportal=true, os=lisp,
                    r=22000, mass=60, portal="Bohk"},
@@ -509,6 +509,8 @@ return {
                             agri=3, mineral=4,
                             upgrades={},
                            },
+                           {r=10000, mass=200,
+                            image_name="planet-3", name="Sav'nakat"},
                            {name = "Portal: Wolf 1481",
                             image_name="portal-1", os=lisp,
                             r=22000, mass=60, portal="Wolf 1481"},
