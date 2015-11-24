@@ -446,7 +446,7 @@ return {
                   },
                   {r=19000, mass=100, station=true,
                    image_name="station-green",
-                   name="Da Kau Station", os=lisp,
+                   name="Da Kau Station", os=orb,
                    industry=6,tech=8,
                    remote=4, pop=4,
                    agri=0, mineral=3,

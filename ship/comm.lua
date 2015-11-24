@@ -57,7 +57,8 @@ local portal_cleared = function(ship, portal_body)
    if(gov.treaties and gov.treaties[target_gov] and
       gov.treaties[target_gov][ship.flag]) then return true end
    local visa = ship.visas[target_gov] and ship.visas[target_gov] > now
-   return visa, "no visa to " .. target_gov .. "; please visit station embassy."
+   return true
+   -- return visa, "no visa to " .. target_gov .. "; please visit station embassy."
 end
 
 local disconnect = function(ship)
