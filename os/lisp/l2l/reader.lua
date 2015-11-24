@@ -172,7 +172,7 @@ local function read_right_bracket(stream, byte)
   raise(UnmatchedRightBracketException(stream))
 end
 
-local function read_string(stream, byte)
+local function read_string(stream)
   local str, byte = "", ""
   local escaped = false
   repeat
@@ -242,7 +242,7 @@ local function read_vector(stream, byte)
         rightbracket = true
       end,
       [EOFException] = function(Exception)
-        raise(UnmatchedLeftBracketException(stream, position))
+        raise(UnmatchedLeftBracketException(stream))
       end
     }))
     for i=1, count, 2 do
@@ -265,7 +265,7 @@ local function read_table(stream, byte)
         rightbrace = true
       end,
       [EOFException] = function(Exception)
-        raise(UnmatchedLeftBraceException(stream, position))
+        raise(UnmatchedLeftBraceException(stream))
       end
     }))
     for i=1, count, 2 do
@@ -324,23 +324,33 @@ local function read_list(stream, byte)
   end)
 end
 
-local function read_table_quote(stream, byte)
+local function read_table_quote(stream)
   return pair({symbol('table-quote'), list({read(stream)})})
 end
 
-local function read_quote(stream, byte)
+local function read_quote(stream)
   return pair({symbol('quote'), list({read(stream)})})
 end
 
-local function read_quasiquote(stream, byte)
+local function read_quasiquote(stream)
   return pair({symbol('quasiquote'), list({read(stream)})})
 end
 
-local function read_quasiquote_eval(stream, byte)
+local function read_quasiquote_eval(stream)
   return pair({symbol('quasiquote-eval'), list({read(stream)})})
 end
 
-local function read_dispatch_macro(stream, byte)
+local function read_negative(stream)
+  local byte = stream:read(1)
+  stream:seek("cur", -1)
+  if not byte:match(" ") then
+    return pair({symbol('-'), list({read(stream)})})
+  else
+    return symbol('-')
+  end
+end
+
+local function read_dispatch_macro(stream)
   local byte = stream:read(1)
   if not byte then
     raise(EOFException(stream:seek("cur", -1) and stream))
@@ -357,7 +367,7 @@ end
 
 -- Dispatch character table. See `read_dispatch_macro`.
 _D = {
-  ['\\'] = read_character,
+--  ['\\'] = read_character,
   ['\''] = read_table_quote,
   [' '] = read_hash_literal
 }

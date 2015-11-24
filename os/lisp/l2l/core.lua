@@ -2,6 +2,11 @@
 
 local module_path = (... or ""):gsub('core$', '')
 
+if debug.getinfo(3) == nil then
+  -- if core.lua is the main script, module_path is "".
+  module_path = ""
+end
+
 require(module_path .. "compat")
 
 local reader = require(module_path .. "reader")
@@ -11,10 +16,6 @@ local exception = require(module_path .. "exception")
 local itertools = require(module_path .. "itertools")
 
 local hash = compiler.hash
-
-setmetatable(_G, {__index=function(self, key)
-  error("undefined '"..key.."'")
-end})
 
 _PROMPT = "> "
 
@@ -57,7 +58,7 @@ local function repl()
         stream:seek("set", position)
         print("Unexpected input: "..stream:read("*all*"))
       else
-        local ok, result = pcall(compiler.eval, form)
+        local _, result = pcall(compiler.eval, form)
         print("=", result)
       end
     end

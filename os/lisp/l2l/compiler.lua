@@ -14,7 +14,7 @@ local FunctionArgumentException =
     return "Argument is not a ".. (tostring(...) or "symbol")
   end)
 
-local list, pair, last = itertools.list, itertools.pair, itertools.last
+local list, pair = itertools.list, itertools.pair
 local slice = itertools.slice
 local map, fold, zip = itertools.map, itertools.fold, itertools.zip
 local foreach = itertools.foreach
@@ -23,11 +23,18 @@ local pack = itertools.pack
 local show = itertools.show
 local raise = exception.raise
 
+local function with_C(newC, f, ...)
+  local C = _C
+  _G._C = setmetatable(newC, {__index = C})
+  local objs, count = pack(f(...))
+  _G._C = C
+  return table.unpack(objs, 1, count)
+end
 
 -- Keyword table. All symbols that match those in this table will be compiled
 -- down into Lua as a symbol that is valid in Lua. Uniquess probable but not
 -- guaranteed. See `hash`.
-_K ={
+local _K ={
   ["and"] = true, 
   ["break"] = true, 
   ["do"] = true, 
@@ -47,7 +54,6 @@ _K ={
   ["until"] = true, 
   ["while"] = true
 }
-
 
 local function hash(str)
   if tostring(str) == "..." then
@@ -172,7 +178,7 @@ local function is_variadic(argument)
   if type(argument) == "number" or type(argument) == "string" then
     return false
   end
-  if getmetatable(argument) == "symbol" and argument ~= symbol("...") then
+  if getmetatable(argument) == symbol and argument ~= symbol("...") then
     return false
   end
   -- symbol("...") and function calls are variadic arguments.
@@ -180,6 +186,9 @@ local function is_variadic(argument)
 end
 
 --- Quick way to define a variadic compiler function
+-- prefix and suffix are placed before and after each execution for
+-- each variadic argument. E.g. can be used to implement stopping evaluation
+-- in an AND operator.
 local function variadic(f, step, initial, prefix, suffix)
   return function(block, stream, ...)
     local last = select("#", ...) > 0 and select(-1, ...)
@@ -210,9 +219,9 @@ local function variadic(f, step, initial, prefix, suffix)
   end
 end
 
-macro = {}
+local macro = {}
 
-function macroexpand(obj)
+local function macroexpand(obj)
   if getmetatable(obj) ~= list then
     return obj
   end
@@ -305,25 +314,19 @@ local compile_add = variadic(
 
 local compile_divide = variadic(
   function(block, stream, parameters)
-    if #parameters == 1 then
-      return "(1 / ("..compile(block, stream, parameters[1]).."))"
-    end
     return list.concat(map(bind(compile, block, stream), parameters), " / ")
   end,
   function(reference, value)
-    return reference .. " / " .. value
-  end, "1")
+    return reference .." and "..reference.." / "..value .." or "..value
+  end, "nil")
 
 local compile_subtract = variadic(
-  function(block, stream, parameters)
-    if #parameters == 1 then
-      return "("..compile(block, stream, parameters[1])..")"
-    end
+  function(block, stream, parameters, is_unary)
     return list.concat(map(bind(compile, block, stream), parameters), " - ")
   end,
   function(reference, value)
-    return reference .. " - " .. value
-  end, "0")
+    return reference .." and "..reference.." - " ..value .." or "..value
+  end, "nil")
 
 local function compile_table_attribute(block, stream, attribute, parent, value)
   local reference = compile(block, stream, parent) .. "[" .. 
@@ -350,8 +353,8 @@ end
 local function compile_set(block, stream, name, value)
   if getmetatable(name) == list then
     local names = {}
-    for i, name in ipairs(name) do
-      table.insert(names, compile(block, stream, name))
+    for i, n in ipairs(name) do
+      table.insert(names, compile(block, stream, n))
       table.insert(block, table.concat(names, ", ") .. "=" .. compile(block, stream, value))
     end
     return table.unpack(names)
@@ -394,7 +397,6 @@ local function compile_quote(block, stream, form)
   else
     return _C[hash("table-quote")](block, stream, form)
   end
-  error("quote error ".. tostring(form))
 end
 
 local function compile_quasiquote(block, stream, form)
@@ -486,7 +488,7 @@ local function defun(block, stream, name, arguments, ...)
   table.insert(block, "function "..name.."("..arguments..")")
   local body = {}
   local reference = declare(body)
-  local count = select("#", ...)
+  count = select("#", ...)
   for i=1, count-1 do
     assign(body, reference, compile(body, stream, select(i, ...)))
   end
@@ -499,26 +501,10 @@ local function defun(block, stream, name, arguments, ...)
   return name
 end
 
-
 local function compile_lambda(block, stream, arguments, ...)
   local src = {}
   defun(src, stream, nil, arguments, ...)
   return "(" .. table.concat(src, "\n") .. ")"
-end
-
-local eval;
-local function compile_defcompiler(block, stream, name, arguments, ...)
-  local reference = "_C[hash(\""..show(name).."\")]"
-  local src = {}
-  -- Serialize the compiler into the source code.
-  defun(src, stream, nil, arguments, ...)
-  table.insert(block, reference.."="..table.concat(src, "\n"))
-  -- Load the compiler immediately.
-  _C[hash(name)] = eval(list({symbol("lambda"), arguments, ...}), stream, {
-    hash = hash,
-    declare = declare
-  })
-  return reference
 end
 
 local function compile_car(block, stream, form)
@@ -569,6 +555,22 @@ local function compile_defun(block, stream, name, arguments, ...)
   return defun(block, stream, name, arguments, ...)
 end
 
+local eval
+
+local function compile_defcompiler(block, stream, name, arguments, ...)
+  local reference = "_C[hash(\""..show(name).."\")]"
+  local src = {}
+  -- Serialize the compiler into the source code.
+  defun(src, stream, nil, arguments, ...)
+  table.insert(block, reference.."="..table.concat(src, "\n"))
+  -- Load the compiler immediately.
+  _C[hash(name)] = eval(list({symbol("lambda"), arguments, ...}), stream, {
+    hash = hash,
+    declare = declare
+  })
+  return reference
+end
+
 local function build(stream)
   local src = {
     "require(" .. module_path .. "\'core\').import(\'core\')"
@@ -589,6 +591,16 @@ local function build(stream)
   if #src > 0 then
     src[#src+1] = "return " .. reference
   end
+
+  -- For each core method used in the code, declare it as a local variable
+  -- as an optimizaiton.
+  local code = table.concat(src, "\n")
+  for k, _ in pairs(require(module_path.."core")) do
+    if code:match("%f[%a]"..k.."%f[%A]") then
+      table.insert(src, 2, "local "..k.." = ".. k)
+    end
+  end
+
   return table.concat(src, "\n")
 end
 
@@ -622,16 +634,23 @@ eval = function (obj, stream, env, G)
   if stream == nil then
     stream=reader.tofile(show(obj))
   end
-  local reference = compile(block, stream, obj, _R.position(obj))
+
+  local reference
+
+  if G ~= _G then
+    reference = with_C(G._C, compile, block, stream, obj, _R.position(obj))
+  else
+    reference = compile(block, stream, obj, _R.position(obj))
+  end
   
   local code = table.concat(block, "\n") .. "\nreturn ".. reference
+
   local f, err = load(code, code, nil, setmetatable(env or {},
       {__newindex=G, __index = setmetatable(core, {__index=G})}))
   if f then
     local objs, count = pack(pcall(f))
     local ok = table.remove(objs, 1)
     if ok then
-      -- print(code)
       return table.unpack(objs, 1, count - 1)
     else
       -- print(code)
@@ -789,8 +808,7 @@ local src = [[
       "\nend"))
 ]]
 
-local compiler = {
-  chunk = chunk,
+compiler = {
   eval = eval,
   compile_parameters = compile_parameters,
   compile = compile,
@@ -829,8 +847,8 @@ local compiler = {
   compile_let = compile_let,
 }
 
---- Returns the minimal environment required to bootstrap l2l.
-local function environment()
+--- Returns the minimal environment required to bootstrap l2l
+local function _minimal()
   return {
     table = table,
     print = print,
@@ -839,32 +857,41 @@ local function environment()
     getmetatable = getmetatable,
     next = next,
     symbol = symbol,
-    _C = _C
+    _C = setmetatable({}, {__index=_C})
   }
 end
 
 --- Modifies the given environment and bootstrap l2l on it.
 -- The given `G` argument must have all elements returned by a table returned
--- by `minimal()`. For example, bootstrap(environment()).
+-- by `_minimal()`. For example, bootstrap(_minimal()).
 -- @G environment table
 -- @return environment table
 local function bootstrap(G)
+  -- l2l errors when an undefined global variable is accessed.
+  setmetatable(G, {__index=function(self, key)
+    error("undefined '"..key.."'")
+  end})
   local stream = reader.tofile(src)
   local ok, form
   repeat
-    ok, obj = pcall(reader.read, stream)
+    ok, form = pcall(reader.read, stream)
     if ok then
-      eval(obj, stream, {
+      eval(form, stream, {
         assign = assign,
         declare = declare,
         _C = _C,
       }, G)
     end
   until not ok
-  if getmetatable(obj) ~= reader.EOFException then
-    error(obj)
+  if getmetatable(form) ~= reader.EOFException then
+    error(form)
   end
   return G
+end
+
+--- Returns the minimal environment required to bootstrap l2l, and bootstrap.
+local function environment()
+  return bootstrap(_minimal())
 end
 
 compiler.environment = environment
