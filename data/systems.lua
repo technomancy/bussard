@@ -7,6 +7,15 @@ local lisp = require("os.lisp")
 -- medicine
 -- equipment
 
+local _ = {r=0, mass=0,
+ image_name="",
+ name="", os=orb,
+ industry=0, tech=0,
+ remote=0, pop=0,
+ agri=0, mineral=0,
+ upgrades={},
+}
+
 ---- inputs: (1 to 10 scale)
 -- industry
 -- remote
@@ -16,7 +25,7 @@ local lisp = require("os.lisp")
 -- pop
 -- upgrades
 
--- TODO: more uninhabited planets
+-- TODO: more uninhabited planets (9, 15)
 
 return {
    -- Tana
@@ -228,7 +237,7 @@ return {
                       upgrades={"fuel_tank", "fuel_charger"},
                      },
                      {r=37000, mass=200,
-                      image_name="planet-15", -- dark with yellow
+                      image_name="shaber2",
                       name="Kala Lamar", os=orb,
 
                       industry=7,tech=8,
@@ -278,11 +287,11 @@ return {
                   },
                   {name = "Portal: Sol",
                    image_name="portal-2", interportal=true,
-                   r=22000, mass=60, portal="Sol",
+                   r=25000, mass=60, portal="Sol",
                    interportal=true, os=lisp},
                   {name = "Portal: Lalande",
                    image_name="portal-1",
-                   r=22000, mass=60, portal="Lalande", os=lisp}
+                   r=21000, mass=60, portal="Lalande", os=lisp}
                },
    },
 
@@ -303,7 +312,7 @@ return {
                    agri=4, mineral=2,
                    upgrades={"cargo_bay", "engine"},
                   },
-                  {r=22000, mass=100, station=true,
+                  {r=20000, mass=100, station=true,
                    image_name = "station-round",
                    name="Warnabu Station", os=orb,
 
@@ -312,7 +321,7 @@ return {
                    agri=1, mineral=3,
                    upgrades={"cargo_bay", "engine"},
                   },
-                  {r=28000, mass=430,
+                  {r=25000, mass=430,
                    image_name = "planet-10",
                    name="Banga", os=orb,
 
@@ -323,16 +332,16 @@ return {
                   },
                   {name = "Portal: Lalande",
                    image_name="portal-2", interportal=true, os=lisp,
-                   r=22000, mass=60, portal="Lalande",},
+                   r=3000, mass=60, portal="Lalande",},
                   {name = "Portal: New Phobos",
                    image_name="portal-1",
-                   r=22000, mass=60, portal="New Phobos", os=lisp,},
+                   r=32000, mass=60, portal="New Phobos", os=lisp,},
                   {name = "Portal: Mecalle",
                    image_name="portal-1",
-                   r=22000, mass=60, portal="Mecalle", os=lisp},
+                   r=34000, mass=60, portal="Mecalle", os=lisp},
                   {name = "Portal: Yueh",
                    image_name="portal-2", interportal=true,
-                   r=22000, mass=60, portal="Yueh", os=lisp}
+                   r=36000, mass=60, portal="Yueh", os=lisp}
                },
    },
    ["New Phobos"] = {gov="Bohk",
@@ -351,7 +360,7 @@ return {
                          upgrades={"cargo_bay"},
                         },
                         {r=30000, mass=440,
-                         image_name = "planet-9",
+                         image_name = "shaber7",
                          name="Changlun", os=orb,
 
                          industry=3,tech=6,
@@ -397,7 +406,7 @@ return {
                       image_name="sun",
                       name="Katilay 103039", fixed=true},
                      {r=25000, mass=350,
-                      image_name="shaber2", -- red plates
+                      image_name="shaber10",
                       name="Katilay Prime", os=orb,
                       industry=2,tech=1,
                       remote=8, pop=2,
@@ -423,18 +432,26 @@ return {
 
 
    -- Yueh
-   ["Yueh"] = {gov="Yueh", -- GI 674
-               x=4.3, y=-1.3,
+   ["Yueh"] = {gov="Yueh", capital=true, -- GI 674
+               x=4.3, y=-1.3, asteroids=2,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                    image_name="sun",
                    name="Yueh 674", fixed=true},
-                  {r=25000, mass=350,
-                   image_name="planet-10",
-                   name="Yueh Prime", os=orb,
+                  {r=12000, mass=350, asteroids=4,
+                   image_name="shaber8",
+                   name="Yueh Prime", os=lisp,
                    industry=7,tech=8,
                    remote=3, pop=7,
-                   agri=2, mineral=3,
+                   agri=3, mineral=3,
+                   upgrades={}, -- TODO
+                  },
+                  {r=18000, mass=100, station=true,
+                   image_name="station-green",
+                   name="Da Kau Station", os=lisp,
+                   industry=6,tech=8,
+                   remote=4, pop=4,
+                   agri=0, mineral=3,
                    upgrades={}, -- TODO
                   },
                   {name = "Portal: Bohk",
@@ -442,24 +459,40 @@ return {
                    r=22000, mass=60, portal="Bohk"},
                   {name = "Portal: Lalande",
                    image_name="portal-2", interportal=true, os=lisp,
-                   r=22000, mass=60, portal="Lalande"},
+                   r=28000, mass=60, portal="Lalande"},
                   {name = "Portal: Kowlu",
                    image_name="portal-1", os=lisp,
-                   r=22000, mass=60, portal="Kowlu"},
+                   r=32000, mass=60, portal="Kowlu"},
                }, -- Yueh capital
    },
-   ["Kowlu"] = {gov="Yueh", capitol = true, -- GI 693
-                x= 5.2, y=-2.3,
+   ["Kowlu"] = {gov="Yueh", -- GI 693
+                x= 5.2, y=-2.3, asteroids=6,
                 bodies = {
                    {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                     image_name="sun",
                     name="Kowlu 693", fixed=true},
+                   {r=12000, mass=500,
+                    image_name="shaber6",
+                    name="Bata Beng", os=orb,
+                    industry=5, tech=4,
+                    remote=6, pop=4,
+                    agri=7, mineral=5,
+                    upgrades={},
+                   },
+                   {r=17000, mass=300,
+                    image_name="shaber9",
+                    name="Sim Roen", os=orb,
+                    industry=2, tech=3,
+                    remote=5, pop=2,
+                    agri=4, mineral=4,
+                    upgrades={},
+                   },
                    {name = "Portal: Delta Pavonis",
                     image_name="portal-1", os=lisp,
                     r=22000, mass=60, portal="Delta Pavonis"},
                    {name = "Portal: Yueh",
                     image_name="portal-1", os=lisp,
-                    r=22000, mass=60, portal="Yueh"}
+                    r=27000, mass=60, portal="Yueh"}
                 }, -- bustling trade hub
    },
    ["Delta Pavonis"] = {gov="Yueh",
@@ -468,12 +501,20 @@ return {
                            {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                             image_name="sun",
                             name="Delta Pavonis", fixed=true},
+                           {r=17000, mass=300,
+                            image_name="v-surface",
+                            name="Packsi", os=orb,
+                            industry=2, tech=3,
+                            remote=6, pop=2,
+                            agri=3, mineral=4,
+                            upgrades={},
+                           },
                            {name = "Portal: Wolf 1481",
                             image_name="portal-1", os=lisp,
                             r=22000, mass=60, portal="Wolf 1481"},
                            {name = "Portal: Kowlu",
                             image_name="portal-1", os=lisp,
-                            r=22000, mass=60, portal="Kowlu"},
+                            r=25000, mass=60, portal="Kowlu"},
                         }
    },
    ["Wolf 1481"] = {gov="Yueh", -- BD
@@ -485,9 +526,12 @@ return {
                        {r=12000, mass=100, station=true,
                         image_name="station-green",
                         name="Steele Station", os=lisp,},
+                       {name = "Lueng Prabo",
+                        image_name="shaber5",
+                        r=19000, mass=240},
                        {name = "Portal: Delta Pavonis",
                         image_name="portal-1", os=lisp,
-                        r=22000, mass=60, portal="Delta Pavonis"}
+                        r=25000, mass=60, portal="Delta Pavonis"}
                     },
    }, -- location of experimental lisp station
 

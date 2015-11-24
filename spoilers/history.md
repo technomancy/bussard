@@ -157,6 +157,8 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2370 - SS Sagan arrives in Kowlu, colony established
 
+* Garibaldi plots a course out to BD-532
+
 * 2373 - SS Calandria arrives in Katilay, portal to Mecalle
   established, Lalande portal fixed
 

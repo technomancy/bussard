@@ -40,7 +40,7 @@ local proximity_check = function(bodies, max, system_name)
    for _, b in ipairs(bodies) do
       for _, b2 in ipairs(bodies) do
          if(b ~= b2 and (not b2.fixed) and (not b.fixed) and (not b.asteroid) and
-            (not b2.asteroid) and b.r ~= b2.r) then
+            (not b2.asteroid)) then
             local gx, gy = body.gravitate(b, b2.x, b2.y)
             if(math.abs(gx) > max or math.abs(gy) > max) then
                print("prox warning:", system_name, b.name, b2.name, gx, gy)

@@ -210,9 +210,9 @@ portal. Mostly they carry cargo and passengers; occasionally science.
  * Mining captain, served on SS Archimedes
  * Kosaga Shipyards engineer
  * University Students
-   * Ricarad Jinod
+   * Ricarad Jinod: developing more advanced sensor array
 * Sol
- * Traxus researcher
+ * Garibaldi: Traxus researcher, eventually discovers domain injector
 * Yueh
  * Luminous engineers (2 or 3?)
  * University students
