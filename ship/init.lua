@@ -29,7 +29,7 @@ local status_whitelist = {
    "cargo", "cargo_capacity", "solar",
    "engine_strength", "turning_speed",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
-   "portal_range", "portal_time", "flag", "target"
+   "portal_range", "portal_time", "flag", "target", "comm_boost",
 }
 
 local base_stats = {
@@ -77,6 +77,8 @@ local epoch_for = function(year)
 end
 
 local ship = {
+   base_stats = base_stats,
+
    -- ephemeral
    x=0, y=0, dx=0, dy=0, heading = math.pi,
    engine_on = false,
@@ -239,6 +241,16 @@ local ship = {
       end
 
       ship.mass = ship.mass + ship:cargo_mass()
+      if(ship.events["jinod3"]) then
+         for _,b in ipairs(ship.systems["Sol"].bodies) do
+            if(b.name == "Mars") then
+               if(not lume.find(b.upgrades, "comm_boost")) then
+                  table.insert(b.upgrades, "comm_boost")
+                  body.seed_cargo(b, true)
+               end
+            end
+         end
+      end
    end,
 
    cargo_mass = function(ship)

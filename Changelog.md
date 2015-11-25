@@ -1,5 +1,14 @@
 # Bussard changelog: history of user-visible changes
 
+## alpha-6 / ???
+
+* Added Comm Boost and Solar Panel upgrades.
+* Finish adding the rest of the worlds.
+* Offer to save the game in case it crashes.
+* Add lisp OS which runs on portals and some stations.
+* Allow reading manual pages before buying.
+* Add ability to sell upgrades.
+
 ## alpha-5 / 2015-11-16
 
 * Add limited support for glob patterns in shell.

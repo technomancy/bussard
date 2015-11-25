@@ -60,11 +60,35 @@ return {
          end
       end,
    },
+   comm_boost = {
+      stats = { mass = 16 },
+      action = function(ship, on_off)
+         if(on_off == "on") then
+            ship.comm_boost = true
+         elseif(on_off == "off") then
+            ship.comm_boost = false
+         else
+            ship.comm_boost = not ship.comm_boost
+         end
+      end,
+      update = function(ship, dt)
+         local boost_multiplier, power_drain = 4, 8
+         if(ship.comm_boost and ship.battery > (dt * power_drain)) then
+            ship.battery = ship.battery - (dt * power_drain)
+            ship.comm_range = ship.base_stats.comm_range * boost_multiplier
+         elseif(ship.comm_boost) then
+            ship.comm_boost = false
+         else
+            ship.comm_range = ship.base_stats.comm_range
+         end
+      end
+   },
 
    -- purely stat upgrades
    engine = { stats = { engine_power = 512, burn_rate = 4, mass = 64, } },
    cargo_bay = { stats = { cargo_capacity = 64, mass = 12, } },
    fuel_tank = { stats = { fuel_capacity = 128, mass = 32, } },
+   solar_panel = { stats = { solar = 30, mass = 32 }},
 
    passponder = {}, -- placeholder
 }

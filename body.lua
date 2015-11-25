@@ -32,6 +32,8 @@ local base_prices = {
       cargo_bay = 768,
       fuel_tank = 1024,
       fuel_charger = 768,
+      comm_boost = 2048,
+      solar_panel = 712,
    },
 }
 
@@ -118,7 +120,7 @@ return {
       end
    end,
 
-   seed_cargo = function(b)
+   seed_cargo = function(b, no_cargo)
       if(not b.os or b.os.name ~= "orb") then return end
       local equipment_factor = (math.log(b.remote / 2) + 4) *
          (3 / (b.industry + b.tech)) + 0.5
@@ -133,6 +135,8 @@ return {
          b.upgrade_prices[u] = math.floor(base_prices.upgrades[u] *
                                              equipment_factor)
       end
+
+      if(no_cargo) then return end
 
       b.prices = {}
       local price_difference = 1.2 -- should be dynamic?

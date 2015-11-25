@@ -14,6 +14,8 @@ local pages = {
    cargo_bay = "doc/cargo_bay.md",
    fuel_tank = "doc/fuel_tank.md",
    fuel_charger = "doc/fuel_charger.md",
+   solar_panel = "doc/solar_panel.md",
+   comm_boost = "doc/comm_boost.md",
 
    -- TODO: editor manual
 }
