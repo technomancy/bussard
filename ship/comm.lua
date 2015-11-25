@@ -206,6 +206,7 @@ return {
          local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
          local env = ship.target.os.shell.new_env(username)
 
+         env.HOST = body.hostname(ship.target.name)
          env.ROWS = tostring(ship.api.repl.rows)
          env.COLS = tostring(ship.api.repl.cols)
 

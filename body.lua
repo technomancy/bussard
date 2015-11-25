@@ -4,6 +4,10 @@ local news = require("news")
 local filesystem_overlays = require("data.filesystems")
 local portal_motd = "Connected to portal, checking for clearance..."
 
+local hostname = function(body_name)
+   return body_name:lower():gsub(" ", "-")
+end
+
 local seed = function(os, body_name)
    local raw = os.fs.new_raw()
    local proxy = os.fs.proxy(raw, "root", raw)
@@ -199,4 +203,6 @@ return {
    end,
 
    base_prices = base_prices,
+
+   hostname = hostname,
 }
