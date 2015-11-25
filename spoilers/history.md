@@ -103,14 +103,14 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 * 2311 - Yueh scientists independently replicate portal tech
 
 * 2312 - Yueh returns cargo ship SS Oberth to Bohk with portal tech
-  (1.2 pc, 0.7c, 5.5y, γ=1.4), launches colonizer SS Kepler to Delta Pavonis
+  (1.2 pc, 0.7c, 5.5y, γ=1.4), launches colonizer SS Kepler to Kowlu
   (2.4 pc, 0.7c, 11y)
 
 * 2313 - Lalande attacks Yueh, dropping asteroids on them from orbit
 
 * 2314 - Peace between Yueh and Lalande, Yueh becomes independent, but
   under the agreement that Lalande controls all existing portals
-  (except Yueh/Bohk and Yueh/Delta Pavonis) and retains a monopoly on
+  (except Yueh/Bohk and Yueh/Kowlu) and retains a monopoly on
   newly-constructed ones
 
 * 2317 - Bohk, Yueh, and Terrans found Human Worlds League in an
@@ -130,7 +130,7 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 * 2323 - Portal between Ross and Sol operational; also constructed
   without portal ship
 
-* 2323 - SS Kepler arrives in Delta Pavonis, colonizes it
+* 2323 - SS Kepler arrives in Kowlu, colonizes it
 
 * 2330 - Lalande launches SS Pythagoras to Katilay (4 pc, 0.7c, 18y, 12.8ly)
 
@@ -150,17 +150,21 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2362 - Lalande launches SS Calandria from Mecalle to Katilay (2.4 pc, 0.7c, 11y)
 
-* 2366 - Lalande launches SS Sagan colonizer from Delta Pavonis to Kowlu
+* 2363 - Traxus researcher (Garibaldi) begins studying programmatic reality
+
+* 2366 - Lalande launches SS Sagan colonizer from Kowlu to Delta Pavonis
   (0.7 pc, 0.7c, 3.2y)
 
 * 2369 - Lalande/Sol relations improve somewhat
 
-* 2370 - SS Sagan arrives in Kowlu, colony established
+* 2370 - SS Sagan arrives in Delta Pavonis, colony established
 
-* Garibaldi plots a course out to BD-532
+* 2372 - Garibaldi leaves Traxus, plots a course out to LHS 451 (0.6 pc, 0.5c, 2.76y)
 
 * 2373 - SS Calandria arrives in Katilay, portal to Mecalle
   established, Lalande portal fixed
+
+* 2374 - Garibaldi arrives at LHS 451 in order to continue his research
 
 ## Fifth wave: Tana and secret colonies
 
@@ -168,6 +172,10 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2378 - Sol launches colony ships to 3 Tana systems: SS Tyson
   (Luyten), SS Planck (Tana), and SS Rosen (Wolf 294)
+
+* 2385 - Garibaldi writes Domain Injector
+
+* 2387 - Garibaldi leaves LHS 451
 
 * 2395 - Katilay finally joins League
 

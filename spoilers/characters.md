@@ -156,9 +156,9 @@ either planetary colonies or re-appropriated into orbital stations.
 * First Wave: SS Lorentz (Lalande, 0.3c), SS Copernicus (Ross, 0.5c)
 * Second Wave: SS Bradbury (Bohk, 0.6c),
   SS Eratosthenes † (New Phobos, 0.5c), SS Defiant (Yueh, 0.6c)
-* Third Wave: SS Kepler † (Delta Pavonis)
+* Third Wave: SS Kepler † (Kowlu)
 * Fourth Wave: SS Las Casas (Katilay), SS Cherenkov † (Mecalle),
-  SS Sagan (Kowlu)
+  SS Sagan (Delta Pavonis)
 * Fifth Wave: SS Pythagoras (Luyten), SS Planck (Tana),
   SS Rosen (Wolf), SS Archimedes (L 668-21)
 

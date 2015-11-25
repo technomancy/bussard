@@ -2,7 +2,7 @@ local utils = require("utils")
 local orbit_time = 0
 
 return {
-   name="Test sensor on Wolf 294",
+   name="Test sensor on New Phobos",
    id="e5ecc7c8-2959-4976-a123-239319f0b889",
    destinations={"Mars"},
    objectives={"new-phobos-flyby"},

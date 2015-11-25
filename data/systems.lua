@@ -7,13 +7,13 @@ local lisp = require("os.lisp")
 -- medicine
 -- equipment
 
-local _ = {r=0, mass=0,
- image_name="",
- name="", os=orb,
- industry=0, tech=0,
- remote=0, pop=0,
- agri=0, mineral=0,
- upgrades={},
+local _ = { r=0, mass=0,
+            image_name="",
+            name="", os=orb,
+            industry=0, tech=0,
+            remote=0, pop=0,
+            agri=0, mineral=0,
+            upgrades={},
 }
 
 ---- inputs: (1 to 10 scale)
@@ -24,6 +24,14 @@ local _ = {r=0, mass=0,
 -- tech
 -- pop
 -- upgrades
+--   laser
+--   cargo_bay
+--   fuel_tank
+--   engine
+--   solar_panel
+--   fuel_charger
+--   comm_boost (must be unlocked)
+--   map*
 
 return {
    -- Tana
@@ -107,7 +115,7 @@ return {
            industry=6,tech=6,
            remote=5, pop=3,
            agri=0, mineral=2,
-           upgrades={"fuel_tank"},
+           upgrades={"engine", "fuel_tank"},
           },
           {r=12000, mass=520,
            image_name="planet-9",
@@ -118,7 +126,7 @@ return {
           {name = "Portal: Sol",
            image_name="portal-2", interportal=true,
            r=20000, mass=60, portal="Sol", os=lisp},
-      },
+       },
       },
    ["L 668-21"] = -- remote mining system
       {gov="Tana",
@@ -164,7 +172,7 @@ return {
                   industry=9,tech=7,
                   remote=1, pop=9,
                   agri=6, mineral=2,
-                  upgrades={"fuel_tank",},
+                  upgrades={"fuel_tank","engine"},
                  },
                  {r=25000, mass=120,
                   image_name="newton", station=true,
@@ -173,7 +181,7 @@ return {
                   industry=7,tech=9,
                   remote=1, pop=4,
                   agri=0, mineral=4,
-                  upgrades={"fuel_charger"},
+                  upgrades={"fuel_charger", "fuel_tank"},
                  },
                  {r=29000, mass=310,
                   image_name="mars",
@@ -265,7 +273,7 @@ return {
                       r=33000, mass=60, portal="Yueh", os=lisp}},
    },
    ["Ross"] = {gov="Terran",
-               x=0, y=-1.7,
+               x=0, y=-1.7, asteroids=2,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=410000,
                    image_name="sun",
@@ -277,7 +285,7 @@ return {
                    industry=4,tech=6,
                    remote=4, pop=3,
                    agri=1, mineral=6,
-                   upgrades={"laser"},
+                   upgrades={"laser", "fuel_tank"},
                   },
                   {r=17000, mass=110,
                    image_name="tribase", station=true,
@@ -313,7 +321,7 @@ return {
                    industry=7,tech=6,
                    remote=4, pop=7,
                    agri=4, mineral=2,
-                   upgrades={"cargo_bay", "engine"},
+                   upgrades={"cargo_bay", "solar_panel"},
                   },
                   {r=20000, mass=100, station=true,
                    image_name = "station-round",
@@ -322,7 +330,7 @@ return {
                    industry=7,tech=8,
                    remote=4, pop=3,
                    agri=1, mineral=3,
-                   upgrades={"cargo_bay", "engine"},
+                   upgrades={"cargo_bay", "engine", "solar_panel"},
                   },
                   {r=25000, mass=430,
                    image_name = "planet-10",
@@ -347,8 +355,7 @@ return {
                    r=36000, mass=60, portal="Yueh", os=lisp}
                },
    },
-   ["New Phobos"] = {gov="Bohk",
-                     x=3.9, y=0.2,
+   ["New Phobos"] = {gov="Bohk", x=3.9, y=0.2, asteroids=5,
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=310000,
                          image_name="sun",
@@ -360,7 +367,7 @@ return {
                          industry=2,tech=6,
                          remote=4, pop=4,
                          agri=5, mineral=5,
-                         upgrades={"cargo_bay"},
+                         upgrades={"cargo_bay", "fuel_tank"},
                         },
                         {r=30000, mass=440,
                          image_name = "shaber7",
@@ -372,33 +379,33 @@ return {
                      }, -- tourism center
    },
    ["Mecalle"] = {gov="Bohk",
-                   x=2.8, y=0.2,
-                   bodies = {
-                      {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
-                       image_name="sun",
-                       name="Mecalle 8760", fixed=true},
-                      {r=27000, mass=342,
-                       image_name = "planet-11", -- blue/purple
-                       name="Tirakir", os=orb,
+                  x=2.8, y=0.2,
+                  bodies = {
+                     {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
+                      image_name="sun",
+                      name="Mecalle 8760", fixed=true},
+                     {r=27000, mass=342,
+                      image_name = "planet-11", -- blue/purple
+                      name="Tirakir", os=orb,
 
-                       industry=2,tech=3,
-                       remote=7, pop=4,
-                       agri=7, mineral=5,
-                       upgrades={},
-                      },
-                      {name = "Portal: Bohk",
-                       image_name="portal-1",
-                       r=18000, mass=60, portal="Bohk", os=lisp},
-                      {name = "Portal: Katilay",
-                       image_name="portal-2", interportal=true,
-                       r=22000, mass=60, portal="Katilay", os=lisp}
-                   }, -- smaller border town
+                      industry=2,tech=3,
+                      remote=7, pop=4,
+                      agri=7, mineral=5,
+                      upgrades={},
+                     },
+                     {name = "Portal: Bohk",
+                      image_name="portal-1",
+                      r=18000, mass=60, portal="Bohk", os=lisp},
+                     {name = "Portal: Katilay",
+                      image_name="portal-2", interportal=true,
+                      r=22000, mass=60, portal="Katilay", os=lisp}
+                  }, -- smaller border town
    },
 
 
    -- Katilay
    ["Katilay"] = {gov="Katilay", capitol = true,
-                  x=3.9, y=2.3,
+                  x=3.9, y=2.3, asteroids = 3,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                       image_name="sun",
@@ -417,7 +424,7 @@ return {
                       industry=3,tech=3,
                       remote=8, pop=3,
                       agri=1, mineral=3,
-                      upgrades={},
+                      upgrades={"laser"},
                      },
                      {name = "Portal: Lalande",
                       image_name="portal-2", interportal=true,
@@ -442,7 +449,7 @@ return {
                    industry=7,tech=8,
                    remote=3, pop=7,
                    agri=3, mineral=3,
-                   upgrades={}, -- TODO
+                   upgrades={"fuel_charger", "laser", "cargo_bay"},
                   },
                   {r=19000, mass=100, station=true,
                    image_name="station-green",
@@ -450,7 +457,7 @@ return {
                    industry=6,tech=8,
                    remote=4, pop=4,
                    agri=0, mineral=3,
-                   upgrades={}, -- TODO
+                   upgrades={"laser", "cargo_bay", "engine", "solar_panel"},
                   },
                   {r=9000, mass=220,
                    image_name="planet-3", name="Ha'nur"},
@@ -461,7 +468,7 @@ return {
                    image_name="portal-2", interportal=true, os=lisp,
                    r=28000, mass=60, portal="Lalande"},
                   {name = "Portal: Kowlu",
-                   image_name="portal-1", os=lisp,
+                   image_name="portal-3", os=lisp, multiportal=true,
                    r=32000, mass=60, portal="Kowlu"},
                }, -- Yueh capital
    },
@@ -477,7 +484,7 @@ return {
                     industry=5, tech=4,
                     remote=6, pop=4,
                     agri=7, mineral=5,
-                    upgrades={},
+                    upgrades={"cargo_bay", "engine"},
                    },
                    {r=17000, mass=300,
                     image_name="shaber9",
@@ -485,7 +492,7 @@ return {
                     industry=2, tech=3,
                     remote=5, pop=2,
                     agri=4, mineral=4,
-                    upgrades={},
+                    upgrades={"engine"},
                    },
                    {name = "Portal: Delta Pavonis",
                     image_name="portal-1", os=lisp,
@@ -501,13 +508,13 @@ return {
                            {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                             image_name="sun",
                             name="Delta Pavonis", fixed=true},
-                           {r=17000, mass=300,
+                           {r=18000, mass=300,
                             image_name="v-surface",
                             name="Packsi", os=orb,
                             industry=2, tech=3,
                             remote=6, pop=2,
                             agri=3, mineral=4,
-                            upgrades={},
+                            upgrades={"engine", "fuel_charger"},
                            },
                            {r=10000, mass=200,
                             image_name="planet-3", name="Sav'nakat"},
@@ -520,7 +527,7 @@ return {
                         }
    },
    ["Wolf 1481"] = {gov="Yueh", -- BD
-                    x=4.1, y=-1.7,
+                    x=4.1, y=-1.7, asteroids=3,
                     bodies = {
                        {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                         image_name="sun",
@@ -546,7 +553,7 @@ return {
                       image_name="sun",
                       name="LHS 451", fixed=true},
                      {name = "Portal: Yueh",
-                      image_name="portal-1", os=lisp,
+                      image_name="portal-3", os=lisp,
                       r=22000, mass=60, portal="Yueh"},
                   }, -- mostly uninhabited
    },
@@ -556,9 +563,9 @@ return {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                          image_name="sun",
                          name="CD-40 9712", fixed=true},
-                        {name = "Portal: Delta Pavonis",
-                         image_name="portal-1", os=lisp,
-                         r=22000, mass=60, portal="Delta Pavonis"},
+                        {name = "Portal: Yueh",
+                         image_name="portal-3", os=lisp,
+                         r=22000, mass=60, portal="Yueh"},
                      }, -- mostly uninhabited
    },
 }
