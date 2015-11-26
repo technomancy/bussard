@@ -236,7 +236,9 @@ First you have just plain `"text"`. These indicators look like this:
 
 The `format` is the template for the text, with the `values` looked up
 in the ship table and then spliced into the format template. Values
-with dots in them indicate that they are nested inside tables.
+with dots in them indicate that they are nested inside tables. Include
+`align="right"` to justify the text along the right side instead of
+the left.
 
 Second is the `"vector"` type, like this:
 

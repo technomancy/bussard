@@ -140,7 +140,7 @@ end)
 -- HUD
 ship.hud = {
    { x=60, y=5, type="text",
-     format="x: %5.2f y: %5.2f", values={"sensors.x", "sensors.y"}
+     format="x: %5.0f y: %5.0f", values={"sensors.x", "sensors.y"}
    },
    { x=60, y=20, type="text",
      format="epoch: %s  credits: %s",
@@ -156,8 +156,8 @@ ship.hud = {
      width=3, color={50, 255, 150}
    },
 
-   { x=-180, y=5, type="text",
-     format="target: %s\ndistance: %0.2f\nmass: %0.0f",
+   { x=-70, y=5, type="text", align="right",
+     format="target: %s\ndistance: %0.0f\nmass: %0.0f",
      values={"sensors.target.name", function(s)
                 return s.sensors.target and utils.distance(s.sensors,
                                                            s.sensors.target)

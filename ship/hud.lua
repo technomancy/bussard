@@ -1,13 +1,14 @@
 local lume = require("lume")
 local body = require("body")
 
-local vector_size = 50
+local vector_size, font_width = 50, nil
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 local get_pos = function(value)
    local x, y = value.x, value.y
-   if(x < 0) then x = (w+x)-vector_size end
-   if(y < 0) then y = (h+y)-vector_size end
+   local offset = (value.type == "vector" and vector_size) or 0
+   if(x < 0) then x = (w+x)-offset end
+   if(y < 0) then y = (h+y)-offset end
    return x, y
 end
 
@@ -51,9 +52,12 @@ local render_bar = function(x, y, values, data)
    end
 end
 
-local render_text = function(x, y, format, values)
+local render_text = function(x, y, format, values, data)
    if(values and values[1]) then
-      love.graphics.print(string.format(format, unpack(values)), x, y)
+      local text = string.format(format, unpack(values))
+      local limit = data.limit or text:len() * font_width
+      if(data.align == "right") then x = x - limit end
+      love.graphics.printf(text, x, y, limit, data.align)
    end
 end
 
@@ -103,6 +107,7 @@ end
 
 return {
    render = function(ship)
+      font_width = love.graphics.getFont():getWidth('a')
       for _,data in ipairs(ship.api.hud or {}) do
          love.graphics.setColor(unpack(data.color or {255, 255, 255, 150}))
          love.graphics.setLineWidth(data.width or 1)
