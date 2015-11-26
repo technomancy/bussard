@@ -37,12 +37,13 @@ local render_vector = function(at_x, at_y, values)
    end
 end
 
-local render_bar = function(x, y, values)
+local render_bar = function(x, y, values, data)
    local level, max, secondary = unpack(values)
+   local height = data.h or 10
    if(type(level) == "number" and type(max) == "number") then
-      love.graphics.rectangle("fill", x, y, math.min(level, max), 10)
+      love.graphics.rectangle("fill", x, y, math.min(level, max), height)
       love.graphics.setColor(255, 200, 200)
-      love.graphics.rectangle("line", x, y, max, 10)
+      love.graphics.rectangle("line", x, y, max, height)
       if(type(secondary) == "number") then
          love.graphics.setColor(0,0,0,100)
          love.graphics.rectangle("fill", x, y, secondary, 5)
@@ -107,9 +108,9 @@ return {
          love.graphics.setLineWidth(data.width or 1)
          local values = lume.map(data.values, lume.fn(get_data, ship.api))
          local x,y = get_pos(data)
-         if(data.type == "text") then render_text(x, y, data.format, values)
-         elseif(data.type == "bar") then render_bar(x, y, values)
-         elseif(data.type == "vector") then render_vector(x, y, values)
+         if(data.type == "text") then render_text(x, y, data.format, values, data)
+         elseif(data.type == "bar") then render_bar(x, y, values, data)
+         elseif(data.type == "vector") then render_vector(x, y, values, data)
          else error("Unknown hud type " .. data.type) end
       end
       -- hard-code this for now

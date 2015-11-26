@@ -22,6 +22,9 @@ this instead:
 
     keymap.define("flight", "lalt", function() ship.actions.laser("toggle") end)
 
+The range of the laser is somewhat limited; if you are zoomed out it
+may not be visible.
+
 ## Mining
 
 Once you have targeted and approached an asteroid, fire your laser to

@@ -169,7 +169,7 @@ ship.hud = {
    },
    { x=5, y=75, type="bar",
      values={"status.battery", "status.battery_capacity"},
-     color={20, 255, 20}
+     color={20, 255, 20}, h=6,
    },
 }
 
