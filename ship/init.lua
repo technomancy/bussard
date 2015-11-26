@@ -274,6 +274,8 @@ ship.api = {
    mission = {
       list = lume.fn(mission.list, ship),
       abort = lume.fn(mission.abort, ship),
+      hud = {x=-300, y=-100, type="text", format="Missions:\n %s",
+             values = {lume.fn(mission.readout, ship)}}
    },
    -- data tables (read-only)
    sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),

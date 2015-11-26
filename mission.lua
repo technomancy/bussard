@@ -86,6 +86,7 @@ local update = function(ship, dt)
    end
 end
 
+-- FIXME: document in manual how to get mission details
 local list = function(ship)
    for mission_id,_ in pairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
@@ -118,10 +119,19 @@ local abort = function(ship, mission_name)
    end
 end
 
+local readout = function(ship)
+   if(#ship.active_missions == 0) then return "- none" end
+   local f = function(m)
+      return "- " .. mission.name
+   end
+   return table.concat(lume.map(ship.active_missions, f), "\n ")
+end
+
 return {
    accept = accept,
    check = check,
    update = update,
    list = list,
    abort = abort,
+   readout = readout,
 }
