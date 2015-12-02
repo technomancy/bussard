@@ -27,10 +27,10 @@ return {
          if(ship.laser and ship.battery > 0) then
             ship.battery = ship.battery - dt * ship.laser_power * 0.1
             for _,b in pairs(ship.bodies) do
-               local dist = utils.distance(ship.x - b.x, ship.y - b.y)
+               local dist = utils.distance(ship.x - b.x, ship.y - b.y) / 4
                local power = ship.laser_power * 16
                if(b.asteroid and laser_hits(ship, b, dist)) then
-                  b.strength = b.strength - (((dt * power * 128) / (dist*dist)))
+                  b.strength = b.strength - (((dt * power * 32) / (dist*dist)))
                   if(b.strength < 0) then b:split(ship) end
                end
             end
