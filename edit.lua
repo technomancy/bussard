@@ -16,6 +16,12 @@ local mark, mark_line = nil, nil
 local kill_ring = {}
 local mark_ring = {}
 
+-- undo data
+local history = {}
+local history_max = 128
+local undo_at = 0
+local dirty = false
+
 -- how many lines do pageup/pagedown scroll?
 local scroll_size = 20
 -- How many pixels of padding are on either side
@@ -36,6 +42,32 @@ local last_yank = nil
 
 local kill_ring_max = 32
 local mark_ring_max = 32
+
+local state = function()
+   return {lines = lume.clone(lines), point = point, point_line = point_line}
+end
+
+local undo = function()
+   local prev = history[#history-undo_at]
+   if(undo_at < #history) then undo_at = undo_at + 1 end
+   if(prev) then
+      lines, point, point_line = prev.lines, prev.point, prev.point_line
+   end
+end
+
+local wrap = function(fn, ...)
+   dirty = false
+   local last_state = state()
+   if(fn ~= undo) then undo_at = 0 end
+   last_cmd = fn
+   fn(...)
+   if(dirty) then
+      table.insert(history, last_state)
+   end
+   if(#history > history_max) then
+      table.remove(history, 1)
+   end
+end
 
 local region = function()
    mark = math.min(string.len(lines[mark_line]), mark)
@@ -62,6 +94,7 @@ local region = function()
 end
 
 local insert = function(text, point_to_end)
+   dirty = true
    if(not text or #text == 0) then return end
    local this_line = lines[point_line]
    local before, after = this_line:sub(0, point), this_line:sub(point + 1)
@@ -88,6 +121,7 @@ local insert = function(text, point_to_end)
 end
 
 local delete = function(start_line, start, finish_line, finish)
+   dirty = true
    if(start_line == finish_line) then
       local line = lines[point_line]
       lines[point_line] = line:sub(0, start) .. line:sub(finish + 1)
@@ -153,6 +187,7 @@ return {
    initialize = function()
       ROW_HEIGHT = love.graphics.getFont():getHeight()
       em = love.graphics.getFont():getWidth('a')
+      history, undo_at, dirty = {}, 0, false
    end,
 
    -- TODO: need a UI for opening new files
@@ -191,6 +226,7 @@ return {
 
    -- edit commands
    delete_backwards = function()
+      dirty = true
       if(point == 0) then
          point_line = point_line - 1
          point = #lines[point_line]
@@ -206,6 +242,7 @@ return {
    end,
 
    delete_forwards = function()
+      dirty = true
       if(point == #lines[point_line]) then
          local next_line = table.remove(lines, point_line+1)
          lines[point_line] = lines[point_line] .. next_line
@@ -216,6 +253,7 @@ return {
    end,
 
    kill_line = function()
+      dirty = true
       if(point == #lines[point_line]) then
          local next_line = table.remove(lines, point_line+1)
          lines[point_line] = lines[point_line] .. next_line
@@ -297,6 +335,7 @@ return {
    end,
 
    newline = function()
+      dirty = true
       local remainder = lines[point_line]:sub(point + 1, -1)
       lines[point_line] = lines[point_line]:sub(0, point)
       point = 0
@@ -353,6 +392,8 @@ return {
       assert(fs and fs.load, "No loading context available.")
       fs:load(path)
    end,
+
+   undo = undo,
 
    -- internal functions
    draw = function()
@@ -440,8 +481,13 @@ return {
    end,
 
    textinput = function(t)
-      local line = lines[point_line]
-      lines[point_line] = line:sub(0, point) .. t .. line:sub(point + 1)
-      point = point + 1
+      wrap(function()
+            local line = lines[point_line]
+            dirty = true
+            lines[point_line] = line:sub(0, point) .. t .. line:sub(point + 1)
+            point = point + 1
+           end)
    end,
+
+   wrap = wrap
 }

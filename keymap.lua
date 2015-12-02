@@ -14,9 +14,10 @@ keymap = {
    modes = {},
    current_mode = nil,
 
-   define_mode = function(name)
+   define_mode = function(name, wrap)
       keymap.modes[name] = {map = {}, ctrl = {}, alt = {},
                             ["ctrl-alt"] = {}}
+      keymap.modes[name]._wrap = wrap
       -- first mode to be defined becomes active
       keymap.current_mode = keymap.current_mode or name
    end,
@@ -38,7 +39,10 @@ keymap = {
 
    handle = function(key, ...)
       local fn = find_binding(key)
-      if(fn) then fn(...) end
+      local wrap = keymap.modes[keymap.current_mode]._wrap
+      if(fn and wrap) then wrap(fn, ...)
+      elseif(fn) then fn(...)
+      end
    end,
 
    change_mode = function(mode_name)
