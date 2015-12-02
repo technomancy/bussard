@@ -19,10 +19,15 @@ the manual, (using ctrl-enter) reload for the changes to take effect:
 
     ship:load("src.config")
 
-Now your laser will fire when you hold the alt key down, so use your
-targeting system to find the nearest asteroid. Get close enough for
-the targeting indicator to turn red, then fire your laser at them to
-mine them up.
+Now your laser will fire when you hold the left alt key down, so use
+your targeting system to find the nearest asteroid. Your laser is more
+effective at close ranges, though you can still destroy asteroids at a
+distance. However, if you're not close enough for the targeting
+indicator to turn red, (scoop range) any ore from the asteroids you
+destroy will not be collected into your cargo hold.
+
+The HUD will tell you the mass of your target; asteroids of higher
+mass will result in more ore being mined, but they take longer.
 
 To continue, run:
 

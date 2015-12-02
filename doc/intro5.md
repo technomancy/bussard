@@ -32,4 +32,7 @@ Star will get you closer to Sol, while the one to Wolf 294 will take
 you to another asteroid-rich system.
 
 The galaxy is yours to explore! But don't forget to explore your
-system's onboard computer as well.
+system's onboard computer as well. The ship's primary manual can be
+accessed by running this:
+
+    man("manual")
