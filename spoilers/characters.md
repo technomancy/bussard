@@ -27,7 +27,7 @@ Ross. Formerly included Sol. Regulates portal technology.
 Independent station in a Terran system (Ross). Grandfathered into
 independence early on. Isolated, wealthy, and small.
 
-* Darush
+* Darush (Ross)
 
 ## Kingdom of Bohk
 
@@ -45,10 +45,18 @@ helped Yueh establish its Delta Pavonis colony.
 ## Yueh
 
 Source of where the portal tech was discovered. Runs two portals (Bohk
-and Delta Pavonis) and has one portal (Kowlu) run by Lalande, which is
-a point of tension.
+and Delta Pavonis) and has two portals (Kowlu and Wolf 1481) run by
+Lalande, which is a point of tension.
 
-* TODO
+* Yueh Prime
+* Da Kau Station
+* Bata Beng (Kowlu)
+* Sim Roen (Kowlu)
+* Packsi (Delta Pavonis)
+* Steele Station (Wolf 1481)
+
+The portal to Delta Pavonis is secretly a multiportal; it can take you
+to a few other locations if you have proper access.
 
 ## Republic of Katilay
 
@@ -72,6 +80,8 @@ transport, leaving it quite vulnerable.
 * Solotogo (Wolf 294)
 * Apkabar Station (Luyten)
 * Mirduka Station (L 668-21)
+
+Tana has the most worlds, but the smallest population.
 
 ## Human Worlds League
 
@@ -186,7 +196,8 @@ ships containing just the equipment needed to create the portal.
 
 Engines capable of lots of maneuvering around a star but not long-term
 flight. They need significant battery if they are to activate a
-portal. Mostly they carry cargo and passengers; occasionally science.
+portal. Mostly they carry cargo and passengers; occasionally
+scientific equipment.
 
 ## Non-colonizing exploration ships? (automated?)
 

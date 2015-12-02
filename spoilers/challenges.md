@@ -22,6 +22,10 @@ times to mine out the asteroid.
 You can also use the Eye of Harmony to slow down time in order to get
 close enough to mine the asteroid, but you don't get that till later.
 
+## Some kind of SQL injection thingy
+
+https://github.com/Wiladams/LJIT2SQLite
+
 ## Blacklisted from portal access
 
 Late in the game, some nefarious conduct gets you blacklisted by
@@ -61,3 +65,4 @@ One of the Yueh portals is different; it connects to multiple systems.
 The "OS" of the lab in which the Causal Domain Injector is found (as
 well as the one in which the portals were discovered, but you don't
 get access to that one) is a Forth.
+
