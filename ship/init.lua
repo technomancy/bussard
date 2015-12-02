@@ -332,7 +332,7 @@ ship.api = {
          if(type(target) == "table") then
             target = target[p]
          else
-            return false
+            return nil
          end
       end
       return target
