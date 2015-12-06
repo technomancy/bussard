@@ -16,13 +16,18 @@ local _ = { r=0, mass=0,
             upgrades={},
 }
 
----- inputs: (1 to 10 scale)
+---- inputs:
+-- this is not a linear scale; Earth has 10 billion people, while the largest
+-- extrasolar worlds (Kala Lamar, Yueh Prime) have about 100 million.
+-- pop: 1: 1000, 2: 10,000, 3: 100,000, 4: 1m, 5: 10m, 6: 100m, 7: 1b, 8: 10b
+-- total: 10,216,655,000, total off-earth: 216,655,000
+--
+-- pop
 -- industry
 -- remote
 -- agri
 -- mineral
 -- tech
--- pop
 -- upgrades
 --   laser
 --   cargo_bay
@@ -33,7 +38,7 @@ local _ = { r=0, mass=0,
 --   comm_boost (must be unlocked)
 --   map*
 
-return {
+local sys = {
    -- Tana
    ["Tana"] =
       {gov="Tana", capitol = true,
@@ -48,16 +53,16 @@ return {
            name="Tana Prime", os=orb,
 
            industry=8,tech=6,
-           remote=2, pop=8,
+           remote=2, pop=4,
            agri=4, mineral=2,
            upgrades={"engine", "cargo_bay"},
           },
           {r=15000, mass=500,
-           image_name = "planet-1",
+           image_name = "planet-9",
            name="Lioboro", os=orb,
 
            industry=7,tech=5,
-           remote=2, pop=5,
+           remote=2, pop=3,
            agri=5, mineral=2,
            upgrades={"cargo_bay"},
           },
@@ -66,7 +71,7 @@ return {
            name="Kenapa Station", os=orb,
 
            industry=8,tech=6,
-           remote=2, pop=3,
+           remote=2, pop=1,
            agri=0, mineral=3,
            upgrades={"cargo_bay"},
           },
@@ -110,15 +115,15 @@ return {
            name="Luyten's Star", fixed=true },
           {r=32000, mass=120,
            image_name="station-pointed", station=true,
-           name="Apkabar station", os=orb,
+           name="Apkabar Station", os=orb,
 
            industry=6,tech=6,
-           remote=5, pop=3,
+           remote=5, pop=2,
            agri=0, mineral=2,
            upgrades={"engine", "fuel_tank"},
           },
           {r=12000, mass=520,
-           image_name="planet-9",
+           image_name="shaber2",
            name="Malong",},
           {name = "Portal: Tana",
            image_name="portal-1",
@@ -138,10 +143,10 @@ return {
            name="L 668-21", fixed=true },
           {r=20000, mass=100, station=true,
            image_name="station-pointed",
-           name="Mirduka station", os=orb,
+           name="Mirduka Station", os=orb,
 
            industry=4,tech=3,
-           remote=7, pop=3,
+           remote=7, pop=2,
            agri=0, mineral=6,
            upgrades={"laser"},
           },
@@ -170,8 +175,8 @@ return {
                   name="Earth", os=orb,
 
                   industry=9,tech=7,
-                  remote=1, pop=9,
-                  agri=6, mineral=2,
+                  remote=1, pop=8,
+                  agri=9, mineral=2,
                   upgrades={"fuel_tank","engine"},
                  },
                  {r=25000, mass=120,
@@ -188,7 +193,7 @@ return {
                   name="Mars", os=orb,
 
                   industry=8,tech=6,
-                  remote=1, pop=6,
+                  remote=1, pop=4,
                   agri=0, mineral=5,
                   upgrades={"engine", "laser"},
                  },
@@ -237,16 +242,16 @@ return {
                       image_name="sun",
                       name="Lalande 25372", fixed=true},
                      {r=14000, mass=200,
-                      image_name="planet-6", -- kinda green
+                      image_name="shaber8",
                       name="Pinan", os=orb,
 
                       industry=6,tech=7,
-                      remote=2, pop=2,
+                      remote=2, pop=3,
                       agri=5, mineral=3,
                       upgrades={"fuel_tank", "fuel_charger"},
                      },
                      {r=37000, mass=200,
-                      image_name="shaber2",
+                      image_name="planet-1",
                       name="Kala Lamar", os=orb,
 
                       industry=7,tech=8,
@@ -292,7 +297,7 @@ return {
                    name="Kuchang Station", os=orb,
 
                    industry=3,tech=5,
-                   remote=4, pop=2,
+                   remote=4, pop=4,
                    agri=0, mineral=3,
                    upgrades={"fuel_tank", "fuel_charger"},
                   },
@@ -319,7 +324,7 @@ return {
                    name="Bohk Prime", os=orb,
 
                    industry=7,tech=6,
-                   remote=4, pop=7,
+                   remote=4, pop=5,
                    agri=4, mineral=2,
                    upgrades={"cargo_bay", "solar_panel"},
                   },
@@ -328,7 +333,7 @@ return {
                    name="Warnabu Station", os=orb,
 
                    industry=7,tech=8,
-                   remote=4, pop=3,
+                   remote=4, pop=1,
                    agri=1, mineral=3,
                    upgrades={"cargo_bay", "engine", "solar_panel"},
                   },
@@ -337,7 +342,7 @@ return {
                    name="Banga", os=orb,
 
                    industry=5,tech=4,
-                   remote=5, pop=5,
+                   remote=5, pop=4,
                    agri=5, mineral=4,
                    upgrades={"cargo_bay"},
                   },
@@ -385,11 +390,11 @@ return {
                       image_name="sun",
                       name="Mecalle 8760", fixed=true},
                      {r=27000, mass=342,
-                      image_name = "planet-11", -- blue/purple
+                      image_name = "planet-11",
                       name="Tirakir", os=orb,
 
                       industry=2,tech=3,
-                      remote=7, pop=4,
+                      remote=7, pop=3,
                       agri=7, mineral=5,
                       upgrades={},
                      },
@@ -420,7 +425,7 @@ return {
                      },
                      {r=12000, mass=100, station=true,
                       image_name="station-round",
-                      name="Slork", os=orb,
+                      name="Slork Station", os=orb,
                       industry=3,tech=3,
                       remote=8, pop=3,
                       agri=1, mineral=3,
@@ -444,10 +449,10 @@ return {
                    image_name="sun",
                    name="Yueh 674", fixed=true},
                   {r=14000, mass=350, asteroids=4,
-                   image_name="shaber8",
+                   image_name="planet-6",
                    name="Yueh Prime", os=lisp,
                    industry=7,tech=8,
-                   remote=3, pop=7,
+                   remote=3, pop=5.8,
                    agri=3, mineral=3,
                    upgrades={"fuel_charger", "laser", "cargo_bay"},
                   },
@@ -455,7 +460,7 @@ return {
                    image_name="station-green",
                    name="Da Kau Station", os=orb,
                    industry=6,tech=8,
-                   remote=4, pop=4,
+                   remote=4, pop=1,
                    agri=0, mineral=3,
                    upgrades={"laser", "cargo_bay", "engine", "solar_panel"},
                   },
@@ -490,7 +495,7 @@ return {
                     image_name="shaber9",
                     name="Sim Roen", os=orb,
                     industry=2, tech=3,
-                    remote=5, pop=2,
+                    remote=5, pop=1,
                     agri=4, mineral=4,
                     upgrades={"engine"},
                    },
@@ -512,7 +517,7 @@ return {
                             image_name="v-surface",
                             name="Packsi", os=orb,
                             industry=2, tech=3,
-                            remote=6, pop=2,
+                            remote=6, pop=3,
                             agri=3, mineral=4,
                             upgrades={"engine", "fuel_charger"},
                            },
@@ -569,3 +574,5 @@ return {
                      }, -- mostly uninhabited
    },
 }
+
+return sys

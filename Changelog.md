@@ -2,6 +2,8 @@
 
 ## alpha-6 / ???
 
+* (Most) worlds tell you a bit about them when you log in.
+* Editor can undo/redo.
 * Added Comm Boost and Solar Panel upgrades.
 * Finish adding the rest of the worlds.
 * Offer to save the game in case it crashes.

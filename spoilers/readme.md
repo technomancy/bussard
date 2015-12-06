@@ -1,5 +1,8 @@
 # Back-story notes (aka SPOILERS)
 
+"An adventure game is a crossword at war with a narrative."
+- Graham Nelson
+
 Here's where the notes are kept in order to keep a consistent
 back-story in the Bussard universe. If you're not working on
 developing the game, you probably don't want to read this.
@@ -10,6 +13,9 @@ in-game technology works.
 
 See the [backstory timeline](history.md) and
 [list of characters, worlds, and organizations](characters.md).
+
+TODO: Need to write an opening that grabs your attention. Something
+about coming to your senses with no memory?
 
 ## Guidelines
 
@@ -52,8 +58,8 @@ escape.
 
 * Bohk research team studying artificial consciousness
 * Artificial consciousness from Darush goes rampant, crashing an unmanned probe
-* Gets shut down by Artificial Consciousness Non-proliferation Agreement
-* Half the research team relocates to Katilay once the portal comes online
+* Research gets shut down by Artificial Consciousness Non-proliferation Agreement
+* Half the Bohk research team relocates to Katilay once the portal comes online
 * Katilay eventually joins the League, comes subject to ACNPA
 * Head researcher sends off ship with memory-wiped AC loaded in to L 668-21 (9.9 parsecs, 64y @ 0.5c)
 * Ship arrives, enters extremely wide orbit near heliopause, waits
@@ -78,7 +84,7 @@ he scans your vessel and determines there are no life signs aboard;
 asking you what the heck is up.
 
 Eventually you do find logs and notes from the research team that
-created you which explain their reactions.
+created you which explain their actions.
 
 ## Causal Domain Injector
 
@@ -162,5 +168,7 @@ against Science into one.
 
   (defun insert-random-name (syllables)
     (interactive "P")
-    (insert (random-name nil syllables) " ")))
+    (insert (random-name nil syllables) " "))
+
+  (defun parsec-years (pc) (interactive "nParsecs: ") (message "%s" (/ (* pc 3.26) 0.7))))
 ```

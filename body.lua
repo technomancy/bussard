@@ -18,6 +18,9 @@ local seed = function(os, body_name)
       os.fs.mkdir(proxy, dir)
       proxy[k] = v
    end
+   if(love.filesystem.isFile("data/motd/" .. body_name)) then
+      proxy.etc.motd = love.filesystem.read("data/motd/" .. body_name)
+   end
    return raw
 end
 

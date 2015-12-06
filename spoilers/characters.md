@@ -8,26 +8,26 @@ Home of humanity, but regressed from its height. Suffered from having
 portal delayed due to accident. Some believe the Defiant was sabotaged
 on its mission to carry a portal to Sol.
 
-* Earth
-* Mars
-* Newton Station
-* Nee Soon Station
+* [x] Earth
+* [x] Mars
+* [x] Newton Station
+* [x] Nee Soon Station
 
 ## Terran Republic
 
 Most powerful, but only controls two systems, Lalande and
 Ross. Formerly included Sol. Regulates portal technology.
 
-* Pinan (Lalande)
-* Kala Lamar (Lalande)
-* Kuchang Station (Ross)
+* [x] Kala Lamar (Lalande)
+* [x] Pinan (Lalande)
+* [ ] Kuchang Station (Ross)
 
 ## Principality of Darush
 
 Independent station in a Terran system (Ross). Grandfathered into
 independence early on. Isolated, wealthy, and small.
 
-* Darush (Ross)
+* [ ] Darush (Ross)
 
 ## Kingdom of Bohk
 
@@ -36,11 +36,11 @@ the Terran Republic. Has two internal portals under oversight from
 Terrans. Helped Lalande re-establish contact with Katilay, and also
 helped Yueh establish its Delta Pavonis colony.
 
-* Bohk Prime
-* Warnabu Station
-* Banga
-* Galure (New Phobos)
-* Tirakir (Mecalle)
+* [ ] Bohk Prime
+* [ ] Warnabu Station
+* [ ] Banga
+* [ ] Galure (New Phobos)
+* [ ] Tirakir (Mecalle)
 
 ## Yueh
 
@@ -48,12 +48,12 @@ Source of where the portal tech was discovered. Runs two portals (Bohk
 and Delta Pavonis) and has two portals (Kowlu and Wolf 1481) run by
 Lalande, which is a point of tension.
 
-* Yueh Prime
-* Da Kau Station
-* Bata Beng (Kowlu)
-* Sim Roen (Kowlu)
-* Packsi (Delta Pavonis)
-* Steele Station (Wolf 1481)
+* [ ] Yueh Prime
+* [ ] Da Kau Station
+* [ ] Bata Beng (Kowlu)
+* [ ] Sim Roen (Kowlu)
+* [ ] Packsi (Delta Pavonis)
+* [ ] Steele Station (Wolf 1481)
 
 The portal to Delta Pavonis is secretly a multiportal; it can take you
 to a few other locations if you have proper access.
@@ -63,8 +63,8 @@ to a few other locations if you have proper access.
 Conflict-wracked even within a single system. Portal was faulty upon
 arrival; contact with Lalande only recently re-established.
 
-* Katilay Prime
-* Slork (station)
+* [ ] Katilay Prime
+* [ ] Slork (station)
 
 ## Tana Protectorates
 
@@ -73,13 +73,12 @@ minerals. Terrans allow Sol to operate portals keeping Tana running,
 but Tana is completely dependent upon Sol for food and Terrans for
 transport, leaving it quite vulnerable.
 
-* Tana Prime (Tana)
-* Lioboro (Tana)
-* Kenapa Station (Tana)
-* Belanda (Wolf 294)
-* Solotogo (Wolf 294)
-* Apkabar Station (Luyten)
-* Mirduka Station (L 668-21)
+* [x] Tana Prime (Tana)
+* [x] Lioboro (Tana)
+* [ ] Kenapa Station (Tana)
+* [x] Solotogo (Wolf 294)
+* [x] Apkabar Station (Luyten)
+* [x] Mirduka Station (L 668-21)
 
 Tana has the most worlds, but the smallest population.
 
@@ -138,7 +137,7 @@ Bohk Prime.
   colony ships, which would be noticed, so they are researching
   coldsleep as an alternative.
 
-* Post-Terran Mining Corporation (Tana)
+* Post-Terran Mining Company (Tana)
   The primary driver behind the colonization of Tana. Government of
   Tana is arguably a front for PTMC.
 

@@ -13,21 +13,21 @@ The establishment of the Terran Republic.
 
 * 2110 - Nee Soon Station operational, outer reaches of Sol system
 
-* 2117 - SS Lorentz arrives, colonizes Lalande
+* 2117 - SS Lorentz arrives, colonizes Kala Lamar in Lalande
 
-* 2123 - SS Copernicus colony ship launches from Sol to Ross
+* 2128 - SS Copernicus colony ship launches from Sol to Ross
   (1.6 pc @ 0.5 c, 10y, γ=1.2)
 
-* 2133 - SS Copernicus arrives, colonizes Ross
+* 2138 - SS Copernicus arrives, colonizes Ross
 
-* 2135 - Errant cargo shuttle threatens Ross colony; Captain Darush
+* 2143 - Errant cargo shuttle threatens Ross colony; Captain Darush
   saves the colony by colliding his ship into the shuttle to push it
   off course, leading to stricter safety regulations
 
-* 2139 - Darush is granted independence due to heroism of
+* 2153 - Darush is granted independence due to heroism of
   captain; station in Ross system remains under Terran control
 
-* ... 30 years: Slow trade routes between Sol, Lalande, Ross grow
+* ... 20 years: Slow trade routes between Sol, Lalande, Ross grow
 
 ## Second Wave of slow colonization
 
@@ -155,6 +155,8 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 * 2366 - Lalande launches SS Sagan colonizer from Kowlu to Delta Pavonis
   (0.7 pc, 0.7c, 3.2y)
 
+* 2368 - Colonists from Kala Lamar found Pinan colony in Lalande
+
 * 2369 - Lalande/Sol relations improve somewhat
 
 * 2370 - SS Sagan arrives in Delta Pavonis, colony established
@@ -179,18 +181,19 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2395 - Katilay finally joins League
 
-* SS Tyson arrives in Luyten, colonizes
+* 2396 - SS Tyson arrives in Luyten, colonizes (3.8 pc, 0.7c, 17.7y)
 
-* 2408 - SS Planck arrives in Tana, colonizes
+* 2402 - SS Rosen arrives in Wolf 294, colonizes (5.3 pc, 0.7c, 24.7y),
+         SS Planck arrives in Tana, colonizes (5.3 pc, 0.7c, 24.7y)
 
-* SS Rosen arrives in Wolf 294, colonizes
+* 2412 - Colonists from Tana Prime colonize Lioboro.
 
 * Under the guise of unmanned exploration, Yueh secretly launches
   smaller groups of coldsleep ships to three new systems carrying
   portals, rather than large colonizers
 
 * 2418 - Indications of rich minerals cause Tana to launch
-  SS Archimedes colonizer to L 668-21
+  SS Archimedes colonizer to L 668-21 (2.1 pc, 0.7c, 9.8y)
 
 * 2427 - L 668-21 colony ship arrives, establishes station colony
 
