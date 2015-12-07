@@ -20,14 +20,14 @@ Ross. Formerly included Sol. Regulates portal technology.
 
 * [x] Kala Lamar (Lalande)
 * [x] Pinan (Lalande)
-* [ ] Kuchang Station (Ross)
+* [x] Kuchang Station (Ross)
 
 ## Principality of Darush
 
 Independent station in a Terran system (Ross). Grandfathered into
 independence early on. Isolated, wealthy, and small.
 
-* [ ] Darush (Ross)
+* [x] Darush (Ross)
 
 ## Kingdom of Bohk
 

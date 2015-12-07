@@ -33,3 +33,6 @@ sign:
 
 upload: release sign
 	rsync -r releases/ p.hagelb.org:p/bussard/
+
+systems:
+	lua -lheadless data/systems.lua
