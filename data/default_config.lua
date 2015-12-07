@@ -81,7 +81,7 @@ keymap.define_mode("edit", ship.edit.wrap)
 keymap.define("edit", "escape", mode("flight"))
 keymap.define("edit", "`", mode("repl"))
 keymap.define("edit", "pause", pause)
-keymap.define("edit", "return", ship.edit.newline)
+keymap.define("edit", "return", ship.edit.newline_and_indent)
 keymap.define("edit", "ctrl-z", ship.edit.undo)
 keymap.define("edit", "ctrl-r", ship.edit.revert)
 

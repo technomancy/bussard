@@ -182,6 +182,15 @@ local backward_word = function()
    end
 end
 
+local newline = function()
+   dirty = true
+   local remainder = lines[point_line]:sub(point + 1, -1)
+   lines[point_line] = lines[point_line]:sub(0, point)
+   point = 0
+   point_line = point_line + 1
+   table.insert(lines, point_line, remainder)
+end
+
 return {
    initialize = function()
       ROW_HEIGHT = love.graphics.getFont():getHeight()
@@ -333,13 +342,13 @@ return {
       mark, mark_line = nil, nil
    end,
 
-   newline = function()
-      dirty = true
-      local remainder = lines[point_line]:sub(point + 1, -1)
-      lines[point_line] = lines[point_line]:sub(0, point)
-      point = 0
-      point_line = point_line + 1
-      table.insert(lines, point_line, remainder)
+   newline = newline,
+
+   newline_and_indent = function()
+      local indentation = (lines[point_line]:match("^ +") or ""):len()
+      newline()
+      insert({string.rep(" ", indentation)})
+      point = point + indentation
    end,
 
    mark = function()
@@ -485,7 +494,7 @@ return {
             dirty = true
             lines[point_line] = line:sub(0, point) .. t .. line:sub(point + 1)
             point = point + 1
-           end)
+      end)
    end,
 
    wrap = wrap
