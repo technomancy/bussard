@@ -65,7 +65,7 @@ local safely = function(f)
 end
 
 love.load = function()
-   if arg[#arg] == "-debug" then require("mobdebug").start() end
+   if(arg[#arg] == "-debug") then require("mobdebug").start() end
    local font = love.graphics.newFont("assets/mensch.ttf", 14)
    love.graphics.setFont(font)
    love.keyboard.setKeyRepeat(true)

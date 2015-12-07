@@ -67,7 +67,7 @@ local disconnect = function(ship)
    ship.comm_connected = false
 end
 
-local logout = function(name)
+local logout = function(name, ship)
    local session = sessions[name]
    if(session) then
       local fs, _ = unpack(session)
@@ -77,6 +77,7 @@ local logout = function(name)
          end
       end
       sessions[name] = nil
+      ship.api.repl.print("Logged out.")
    end
 end
 
@@ -100,7 +101,7 @@ local sandbox = function(ship)
       set_prompt = function(p) ship.api.repl.prompt = p end,
       disconnect = function()
          disconnect(ship)
-         logout(target.name)
+         logout(target.name, ship)
       end
    }
    if(ship.target and ship.target.portal) then
@@ -122,8 +123,7 @@ end
 local send_input = function(ship, input)
    if(input == "logout") then
       if(sessions[ship.comm_connected]) then
-         ship.api.repl.print("Logged out.")
-         logout(ship.target.name)
+         logout(ship.target.name, ship)
       else
          ship.api.repl.print("| Not logged in.")
       end
@@ -151,7 +151,7 @@ local sandbox_out = function(ship, target_name, output)
       ship.api.repl.write(output)
    else
       -- printing nil means EOF, close session
-      logout(target_name)
+      logout(target_name, ship)
       disconnect(ship)
    end
 end
@@ -238,7 +238,7 @@ return {
 
    logout_all = function(ship)
       for _,session in pairs(sessions) do
-         logout(session)
+         logout(session, ship)
       end
       disconnect(ship)
    end,
