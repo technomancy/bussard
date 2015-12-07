@@ -123,11 +123,13 @@ local abort = function(ship, mission_name)
 end
 
 local readout = function(ship)
-   if(#ship.active_missions == 0) then return "- none" end
-   local f = function(m)
-      return "- " .. mission.name
+   if(lume.count(ship.active_missions) == 0) then return "- none" end
+   local s = ""
+   for mission_id in pairs(ship.active_missions) do
+      local this_mission = require("data.missions." .. mission_id)
+      s = s .. "\n- " .. this_mission.name
    end
-   return table.concat(lume.map(ship.active_missions, f), "\n ")
+   return s
 end
 
 return {

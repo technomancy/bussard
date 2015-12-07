@@ -76,7 +76,6 @@ user-visible changes were added in which releases.
 Planned features:
 
 * many more missions and characters
-* many more systems under various governments
 * many more ship upgrades
 * tutorials for writing ship code (autopilot, price tracking, auto-mining)
 * exploits to break into accounts you don't own
@@ -93,7 +92,7 @@ in order to make testing login interaction easier.
 **A:** Use `ctrl-enter` to open the config in the editor. Find the key binding you want to change for the mode in question ("flight", "repl", or "edit"), and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` and then `ctrl-r` to load them.
 
 **Q:** What can I do to improve the frame rate?  
-**A:** The biggest performance drag is calculating trajectories. Reduce the calculations with `ship.trajectory = 128` and you should notice a dramatic speed boost.
+**A:** The biggest performance drag is calculating trajectories. Reduce the calculations with `ship.trajectory = 128` and you should notice a dramatic speed boost. If you drop the trajectory length, you may want to boost the `ship.trajectory_step_size` to compensate.
 
 **Q:** Where are the missions?  
 **A:** There are currently only a few missions. The main chain starts at Tana Prime and continues on Mars. Future releases will flesh out more missions. You need to read the newsgroup postings (in `/usr/news/`) and indicate your acceptance with the `reply` command.
