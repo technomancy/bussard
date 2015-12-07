@@ -1,10 +1,13 @@
 local utils = require("utils")
 local body = require("body")
 
-local fail = function(ship, mission)
+local fail = function(ship, mission, aborted)
    ship.credits = ship.credits - (mission.fail_credits or 0)
    if(mission.fail_function) then
-      mission.fail_function(ship)
+      mission.fail_function(ship, aborted)
+   end
+   if(not aborted and mission.fail_message) then
+      ship.api.repl.print("Mission failed: " .. mission.fail_message)
    end
    for good, amt in pairs(mission.cargo or {}) do
       ship.cargo[good] = ship.cargo[good] - amt
@@ -113,7 +116,7 @@ local abort = function(ship, mission_name)
    if(mission) then
       ship.active_missions[mission.id] = nil
       ship.api.repl.print("Mission " .. mission.id .. " aborted.")
-      fail(ship, mission)
+      fail(ship, mission, true)
    else
       ship.api.repl.print("Mission " .. mission.id .. " not active.")
    end

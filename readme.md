@@ -96,7 +96,7 @@ in order to make testing login interaction easier.
 **A:** The biggest performance drag is calculating trajectories. Reduce the calculations with `ship.trajectory = 128` and you should notice a dramatic speed boost.
 
 **Q:** Where are the missions?  
-**A:** There are currently only three missions. The chain starts at Tana Prime and continues on Mars. Future releases will flesh out more missions. You need to read the newsgroup postings (in `/usr/news/`) and indicate your acceptance with the `reply` command.
+**A:** There are currently only a few missions. The main chain starts at Tana Prime and continues on Mars. Future releases will flesh out more missions. You need to read the newsgroup postings (in `/usr/news/`) and indicate your acceptance with the `reply` command.
 
 ## Influences
 

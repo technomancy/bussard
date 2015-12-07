@@ -77,7 +77,6 @@ return {
          for k,p in pairs(f.proc) do
             if(type(p) == "table" and p.thread) then
                if(coroutine.status(p.thread) == "dead") then
-                  print("coro died")
                   f.proc[k] = nil
                else
                   local _, err = coroutine.resume(p.thread)
