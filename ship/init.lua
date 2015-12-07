@@ -19,15 +19,12 @@ local body = require("body")
 
 local scale_min = 1
 
-local sensor_whitelist = {
-   "x", "y", "dx", "dy", "heading", "target", "system_name", "bodies",
-}
-
 local status_whitelist = {
+   "x", "y", "dx", "dy", "heading", "target", "system_name", "bodies",
    "fuel", "fuel_capacity", "battery", "battery_capacity", "mass", "in_range",
    "engine_on", "turning_right", "turning_left", "credits", "upgrade_names",
    "cargo", "cargo_capacity", "solar",
-   "engine_strength", "turning_speed",
+   "engine_strength", "turning_speed", "cpuinfo",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
    "portal_range", "portal_time", "flag", "target", "comm_boost",
 }
@@ -38,7 +35,7 @@ local base_stats = {
    fuel_capacity = 192,
    scoop_range = 0,
    comm_range = 2048,
-   recharge_rate = 2,
+   recharge_rate = 4,
    burn_rate = 16,
    engine_strength = 1024,
    turning_speed = 4,
@@ -104,6 +101,7 @@ local ship = {
    visas = {},
    flag = "Tana",
 
+   cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
       repl.initialize()
       edit.initialize()
@@ -278,7 +276,7 @@ ship.api = {
              values = {lume.fn(mission.readout, ship)}}
    },
    -- data tables (read-only)
-   sensors = utils.whitelist_table(ship, sensor_whitelist, "sensors"),
+   sensors = utils.whitelist_table(ship, status_whitelist, "sensors"),
    status = utils.whitelist_table(ship, status_whitelist, "status"),
 
    -- upgrades can place functions in this table when loaded
@@ -289,16 +287,16 @@ ship.api = {
       next_target = function()
          if(love.keyboard.isDown("lshift", "rshift")) then
             ship.target_number = ((ship.target_number - 1) %
-                  (table.length(ship.api.sensors.bodies) + 1))
+                  (table.length(ship.bodies) + 1))
          else
             ship.target_number = ((ship.target_number + 1) %
-                  (table.length(ship.api.sensors.bodies) + 1))
+                  (table.length(ship.bodies) + 1))
          end
          ship.target = ship.bodies[ship.target_number]
       end,
       closest_target = function()
          local min_distance = 1000000000000
-         for i,b in ipairs(ship.api.sensors.bodies) do
+         for i,b in ipairs(ship.bodies) do
             if(utils.distance(ship, b) < min_distance) then
                ship.target_number = i
                min_distance = utils.distance(ship, b)
@@ -357,7 +355,7 @@ ship.api = {
 
    fuel_to_stop = function(s)
       -- no idea where this 20 factor comes from
-      return utils.distance(s.sensors.dx, s.sensors.dy) *
+      return utils.distance(s.status.dx, s.status.dy) *
          s.status.engine_strength * s.status.burn_rate / (s.status.mass * 20)
    end,
 

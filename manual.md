@@ -153,22 +153,16 @@ command on the station computer for details.
 In your onboard computer, `ship` is a table representing the data and
 functionality that can be accessed programmatically.
 
-#### ship.sensors
+#### ship.status
 
-The fields in this table primarily relate to your ship's flight
-through space and other objects in space around it.
+These fields primarily convey the status of your ship's components and
+its upgrades as well as its flight through space and the objects nearby.
 
 * `x`, `y`, `dx`, `dy`: position and velocity.
 * `heading`: direction pointing, in radians.
 * `target`: table representing the body (planet, star, station, portal, etc.) targeted.
 * `system_name`: the name of the current system.
 * `bodies`: an array of bodies present in the current system.
-
-#### ship.status
-
-These fields primarily convey the status of your ship's components and
-its upgrades.
-
 * `fuel`, `fuel_capacity`: current and maximum fuel levels.
 * `mass`: current total mass of the ship, its upgrades, and its cargo.
 * `engine_on`: boolean indicating whether the engine is firing.

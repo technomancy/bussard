@@ -141,7 +141,7 @@ end)
 -- HUD
 ship.hud = {
    { x=60, y=5, type="text",
-     format="x: %5.0f y: %5.0f", values={"sensors.x", "sensors.y"}
+     format="x: %5.0f y: %5.0f", values={"status.x", "status.y"}
    },
    { x=60, y=20, type="text",
      format="epoch: %s  credits: %s",
@@ -149,20 +149,20 @@ ship.hud = {
         "status.credits"}
    },
    { x=5, y=5, type="vector",
-     values={"sensors.dx", "sensors.dy"},
+     values={"status.dx", "status.dy"},
      width=3, color={50, 255, 50}
    },
    { x=-5, y=5, type="vector",
-     values={"sensors.target.dx", "sensors.target.dy"},
+     values={"status.target.dx", "status.target.dy"},
      width=3, color={50, 255, 150}
    },
 
    { x=-70, y=5, type="text", align="right",
      format="target: %s\ndistance: %0.0f\nmass: %0.0f",
-     values={"sensors.target.name", function(s)
-                return s.sensors.target and utils.distance(s.sensors,
-                                                           s.sensors.target)
-     end, "sensors.target.mass"}
+     values={"status.target.name", function(s)
+                return s.status.target and utils.distance(s.status,
+                                                          s.status.target)
+     end, "status.target.mass"}
    },
    { x=5,y=60, type="bar",
      values={"status.fuel", "status.fuel_capacity", ship.fuel_to_stop},

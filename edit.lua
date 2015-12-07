@@ -59,7 +59,6 @@ local wrap = function(fn, ...)
    dirty = false
    local last_state = state()
    if(fn ~= undo) then undo_at = 0 end
-   last_cmd = fn
    fn(...)
    if(dirty) then
       table.insert(history, last_state)
