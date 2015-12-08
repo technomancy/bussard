@@ -1,4 +1,7 @@
 local utils = require("utils")
+local keymap = require("keymap")
+
+local w, h, em = love.graphics:getWidth(), love.graphics:getHeight()
 
 local laser_hits = function(ship, b, distance)
    -- assuming circular images
@@ -8,6 +11,19 @@ local laser_hits = function(ship, b, distance)
    local divergence = math.abs(math.sin(angular_divergence) * distance)
    return divergence < diameter
 end
+
+local pan = function(m, x, y)
+   m.x, m.y = m.x + x, m.y + y
+end
+
+local gov_colors = {
+   ["Tana"] = {0xaf, 0xfe, 0xee},
+   ["Sol"] = {0xff, 0xff, 0xff},
+   ["Terran"] = {0x22, 0x8b, 0x22},
+   ["Bohk"] = {0xff, 0xd7, 0x00},
+   ["Katilay"] = {0x71, 0x1c, 0xae},
+   ["Yueh"] = {0xcd, 0x00, 0x00},
+}
 
 return {
    laser = {
@@ -84,6 +100,55 @@ return {
       end
    },
 
+   map = {
+      stats = { mass=2 },
+      load = function(ship)
+         em = love.graphics.getFont():getWidth('a')
+         if(not keymap.modes.map) then
+            local system = ship.systems[ship.system_name]
+            local m = { x=system.x, y=system.y }
+            ship.map = m
+            keymap.define_mode("map")
+            keymap.define("map", "escape", lume.fn(keymap.change_mode, "flight"))
+            keymap.define("map", "down", lume.fn(pan, m, 0, -0.1))
+            keymap.define("map", "up", lume.fn(pan, m, 0, 0.1))
+            keymap.define("map", "left", lume.fn(pan, m, -0.1, 0))
+            keymap.define("map", "right", lume.fn(pan, m, 0.1, 0))
+         end
+      end,
+      draw_after = function(ship, dt)
+         if(keymap.current_mode == "map") then
+            love.graphics.setColor(0, 0, 0, 200)
+            love.graphics.rectangle("fill", 0, 0, w, h)
+            love.graphics.push()
+            love.graphics.translate(w/2 + ship.map.x*-100, h/2 + ship.map.y*100)
+            love.graphics.setColor(0, 0, 255)
+
+            for name, data in pairs(ship.systems) do
+               for _, b in ipairs(data.bodies) do
+                  if(b.portal) then
+                     local target = ship.systems[b.portal]
+                     love.graphics.line(data.x*100, data.y*-100,
+                                        target.x*100, target.y*-100)
+                  end
+               end
+            end
+
+            for name, data in pairs(ship.systems) do
+               local x,y = data.x*100, data.y*-100
+               local r = data.bodies[1].mass / 15000
+               local label_width = name:len() * em
+               local color = gov_colors[data.gov]
+               love.graphics.setColor(unpack(color))
+               love.graphics.circle("fill", x, y, r)
+               love.graphics.print(name, x-label_width/2, y+r*1.2)
+               love.graphics.setColor(77, 77, 77)
+               love.graphics.circle("line", x, y, r)
+            end
+            love.graphics.pop()
+         end
+      end,
+   },
    -- purely stat upgrades
    engine = { stats = { engine_power = 512, burn_rate = 4, mass = 64, } },
    cargo_bay = { stats = { cargo_capacity = 64, mass = 12, } },

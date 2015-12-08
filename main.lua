@@ -71,6 +71,7 @@ love.load = function()
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    if arg[#arg] == "-abort" then save.abort(ship) end
+   keymap.current_mode = "flight"
    save.load_into(ship)
    body.load(systems)
 
@@ -185,6 +186,9 @@ love.draw = safely(function(dt)
       hud.render(ship)
       ship.api.repl.draw()
       ship.api.edit.draw()
+      for _,u in pairs(ship.upgrades) do
+         if(u.draw_after) then u.draw_after(ship, dt) end
+      end
 end)
 
 return ship -- for headless.lua

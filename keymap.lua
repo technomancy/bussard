@@ -18,8 +18,6 @@ keymap = {
       keymap.modes[name] = {map = {}, ctrl = {}, alt = {},
                             ["ctrl-alt"] = {}}
       keymap.modes[name]._wrap = wrap
-      -- first mode to be defined becomes active
-      keymap.current_mode = keymap.current_mode or name
    end,
 
    define = function(mode, keycode, fn)

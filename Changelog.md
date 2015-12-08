@@ -2,6 +2,7 @@
 
 ## alpha-6 / ???
 
+* Add a map upgrade.
 * (Most) worlds tell you a bit about them when you log in.
 * Editor can undo/redo.
 * Added Comm Boost and Solar Panel upgrades.

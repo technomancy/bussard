@@ -225,6 +225,7 @@ local ship = {
 
       for _,u in ipairs(ship.upgrade_names) do
          ship.upgrades[u] = assert(upgrade[u], u .. " not found.")
+         if(upgrade[u].load) then upgrade[u].load(ship) end
       end
 
       for good,amt in pairs(ship.cargo) do

@@ -552,7 +552,7 @@ local sys = {
 
    -- secret colonies
    ["LHS 451"] = {gov="Yueh", -- GI 682
-                  x=4.9,y=-1.1,
+                  x=4.9,y=-1.1, unmapped=true,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                       image_name="sun",
@@ -563,7 +563,7 @@ local sys = {
                   }, -- mostly uninhabited
    },
    ["CD-40 9712"] = {gov="Yueh", -- GI 588
-                     x=5.3, y=-2.8,
+                     x=5.3, y=-2.8, unmapped=true,
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                          image_name="sun",
