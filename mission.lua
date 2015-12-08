@@ -12,6 +12,7 @@ local fail = function(ship, mission, aborted)
    for good, amt in pairs(mission.cargo or {}) do
       ship.cargo[good] = ship.cargo[good] - amt
    end
+   ship.active_missions[mission.id] = nil
 end
 
 local cargo_check = function(ship, mission)
