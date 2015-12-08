@@ -238,7 +238,7 @@ local sys = {
    ["Lalande"] = {gov="Terran", capitol = true,
                   x=1.6, y=-0.4,
                   bodies = {
-                     {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
+                     {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
                       image_name="sun",
                       name="Lalande 25372", fixed=true},
                      {r=14000, mass=200,
@@ -314,9 +314,9 @@ local sys = {
 
    -- Bohk
    ["Bohk"] = {gov="Bohk", capitol = true,
-               x=4.3, y=-0.6,
+               x=3.2, y=-0.6,
                bodies = {
-                  {r=0, x=0, y=0, dx=0, dy=0, mass=350000,
+                  {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
                    image_name="sun",
                    name="Bohk 832", fixed=true},
                   {r=15000, mass=500,
@@ -362,7 +362,7 @@ local sys = {
    },
    ["New Phobos"] = {gov="Bohk", x=3.9, y=0.2, asteroids=5,
                      bodies = {
-                        {r=0, x=0, y=0, dx=0, dy=0, mass=310000,
+                        {r=0, x=0, y=0, dx=0, dy=0, mass=390000,
                          image_name="sun",
                          name="New Phobos 4523", fixed=true},
                         {r=18000, mass=630,
@@ -410,9 +410,9 @@ local sys = {
 
    -- Katilay
    ["Katilay"] = {gov="Katilay", capitol = true,
-                  x=3.9, y=2.3, asteroids = 3,
+                  x=3.2, y=3.3, asteroids = 3,
                   bodies = {
-                     {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                     {r=0, x=0, y=0, dx=0, dy=0, mass=210000,
                       image_name="sun",
                       name="Katilay 103039", fixed=true},
                      {r=25000, mass=350,
@@ -443,9 +443,9 @@ local sys = {
 
    -- Yueh
    ["Yueh"] = {gov="Yueh", capital=true, -- GI 674
-               x=4.3, y=-1.3, asteroids=2,
+               x=4.3, y=-1.4, asteroids=2,
                bodies = {
-                  {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                  {r=0, x=0, y=0, dx=0, dy=0, mass=390000,
                    image_name="sun",
                    name="Yueh 674", fixed=true},
                   {r=14000, mass=350, asteroids=4,
@@ -478,9 +478,9 @@ local sys = {
                }, -- Yueh capital
    },
    ["Kowlu"] = {gov="Yueh", -- GI 693
-                x= 5.2, y=-2.3, asteroids=6,
+                x= 5.4, y=-2.3, asteroids=6,
                 bodies = {
-                   {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                   {r=0, x=0, y=0, dx=0, dy=0, mass=440000,
                     image_name="sun",
                     name="Kowlu 693", fixed=true},
                    {r=12000, mass=500,
@@ -510,7 +510,7 @@ local sys = {
    ["Delta Pavonis"] = {gov="Yueh",
                         x=4.5, y=-2.6,
                         bodies = {
-                           {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                           {r=0, x=0, y=0, dx=0, dy=0, mass=190000,
                             image_name="sun",
                             name="Delta Pavonis", fixed=true},
                            {r=18000, mass=300,
@@ -532,9 +532,9 @@ local sys = {
                         }
    },
    ["Wolf 1481"] = {gov="Yueh", -- BD
-                    x=4.1, y=-1.7, asteroids=3,
+                    x=4.0, y=-2.1, asteroids=3,
                     bodies = {
-                       {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+                       {r=0, x=0, y=0, dx=0, dy=0, mass=150000,
                         image_name="sun",
                         name="Wolf 1481", fixed=true},
                        {r=12000, mass=100, station=true,
@@ -560,10 +560,10 @@ local sys = {
                      {name = "Portal: Yueh",
                       image_name="portal-3", os=lisp,
                       r=22000, mass=60, portal="Yueh"},
-                  }, -- mostly uninhabited
+                  },
    },
    ["CD-40 9712"] = {gov="Yueh", -- GI 588
-                     x=5.3, y=-2.8, unmapped=true,
+                     x=5.3, y=-3.1, unmapped=true,
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                          image_name="sun",
@@ -571,7 +571,7 @@ local sys = {
                         {name = "Portal: Yueh",
                          image_name="portal-3", os=lisp,
                          r=22000, mass=60, portal="Yueh"},
-                     }, -- mostly uninhabited
+                     },
    },
 }
 
