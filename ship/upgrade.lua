@@ -116,6 +116,7 @@ return {
             keymap.define("map", "right", lume.fn(pan, m, 0.1, 0))
          end
       end,
+      action = lume.fn(keymap.change_mode, "map"),
       draw_after = function(ship, dt)
          if(keymap.current_mode == "map") then
             love.graphics.setColor(0, 0, 0, 200)
@@ -125,25 +126,32 @@ return {
             love.graphics.setColor(0, 0, 255)
 
             for name, data in pairs(ship.systems) do
-               for _, b in ipairs(data.bodies) do
-                  if(b.portal) then
-                     local target = ship.systems[b.portal]
-                     love.graphics.line(data.x*100, data.y*-100,
-                                        target.x*100, target.y*-100)
+               if(not data.unmapped) then
+                  for _, b in ipairs(data.bodies) do
+                     if(b.portal and not ship.systems[b.portal].unmapped) then
+                        local target = ship.systems[b.portal]
+                        love.graphics.line(data.x*100, data.y*-100,
+                                           target.x*100, target.y*-100)
+                     end
                   end
                end
             end
 
             for name, data in pairs(ship.systems) do
-               local x,y = data.x*100, data.y*-100
-               local r = data.bodies[1].mass / 15000
-               local label_width = name:len() * em
-               local color = gov_colors[data.gov]
-               love.graphics.setColor(unpack(color))
-               love.graphics.circle("fill", x, y, r)
-               love.graphics.print(name, x-label_width/2, y+r*1.2)
-               love.graphics.setColor(77, 77, 77)
-               love.graphics.circle("line", x, y, r)
+               if(not data.unmapped) then
+                  local x,y = data.x*100, data.y*-100
+                  local r = data.bodies[1].mass / 15000
+                  local label_width = name:len() * em
+                  local color = gov_colors[data.gov]
+                  love.graphics.setColor(unpack(color))
+                  love.graphics.circle("fill", x, y, r)
+                  love.graphics.print(name, x-label_width/2, y+r*1.3)
+                  if(name == ship.system_name) then
+                     love.graphics.circle("line", x, y, r*1.3)
+                  end
+                  love.graphics.setColor(77, 77, 77)
+                  love.graphics.circle("line", x, y, r)
+               end
             end
             love.graphics.pop()
          end

@@ -226,17 +226,15 @@ local ship = {
       for _,u in ipairs(ship.upgrade_names) do
          ship.upgrades[u] = assert(upgrade[u], u .. " not found.")
          if(upgrade[u].load) then upgrade[u].load(ship) end
+         for k,v in pairs(upgrade[u].stats or {}) do
+            ship[k] = (ship[k] or 0) + v
+         end
+         ship.api.actions[u] = upgrade[u].action and
+            lume.fn(upgrade[u].action, ship)
       end
 
       for good,amt in pairs(ship.cargo) do
          if(amt == 0) then ship.cargo[good] = nil end
-      end
-
-      for name,u in pairs(ship.upgrades) do
-         for k,v in pairs(u.stats or {}) do
-            ship[k] = (ship[k] or 0) + v
-         end
-         ship.api.actions[name] = u.action and lume.fn(u.action, ship)
       end
 
       ship.mass = ship.mass + ship:cargo_mass()
