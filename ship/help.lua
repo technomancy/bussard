@@ -7,6 +7,7 @@ local pages = {
    intro4 = "doc/intro4.md",
    intro5 = "doc/intro5.md",
 
+   -- FIXME: don't list these unless they're bought
    manual = "manual.md",
    keycodes = "doc/keycodes.md",
    laser = "doc/laser.md",
@@ -16,12 +17,13 @@ local pages = {
    fuel_charger = "doc/fuel_charger.md",
    solar_panel = "doc/solar_panel.md",
    comm_boost = "doc/comm_boost.md",
+   map = "doc/map.md",
 
    -- TODO: editor manual
 }
 
 local list = function()
-   return "Manual pages:\n* " .. table.concat(lume.keys(pages), "\n* ")
+   return "Manual pages:\n* " .. table.concat(lume.sort(lume.keys(pages)), "\n* ")
 end
 
 return {

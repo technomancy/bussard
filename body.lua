@@ -41,6 +41,7 @@ local base_prices = {
       fuel_charger = 768,
       comm_boost = 2048,
       solar_panel = 712,
+      map = 512,
    },
 }
 

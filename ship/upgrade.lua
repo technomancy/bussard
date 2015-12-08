@@ -101,7 +101,7 @@ return {
    },
 
    map = {
-      stats = { mass=2 },
+      stats = {},
       load = function(ship)
          em = love.graphics.getFont():getWidth('a')
          if(not keymap.modes.map) then
@@ -153,6 +153,8 @@ return {
                   love.graphics.circle("line", x, y, r)
                end
             end
+            love.graphics.print("Copyright © 2430 Lonesome Planet Publishing" ..
+                                   ", All Rights Reserved.", -640, 480)
             love.graphics.pop()
          end
       end,
