@@ -1,5 +1,8 @@
 local lume = require("lume")
 
+local upgrades = {"laser", "engine", "cargo_bay", "fuel_tank", "fuel_charger",
+                  "solar_panel", "comm_boost", "map",}
+
 local pages = {
    intro = "doc/intro.md",
    intro2 = "doc/intro2.md",
@@ -7,9 +10,9 @@ local pages = {
    intro4 = "doc/intro4.md",
    intro5 = "doc/intro5.md",
 
-   -- FIXME: don't list these unless they're bought
    manual = "manual.md",
    keycodes = "doc/keycodes.md",
+
    laser = "doc/laser.md",
    engine = "doc/engine.md",
    cargo_bay = "doc/cargo_bay.md",
@@ -22,8 +25,13 @@ local pages = {
    -- TODO: editor manual
 }
 
-local list = function()
-   return "Manual pages:\n* " .. table.concat(lume.sort(lume.keys(pages)), "\n* ")
+local show_page = function(ship, p)
+   return not lume.find(upgrades, p) or lume.find(ship.status.upgrade_names, p)
+end
+
+local list = function(ship)
+   local have_pages = lume.filter(lume.keys(pages), lume.fn(show_page, ship))
+   return "Manual pages:\n* " .. table.concat(lume.sort(have_pages), "\n* ")
 end
 
 return {
@@ -31,8 +39,8 @@ return {
    message = "Type `man()` to view your ship's operating manual.",
    man = function(ship, page_name)
       if(page_name == "list") then
-         ship.repl.print(list())
-      elseif(pages[page_name]) then
+         ship.repl.print(list(ship))
+      elseif(pages[page_name] and show_page(ship, p)) then
          -- can't inline this because read returns multiple values
          local p = love.filesystem.read(pages[page_name])
          ship.repl.print(p)
