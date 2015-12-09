@@ -7,6 +7,7 @@ dynamically reconfigure to add new capabilities.
 Please review this manual to ensure you have a complete understanding
 of your ship's operation, and you will enjoy many safe travels on board.
 There are manuals on other topics as well, use `man("list")` to see them all.
+Upgrades you purchase will come with new manuals too.
 
 ## Display
 
@@ -119,9 +120,10 @@ storage. Please note that attempting to access accounts of others is
 strictly forbidden by interstellar law.
 
 Services offered on stations vary by locale, but most stations at
-least offer to buy and sell cargo. The `cargo` executable takes
-`list`, `buy`, and `sell` subcommands; see its online help (`cargo
---help`) for usage details.
+least offer to buy and sell cargo. The `cargo` program takes `list`,
+`buy`, and `sell` subcommands; see its online help (`cargo --help`)
+for usage details. You can run `ls /bin` to see a list of built-in
+programs on most computer systems.
 
 While your session is active, you will not be able to enter any code
 into your ship's REPL, and the REPL prompt will change to `$`. Enter
@@ -143,10 +145,10 @@ seconds for it to complete.
 
 Certain portals which allow travel between systems of different
 governments require you to receive clearance before you may travel
-through them. Stations in the border systems containing these portals
+through them. Worlds in the border systems containing these portals
 usually offer services where citizens of one government may buy
-clearance to another for a limited time. Try using the `embassy`
-command on the station computer for details.
+clearance to another government. Try using the `embassy` command on
+the station computer for details.
 
 ### API list
 
@@ -155,7 +157,7 @@ functionality that can be accessed programmatically.
 
 #### ship.status
 
-These fields primarily convey the status of your ship's components and
+These read-only fields primarily convey the status of your ship's components and
 its upgrades as well as its flight through space and the objects nearby.
 
 * `x`, `y`, `dx`, `dy`: position and velocity.
@@ -171,7 +173,7 @@ its upgrades as well as its flight through space and the objects nearby.
 * `cargo`: a table of good names to tons of that good in your hold.
 * `cargo_capacity`: the maximum total tonnage you can fit in your hold.
 * `engine_strength`, `turning_speed`: capabilities of engine/turn thrusters.
-* `burn_rate`: how quickly your engine consumes fuel.
+* `burn_rate`: how quickly your engine uses fuel; turn thrusters use negligible fuel.
 * `recharge_rate`: how quickly your collector replenishes your fuel.
 * `solar`: how quickly your battery charges (based on distance from star).
 * `comm_connected`: whether or not the comm system is connected.
@@ -183,6 +185,8 @@ its upgrades as well as its flight through space and the objects nearby.
 
 #### ship.actions
 
+These functions affect changes to the ship's state.
+
 * `forward`, `left`, `right`: accepts a boolean indicating whether to
   fire the given engine/thruster.
 * `next_target`: cycle sequentially through all the targets in the system.
@@ -190,6 +194,9 @@ its upgrades as well as its flight through space and the objects nearby.
 * `closest_target`: select the closest available target. ctrl-tab by default.
 * `login`: accepts optional username/password, attempts to establish a
   login session with the target if possible.
+
+Upgrades often add new functions to this table. Consult the manual for
+any given upgrade for details.
 
 #### controls (flight)
 
@@ -234,7 +241,7 @@ with dots in them indicate that they are nested inside tables. Include
 `align="right"` to justify the text along the right side instead of
 the left.
 
-Second is the `"vector"` type, like this:
+Second is the two-dimensional `"vector"` type, like this:
 
     { type="vector", x=5, y=60, values={"sensors.dx", "sensors.dy"} }
 
@@ -268,6 +275,17 @@ instance, to purchase a laser, provided you have enough credits. Once
 you have purchased an upgrade, you can usually view its documentation
 by logging out of the station and accessing its manual page with
 `man("laser")`, etc.
+
+### Missions
+
+Often on computers at various worlds you can accept missions from the
+people there, usually by browsing the newsgroups in `/usr/news` and
+replying to requests for help.
+
+Your HUD is preconfigured with a listing for active missions. To get
+more details, you can run `ship.missions.list()`, while you can abort
+a given mission with `ship.missions.abort("MISSION_ID")`, though this
+will forfeit any cargo from the mission.
 
 ## Footer
 

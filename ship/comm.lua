@@ -58,6 +58,7 @@ local portal_cleared = function(ship, portal_body)
       gov.treaties[target_gov][ship.flag]) then return true end
    local visa = ship.visas[target_gov] and ship.visas[target_gov] > now
    return true
+   -- FIXME: visas be good for one entry at any time
    -- return visa, "no visa to " .. target_gov .. "; please visit station embassy."
 end
 

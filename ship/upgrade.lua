@@ -117,7 +117,7 @@ return {
          end
       end,
       action = lume.fn(keymap.change_mode, "map"),
-      draw_after = function(ship, dt)
+      draw_after = function(ship)
          if(keymap.current_mode == "map") then
             love.graphics.setColor(0, 0, 0, 200)
             love.graphics.rectangle("fill", 0, 0, w, h)
@@ -125,7 +125,7 @@ return {
             love.graphics.translate(w/2 + ship.map.x*-100, h/2 + ship.map.y*100)
             love.graphics.setColor(0, 0, 255)
 
-            for name, data in pairs(ship.systems) do
+            for _, data in pairs(ship.systems) do
                if(not data.unmapped) then
                   for _, b in ipairs(data.bodies) do
                      if(b.portal and not ship.systems[b.portal].unmapped) then

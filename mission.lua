@@ -90,7 +90,6 @@ local update = function(ship, dt)
    end
 end
 
--- FIXME: document in manual how to get mission details
 local list = function(ship)
    for mission_id,_ in pairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
