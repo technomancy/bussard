@@ -56,10 +56,8 @@ local portal_cleared = function(ship, portal_body)
       gov.treaties[target_gov][current_gov]) then return true end
    if(gov.treaties and gov.treaties[target_gov] and
       gov.treaties[target_gov][ship.flag]) then return true end
-   local visa = ship.visas[target_gov] and ship.visas[target_gov] > now
-   return true
-   -- FIXME: visas be good for one entry at any time
-   -- return visa, "no visa to " .. target_gov .. "; please visit station embassy."
+   local visa = (ship.visas[target_gov] or 0) > 0
+   return visa, "no visa to " .. target_gov .. "; please visit station embassy."
 end
 
 local disconnect = function(ship)
@@ -106,12 +104,19 @@ local sandbox = function(ship)
       end
    }
    if(ship.target and ship.target.portal) then
+      sb.body = ship.target
       sb.portal_target = ship.target.portal
       sb.trip_cleared = lume.fn(portal_cleared, ship, target)
       sb.set_beams = function(n)
          target.beam_count = ((n or 0) * 9) / ship.portal_time
       end
-      sb.portal_activate = function() ship:enter(target.portal, true) end
+      sb.portal_activate = function()
+         local gov = ship.systems[sb.portal_target].gov
+         if(ship.visas[gov] and sb.body.interportal) then
+            ship.visas[gov] = ship.visas[gov] - 1
+         end
+         ship:enter(target.portal, true)
+      end
       sb.draw_power = function(power)
          assert(ship.battery - power >= 0, "Insufficient power.")
          ship.portal_target = target

@@ -21,8 +21,6 @@ local pages = {
    solar_panel = "doc/solar_panel.md",
    comm_boost = "doc/comm_boost.md",
    map = "doc/map.md",
-
-   -- TODO: editor manual
 }
 
 local show_page = function(ship, p)
@@ -40,7 +38,7 @@ return {
    man = function(ship, page_name)
       if(page_name == "list") then
          ship.repl.print(list(ship))
-      elseif(pages[page_name] and show_page(ship, p)) then
+      elseif(pages[page_name] and show_page(ship, page_name)) then
          -- can't inline this because read returns multiple values
          local p = love.filesystem.read(pages[page_name])
          ship.repl.print(p)

@@ -133,8 +133,8 @@ return {
          local visa = gov.visas[to_gov]
          if(ship.credits >= visa.price) then
             ship.credits = ship.credits - visa.price
-            ship.visas[to_gov] = visa.length + utils.time(ship)
-            return true, "Success", visa.length, visa.price
+            ship.visas[to_gov] = (ship.visas[to_gov] or 0) + 1
+            return true, "Success", visa.price
          else
             return false, "Insufficient credits."
          end

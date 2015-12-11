@@ -348,7 +348,7 @@ local sys = {
                   },
                   {name = "Portal: Lalande",
                    image_name="portal-2", interportal=true, os=lisp,
-                   r=3000, mass=60, portal="Lalande",},
+                   r=30000, mass=60, portal="Lalande",},
                   {name = "Portal: New Phobos",
                    image_name="portal-1",
                    r=32000, mass=60, portal="New Phobos", os=lisp,},

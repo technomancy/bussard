@@ -15,7 +15,5 @@ Mars. You will need to spend a quarter of a kilosecond within range of
 the star.
 
 Because of the distance, we are prepared to supply you with a passponder
-device to allow you access to New Phobos and the systems on route,
-though the visas on it will expire if they are not activated in 20
-kiloseconds. The passponder device may be kept as payment once the
-mission is completed.
+device to allow you access to New Phobos and the systems on route. The
+passponder device may be kept as payment once the mission is completed.

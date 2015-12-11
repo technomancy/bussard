@@ -1,8 +1,10 @@
+-- -*- lua -*-
 local utils = require("utils")
 local orbit_time = 0
 
 return {
    name="Test sensor on New Phobos",
+   description="Spend 1/4 ksec within 5000 of Wolf 294.",
    id="e5ecc7c8-2959-4976-a123-239319f0b889",
    destinations={"Mars"},
    objectives={"new-phobos-flyby"},
@@ -28,8 +30,8 @@ return {
    -- TODO: tweak timing
    accept_function=function(ship)
       local deadline = utils.time(ship) + 20000
-      ship.visas["Terran"] = deadline
-      ship.visas["Bohk"] = deadline
+      ship.visas["Terran"] = 2
+      ship.visas["Bohk"] = 1
       table.insert(ship.upgrade_names, "passponder")
       ship:recalculate()
    end,

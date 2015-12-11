@@ -271,7 +271,7 @@ ship.api = {
    mission = {
       list = lume.fn(mission.list, ship),
       abort = lume.fn(mission.abort, ship),
-      hud = {x=-300, y=-100, type="text", format="Missions:\n %s",
+      hud = {x=-300, y=-100, type="text", format="Missions: %s",
              values = {lume.fn(mission.readout, ship)}}
    },
    -- data tables (read-only)

@@ -148,6 +148,10 @@ Bohk Prime.
 * GNO Project (Sol)
   Responsible for maintaining software infrastrucutre such as the Orb OS.
 
+* TMRC (Bohk, Yueh)
+  Loose association of hackers, mostly interested in cool onboard computer
+  tricks, but also with some interest in security.
+
 # Universities
 
 ...
