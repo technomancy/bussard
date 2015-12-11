@@ -1,0 +1,113 @@
+From: Genur Rodot
+Subject: Auto zoom
+To: soc.bohk
+Message-Id: b922cb68-9da0-4c77-8cae-aea72ba7deb9
+Content-Type: text/plain; charset=UTF-8
+
+I was playing around with this function the other day, and I've come to
+find it pretty handy. It automatically adjusts the zoom scale depending
+on the distance of your ship from its target as long as you hold down
+right alt on your helm keyboard.
+
+  local az = function(on)
+    if(not on or not ship.status.target) then return end
+    local d = utils.distance(ship.status, ship.status.target)
+    local s = math.pow(ship.scale, 8) * 1000
+    local f = d/s
+    print(d, s, f)
+    if(f < 0.2) then
+      ship.scale = ship.scale - ship.dt / 10
+    elseif(f > 0.35) then
+      ship.scale = ship.scale + ship.dt / 10
+    end
+  end
+
+  ship.controls.ralt = az
+
+You can multiply or divide that ship.dt factor to make the zoom more or
+less gradual; sometimes it feels a bit abrupt.
+
+
+
+From: Diejoud Malomis
+Subject: Re: Auto zoom
+To: soc.bohk
+Message-Id: f0cd6932-819b-4c8a-88d4-83821c9921fb
+In-Reply-To: b922cb68-9da0-4c77-8cae-aea72ba7deb9
+Content-Type: text/plain; charset=UTF-8
+
+Looks pretty handy! I was going to use this, but I don't have a right
+alt key on my Atreus helm control, so I've got it wired in to run
+continuously via updaters instead:
+
+  local az = function()
+    if(not on or not ship.status.target) then return end
+    local d = utils.distance(ship.status, ship.status.target)
+    local s = math.pow(ship.scale, 8) * 1000
+    local f = d/s
+    if(f < 0.2) then
+      ship.scale = ship.scale - ship.dt / 25
+    elseif(f > 0.35) then
+      ship.scale = ship.scale + ship.dt / 25
+    end
+  end
+
+  table.insert(ship.updaters, az)
+
+I've made the zoom more gradual since it can happen when you're not
+expecting it; 25 as the ship.dt factor feels nice and subtle.
+
+
+
+From: Diejoud Malomis
+Subject: Re: Auto zoom
+To: soc.bohk
+Message-Id: e3cf56df-5f1b-4530-84b6-78bdc26a5799
+In-Reply-To: f0cd6932-819b-4c8a-88d4-83821c9921fb
+Content-Type: text/plain; charset=UTF-8
+
+Actually that function in my last message is pretty annoying; since it
+continuously fires, it jumps all around while you are cycling through
+your targets. Here's a nicer version that waits till you've settled on a
+target:
+
+  local az_last
+  local az_last_at = 0
+
+  az = function(on)
+    if(not on or not ship.status.target) then return end
+
+    if(not az_last == ship.status.target) then
+      az_last = ship.status.target
+      az_last_at = 0
+    end
+    
+    if(az_last_at and az_last_at > 1) then
+      local d = utils.distance(ship.status, ship.status.target)
+      local s = math.pow(ship.scale, 8) * 1000
+      local f = d/s
+      print(d, s, f)
+      if(f < 0.2) then
+        ship.scale = ship.scale - ship.dt / 25
+      elseif(f > 0.35) then
+        ship.scale = ship.scale + ship.dt / 25
+      end
+    else
+      az_last_at = az_last_at + ship.dt
+    end
+  end
+
+
+
+From: Riris Kimepusas
+Subject: Re: Auto zoom
+To: soc.bohk
+Message-Id: 922d1331-1cf2-49ad-8081-2b1c89a62388
+In-Reply-To: e3cf56df-5f1b-4530-84b6-78bdc26a5799
+Content-Type: text/plain; charset=UTF-8
+
+This is great! The one thing I would change is adding in a minimum
+distance; it's a bit silly to zoom in once you're closer than 3000 or
+so. I find by that point I can see everything just fine anyway. I've
+just added a conditional early return right after the "local d" line and
+it works like a charm.
