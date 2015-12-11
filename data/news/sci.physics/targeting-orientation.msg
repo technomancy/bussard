@@ -1,0 +1,57 @@
+From: Dekoukar Hurid
+To: sci.physics
+Content-Type: text/plain; charset=UTF-8
+Subject: Targeting orientation
+Message-Id: c21aedcf-fc65-46fd-84a7-23383160d60f
+
+I want to write some kind of auto-pilot code for my ship.
+
+How would I write a function that would turn my ship to face its current
+target? I think it is possible using trigonometry, but my math is too rusty.
+
+
+
+From: Rucojur Fusehog
+To: sci.physics
+Content-Type: text/plain; charset=UTF-8
+Subject: Re: Targeting orientation
+Message-Id: 8ff16302-b137-4a90-9527-bbe59a167426
+In-Reply-To: c21aedcf-fc65-46fd-84a7-23383160d60f
+
+This is a bit tricky because you would think it just needs the
+arctangent, but if you use math.atan2 then it correctly calculates the
+quadrant; the code gets a lot simpler if you don't have to figure that
+bit out separately.
+
+Here's what I have. Note that it's not all that useful since it points
+you to where the target currently is, not where it will be by the time
+you actually get to it.
+
+  local normalize = function(t)
+    return math.mod(t + math.pi, math.pi * 2) - math.pi
+  end
+
+  ship.controls.down = function(active)
+    local t = ship.status.target
+    if(not active or not t) then return end
+
+    local heading = normalize(ship.status.heading)
+    local theta = math.atan2(t.y - ship.status.y, t.x - ship.status.x)
+    theta = normalize(math.pi/2 - theta)
+    if(heading - theta < 0) then
+      ship.actions.left(true)
+    else
+      ship.actions.right(true)
+    end
+  end
+
+
+
+From: Dekoukar Hurid
+To: sci.physics
+Content-Type: text/plain; charset=UTF-8
+Subject: Re: Targeting orientation
+Message-Id: 9662d784-9b59-43d0-ac67-6433c0b8d992
+In-Reply-To: 8ff16302-b137-4a90-9527-bbe59a167426
+
+That looks like what I'm looking for; thanks.
