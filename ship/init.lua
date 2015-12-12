@@ -140,6 +140,7 @@ local ship = {
          local portal = lume.match(ship.bodies, function(b) return b.portal == from end)
          if(portal) then
             ship.x, ship.y = portal.x, portal.y
+            ship.dx, ship.dy = portal.dx, portal.dy
          else
             ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
          end
