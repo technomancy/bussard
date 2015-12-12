@@ -131,13 +131,15 @@ love.draw = safely(function(dt)
          -- you can log into portals, but this isn't obvious at first
          if(ship:in_range(ship.target) and ship.target.os and
             not ship.target.portal) then
-            love.graphics.setColor(10, 100, 10)
+            love.graphics.setColor(10, 200, 10)
          elseif(ship.target.asteroid and
                 ship:in_range(ship.target, ship.scoop_range)) then
             love.graphics.setColor(100, 10, 10)
          elseif(ship.target.portal and
                 ship:in_range(ship.target, ship.portal_range)) then
             love.graphics.setColor(10, 10, 100)
+         elseif(ship.target.os) then
+            love.graphics.setColor(80, 120, 80)
          else
             love.graphics.setColor(100, 100, 100)
          end

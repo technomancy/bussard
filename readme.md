@@ -14,7 +14,7 @@ Read [an interview on the motivation and background for the game](http://hifibya
 
 When you start the game, your first priority is to rendezvous with the
 nearby station. Press `tab` until your targeting indicator in your HUD
-shows the station. The grey line will always point in the direction of
+shows the station. The targeting line will always point in the direction of
 your target; the blue striped line indicates your current
 trajectory. Head towards the station and try to make your trajectory
 match its orbit, but keep an eye on your velocity and fuel supply. If
@@ -22,8 +22,8 @@ you accelerate too much, you may not have enough fuel to match
 velocity with the station. Once you get close, it will be easier to
 match velocity if you zoom in with `=`.
 
-Once you are in orbit around the station, and are in range, the grey
-line pointing towards the station will turn green. Press backtick and
+Once you are in orbit around the station, and are in range, the line
+pointing towards the station will turn light green. Press backtick and
 type `login()` to establish a connection. You can see all the commands
 available on the station by typing `ls /bin`, but at this time you
 only need to concern yourself with the `upgrade` command. Run `upgrade

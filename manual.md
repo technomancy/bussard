@@ -103,8 +103,8 @@ station's services, including refueling, cargo transactions,
 purchasing upgrades, downloading new code, renting cargo storage,
 and communicating with others.
 
-Your targeting indicator will turn green when you are within range of
-a station that allows logins.
+Your targeting indicator will turn dark green when you are within
+range of a station that allows logins.
 
 Sessions are initiated using the `ship.actions.login` function, which
 will log you into the currently-targeted planet or station with the
