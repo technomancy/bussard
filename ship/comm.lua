@@ -76,7 +76,9 @@ local logout = function(name, ship)
          end
       end
       sessions[name] = nil
-      ship.api.repl.print("Logged out.")
+      if(not name:match("[Pp]ortal")) then
+         ship.api.repl.print("\nLogged out.")
+      end
    end
 end
 
