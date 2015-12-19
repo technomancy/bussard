@@ -69,6 +69,7 @@ keymap.define("repl", "left", ship.repl.backward_char)
 keymap.define("repl", "pageup", ship.repl.scroll_up)
 keymap.define("repl", "pagedown", ship.repl.scroll_down)
 
+keymap.define("repl", "tab", ship.repl.complete)
 keymap.define("repl", "escape", mode("flight"))
 keymap.define({"flight", "repl"}, "ctrl-return", function() ship:e("src.config") end)
 

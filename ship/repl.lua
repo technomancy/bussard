@@ -192,6 +192,40 @@ function repl.eval(text, add_to_history)
    return false
 end
 
+local function completions_for(input, context, prefixes)
+   if(type(context) ~= "table") then return {} end
+   local input_parts = lume.split(input, ".")
+   if(#input_parts == 1) then
+      local matches = {}
+      for k in pairs(context) do
+         if(k:find("^" .. input)) then
+            local parts = lume.clone(prefixes)
+            table.insert(parts, k)
+            table.insert(matches, table.concat(parts, "."))
+         end
+      end
+      return matches
+   else
+      local first_part = table.remove(input_parts, 1)
+      table.insert(prefixes, first_part)
+      return completions_for(table.concat(input_parts, "."), context[first_part],
+                             prefixes)
+   end
+end
+
+repl.complete = function()
+   local input = lume.last(lume.split(editline:sub(0, cursor))) or ""
+   local completions = completions_for(input, repl.completion_context or
+                                          repl.sandbox, {})
+   if(#completions == 1) then
+      editline = editline:sub(1, cursor - input:len()) .. completions[1] ..
+         editline:sub(cursor + 1)
+      cursor = cursor + completions[1]:len() - input:len()
+   elseif(#completions > 0) then
+      repl.print(table.concat(completions, " "))
+   end
+end
+
 -- Line editing functionality and key handling
 
 local function reset_editline()

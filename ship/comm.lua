@@ -50,7 +50,6 @@ local portal_cleared = function(ship, portal_body)
    -- TODO: import duties to pay on your cargo
    local target_gov = assert(ship.systems[portal_body.portal].gov)
    local current_gov = assert(ship.systems[ship.system_name].gov)
-   local now = utils.time(ship)
    if(not portal_body.interportal) then return true end
    if(gov.treaties and gov.treaties[target_gov] and
       gov.treaties[target_gov][current_gov]) then return true end
@@ -64,6 +63,7 @@ local disconnect = function(ship)
    ship.api.repl.read = nil
    ship.api.repl.prompt = nil
    ship.comm_connected = false
+   ship.api.repl.completion_context = nil
 end
 
 local logout = function(name, ship)
@@ -113,9 +113,9 @@ local sandbox = function(ship)
          target.beam_count = ((n or 0) * 9) / ship.portal_time
       end
       sb.portal_activate = function()
-         local gov = ship.systems[sb.portal_target].gov
-         if(ship.visas[gov] and sb.body.interportal) then
-            ship.visas[gov] = ship.visas[gov] - 1
+         local target_gov = ship.systems[sb.portal_target].gov
+         if(ship.visas[target_gov] and sb.body.interportal) then
+            ship.visas[target_gov] = ship.visas[target_gov] - 1
          end
          ship:enter(target.portal, true)
       end
@@ -168,6 +168,7 @@ local orb_login = function(fs, env, ship)
    env.IN, env.OUT = "/tmp/in", "/tmp/out"
    ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
    fs[env.OUT] = lume.fn(sandbox_out, ship, ship.target.name)
+   ship.api.repl.completion_context = {}
 
    -- TODO: improve error handling for problems in smashrc
    ship.target.os.process.spawn(fs, env, nil, sandbox(ship))
@@ -192,6 +193,7 @@ local lisp_login = function(fs, env, ship)
          end
       end
    end
+   ship.api.repl.completion_context = box
    box.io = box.io or { read = env.IN, write = write }
    box.print = function(...) write(unpack(lume.map({...}, tostring))) write("\n") end
 

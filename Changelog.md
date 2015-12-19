@@ -2,6 +2,7 @@
 
 ## alpha-6 / ???
 
+* Tab completion (only for the in-ship repl).
 * Add a map upgrade.
 * (Most) worlds tell you a bit about them when you log in.
 * Editor can undo/redo.
