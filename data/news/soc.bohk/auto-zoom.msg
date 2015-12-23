@@ -4,10 +4,10 @@ To: soc.bohk
 Message-Id: b922cb68-9da0-4c77-8cae-aea72ba7deb9
 Content-Type: text/plain; charset=UTF-8
 
-I was playing around with this function the other day, and I've come to
-find it pretty handy. It automatically adjusts the zoom scale depending
-on the distance of your ship from its target as long as you hold down
-right alt on your helm keyboard.
+One of my friends from TMRC showed me this function the other day, and
+I've come to find it pretty handy. It automatically adjusts the zoom
+scale depending on the distance of your ship from its target as long as
+you hold down right alt on your helm keyboard.
 
   local az = function(on)
     if(not on or not ship.status.target) then return end
