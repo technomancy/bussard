@@ -2,6 +2,7 @@ local lume = require("lume")
 
 return { restrictions={"bimen1"},
          chance = 25,
+         gov={"Sol"},
          prereq_fn = function(ship)
             return lume.find(ship.upgrade_names, "passponder")
          end,

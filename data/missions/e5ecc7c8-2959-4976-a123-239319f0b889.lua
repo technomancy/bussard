@@ -29,9 +29,8 @@ return {
 
    -- TODO: tweak timing
    accept_function=function(ship)
-      local deadline = utils.time(ship) + 20000
-      ship.visas["Terran"] = 2
-      ship.visas["Bohk"] = 1
+      ship.visas["Terran"] = (ship.visas["Terran"] or 0) + 2
+      ship.visas["Bohk"] = (ship.visas["Bohk"] or 0) + 1
       table.insert(ship.upgrade_names, "passponder")
       ship:recalculate()
    end,

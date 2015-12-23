@@ -4,7 +4,7 @@ local orbit_time = 0
 
 return {
    name="Test sensor on Wolf 294",
-   description="Spend 1/4 ksec within 3000 of New Phobos.",
+   description="Spend 1/4 ksec within 3000 of Wolf 294.",
    id="fdb7f320-8911-4753-ad8f-3a20260ea7e8",
    destinations={"Mars"},
    objectives={"wolf-294-flyby"},

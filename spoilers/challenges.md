@@ -22,6 +22,8 @@ times to mine out the asteroid.
 You can also use the Eye of Harmony to slow down time in order to get
 close enough to mine the asteroid, but you don't get that till later.
 
+## parsing through log files from some portal sensor readings?
+
 ## Some kind of SQL injection thingy
 
 https://github.com/Wiladams/LJIT2SQLite
