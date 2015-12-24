@@ -1,6 +1,6 @@
 # Bussard changelog: history of user-visible changes
 
-## alpha-6 / ???
+## alpha-6 / 2015-12-24
 
 * A few more missions.
 * Tab completion (only for the in-ship repl).

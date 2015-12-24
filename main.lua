@@ -22,7 +22,7 @@ local portal_offsets = {
 }
 
 local ui = {
-   version = "alpha-5",
+   version = "alpha-6",
 
    quit = function(ui)
       save.save(ship, ui)
