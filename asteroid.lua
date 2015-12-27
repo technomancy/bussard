@@ -72,8 +72,8 @@ return {
       end
       if(asteroid_count < (ship.systems[ship.system_name].asteroids or 0)) then
          local i = 1
-         while(body.find(ship.bodies, "asteroid" .. i)) do i = i + 1 end
-         asteroid("asteroid" .. i, 64, ship.bodies)
+         while(body.find(ship.bodies, "Asteroid " .. i)) do i = i + 1 end
+         asteroid("Asteroid " .. i, 64, ship.bodies)
       end
    end,
 
@@ -83,7 +83,7 @@ return {
          if(b.asteroid) then system.bodies[b.name] = nil end
       end
       for i = 1, system.asteroids do
-         asteroid("asteroid" .. i, 64, system.bodies)
+         asteroid("Asteroid " .. i, 64, system.bodies)
       end
    end,
 }

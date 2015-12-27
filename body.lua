@@ -121,10 +121,14 @@ return {
          filesystems[body.name]
    end,
 
-   schedule = function(bodies)
+   update = function(bodies, dt)
       for _,b in pairs(bodies) do
-         local fs = filesystems[b.name]
-         if b.os and fs then b.os.process.scheduler(fs) end
+         if(b.update) then
+            b:update(dt)
+         elseif(b.os) then
+            local fs = filesystems[b.name]
+            if fs then b.os.process.scheduler(fs) end
+         end
       end
    end,
 

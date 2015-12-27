@@ -159,7 +159,7 @@ ship.hud = {
    },
 
    { x=-70, y=5, type="text", align="right",
-     format="target: %s\ndistance: %0.0f\nmass: %0.0f",
+     format="%s\ndistance: %0.0f\nmass: %0.0f",
      values={"status.target.name", function(s)
                 return s.status.target and utils.distance(s.status,
                                                           s.status.target)

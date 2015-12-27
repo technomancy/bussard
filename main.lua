@@ -101,9 +101,9 @@ love.update = safely(function(dt)
       if(ship.api.paused) then return end
       local real_time_factor = ship.time_factor * 0.1 * dt
       ship:update(real_time_factor)
-      body.schedule(ship.bodies)
-      asteroid.recycle(ship)
+      body.update(ship.bodies, dt)
       body.gravitate_all(ship.bodies, ship, real_time_factor)
+      asteroid.recycle(ship)
 end)
 
 -- for commands that don't need repeat
