@@ -1,15 +1,19 @@
 local lume = require "lume"
 local body = require "body"
+local other_ship = require "ship.others"
+local asteroid = require "asteroid"
+local utils = require "utils"
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading",
    "battery", "fuel", "credits", "system_name", "active_missions",
-   "upgrade_names", "cargo", "target_number", "events", "visas", "flag",
+   "upgrade_names", "cargo", "target_number", "events", "flag",
 }
 
-local system_fields = {
-   "x", "y", "dx", "dy", "cargo",
-   "prices", "upgrade_prices", "fuel_price", "account_price"
+local body_fields = {
+   "x", "y", "dx", "dy", "cargo", "name", "mass",
+   "prices", "upgrade_prices", "fuel_price", "account_price",
+   "progress", "from_name", "target_name", "ship", "asteroid",
 }
 
 local ship_filename = "ship_data.lua"
@@ -19,12 +23,8 @@ local fs_filename = function(b)
    return "fs/" .. b.name .. ".lua"
 end
 
-local get_system_data = function(bodies)
-   local data = {}
-   for _,b in ipairs(bodies) do
-      data[b.name] = lume.pick(b, unpack(system_fields))
-   end
-   return data
+local body_data = function(b)
+   return lume.pick(b, unpack(body_fields))
 end
 
 return {
@@ -34,7 +34,7 @@ return {
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
-                            lume.serialize(get_system_data(ship.bodies)))
+                            lume.serialize(lume.map(ship.bodies, body_data)))
       love.filesystem.createDirectory("fs")
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do
@@ -68,8 +68,17 @@ return {
       if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)
          local system_data = lume.deserialize(system_data_string)
-         for _,b in ipairs(ship.bodies) do
-            lume.extend(b, system_data[b.name])
+         for i,data in ipairs(system_data) do
+            local existing = utils.find_by(ship.bodies, "name", data.name)
+            if(existing) then
+               lume.extend(existing, data)
+            elseif(data.ship) then
+               local other = other_ship.make(ship.bodies, data.name)
+               lume.extend(other, data)
+               ship.bodies[i] = other
+            else
+               ship.bodies[i] = data
+            end
          end
       else
          ship:enter(ship.system_name, true)
@@ -92,5 +101,4 @@ return {
             love.filesystem.remove(fs_filename(b))
          end
       end
-   end,
-}
+   end,}

@@ -36,7 +36,8 @@ local update = function(self, dt)
    end
 end
 
-local make_ship = function(targets, i)
+local make = function(bodies, name)
+   local targets = lume.filter(bodies, function(b) return b.os end)
    local target = targets[math.random(#targets)]
    local from = targets[math.random(#targets)]
    while target == from do from = targets[math.random(#targets)] end
@@ -51,7 +52,7 @@ local make_ship = function(targets, i)
       y = from.y,
       dx=0, dy=0,
       mass = 128,
-      name = "Ship " .. i,
+      name = name,
       bodies = targets,
       engine_strength = 512,
       projection = 60,
@@ -74,11 +75,11 @@ return {
       local system = systems[system_name]
       local avg_pop = lume.reduce(pops, function(x, y) return x + y end)
       local ship_count = math.random(avg_pop / 2)
-      local targets = lume.filter(bodies, function(b) return b.os end)
       for i = 1, ship_count do
-         local ship = make_ship(targets, i)
+         local ship = make(bodies, "Ship " .. i)
          table.insert(bodies, ship)
-         ship:update(0)
       end
    end,
+
+   make = make,
 }
