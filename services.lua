@@ -115,40 +115,4 @@ return {
          return price
       end
    end,
-
-   buy_visa = function(ship, to_gov)
-      local from = ship.systems[ship.system_name].gov
-      if(not gov.adjacent[to_gov]) then
-         return false, "Government not found."
-      elseif(ship.flag == to_gov) then
-         return false, "Your ship is already registered under a "..to_gov.." flag."
-      elseif(not lume.find(ship.upgrade_names, "passponder")) then
-         return false, "Need passponder for visa."
-      elseif(gov.treaties and gov.treaties[to_gov] and
-             gov.treaties[to_gov][ship.flag]) then
-         return false, "No visa needed for in-treaty travel."
-      elseif(not gov.adjacent[from][to_gov]) then
-         return false, "No embassy for " .. to_gov .. " in this system."
-      elseif(gov.visas[to_gov]) then
-         local visa = gov.visas[to_gov]
-         if(ship.credits >= visa.price) then
-            ship.credits = ship.credits - visa.price
-            ship.visas[to_gov] = (ship.visas[to_gov] or 0) + 1
-            return true, "Success", visa.price
-         else
-            return false, "Insufficient credits."
-         end
-      else
-         return false, "Travel to " .. to_gov .. " is not permitted."
-      end
-   end,
-
-   list_visas = function(ship)
-      local current = ship.systems[ship.system_name]
-      local visas = {}
-      for this_gov,_ in pairs(gov.adjacent[current.gov]) do
-         visas[this_gov] = gov.visas[this_gov]
-      end
-      return visas
-   end
 }

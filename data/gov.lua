@@ -1,9 +1,5 @@
 return { treaties = {["Sol"] = {["Tana"] = true},
             ["Tana"] = {["Sol"] = true},},
-         visas = {["Terran"] = {price = 422},
-                  ["Bohk"] = {price = 510},
-                  ["Yueh"] = {price = 815},
-                  ["Katilay"] = {price = 1015}},
          adjacent = {
             ["Tana"] = {["Sol"] = true},
             ["Sol"] = {["Terran"] = true, ["Tana"] = true},

@@ -47,7 +47,6 @@ local scp = function(ship, from, to)
 end
 
 local portal_cleared = function(ship, portal_body)
-   -- TODO: import duties to pay on your cargo
    local target_gov = assert(ship.systems[portal_body.portal].gov)
    local current_gov = assert(ship.systems[ship.system_name].gov)
    if(not portal_body.interportal) then return true end
@@ -55,8 +54,8 @@ local portal_cleared = function(ship, portal_body)
       gov.treaties[target_gov][current_gov]) then return true end
    if(gov.treaties and gov.treaties[target_gov] and
       gov.treaties[target_gov][ship.flag]) then return true end
-   local visa = (ship.visas[target_gov] or 0) > 0
-   return visa, "no visa to " .. target_gov .. "; please visit station embassy."
+   -- TODO: need prior clearance when flying to a war zone
+   return true
 end
 
 local disconnect = function(ship)
@@ -89,8 +88,6 @@ local sandbox = function(ship)
       buy_upgrade = lume.fn(services.buy_upgrade, ship),
       sell_upgrade = lume.fn(services.sell_upgrade, ship),
       upgrade_help = ship.api.help.get,
-      buy_visa = lume.fn(services.buy_visa, ship),
-      list_visas = lume.fn(services.list_visas, ship),
       refuel = lume.fn(services.refuel, ship, ship.target),
       cargo_transfer = lume.fn(services.cargo_transfer, ship.target, ship),
       scp = lume.fn(scp, ship),
@@ -112,13 +109,7 @@ local sandbox = function(ship)
       sb.set_beams = function(n)
          target.beam_count = ((n or 0) * 9) / ship.portal_time
       end
-      sb.portal_activate = function()
-         local target_gov = ship.systems[sb.portal_target].gov
-         if(ship.visas[target_gov] and sb.body.interportal) then
-            ship.visas[target_gov] = ship.visas[target_gov] - 1
-         end
-         ship:enter(target.portal, true)
-      end
+      sb.portal_activate = function() ship:enter(target.portal, true) end
       sb.draw_power = function(power)
          assert(ship.battery - power >= 0, "Insufficient power.")
          ship.portal_target = target

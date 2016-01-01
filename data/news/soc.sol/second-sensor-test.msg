@@ -13,7 +13,3 @@ We've determined from the last test that the optimum range is under
 study is strongest in the New Phobos system, which is quite a ways from
 Mars. You will need to spend a quarter of a kilosecond within range of
 the star.
-
-Because of the distance, we are prepared to supply you with a passponder
-device to allow you access to New Phobos and the systems on route. The
-passponder device may be kept as payment once the mission is completed.

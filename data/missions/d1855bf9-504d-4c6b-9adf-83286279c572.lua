@@ -5,8 +5,4 @@ return {
    success_events={"bimen1"},
    credits=450,
    success_message="Thanks for the ride.",
-   accept_function=function(ship)
-      ship.visas["Terran"] = (ship.visas["Terran"] or 0) + 2
-      ship.visas["Yueh"] = (ship.visas["Yueh"] or 0) + 1
-   end,
 }

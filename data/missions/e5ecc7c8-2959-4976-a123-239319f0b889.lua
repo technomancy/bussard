@@ -26,17 +26,4 @@ return {
          orbit_time = 0
       end
    end,
-
-   -- TODO: tweak timing
-   accept_function=function(ship)
-      ship.visas["Terran"] = (ship.visas["Terran"] or 0) + 2
-      ship.visas["Bohk"] = (ship.visas["Bohk"] or 0) + 1
-      table.insert(ship.upgrade_names, "passponder")
-      ship:recalculate()
-   end,
-
-   fail_function=function(ship)
-      table.remove(ship.upgrade_names, "passponder")
-      ship:recalculate()
-   end,
 }

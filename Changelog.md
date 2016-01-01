@@ -1,5 +1,9 @@
 # Bussard changelog: history of user-visible changes
 
+## beta-1 / ???
+
+* AI-controlled ships.
+
 ## alpha-6 / 2015-12-24
 
 * A few more missions.

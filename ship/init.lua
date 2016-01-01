@@ -99,7 +99,6 @@ local ship = {
    upgrade_names = {},
    active_missions={},
    events = {},
-   visas = {},
    flag = "Tana",
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
