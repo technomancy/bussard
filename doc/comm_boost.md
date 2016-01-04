@@ -1,6 +1,6 @@
-# Traxus Communication Range Booster
+# Orolo Communication Range Booster
 
-Thanks for purchasing the Traxus Communication Range Booster. By
+Thanks for purchasing the Orolo Communication Range Booster. By
 following the recommendations in this manual, it will provide you with
 many years of safe, reliable functioning.
 
@@ -28,4 +28,4 @@ Note that if the ship battery runs out of power while the device is
 turned on, it will automatically disengage, allowing the battery to
 recharge over time.
 
-Copyright © 2431 Traxus Research, All Rights Reserved.
+Copyright © 2431 Orolo Research, All Rights Reserved.

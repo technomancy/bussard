@@ -150,7 +150,7 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2362 - Lalande launches SS Calandria from Mecalle to Katilay (2.4 pc, 0.7c, 11y)
 
-* 2363 - Traxus researcher (Garibaldi) begins studying programmatic reality
+* 2363 - Researcher (Garibaldi) begins studying programmatic reality
 
 * 2366 - Lalande launches SS Sagan colonizer from Kowlu to Delta Pavonis
   (0.7 pc, 0.7c, 3.2y)
@@ -161,7 +161,7 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2370 - SS Sagan arrives in Delta Pavonis, colony established
 
-* 2372 - Garibaldi leaves Traxus, plots a course out to LHS 451 (0.6 pc, 0.5c, 2.76y)
+* 2372 - Garibaldi leaves Sol, plots a course out to LHS 451 (0.6 pc, 0.5c, 2.76y)
 
 * 2373 - SS Calandria arrives in Katilay, portal to Mecalle
   established, Lalande portal fixed

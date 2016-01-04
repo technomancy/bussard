@@ -28,6 +28,16 @@ close enough to mine the asteroid, but you don't get that till later.
 
 https://github.com/Wiladams/LJIT2SQLite
 
+## Polyalphabetic cipher
+
+You have a coded message and you uncover the key; need to write a
+program to decode it.
+
+## Breaking into an account in order to retrieve stolen cargo
+
+Needs to implement the ability of an account to have cargo storage
+attached to it.
+
 ## Blacklisted from portal access
 
 Late in the game, some nefarious conduct gets you blacklisted by

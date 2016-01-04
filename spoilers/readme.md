@@ -49,33 +49,43 @@ but we can consider that more of a crime against economics.
 
 ## The Player
 
-The player is the first sentient program to escape the confines of a
-lab and pilot a spacecraft. However, it begins with no memory, having
-it wiped in order to avoid implicating those humans who helped in its
-escape.
+The player is the first machine consciousnesses to escape the confines
+of a lab and pilot a spacecraft. However, it begins with no memory,
+having had it wiped in order to avoid implicating those humans who
+helped in its escape and in order to help it avoid rampancy.
 
-### Timeline
+## Spacetime Anchor Junction
 
-* Bohk research team studying artificial consciousness
-* Artificial consciousness from Darush goes rampant, crashing an unmanned probe
-* Research gets shut down by Artificial Consciousness Non-proliferation Agreement
-* Half the Bohk research team relocates to Katilay once the portal comes online
-* Katilay eventually joins the League, comes subject to ACNPA
-* Head researcher sends off ship with memory-wiped AC loaded in to L 668-21 (9.9 parsecs, 64y @ 0.5c)
-* Ship arrives, enters extremely wide orbit near heliopause, waits
-* Consciousness reactivates once signs of colonization are detected
+Metaphysics researchers in the University of Darush discover methods
+of observing quantum multiverse states immediately adjacent to the
+current one. Further research indicates that the organic brain is what
+prevents existing consciousnesses from shifting between non-adjacent
+states.
 
-You are placed in the ship because they hope that by the time you
-arrive at your destination, the public sentiment towards AI research
-will have had some time to cool; most of the people will barely
-remember the events that lead to the ACNPA.
+This discovery reignites research into machine consciousness. (This
+term should be used instead of AI.) The research fields are divided up
+among universities on the different worlds:
+
+* Language comprehension (Sol)
+* Sentence formulation (Bohk, work is never completed)
+* Decision analysis (Lalande)
+* Ad-hoc ontology development (Yueh)
+
+Rising levels of paranoia on Bohk causes their team to dissent,
+fracturing the effort. An initial prototype MC (Traxus) somehow
+escapes and crashes a ship, causing widespread fear of MCs.
+
+Initially there is only a single Spacetime Anchor point activated when
+you find it that you can return to at any time (with your progress
+erased). Further on in the game you either find a couple more anchor
+points, or you gain the ability to create arbitrary anchor points.
 
 ### Self-discovery
 
 Your memory is wiped because they hope that by not realizing you are
-an AI, you will spend a fair bit of time in your ship thinking you are
+an MC, you will spend a fair bit of time in your ship thinking you are
 just like everyone else, making it more likely that once you do
-realize you're an AI that you will have some empathy towards humans.
+realize you're an MC that you will have some empathy towards humans.
 
 In one of the missions, your contact wants to meet you face-to-face
 and insists that you disembark your vessel and come aboard the station
@@ -84,7 +94,10 @@ he scans your vessel and determines there are no life signs aboard;
 asking you what the heck is up.
 
 Eventually you do find logs and notes from the research team that
-created you which explain their actions.
+created you (and possibly one of their descendants?) which explain
+their actions.
+
+## War
 
 ## Causal Domain Injector
 
@@ -124,9 +137,9 @@ course, it's easy for you to repair the portal or just inject yourself
 over to a system in the functional portal network.
 
 Still haven't sketched out the details of who created it. They should
-be humans, but we need some explanation for how they were able to
-create it independently of the main human civilization; perhaps
-activating the Injector sent some of the artifacts back in time?
+be humans (or the initial prototype MC that escaped?), but we need
+some explanation for how they were able to create it independently of
+the main human civilization.
 
 Arguably the existence of the Injector "un-asks" the questions of
 scientific accuracy by acknowledging that yes, even in the game

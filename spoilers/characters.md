@@ -141,7 +141,7 @@ Bohk Prime.
   The primary driver behind the colonization of Tana. Government of
   Tana is arguably a front for PTMC.
 
-* Traxus Research (Sol)
+* Orolo Research (Sol)
   Responsible for early sublight drives, recently assisting Luminous
   with coldsleep research.
 
@@ -207,7 +207,7 @@ scientific equipment.
 # Historical Characters
 
 * Captain Darush, saved the SS Copernicus on the trip to Ross
-* Prof. Strauss, founded Traxus research on Mars
+* Prof. Strauss, founded Orolo research on Mars
 * Dr. Soong, credited (miscredited?) with discovery of portals, founded Aperture
 * Captain Jarkad of SS Goddard
 * Dr. Jameson, Yueh Researcher who replicated portal tech
@@ -226,7 +226,7 @@ scientific equipment.
  * University Students
    * Ricarad Jinod: developing more advanced sensor array
 * Sol
- * Garibaldi: Traxus researcher, eventually discovers domain injector
+ * Garibaldi: Orolo researcher, eventually discovers domain injector
 * Yueh
  * Luminous engineers (2 or 3?)
  * University students
