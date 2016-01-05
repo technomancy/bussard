@@ -35,7 +35,8 @@ local function asteroid(name, mass_max, bodies, parent)
       end
    end
 
-   local a = { name = name, mass = mass, image = asteroid_image,
+   local a = { name = name, mass = mass,
+               image = asteroid_image, image_name = "asteroid",
                scale = (mass / 64) + 0.5,
                asteroid = true, strength = mass, split = split,
    }

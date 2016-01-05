@@ -174,18 +174,24 @@ return {
    end,
 
    seed_pos = function(b, star)
-      if(not b.r) then return end
-      assert(star.fixed, star.name .. " is not a star.")
+      if(b.fixed) then
+         b.x, b.y = 0, 0
+         return
+      elseif(not b.r) then
+         return
+      else
+         assert(star.fixed, star.name .. " is not a star.")
 
-      -- Unclear why it's necessary to divide by ten here; standard orbital
-      -- calculations do not include this factor, but without it we cannot
-      -- achieve orbit.
-      local v = math.sqrt((g*star.mass)/b.r) / 10
-      local theta = math.random() * math.pi * 2
+         -- Unclear why it's necessary to divide by ten here; standard orbital
+         -- calculations do not include this factor, but without it we cannot
+         -- achieve orbit.
+         local v = math.sqrt((g*star.mass)/b.r) / 10
+         local theta = math.random() * math.pi * 2
 
-      b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
-      b.dx = math.sin(theta + math.pi / 2) * v
-      b.dy = math.cos(theta + math.pi / 2) * v
+         b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
+         b.dx = math.sin(theta + math.pi / 2) * v
+         b.dy = math.cos(theta + math.pi / 2) * v
+      end
    end,
 
    seed_news = function(ship, b)

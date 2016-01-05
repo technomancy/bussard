@@ -10,7 +10,7 @@ local ship_fields = {
 }
 
 local body_fields = {
-   "x", "y", "dx", "dy", "cargo", "name", "mass",
+   "x", "y", "dx", "dy", "cargo", "name", "mass", "image_name",
    "prices", "upgrade_prices", "fuel_price", "account_price",
    "progress", "from_name", "target_name", "ship", "asteroid",
 }
