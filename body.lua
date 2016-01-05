@@ -174,7 +174,7 @@ return {
    end,
 
    seed_pos = function(b, star)
-      if(b.fixed or b.asteroid) then return end
+      if(not b.r) then return end
       assert(star.fixed, star.name .. " is not a star.")
 
       -- Unclear why it's necessary to divide by ten here; standard orbital

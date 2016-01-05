@@ -2,7 +2,6 @@
 -- have access to functionality that isn't exposed inside the OS sandbox.
 
 local utils = require("utils")
-local gov = require("data.gov")
 local body = require("body")
 
 local get_price = function(good, amount, prices, direction)

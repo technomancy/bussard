@@ -72,7 +72,6 @@ return {
          if(b.ship) then table.remove(bodies, i) end
          if(b.pop) then table.insert(pops, b.pop) end
       end
-      local system = systems[system_name]
       local avg_pop = lume.reduce(pops, function(x, y) return x + y end)
       local ship_count = math.random(avg_pop / 2)
       for i = 1, ship_count do

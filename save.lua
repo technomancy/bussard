@@ -1,7 +1,6 @@
 local lume = require "lume"
 local body = require "body"
 local other_ship = require "ship.others"
-local asteroid = require "asteroid"
 local utils = require "utils"
 
 local ship_fields = {
