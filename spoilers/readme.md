@@ -80,6 +80,13 @@ you find it that you can return to at any time (with your progress
 erased). Further on in the game you either find a couple more anchor
 points, or you gain the ability to create arbitrary anchor points.
 
+Should think through the possibility of allowing a reset of the Anchor
+point. This should only be possible at great cost; for instance a
+ridiculously high power requirement (10x your ship's standard battery;
+requires some digging to get a temporary boost or something). Coming
+up with a scenario that would reasonably require fancy piloting would
+be great.
+
 ### Self-discovery
 
 Your memory is wiped because they hope that by not realizing you are

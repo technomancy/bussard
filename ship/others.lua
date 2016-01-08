@@ -5,6 +5,8 @@ local body = require("body")
 -- TODO: rotation of this is wrong
 local image = love.graphics.newImage("assets/ship.png")
 
+local names = lume.array(love.filesystem.lines("data/ships.txt"))
+
 local normalize = function(t)
    return math.mod(t + math.pi, math.pi * 2) - math.pi
 end
@@ -33,6 +35,15 @@ local update = function(self, dt)
       self.projection = self.projection + 0.001
    elseif(self.projection > 1) then
       self.projection = self.projection - 0.25
+   else -- we've been here a while now
+      if(self.target.portal) then -- portal on out
+         self:remove()
+      else -- find a portal to target
+         local portals = lume.filter(self.bodies, function(b) return b.portal end)
+         self.target = lume.randomchoice(portals)
+         self.target_name = self.target.name
+         self.projection = 60
+      end
    end
 end
 
@@ -57,27 +68,24 @@ local make = function(bodies, name)
       engine_strength = 512,
       projection = 60,
       target_range = 1000,
-      speed_limit = 10,
+      speed_limit = 8,
 
       target = target, target_name = target.name,
       from = from, from_name = from.name,
-      progress = math.random(90)
+      progress = math.random(90),
+      remove = lume.fn(lume.remove, bodies),
    }
 end
 
 return {
    seed = function(system_name, bodies)
       local pops = {}
-      local names = {}
-      for line in love.filesystem.lines("data/ships.txt") do
-         table.insert(names, line)
-      end
       for i,b in ipairs(bodies) do -- remove existing ships
          if(b.ship) then table.remove(bodies, i) end
          if(b.pop) then table.insert(pops, b.pop) end
       end
       local avg_pop = lume.reduce(pops, function(x, y) return x + y end)
-      local ship_count = math.random(avg_pop / 2)
+      local ship_count = math.random(avg_pop / 3)
       for i = 1, ship_count do
          local ship = make(bodies, "SS. " .. names[math.random(#names)])
          table.insert(bodies, ship)
