@@ -68,6 +68,10 @@ end
 return {
    seed = function(system_name, bodies)
       local pops = {}
+      local names = {}
+      for line in love.filesystem.lines("data/ships.txt") do
+         table.insert(names, line)
+      end
       for i,b in ipairs(bodies) do -- remove existing ships
          if(b.ship) then table.remove(bodies, i) end
          if(b.pop) then table.insert(pops, b.pop) end
@@ -75,7 +79,7 @@ return {
       local avg_pop = lume.reduce(pops, function(x, y) return x + y end)
       local ship_count = math.random(avg_pop / 2)
       for i = 1, ship_count do
-         local ship = make(bodies, "Ship " .. i)
+         local ship = make(bodies, "SS. " .. names[math.random(#names)])
          table.insert(bodies, ship)
       end
    end,
