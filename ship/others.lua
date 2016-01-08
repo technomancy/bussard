@@ -39,6 +39,7 @@ local update = function(self, dt)
       if(self.target.portal) then -- portal on out
          self:remove()
       else -- find a portal to target
+         -- TODO: we should exchange some cargo with the station/planet
          local portals = lume.filter(self.bodies, "portal")
          self.target = lume.randomchoice(portals)
          self.target_name = self.target.name
@@ -47,11 +48,17 @@ local update = function(self, dt)
    end
 end
 
-local make = function(bodies, name)
+local make = function(bodies, name, from_portal)
    local targets = lume.filter(bodies, "os")
-   local target = targets[math.random(#targets)]
-   local from = targets[math.random(#targets)]
-   while target == from do from = targets[math.random(#targets)] end
+   local target, from = targets[math.random(#targets)]
+   if(from_portal) then
+      local portals = lume.filter(bodies, "portal")
+      from = portals[math.random(#portals)]
+      while target == from do from = portals[math.random(#portals)] end
+   else
+      from = targets[math.random(#targets)]
+      while target == from do from = targets[math.random(#targets)] end
+   end
 
    return {
       ship = true,
@@ -68,7 +75,7 @@ local make = function(bodies, name)
       engine_strength = 512,
       projection = 60,
       target_range = 1000,
-      speed_limit = 8,
+      speed_limit = 5,
 
       target = target, target_name = target.name,
       from = from, from_name = from.name,
@@ -77,23 +84,26 @@ local make = function(bodies, name)
    }
 end
 
-local insert_new = function(bodies)
-   local ship = make(bodies, "SS. " .. names[math.random(#names)])
+local insert_new = function(bodies, from_portal)
+   local ship = make(bodies, "SS. " .. names[math.random(#names)], from_portal)
    table.insert(bodies, ship)
 end
 
-local avg_pop = function(bodies)
+local sys_pop = function(bodies)
    return lume.reduce(bodies, function(p, b) return p + (b.pop or 0) end, 0)
 end
 
 local update_counter = 0
+
+-- for every 1 population in a system, there should be this many ships:
+local ship_factor = 0.3
 
 return {
    seed = function(system_name, bodies)
       for i,b in ipairs(bodies) do -- remove existing ships
          if(b.ship) then table.remove(bodies, i) end
       end
-      local ship_count = math.random(avg_pop(bodies) / 3)
+      local ship_count = math.random(sys_pop(bodies) * ship_factor)
       for i = 1, ship_count do insert_new(bodies) end
    end,
 
@@ -103,8 +113,8 @@ return {
       else
          update_counter = 0
          local ship_count = lume.count(bodies, "ship")
-         if(ship_count < math.random(avg_pop(bodies) / 4)) then
-            insert_new(bodies)
+         if(ship_count < math.random(sys_pop(bodies) * ship_factor)) then
+            insert_new(bodies, true)
          end
       end
    end,
