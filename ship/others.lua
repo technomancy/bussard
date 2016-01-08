@@ -39,7 +39,7 @@ local update = function(self, dt)
       if(self.target.portal) then -- portal on out
          self:remove()
       else -- find a portal to target
-         local portals = lume.filter(self.bodies, function(b) return b.portal end)
+         local portals = lume.filter(self.bodies, "portal")
          self.target = lume.randomchoice(portals)
          self.target_name = self.target.name
          self.projection = 60
@@ -48,7 +48,7 @@ local update = function(self, dt)
 end
 
 local make = function(bodies, name)
-   local targets = lume.filter(bodies, function(b) return b.os end)
+   local targets = lume.filter(bodies, "os")
    local target = targets[math.random(#targets)]
    local from = targets[math.random(#targets)]
    while target == from do from = targets[math.random(#targets)] end
@@ -77,18 +77,35 @@ local make = function(bodies, name)
    }
 end
 
+local insert_new = function(bodies)
+   local ship = make(bodies, "SS. " .. names[math.random(#names)])
+   table.insert(bodies, ship)
+end
+
+local avg_pop = function(bodies)
+   return lume.reduce(bodies, function(p, b) return p + (b.pop or 0) end, 0)
+end
+
+local update_counter = 0
+
 return {
    seed = function(system_name, bodies)
-      local pops = {}
       for i,b in ipairs(bodies) do -- remove existing ships
          if(b.ship) then table.remove(bodies, i) end
-         if(b.pop) then table.insert(pops, b.pop) end
       end
-      local avg_pop = lume.reduce(pops, function(x, y) return x + y end)
-      local ship_count = math.random(avg_pop / 3)
-      for i = 1, ship_count do
-         local ship = make(bodies, "SS. " .. names[math.random(#names)])
-         table.insert(bodies, ship)
+      local ship_count = math.random(avg_pop(bodies) / 3)
+      for i = 1, ship_count do insert_new(bodies) end
+   end,
+
+   update = function(bodies, dt)
+      if(update_counter < 16) then
+         update_counter = update_counter + dt
+      else
+         update_counter = 0
+         local ship_count = lume.count(bodies, "ship")
+         if(ship_count < math.random(avg_pop(bodies) / 4)) then
+            insert_new(bodies)
+         end
       end
    end,
 

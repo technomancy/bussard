@@ -4,6 +4,7 @@ _, lume = require("metatable_monkey"), require("lume")
 local starfield = require "starfield"
 local body = require "body"
 local hud = require "ship.hud"
+local other_ship = require "ship.others"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local save = require "save"
@@ -104,6 +105,7 @@ love.update = safely(function(dt)
       body.update(ship.bodies, dt)
       body.gravitate_all(ship.bodies, ship, real_time_factor)
       asteroid.recycle(ship)
+      other_ship.update(ship.bodies, dt)
 end)
 
 -- for commands that don't need repeat
