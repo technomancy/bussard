@@ -133,7 +133,11 @@ keymap.define("edit", "ctrl-backspace", ship.edit.backward_kill_word)
 keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
 
 keymap.define({"edit", "flight", "repl"}, "ctrl-r",
-   function() ship:load("src.config") end)
+   function()
+      ship:load("src.config")
+      ship.repl.initialize()
+      ship.edit.initialize()
+end)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
 keymap.define("edit", "ctrl-l", function()
