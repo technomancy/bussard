@@ -8,7 +8,7 @@ local comm = require("ship.comm")
 local help = require("ship.help")
 local repl = require("ship.repl")
 local upgrade = require("ship.upgrade")
-local others = require("ship.others")
+local ai = require("ship.ai")
 
 local keymap = require("keymap")
 local edit = require("edit")
@@ -144,7 +144,7 @@ local ship = {
          else
             ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
          end
-         others.seed(system_name, ship.bodies)
+         ai.seed(system_name, ship.bodies)
          print(#ship.bodies)
       end
    end,

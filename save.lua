@@ -1,6 +1,6 @@
 local lume = require "lume"
 local body = require "body"
-local other_ship = require "ship.others"
+local ai = require "ship.ai"
 local utils = require "utils"
 
 local ship_fields = {
@@ -72,7 +72,7 @@ return {
             if(existing) then
                lume.extend(existing, data)
             elseif(data.ship) then
-               local other = other_ship.make(ship.bodies, data.name)
+               local other = ai.make(ship.bodies, data.name)
                lume.extend(other, data)
                ship.bodies[i] = other
             else

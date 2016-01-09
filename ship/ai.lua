@@ -80,6 +80,7 @@ local make = function(bodies, name, from_portal)
       target = target, target_name = target.name,
       from = from, from_name = from.name,
       progress = math.random(90),
+      -- TODO: if the ship is targeted when it disappears, targeting acts weird
       remove = lume.fn(lume.remove, bodies),
    }
 end
