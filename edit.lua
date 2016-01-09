@@ -2,9 +2,7 @@ local lume = require("lume")
 
 --- Essentially a port of Emacs to Lua/Love.
 -- missing features (a very limited list)
--- * undo/redo
 -- * search/replace
--- * indentation
 -- * syntax highlighting
 -- * multiple file support
 
@@ -351,7 +349,8 @@ return {
    newline_and_indent = function()
       local indentation = (lines[point_line]:match("^ +") or ""):len()
       newline()
-      insert({string.rep(" ", indentation)})
+      local existing_indentation = (lines[point_line]:match("^ +") or ""):len()
+      insert({string.rep(" ", indentation - existing_indentation)})
       point = point + indentation
    end,
 
