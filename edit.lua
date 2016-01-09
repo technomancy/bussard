@@ -205,15 +205,13 @@ return {
          point, point_line = 0, 1
       end
 
-      mark, mark_line = nil, nil
+      mark, mark_line, on = nil, nil, true
       fs, path = this_fs, this_path
-      local content = fs:find(path)
-      if(content) then
-         lines = lume.split(content, "\n")
+      if(fs) then
+         lines = lume.split(fs:find(path) or "", "\n")
       else
-         lines = {""}
+         lines = lume.split(love.filesystem.read(path) or "", "\n")
       end
-      on = true
    end,
 
    revert = function()
@@ -221,13 +219,19 @@ return {
    end,
 
    save = function(this_fs, this_path)
-      local parts = lume.split(this_path or path, ".")
-      local filename = table.remove(parts, #parts)
       local target = this_fs or fs
-      for _,part in ipairs(parts) do
-         target = target[part]
+      if(target) then -- save to ship fs
+         local parts = lume.split(this_path or path, ".")
+         local filename = table.remove(parts, #parts)
+         for _,part in ipairs(parts) do
+            target = target[part]
+         end
+         target[filename] = table.concat(lines, "\n")
+      else -- save to real disk
+         local f = io.open(this_path or path, "w")
+         f:write(table.concat(lines, "\n"))
+         f:close()
       end
-      target[filename] = table.concat(lines, "\n")
    end,
 
    on = function(or_not) on = or_not ~= false end,
