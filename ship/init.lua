@@ -74,6 +74,26 @@ local epoch_for = function(year)
    return years * 365 * 52 * 7 * 24 * 60 * 60
 end
 
+local target_dt = 0.03 -- about 33 frames per second
+
+local trajectory_adjust = function(ship, dt)
+   if(not ship.trajectory_adjust_progress) then
+      ship.trajectory_adjust_progress = 5
+      return
+   end
+
+   ship.trajectory_adjust_progress = ship.trajectory_adjust_progress - dt
+
+   if((ship.trajectory_adjust_progress or 0) <= 0) then
+      ship.updaters.trajectory_adjust = nil
+      ship.trajectory_adjust_progress = nil
+   elseif(dt > target_dt and ship.trajectory_adjust_progress < 4) then
+      -- give it a second to stabilize, then reduce
+      ship.trajectory = ship.trajectory * 0.8
+      ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
+   end
+end
+
 local ship = {
    base_stats = base_stats,
 
@@ -145,7 +165,6 @@ local ship = {
             ship.x, ship.y = math.random(30000) + 10000, math.random(30000) + 10000
          end
          ai.seed(system_name, ship.bodies)
-         print(#ship.bodies)
       end
    end,
 
@@ -221,6 +240,9 @@ local ship = {
    -- run when cargo or upgrades change; always idempotent
    recalculate = function(ship)
       ship.target = ship.bodies[ship.target_number]
+      if(ship.api.trajectory_auto) then
+         ship.api.updaters.trajectory_adjust = trajectory_adjust
+      end
 
       for k,v in pairs(base_stats) do
          ship[k] = v
@@ -344,16 +366,20 @@ ship.api = {
       ["fallback_config"] = fallback_config,
    },
    docs = {},
-   persist = {"persist", "scale", "trajectory", "src", "docs"},
+   persist = {"persist", "scale", "src", "docs",
+              "trajectory", "trajectory_step_size", "trajectory_auto"},
 
    -- added by loading config
    controls = {},
    commands = {},
+   updaters = {},
    helm = love.keyboard,
 
    -- you can adjust these to improve performance
    trajectory = 256,
    trajectory_step_size = 0.1,
+   trajectory_seconds = 15,
+   trajectory_auto = true, -- turn this off to disable auto-adjustment
 
    fuel_to_stop = function(s)
       -- no idea where this 20 factor comes from
