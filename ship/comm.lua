@@ -43,7 +43,7 @@ local scp = function(ship, from, to)
    else
       error("Neither " .. from .. " nor " .. " to " .. "are remote files.")
    end
-   ship.api.repl.print("Copied successfully.")
+   ship.api.console.print("Copied successfully.")
 end
 
 local portal_cleared = function(ship, portal_body)
@@ -59,10 +59,10 @@ local portal_cleared = function(ship, portal_body)
 end
 
 local disconnect = function(ship)
-   ship.api.repl.read = nil
-   ship.api.repl.prompt = nil
+   ship.api.console.read = nil
+   ship.api.console.prompt = nil
    ship.comm_connected = false
-   ship.api.repl.completion_context = nil
+   ship.api.console.completion_context = nil
 end
 
 local logout = function(name, ship)
@@ -76,7 +76,7 @@ local logout = function(name, ship)
       end
       sessions[name] = nil
       if(not name:match("[Pp]ortal")) then
-         ship.api.repl.print("\nLogged out.")
+         ship.api.console.print("\nLogged out.")
       end
    end
 end
@@ -96,7 +96,7 @@ local sandbox = function(ship)
       distance = lume.fn(utils.distance, ship, ship.target),
       os = {time = lume.fn(utils.time, ship)},
       accept_mission = lume.fn(mission.accept, ship),
-      set_prompt = function(p) ship.api.repl.prompt = p end,
+      set_prompt = function(p) ship.api.console.prompt = p end,
       disconnect = function()
          disconnect(ship)
          logout(target.name, ship)
@@ -124,19 +124,19 @@ local send_input = function(ship, input)
       if(sessions[ship.comm_connected]) then
          logout(ship.target.name, ship)
       else
-         ship.api.repl.print("| Not logged in.")
+         ship.api.console.print("| Not logged in.")
       end
       disconnect(ship)
    elseif(not ship:in_range(ship.target)) then
-      ship.api.repl.print("| Out of range. Run `logout` to disconnect.")
+      ship.api.console.print("| Out of range. Run `logout` to disconnect.")
    elseif(not sessions[ship.target.name]) then
-      ship.api.repl.print("Not logged in to " .. ship.target.name ..
-                             ". Run `logout` to disconnect.")
+      ship.api.console.print("Not logged in to " .. ship.target.name ..
+                                ". Run `logout` to disconnect.")
    else
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env, "Not logged into " .. ship.target.name)
-      ship.api.repl.history:append(input, true)
-      ship.api.repl.print((ship.api.repl.prompt or "> ") .. input)
+      ship.api.console.history:append(input, true)
+      ship.api.console.print((ship.api.console.prompt or "> ") .. input)
       if(fs[env.IN]) then
          fs[env.IN](input)
       else
@@ -147,7 +147,7 @@ end
 
 local sandbox_out = function(ship, target_name, output)
    if(output) then
-      ship.api.repl.write(output)
+      ship.api.console.write(output)
    else
       -- printing nil means EOF, close session
       logout(target_name, ship)
@@ -159,7 +159,7 @@ local orb_login = function(fs, env, ship)
    env.IN, env.OUT = "/tmp/in", "/tmp/out"
    ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
    fs[env.OUT] = lume.fn(sandbox_out, ship, ship.target.name)
-   ship.api.repl.completion_context = {}
+   ship.api.console.completion_context = {}
 
    -- TODO: improve error handling for problems in smashrc
    ship.target.os.process.spawn(fs, env, nil, sandbox(ship))
@@ -169,7 +169,7 @@ local lisp_login = function(fs, env, ship)
    local buffer = {}
    local max_buffer_size = 1024
    local box = sandbox(ship)
-   local write = ship.api.repl.write
+   local write = ship.api.console.write
    env.IN = function(...)
       local arg = {...}
       if(#arg == 0 or arg[1] == "*line*") then
@@ -184,7 +184,7 @@ local lisp_login = function(fs, env, ship)
          end
       end
    end
-   ship.api.repl.completion_context = box
+   ship.api.console.completion_context = box
    box.io = box.io or { read = env.IN, write = write }
    box.print = function(...) write(unpack(lume.map({...}, tostring))) write("\n") end
 
@@ -197,7 +197,7 @@ return {
 
    login = function(ship, username, password)
       if(not ship:in_range(ship.target)) then
-         ship.api.repl.print("| Out of range.")
+         ship.api.console.print("| Out of range.")
          return
       end
 
@@ -208,11 +208,11 @@ return {
          local env = ship.target.os.shell.new_env(username)
 
          env.HOST = body.hostname(ship.target.name)
-         env.ROWS = tostring(ship.api.repl.rows)
-         env.COLS = tostring(ship.api.repl.cols)
+         env.ROWS = tostring(ship.api.console.rows)
+         env.COLS = tostring(ship.api.console.cols)
 
          sessions[ship.target.name] = {fs, env, fs_raw}
-         ship.api.repl.read = lume.fn(send_input, ship)
+         ship.api.console.read = lume.fn(send_input, ship)
          ship.comm_connected = ship.target.name
 
          if(ship.target.os.name == "orb") then
@@ -226,14 +226,14 @@ return {
          ship.battery = ship.battery_capacity
 
          local default_motd = "Login succeeded. Run `logout` to disconnect."
-         ship.api.repl.print(fs_raw.etc.motd or default_motd)
+         ship.api.console.print(fs_raw.etc.motd or default_motd)
 
          mission.check(ship)
 
-         return ship.api.repl.invisible
+         return ship.api.console.invisible
       else
-         ship.api.repl.print("Login failed.")
-         return ship.api.repl.invisible
+         ship.api.console.print("Login failed.")
+         return ship.api.console.invisible
       end
    end,
 

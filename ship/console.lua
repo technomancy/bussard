@@ -10,7 +10,7 @@ local lume = require("lume")
 local love = love
 
 -- Module
-local repl = {
+local console = {
    padding_left = 10,
    max_lines = 1000,
    max_history = 1000,
@@ -95,48 +95,48 @@ function buffer:get(idx)
    end
 end
 
-function repl.initialize()
+function console.initialize()
    lines = buffer:new({})
-   lines.max = repl.max_lines
-   repl.history = buffer:new()
-   repl.history.max = repl.max_history
+   lines.max = console.max_lines
+   console.history = buffer:new()
+   console.history.max = console.max_history
    -- Expose these in case somebody wants to use them
-   repl.lines = lines
+   console.lines = lines
    font = love.graphics.getFont()
-   repl.font_width = font:getWidth('a')
+   console.font_width = font:getWidth('a')
    ROW_HEIGHT = font:getHeight()
 end
 
-function repl.on(or_not)
+function console.on(or_not)
    on = or_not ~= false
 end
 
-function repl.is_on()
+function console.is_on()
    return on
 end
 
-function repl.on_close() end
+function console.on_close() end
 
-function repl.write(value)
+function console.write(value)
    for line,_ in tostring(value):gmatch("([^\n]*\n?)") do
-      if(line and line ~= "" and line ~= "\n") then repl.display_line = line end
+      if(line and line ~= "" and line ~= "\n") then console.display_line = line end
       lines:append(line)
    end
 end
 
-function repl.print(...)
+function console.print(...)
    local texts = lume.map({...}, tostring)
-   repl.write(table.concat(texts, "\t") .. "\n")
+   console.write(table.concat(texts, "\t") .. "\n")
 end
 
 local function pack(...) return {...} end
 
-function repl.eval(text, add_to_history)
+function console.eval(text, add_to_history)
    -- show input
-   repl.print("> " .. text)
+   console.print("> " .. text)
 
    if(text == "help" or text == "help()") then
-      repl.print("Press ` to open the repl, and run man() for more help.")
+      console.print("Press ` to open the console, and run man() for more help.")
       return true
    end
 
@@ -148,17 +148,17 @@ function repl.eval(text, add_to_history)
          func, err = loadstring(text)
          if not func then
             if err then
-               repl.print('! Compilation error: ' .. err)
+               console.print('! Compilation error: ' .. err)
             else
-               repl.print('! Unknown compilation error')
+               console.print('! Unknown compilation error')
             end
             return false
          end
       end
    end
 
-   if repl.sandbox then
-      setfenv(func, repl.sandbox)
+   if console.sandbox then
+      setfenv(func, console.sandbox)
    end
 
    -- Try evaluating
@@ -171,22 +171,22 @@ function repl.eval(text, add_to_history)
          local results, i = lume.serialize(result[2], true), 3
          if add_to_history then
             if text:sub(0,1) == '=' then
-               repl.history:append('return ' .. text:sub(2), true)
+               console.history:append('return ' .. text:sub(2), true)
             else
-               repl.history:append(text, true)
+               console.history:append(text, true)
             end
          end
-         if result[2] == repl.invisible then return true end
+         if result[2] == console.invisible then return true end
          while i <= #result do
             results = results .. ', ' .. lume.serialize(result[i], true)
             i = i + 1
          end
-         repl.print(results)
+         console.print(results)
          return true
       else
          print(err_msg)
          print(traceback)
-         repl.print('! Evaluation error: ' .. err_msg)
+         console.print('! Evaluation error: ' .. err_msg)
       end
    end
    return false
@@ -213,16 +213,16 @@ local function completions_for(input, context, prefixes)
    end
 end
 
-repl.complete = function()
+console.complete = function()
    local input = lume.last(lume.split(editline:sub(0, cursor))) or ""
-   local completions = completions_for(input, repl.completion_context or
-                                          repl.sandbox, {})
+   local completions = completions_for(input, console.completion_context or
+                                          console.sandbox, {})
    if(#completions == 1) then
       editline = editline:sub(1, cursor - input:len()) .. completions[1] ..
          editline:sub(cursor + 1)
       cursor = cursor + completions[1]:len() - input:len()
    elseif(#completions > 0) then
-      repl.print(table.concat(completions, " "))
+      console.print(table.concat(completions, " "))
    end
 end
 
@@ -235,54 +235,54 @@ end
 
 local function get_history()
    if histpos > 0 then
-      editline = repl.history:get(-histpos)
+      editline = console.history:get(-histpos)
       cursor = #editline
    end
 end
 
-function repl.delete_backwards()
+function console.delete_backwards()
    editline = editline:sub(0, cursor - 1) .. editline:sub(cursor + 1, #editline)
    if cursor > 0 then
       cursor = cursor - 1
    end
 end
 
-function repl.delete_forwards()
+function console.delete_forwards()
    editline = editline:sub(0, cursor) .. editline:sub(cursor + 2, #editline)
 end
 
-function repl.kill_line()
+function console.kill_line()
    editline = editline:sub(0, cursor)
 end
 
-function repl.move_beginning_of_line()
+function console.move_beginning_of_line()
    cursor = 0
 end
 
-function repl.move_end_of_line()
+function console.move_end_of_line()
    cursor = #editline
 end
 
-function repl.eval_line()
+function console.eval_line()
    histpos = 0
    offset = 1
    if editline == '' then return end
-   if repl.read then
-      repl.read(editline)
+   if console.read then
+      console.read(editline)
       reset_editline()
-   elseif repl.eval(editline, true) then
+   elseif console.eval(editline, true) then
       reset_editline()
    end
 end
 
-function repl.history_prev()
-   if histpos + 1 <= repl.history.entries then
+function console.history_prev()
+   if histpos + 1 <= console.history.entries then
       histpos = histpos + 1
       get_history()
    end
 end
 
-function repl.history_next()
+function console.history_next()
    if histpos - 1 > 0 then
       histpos = histpos - 1
       get_history()
@@ -292,32 +292,32 @@ function repl.history_next()
    end
 end
 
-function repl.scroll_up()
-   offset = math.min(lines.entries - repl.rows + 1, offset + repl.rows)
+function console.scroll_up()
+   offset = math.min(lines.entries - console.rows + 1, offset + console.rows)
 end
 
-function repl.scroll_down()
-   offset = math.max(1, offset - repl.rows)
+function console.scroll_down()
+   offset = math.max(1, offset - console.rows)
 end
 
-function repl.clear()
+function console.clear()
    reset_editline()
 end
 
-function repl.forward_char()
+function console.forward_char()
    cursor = cursor + 1
 end
 
-function repl.backward_char()
+function console.backward_char()
    cursor = cursor - 1
 end
 
-function repl.forward_word()
+function console.forward_word()
    local match = editline:find(word_break, cursor + 2)
    cursor = match and match - 1 or string.len(editline)
 end
 
-function repl.backward_word()
+function console.backward_word()
    local back_line = editline:sub(0, math.max(cursor - 1, 0)):reverse()
    if(back_line:find(word_break)) then
       cursor = string.len(back_line) - back_line:find(word_break) + 1
@@ -326,19 +326,19 @@ function repl.backward_word()
    end
 end
 
-function repl.textinput(t)
-   repl.display_line = nil
+function console.textinput(t)
+   console.display_line = nil
    editline = editline:sub(0, cursor) .. t .. editline:sub(cursor + 1)
    cursor = cursor + 1
 end
 
 -- Rendering
 
-function repl.draw()
+function console.draw()
    local width, height = love.graphics:getWidth(), love.graphics:getHeight()
 
-   repl.rows = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
-   repl.cols = math.floor((width - (repl.font_width * 2)) / repl.font_width)
+   console.rows = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
+   console.cols = math.floor((width - (console.font_width * 2)) / console.font_width)
 
    -- Draw background
    love.graphics.setColor(0, 0, 0, 150)
@@ -353,21 +353,21 @@ function repl.draw()
    local limit = height - (ROW_HEIGHT * 2)
 
    local print_edit_line = function()
-      local prefix = repl.prompt or "> "
+      local prefix = console.prompt or "> "
       local ln = prefix .. editline
-      love.graphics.print(ln, repl.padding_left, limit)
+      love.graphics.print(ln, console.padding_left, limit)
 
       -- draw cursor
-      local cx, cy = repl.padding_left + 1 +
-         (repl.font_width * string.len(prefix .. editline:sub(0, cursor))),
+      local cx, cy = console.padding_left + 1 +
+         (console.font_width * string.len(prefix .. editline:sub(0, cursor))),
       limit + font:getHeight() + 2
       love.graphics.line(cx, cy, cx + 5, cy)
    end
 
-   -- show edit line, unless the disabled repl has a display_line to show
+   -- show edit line, unless the disabled console has a display_line to show
    if(not on) then
-      if(repl.display_line) then
-         love.graphics.print(repl.display_line, repl.padding_left, limit)
+      if(console.display_line) then
+         love.graphics.print(console.display_line, console.padding_left, limit)
       else
          print_edit_line()
       end
@@ -382,11 +382,11 @@ function repl.draw()
          local y = limit - (ROW_HEIGHT*(row+1)) + 0.5 * ROW_HEIGHT
          love.graphics.line(PADDING, y, width - PADDING, y)
       else
-         love.graphics.print(ln2, repl.padding_left, limit - (ROW_HEIGHT*(row+1)))
+         love.graphics.print(ln2, console.padding_left, limit - (ROW_HEIGHT*(row+1)))
       end
    end
 
-   for i = offset, repl.rows + offset do
+   for i = offset, console.rows + offset do
       local line = lines:get(-i)
       if(line) then render_line(line, i - offset) end
    end
@@ -397,7 +397,7 @@ function repl.draw()
    -- lines entered rather than the lines drawn, but close enough
 
    -- height is percentage of the possible lines
-   local bar_height = math.min(100, (repl.rows * 100) / lines.entries)
+   local bar_height = math.min(100, (console.rows * 100) / lines.entries)
    -- convert to pixels (percentage of screen height, minus 10px padding)
    local bar_height_pixels = (bar_height * (height - 10)) / 100
 
@@ -425,4 +425,4 @@ function repl.draw()
    end
 end
 
-return repl
+return console

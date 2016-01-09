@@ -2,6 +2,10 @@
 
 ## beta-1 / ???
 
+* Rename repl to console.
+* Automatically adjust trajectory settings to achieve decent frame rate.
+* Change default quit key to ctrl-esc.
+* Save state of asteroids and ships.
 * AI-controlled ships.
 
 ## alpha-6 / 2015-12-24

@@ -29,7 +29,7 @@ end
 return {
    save = function(ship)
       local ship_data = lume.pick(ship, unpack(ship_fields))
-      ship_data.time_offset = ship.api.repl.sandbox.os.time()
+      ship_data.time_offset = ship.api.console.sandbox.os.time()
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
@@ -59,7 +59,7 @@ return {
 
          lume.extend(ship, ship_data)
          ship:enter(ship.system_name)
-         ship.api.repl.display_line = nil
+         ship.api.console.display_line = nil
       else
          ship.time_offset = 8383504000
          ship:enter(ship.system_name, true)

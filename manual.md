@@ -44,14 +44,14 @@ spacecraft is equipped with a LuaJIT-based control unit, offering a
 high degree of flexibility and customization without sacrificing
 performance.
 
-At the bottom of the screen is the REPL (interactive code console)
+At the bottom of the screen is the interactive code console
 where you can interact directly with your ship's onboard computer. By
 default a single line is shown, which displays either the current line
 of input (if applicable) or the last line of output. Pressing `
-toggles the full repl, which allows you to scroll through the previous
-input and output. While the full repl is active, the piloting controls
-for your ship will be unavailable until you leave the repl with the
-esc key. Enter any Lua code into the repl to have it evaluated. See
+toggles the full console, which allows you to scroll through the previous
+input and output. While the full console is active, the piloting controls
+for your ship will be unavailable until you leave the console with the
+esc key. Enter any Lua code into the console to have it evaluated. See
 the API section below to learn how to control your ship from code.
 
 When your ship starts, it will load its init file in order to create
@@ -79,8 +79,8 @@ function to call when the key is pressed. This function is passed a
 boolean indicating whether it is a repeated key or not.
 
 By default your ship has a `"flight"` mode active normally and a
-`"repl"` mode active when the REPL is full-screen. Note that
-`"flight"` mode does have the simple one-line REPL available, but not
+`"console"` mode active when the console is full-screen. Note that
+`"flight"` mode does have the simple one-line console available, but not
 all characters can be entered in this mode as some (like the zoom
 keys) have other flight-related functions. There is also an `"edit"`
 mode where the editor key bindings are defined. You can check the

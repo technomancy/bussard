@@ -13,7 +13,7 @@ local pause = function() ship.paused = (not ship.paused) end
 local mode = function(mode)
    return function()
       if(keymap.current_mode == "edit") then ship.edit.save() end
-      ship.repl.on(mode == "repl")
+      ship.console.on(mode == "console")
       ship.edit.on(mode == "edit")
       keymap.change_mode(mode)
    end
@@ -21,7 +21,7 @@ end
 
 -- Flight mode
 keymap.define_mode("flight")
-keymap.define("flight", "`", mode("repl"))
+keymap.define("flight", "`", mode("console"))
 
 -- You can change this so escape by itself quits if you prefer.
 keymap.define("flight", "escape", function() print("Press ctrl-esc to quit.") end)
@@ -33,57 +33,57 @@ keymap.define("flight", "ctrl- ", ship.actions.login)
 
 keymap.modes["flight"].textinput = function(text)
    if(not ship.controls[text]) then
-      ship.repl.textinput(text)
+      ship.console.textinput(text)
    end
 end
 
--- Repl mode
-keymap.define_mode("repl")
-keymap.define({"repl", "flight"}, "pause", pause)
-keymap.define("repl", "`", function() end)
-keymap.define("repl", "~", function() end)
+-- Console mode
+keymap.define_mode("console")
+keymap.define({"console", "flight"}, "pause", pause)
+keymap.define("console", "`", function() end)
+keymap.define("console", "~", function() end)
 
-keymap.define({"repl", "flight"}, "return", ship.repl.eval_line)
-keymap.define({"repl", "flight"}, "backspace", ship.repl.delete_backwards)
-keymap.define({"repl", "flight"}, "ctrl-h", ship.repl.delete_backwards)
-keymap.define({"repl", "flight"}, "delete", ship.repl.delete_forwards)
-keymap.define({"repl", "flight"}, "ctrl-d", ship.repl.delete_forwards)
-keymap.define({"repl", "flight"}, "ctrl-k", ship.repl.kill_line)
+keymap.define({"console", "flight"}, "return", ship.console.eval_line)
+keymap.define({"console", "flight"}, "backspace", ship.console.delete_backwards)
+keymap.define({"console", "flight"}, "ctrl-h", ship.console.delete_backwards)
+keymap.define({"console", "flight"}, "delete", ship.console.delete_forwards)
+keymap.define({"console", "flight"}, "ctrl-d", ship.console.delete_forwards)
+keymap.define({"console", "flight"}, "ctrl-k", ship.console.kill_line)
 
-keymap.define({"repl", "flight"}, "ctrl-a", ship.repl.move_beginning_of_line)
-keymap.define({"repl", "flight"}, "home", ship.repl.move_beginning_of_line)
-keymap.define({"repl", "flight"}, "ctrl-e", ship.repl.move_end_of_line)
-keymap.define({"repl", "flight"}, "end", ship.repl.move_end_of_line)
+keymap.define({"console", "flight"}, "ctrl-a", ship.console.move_beginning_of_line)
+keymap.define({"console", "flight"}, "home", ship.console.move_beginning_of_line)
+keymap.define({"console", "flight"}, "ctrl-e", ship.console.move_end_of_line)
+keymap.define({"console", "flight"}, "end", ship.console.move_end_of_line)
 
-keymap.define({"repl", "flight"}, "ctrl-b", ship.repl.backward_char)
-keymap.define({"repl", "flight"}, "ctrl-f", ship.repl.forward_char)
-keymap.define({"repl", "flight"}, "alt-f", ship.repl.forward_word)
-keymap.define({"repl", "flight"}, "alt-b", ship.repl.backward_word)
+keymap.define({"console", "flight"}, "ctrl-b", ship.console.backward_char)
+keymap.define({"console", "flight"}, "ctrl-f", ship.console.forward_char)
+keymap.define({"console", "flight"}, "alt-f", ship.console.forward_word)
+keymap.define({"console", "flight"}, "alt-b", ship.console.backward_word)
 
-keymap.define({"repl", "flight"}, "ctrl-p", ship.repl.history_prev)
-keymap.define({"repl", "flight"}, "ctrl-n", ship.repl.history_next)
-keymap.define({"repl", "flight"}, "down", ship.repl.history_next)
+keymap.define({"console", "flight"}, "ctrl-p", ship.console.history_prev)
+keymap.define({"console", "flight"}, "ctrl-n", ship.console.history_next)
+keymap.define({"console", "flight"}, "down", ship.console.history_next)
 
 -- Not part of flight mode
-keymap.define("repl", "up", ship.repl.history_prev)
-keymap.define("repl", "right", ship.repl.forward_char)
-keymap.define("repl", "left", ship.repl.backward_char)
+keymap.define("console", "up", ship.console.history_prev)
+keymap.define("console", "right", ship.console.forward_char)
+keymap.define("console", "left", ship.console.backward_char)
 
-keymap.define("repl", "pageup", ship.repl.scroll_up)
-keymap.define("repl", "pagedown", ship.repl.scroll_down)
+keymap.define("console", "pageup", ship.console.scroll_up)
+keymap.define("console", "pagedown", ship.console.scroll_down)
 
-keymap.define("repl", "tab", ship.repl.complete)
-keymap.define("repl", "escape", mode("flight"))
-keymap.define({"flight", "repl"}, "ctrl-return", function() ship:e("src.config") end)
+keymap.define("console", "tab", ship.console.complete)
+keymap.define("console", "escape", mode("flight"))
+keymap.define({"flight", "console"}, "ctrl-return", function() ship:e("src.config") end)
 
-keymap.define("repl", "ctrl-l", ship.repl.clear)
+keymap.define("console", "ctrl-l", ship.console.clear)
 
-keymap.modes["repl"].textinput = ship.repl.textinput
+keymap.modes["console"].textinput = ship.console.textinput
 
 -- Edit mode
 keymap.define_mode("edit", ship.edit.wrap)
 keymap.define("edit", "escape", mode("flight"))
-keymap.define("edit", "`", mode("repl"))
+keymap.define("edit", "`", mode("console"))
 keymap.define("edit", "pause", pause)
 keymap.define("edit", "return", ship.edit.newline_and_indent)
 keymap.define("edit", "ctrl-z", ship.edit.undo)
@@ -132,10 +132,10 @@ keymap.define("edit", "alt-y", ship.edit.yank_pop)
 keymap.define("edit", "ctrl-backspace", ship.edit.backward_kill_word)
 keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
 
-keymap.define({"edit", "flight", "repl"}, "ctrl-r",
+keymap.define({"edit", "flight", "console"}, "ctrl-r",
    function()
       ship:load("src.config")
-      ship.repl.initialize()
+      ship.console.initialize()
       ship.edit.initialize()
 end)
 

@@ -6,7 +6,7 @@ local fallback_config = love.filesystem.read("data/fallback_config.lua")
 
 local comm = require("ship.comm")
 local help = require("ship.help")
-local repl = require("ship.repl")
+local console = require("ship.console")
 local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
 
@@ -60,7 +60,7 @@ local sandbox = function(ship)
                      {  help = help.message,
                         keymap = keymap,
                         default_config = default_config,
-                        print = repl.print,
+                        print = console.print,
                         ship = ship.api,
                         dofile = lume.fn(sandbox_dofile, ship.api),
                         os = {time = lume.fn(utils.time, ship)},
@@ -123,20 +123,20 @@ local ship = {
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
-      repl.initialize()
+      console.initialize()
       edit.initialize()
 
       ship.api.ui = ui
       ship.systems = systems
 
       ship.sandbox = sandbox(ship)
-      ship.api.repl.sandbox = ship.sandbox
+      ship.api.console.sandbox = ship.sandbox
    end,
 
    enter = function(ship, system_name, reseed)
       local from = ship.system_name
       assert(ship.systems[system_name], system_name .. " not found.")
-      ship.api.repl.display_line = "Entering the " .. system_name .. " system."
+      ship.api.console.display_line = "Entering the " .. system_name .. " system."
 
       -- stuff these things in there to expose to in-ship APIs
       ship.bodies = ship.systems[system_name].bodies
@@ -289,7 +289,8 @@ local ship = {
 -- everything in here is exposed to the sandbox. this table *is* `ship`, as far
 -- as the in-game code is concerned.
 ship.api = {
-   repl = repl,
+   console = console,
+   repl = console, -- for backwards-compatibility
    edit = edit,
    help = help,
 
@@ -342,7 +343,7 @@ ship.api = {
    e = function(s, path)
       if(type(path) == "string") then
          keymap.change_mode("edit")
-         s.repl.on(false)
+         s.console.on(false)
          s.edit.open(s, path)
       end
    end,

@@ -24,7 +24,7 @@ love = love or { graphics = { newImage = f, getWidth = o, getHeight = o,
 package.path = package.path .. ";?/init.lua"
 local ship = require "main"
 
-ship.api.repl.print = print
+ship.api.console.print = print
 
 love.load()
 

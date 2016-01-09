@@ -14,7 +14,7 @@ ship's config file (normally accessible with ctrl-enter):
 
 Be sure it's below the `ship.controls = { [...] }` section.
 In order to reload your config with the changes you've made, switch to
-the repl (usually ~) and run `ship:load("src.config")`.
+the console (usually `) and run: ship:load("src.config")
 
 This will fire the laser as long as the key is held down. However, if
 you'd like a key to toggle it on and off, you can use something like

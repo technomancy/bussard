@@ -80,20 +80,20 @@ love.load = function()
       require("localhacks")(ship)
    end
 
-   ship.api.repl.display_line =
-   "Press ` to open the repl, and run man() for more help. Zoom with = and -."
+   ship.api.console.display_line =
+   "Press ` to open the console, and run man() for more help. Zoom with = and -."
    xpcall(function() ship.api:load("src.config") end,
       function(e)
          print("Initial load failed:", e)
-         ship.repl.print(e)
-         ship.repl.print(debug.traceback())
-         ship.repl.display_line = "Error loading config; falling back to " ..
+         ship.console.print(e)
+         ship.console.print(debug.traceback())
+         ship.console.display_line = "Error loading config; falling back to " ..
             "ship.src.fallback_config."
          local chunk = assert(loadstring("src.fallback_config"))
-         setfenv(chunk, ship.api.repl.sandbox)
+         setfenv(chunk, ship.api.console.sandbox)
          local success, msg = pcall(chunk)
          if(not success) then
-            ship.repl.print(msg)
+            ship.console.print(msg)
          end
    end)
 end
@@ -188,7 +188,7 @@ love.draw = safely(function(dt)
       love.graphics.pop()
 
       hud.render(ship)
-      ship.api.repl.draw()
+      ship.api.console.draw()
       ship.api.edit.draw()
       for _,u in pairs(ship.upgrades) do
          if(u.draw_after) then u.draw_after(ship, dt) end

@@ -3,41 +3,41 @@
 local mode = function(mode)
    return function()
       if(keymap.current_mode == "edit") then ship.edit.save() end
-      ship.repl.on(mode == "repl")
+      ship.console.on(mode == "console")
       ship.edit.on(mode == "edit")
       keymap.change_mode(mode)
    end
 end
 
 keymap.define_mode("flight") -- basically empty
-keymap.define("flight", "`", mode("repl"))
+keymap.define("flight", "`", mode("console"))
 keymap.define("flight", "escape", ship.ui.quit)
 keymap.define("flight", "ctrl-return", function() ship:e("config.lua") end)
 
--- Repl mode
-keymap.define_mode("repl")
+-- Console mode
+keymap.define_mode("console")
 
-keymap.define("repl", "`", mode("flight"))
-keymap.define("repl", "return", ship.repl.eval_line)
-keymap.define("repl", "backspace", ship.repl.delete_backwards)
-keymap.define("repl", "delete", ship.repl.delete_forwards)
-keymap.define("repl", "ctrl-k", ship.repl.kill_line)
+keymap.define("console", "`", mode("flight"))
+keymap.define("console", "return", ship.console.eval_line)
+keymap.define("console", "backspace", ship.console.delete_backwards)
+keymap.define("console", "delete", ship.console.delete_forwards)
+keymap.define("console", "ctrl-k", ship.console.kill_line)
 
-keymap.define("repl", "home", ship.repl.move_beginning_of_line)
-keymap.define("repl", "end", ship.repl.move_end_of_line)
-keymap.define("repl", "left", ship.repl.backward_char)
-keymap.define("repl", "right", ship.repl.forward_char)
-keymap.define("repl", "up", ship.repl.history_prev)
-keymap.define("repl", "down", ship.repl.history_next)
-keymap.define("repl", "pageup", ship.repl.scroll_up)
-keymap.define("repl", "pagedown", ship.repl.scroll_down)
+keymap.define("console", "home", ship.console.move_beginning_of_line)
+keymap.define("console", "end", ship.console.move_end_of_line)
+keymap.define("console", "left", ship.console.backward_char)
+keymap.define("console", "right", ship.console.forward_char)
+keymap.define("console", "up", ship.console.history_prev)
+keymap.define("console", "down", ship.console.history_next)
+keymap.define("console", "pageup", ship.console.scroll_up)
+keymap.define("console", "pagedown", ship.console.scroll_down)
 
-keymap.define("repl", "ctrl-return", mode("flight"))
-keymap.define("repl", "escape", mode("flight"))
+keymap.define("console", "ctrl-return", mode("flight"))
+keymap.define("console", "escape", mode("flight"))
 
-keymap.define("repl", "ctrl-l", ship.repl.clear)
+keymap.define("console", "ctrl-l", ship.console.clear)
 
-keymap.modes["repl"].textinput = ship.repl.textinput
+keymap.modes["console"].textinput = ship.console.textinput
 
 -- Edit mode
 keymap.define_mode("edit")

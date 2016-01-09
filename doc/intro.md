@@ -1,7 +1,7 @@
 # Welcome to Bussard!
 
 If you're just getting started, you'll want to acquaint yourself with
-the flight controls first. Right now you're reading this in repl mode,
+the flight controls first. Right now you're reading this in console mode,
 which is a console in which you can interact with your ship's onboard
 computer. You'll want to hit ESC to get back to flight mode, and ~
 will get you back here.
@@ -16,6 +16,6 @@ the upper right shows your velocity vector. Use the equals and minus
 keys to zoom in and out.
 
 Once you've got a feel for the controls and instrumentation, run this
-in the repl to continue:
+in the console to continue:
 
     man("intro2")
