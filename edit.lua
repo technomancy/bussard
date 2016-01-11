@@ -237,6 +237,7 @@ return {
    -- edit commands
    delete_backwards = function()
       dirty = true
+      if(point == 0 and point_line == 1) then return end
       if(point == 0) then
          point_line = point_line - 1
          point = #lines[point_line]
