@@ -109,9 +109,9 @@ love.update = safely(function(dt)
 end)
 
 -- for commands that don't need repeat
-love.keypressed = keymap.handle
+love.keypressed = safely(keymap.handle)
 
-love.textinput = keymap.textinput
+love.textinput = safely(keymap.textinput)
 
 love.draw = safely(function(dt)
       starfield.render(star1, ship.x, ship.y)
