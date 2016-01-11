@@ -4,7 +4,7 @@
 
 * Rename repl to console.
 * Automatically adjust trajectory settings to achieve decent frame rate.
-* Change default quit key to ctrl-esc.
+* Change default quit key to ctrl-q.
 * Save state of asteroids and ships.
 * AI-controlled ships.
 

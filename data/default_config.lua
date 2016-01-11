@@ -24,8 +24,8 @@ keymap.define_mode("flight")
 keymap.define("flight", "`", mode("console"))
 
 -- You can change this so escape by itself quits if you prefer.
-keymap.define("flight", "escape", function() print("Press ctrl-esc to quit.") end)
-keymap.define("flight", "ctrl-escape", ship.ui.quit)
+keymap.define("flight", "escape", function() print("Press ctrl-q to quit.") end)
+keymap.define("flight", "ctrl-q", ship.ui.quit)
 
 keymap.define("flight", "tab", ship.actions.next_target)
 keymap.define("flight", "ctrl-tab", ship.actions.closest_target)
