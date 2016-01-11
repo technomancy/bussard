@@ -170,10 +170,14 @@ function console.eval(text, add_to_history)
       if result[1] then
          local results, i = lume.serialize(result[2], true), 3
          if add_to_history then
+            local to_append
             if text:sub(0,1) == '=' then
-               console.history:append('return ' .. text:sub(2), true)
+               to_append = 'return ' .. text:sub(2)
             else
-               console.history:append(text, true)
+               to_append = text
+            end
+            if console.history:get(-1) ~= to_append then
+              console.history:append(to_append, true)
             end
          end
          if result[2] == console.invisible then return true end
