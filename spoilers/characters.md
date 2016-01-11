@@ -207,7 +207,6 @@ scientific equipment.
 # Historical Characters
 
 * Captain Darush, saved the SS Copernicus on the trip to Ross
-* Prof. Strauss, founded Orolo research on Mars
 * Dr. Soong, credited (miscredited?) with discovery of portals, founded Aperture
 * Captain Jarkad of SS Goddard
 * Dr. Jameson, Yueh Researcher who replicated portal tech

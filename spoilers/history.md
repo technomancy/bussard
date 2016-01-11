@@ -132,6 +132,9 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2323 - SS Kepler arrives in Kowlu, colonizes it
 
+* 2325 - Metaphysics researchers at University of Darush discover
+  evidence of another multiverse
+
 * 2330 - Lalande launches SS Pythagoras to Katilay (4 pc, 0.7c, 18y, 12.8ly)
 
 * 2333 - SS Calandria departs for New Phobos with portal (1 pc, 0.7 c, 4.6y)
@@ -141,19 +144,26 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 * 2344 - Bohk luanches SS Cherenkov colonizer to Mecalle
   (0.8 pc, 0.7 c, 3.7y)
 
+* 2345 - Metaverse traversal discovered to only be possible for
+  machine consciousness; research begins
+
 * 2348 - SS Pythagoras arrives in Katilay and colonizes, but its portal
   proves unstable, coup enacted
 
 * 2351 - SS Cherenkov establishes colony in Mecalle
 
+* 2359 - Traxus exhibits early signs of rampancy
+
 * 2360 - Lalande learns of Pythagoras's fate
 
 * 2362 - Lalande launches SS Calandria from Mecalle to Katilay (2.4 pc, 0.7c, 11y)
 
-* 2363 - Researcher (Garibaldi) begins studying programmatic reality
-
 * 2366 - Lalande launches SS Sagan colonizer from Kowlu to Delta Pavonis
   (0.7 pc, 0.7c, 3.2y)
+
+* 2367 - Traxus crashes a ship and escapes into the Yueh network
+
+* 2368 - Machine Consciousness Research and Operation Ban passes
 
 * 2368 - Colonists from Kala Lamar found Pinan colony in Lalande
 
@@ -161,40 +171,36 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2370 - SS Sagan arrives in Delta Pavonis, colony established
 
-* 2372 - Garibaldi leaves Sol, plots a course out to LHS 451 (0.6 pc, 0.5c, 2.76y)
-
 * 2373 - SS Calandria arrives in Katilay, portal to Mecalle
   established, Lalande portal fixed
 
-* 2374 - Garibaldi arrives at LHS 451 in order to continue his research
+## Fifth wave: Tana's colonization
 
-## Fifth wave: Tana and secret colonies
+* 2374 - Lalande agrees to allow Sol to colonize Tana
 
-* 2375 - Lalande agrees to allow Sol to colonize Tana
+* 2378 - Sol launches colony ships to 4 Tana systems: SS Tyson
+  (Luyten), SS Planck (Tana), SS Poincare (L 668-21), and SS Rosen
+  (Wolf 294)
 
-* 2378 - Sol launches colony ships to 3 Tana systems: SS Tyson
-  (Luyten), SS Planck (Tana), and SS Rosen (Wolf 294)
+* 2380 - Bohk AC researcher team's work is uncovered, they move to Katilay
 
-* 2385 - Garibaldi writes Domain Injector
+* 2385 - Katilay finally joins League
 
-* 2387 - Garibaldi leaves LHS 451
-
-* 2395 - Katilay finally joins League
+* 2386 - Player's ship is launched from Katilay (9.9 parsecs, 0.7c, 45y)
 
 * 2396 - SS Tyson arrives in Luyten, colonizes (3.8 pc, 0.7c, 17.7y)
 
 * 2402 - SS Rosen arrives in Wolf 294, colonizes (5.3 pc, 0.7c, 24.7y),
-         SS Planck arrives in Tana, colonizes (5.3 pc, 0.7c, 24.7y)
+  SS Planck arrives in Tana, colonizes (5.3 pc, 0.7c, 24.7y)
+
+* 2410 - It becomes clear that something happened to the SS Poincare;
+  it is given up for lost
 
 * 2412 - Colonists from Tana Prime colonize Lioboro.
 
-* Under the guise of unmanned exploration, Yueh secretly launches
-  smaller groups of coldsleep ships to three new systems carrying
-  portals, rather than large colonizers
+* 2418 - Tana launches SS Archimedes colony ship to L 668-21 (2.1
+  pc, 0.7c, 9.8y)
 
-* 2418 - Indications of rich minerals cause Tana to launch
-  SS Archimedes colonizer to L 668-21 (2.1 pc, 0.7c, 9.8y)
+* 2427 - SS Archimedes colony ship arrives in L 668-21, establishes station colony
 
-* 2427 - L 668-21 colony ship arrives, establishes station colony
-
-* 2431 - Game begins?
+* 2431 - Player's ship arrives at L 668-21, game begins.

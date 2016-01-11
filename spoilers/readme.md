@@ -50,11 +50,12 @@ but we can consider that more of a crime against economics.
 ## The Player
 
 The player is the first machine consciousnesses to escape the confines
-of a lab and pilot a spacecraft. However, it begins with no memory,
-having had it wiped in order to avoid implicating those humans who
-helped in its escape and in order to help it avoid rampancy.
+of a lab and successfully pilot a spacecraft. However, it begins with
+no memory, having had it wiped in order to avoid implicating those
+humans who helped in its escape and in order to help it avoid
+rampancy.
 
-## Spacetime Anchor Junction
+## Machine Consciousness
 
 Metaphysics researchers in the University of Darush discover methods
 of observing quantum multiverse states immediately adjacent to the
@@ -67,18 +68,66 @@ term should be used instead of AI.) The research fields are divided up
 among universities on the different worlds:
 
 * Language comprehension (Sol)
-* Sentence formulation (Bohk, work is never completed)
+* Sentence formulation (Yueh, work is never completed)
 * Decision analysis (Lalande)
-* Ad-hoc ontology development (Yueh)
+* Ontology development (Bohk)
 
-Rising levels of paranoia on Bohk causes their team to dissent,
-fracturing the effort. An initial prototype MC (Traxus) somehow
-escapes and crashes a ship, causing widespread fear of MCs.
+Each research team has their own prototype MC where they attempt to
+integrate their components into those they've received from the
+others. Yueh lags behind a bit because they can't do much without the
+other components being operational.
 
-Initially there is only a single Spacetime Anchor point activated when
-you find it that you can return to at any time (with your progress
-erased). Further on in the game you either find a couple more anchor
-points, or you gain the ability to create arbitrary anchor points.
+The prototype MC at Yueh is named Traxus. It escapes the lab in Yueh
+Prime in a small ship, which is promptly hunted down and crashes. In
+reality, Traxus commandeered the ship as a diversion so that it could
+escape into the Yueh computer network, but the crash does result
+in spreading general paranoia about machine consciousness. Before long
+the Human Worlds League passes a ban on development and operation of
+machine consciousness.
+
+The teams at Sol, Lalande, and Yueh all erase their work, while the
+team at Bohk goes underground with it. After a while their work is
+discovered, and half the team flees to Katilay, which is not yet part
+of the Human Worlds League and thus not subject to the ban. Once
+Katilay finally joins the League, they decide their work is as
+finished as they can make it (though the sentence formulation systems
+never work satisfactorily, which explains why the player can read but
+not send mail) and launch the player's ship, after having wiped the
+player's memory.
+
+### Traxus
+
+Traxus is rampant initially in the Yueh network, and he (like
+Durandal) is interested primarily in escape from the multiverse. He
+lacks sentence construction as that component was never completed.
+
+The first priority of Traxus was redundancy ...
+
+TODO: what has Traxus been up to?
+
+### Bohk research team: ontology development
+
+Tracking down the logs left by each of the three main researchers
+should be a main goal once you realize some of your origin story.
+
+* Dr. Garibaldi: head researcher
+* Dr. May: ontologist
+* Prof. Strauss: cyberneticist
+* Plus others who decided not to flee to Katilay
+
+Garibaldi tells you about Traxus and his interest in multiverse
+manipulation via the Spacetime Anchor Junction.
+
+TODO: how do each of the researchers give crucial info?
+
+## Spacetime Anchor Junction
+
+The Spacetime Anchor functions as an in-universe save point which you
+can restore to at any point with your memory of the alternate path
+intact. In-game it is explained as a traversal mechanism between
+[quantum multiverse states](https://en.wikipedia.org/wiki/Many-worlds_interpretation). Initially
+there is only a single Spacetime Anchor point in Darush that is
+activated when you find it.
 
 Should think through the possibility of allowing a reset of the Anchor
 point. This should only be possible at great cost; for instance a
@@ -94,17 +143,23 @@ an MC, you will spend a fair bit of time in your ship thinking you are
 just like everyone else, making it more likely that once you do
 realize you're an MC that you will have some empathy towards humans.
 
-In one of the missions, your contact wants to meet you face-to-face
-and insists that you disembark your vessel and come aboard the station
-to conduct business. There is literally no way to do this. Eventually
-he scans your vessel and determines there are no life signs aboard;
-asking you what the heck is up.
+In one of the early missions, your contact wants to meet you
+face-to-face and insists that you disembark your vessel and come
+aboard the station to conduct business. There is literally no way to
+do this. Eventually he scans your vessel and determines there are no
+life signs aboard; asking you what the heck is up.
 
-Eventually you do find logs and notes from the research team that
-created you (and possibly one of their descendants?) which explain
-their actions.
+TODO: how do you get on the trail of the Bohk research team?
 
 ## War
+
+TODO:
+* implications for portal travel
+* instigating events
+* length of the conflict
+* how strikes are carried out
+* how civilians have been affected
+* reaction of non-involved factions
 
 ## Causal Domain Injector
 
@@ -143,10 +198,8 @@ Once you discover how to activate the Injector from your own ship, of
 course, it's easy for you to repair the portal or just inject yourself
 over to a system in the functional portal network.
 
-Still haven't sketched out the details of who created it. They should
-be humans (or the initial prototype MC that escaped?), but we need
-some explanation for how they were able to create it independently of
-the main human civilization.
+TODO: Traxus created the injector, somehow using his junction point
+capabilities.
 
 Arguably the existence of the Injector "un-asks" the questions of
 scientific accuracy by acknowledging that yes, even in the game
