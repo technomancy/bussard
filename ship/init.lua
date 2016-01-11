@@ -48,11 +48,11 @@ local base_stats = {
 }
 
 local sandbox_dofile = function(ship, filename)
-   local contents = ship:find(filename)
+   local contents = ship.api:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
    local chunk = assert(loadstring(contents))
    setfenv(chunk, ship.sandbox)
-   chunk()
+   return chunk()
 end
 
 local sandbox = function(ship)
@@ -62,7 +62,7 @@ local sandbox = function(ship)
                         default_config = default_config,
                         print = console.print,
                         ship = ship.api,
-                        dofile = lume.fn(sandbox_dofile, ship.api),
+                        dofile = lume.fn(sandbox_dofile, ship),
                         os = {time = lume.fn(utils.time, ship)},
                         scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
