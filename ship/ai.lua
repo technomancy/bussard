@@ -51,14 +51,15 @@ end
 local make = function(bodies, name, from_portal)
    local targets = lume.filter(bodies, "os")
    local target, from = targets[math.random(#targets)]
+
    if(from_portal) then
       local portals = lume.filter(bodies, "portal")
       from = portals[math.random(#portals)]
-      while target == from do from = portals[math.random(#portals)] end
    else
       from = targets[math.random(#targets)]
-      while target == from do from = targets[math.random(#targets)] end
    end
+
+   while target == from do target = targets[math.random(#targets)] end
 
    return {
       ship = true,
