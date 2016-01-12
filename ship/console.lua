@@ -8,6 +8,7 @@
 
 local lume = require("lume")
 local love = love
+local utils = require("utils")
 
 -- Module
 local console = {
@@ -44,61 +45,10 @@ local word_break = "[ _-]"
 -- current font
 local font
 
--- Circular buffer functionality
-local buffer = {}
-
-function buffer:new(ob)
-   local o = ob or {}
-   o.entries = #o
-   o.cursor = #o + 1
-   o.max = 10
-   setmetatable(o, self)
-   self.__index = self
-   return o
-end
-
-function buffer:append(entry, assume_newline)
-   if self[self.cursor] then
-      self[self.cursor] = entry
-      self.cursor = self.cursor + 1
-      if self.entries ~= self.max then
-         self.entries = self.entries + 1
-      end
-   elseif(self[#self] and self[#self]:byte(-1) ~= 10 and not assume_newline) then
-      self[#self] = self[#self] .. entry
-   else
-      table.insert(self, entry)
-      self.cursor = self.cursor + 1
-      if self.entries ~= self.max then
-         self.entries = self.entries + 1
-      end
-   end
-   if self.cursor == self.max + 1 then
-      self.cursor = 1
-   end
-end
-
-function buffer:get(idx)
-   -- Allow negative indexes
-   if idx < 0 then
-      idx = (self.entries + idx) + 1
-   end
-
-   if self.entries == self.max then
-      local c = self.cursor + idx - 1
-      if c > self.max then
-         c = c - self.max
-      end
-      return self[c]
-   else
-      return self[idx]
-   end
-end
-
 function console.initialize()
-   lines = buffer:new({})
+   lines = utils.buffer:new()
    lines.max = console.max_lines
-   console.history = buffer:new()
+   console.history = utils.buffer:new()
    console.history.max = console.max_history
    -- Expose these in case somebody wants to use them
    console.lines = lines
