@@ -56,8 +56,9 @@ local safely = function(f)
       end
       love.keypressed = function(key)
          if(key == "return") then ui.quit(ui)
-         elseif(key == "q") then
-            if(love.keyboard.isDown("lctrl", "rctrl")) then save.abort(ship) end
+         elseif(key == "escape") then love.event.quit()
+         elseif(key == "q" and love.keyboard.isDown("lctrl", "rctrl")) then
+            save.abort(ship)
             love.event.quit()
          end
       end
