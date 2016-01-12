@@ -65,14 +65,16 @@ return {
          ship_data.api = nil
          ship_data.console = nil
          lume.extend(ship, ship_data)
+         
+         if (console_data) then
+            ship.api.console.history = utils.buffer:new(console_data.history)
+            ship.api.console.max_history = console_data.max_history
+            ship.api.console.history.max = console_data.max_history
 
-         ship.api.console.history = utils.buffer:new(console_data.history)
-         ship.api.console.max_history = console_data.max_history
-         ship.api.console.history.max = console_data.max_history
-
-         ship.api.console.lines = utils.buffer:new(console_data.lines)
-         ship.api.console.max_lines = console_data.max_lines
-         ship.api.console.lines.max = console_data.max_lines
+            ship.api.console.lines = utils.buffer:new(console_data.lines)
+            ship.api.console.max_lines = console_data.max_lines
+            ship.api.console.lines.max = console_data.max_lines
+         end
 
          ship:enter(ship.system_name)
          ship.api.console.display_line = nil
