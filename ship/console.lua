@@ -81,6 +81,7 @@ end
 function console.clear_lines()
    console.lines = utils.buffer:new()
    console.lines.max = console.max_lines
+   return console.invisible
 end
 
 local function pack(...) return {...} end
@@ -91,11 +92,6 @@ function console.eval(text, add_to_history)
 
    if(text == "help" or text == "help()") then
       console.print("Press ` to open the console, and run man() for more help.")
-      return true
-   end
-
-   if(text == "clear" or text == "clear()") then
-      console.clear_lines()
       return true
    end
 

@@ -61,6 +61,7 @@ local sandbox = function(ship)
                         keymap = keymap,
                         default_config = default_config,
                         print = console.print,
+                        clear = console.clear_lines,
                         ship = ship.api,
                         dofile = lume.fn(sandbox_dofile, ship),
                         -- TODO: add require too; maybe loadstring
