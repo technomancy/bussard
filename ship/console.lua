@@ -253,6 +253,7 @@ function console.history_next()
 end
 
 function console.scroll_up()
+   if(console.lines.entries < console.rows) then return end
    offset = math.min(console.lines.entries - console.rows + 1, offset + console.rows)
 end
 
