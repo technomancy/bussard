@@ -52,11 +52,11 @@ local safely = function(f)
          love.graphics.print("Error: " .. ret, 100, 100)
          love.graphics.print("Press Enter to save and quit.", 100, 200)
          love.graphics.print("Press Esc to quit without saving.", 100, 300)
-         love.graphics.print("Press Ctrl-Esc to wipe your save game.", 100, 400)
+         love.graphics.print("Press Ctrl-Q to wipe your save game.", 100, 400)
       end
       love.keypressed = function(key)
          if(key == "return") then ui.quit(ui)
-         elseif(key == "escape") then
+         elseif(key == "q") then
             if(love.keyboard.isDown("lctrl", "rctrl")) then save.abort(ship) end
             love.event.quit()
          end
