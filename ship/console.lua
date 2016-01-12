@@ -27,9 +27,6 @@ local PADDING = 20
 -- How many pixels are required to display a row
 local ROW_HEIGHT
 -- Console contents
--- List of {boolean, string} where boolean is true if the string is part of user
--- -navigable history (a > will be prepended before rendering if true)
-local lines
 -- Line that is currently being edited
 local editline = ""
 -- Location in the editline
@@ -46,12 +43,14 @@ local word_break = "[ _-]"
 local font
 
 function console.initialize()
-   lines = utils.buffer:new()
-   lines.max = console.max_lines
+   -- List of {boolean, string} where boolean is true if the string is part of user
+   -- -navigable history (a > will be prepended before rendering if true)
+   console.lines = utils.buffer:new()
+   console.lines.max = console.max_lines
+   -- List of command history entries
    console.history = utils.buffer:new()
    console.history.max = console.max_history
-   -- Expose these in case somebody wants to use them
-   console.lines = lines
+
    font = love.graphics.getFont()
    console.font_width = font:getWidth('a')
    ROW_HEIGHT = font:getHeight()
@@ -70,7 +69,7 @@ function console.on_close() end
 function console.write(value)
    for line,_ in tostring(value):gmatch("([^\n]*\n?)") do
       if(line and line ~= "" and line ~= "\n") then console.display_line = line end
-      lines:append(line)
+      console.lines:append(line)
    end
 end
 
@@ -247,7 +246,7 @@ function console.history_next()
 end
 
 function console.scroll_up()
-   offset = math.min(lines.entries - console.rows + 1, offset + console.rows)
+   offset = math.min(console.lines.entries - console.rows + 1, offset + console.rows)
 end
 
 function console.scroll_down()
@@ -341,7 +340,7 @@ function console.draw()
    end
 
    for i = offset, console.rows + offset do
-      local line = lines:get(-i)
+      local line = console.lines:get(-i)
       if(line) then render_line(line, i - offset) end
    end
 
@@ -351,7 +350,7 @@ function console.draw()
    -- lines entered rather than the lines drawn, but close enough
 
    -- height is percentage of the possible lines
-   local bar_height = math.min(100, (console.rows * 100) / lines.entries)
+   local bar_height = math.min(100, (console.rows * 100) / console.lines.entries)
    -- convert to pixels (percentage of screen height, minus 10px padding)
    local bar_height_pixels = (bar_height * (height - 10)) / 100
 
@@ -363,7 +362,7 @@ function console.draw()
       -- now determine location on the screen by taking the offset in
       -- history and converting it first to a percentage of total
       -- lines and then a pixel offset on the screen
-      local bar_end = (offset * 100) / lines.entries
+      local bar_end = (offset * 100) / console.lines.entries
       bar_end = ((height - 10) * bar_end) / 100
       bar_end = height - bar_end
 
