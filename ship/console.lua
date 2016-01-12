@@ -181,6 +181,7 @@ console.complete = function()
          editline:sub(cursor + 1)
       cursor = cursor + completions[1]:len() - input:len()
    elseif(#completions > 0) then
+      -- TODO: this should only be shown temporarily while deciding on a choice
       console.print(table.concat(completions, " "))
    end
 end

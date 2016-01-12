@@ -76,7 +76,7 @@ keymap.define("console", "tab", ship.console.complete)
 keymap.define("console", "escape", mode("flight"))
 keymap.define({"flight", "console"}, "ctrl-return", function() ship:e("src.config") end)
 
-keymap.define("console", "ctrl-l", ship.console.clear)
+keymap.define("console", "ctrl-l", ship.console.clear_lines)
 
 keymap.modes["console"].textinput = ship.console.textinput
 
