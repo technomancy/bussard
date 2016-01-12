@@ -8,6 +8,7 @@
 
 local lume = require("lume")
 local love = love
+local utils = require("utils")
 
 -- Module
 local console = {
@@ -26,9 +27,6 @@ local PADDING = 20
 -- How many pixels are required to display a row
 local ROW_HEIGHT
 -- Console contents
--- List of {boolean, string} where boolean is true if the string is part of user
--- -navigable history (a > will be prepended before rendering if true)
-local lines
 -- Line that is currently being edited
 local editline = ""
 -- Location in the editline
@@ -44,64 +42,15 @@ local word_break = "[ _-]"
 -- current font
 local font
 
--- Circular buffer functionality
-local buffer = {}
-
-function buffer:new(ob)
-   local o = ob or {}
-   o.entries = #o
-   o.cursor = #o + 1
-   o.max = 10
-   setmetatable(o, self)
-   self.__index = self
-   return o
-end
-
-function buffer:append(entry, assume_newline)
-   if self[self.cursor] then
-      self[self.cursor] = entry
-      self.cursor = self.cursor + 1
-      if self.entries ~= self.max then
-         self.entries = self.entries + 1
-      end
-   elseif(self[#self] and self[#self]:byte(-1) ~= 10 and not assume_newline) then
-      self[#self] = self[#self] .. entry
-   else
-      table.insert(self, entry)
-      self.cursor = self.cursor + 1
-      if self.entries ~= self.max then
-         self.entries = self.entries + 1
-      end
-   end
-   if self.cursor == self.max + 1 then
-      self.cursor = 1
-   end
-end
-
-function buffer:get(idx)
-   -- Allow negative indexes
-   if idx < 0 then
-      idx = (self.entries + idx) + 1
-   end
-
-   if self.entries == self.max then
-      local c = self.cursor + idx - 1
-      if c > self.max then
-         c = c - self.max
-      end
-      return self[c]
-   else
-      return self[idx]
-   end
-end
-
 function console.initialize()
-   lines = buffer:new({})
-   lines.max = console.max_lines
-   console.history = buffer:new()
+   -- List of {boolean, string} where boolean is true if the string is part of user
+   -- -navigable history (a > will be prepended before rendering if true)
+   console.lines = utils.buffer:new()
+   console.lines.max = console.max_lines
+   -- List of command history entries
+   console.history = utils.buffer:new()
    console.history.max = console.max_history
-   -- Expose these in case somebody wants to use them
-   console.lines = lines
+
    font = love.graphics.getFont()
    console.font_width = font:getWidth('a')
    ROW_HEIGHT = font:getHeight()
@@ -120,13 +69,19 @@ function console.on_close() end
 function console.write(value)
    for line,_ in tostring(value):gmatch("([^\n]*\n?)") do
       if(line and line ~= "" and line ~= "\n") then console.display_line = line end
-      lines:append(line)
+      console.lines:append(line)
    end
 end
 
 function console.print(...)
    local texts = lume.map({...}, tostring)
    console.write(table.concat(texts, "\t") .. "\n")
+end
+
+function console.clear_lines()
+   console.lines = utils.buffer:new()
+   console.lines.max = console.max_lines
+   return console.invisible
 end
 
 local function pack(...) return {...} end
@@ -297,7 +252,7 @@ function console.history_next()
 end
 
 function console.scroll_up()
-   offset = math.min(lines.entries - console.rows + 1, offset + console.rows)
+   offset = math.min(console.lines.entries - console.rows + 1, offset + console.rows)
 end
 
 function console.scroll_down()
@@ -391,7 +346,7 @@ function console.draw()
    end
 
    for i = offset, console.rows + offset do
-      local line = lines:get(-i)
+      local line = console.lines:get(-i)
       if(line) then render_line(line, i - offset) end
    end
 
@@ -401,7 +356,7 @@ function console.draw()
    -- lines entered rather than the lines drawn, but close enough
 
    -- height is percentage of the possible lines
-   local bar_height = math.min(100, (console.rows * 100) / lines.entries)
+   local bar_height = math.min(100, (console.rows * 100) / console.lines.entries)
    -- convert to pixels (percentage of screen height, minus 10px padding)
    local bar_height_pixels = (bar_height * (height - 10)) / 100
 
@@ -413,7 +368,7 @@ function console.draw()
       -- now determine location on the screen by taking the offset in
       -- history and converting it first to a percentage of total
       -- lines and then a pixel offset on the screen
-      local bar_end = (offset * 100) / lines.entries
+      local bar_end = (offset * 100) / console.lines.entries
       bar_end = ((height - 10) * bar_end) / 100
       bar_end = height - bar_end
 
