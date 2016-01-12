@@ -63,6 +63,7 @@ local sandbox = function(ship)
                         print = console.print,
                         ship = ship.api,
                         dofile = lume.fn(sandbox_dofile, ship),
+                        -- TODO: add require too; maybe loadstring
                         os = {time = lume.fn(utils.time, ship)},
                         scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
@@ -178,8 +179,15 @@ local ship = {
          end
       end
 
-      -- TODO: calculate oberth effect
+      -- this seems overcomplicated at first glance--why are we
+      -- setting an engine_on bit in the ship.controls handler and
+      -- then checking it later? the answer is that otherwise it would
+      -- be a sandbox violation. if the ship.controls handler affected
+      -- acceleration directly, you could write code that would make
+      -- the engine arbitrarily powerful or use zero fuel or
+      -- whatever. so these two steps must remain separate.
       if(ship.engine_on and ship.fuel > 0) then
+         -- TODO: calculate oberth effect
          local fx = (math.sin(ship.heading) * dt * ship.engine_strength)
          local fy = (math.cos(ship.heading) * dt * ship.engine_strength)
          ship.dx = ship.dx + fx / ship.mass
@@ -367,7 +375,7 @@ ship.api = {
       ["fallback_config"] = fallback_config,
    },
    docs = {},
-   persist = {"persist", "scale", "src", "docs",
+   persist = {"persist", "scale", "src", "docs", "trajectory_seconds",
               "trajectory", "trajectory_step_size", "trajectory_auto"},
 
    -- added by loading config
@@ -376,10 +384,11 @@ ship.api = {
    updaters = {},
    helm = love.keyboard,
 
-   -- you can adjust these to improve performance
+   -- trajectory plotting is the single biggest perf drain by far
+   -- these numbers will be changed if the frame rate is too low
    trajectory = 256,
    trajectory_step_size = 0.1,
-   trajectory_seconds = 15,
+   trajectory_seconds = 15, -- how far out the trajectory should go
    trajectory_auto = true, -- turn this off to disable auto-adjustment
 
    fuel_to_stop = function(s)
