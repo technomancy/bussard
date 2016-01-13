@@ -15,7 +15,7 @@ local include = function(ship, b, m)
    elseif(m.govs and not lume.find(m.govs, b.gov)) then return false
    elseif(m.prereqs and not lume.all(m.prereqs, happened)) then return false
    elseif(m.restrictions and lume.any(m.restrictions, happened)) then return false
-   elseif(m.mission_id and not lume.find(ship.active_missions, m.mission_id)) then return false
+   elseif(m.mission_id and lume.find(ship.active_missions, m.mission_id)) then return false
    elseif(m.prereq_fn and not m.prereq_fn(ship)) then return false
    else return true end
 end
