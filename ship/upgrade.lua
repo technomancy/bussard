@@ -25,6 +25,8 @@ local gov_colors = {
    ["Yueh"] = {0xcd, 0x00, 0x00},
 }
 
+local map_previous_mode
+
 return {
    laser = {
       stats = {
@@ -109,14 +111,17 @@ return {
             local m = { x=system.x, y=system.y }
             ship.map = m
             keymap.define_mode("map")
-            keymap.define("map", "escape", lume.fn(keymap.change_mode, "flight"))
+            keymap.define("map", "escape", function() keymap.change_mode(map_previous_mode) end)
             keymap.define("map", "down", lume.fn(pan, m, 0, -0.1))
             keymap.define("map", "up", lume.fn(pan, m, 0, 0.1))
             keymap.define("map", "left", lume.fn(pan, m, -0.1, 0))
             keymap.define("map", "right", lume.fn(pan, m, 0.1, 0))
          end
       end,
-      action = lume.fn(keymap.change_mode, "map"),
+      action = function()
+         map_previous_mode = keymap.current_mode
+         keymap.change_mode("map")
+      end,
       draw_after = function(ship)
          if(keymap.current_mode == "map") then
             love.graphics.setColor(0, 0, 0, 200)
