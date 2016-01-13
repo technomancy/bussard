@@ -20,6 +20,19 @@ local include = function(ship, b, m)
    else return true end
 end
 
+-- every time you enter the system, the news on it is re-seeded, and
+-- the rules for whether a post should be posted are re-evaluated.
+
+-- every post is a .msg file, plus optionally a .lua file for
+-- metadata, plus you can have a higher-level metadata file that
+-- applies to all messages in a given group. metadata is used to
+-- determine whether a post should be posted or not in a given body's
+-- filesystem.
+
+-- some posts have missions attached to them; they will have a
+-- mission_id field in their metadata. missions are accepted with
+-- /bin/reply in the OS. once they are accepted, mission.lua handles
+-- their success/failure states.
 return {
    seed = function(ship, b, fs)
       if(b.os.name ~= "orb") then return end

@@ -1,3 +1,5 @@
+-- missions are accepted by replying to newsgroup postings; see news.lua.
+
 local utils = require("utils")
 local body = require("body")
 
