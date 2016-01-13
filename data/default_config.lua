@@ -140,9 +140,9 @@ end)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
 keymap.define("edit", "ctrl-l", function()
-                 ship.edit.newline()
-                 ship.edit.textinput("\f")
-                 ship.edit.newline()
+   ship.edit.newline()
+   ship.edit.textinput("\f")
+   ship.edit.newline()
 end)
 
 -- HUD
