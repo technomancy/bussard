@@ -135,15 +135,14 @@ keymap.define("edit", "alt-d", ship.edit.forward_kill_word)
 keymap.define({"edit", "flight", "console"}, "ctrl-r",
    function()
       ship:load("src.config")
-      ship.console.initialize()
       ship.edit.initialize()
 end)
 
 keymap.modes["edit"].textinput = ship.edit.textinput
 keymap.define("edit", "ctrl-l", function()
-                 ship.edit.newline()
-                 ship.edit.textinput("\f")
-                 ship.edit.newline()
+   ship.edit.newline()
+   ship.edit.textinput("\f")
+   ship.edit.newline()
 end)
 
 -- HUD
