@@ -7,6 +7,8 @@
 * Change default quit key to ctrl-q.
 * Save state of asteroids and ships.
 * AI-controlled ships.
+* Persist console buffer and command history.
+* New `clear()` function (clears the console buffer).
 
 ## alpha-6 / 2015-12-24
 
