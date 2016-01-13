@@ -249,9 +249,10 @@ local ship = {
    -- run when cargo or upgrades change; always idempotent
    recalculate = function(ship)
       ship.target = ship.bodies[ship.target_number]
-      if(ship.api.trajectory_auto) then
-         ship.api.updaters.trajectory_adjust = trajectory_adjust
-      end
+      -- this needs a bit more work; it shrinks the trajectory way too much
+      -- if(ship.api.trajectory_auto) then
+      --    ship.api.updaters.trajectory_adjust = trajectory_adjust
+      -- end
 
       for k,v in pairs(base_stats) do
          ship[k] = v
