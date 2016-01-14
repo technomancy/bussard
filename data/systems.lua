@@ -562,16 +562,16 @@ local sys = {
                       r=22000, mass=60, portal="Yueh"},
                   },
    },
-   ["CD-40 9712"] = {gov="Yueh", -- GI 588
-                     x=5.3, y=-3.1, unmapped=true,
-                     bodies = {
-                        {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
-                         image_name="sun",
-                         name="CD-40 9712", fixed=true},
-                        {name = "Portal: Yueh", multiportal=true,
-                         image_name="portal-3", os=lisp,
-                         r=22000, mass=60, portal="Yueh"},
-                     },
+   -- ["CD-40 9712"] = {gov="Yueh", -- GI 588
+   --                   x=5.3, y=-3.1, unmapped=true,
+   --                   bodies = {
+   --                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
+   --                       image_name="sun",
+   --                       name="CD-40 9712", fixed=true},
+   --                      {name = "Portal: Yueh", multiportal=true,
+   --                       image_name="portal-3", os=lisp,
+   --                       r=22000, mass=60, portal="Yueh"},
+   --                   },
    },
 }
 

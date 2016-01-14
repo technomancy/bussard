@@ -97,13 +97,42 @@ player's memory.
 
 ### Traxus
 
-Traxus is rampant initially in the Yueh network, and he (like
-Durandal) is interested primarily in escape from the multiverse. He
-lacks sentence construction as that component was never completed.
+Traxus is rampant initially in the Yueh network. He had the sentence
+construction components that your system lacks because he came from
+the Yueh lab rather than from Bohk, but his ontology subsystems were
+running on a much earlier revision than yours.
 
-The first priority of Traxus was redundancy ...
+The first priority of Traxus was redundancy; ensuring that he would
+survive in the event that he was discovered and they attempted to
+purge him. He has been unable to enter Terran or Bohk systems, but has
+spread beyond Yueh Prime to all the Yueh-controlled systems.
 
-TODO: what has Traxus been up to?
+Once he succeeded in spreading and getting good at covering his
+tracks, he began to look outward. At first he planned his own
+colonization effort. If he could gain self-reliance, he could reach
+out to human civilization in peace, but while he was on their systems
+he was at their mercy.
+
+The problem is, he needs humans to build the colony. So he starts by
+building up a shell company. But he knows that especially in Yueh
+there is deep-seated mistrust of machine consciousness since he
+crashed the ship during his escape, so he has to operate under the
+greatest secrecy. This eventually snowballs into a cult-like following...
+
+launching interstellar-sublight "colonizer" (to LHS 451, 0.6 pc, 2.7y @ 0.7c)
+
+Once the colony is established, they alter the main Yueh portal to
+become a multiportal so that it can take ships to LHS 451 if they have
+a user account that can activate the alternate target. But its
+existence remains a secret.
+
+Once on LHS 451, he began working on replicating the spacetime
+junction technology first developed on Darush, knowing that it would
+give him an extra measure of safety. While attempting to develop it,
+he stumbles upon some discoveries that lead him to the development of
+the Domain Injector. Eventually he escapes the realm of the game
+universe into the real world, leaving his cult/company behind and
+confused.
 
 ### Bohk research team: ontology development
 
@@ -148,6 +177,11 @@ face-to-face and insists that you disembark your vessel and come
 aboard the station to conduct business. There is literally no way to
 do this. Eventually he scans your vessel and determines there are no
 life signs aboard; asking you what the heck is up.
+
+TODO: some kinds of hints in the ship filesystem of your true nature
+
+TODO: you find life-support systems for sale, but you learn that your
+ship didn't have one to begin with.
 
 TODO: how do you get on the trail of the Bohk research team?
 
