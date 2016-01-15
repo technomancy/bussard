@@ -11,7 +11,7 @@ love = love or { graphics = { newImage = f, getWidth = o, getHeight = o,
                                  return { getWidth = f, getHeight = f,} end, },
                  keyboard = { isDown = f, setKeyRepeat = f, },
                  filesystem = { save = f, newFile = f, write = f,
-                                isFile = f,
+                                isFile = f, lines = function() return pairs({"hi"}) end,
                                 read = function(filename)
                                    local file = io.open(filename, "r")
                                    local content = file:read("*all")
@@ -46,7 +46,7 @@ local proximity_check = function(bodies, max, system_name)
    for _, b in ipairs(bodies) do
       for _, b2 in ipairs(bodies) do
          if(b ~= b2 and (not b2.fixed) and (not b.fixed) and (not b.asteroid) and
-            (not b2.asteroid)) then
+            (not b2.asteroid) and (not b.ship) and (not b2.ship)) then
             local gx, gy = body.gravitate(b, b2.x, b2.y)
             if(math.abs(gx) > max or math.abs(gy) > max) then
                print("prox warning:", system_name, b.name, b2.name, gx, gy)

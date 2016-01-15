@@ -105,7 +105,7 @@ return {
       for i,b in ipairs(bodies) do -- remove existing ships
          if(b.ship) then table.remove(bodies, i) end
       end
-      local ship_count = math.random(sys_pop(bodies) * ship_factor)
+      local ship_count = math.random(math.ceil(sys_pop(bodies) * ship_factor))
       for i = 1, ship_count do insert_new(bodies) end
    end,
 
