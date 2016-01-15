@@ -572,7 +572,7 @@ local sys = {
    --                       image_name="portal-3", os=lisp,
    --                       r=22000, mass=60, portal="Yueh"},
    --                   },
-   },
+   -- },
 }
 
 return sys
