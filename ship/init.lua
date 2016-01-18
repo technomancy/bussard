@@ -273,6 +273,8 @@ local ship = {
       end
 
       ship.mass = ship.mass + ship:cargo_mass()
+
+      -- TODO: this needs to be declarative
       if(ship.events["jinod3"]) then
          for _,b in ipairs(ship.systems["Sol"].bodies) do
             if(b.name == "Mars") then

@@ -32,7 +32,7 @@ local base_prices = {
    food = 5,
    equipment = 10,
    medicine = 20,
-   account = 512,
+   account = 256,
    upgrades = {
       laser = 256,
       engine = 1024,
@@ -140,8 +140,8 @@ return {
       b.fuel_price = math.ceil(base_prices.fuel *
                                   (math.log(b.remote / 2) + 1) * (5 / b.industry))
       b.account_price = math.floor(base_prices.account *
-                                      (math.log(b.remote / 2 + b.pop) + 1))
-
+                                      (math.log(math.max(b.remote, 2) * 0.5) + 1))
+      print("account", b.name, b.account_price)
       b.upgrade_prices = {}
       for _,u in ipairs(b.upgrades) do
          b.upgrade_prices[u] = math.floor(base_prices.upgrades[u] *
