@@ -1,11 +1,12 @@
 local utils = require("utils")
 local keymap = require("keymap")
+local asteroid = require("asteroid")
 
 local w, h, em = love.graphics:getWidth(), love.graphics:getHeight()
 
 local laser_hits = function(ship, b, distance)
    -- assuming circular images
-   local diameter = b.image:getWidth() / 2
+   local diameter = b:img():getWidth() / 2
    local theta = math.atan2(b.y - ship.y, b.x - ship.x)
    local angular_divergence = math.abs(ship.heading - theta)
    local divergence = math.abs(math.sin(angular_divergence) * distance)
@@ -49,7 +50,7 @@ return {
                local power = ship.laser_power * 16
                if(b.asteroid and laser_hits(ship, b, dist)) then
                   b.strength = b.strength - (((dt * power * 32) / (dist*dist)))
-                  if(b.strength < 0) then b:split(ship) end
+                  if(b.strength < 0) then asteroid.split(b, ship) end
                end
             end
          end

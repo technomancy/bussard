@@ -64,7 +64,8 @@ local make = function(bodies, name, from_portal)
    return {
       ship = true,
       update = update,
-      image = image,
+      -- TODO: rotation of this is wrong
+      image_name = "ship", img = body.img,
       scale = 10,
 
       x = from.x,

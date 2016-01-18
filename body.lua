@@ -219,4 +219,9 @@ return {
    base_prices = base_prices,
 
    hostname = hostname,
+
+   api = {
+      gravitate = gravitate,
+      gravitate_all = gravitate_all,
+   },
 }

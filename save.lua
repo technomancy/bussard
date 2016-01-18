@@ -12,7 +12,7 @@ local ship_fields = {
 local body_fields = {
    "x", "y", "dx", "dy", "cargo", "name", "mass", "image_name",
    "prices", "upgrade_prices", "fuel_price", "account_price",
-   "progress", "from_name", "target_name", "ship", "asteroid",
+   "progress", "from_name", "target_name", "ship", "asteroid", "strength",
 }
 
 local console_fields = {
@@ -65,7 +65,7 @@ return {
          ship_data.api = nil
          ship_data.console = nil
          lume.extend(ship, ship_data)
-         
+         ship.api.src.draw = ship.api.src.draw or love.filesystem.read("data/default_draw.lua")
          if (console_data) then
             ship.api.console.history = utils.buffer:new(console_data.history)
             ship.api.console.max_history = console_data.max_history

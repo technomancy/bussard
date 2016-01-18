@@ -15,30 +15,11 @@ end
 
 local function asteroid(name, mass_max, bodies, parent)
    local mass = math.random(mass_max)
-   local split = function(self, ship)
-      for i,b in ipairs(bodies) do
-         if(b == self) then table.remove(bodies, i) end
-      end
-
-      retarget(self, ship)
-      if(self.mass < min_mass) then
-         if(utils.distance(ship, self) <= ship.scoop_range) then
-            ship.api.console.print("Scooped up " .. self.name)
-            ship:move_cargo("ore", 10, true)
-         else
-            ship.api.console.print("Destroyed " .. self.name ..
-                                      " but out of scoop range.")
-         end
-      else
-         asteroid(name .. "-", self.mass / 2, bodies, self)
-         asteroid(name .. "+", self.mass / 2, bodies, self)
-      end
-   end
 
    local a = { name = name, mass = mass,
-               image = asteroid_image, image_name = "asteroid",
+               image_name = "asteroid",
                scale = (mass / 64) + 0.5,
-               asteroid = true, strength = mass, split = split,
+               asteroid = true, strength = mass
    }
 
    if(parent) then
@@ -80,11 +61,30 @@ return {
 
    populate = function(system)
       if(not system.asteroids) then return end
-      for _,b in pairs(system.bodies) do
-         if(b.asteroid) then system.bodies[b.name] = nil end
+      for i,b in lume.ripairs(system.bodies) do
+         if(b.asteroid) then table.remove(system.bodies, i) end
       end
       for i = 1, system.asteroids do
          asteroid("Asteroid " .. i, 64, system.bodies)
       end
    end,
+
+   split = function(self, ship)
+      lume.remove(ship.bodies, self)
+      retarget(self, ship)
+
+      if(self.mass < min_mass) then
+         if(utils.distance(ship, self) <= ship.scoop_range) then
+            ship.api.console.print("Scooped up " .. self.name)
+            ship:move_cargo("ore", 10, true)
+         else
+            ship.api.console.print("Destroyed " .. self.name ..
+                                      " but out of scoop range.")
+         end
+      else
+         asteroid(self.name .. "-", self.mass / 2, ship.bodies, self)
+         asteroid(self.name .. "+", self.mass / 2, ship.bodies, self)
+      end
+   end
+
 }
