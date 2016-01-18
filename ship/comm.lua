@@ -68,12 +68,13 @@ end
 local logout = function(name, ship)
    local session = sessions[name]
    if(session) then
-      local fs, _ = unpack(session)
+      local fs, env = unpack(session)
       for k,_ in pairs(fs["/home/guest"] or {}) do
          if(k ~= "_user" and k ~= "_group") then
             session[1]["/home/guest/" .. k] = nil
          end
       end
+      fs[env.HOME .. "/ship"] = nil
       sessions[name] = nil
       if(not name:match("[Pp]ortal")) then
          ship.api.console.print("\nLogged out.")
@@ -160,6 +161,7 @@ local orb_login = function(fs, env, ship)
    ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
    fs[env.OUT] = lume.fn(sandbox_out, ship, ship.target.name)
    ship.api.console.completion_context = {}
+   fs[env.HOME .. "/ship"] = ship.api
 
    -- TODO: improve error handling for problems in smashrc
    ship.target.os.process.spawn(fs, env, nil, sandbox(ship))

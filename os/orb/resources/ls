@@ -9,6 +9,7 @@ local ls = function(dirname)
       print("Not found: " .. dirname)
    elseif(type(dir) == "table") then
       for name,contents in pairs(dir) do
+         name = tostring(name)
          if(not name:match("^_")) then
             if(type(contents) == "table") then
                print(name .. "/")

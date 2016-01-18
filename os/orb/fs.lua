@@ -68,7 +68,8 @@ orb.fs = {
    read = function(f, path)
       if(not path) then return io.read() end
       local contents = f[path]
-      if(type(contents) == "string") then
+      if(type(contents) == "string" or type(contents) == "number" or
+         type(contents) == "boolean") then
          return contents
       elseif(type(contents) == "function") then
          return contents()
@@ -171,13 +172,13 @@ orb.fs = {
    readable = function(f, dir, user)
       if(user == "root") then return true end
       local owner, group = orb.fs.dir_meta(dir)
-      return owner == user or orb.shell.in_group(f, user, group)
+      return owner == nil or owner == user or orb.shell.in_group(f, user, group)
    end,
 
    writeable = function(f, dir, user)
       if(user == "root") then return true end
       local owner, group, group_write = orb.fs.dir_meta(dir)
-      return owner == user or
+      return owner == nil or owner == user or
          (group_write and orb.shell.in_group(f, user, group))
    end,
 
@@ -191,10 +192,12 @@ orb.fs = {
       end
    end,
 
-   strip_special = function(f)
+   strip_special = function(f, blacklist)
       for k,v in pairs(f) do
-         if(type(v) == "table") then
-            orb.fs.strip_special(v)
+         if(lume.find(blacklist, v)) then
+            f[k] = nil
+         elseif(type(v) == "table") then
+            orb.fs.strip_special(v, blacklist)
          elseif(type(v) ~= "string" and type(v) ~= "number") then
             f[k] = nil
          end
@@ -262,7 +265,8 @@ orb.fs = {
             assert(orb.fs.readable(raw_root, raw, user), "Not readable")
             local f2 = {}
             for k,v in pairs(raw) do
-               if(type(v) == "string" or type(v) == "function") then
+               if(type(v) == "string" or type(v) == "function" or
+                  type(v) == "number" or type(v) == "boolean") then
                   f2[k] = v
                elseif(type(v) == "table" and
                       orb.fs.readable(raw_root, v, user)) then
