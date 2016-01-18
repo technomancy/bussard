@@ -6,7 +6,7 @@ local w, h, em = love.graphics:getWidth(), love.graphics:getHeight()
 
 local laser_hits = function(ship, b, distance)
    -- assuming circular images
-   local diameter = b:img():getWidth() / 2
+   local diameter = b.image:getWidth() / 2
    local theta = math.atan2(b.y - ship.y, b.x - ship.x)
    local angular_divergence = math.abs(ship.heading - theta)
    local divergence = math.abs(math.sin(angular_divergence) * distance)
