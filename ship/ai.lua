@@ -116,7 +116,7 @@ return {
       else
          update_counter = 0
          local ship_count = lume.count(bodies, "ship")
-         if(ship_count < math.random(sys_pop(bodies) * ship_factor)) then
+         if(ship_count < (math.random() * sys_pop(bodies) * ship_factor)) then
             insert_new(bodies, true)
          end
       end

@@ -2,6 +2,7 @@
 
 ## beta-1 / ???
 
+* Always spawn asteroids in stable orbits.
 * Rename repl to console.
 * Automatically adjust trajectory settings to achieve decent frame rate.
 * Change default quit key to ctrl-q.
