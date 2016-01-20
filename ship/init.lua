@@ -78,7 +78,7 @@ end
 
 local target_dt = 0.03 -- about 33 frames per second
 
-local trajectory_adjust = function(ship, dt)
+local trajectory_auto = function(ship, dt)
    if(not ship.trajectory_adjust_progress) then
       ship.trajectory_adjust_progress = 5
       return
@@ -86,12 +86,16 @@ local trajectory_adjust = function(ship, dt)
 
    ship.trajectory_adjust_progress = ship.trajectory_adjust_progress - dt
 
-   if((ship.trajectory_adjust_progress or 0) <= 0) then
-      ship.updaters.trajectory_adjust = nil
+   if(ship.trajectory_adjust_progress <= 0) then
+      ship.updaters.trajectory_auto = nil
       ship.trajectory_adjust_progress = nil
-   elseif(dt > target_dt and ship.trajectory_adjust_progress < 4) then
-      -- give it a second to stabilize, then reduce
+   elseif(ship.trajectory_adjust_progress < 4) then
+      return -- give it a second to stabilize, then reduce
+   elseif(dt > target_dt * 1.3) then
       ship.trajectory = ship.trajectory * 0.8
+      ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
+   elseif(dt < target_dt * 0.7) then
+      ship.trajectory = ship.trajectory * 1.2
       ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
    end
 end
@@ -249,10 +253,9 @@ local ship = {
    -- run when cargo or upgrades change; always idempotent
    recalculate = function(ship)
       ship.target = ship.bodies[ship.target_number]
-      -- this needs a bit more work; it shrinks the trajectory way too much
-      -- if(ship.api.trajectory_auto) then
-      --    ship.api.updaters.trajectory_adjust = trajectory_adjust
-      -- end
+      if(ship.api.trajectory_auto) then
+         ship.api.updaters.trajectory_auto = trajectory_auto
+      end
 
       for k,v in pairs(base_stats) do
          ship[k] = v
