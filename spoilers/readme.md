@@ -119,7 +119,7 @@ there is deep-seated mistrust of machine consciousness since he
 crashed the ship during his escape, so he has to operate under the
 greatest secrecy. This eventually snowballs into a cult-like following...
 
-launching interstellar-sublight "colonizer" (to LHS 451, 0.6 pc, 2.7y @ 0.7c)
+TODO: launching interstellar-sublight "colonizer" (to LHS 451, 0.6 pc, 2.7y @ 0.7c)
 
 Once the colony is established, they alter the main Yueh portal to
 become a multiportal so that it can take ships to LHS 451 if they have

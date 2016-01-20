@@ -27,11 +27,17 @@ local function asteroid(name, mass_max, bodies, parent)
       local o = math.random(20) - 10
       a.x, a.y, a.dx, a.dy = parent.x + o, parent.y + o, parent.dx, parent.dy
    else
-      -- try to get them to spawn clustered near the sun with some outliers
-      local r = utils.gaussian_random(30000)
-      local theta = math.random(math.pi * 2)
+      -- try to get them to spawn clustered near-ish the sun with some outliers
+      local r = utils.gaussian_random(40000)
+      local base_v = math.sqrt((body.g*bodies[1].mass)/math.abs(r)) / 10
+      -- use the same orbit logic as planets, but with random eccentricity
+      local eccentricity = math.random() / 2 + 0.5
+      local v = base_v * eccentricity
+      local theta = math.random() * math.pi * 2
+
       a.x, a.y = math.sin(theta) * r, math.cos(theta) * r
-      a.dx, a.dy = math.random(32) - 16, math.random(32) - 16
+      a.dx = math.sin(theta + math.pi / 2) * v
+      a.dy = math.cos(theta + math.pi / 2) * v
    end
 
    table.insert(bodies, a)

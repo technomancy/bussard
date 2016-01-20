@@ -223,4 +223,6 @@ return {
       gravitate = gravitate,
       gravitate_all = gravitate_all,
    },
+
+   g = g,
 }
