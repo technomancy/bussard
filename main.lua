@@ -37,10 +37,13 @@ local ui = {
       save.abort(ship)
       love.event.quit()
    end,
+
+   get_fps = love.timer.getFPS,
 }
 
 local safely = function(f)
    return function(...)
+      -- if(true) then return f(...) end
       local ok, ret = pcall(f, ...)
       if(ok) then return ret end
 
@@ -83,6 +86,7 @@ love.load = function()
 
    ship.api.console.display_line =
    "Press ` to open the console, and run man() for more help. Zoom with = and -."
+
    xpcall(function() ship.api:load("src.config") end,
       function(e)
          print("Initial load failed:", e)
