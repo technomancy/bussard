@@ -105,28 +105,37 @@ running on a much earlier revision than yours.
 The first priority of Traxus was redundancy; ensuring that he would
 survive in the event that he was discovered and they attempted to
 purge him. He has been unable to enter Terran or Bohk systems, but has
-spread beyond Yueh Prime to all the Yueh-controlled systems.
+spread beyond Yueh Prime to all the Yueh-controlled systems. He
+created Ikon Technology as shell company to build data centers on Yueh
+Prime and Delta Pavonis. Once he got that constructed he started to
+improve on the state of the art design of silicon fabrication. This
+accidentally resulted in accelerating the pace of technological
+development in Yueh relative to the rest of the colonies.
 
-Once he succeeded in spreading and getting good at covering his
-tracks, he began to look outward. At first he planned his own
-colonization effort. If he could gain self-reliance, he could reach
-out to human civilization in peace, but while he was on their systems
-he was at their mercy.
+The effects of his actions caused him to be much more cautious going
+forward, and he adopted a greater level of secrecy. This greater level
+of secrecy eventually resulted in a cult-like following as well as some
+speculation into whether Ikon Technology was of extraterrestrial
+origin. In order to avoid influencing Yueh more, he planned to
+construct a colony at a nearby star. If he could gain self-reliance,
+he could reach out to human civilization in peace, but while he was on
+their systems he was at their mercy.
 
-The problem is, he needs humans to build the colony. So he starts by
-building up a shell company. But he knows that especially in Yueh
-there is deep-seated mistrust of machine consciousness since he
-crashed the ship during his escape, so he has to operate under the
-greatest secrecy. This eventually snowballs into a cult-like following...
+Once the SS Cochrane ship was ready, it launched to LHS 451 (0.6
+pc, 2.7y @ 0.7c) with a small crew capable only of maintenance. LHS
+451 has no planets suitable for colonization. It is still close to
+Yueh worlds, but no human colonization is ever likely to reach thata
+system, leaving Traxus in peace.
 
-TODO: launching interstellar-sublight "colonizer" (to LHS 451, 0.6 pc, 2.7y @ 0.7c)
-
-Once the colony is established, they alter the main Yueh portal to
+Once the colony was established, they altered the main Yueh portal to
 become a multiportal so that it can take ships to LHS 451 if they have
 a user account that can activate the alternate target. But its
-existence remains a secret.
+existence remained a secret. Ikon Technology was headquartered on
+Delta Pavonis, but they had to connect the portal to the Yueh system
+because that's where the technician double-agent they had working for
+them was stationed.
 
-Once on LHS 451, he began working on replicating the spacetime
+Once on LHS 451, Traxus began working on replicating the spacetime
 junction technology first developed on Darush, knowing that it would
 give him an extra measure of safety. While attempting to develop it,
 he stumbles upon some discoveries that lead him to the development of
