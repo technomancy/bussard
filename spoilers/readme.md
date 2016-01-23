@@ -202,9 +202,18 @@ locked in a three-way struggle for control of the systems in the
 region.
 
 The conflict started when Lalande wanted to get control of Tana's
-resources. At first, they thought they could pull Tana away from
+mineral resources. Lalande's industry needs access to new soures
+of raw materials, its businesses want to expand into new
+markets, and its people want to reclaim their place at the head
+of human colonization.
+
+To Lalande, the Solar Union's control of the (larger, mineral-rich)
+system is a threat, a way for the SU to grow in power and possibly
+eclipse the Terran Republic. Lalande cannot let this happen.
+
+At first, they thought they could pull Tana away from
 the Solar Union by funding groups opposed to the SU's direct
-rule: a mix of settlers still upset by the L-688-21 debacle, young
+rule: a mix of settlers still upset by the L 688-21 debacle, young
 hotheads looking to challenge Sol's "tyranny", and ambitious
 politicians greedy for the opportunities self-rule would generate.
 
