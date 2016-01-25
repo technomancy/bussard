@@ -219,10 +219,5 @@ return {
 
    hostname = hostname,
 
-   api = {
-      gravitate = gravitate,
-      gravitate_all = gravitate_all,
-   },
-
    g = g,
 }

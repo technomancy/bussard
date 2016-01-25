@@ -1,9 +1,8 @@
-local systems = require("data.systems")
 local utils = require("utils")
 local body = require("body")
 
 -- TODO: rotation of this is wrong
-local image = love.graphics.newImage("assets/ship.png")
+-- local image = love.graphics.newImage("assets/ship.png")
 
 local names = lume.array(love.filesystem.lines("data/ships.txt"))
 
@@ -24,8 +23,7 @@ local update = function(self, dt)
       local theta_v = normalize(-math.atan2(self.dy, self.dx) + math.pi/2)
       local v = utils.distance(self.dx, self.dy)
       local dv = v - utils.distance(self.target.dx, self.target.dy)
-      if(math.abs(theta_v - theta) < 1 and dv > self.speed_limit) then
-      else
+      if(not (math.abs(theta_v - theta) < 1 and dv > self.speed_limit)) then
          self.rotation = theta
          local fx = (math.sin(self.rotation) * dt * self.engine_strength)
          local fy = (math.cos(self.rotation) * dt * self.engine_strength)
@@ -102,12 +100,12 @@ local update_counter = 0
 local ship_factor = 0.3
 
 return {
-   seed = function(system_name, bodies)
+   seed = function(_, bodies)
       for i,b in ipairs(bodies) do -- remove existing ships
          if(b.ship) then table.remove(bodies, i) end
       end
       local ship_count = math.random(math.ceil(sys_pop(bodies) * ship_factor))
-      for i = 1, ship_count do insert_new(bodies) end
+      for _ = 1, ship_count do insert_new(bodies) end
    end,
 
    update = function(bodies, dt)
