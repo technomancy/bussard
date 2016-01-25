@@ -19,8 +19,9 @@ can log into the station's computer as a guest by running this function:
 
 At this point you can explore the station's computer as long as you
 stay within comm range. However, unless your orbit is stable, you will
-drift out of range. You can go back to flight mode with ESC to make
-course corrections and you will stay logged in.
+drift out of range. If you are in console mode you can go back to
+flight mode with ESC to make course corrections and you will stay
+logged in.
 
 While you're logged into the station, you can't run anything on your
 ship's own computer, so in order to continue, run this:

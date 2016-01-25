@@ -7,7 +7,7 @@ dynamically reconfigure to add new capabilities.
 Please review this manual to ensure you have a complete understanding
 of your ship's operation, and you will enjoy many safe travels on board.
 There are manuals on other topics as well, use `man("list")` to see them all.
-Upgrades you purchase will come with new manuals too.
+Most upgrades that you purchase will come with new manuals too.
 
 ## Display
 
@@ -47,15 +47,16 @@ performance.
 At the bottom of the screen is the interactive code console
 where you can interact directly with your ship's onboard computer. By
 default a single line is shown, which displays either the current line
-of input (if applicable) or the last line of output. Pressing `
+of input (if applicable) or the last line of output. Pressing ` (backtick)
 toggles the full console, which allows you to scroll through the previous
 input and output. While the full console is active, the piloting controls
 for your ship will be unavailable until you leave the console with the
 esc key. Enter any Lua code into the console to have it evaluated. See
 the API section below to learn how to control your ship from code.
 
-When your ship starts, it will load its init file in order to create
-key bindings, define helper functions, and perform any other setup.
+When your ship starts, it will load its init file (called src.config) in
+order to create key bindings, define helper functions, and perform any
+other setup.
 
 You can make changes to your init file using the onboard editor. Run
 this code in your REPL: `ship:e("src.config")`. (Also bound to
@@ -67,33 +68,6 @@ filename to `ship:e`, but by default only files in the `ship.src` and
 configure it to save other tables by adding their names to the
 `ship.persist` table.
 
-### Keymaps and Modes
-
-The currently active mode and its keymaps will dictate how your ship
-will react to keys on your helm keyboard. Once a mode is defined, you
-can add key bindings to it like so: `keymap.define("flight", "ctrl-p",
-function() ship.ui.paused = true end)`.  The first argument is the
-name of the mode you're adding the key binding to, the second argument
-is a string describing the key to bind, and the third argument is the
-function to call when the key is pressed. This function is passed a
-boolean indicating whether it is a repeated key or not.
-
-By default your ship has a `"flight"` mode active normally and a
-`"console"` mode active when the console is full-screen. Note that
-`"flight"` mode does have the simple one-line console available, but not
-all characters can be entered in this mode as some (like the zoom
-keys) have other flight-related functions. There is also an `"edit"`
-mode where the editor key bindings are defined. You can check the
-current mode with `keymap.current_mode`.
-
-See the `keycodes` manual page for a detailed listing of available key
-names. You can run `man("keycodes")` to view it.
-
-Take a look at the default config code that came with your ship for an
-example of how to create modes and bind new keys in them; it will come
-in very handy to add in new keys when operating your ship; in
-particular when you purchase an upgrade that adds new capabilities.
-
 ### Communication system
 
 When you are in range of a planet or space station with an active
@@ -103,7 +77,7 @@ station's services, including refueling, cargo transactions,
 purchasing upgrades, downloading new code, renting cargo storage,
 and communicating with others.
 
-Your targeting indicator will turn dark green when you are within
+Your targeting indicator will turn light green when you are within
 range of a station that allows logins.
 
 Sessions are initiated using the `ship.actions.login` function, which
@@ -119,15 +93,16 @@ access to the rest of the services as well as persistent file
 storage. Please note that attempting to access accounts of others is
 strictly forbidden by interstellar law.
 
-Services offered on stations vary by locale, but most stations at
+Services offered on stations vary by location, but most stations at
 least offer to buy and sell cargo. The `cargo` program takes `list`,
 `buy`, and `sell` subcommands; see its online help (`cargo --help`)
 for usage details. You can run `ls /bin` to see a list of built-in
 programs on most computer systems.
 
-While your session is active, you will not be able to enter any code
-into your ship's REPL, and the REPL prompt will change to `$`. Enter
-`logout` to terminate your session and return to your ship's REPL.
+While your login session is active, you will not be able to enter any
+code into your ship's computer, and the console prompt will change to
+`$`. Enter `logout` to terminate your session and return to your
+ship's computer.
 
 If you have an account on a station server, you can copy files to and
 from the targeted station using
@@ -145,15 +120,12 @@ seconds for it to complete.
 
 Certain portals which allow travel between systems of different
 governments require you to receive clearance before you may travel
-through them. Worlds in the border systems containing these portals
-usually offer services where citizens of one government may buy
-clearance to another government. Try using the `embassy` command on
-the station computer for details.
+through them.
 
 ### API list
 
 In your onboard computer, `ship` is a table representing the data and
-functionality that can be accessed programmatically.
+functionality that can be accessed by code you write.
 
 #### ship.status
 
@@ -185,7 +157,7 @@ its upgrades as well as its flight through space and the objects nearby.
 
 #### ship.actions
 
-These functions affect changes to the ship's state.
+These functions affect changes to the ship's systems.
 
 * `forward`, `left`, `right`: accepts a boolean indicating whether to
   fire the given engine/thruster.
@@ -202,11 +174,12 @@ any given upgrade for details.
 
 This is a table of keys to functions; usually functions in the
 `ship.actions` table above. These function slightly differently from
-the keymap functionality described above. Keymaps can only be used for
+the keymap functionality described below. Keymaps can only be used for
 commands that are triggered once per key press. Controls must be used
 when the ship will behave differently based on how long the key is
-held. All piloting functionality should use this table. The zoom
-functions for changing the scale should use it too.
+held. All piloting functionality should use this table, since holding
+down the turn key will turn further than just pressing it quickly. The
+zoom functions need to use it too.
 
 #### scale
 
@@ -221,33 +194,42 @@ typically several times per second. They are passed the ship table as
 well as an argument indicating how many seconds it has been since the
 last time they ran. This can be useful for implementing automated
 piloting or any kind of functionality that needs to check the current
-state of the ship as it changes in flight.
+status of the ship as it changes in flight.
+
+As an example, here is a function which adds a counter to keep track
+of how many total seconds the engine is engaged:
+
+    ship.updaters.engine_time = function(ship, dt)
+      if(ship.status.engine_on) then
+        ship.engine_time = (ship.engine_time or 0) + dt
+      end
+    end
 
 #### hud
 
 The heads-up-display is configurable by setting `ship.hud`. It should
 be an array of instrument tables. There are three different valid
-types of instruments; each needs at least `type`, `x`, and
-`y`. Negative `x` and `y` values will count from the right or bottom
-of the screen backwards.
+types of instruments, "text", "vector", and "bar"; each needs at least
+`type`, `x`, and `y`. Negative `x` and `y` values will count backwards
+from the right or bottom of the screen.
 
-First you have just plain `"text"`. These indicators look like this:
+First you have just plain `"text"`. These instruments look like this:
 
     { type="text", x=5, y=5, format="x: %5.2f y: %5.2f", values={"sensors.x", "sensors.y"} }
 
-The `format` is the template for the text, with the `values` looked up
-in the ship table and then spliced into the format template. Values
-with dots in them indicate that they are nested inside tables. Include
-`align="right"` to justify the text along the right side instead of
-the left.
+The `format` is the template for the text shown on screen, with the
+`values` looked up in the ship table and then spliced into the format
+template. Values with dots in them indicate that they are nested
+inside tables. Include `align="right"` to justify the text along the
+right side instead of the left.
 
-Second is the two-dimensional `"vector"` type, like this:
+Second is the two-dimensional `"vector"` type instrument, like this:
 
     { type="vector", x=5, y=60, values={"sensors.dx", "sensors.dy"} }
 
 Here the `values` are just the X and Y values displayed by the vector
 indicator; again they are looked up in the ship table before being
-printed.
+printed. The example above shows the ship's velocity.
 
 Finally we have `"bar"` for percentages:
 
@@ -261,7 +243,7 @@ Any type can have a `color` field set to customize its color.
 See the default configuration file for an example.
 
 The `values` can also include functions instead of strings. The
-function will be passed the ship table.
+function will be passed the ship table, and their return values used.
 
 ### Upgrades
 
@@ -286,6 +268,33 @@ Your HUD is preconfigured with a listing for active missions. To get
 more details, you can run `ship.missions.list()`, while you can abort
 a given mission with `ship.missions.abort("MISSION_ID")`, though this
 will forfeit any cargo from the mission.
+
+### Keymaps and Modes
+
+The currently active mode and its keymaps will dictate how your ship
+will react to keys on your helm keyboard. Once a mode is defined, you
+can add key bindings to it like so: `keymap.define("flight", "ctrl-p",
+function() ship.ui.paused = true end)`.  The first argument is the
+name of the mode you're adding the key binding to, the second argument
+is a string describing the key to bind, and the third argument is the
+function to call when the key is pressed. This function is passed a
+boolean indicating whether it is a repeated key or not.
+
+By default your ship has a "flight" mode active normally and a
+"console" mode active when the console is full-screen. Note that
+"flight" mode does have the simple one-line console available, but not
+all characters can be entered in this mode as some (like the zoom
+keys) have other flight-related functions. There is also an "edit"
+mode where the editor key bindings are defined. You can check the
+current mode with `keymap.current_mode`.
+
+See the `keycodes` manual page for a detailed listing of available key
+names. You can run `man("keycodes")` to view it.
+
+Take a look at the default config code that came with your ship for an
+example of how to create modes and bind new keys in them; it will come
+in very handy to add in new keys when operating your ship; in
+particular when you purchase an upgrade that adds new capabilities.
 
 ## Footer
 

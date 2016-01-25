@@ -1,8 +1,16 @@
 # Trade
 
-After you've mined an asteroid or two, check your cargo bay:
+After you've mined an asteroid or two, check your cargo bay by running
+this in the console:
 
     ship.status.cargo
+
+In your onboard computer, "ship" is a table which contains data
+regarding your ship as well as functions to activate the ship's
+features. In console mode, type "ship." and press tab to see all the
+fields for this table. You can start typing "ship.status.h", and
+pressing tab will auto-complete it to "ship.status.heading", which is
+helpful for exploring the contents of any table in the ship's computer.
 
 You'll also want to check the total carrying capacity of your cargo
 bay so you know when it's filling up:
@@ -10,13 +18,13 @@ bay so you know when it's filling up:
     ship.status.cargo_capacity
 
 You can bring this cargo back to the station, but you'll get a better
-price for it in a system that isn't asteroid-rich. It's time to head
+price for it in a system that isn't a mining hub. It's time to head
 to the portal. Press tab a few times until the portal is targeted, and
 make your way over. You'll need to match orbit, but not as precisely
 as with the station, since you'll be on your way shortly. Once you're
 close enough for the targeting indicator to turn blue, hit
 ctrl-space. If you can stay near enough for the few seconds it takes
-the portal to activate, you'll soon be on your way to the Tana system.
+the portal to activate, you'll soon be on your way to the next system.
 
 This system has two planets in addition to the space station. Approach
 whichever planet is closer and log in once you've got a reasonably

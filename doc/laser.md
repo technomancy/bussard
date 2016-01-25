@@ -14,7 +14,9 @@ ship's config file (normally accessible with ctrl-enter):
 
 Be sure it's below the `ship.controls = { [...] }` section.
 In order to reload your config with the changes you've made, switch to
-the console (usually `) and run: ship:load("src.config")
+the console (usually `) and run:
+
+    ship:load("src.config")
 
 This will fire the laser as long as the key is held down. However, if
 you'd like a key to toggle it on and off, you can use something like
@@ -23,7 +25,8 @@ this instead:
     keymap.define("flight", "lalt", function() ship.actions.laser("toggle") end)
 
 The range of the laser is somewhat limited; if you are zoomed out it
-may not be visible.
+may not be visible. Note that the laser consumes power while active;
+it will shut off if your power reserves run too low.
 
 ## Mining
 

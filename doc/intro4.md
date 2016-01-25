@@ -9,13 +9,9 @@ laser's manual explains how to do this:
 
     man("laser")
 
-The main manual also has a lot more details about the technical
-details of your ship:
-
-    man("manual")
-
 Once you've made the changes to the ship's config file described in
-the manual, (using ctrl-enter) reload for the changes to take effect:
+the manual, (using ctrl-enter to enter the editor) reload for the
+changes to take effect:
 
     ship:load("src.config")
 

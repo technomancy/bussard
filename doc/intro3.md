@@ -18,8 +18,8 @@ which groups are available, run this:
     ls /usr/news
 
 Let's take a look at the "soc.tana" group, which has discussion about
-the Tana Protectorate, which is the government that controls the
-system you're currently in.
+the Tana Protectorate, the government that controls the system you're
+currently in.
 
     cd /usr/news/soc.tana
 

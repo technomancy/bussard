@@ -2,6 +2,7 @@
 
 ## beta-1 / ???
 
+* Ship table is mounted to unix file system on login.
 * Always spawn asteroids in stable orbits.
 * Rename repl to console.
 * Automatically adjust trajectory settings to achieve decent frame rate.
