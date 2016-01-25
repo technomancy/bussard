@@ -123,7 +123,7 @@ end
 local send_input = function(ship, input)
    if(input == "logout") then
       if(sessions[ship.comm_connected]) then
-         logout(ship.target.name, ship)
+         logout(ship.comm_connected, ship)
       else
          ship.api.console.print("| Not logged in.")
       end
