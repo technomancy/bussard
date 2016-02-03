@@ -19,7 +19,7 @@ return {
          utils.distance(ship.x, ship.y) < 3000) then
          orbit_time = orbit_time + (dt * ship.time_factor)
          if(orbit_time > 250) then
-            ship.api.console.print("Sensor readings complete.")
+            ship.api.print("Sensor readings complete.")
             ship.events["new-phobos-flyby"] = true
          end
       else

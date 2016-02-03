@@ -1,5 +1,5 @@
 local utils = require("utils")
-local keymap = require("keymap")
+local keymap = require("edit.keymap")
 local asteroid = require("asteroid")
 
 local w, h, em = love.graphics:getWidth(), love.graphics:getHeight()

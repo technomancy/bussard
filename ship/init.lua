@@ -10,8 +10,8 @@ local console = require("ship.console")
 local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
 
-local keymap = require("keymap")
 local edit = require("edit")
+local keymap = require("edit.keymap")
 local mission = require("mission")
 
 -- for shuffling systems upon entry
@@ -60,7 +60,7 @@ local sandbox = function(ship)
                      {  help = help.message,
                         keymap = keymap,
                         default_config = default_config,
-                        print = console.print,
+                        print = ship.api.print,
                         clear = console.clear_lines,
                         ship = ship.api,
                         dofile = lume.fn(sandbox_dofile, ship),

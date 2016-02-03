@@ -43,7 +43,7 @@ local scp = function(ship, from, to)
    else
       error("Neither " .. from .. " nor " .. " to " .. "are remote files.")
    end
-   ship.api.console.print("Copied successfully.")
+   ship.api.print("Copied successfully.")
 end
 
 local portal_cleared = function(ship, portal_body)
@@ -77,7 +77,7 @@ local logout = function(name, ship)
       fs[env.HOME .. "/ship"] = nil
       sessions[name] = nil
       if(not name:match("[Pp]ortal")) then
-         ship.api.console.print("\nLogged out.")
+         ship.api.print("\nLogged out.")
       end
    end
 end
@@ -125,19 +125,19 @@ local send_input = function(ship, input)
       if(sessions[ship.comm_connected]) then
          logout(ship.comm_connected, ship)
       else
-         ship.api.console.print("| Not logged in.")
+         ship.api.print("| Not logged in.")
       end
       disconnect(ship)
    elseif(not ship:in_range(ship.target)) then
-      ship.api.console.print("| Out of range. Run `logout` to disconnect.")
+      ship.api.print("| Out of range. Run `logout` to disconnect.")
    elseif(not sessions[ship.target.name]) then
-      ship.api.console.print("Not logged in to " .. ship.target.name ..
+      ship.api.print("Not logged in to " .. ship.target.name ..
                                 ". Run `logout` to disconnect.")
    else
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env, "Not logged into " .. ship.target.name)
       ship.api.console.history:append(input, true)
-      ship.api.console.print((ship.api.console.prompt or "> ") .. input)
+      ship.api.print((ship.api.console.prompt or "> ") .. input)
       if(fs[env.IN]) then
          fs[env.IN](input)
       else
@@ -199,7 +199,7 @@ return {
 
    login = function(ship, username, password)
       if(not ship:in_range(ship.target)) then
-         ship.api.console.print("| Out of range.")
+         ship.api.print("| Out of range.")
          return
       end
 
@@ -228,13 +228,13 @@ return {
          ship.battery = ship.battery_capacity
 
          local default_motd = "Login succeeded. Run `logout` to disconnect."
-         ship.api.console.print(fs_raw.etc.motd or default_motd)
+         ship.api.print(fs_raw.etc.motd or default_motd)
 
          mission.check(ship)
 
          return ship.api.console.invisible
       else
-         ship.api.console.print("Login failed.")
+         ship.api.print("Login failed.")
          return ship.api.console.invisible
       end
    end,

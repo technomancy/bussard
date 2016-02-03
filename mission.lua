@@ -9,7 +9,7 @@ local fail = function(ship, mission, aborted)
       mission.fail_function(ship, aborted)
    end
    if(not aborted and mission.fail_message) then
-      ship.api.console.print("Mission failed: " .. mission.fail_message)
+      ship.api.print("Mission failed: " .. mission.fail_message)
    end
    for good, amt in pairs(mission.cargo or {}) do
       ship.cargo[good] = ship.cargo[good] - amt
@@ -57,7 +57,7 @@ local check = function(ship)
          end
 
          ship.credits = ship.credits + (mission.credits or 0)
-         ship.api.console.print("Mission success: " .. mission.success_message)
+         ship.api.print("Mission success: " .. mission.success_message)
          ship.active_missions[mission_id] = nil
          body.seed_news(ship, ship.target) -- in case of successive missions
       end
@@ -86,7 +86,7 @@ local update = function(ship, dt)
       if(mission.updater) then mission.updater(ship, dt) end
       if(mission.time_limit and (utils.time(ship) >
                                  start_time + mission.time_limit)) then
-         ship.api.console.print("Mission time limit exceeded: " .. mission.name)
+         ship.api.print("Mission time limit exceeded: " .. mission.name)
          fail(ship, mission)
       end
    end
@@ -95,13 +95,13 @@ end
 local list = function(ship)
    for mission_id,_ in pairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
-      ship.api.console.print("\n")
-      ship.api.console.print(mission.name)
+      ship.api.print("\n")
+      ship.api.print(mission.name)
       if(mission.description) then
-         ship.api.console.print(mission.description)
+         ship.api.print(mission.description)
       end
       if(mission.credits) then
-         ship.api.console.print("Credits: " .. mission.credits)
+         ship.api.print("Credits: " .. mission.credits)
       end
    end
 end
@@ -117,10 +117,10 @@ local abort = function(ship, mission_name)
 
    if(mission) then
       ship.active_missions[mission.id] = nil
-      ship.api.console.print("Mission " .. mission.id .. " aborted.")
+      ship.api.print("Mission " .. mission.id .. " aborted.")
       fail(ship, mission, true)
    else
-      ship.api.console.print("Mission " .. mission.id .. " not active.")
+      ship.api.print("Mission " .. mission.id .. " not active.")
    end
 end
 

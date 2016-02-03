@@ -37,16 +37,16 @@ return {
    message = "Type `man()` to view your ship's operating manual.",
    man = function(ship, page_name)
       if(page_name == "list") then
-         ship.console.print(list(ship))
+         ship.log(list(ship))
       elseif(pages[page_name] and show_page(ship, page_name)) then
          -- can't inline this because read returns multiple values
          local p = love.filesystem.read(pages[page_name])
-         ship.console.print(p)
+         ship.log(p)
       elseif(page_name) then
-         ship.console.print("Page not found.\n\n" .. list())
+         ship.log("Page not found.\n\n" .. list())
       else
          local p = love.filesystem.read("doc/intro.md")
-         ship.console.print(p)
+         ship.log(p)
       end
    end,
 

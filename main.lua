@@ -8,7 +8,7 @@ local ai = require "ship.ai"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local save = require "save"
-local keymap = require "keymap"
+local keymap = require "edit.keymap"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 local systems = require("data.systems")
@@ -90,15 +90,15 @@ love.load = function()
    xpcall(function() ship.api:load("src.config") end,
       function(e)
          print("Initial load failed:", e)
-         ship.console.print(e)
-         ship.console.print(debug.traceback())
+         ship.api.print(e)
+         ship.api.print(debug.traceback())
          ship.console.display_line = "Error loading config; falling back to " ..
             "ship.src.fallback_config."
          local chunk = assert(loadstring("src.fallback_config"))
          setfenv(chunk, ship.api.console.sandbox)
          local success, msg = pcall(chunk)
          if(not success) then
-            ship.console.print(msg)
+            ship.api.print(msg)
          end
    end)
 end
