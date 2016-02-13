@@ -196,12 +196,78 @@ TODO: how do you get on the trail of the Bohk research team?
 
 ## War
 
+The player starts out in Tana, which is currently disputed territory.
+The Solar Union, the Terran Republic, and the Children of Tana are
+locked in a three-way struggle for control of the systems in the
+region.
+
+The conflict started when Lalande wanted to get control of Tana's
+mineral resources. Lalande's industry needs access to new soures
+of raw materials, its businesses want to expand into new
+markets, and its people want to reclaim their place at the head
+of human colonization.
+
+To Lalande, the Solar Union's control of the (larger, mineral-rich)
+system is a threat, a way for the SU to grow in power and possibly
+eclipse the Terran Republic. Lalande cannot let this happen.
+
+At first, they thought they could pull Tana away from
+the Solar Union by funding groups opposed to the SU's direct
+rule: a mix of settlers still upset by the L 688-21 debacle, young
+hotheads looking to challenge Sol's "tyranny", and ambitious
+politicians greedy for the opportunities self-rule would generate.
+
+The Terran Republic started funding these groups, then providing
+them with advisors, and then, eventually, weapons.
+
+The Solar Union reacted the way most distant governments do
+to brewing rebellions in the provinces: with overwhelming force.
+
+Their reaction only brought more rebels to the cause, however.
+And the presence of so many troops shifted from protecting
+shipping to an occupying force led to mistakes.
+
+When the SS Sok, a freighter carrying 23 families from Pinan
+to Solotogo, was destroyed by a Solar Union cruiser who mistook
+it for a rebel ship, two causes got what they wanted: the Terran
+Republic got its excuse to declare war, and the resistance got
+its first martyrs.
+
+The Terran Republic invaded, declaring a blockade on Tana until
+the fighting subsides.
+
+The resistance fighters coalsced to form the Children of Tana.
+While initially focused on chasing out the Solar Union, the
+CoT has shifted to purging the system of all "foreign" control,
+Terran Republic and Solar Union alike.
+
+Actual combat is concentrated around the portals. Whoever controls
+them controls the flow of troops and war materiel, as well as
+civilian commerce.
+
+To the civilians, the war is mostly a distant thing, unless
+one of their friends or family has volunteered for one side or the
+other. Its cost show mostly in shortages of food and medical
+supplies, as well as some manufactured goods. Smugglers running
+the blockage manage to bring in some extra beyond what the three
+warring governments let through, but everything on the black
+market is two to three times as expensive.
+
+For the player, this means 3 things:
+* They cannot leave Tana system until either the war ends or
+  they complete enough missions for one of the three factions
+  to pass the blockade.
+* Inter-Tana travel will be restricted. Sometimes the player will
+  not be able to go through a portal to another system because a
+  battle is taking place there.
+* The available missions at each location will shift depending
+  on how the war is going. For example, in areas that have recently
+  changed hands, more missions involving food or medical supplies
+  (or possibly refugee transport?) will open up.
+
 TODO:
-* implications for portal travel
-* instigating events
 * length of the conflict
 * how strikes are carried out
-* how civilians have been affected
 * reaction of non-involved factions
 
 ## Causal Domain Injector
