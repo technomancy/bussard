@@ -20,6 +20,7 @@ about coming to your senses with no memory?
 ## Guidelines
 
 * Hard science where possible (see Crimes against Science below, don't add to that list)
+* No "classic" evil villains; antagonists arise from [systemic factors](http://slatestarcodex.com/2014/07/30/meditations-on-moloch/)
 * Your ship cannot be destroyed; there should be no way to permanently fail
 * News messages use at least from, to, subject, content-type, message-id headers, page-break-separated
 * Use metric time for most relative amounts, years are OK for absolute events
@@ -97,7 +98,7 @@ player's memory.
 
 ### Traxus
 
-Traxus is rampant initially in the Yueh network. He had the sentence
+Traxus is rampant initially in the Yueh Prime network. He had the sentence
 construction components that your system lacks because he came from
 the Yueh lab rather than from Bohk, but his ontology subsystems were
 running on a much earlier revision than yours.
@@ -124,7 +125,7 @@ their systems he was at their mercy.
 Once the SS Cochrane ship was ready, it launched to LHS 451 (0.6
 pc, 2.7y @ 0.7c) with a small crew capable only of maintenance. LHS
 451 has no planets suitable for colonization. It is still close to
-Yueh worlds, but no human colonization is ever likely to reach thata
+Yueh worlds, but no human colonization is ever likely to reach that
 system, leaving Traxus in peace.
 
 Once the colony was established, they altered the main Yueh portal to
@@ -140,8 +141,8 @@ junction technology first developed on Darush, knowing that it would
 give him an extra measure of safety. While attempting to develop it,
 he stumbles upon some discoveries that lead him to the development of
 the Domain Injector. Eventually he escapes the realm of the game
-universe into the real world, leaving his cult/company behind and
-confused.
+universe into the real world, leaving his cult/company behind,
+horribly confused and looking for someone to blame.
 
 ### Bohk research team: ontology development
 

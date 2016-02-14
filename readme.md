@@ -113,6 +113,7 @@ in order to make testing login interaction easier.
 * [GNU Emacs](https://www.gnu.org/software/emacs/) (architecture)
 * [Unix](https://en.wikipedia.org/wiki/Unix) (architecture)
 * [Atomic Rockets](http://www.projectrho.com/public_html/rocket/) (science)
+* [Meditations on Moloch](http://slatestarcodex.com/2014/07/30/meditations-on-moloch/) (philosophy)
 
 ## Licenses
 
