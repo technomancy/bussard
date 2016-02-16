@@ -4,21 +4,17 @@ local lume = require("lume")
 -- missing features (a very limited list)
 -- * search/replace
 -- * syntax highlighting
--- * multiple file support
+-- * minibuffer
 
--- buffer data
-local fs, path
-local lines = {""}
-local point, point_line = 0, 1
-local mark, mark_line = nil, nil
-local kill_ring = {}
-local mark_ring = {}
-
--- undo data
-local history = {}
-local history_max = 128
-local undo_at = 0
-local dirty = false
+local make_buffer = function(fs, path)
+   return { fs=fs, path=path,
+            lines = lume.split(fs:find(path) or "", "\n"),
+            point = 0, point_line = 1,
+            mark = nil, mark_line = nil, last_yank = nil,
+            kill_ring = {}, mark_ring = {},
+            history = {}, undo_at = 0, dirty = false,
+   }
+end
 
 -- how many lines do pageup/pagedown scroll?
 local scroll_size = 20
@@ -33,101 +29,103 @@ local DISPLAY_ROWS
 local em
 -- pattern for word breaks
 local word_break = "[%s%p]+"
--- need to replace this when cycling yank
-local last_yank = nil
 
 local kill_ring_max = 32
 local mark_ring_max = 32
+local history_max = 128
+
+local buffers = {}
+local b
 
 local state = function()
-   return {lines = lume.clone(lines), point = point, point_line = point_line}
+   return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
 end
 
 local undo = function()
-   local prev = history[#history-undo_at]
-   if(undo_at < #history) then undo_at = undo_at + 1 end
+   local prev = b.history[#b.history-b.undo_at]
+   if(b.undo_at < #b.history) then b.undo_at = b.undo_at + 1 end
    if(prev) then
-      lines, point, point_line = prev.lines, prev.point, prev.point_line
+      b.lines, b.point, b.point_line = prev.lines, prev.point, prev.point_line
    end
 end
 
 local wrap = function(fn, ...)
-   dirty = false
+   b.dirty = false
    local last_state = state()
-   if(fn ~= undo) then undo_at = 0 end
+   if(fn ~= undo) then b.undo_at = 0 end
    fn(...)
-   if(dirty) then
-      table.insert(history, last_state)
+   if(b.dirty) then
+      table.insert(b.history, last_state)
    end
-   if(#history > history_max) then
-      table.remove(history, 1)
+   if(#b.history > history_max) then
+      table.remove(b.history, 1)
    end
 end
 
 local region = function()
-   mark = math.min(string.len(lines[mark_line]), mark)
+   b.mark = math.min(string.len(b.lines[b.mark_line]), b.mark)
 
-   if(point_line == mark_line) then
-      local start, finish = math.min(point, mark), math.max(point, mark)
-      return {lines[point_line]:sub(start+1, finish)}, point_line, start, point_line, finish
-   elseif(mark == nil or mark_line == nil) then
-      return {}, point_line, point, point_line, point
+   if(b.point_line == b.mark_line) then
+      local start, finish = math.min(b.point, b.mark), math.max(b.point, b.mark)
+      return {b.lines[b.point_line]:sub(start+1, finish)}, b.point_line, start, b.point_line, finish
+   elseif(b.mark == nil or b.mark_line == nil) then
+      return {}, b.point_line, b.point, b.point_line, b.point
    else
       local start_line, start, finish_line, finish
-      if(point_line < mark_line) then
-         start_line, start, finish_line,finish = point_line,point,mark_line,mark
+      if(b.point_line < b.mark_line) then
+         start_line, start, finish_line,finish = b.point_line,b.point,b.mark_line,b.mark
       else
-         start_line, start, finish_line,finish = mark_line,mark,point_line,point
+         start_line, start, finish_line,finish = b.mark_line,b.mark,b.point_line,b.point
       end
-      local r = {lines[start_line]:sub(start+1, -1)}
+      local r = {b.lines[start_line]:sub(start+1, -1)}
       for i = start_line+1, finish_line-1 do
-         table.insert(r, lines[i])
+         table.insert(r, b.lines[i])
       end
-      table.insert(r, lines[finish_line]:sub(0, finish))
+      table.insert(r, b.lines[finish_line]:sub(0, finish))
       return r, start_line, start, finish_line, finish
    end
 end
 
 local insert = function(text, point_to_end)
-   dirty = true
+   b.dirty = true
    if(not text or #text == 0) then return end
-   local this_line = lines[point_line]
-   local before, after = this_line:sub(0, point), this_line:sub(point + 1)
+   local this_line = b.lines[b.point_line]
+   local before, after = this_line:sub(0, b.point), this_line:sub(b.point + 1)
    local first_line = text[1]
 
    if(#text == 1) then
-      lines[point_line] = (before or "") .. (first_line or "") .. (after or "")
+      b.lines[b.point_line] = (before or "") .. (first_line or "") .. (after or "")
       if(point_to_end) then
-         point = before:len() + first_line:len()
+         b.point = before:len() + first_line:len()
       end
    else
-      lines[point_line] = (before or "") .. (first_line or "")
+      b.lines[b.point_line] = (before or "") .. (first_line or "")
       for i,l in ipairs(text) do
          if(i > 1 and i < #text) then
-            table.insert(lines, i+point_line-1, l)
+            table.insert(b.lines, i+b.point_line-1, l)
          end
       end
-      table.insert(lines, point_line+#text-1, text[#text] .. (after or ""))
+      table.insert(b.lines, b.point_line+#b.text-1, b.text[#b.text] .. (after or ""))
       if(point_to_end) then
-         point = #text[#text]
-         point_line = point_line+#text-1
+         b.point = #b.text[#b.text]
+         b.point_line = b.point_line+#b.text-1
       end
    end
 end
 
 local delete = function(start_line, start, finish_line, finish)
-   dirty = true
+   b.dirty = true
    if(start_line == finish_line) then
-      local line = lines[point_line]
-      lines[point_line] = line:sub(0, start) .. line:sub(finish + 1)
+      local line = b.lines[b.point_line]
+      b.lines[b.point_line] = line:sub(0, start) .. line:sub(finish + 1)
    else
-      local after = lines[finish_line]:sub(finish+1, -1)
+      local after = b.lines[finish_line]:sub(finish+1, -1)
       for i = finish_line, start_line + 1, -1 do
-         table.remove(lines, i)
+         table.remove(b.lines, i)
       end
-      lines[start_line] = lines[start_line]:sub(0, start) .. after
+      b.lines[start_line] = b.lines[start_line]:sub(0, start) .. after
    end
-   point, point_line, mark, mark_line = start, start_line, start, start_line
+   b.point, b.point_line, b.mark, b.mark_line = start, start_line, start, start_line
 end
 
 local push = function(ring, text, max)
@@ -136,184 +134,180 @@ local push = function(ring, text, max)
 end
 
 local yank = function()
-   local text = kill_ring[#kill_ring]
+   local text = b.kill_ring[#b.kill_ring]
    if(text) then
-      last_yank = {point_line, point,
-                   point_line + #text - 1, string.len(text[#text])}
+      last_yank = {b.point_line, b.point,
+                   b.point_line + #text - 1, string.len(text[#text])}
       insert(text, true)
    end
 end
 
 local beginning_of_buffer = function()
-   return point == 0 and point_line == 1
+   return b.point == 0 and b.point_line == 1
 end
 
 local end_of_buffer = function()
-   return point == #lines[point_line] and point_line == #lines
+   return b.point == #b.lines[b.point_line] and b.point_line == #b.lines
 end
 
 local forward_word = function()
    if(end_of_buffer()) then return end
-   local remainder = lines[point_line]:sub(point + 1, -1)
+   local remainder = b.lines[b.point_line]:sub(b.point + 1, -1)
    if(not remainder:find("%S")) then
-      point, point_line = 0, point_line+1
+      b.point, b.point_line = 0, b.point_line+1
    end
-   local _, match = lines[point_line]:find(word_break, point + 2)
-   point = match and match - 1 or #lines[point_line]
+   local _, match = b.lines[b.point_line]:find(word_break, b.point + 2)
+   b.point = match and match - 1 or #b.lines[b.point_line]
 end
 
 local backward_word = function()
    if(beginning_of_buffer()) then return end
-   local before = lines[point_line]:sub(0, point)
+   local before = b.lines[b.point_line]:sub(0, b.point)
    if(not before:find("%S")) then
-      point_line = point_line - 1
-      point = #lines[point_line]
+      b.point_line = b.point_line - 1
+      b.point = #b.lines[b.point_line]
    end
-   local back_line = lines[point_line]:sub(0, math.max(point - 1, 0)):reverse()
+   local back_line = b.lines[b.point_line]:sub(0, math.max(b.point - 1, 0)):reverse()
    if(back_line and back_line:find(word_break)) then
       local _, match = back_line:find(word_break)
-      point = string.len(back_line) - match + 1
+      b.point = string.len(back_line) - match + 1
    else
-      point = 0
+      b.point = 0
    end
 end
 
 local save = function(this_fs, this_path)
-   local target = this_fs or fs
+   local target = this_fs or b.fs
    if(target) then -- save to ship fs
-      local parts = lume.split(this_path or path, ".")
+      local parts = lume.split(this_path or b.path, ".")
       local filename = table.remove(parts, #parts)
       for _,part in ipairs(parts) do
          target = target[part]
       end
-      target[filename] = table.concat(lines, "\n")
+      target[filename] = table.concat(b.lines, "\n")
    else -- save to real disk
-      local f = io.open(this_path or path, "w")
-      f:write(table.concat(lines, "\n"))
+      local f = io.open(this_path or b.path, "w")
+      f:write(table.concat(b.lines, "\n"))
       f:close()
    end
 end
 
 local newline = function()
-   dirty = true
-   local remainder = lines[point_line]:sub(point + 1, -1)
-   lines[point_line] = lines[point_line]:sub(0, point)
-   point = 0
-   point_line = point_line + 1
-   table.insert(lines, point_line, remainder)
+   b.dirty = true
+   local remainder = b.lines[b.point_line]:sub(b.point + 1, -1)
+   b.lines[b.point_line] = b.lines[b.point_line]:sub(0, b.point)
+   b.point = 0
+   b.point_line = b.point_line + 1
+   table.insert(b.lines, b.point_line, remainder)
 end
 
 return {
    initialize = function()
       ROW_HEIGHT = love.graphics.getFont():getHeight()
       em = love.graphics.getFont():getWidth('a')
-      history, undo_at, dirty = {}, 0, false
    end,
 
    -- TODO: need a UI for opening new files
-   open = function(this_fs, this_path)
-      -- reset position if opening a different file
-      if(this_path ~= path) then
-         point, point_line = 0, 1
-      end
+   open = function(fs, path)
+      local buffer = lume.match(buffers, function(b) return b.path == path end)
 
-      mark, mark_line = nil, nil
-      fs, path = this_fs, this_path
-      if(fs) then
-         lines = lume.split(fs:find(path) or "", "\n")
+      if(buffer) then -- move it to the front if already open
+         lume.remove(buffers, buffer)
+         table.insert(buffers, 1, buffer)
       else
-         lines = lume.split(love.filesystem.read(path) or "", "\n")
+         table.insert(buffers, 1, make_buffer(fs, path))
       end
+      b = buffers[1]
    end,
 
    revert = function()
-      lines = lume.split(fs:find(path), "\n")
+      b.lines = lume.split(b.fs:find(b.path), "\n")
    end,
 
    save = save,
 
    -- edit commands
    delete_backwards = function()
-      dirty = true
-      if(point == 0 and point_line == 1) then return end
-      if(point == 0) then
-         point_line = point_line - 1
-         point = #lines[point_line]
-         lines[point_line] = lines[point_line] .. lines[point_line+1]
-         table.remove(lines, point_line+1)
+      b.dirty = true
+      if(b.point == 0 and b.point_line == 1) then return end
+      if(b.point == 0) then
+         b.point_line = b.point_line - 1
+         b.point = #b.lines[b.point_line]
+         b.lines[b.point_line] = b.lines[b.point_line] .. b.lines[b.point_line+1]
+         table.remove(b.lines, b.point_line+1)
       else
-         local l = lines[point_line]
-         lines[point_line] = l:sub(0, point - 1) .. l:sub(point + 1, #l)
-         if point > 0 then
-            point = point - 1
+         local l = b.lines[b.point_line]
+         b.lines[b.point_line] = l:sub(0, b.point - 1) .. l:sub(b.point + 1, #l)
+         if b.point > 0 then
+            b.point = b.point - 1
          end
       end
    end,
 
    delete_forwards = function()
-      dirty = true
-      if(point == #lines[point_line]) then
-         local next_line = table.remove(lines, point_line+1)
-         lines[point_line] = lines[point_line] .. next_line
+      b.dirty = true
+      if(b.point == #b.lines[b.point_line]) then
+         local next_line = table.remove(b.lines, b.point_line+1)
+         b.lines[b.point_line] = b.lines[b.point_line] .. next_line
       else
-         local l = lines[point_line]
-         lines[point_line] = l:sub(0, point) .. l:sub(point + 2, #l)
+         local l = b.lines[b.point_line]
+         b.lines[b.point_line] = l:sub(0, b.point) .. l:sub(b.point + 2, #l)
       end
    end,
 
    kill_line = function()
-      dirty = true
-      if(point == #lines[point_line]) then
-         local next_line = table.remove(lines, point_line+1)
-         lines[point_line] = lines[point_line] .. next_line
-         push(kill_ring, {""}, kill_ring_max)
+      b.dirty = true
+      if(b.point == #b.lines[b.point_line]) then
+         local next_line = table.remove(b.lines, b.point_line+1)
+         b.lines[b.point_line] = b.lines[b.point_line] .. next_line
+         push(b.kill_ring, {""}, kill_ring_max)
       else
-         local killed = lines[point_line]:sub(point + 1, -1)
-         lines[point_line] = lines[point_line]:sub(0, point)
-         push(kill_ring, {killed}, kill_ring_max)
+         local killed = b.lines[b.point_line]:sub(b.point + 1, -1)
+         b.lines[b.point_line] = b.lines[b.point_line]:sub(0, b.point)
+         push(b.kill_ring, {killed}, kill_ring_max)
       end
    end,
 
    move_beginning_of_line = function()
-      point = 0
+      b.point = 0
    end,
 
    move_end_of_line = function()
-      point = #lines[point_line]
+      b.point = #b.lines[b.point_line]
    end,
 
    prev_line = function()
-      if(point_line > 1) then point_line = point_line - 1 end
+      if(b.point_line > 1) then b.point_line = b.point_line - 1 end
    end,
 
    next_line = function()
-      if(point_line < #lines) then point_line = point_line + 1 end
+      if(b.point_line < #b.lines) then b.point_line = b.point_line + 1 end
    end,
 
    scroll_up = function()
-      point_line = math.max(0, point_line - scroll_size)
+      b.point_line = math.max(0, b.point_line - scroll_size)
    end,
 
    scroll_down = function()
-      point_line = math.min(#lines, point_line + scroll_size)
+      b.point_line = math.min(#b.lines, b.point_line + scroll_size)
    end,
 
    forward_char = function()
       if(end_of_buffer()) then return
-      elseif(point == #lines[point_line]) then
-         point, point_line = 0, point_line+1
+      elseif(b.point == #b.lines[b.point_line]) then
+         b.point, b.point_line = 0, b.point_line+1
       else
-         point = point + 1
+         b.point = b.point + 1
       end
    end,
 
    backward_char = function()
       if(beginning_of_buffer()) then return
-      elseif(point == 0) then
-         point = #lines[point_line-1]
-         point_line = point_line-1
+      elseif(b.point == 0) then
+         b.point = #b.lines[b.point_line-1]
+         b.point_line = b.point_line-1
       else
-         point = point - 1
+         b.point = b.point - 1
       end
    end,
 
@@ -322,70 +316,70 @@ return {
    backward_word = backward_word,
 
    backward_kill_word = function()
-      local original_point_line, original_point = point_line, point
+      local original_point_line, original_point = b.point_line, b.point
       backward_word()
-      delete(point_line, point, original_point_line, original_point)
+      delete(b.point_line, b.point, original_point_line, original_point)
    end,
 
    forward_kill_word = function()
-      local original_point_line, original_point = point_line, point
+      local original_point_line, original_point = b.point_line, b.point
       forward_word()
-      delete(original_point_line, original_point, point_line, point)
+      delete(original_point_line, original_point, b.point_line, b.point)
    end,
 
    beginning_of_buffer = function()
-      point, point_line = 0, 1
-      mark, mark_line = nil, nil
+      b.point, b.point_line = 0, 1
+      b.mark, b.mark_line = nil, nil
    end,
 
    end_of_buffer = function()
-      point, point_line = #lines[#lines], #lines
-      mark, mark_line = nil, nil
+      b.point, b.point_line = #b.lines[#b.lines], #b.lines
+      b.mark, b.mark_line = nil, nil
    end,
 
    newline = newline,
 
    newline_and_indent = function()
-      local indentation = (lines[point_line]:match("^ +") or ""):len()
+      local indentation = (b.lines[b.point_line]:match("^ +") or ""):len()
       newline()
-      local existing_indentation = (lines[point_line]:match("^ +") or ""):len()
+      local existing_indentation = (b.lines[b.point_line]:match("^ +") or ""):len()
       insert({string.rep(" ", indentation - existing_indentation)})
-      point = point + indentation
+      b.point = b.point + indentation
    end,
 
    mark = function()
-      push(mark_ring, {point, point_line}, mark_ring_max)
-      mark, mark_line = point, point_line
+      push(b.mark_ring, {b.point, b.point_line}, mark_ring_max)
+      b.mark, b.mark_line = b.point, b.point_line
    end,
 
    jump_to_mark = function()
-      point, point_line = mark or point, mark_line or point_line
-      if(#mark_ring > 0) then
-         table.insert(mark_ring, 1, table.remove(mark_ring))
-         mark, mark_line = unpack(mark_ring[1])
+      b.point, b.point_line = b.mark or b.point, mark_b.line or b.point_line
+      if(#b.mark_ring > 0) then
+         table.insert(b.mark_ring, 1, table.remove(b.mark_ring))
+         b.mark, b.mark_line = unpack(b.mark_ring[1])
       end
    end,
 
    no_mark = function()
-      mark, mark_line = nil, nil
+      b.mark, b.mark_line = nil, nil
    end,
 
    kill_ring_save = function()
-      if(mark == nil or mark_line == nil) then return end
-      push(kill_ring, region(), kill_ring_max)
+      if(b.mark == nil or b.mark_line == nil) then return end
+      push(b.kill_ring, region(), kill_ring_max)
    end,
 
    kill_region = function()
-      if(mark == nil or mark_line == nil) then return end
+      if(b.mark == nil or b.mark_line == nil) then return end
       local _, start_line, start, finish_line, finish = region()
-      push(kill_ring, region(), kill_ring_max)
+      push(b.kill_ring, region(), kill_ring_max)
       delete(start_line, start, finish_line, finish)
    end,
 
    yank = yank,
 
    yank_pop = function()
-      table.insert(kill_ring, 1, table.remove(kill_ring))
+      table.insert(b.kill_ring, 1, table.remove(b.kill_ring))
       local ly_line1, ly_point1, ly_line2, ly_point2 = unpack(last_yank)
       delete(ly_line1, ly_point1, ly_line2, ly_point2)
       yank()
@@ -393,14 +387,14 @@ return {
 
    print_kill_ring = function()
       print("Ring:")
-      for i,l in ipairs(kill_ring) do
+      for i,l in ipairs(b.kill_ring) do
          print(i, lume.serialize(l))
       end
    end,
 
    eval_buffer = function()
-      assert(fs and fs.load, "No loading context available.")
-      fs:load(path)
+      assert(b.fs and b.fs.load, "No loading context available.")
+      b.fs:load(b.path)
    end,
 
    undo = undo,
@@ -411,11 +405,11 @@ return {
       DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
 
       -- enforce consistency
-      if(point_line < 1) then point_line = 1 end
-      if(point_line > #lines) then point_line = #lines end
-      if(point < 0) then point = 0 end
-      if(point > string.len(lines[point_line])) then
-         point = string.len(lines[point_line]) end
+      if(b.point_line < 1) then b.point_line = 1 end
+      if(b.point_line > #b.lines) then b.point_line = #b.lines end
+      if(b.point < 0) then b.point = 0 end
+      if(b.point > string.len(b.lines[b.point_line])) then
+         b.point = string.len(b.lines[b.point_line]) end
 
       -- Draw background
       love.graphics.setColor(0, 0, 0, 170)
@@ -432,23 +426,23 @@ return {
       end
 
       local edge = math.ceil(DISPLAY_ROWS * 0.3)
-      local offset = (point_line < edge and 0) or (point_line - edge)
-      for i,line in ipairs(lines) do
+      local offset = (b.point_line < edge and 0) or (b.point_line - edge)
+      for i,line in ipairs(b.lines) do
          if(i >= offset) then
             local y = ROW_HEIGHT * (i - offset)
             -- mark
-            if(i == mark_line) then
+            if(i == b.mark_line) then
                love.graphics.setColor(0, 125, 0)
-               love.graphics.rectangle("line", PADDING+mark*em, y,
+               love.graphics.rectangle("line", PADDING+b.mark*em, y,
                                        em, ROW_HEIGHT)
             end
-            if(i == point_line) then
+            if(i == b.point_line) then
                -- point_line line
                love.graphics.setColor(0, 50, 0, 150)
                love.graphics.rectangle("fill", 0, y, width, ROW_HEIGHT)
                -- point
                love.graphics.setColor(0, 125, 0)
-               love.graphics.rectangle("fill", PADDING+point*em, y,
+               love.graphics.rectangle("fill", PADDING+b.point*em, y,
                                        em, ROW_HEIGHT)
             end
             love.graphics.setColor(0, 200, 0)
@@ -462,7 +456,7 @@ return {
       -- lines entered rather than the lines drawn, but close enough
 
       -- height is percentage of the possible lines
-      local bar_height = math.min(100, (DISPLAY_ROWS * 100) / #lines)
+      local bar_height = math.min(100, (DISPLAY_ROWS * 100) / #b.lines)
       -- convert to pixels (percentage of screen height, minus 10px padding)
       local bar_height_pixels = (bar_height * (height - 10)) / 100
 
@@ -474,7 +468,7 @@ return {
          -- now determine location on the screen by taking the offset in
          -- history and converting it first to a percentage of total
          -- lines and then a pixel offset on the screen
-         local bar_end = (point_line * 100) / #lines
+         local bar_end = (b.point_line * 100) / #b.lines
          bar_end = ((height - 10) * bar_end) / 100
 
          local bar_begin = bar_end - bar_height_pixels
@@ -491,10 +485,10 @@ return {
 
    textinput = function(t)
       wrap(function()
-            local line = lines[point_line]
-            dirty = true
-            lines[point_line] = line:sub(0, point) .. t .. line:sub(point + 1)
-            point = point + 1
+            local line = b.lines[b.point_line]
+            b.dirty = true
+            b.lines[b.point_line] = line:sub(0, b.point) .. t .. line:sub(b.point + 1)
+            b.point = b.point + 1
       end)
    end,
 

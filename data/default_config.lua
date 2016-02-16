@@ -13,7 +13,7 @@ local pause = function() ship.paused = (not ship.paused) end
 -- Flight mode
 define_mode("flight")
 bind("flight", "`", function() ship:change_mode("console") end)
-bind("flight", "return", function()
+bind("flight", "ctrl-return", function()
         ship.editor.open(ship, "src.config")
         ship:change_mode("edit")
 end)
@@ -26,58 +26,13 @@ bind("flight", "tab", ship.actions.next_target)
 bind("flight", "ctrl-tab", ship.actions.closest_target)
 bind("flight", "ctrl- ", ship.actions.login)
 
--- ship.modes.flight.textinput = function(text)
---    if(not ship.controls[text]) then
---       ship.modes.console.textinput(text)
---    end
--- end
-
--- -- Console mode
--- define_mode("console")
--- bind({"console", "flight"}, "pause", pause)
--- bind("console", "`", function() end)
--- bind("console", "~", function() end)
-
--- bind({"console", "flight"}, "return", ship.console.eval_line)
--- bind({"console", "flight"}, "backspace", ship.console.delete_backwards)
--- bind({"console", "flight"}, "ctrl-h", ship.console.delete_backwards)
--- bind({"console", "flight"}, "delete", ship.console.delete_forwards)
--- bind({"console", "flight"}, "ctrl-d", ship.console.delete_forwards)
--- bind({"console", "flight"}, "ctrl-k", ship.console.kill_line)
-
--- bind({"console", "flight"}, "ctrl-a", ship.console.move_beginning_of_line)
--- bind({"console", "flight"}, "home", ship.console.move_beginning_of_line)
--- bind({"console", "flight"}, "ctrl-e", ship.console.move_end_of_line)
--- bind({"console", "flight"}, "end", ship.console.move_end_of_line)
-
--- bind({"console", "flight"}, "ctrl-b", ship.console.backward_char)
--- bind({"console", "flight"}, "ctrl-f", ship.console.forward_char)
--- bind({"console", "flight"}, "alt-f", ship.console.forward_word)
--- bind({"console", "flight"}, "alt-b", ship.console.backward_word)
-
--- bind({"console", "flight"}, "ctrl-p", ship.console.history_prev)
--- bind({"console", "flight"}, "ctrl-n", ship.console.history_next)
--- bind({"console", "flight"}, "down", ship.console.history_next)
-
--- -- Not part of flight mode
--- bind("console", "up", ship.console.history_prev)
--- bind("console", "right", ship.console.forward_char)
--- bind("console", "left", ship.console.backward_char)
-
--- bind("console", "pageup", ship.console.scroll_up)
--- bind("console", "pagedown", ship.console.scroll_down)
-
--- bind("console", "tab", ship.console.complete)
--- bind("console", "escape", mode("flight"))
--- bind({"flight", "console"}, "ctrl-return", function() ship:e("src.config") end)
-
--- bind("console", "ctrl-l", ship.console.clear_lines)
-
--- keymap.modes["console"].textinput = ship.console.textinput
-
 -- Edit mode
 define_mode("edit", ship.editor.textinput, ship.editor.wrap)
-bind("edit", "escape", function() ship:change_mode("flight") end)
+bind("edit", "escape", function()
+        ship.editor.save()
+        ship:change_mode("flight")
+end)
+
 bind("edit", "`", function() ship:change_mode("console") end)
 
 bind("edit", "pause", pause)
@@ -128,11 +83,10 @@ bind("edit", "alt-y", ship.editor.yank_pop)
 bind("edit", "ctrl-backspace", ship.editor.backward_kill_word)
 bind("edit", "alt-d", ship.editor.forward_kill_word)
 
-bind({"edit", "flight", -- "console"
-     }, "ctrl-r",
-   function()
-      ship:load("src.config")
-      ship.editor.initialize()
+bind("flight", "ctrl-r",
+     function()
+        ship:load("src.config")
+        ship.editor.initialize()
 end)
 
 bind("edit", "ctrl-l", function()
