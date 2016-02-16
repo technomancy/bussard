@@ -59,7 +59,7 @@ local find_binding = function(ship, key)
    local mode = ship.api.mode
    local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
    local alt = love.keyboard.isDown("lalt", "ralt")
-   local map = (ctrl and alt and ship.mode["ctrl-alt"]) or
+   local map = (ctrl and alt and mode["ctrl-alt"]) or
       (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
 
    return map[key] or map["__any"]
@@ -362,7 +362,15 @@ ship.api = {
    editor = editor,
    help = help,
 
-   modes = {},
+   -- TODO: need mode inheritance
+   modes = { minibuffer = { map = { ["return"] = editor.exit_minibuffer,
+                               escape = lume.fn(editor.exit_minibuffer, true),
+                               backspace = editor.delete_backwards, },
+                            ctrl = {g=lume.fn(editor.exit_minibuffer, true),},
+                            alt = {}, ["ctrl-alt"] = {},
+                            _wrap = editor.wrap, _textinput = editor.textinput,
+                            name = "minibuffer",
+           }},
 
    change_mode = function(ship, mode_name)
       ship.mode = ship.modes[mode_name]
@@ -460,6 +468,13 @@ ship.api = {
 
    cheat = ship,
    print = print, -- TODO: replace this with printing to the console
+
+   read_line = function(s, prompt, callback)
+      local last_mode = s.mode
+      s.mode = s.modes.minibuffer
+      editor.activate_minibuffer(prompt, callback,
+                                 function() s.mode = last_mode end)
+   end,
 }
 
 return ship

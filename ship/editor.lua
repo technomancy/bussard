@@ -6,9 +6,9 @@ local lume = require("lume")
 -- * syntax highlighting
 -- * minibuffer
 
-local make_buffer = function(fs, path)
+local make_buffer = function(fs, path, lines)
    return { fs=fs, path=path,
-            lines = lume.split(fs:find(path) or "", "\n"),
+            lines = lines or lume.split(fs:find(path) or "", "\n"),
             point = 0, point_line = 1,
             mark = nil, mark_line = nil, last_yank = nil,
             kill_ring = {}, mark_ring = {},
@@ -41,6 +41,7 @@ local history_max = 128
 
 local buffers = {}
 local b
+local mb
 
 local state = function()
    return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
@@ -431,6 +432,11 @@ return {
       end
 
       local edge = math.ceil(DISPLAY_ROWS * 0.3)
+
+      if(b.minibuffer) then
+         mb, b = b, buffers[1]
+      end
+
       local offset = (b.point_line < edge and 0) or (b.point_line - edge)
       for i,line in ipairs(b.lines) do
          if(i >= offset) then
@@ -448,9 +454,11 @@ return {
                love.graphics.setColor(0, 50, 0, 150)
                love.graphics.rectangle("fill", 0, y, width, ROW_HEIGHT)
                -- point
-               love.graphics.setColor(0, 125, 0)
-               love.graphics.rectangle("fill", PADDING+b.point*em, y,
-                                       em, ROW_HEIGHT)
+               if(not mb) then
+                  love.graphics.setColor(0, 125, 0)
+                  love.graphics.rectangle("fill", PADDING+b.point*em, y,
+                                          em, ROW_HEIGHT)
+               end
             end
             love.graphics.setColor(0, 200, 0)
             render_line(line, y)
@@ -460,7 +468,14 @@ return {
       love.graphics.setColor(0, 200, 0, 150)
       love.graphics.rectangle("fill", 0, height - ROW_HEIGHT, width, ROW_HEIGHT)
       love.graphics.setColor(0, 0, 0)
-      love.graphics.print(b:modeline(), PADDING, height - ROW_HEIGHT)
+      if(mb) then
+         love.graphics.print(mb.lines[1], PADDING, height - ROW_HEIGHT)
+         love.graphics.setColor(0, 225, 0)
+         love.graphics.rectangle("fill", PADDING+mb.point*em,
+                                 height - ROW_HEIGHT, em, ROW_HEIGHT)
+      else
+         love.graphics.print(b:modeline(), PADDING, height - ROW_HEIGHT)
+      end
 
       -- draw scroll bar
 
@@ -493,6 +508,7 @@ return {
             love.graphics.line(sx, bar_begin, sx, bar_end)
          end
       end
+      if(mb) then b, mb = mb, nil end
    end,
 
    textinput = function(t)
@@ -502,6 +518,21 @@ return {
             b.lines[b.point_line] = line:sub(0, b.point) .. t .. line:sub(b.point + 1)
             b.point = b.point + 1
       end)
+   end,
+
+   activate_minibuffer = function(prompt, callback, exit_callback)
+      b = make_buffer(nil, nil, {prompt})
+      b.minibuffer, b.prompt = true, prompt
+      b.callback, b.exit_callback = callback, exit_callback
+      b.point = #prompt
+   end,
+
+   exit_minibuffer = function(cancel)
+      if(not cancel) then
+         b.callback(string.sub(b.lines[1], #b.prompt))
+      end
+      b.exit_callback()
+      b, mb = buffers[1], nil
    end,
 
    wrap = wrap,

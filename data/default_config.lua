@@ -95,6 +95,13 @@ bind("edit", "ctrl-l", function()
         ship.editor.newline()
 end)
 
+bind("edit", "alt-x", function()
+        print("hi")
+        ship:read_line("Type a thing: ", function(input)
+                          print("Typed " .. input)
+        end)
+end)
+
 -- HUD
 ship.hud = {
    { x=60, y=5, type="text",
