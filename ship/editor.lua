@@ -12,7 +12,12 @@ local make_buffer = function(fs, path)
             point = 0, point_line = 1,
             mark = nil, mark_line = nil, last_yank = nil,
             kill_ring = {}, mark_ring = {},
-            history = {}, undo_at = 0, dirty = false,
+            history = {}, undo_at = 0, dirty = false, needs_save = false,
+            mode = { name = "edit" }, -- TODO: real mode
+            modeline = function(b)
+               return string.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
+                                    b.path, b.point_line, #b.lines, b.mode.name)
+            end
    }
 end
 
@@ -87,7 +92,7 @@ local region = function()
 end
 
 local insert = function(text, point_to_end)
-   b.dirty = true
+   b.dirty, b.needs_save = true, true
    if(not text or #text == 0) then return end
    local this_line = b.lines[b.point_line]
    local before, after = this_line:sub(0, b.point), this_line:sub(b.point + 1)
@@ -114,7 +119,7 @@ local insert = function(text, point_to_end)
 end
 
 local delete = function(start_line, start, finish_line, finish)
-   b.dirty = true
+   b.dirty, b.needs_save = true, true
    if(start_line == finish_line) then
       local line = b.lines[b.point_line]
       b.lines[b.point_line] = line:sub(0, start) .. line:sub(finish + 1)
@@ -193,7 +198,7 @@ local save = function(this_fs, this_path)
 end
 
 local newline = function()
-   b.dirty = true
+   b.dirty, b.needs_save = true, true
    local remainder = b.lines[b.point_line]:sub(b.point + 1, -1)
    b.lines[b.point_line] = b.lines[b.point_line]:sub(0, b.point)
    b.point = 0
@@ -228,7 +233,7 @@ return {
 
    -- edit commands
    delete_backwards = function()
-      b.dirty = true
+      b.dirty, b.needs_save = true, true
       if(b.point == 0 and b.point_line == 1) then return end
       if(b.point == 0) then
          b.point_line = b.point_line - 1
@@ -245,7 +250,7 @@ return {
    end,
 
    delete_forwards = function()
-      b.dirty = true
+      b.dirty, b.needs_save = true, true
       if(b.point == #b.lines[b.point_line]) then
          local next_line = table.remove(b.lines, b.point_line+1)
          b.lines[b.point_line] = b.lines[b.point_line] .. next_line
@@ -256,7 +261,7 @@ return {
    end,
 
    kill_line = function()
-      b.dirty = true
+      b.dirty, b.needs_save = true, true
       if(b.point == #b.lines[b.point_line]) then
          local next_line = table.remove(b.lines, b.point_line+1)
          b.lines[b.point_line] = b.lines[b.point_line] .. next_line
@@ -430,6 +435,8 @@ return {
       for i,line in ipairs(b.lines) do
          if(i >= offset) then
             local y = ROW_HEIGHT * (i - offset)
+            if(y >= height - ROW_HEIGHT) then break end
+            -- elseif(y > height) then break end
             -- mark
             if(i == b.mark_line) then
                love.graphics.setColor(0, 125, 0)
@@ -449,6 +456,11 @@ return {
             render_line(line, y)
          end
       end
+
+      love.graphics.setColor(0, 200, 0, 150)
+      love.graphics.rectangle("fill", 0, height - ROW_HEIGHT, width, ROW_HEIGHT)
+      love.graphics.setColor(0, 0, 0)
+      love.graphics.print(b:modeline(), PADDING, height - ROW_HEIGHT)
 
       -- draw scroll bar
 
@@ -486,7 +498,7 @@ return {
    textinput = function(t)
       wrap(function()
             local line = b.lines[b.point_line]
-            b.dirty = true
+            b.dirty, b.needs_save = true, true
             b.lines[b.point_line] = line:sub(0, b.point) .. t .. line:sub(b.point + 1)
             b.point = b.point + 1
       end)
