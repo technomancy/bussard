@@ -6,17 +6,17 @@ local fallback_config = love.filesystem.read("data/fallback_config.lua")
 
 local comm = require("ship.comm")
 local help = require("ship.help")
-local console = require("ship.console")
 local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
 
-local edit = require("edit")
-local keymap = require("edit.keymap")
 local mission = require("mission")
 
 -- for shuffling systems upon entry
 local asteroid = require("asteroid")
 local body = require("body")
+
+local console = {} -- TODO: to keep from crashing
+local editor = require("ship.editor")
 
 local scale_min = 1
 
@@ -55,6 +55,40 @@ local sandbox_dofile = function(ship, filename)
    return chunk()
 end
 
+local find_binding = function(ship, key)
+   local mode = ship.api.mode
+   local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
+   local alt = love.keyboard.isDown("lalt", "ralt")
+   local map = (ctrl and alt and ship.mode["ctrl-alt"]) or
+      (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
+
+   return map[key] or map["__any"]
+end
+
+local define_mode = function(ship, name, textinput, wrap)
+   ship.api.modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
+                            _wrap = wrap, _textinput = textinput, name = name }
+   if(not ship.api.mode) then -- first mode to be defined activates
+      ship.api.mode = ship.api.modes[name]
+   end
+end
+
+local bind = function(ship, mode, keycode, fn)
+   if(type(mode) == "table") then
+      for _,m in ipairs(mode) do
+         ship.sandbox.bind(m, keycode, fn)
+      end
+   else
+      -- lua regexes don't support |
+      local map, key = keycode:match("(ctrl-alt)-(.+)")
+      if not map then map, key = keycode:match("(ctrl)-(.+)") end
+      if not map then map, key = keycode:match("(alt)-(.+)") end
+      if map == "alt-ctrl" then map = "ctrl-alt" end
+      assert(ship.api.modes[mode], "No mode " .. mode)
+      ship.api.modes[mode][map or "map"][key or keycode] = fn
+   end
+end
+
 local sandbox = function(ship)
    return lume.merge(utils.sandbox,
                      {  help = help.message,
@@ -68,6 +102,8 @@ local sandbox = function(ship)
                         os = {time = lume.fn(utils.time, ship)},
                         scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
+                        define_mode = lume.fn(define_mode, ship),
+                        bind = lume.fn(bind, ship)
    })
 end
 
@@ -129,8 +165,9 @@ local ship = {
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
-      console.initialize()
-      edit.initialize()
+      for _,m in pairs(ship.api.modes) do
+         if(m.initialize) then m.initialize() end
+      end
 
       ship.api.ui = ui
       ship.systems = systems
@@ -178,7 +215,7 @@ local ship = {
       ship.api.dt = dt
 
       -- activate controls
-      if(keymap.current_mode == "flight") then
+      if(ship.api.mode and ship.api.mode.name == "flight") then
          for k,f in pairs(ship.api.controls) do
             f(love.keyboard.isDown(k))
          end
@@ -299,6 +336,22 @@ local ship = {
    enforce_limits = function(ship)
       if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
    end,
+
+   -- interface
+   handle_key = function(ship, key, ...)
+      local fn = find_binding(ship, key)
+      local wrap = ship.api.mode._wrap
+      if(fn and wrap) then wrap(fn, ...)
+      elseif(fn) then fn(...)
+      end
+   end,
+
+   textinput = function(ship, text)
+      if(find_binding(ship, text)) then return end
+      if(ship.api.mode._textinput and string.len(text) == 1) then
+         ship.api.mode._textinput(text)
+      end
+   end,
 }
 
 -- everything in here is exposed to the sandbox. this table *is* `ship`, as far
@@ -306,8 +359,15 @@ local ship = {
 ship.api = {
    console = console,
    repl = console, -- for backwards-compatibility
-   edit = edit,
+   editor = editor,
    help = help,
+
+   modes = {},
+
+   change_mode = function(ship, mode_name)
+      ship.mode = ship.modes[mode_name]
+      if(ship.mode.end_hook) then ship.mode.end_hook(ship, mode_name) end
+   end,
 
    mission = {
       list = lume.fn(mission.list, ship),
@@ -355,14 +415,6 @@ ship.api = {
       chunk()
    end,
 
-   e = function(s, path)
-      if(type(path) == "string") then
-         keymap.change_mode("edit")
-         s.console.on(false)
-         s.edit.open(s, path)
-      end
-   end,
-
    find = function(s, path)
       local parts = lume.split(path, ".")
       local target = s
@@ -407,6 +459,7 @@ ship.api = {
    scale = 1.9,
 
    cheat = ship,
+   print = print, -- TODO: replace this with printing to the console
 }
 
 return ship

@@ -29,8 +29,6 @@ local PADDING = 20
 local ROW_HEIGHT
 -- Maximum amount of rows that can be displayed on the screen
 local DISPLAY_ROWS
--- enabled?
-local on = false
 -- width of an m
 local em
 -- pattern for word breaks
@@ -180,6 +178,22 @@ local backward_word = function()
    end
 end
 
+local save = function(this_fs, this_path)
+   local target = this_fs or fs
+   if(target) then -- save to ship fs
+      local parts = lume.split(this_path or path, ".")
+      local filename = table.remove(parts, #parts)
+      for _,part in ipairs(parts) do
+         target = target[part]
+      end
+      target[filename] = table.concat(lines, "\n")
+   else -- save to real disk
+      local f = io.open(this_path or path, "w")
+      f:write(table.concat(lines, "\n"))
+      f:close()
+   end
+end
+
 local newline = function()
    dirty = true
    local remainder = lines[point_line]:sub(point + 1, -1)
@@ -203,7 +217,7 @@ return {
          point, point_line = 0, 1
       end
 
-      mark, mark_line, on = nil, nil, true
+      mark, mark_line = nil, nil
       fs, path = this_fs, this_path
       if(fs) then
          lines = lume.split(fs:find(path) or "", "\n")
@@ -216,23 +230,7 @@ return {
       lines = lume.split(fs:find(path), "\n")
    end,
 
-   save = function(this_fs, this_path)
-      local target = this_fs or fs
-      if(target) then -- save to ship fs
-         local parts = lume.split(this_path or path, ".")
-         local filename = table.remove(parts, #parts)
-         for _,part in ipairs(parts) do
-            target = target[part]
-         end
-         target[filename] = table.concat(lines, "\n")
-      else -- save to real disk
-         local f = io.open(this_path or path, "w")
-         f:write(table.concat(lines, "\n"))
-         f:close()
-      end
-   end,
-
-   on = function(or_not) on = or_not ~= false end,
+   save = save,
 
    -- edit commands
    delete_backwards = function()
@@ -409,7 +407,6 @@ return {
 
    -- internal functions
    draw = function()
-      if not on then return end
       local width, height = love.graphics:getWidth(), love.graphics:getHeight()
       DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
 
@@ -501,5 +498,7 @@ return {
       end)
    end,
 
-   wrap = wrap
+   wrap = wrap,
+   end_hook = save,
+   name = "edit",
 }

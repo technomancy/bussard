@@ -8,7 +8,6 @@ local ai = require "ship.ai"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local save = require "save"
-local keymap = require "edit.keymap"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 local systems = require("data.systems")
@@ -43,7 +42,7 @@ local ui = {
 
 local safely = function(f)
    return function(...)
-      -- if(true) then return f(...) end
+      if(true) then return f(...) end
       local ok, ret = pcall(f, ...)
       if(ok) then return ret end
 
@@ -76,9 +75,9 @@ love.load = function()
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    if arg[#arg] == "-abort" then save.abort(ship) end
-   keymap.current_mode = "flight"
    save.load_into(ship)
    body.load(systems)
+   ship.api.editor.initialize()
 
    if(love.filesystem.isFile("localhacks.lua")) then
       require("localhacks")(ship)
@@ -114,9 +113,10 @@ love.update = safely(function(dt)
 end)
 
 -- for commands that don't need repeat
-love.keypressed = safely(keymap.handle)
+love.keypressed = safely(lume.fn(ship.handle_key, ship))
+-- love.keypressed = ship.handle_key
 
-love.textinput = safely(keymap.textinput)
+love.textinput = safely(lume.fn(ship.textinput, ship))
 
 love.draw = safely(function(dt)
       starfield.render(star1, ship.x, ship.y)
@@ -193,8 +193,8 @@ love.draw = safely(function(dt)
       love.graphics.pop()
 
       hud.render(ship)
-      ship.api.console.draw()
-      ship.api.edit.draw()
+      if(ship.api.mode.name ~= "flight") then ship.api.editor.draw(dt) end
+
       for _,u in pairs(ship.upgrades) do
          if(u.draw_after) then u.draw_after(ship, dt) end
       end
