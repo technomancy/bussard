@@ -65,7 +65,7 @@ return {
          ship_data.api = nil
          ship_data.console = nil
          lume.extend(ship, ship_data)
-         ship.api.src.draw = ship.api.src.draw or love.filesystem.read("data/default_draw.lua")
+
          if (console_data) then
             ship.api.console.history = utils.buffer:new(console_data.history)
             ship.api.console.max_history = console_data.max_history
@@ -81,6 +81,14 @@ return {
       else
          ship.time_offset = 8383504000
          ship:enter(ship.system_name, true)
+         for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
+            local base = lume.last(lume.split(v, "/"))
+            ship.api.src[base] = love.filesystem.read(v)
+         end
+         for _,v in pairs(love.filesystem.getDirectoryItems("data/docs")) do
+            local base = lume.last(lume.split(v, "/"))
+            ship.api.docs[base] = love.filesystem.read(v)
+         end
       end
       if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)

@@ -1,8 +1,7 @@
 local utils = require("utils")
 local lume = require("lume")
 
-local default_config = love.filesystem.read("data/default_config.lua")
-local fallback_config = love.filesystem.read("data/fallback_config.lua")
+local default_config = love.filesystem.read("data/src/config")
 
 local comm = require("ship.comm")
 local help = require("ship.help")
@@ -55,14 +54,15 @@ local sandbox_dofile = function(ship, filename)
    return chunk()
 end
 
-local find_binding = function(ship, key)
-   local mode = ship.api.mode
+local function find_binding(ship, key, the_mode)
+   local mode = the_mode or ship.api.mode
    local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
    local alt = love.keyboard.isDown("lalt", "ralt")
    local map = (ctrl and alt and mode["ctrl-alt"]) or
       (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
 
-   return map[key] or map["__any"]
+   return map[key] or map["__any"] or
+      (mode.parent and find_binding(ship, key, mode.parent))
 end
 
 local define_mode = function(ship, name, textinput, wrap)
@@ -436,10 +436,7 @@ ship.api = {
    end,
 
    -- for user files
-   src = {
-      ["config"] = default_config,
-      ["fallback_config"] = fallback_config,
-   },
+   src = {},
    docs = {},
    persist = {"persist", "scale", "src", "docs", "trajectory_seconds",
               "trajectory", "trajectory_step_size", "trajectory_auto"},

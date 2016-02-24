@@ -1,4 +1,4 @@
--- This code runs inside your ship's own computer.
+-- This -*- lua -*- code runs inside your ship's own computer.
 
 ship.controls = {
    up = ship.actions.forward,
@@ -95,11 +95,8 @@ bind("edit", "ctrl-l", function()
         ship.editor.newline()
 end)
 
-bind("edit", "alt-x", function()
-        print("hi")
-        ship:read_line("Type a thing: ", function(input)
-                          print("Typed " .. input)
-        end)
+bind("edit", "alt-o", function()
+        ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
 end)
 
 -- HUD

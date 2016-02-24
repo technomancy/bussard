@@ -1,0 +1,7 @@
+-- -*- lua -*-
+
+define_mode("console")
+ship.modes.console.parent = ship.modes.edit -- fall back to edit when undefined
+
+bind("console", "escape", function() ship:change_mode("flight") end)
+bind("console", "return", eval_line)
