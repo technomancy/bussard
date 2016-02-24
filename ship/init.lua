@@ -92,7 +92,6 @@ end
 local sandbox = function(ship)
    return lume.merge(utils.sandbox,
                      {  help = help.message,
-                        keymap = keymap,
                         default_config = default_config,
                         print = ship.api.print,
                         clear = console.clear_lines,
@@ -372,9 +371,9 @@ ship.api = {
                             name = "minibuffer",
            }},
 
-   change_mode = function(ship, mode_name)
-      ship.mode = ship.modes[mode_name]
-      if(ship.mode.end_hook) then ship.mode.end_hook(ship, mode_name) end
+   change_mode = function(s, mode_name)
+      s.mode = s.modes[mode_name]
+      if(s.mode.end_hook) then s.mode.end_hook(s, mode_name) end
    end,
 
    mission = {

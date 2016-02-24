@@ -217,7 +217,7 @@ return {
 
    -- TODO: need a UI for opening new files
    open = function(fs, path)
-      local buffer = lume.match(buffers, function(b) return b.path == path end)
+      local buffer = lume.match(buffers, function(bu) return bu.path == path end)
 
       if(buffer) then -- move it to the front if already open
          lume.remove(buffers, buffer)
@@ -361,7 +361,7 @@ return {
    end,
 
    jump_to_mark = function()
-      b.point, b.point_line = b.mark or b.point, mark_b.line or b.point_line
+      b.point, b.point_line = b.mark or b.point, b.mark_line or b.point_line
       if(#b.mark_ring > 0) then
          table.insert(b.mark_ring, 1, table.remove(b.mark_ring))
          b.mark, b.mark_line = unpack(b.mark_ring[1])
@@ -388,7 +388,7 @@ return {
 
    yank_pop = function()
       table.insert(kill_ring, 1, table.remove(kill_ring))
-      local ly_line1, ly_point1, ly_line2, ly_point2 = unpack(last_yank)
+      local ly_line1, ly_point1, ly_line2, ly_point2 = unpack(b.last_yank)
       delete(ly_line1, ly_point1, ly_line2, ly_point2)
       yank()
    end,

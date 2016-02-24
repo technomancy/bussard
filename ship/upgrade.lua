@@ -118,7 +118,7 @@ return {
             ship.sandbox.bind("map", "right", lume.fn(pan, m, 0.1, 0))
          end
       end,
-      action = function()
+      action = function(ship)
          map_previous_mode = ship.mode
          ship.mode = ship.modes.map
       end,
