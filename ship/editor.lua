@@ -6,12 +6,13 @@ local lume = require("lume")
 -- * syntax highlighting
 -- * minibuffer
 
+local kill_ring = {}
+
 local make_buffer = function(fs, path, lines)
    return { fs=fs, path=path,
             lines = lines or lume.split(fs:find(path) or "", "\n"),
             point = 0, point_line = 1,
-            mark = nil, mark_line = nil, last_yank = nil,
-            kill_ring = {}, mark_ring = {},
+            mark = nil, mark_line = nil, last_yank = nil, mark_ring = {},
             history = {}, undo_at = 0, dirty = false, needs_save = false,
             mode = { name = "edit" }, -- TODO: real mode
             modeline = function(b)
@@ -140,10 +141,10 @@ local push = function(ring, text, max)
 end
 
 local yank = function()
-   local text = b.kill_ring[#b.kill_ring]
+   local text = kill_ring[#kill_ring]
    if(text) then
-      last_yank = {b.point_line, b.point,
-                   b.point_line + #text - 1, string.len(text[#text])}
+      b.last_yank = {b.point_line, b.point,
+                     b.point_line + #text - 1, string.len(text[#text])}
       insert(text, true)
    end
 end
@@ -196,6 +197,7 @@ local save = function(this_fs, this_path)
       f:write(table.concat(b.lines, "\n"))
       f:close()
    end
+   b.needs_save = false
 end
 
 local newline = function()
@@ -266,11 +268,11 @@ return {
       if(b.point == #b.lines[b.point_line]) then
          local next_line = table.remove(b.lines, b.point_line+1)
          b.lines[b.point_line] = b.lines[b.point_line] .. next_line
-         push(b.kill_ring, {""}, kill_ring_max)
+         push(kill_ring, {""}, kill_ring_max)
       else
          local killed = b.lines[b.point_line]:sub(b.point + 1, -1)
          b.lines[b.point_line] = b.lines[b.point_line]:sub(0, b.point)
-         push(b.kill_ring, {killed}, kill_ring_max)
+         push(kill_ring, {killed}, kill_ring_max)
       end
    end,
 
@@ -372,20 +374,20 @@ return {
 
    kill_ring_save = function()
       if(b.mark == nil or b.mark_line == nil) then return end
-      push(b.kill_ring, region(), kill_ring_max)
+      push(kill_ring, region(), kill_ring_max)
    end,
 
    kill_region = function()
       if(b.mark == nil or b.mark_line == nil) then return end
       local _, start_line, start, finish_line, finish = region()
-      push(b.kill_ring, region(), kill_ring_max)
+      push(kill_ring, region(), kill_ring_max)
       delete(start_line, start, finish_line, finish)
    end,
 
    yank = yank,
 
    yank_pop = function()
-      table.insert(b.kill_ring, 1, table.remove(b.kill_ring))
+      table.insert(kill_ring, 1, table.remove(kill_ring))
       local ly_line1, ly_point1, ly_line2, ly_point2 = unpack(last_yank)
       delete(ly_line1, ly_point1, ly_line2, ly_point2)
       yank()
@@ -393,7 +395,7 @@ return {
 
    print_kill_ring = function()
       print("Ring:")
-      for i,l in ipairs(b.kill_ring) do
+      for i,l in ipairs(kill_ring) do
          print(i, lume.serialize(l))
       end
    end,
@@ -531,9 +533,13 @@ return {
       if(not cancel) then
          b.callback(string.sub(b.lines[1], #b.prompt))
       end
-      b.exit_callback()
+      if(b.exit_callback) then b.exit_callback() end
       b, mb = buffers[1], nil
    end,
+
+   insert = insert,
+   region = region,
+   delete = delete,
 
    wrap = wrap,
    end_hook = save,
