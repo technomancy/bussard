@@ -55,7 +55,7 @@ local sandbox_dofile = function(ship, filename)
 end
 
 local function find_binding(ship, key, the_mode)
-   local mode = the_mode or ship.api.mode
+   local mode = the_mode or ship.api:mode()
    local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
    local alt = love.keyboard.isDown("lalt", "ralt")
    local map = (ctrl and alt and mode["ctrl-alt"]) or
@@ -68,12 +68,10 @@ end
 local define_mode = function(ship, name, textinput, wrap)
    ship.api.modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
                             _wrap = wrap, _textinput = textinput, name = name }
-   if(not ship.api.mode) then -- first mode to be defined activates
-      ship.api.mode = ship.api.modes[name]
-   end
 end
 
 local bind = function(ship, mode, keycode, fn)
+   assert(keycode ~= nil, "Tried to bind to nil. Use false to unbind")
    if(type(mode) == "table") then
       for _,m in ipairs(mode) do
          ship.sandbox.bind(m, keycode, fn)
@@ -214,7 +212,8 @@ local ship = {
       ship.api.dt = dt
 
       -- activate controls
-      if(ship.api.mode and ship.api.mode.name == "flight") then
+      local current_mode = ship.api:mode()
+      if(current_mode and current_mode.name == "flight") then
          for k,f in pairs(ship.api.controls) do
             f(love.keyboard.isDown(k))
          end
@@ -339,7 +338,7 @@ local ship = {
    -- interface
    handle_key = function(ship, key, ...)
       local fn = find_binding(ship, key)
-      local wrap = ship.api.mode._wrap
+      local wrap = ship.api:mode()._wrap
       if(fn and wrap) then wrap(fn, ...)
       elseif(fn) then fn(...)
       end
@@ -347,8 +346,8 @@ local ship = {
 
    textinput = function(ship, text)
       if(find_binding(ship, text)) then return end
-      if(ship.api.mode._textinput and string.len(text) == 1) then
-         ship.api.mode._textinput(text)
+      if(ship.api:mode()._textinput and string.len(text) == 1) then
+         ship.api:mode()._textinput(text)
       end
    end,
 }
@@ -361,7 +360,6 @@ ship.api = {
    editor = editor,
    help = help,
 
-   -- TODO: need mode inheritance
    modes = { minibuffer = { map = { ["return"] = editor.exit_minibuffer,
                                escape = lume.fn(editor.exit_minibuffer, true),
                                backspace = editor.delete_backwards, },
@@ -371,9 +369,13 @@ ship.api = {
                             name = "minibuffer",
            }},
 
+   mode = function(s)
+      return s.current_mode
+   end,
+
    change_mode = function(s, mode_name)
-      s.mode = s.modes[mode_name]
-      if(s.mode.end_hook) then s.mode.end_hook(s, mode_name) end
+      s.current_mode = s.modes[mode_name]
+      if(s.current_mode.end_hook) then s.current_mode.end_hook(s, mode_name) end
    end,
 
    mission = {
@@ -466,10 +468,10 @@ ship.api = {
    print = print, -- TODO: replace this with printing to the console
 
    read_line = function(s, prompt, callback)
-      local last_mode = s.mode
-      s.mode = s.modes.minibuffer
+      local last_mode = s:mode().name
+      s:change_mode("minibuffer")
       editor.activate_minibuffer(prompt, callback,
-                                 function() s.mode = last_mode end)
+                                 function() s:change_mode(last_mode) end)
    end,
 }
 

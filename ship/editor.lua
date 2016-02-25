@@ -215,7 +215,6 @@ return {
       em = love.graphics.getFont():getWidth('a')
    end,
 
-   -- TODO: need a UI for opening new files
    open = function(fs, path)
       local buffer = lume.match(buffers, function(bu) return bu.path == path end)
 
@@ -226,6 +225,7 @@ return {
          table.insert(buffers, 1, make_buffer(fs, path))
       end
       b = buffers[1]
+      if(fs.change_mode) then fs:change_mode("edit") end
    end,
 
    revert = function()

@@ -111,19 +111,22 @@ return {
             local m = { x=system.x, y=system.y }
             ship.map = m
             ship.sandbox.define_mode("map")
-            ship.sandbox.bind("map", "escape", function() ship.mode = map_previous_mode end)
+            ship.sandbox.bind("map", "escape", function()
+                                 ship:change_mode(map_previous_mode) end)
             ship.sandbox.bind("map", "down", lume.fn(pan, m, 0, -0.1))
             ship.sandbox.bind("map", "up", lume.fn(pan, m, 0, 0.1))
             ship.sandbox.bind("map", "left", lume.fn(pan, m, -0.1, 0))
             ship.sandbox.bind("map", "right", lume.fn(pan, m, 0.1, 0))
          end
       end,
+
       action = function(ship)
-         map_previous_mode = ship.mode
-         ship.mode = ship.modes.map
+         map_previous_mode = ship:mode().name
+         ship:change_mode("map")
       end,
+
       draw_after = function(ship)
-         if(ship.mode.name == "map") then
+         if(ship:mode().name == "map") then
             love.graphics.setColor(0, 0, 0, 200)
             love.graphics.rectangle("fill", 0, 0, w, h)
             love.graphics.push()

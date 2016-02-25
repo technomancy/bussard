@@ -82,12 +82,10 @@ return {
          ship.time_offset = 8383504000
          ship:enter(ship.system_name, true)
          for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
-            local base = lume.last(lume.split(v, "/"))
-            ship.api.src[base] = love.filesystem.read(v)
+            ship.api.src[v] = love.filesystem.read("data/src/" .. v)
          end
          for _,v in pairs(love.filesystem.getDirectoryItems("data/docs")) do
-            local base = lume.last(lume.split(v, "/"))
-            ship.api.docs[base] = love.filesystem.read(v)
+            ship.api.docs[v] = love.filesystem.read("data/docs/" .. v)
          end
       end
       if(love.filesystem.isFile(system_filename)) then

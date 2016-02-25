@@ -193,7 +193,7 @@ love.draw = safely(function(dt)
       love.graphics.pop()
 
       hud.render(ship)
-      if(ship.api.mode.name ~= "flight") then ship.api.editor.draw(dt) end
+      if(ship.api:mode() and ship.api:mode().name ~= "flight") then ship.api.editor.draw(dt) end
 
       for _,u in pairs(ship.upgrades) do
          if(u.draw_after) then u.draw_after(ship, dt) end
