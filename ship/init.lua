@@ -67,7 +67,7 @@ end
 
 local define_mode = function(ship, name, textinput, wrap)
    ship.api.modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
-                            _wrap = wrap, _textinput = textinput, name = name }
+                            wrap = wrap, textinput = textinput, name = name }
 end
 
 local bind = function(ship, mode, keycode, fn)
@@ -338,7 +338,7 @@ local ship = {
    -- interface
    handle_key = function(ship, key, ...)
       local fn = find_binding(ship, key)
-      local wrap = ship.api:mode()._wrap
+      local wrap = ship.api:mode().wrap
       if(fn and wrap) then wrap(fn, ...)
       elseif(fn) then fn(...)
       end
@@ -346,8 +346,8 @@ local ship = {
 
    textinput = function(ship, text)
       if(find_binding(ship, text)) then return end
-      if(ship.api:mode()._textinput and string.len(text) == 1) then
-         ship.api:mode()._textinput(text)
+      if(ship.api:mode().textinput and string.len(text) == 1) then
+         ship.api:mode().textinput(text)
       end
    end,
 }
@@ -365,17 +365,12 @@ ship.api = {
                                backspace = editor.delete_backwards, },
                             ctrl = {g=lume.fn(editor.exit_minibuffer, true),},
                             alt = {}, ["ctrl-alt"] = {},
-                            _wrap = editor.wrap, _textinput = editor.textinput,
+                            wrap = editor.wrap, textinput = editor.textinput,
                             name = "minibuffer",
            }},
 
    mode = function(s)
-      return s.current_mode
-   end,
-
-   change_mode = function(s, mode_name)
-      s.current_mode = s.modes[mode_name]
-      if(s.current_mode.end_hook) then s.current_mode.end_hook(s, mode_name) end
+      return s.modes[s.editor.current_mode_name() or "flight"]
    end,
 
    mission = {
@@ -465,13 +460,10 @@ ship.api = {
    scale = 1.9,
 
    cheat = ship,
-   print = print, -- TODO: replace this with printing to the console
+   print = editor.print,
 
    read_line = function(s, prompt, callback)
-      local last_mode = s:mode().name
-      s:change_mode("minibuffer")
-      editor.activate_minibuffer(prompt, callback,
-                                 function() s:change_mode(last_mode) end)
+      editor.activate_minibuffer(prompt, callback)
    end,
 }
 

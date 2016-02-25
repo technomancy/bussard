@@ -42,7 +42,7 @@ local ui = {
 
 local safely = function(f)
    return function(...)
-      -- if(true) then return f(...) end
+      if(true) then return f(...) end
       local ok, ret = pcall(f, ...)
       if(ok) then return ret end
 
@@ -193,7 +193,7 @@ love.draw = safely(function(dt)
       love.graphics.pop()
 
       hud.render(ship)
-      if(ship.api:mode() and ship.api:mode().name ~= "flight") then ship.api.editor.draw(dt) end
+      ship.api.editor.draw(dt)
 
       for _,u in pairs(ship.upgrades) do
          if(u.draw_after) then u.draw_after(ship, dt) end

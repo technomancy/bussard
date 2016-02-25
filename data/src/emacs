@@ -1,4 +1,4 @@
--- Emacs keys
+-- Emacs keys -*- lua -*-
 
 bind("edit", "ctrl-h", ship.editor.delete_backwards)
 bind("edit", "ctrl-d", ship.editor.delete_forwards)
@@ -23,3 +23,6 @@ bind("edit", "alt-y", ship.editor.yank_pop)
 
 bind("edit", "ctrl-backspace", ship.editor.backward_kill_word)
 bind("edit", "alt-d", ship.editor.forward_kill_word)
+
+bind("edit", "alt-k", ship.editor.close)
+bind("edit", "ctrl-alt-k", lume.fn(ship.editor.close, true))

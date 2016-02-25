@@ -4,8 +4,11 @@ define_mode("edit", ship.editor.textinput, ship.editor.wrap)
 
 bind("edit", "escape", function()
         ship.editor.save()
-        ship:change_mode("flight")
+        ship.editor.change_buffer(nil)
 end)
+
+bind("edit", "appback", lume.fn(ship.editor.next_buffer, -1))
+bind("edit", "appforward", ship.editor.next_buffer)
 
 bind("edit", "pause", pause)
 
@@ -41,6 +44,8 @@ end)
 bind("edit", "alt-o", function()
         ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
 end)
+bind("edit", "alt-w", ship.editor.close)
+bind("edit", "ctrl-alt-w", lume.fn(ship.editor.close, true))
 
 -- comment this out to disable Emacs key bindings
 dofile("src.emacs")

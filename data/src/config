@@ -12,9 +12,8 @@ local pause = function() ship.paused = (not ship.paused) end
 
 -- Flight mode
 define_mode("flight")
-ship:change_mode("flight")
 
-bind("flight", "ctrl-return", lume.fn(ship.editor.open, ship, "src.config"))
+bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
 
 -- You can change this so escape by itself quits if you prefer.
 bind("flight", "escape", function() print("Press ctrl-q to quit.") end)

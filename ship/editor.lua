@@ -9,15 +9,14 @@ local lume = require("lume")
 local kill_ring = {}
 
 local make_buffer = function(fs, path, lines)
-   return { fs=fs, path=path,
+   return { fs=fs, path=path, mode = "edit",
             lines = lines or lume.split(fs:find(path) or "", "\n"),
             point = 0, point_line = 1,
             mark = nil, mark_line = nil, last_yank = nil, mark_ring = {},
             history = {}, undo_at = 0, dirty = false, needs_save = false,
-            mode = { name = "edit" }, -- TODO: real mode
             modeline = function(b)
                return string.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
-                                    b.path, b.point_line, #b.lines, b.mode.name)
+                                    b.path, b.point_line, #b.lines, b.mode)
             end
    }
 end
@@ -40,9 +39,14 @@ local kill_ring_max = 32
 local mark_ring_max = 32
 local history_max = 128
 
-local buffers = {}
-local b
+local console = make_buffer(fs, "*console*", {"This is the console.", "> "})
+console.prevent_close, console.point, console.point_line = true, 2, 2
+console.mode = "console"
+
 local mb
+local last_buffer -- for returning too after leaving minibuffer
+local buffers = {console}
+local b = nil -- default back to flight mode
 
 local state = function()
    return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
@@ -61,10 +65,10 @@ local wrap = function(fn, ...)
    local last_state = state()
    if(fn ~= undo) then b.undo_at = 0 end
    fn(...)
-   if(b.dirty) then
+   if(b and b.dirty) then
       table.insert(b.history, last_state)
    end
-   if(#b.history > history_max) then
+   if(b and #b.history > history_max) then
       table.remove(b.history, 1)
    end
 end
@@ -135,8 +139,8 @@ local delete = function(start_line, start, finish_line, finish)
    b.point, b.point_line, b.mark, b.mark_line = start, start_line, start, start_line
 end
 
-local push = function(ring, text, max)
-   table.insert(ring, text)
+local push = function(ring, item, max)
+   table.insert(ring, item)
    if(#ring > max) then table.remove(ring, 1) end
 end
 
@@ -185,19 +189,15 @@ end
 
 local save = function(this_fs, this_path)
    local target = this_fs or b.fs
-   if(target) then -- save to ship fs
+   if(target) then
       local parts = lume.split(this_path or b.path, ".")
       local filename = table.remove(parts, #parts)
       for _,part in ipairs(parts) do
          target = target[part]
       end
       target[filename] = table.concat(b.lines, "\n")
-   else -- save to real disk
-      local f = io.open(this_path or b.path, "w")
-      f:write(table.concat(b.lines, "\n"))
-      f:close()
+      b.needs_save = false
    end
-   b.needs_save = false
 end
 
 local newline = function()
@@ -216,16 +216,22 @@ return {
    end,
 
    open = function(fs, path)
-      local buffer = lume.match(buffers, function(bu) return bu.path == path end)
+      b = lume.match(buffers, function(bu) return bu.path == path end)
 
-      if(buffer) then -- move it to the front if already open
-         lume.remove(buffers, buffer)
-         table.insert(buffers, 1, buffer)
-      else
-         table.insert(buffers, 1, make_buffer(fs, path))
+      if(not b) then
+         table.insert(buffers, make_buffer(fs, path))
+         b = buffers[#buffers]
       end
-      b = buffers[1]
-      if(fs.change_mode) then fs:change_mode("edit") end
+   end,
+
+   close = function(confirm)
+      if(b.prevent_close) then return end
+      if(b.needs_save and not confirm) then
+         print("Save or call close(true) to confirm closing without saving.")
+      else
+         lume.remove(buffers, b)
+         b = buffers[1]
+      end
    end,
 
    revert = function()
@@ -409,6 +415,8 @@ return {
 
    -- internal functions
    draw = function()
+      if(not b) then return end
+
       local width, height = love.graphics:getWidth(), love.graphics:getHeight()
       DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
 
@@ -418,6 +426,7 @@ return {
       if(b.point < 0) then b.point = 0 end
       if(b.point > string.len(b.lines[b.point_line])) then
          b.point = string.len(b.lines[b.point_line]) end
+      -- TODO: don't allow prompt to be edited
 
       -- Draw background
       love.graphics.setColor(0, 0, 0, 170)
@@ -523,18 +532,30 @@ return {
    end,
 
    activate_minibuffer = function(prompt, callback, exit_callback)
-      b = make_buffer(nil, nil, {prompt})
+      last_buffer, b = b, make_buffer(nil, nil, {prompt})
+      b.mode = "minibuffer"
       b.minibuffer, b.prompt = true, prompt
       b.callback, b.exit_callback = callback, exit_callback
       b.point = #prompt
    end,
 
    exit_minibuffer = function(cancel)
+      local minibuffer = b
+      b, mb = last_buffer, nil
       if(not cancel) then
-         b.callback(string.sub(b.lines[1], #b.prompt))
+         minibuffer.callback(string.sub(minibuffer.lines[1],
+                                        #minibuffer.prompt + 1))
       end
-      if(b.exit_callback) then b.exit_callback() end
-      b, mb = buffers[1], nil
+   end,
+
+   next_buffer = function(n)
+      local current = lume.find(buffers, b) - 1
+      if(current + (n or 1) < 0) then current = current + #buffers end
+      b = buffers[math.mod(current + (n or 1), #buffers) + 1]
+   end,
+
+   change_buffer = function(path)
+      b = lume.match(buffers, function(bu) return bu.path == path end)
    end,
 
    insert = insert,
@@ -544,4 +565,22 @@ return {
    wrap = wrap,
    end_hook = save,
    name = "edit",
+
+   current_mode_name = function()
+      return b and b.mode
+   end,
+
+   current_buffer = function() return b end,
+
+   print = function(...)
+      local texts = lume.map({...}, tostring)
+      local last_b, last_point, last_line = b, console.point, console.point_line
+      b = console
+      b.point_line = #b.lines - 1
+      b.point = #b.lines[b.point_line]
+      newline()
+      insert(lume.split(table.concat(texts, "\t"), "\n"))
+      b.point, b.point_line = last_point, #b.lines
+      b = last_b
+   end,
 }
