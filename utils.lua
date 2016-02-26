@@ -195,19 +195,25 @@ return {
 
    sandbox = {
       -- functions
-      type = type,
+      assert = assert,
+      error = error,
       pairs = pairs,
       ipairs = ipairs,
       next = next,
-      unpack = unpack,
+      pcall = pcall,
+      xpcall = xpcall,
+      select = select,
       tonumber = tonumber,
       tostring = tostring,
+      type = type,
+      unpack = unpack,
+      pack = function(...) return {...} end,
 
       -- tables
-      coroutine = coroutine,
-      math = math,
-      table = table,
-      string = string,
+      coroutine = lume.clone(coroutine),
+      math = lume.clone(math),
+      table = lume.clone(table),
+      string = lume.clone(string),
 
       -- custom
       utils = {
@@ -227,6 +233,6 @@ return {
          if(t[key] == value) then return t end
       end
    end,
-   
+
    buffer = buffer,
 }
