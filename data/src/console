@@ -1,7 +1,17 @@
 -- -*- lua -*-
 
-define_mode("console")
-ship.modes.console.parent = ship.modes.edit -- fall back to edit when undefined
+local prompt = "> "
 
-bind("console", "escape", ship.editor.change_buffer)
-bind("console", "return", eval_line)
+define_mode("console")
+ship.modes.console.parent = ship.modes.edit -- most keys work like in edit mode
+
+bind("console", "return", function()
+        local input = string.sub(ship.editor.get_line(0), string.len(prompt)+1)
+        loadstring(input)
+end)
+
+-- TODO: port from old console
+-- real eval
+-- history
+-- completion
+-- one-line console in flight mode

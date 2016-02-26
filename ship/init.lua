@@ -46,14 +46,6 @@ local base_stats = {
    portal_time = 40, -- in-game seconds
 }
 
-local sandbox_dofile = function(ship, filename)
-   local contents = ship.api:find(filename)
-   assert(type(contents) == "string", filename .. " is not a file.")
-   local chunk = assert(loadstring(contents))
-   setfenv(chunk, ship.sandbox)
-   return chunk()
-end
-
 local function find_binding(ship, key, the_mode)
    local mode = the_mode or ship.api:mode()
    local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
@@ -87,15 +79,38 @@ local bind = function(ship, mode, keycode, fn)
    end
 end
 
+local sandbox_loadstring = function(ship, code)
+   local chunk = assert(loadstring(code))
+   setfenv(chunk, ship.sandbox)
+   return chunk()
+end
+
+local sandbox_dofile = function(ship, filename)
+   local contents = ship.api:find(filename)
+   assert(type(contents) == "string", filename .. " is not a file.")
+   return sandbox_loadstring(ship, contents)
+end
+
+local sandbox_loaded = {}
+
+local sandbox_require = function(ship, mod_name)
+   if(sandbox_loaded[mod_name]) then return end
+   sandbox_dofile(ship, mod_name)
+   sandbox_loaded[mod_name] = true
+end
+
 local sandbox = function(ship)
    return lume.merge(utils.sandbox,
                      {  help = help.message,
                         default_config = default_config,
                         print = ship.api.print,
+                        realprint = print,
                         clear = console.clear_lines,
                         ship = ship.api,
+                        _LOADED = sandbox_loaded,
                         dofile = lume.fn(sandbox_dofile, ship),
-                        -- TODO: add require too; maybe loadstring
+                        require = lume.fn(sandbox_require, ship),
+                        loadstring = lume.fn(sandbox_loadstring, ship),
                         os = {time = lume.fn(utils.time, ship)},
                         scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
@@ -344,10 +359,14 @@ local ship = {
       end
    end,
 
-   textinput = function(ship, text)
+   textinput = function(ship, text, the_mode)
       if(find_binding(ship, text)) then return end
-      if(ship.api:mode().textinput and string.len(text) == 1) then
-         ship.api:mode().textinput(text)
+      if(string.len(text) > 1) then return end
+      local mode = the_mode or ship.api:mode()
+      if(mode.textinput) then
+         mode.textinput(text)
+      elseif(mode.parent) then
+         ship:textinput(text, mode.parent)
       end
    end,
 }

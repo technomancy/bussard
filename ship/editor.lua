@@ -209,6 +209,10 @@ local newline = function()
    table.insert(b.lines, b.point_line, remainder)
 end
 
+local get_buffer = function(path)
+   return lume.match(buffers, function(bu) return bu.path == path end)
+end
+
 return {
    initialize = function()
       ROW_HEIGHT = love.graphics.getFont():getHeight()
@@ -216,7 +220,7 @@ return {
    end,
 
    open = function(fs, path)
-      b = lume.match(buffers, function(bu) return bu.path == path end)
+      b = get_buffer(path)
 
       if(not b) then
          table.insert(buffers, make_buffer(fs, path))
@@ -555,7 +559,7 @@ return {
    end,
 
    change_buffer = function(path)
-      b = lume.match(buffers, function(bu) return bu.path == path end)
+      b = get_buffer(path)
    end,
 
    insert = insert,
@@ -582,5 +586,10 @@ return {
       insert(lume.split(table.concat(texts, "\t"), "\n"))
       b.point, b.point_line = last_point, #b.lines
       b = last_b
+   end,
+
+   get_line = function(n)
+      if(n < 1) then n = #b.lines - n end
+      return b.lines[n]
    end,
 }
