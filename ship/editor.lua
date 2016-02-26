@@ -602,6 +602,10 @@ return {
       return b.lines[n]
    end,
 
+   get_line_number = function() return b.point_line end,
+
+   is_dirty = function() return b and b.dirty end,
+
    invisible = {}, -- sentinel "do not print" value
 
    suppress_read_only = function(f, ...)

@@ -4,6 +4,25 @@ local prompt = "> "
 
 define_mode("console")
 ship.modes.console.parent = ship.modes.edit -- most keys work like in edit mode
+ship.modes.console.wrap = function(fn, ...) -- enforce read-only prompt!
+   ship.editor.wrap(fn, ...)
+   if(ship.editor.is_dirty() and
+      string.sub(ship.editor.get_line(0), 1, string.len(prompt)) ~= prompt) then
+      ship.editor.undo()
+   end
+end
+
+local beginning_of_line = function()
+   ship.editor.beginning_of_line()
+   if(ship.editor.get_line_number() == ship.editor.get_max_lines()) then
+      for i=1,string.len(prompt) do
+         ship.editor.forward_char()
+      end
+   end
+end
+
+bind("console", "ctrl-a", beginning_of_line)
+bind("console", "home", beginning_of_line)
 
 bind("console", "return", function()
         local input = string.sub(ship.editor.get_line(0), string.len(prompt)+1)
@@ -46,7 +65,6 @@ bind("console", "return", function()
 end)
 
 -- TODO: port from old console
--- read-only prompt
 -- history
 -- completion
 -- one-line console in flight mode
