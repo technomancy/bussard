@@ -286,11 +286,11 @@ return {
       end
    end,
 
-   move_beginning_of_line = function()
+   beginning_of_line = function()
       b.point = 0
    end,
 
-   move_end_of_line = function()
+   end_of_line = function()
       b.point = #b.lines[b.point_line]
    end,
 
