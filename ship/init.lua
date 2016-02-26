@@ -80,15 +80,19 @@ local bind = function(ship, mode, keycode, fn)
 end
 
 local sandbox_loadstring = function(ship, code)
-   local chunk = assert(loadstring(code))
-   setfenv(chunk, ship.sandbox)
-   return chunk()
+   local chunk, err = loadstring(code)
+   if(chunk) then
+      setfenv(chunk, ship.sandbox)
+      return chunk
+   else
+      return chunk, err
+   end
 end
 
 local sandbox_dofile = function(ship, filename)
    local contents = ship.api:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
-   return sandbox_loadstring(ship, contents)
+   return sandbox_loadstring(ship, contents)()
 end
 
 local sandbox_loaded = {}
@@ -111,6 +115,7 @@ local sandbox = function(ship)
                         dofile = lume.fn(sandbox_dofile, ship),
                         require = lume.fn(sandbox_require, ship),
                         loadstring = lume.fn(sandbox_loadstring, ship),
+                        debug = {traceback = debug.traceback},
                         os = {time = lume.fn(utils.time, ship)},
                         scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),

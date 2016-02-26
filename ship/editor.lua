@@ -266,7 +266,7 @@ return {
       b.dirty, b.needs_save = true, true
       if(b.point == #b.lines[b.point_line]) then
          local next_line = table.remove(b.lines, b.point_line+1)
-         b.lines[b.point_line] = b.lines[b.point_line] .. next_line
+         b.lines[b.point_line] = b.lines[b.point_line] .. (next_line or "")
       else
          local l = b.lines[b.point_line]
          b.lines[b.point_line] = l:sub(0, b.point) .. l:sub(b.point + 2, #l)
@@ -591,5 +591,11 @@ return {
    get_line = function(n)
       if(n < 1) then n = #b.lines - n end
       return b.lines[n]
+   end,
+
+   invisible = {}, -- sentinel "do not print" value
+
+   suppress_read_only = function(f, ...)
+      return f(...) -- TODO implement read-only, suppress it here
    end,
 }
