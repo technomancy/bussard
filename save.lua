@@ -15,10 +15,6 @@ local body_fields = {
    "progress", "from_name", "target_name", "ship", "asteroid", "strength",
 }
 
-local console_fields = {
-   "history", "lines", "max_history", "max_lines",
-}
-
 local ship_filename = "ship_data.lua"
 local system_filename = "system_data.lua"
 
@@ -35,7 +31,6 @@ return {
       local ship_data = lume.pick(ship, unpack(ship_fields))
       ship_data.time_offset = ship.sandbox.os.time()
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
-      ship_data.console = lume.pick(ship.api.console, unpack(console_fields))
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
                             lume.serialize(lume.map(ship.bodies, body_data)))
@@ -58,26 +53,14 @@ return {
          local ship_data_string = love.filesystem.read(ship_filename)
          local ship_data = lume.deserialize(ship_data_string)
          local api_data = ship_data.api
-         local console_data = ship_data.console
 
          lume.extend(ship.api, api_data)
 
          ship_data.api = nil
-         ship_data.console = nil
          lume.extend(ship, ship_data)
 
-         if (console_data) then
-            ship.api.console.history = utils.buffer:new(console_data.history)
-            ship.api.console.max_history = console_data.max_history
-            ship.api.console.history.max = console_data.max_history
-
-            ship.api.console.lines = utils.buffer:new(console_data.lines)
-            ship.api.console.max_lines = console_data.max_lines
-            ship.api.console.lines.max = console_data.max_lines
-         end
-
          ship:enter(ship.system_name)
-         ship.api.console.display_line = nil
+         -- ship.api.console.display_line = nil
       else
          ship.time_offset = 8383504000
          ship:enter(ship.system_name, true)

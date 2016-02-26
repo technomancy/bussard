@@ -3,7 +3,7 @@ local lume = require("lume")
 
 local default_config = love.filesystem.read("data/src/config")
 
-local comm = require("ship.comm")
+-- local comm = require("ship.comm")
 local help = require("ship.help")
 local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
@@ -14,7 +14,6 @@ local mission = require("mission")
 local asteroid = require("asteroid")
 local body = require("body")
 
-local console = {} -- TODO: to keep from crashing
 local editor = require("ship.editor")
 
 local scale_min = 1
@@ -109,7 +108,7 @@ local sandbox = function(ship)
                         default_config = default_config,
                         print = ship.api.print,
                         realprint = print,
-                        clear = console.clear_lines,
+                        -- clear = ship.editor.clear_lines,
                         ship = ship.api,
                         _LOADED = sandbox_loaded,
                         dofile = lume.fn(sandbox_dofile, ship),
@@ -117,7 +116,7 @@ local sandbox = function(ship)
                         loadstring = lume.fn(sandbox_loadstring, ship),
                         debug = {traceback = debug.traceback},
                         os = {time = lume.fn(utils.time, ship)},
-                        scp = lume.fn(comm.scp, ship),
+                        -- scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
                         define_mode = lume.fn(define_mode, ship),
                         bind = lume.fn(bind, ship)
@@ -190,19 +189,20 @@ local ship = {
       ship.systems = systems
 
       ship.sandbox = sandbox(ship)
-      ship.api.console.sandbox = ship.sandbox
    end,
+
+   dofile = sandbox_dofile,
 
    enter = function(ship, system_name, reseed)
       local from = ship.system_name
       assert(ship.systems[system_name], system_name .. " not found.")
-      ship.api.console.display_line = "Entering the " .. system_name .. " system."
+      -- ship.api.console.display_line = "Entering the " .. system_name .. " system."
 
       -- stuff these things in there to expose to in-ship APIs
       ship.bodies = ship.systems[system_name].bodies
       ship.system_name = system_name
 
-      comm.logout_all(ship)
+      -- comm.logout_all(ship)
       ship:recalculate()
 
       if(reseed) then
@@ -379,8 +379,6 @@ local ship = {
 -- everything in here is exposed to the sandbox. this table *is* `ship`, as far
 -- as the in-game code is concerned.
 ship.api = {
-   console = console,
-   repl = console, -- for backwards-compatibility
    editor = editor,
    help = help,
 
@@ -432,16 +430,8 @@ ship.api = {
          end
          ship.target = ship.bodies[ship.target_number]
       end,
-      login = lume.fn(comm.login, ship),
+      -- login = lume.fn(comm.login, ship),
    },
-
-   load = function(s, filename)
-      filename = filename or "src.config"
-      local content = assert(s:find(filename), "File not found: " .. filename)
-      local chunk = assert(loadstring(content), "Failed to load " .. filename)
-      setfenv(chunk, ship.sandbox)
-      chunk()
-   end,
 
    find = function(s, path)
       local parts = lume.split(path, ".")

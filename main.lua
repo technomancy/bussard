@@ -83,10 +83,10 @@ love.load = function()
       require("localhacks")(ship)
    end
 
-   ship.api.console.display_line =
-   "Press ` to open the console, and run man() for more help. Zoom with = and -."
+   -- ship.api.console.display_line =
+   -- "Press ` to open the console, and run man() for more help. Zoom with = and -."
 
-   xpcall(function() ship.api:load("src.config") end,
+   xpcall(function() ship:dofile("src.config") end,
       function(e)
          print("Initial load failed:", e)
          ship.api.print(e)
