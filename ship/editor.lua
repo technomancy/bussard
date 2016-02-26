@@ -213,6 +213,15 @@ local get_buffer = function(path)
    return lume.match(buffers, function(bu) return bu.path == path end)
 end
 
+local save_excursion = function(f) -- TODO: discards multiple values from f
+   local old_b, p, pl, m, ml = b, b.point, b.point_line, b.mark, b.mark_line
+   local val, err = pcall(f)
+   b = old_b
+   b.point, b.point_line, b.mark, b.mark_line = p, pl, m, ml
+   if(not val) then error(err) end
+   return val
+end
+
 return {
    initialize = function()
       ROW_HEIGHT = love.graphics.getFont():getHeight()
@@ -578,14 +587,14 @@ return {
 
    print = function(...)
       local texts = lume.map({...}, tostring)
-      local last_b, last_point, last_line = b, console.point, console.point_line
-      b = console
-      b.point_line = #b.lines - 1
-      b.point = #b.lines[b.point_line]
-      newline()
-      insert(lume.split(table.concat(texts, "\t"), "\n"))
-      b.point, b.point_line = last_point, #b.lines
-      b = last_b
+      local on_last_line = b.point_line == #b.lines
+      save_excursion(function()
+            b = console
+            b.point, b.point_line = 0, #b.lines
+            insert(lume.split(table.concat(texts, "\t"), "\n"), true)
+            newline()
+      end)
+      if(on_last_line and b == console) then b.point_line = #b.lines end
    end,
 
    get_line = function(n)
@@ -598,4 +607,6 @@ return {
    suppress_read_only = function(f, ...)
       return f(...) -- TODO implement read-only, suppress it here
    end,
+
+   save_excursion = save_excursion,
 }
