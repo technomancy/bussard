@@ -83,22 +83,19 @@ love.load = function()
       require("localhacks")(ship)
    end
 
-   -- ship.api.console.display_line =
-   -- "Press ` to open the console, and run man() for more help. Zoom with = and -."
-
    xpcall(function() ship:dofile("src.config") end,
       function(e)
          print("Initial load failed:", e)
          ship.api.print(e)
          ship.api.print(debug.traceback())
-         ship.console.display_line = "Error loading config; falling back to " ..
-            "ship.src.fallback_config."
-         local chunk = assert(loadstring("src.fallback_config"))
-         setfenv(chunk, ship.api.console.sandbox)
-         local success, msg = pcall(chunk)
-         if(not success) then
-            ship.api.print(msg)
-         end
+         ship.api.editor.print("Error loading config!")
+         -- TODO: fix fallback config
+         -- local chunk = assert(loadstring("src.fallback_config"))
+         -- setfenv(chunk, ship.api.console.sandbox)
+         -- local success, msg = pcall(chunk)
+         -- if(not success) then
+         --    ship.api.print(msg)
+         -- end
    end)
 end
 
