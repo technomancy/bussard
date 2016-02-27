@@ -4,6 +4,7 @@ local prompt = "> "
 
 define_mode("console")
 ship.modes.console.parent = ship.modes.edit -- most keys work like in edit mode
+ship.modes.console.textinput = ship.modes.edit.textinput
 ship.modes.console.wrap = function(fn, ...) -- enforce read-only prompt!
    ship.editor.wrap(fn, ...)
    if(ship.editor.is_dirty() and
@@ -67,4 +68,4 @@ end)
 -- TODO: port from old console
 -- history
 -- completion
--- one-line console in flight mode
+-- comm system

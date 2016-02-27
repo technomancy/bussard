@@ -369,7 +369,11 @@ local ship = {
       if(string.len(text) > 1) then return end
       local mode = the_mode or ship.api:mode()
       if(mode.textinput) then
-         mode.textinput(text)
+         if(mode.wrap) then
+            mode.wrap(mode.textinput, text)
+         else
+            mode.textinput(text)
+         end
       elseif(mode.parent) then
          ship:textinput(text, mode.parent)
       end
