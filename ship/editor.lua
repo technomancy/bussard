@@ -48,6 +48,9 @@ local last_buffer -- for returning too after leaving minibuffer
 local buffers = {console}
 local b = nil -- default back to flight mode
 
+local last_line = "Press ctrl-enter to open the console, " ..
+   "and run man() for more help. Zoom with = and -."
+
 local state = function()
    return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
 end
@@ -214,10 +217,12 @@ local get_buffer = function(path)
 end
 
 local save_excursion = function(f) -- TODO: discards multiple values from f
-   local old_b, p, pl, m, ml = b, b.point, b.point_line, b.mark, b.mark_line
+   local old_b, p, pl, m, ml = b, b and b.point, b and b.point_line, b and b.mark, b and b.mark_line
    local val, err = pcall(f)
    b = old_b
-   b.point, b.point_line, b.mark, b.mark_line = p, pl, m, ml
+   if(b) then
+      b.point, b.point_line, b.mark, b.mark_line = p, pl, m, ml
+   end
    if(not val) then error(err) end
    return val
 end
@@ -428,7 +433,16 @@ return {
 
    -- internal functions
    draw = function()
-      if(not b) then return end
+      if(not b) then -- TODO: hard-coded prompt
+         if(console.lines[#console.lines] == "> ") then
+            love.graphics.print(last_line, PADDING,
+                                love.graphics:getHeight() - ROW_HEIGHT * 2)
+         else
+            love.graphics.print(console.lines[#console.lines], PADDING,
+                                love.graphics:getHeight() - ROW_HEIGHT * 2)
+         end
+         return
+      end
 
       local width, height = love.graphics:getWidth(), love.graphics:getHeight()
       DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
@@ -545,6 +559,7 @@ return {
    end,
 
    activate_minibuffer = function(prompt, callback, exit_callback)
+      -- FIXME: prevent "o" from being inserted here
       last_buffer, b = b, make_buffer(nil, nil, {prompt})
       b.mode = "minibuffer"
       b.minibuffer, b.prompt = true, prompt
@@ -587,22 +602,30 @@ return {
 
    print = function(...)
       local texts = lume.map({...}, tostring)
-      local on_last_line = b.point_line == #b.lines
+      local lines = lume.split(table.concat(texts, "\t"), "\n")
+      local on_last_line
       save_excursion(function()
+            on_last_line = console.point_line == #console.lines
+            last_line = lume.last(lines)
             b = console
             b.point, b.point_line = 0, #b.lines
-            insert(lume.split(table.concat(texts, "\t"), "\n"), true)
+            insert(lines, true)
             newline()
       end)
-      if(on_last_line and b == console) then b.point_line = #b.lines end
+      if(on_last_line and b == console) then
+         b.point_line = #b.lines
+      end
    end,
 
    get_line = function(n)
+      if(not b) then return end
       if(n < 1) then n = #b.lines - n end
       return b.lines[n]
    end,
 
    get_line_number = function() return b.point_line end,
+
+   get_max_lines = function() return b and #b.lines end,
 
    is_dirty = function() return b and b.dirty end,
 
