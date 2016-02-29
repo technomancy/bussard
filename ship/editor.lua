@@ -102,6 +102,7 @@ end
 
 local insert = function(text, point_to_end)
    b.dirty, b.needs_save = true, true
+   text = lume.map(text, function(s) return s:gsub("\t", "  ") end)
    if(not text or #text == 0) then return end
    local this_line = b.lines[b.point_line]
    local before, after = this_line:sub(0, b.point), this_line:sub(b.point + 1)
@@ -119,10 +120,10 @@ local insert = function(text, point_to_end)
             table.insert(b.lines, i+b.point_line-1, l)
          end
       end
-      table.insert(b.lines, b.point_line+#b.text-1, b.text[#b.text] .. (after or ""))
+      table.insert(b.lines, b.point_line+#text-1, text[#text] .. (after or ""))
       if(point_to_end) then
-         b.point = #b.text[#b.text]
-         b.point_line = b.point_line+#b.text-1
+         b.point = #text[#text]
+         b.point_line = b.point_line+#text-1
       end
    end
 end
