@@ -51,6 +51,8 @@ local b = nil -- default back to flight mode
 local last_line = "Press ctrl-enter to open the console, " ..
    "and run man() for more help. Zoom with = and -."
 
+local invisible = {}             -- sentinel "do not print" value
+
 local state = function()
    return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
 end
@@ -226,6 +228,17 @@ local save_excursion = function(f) -- TODO: discards multiple values from f
    end
    if(not val) then error(err) end
    return val
+end
+
+local write = function(...)
+   local lines = lume.split(table.concat({...}, " "), "\n")
+   save_excursion(function()
+         last_line = lume.last(lines)
+         b = console
+         b.point, b.point_line = 0, #b.lines
+         insert(lines, true)
+         newline()
+   end)
 end
 
 return {
@@ -602,21 +615,16 @@ return {
    current_buffer = function() return b end,
 
    print = function(...)
-      local texts = lume.map({...}, tostring)
-      local lines = lume.split(table.concat(texts, "\t"), "\n")
-      local on_last_line
-      save_excursion(function()
-            on_last_line = console.point_line == #console.lines
-            last_line = lume.last(lines)
-            b = console
-            b.point, b.point_line = 0, #b.lines
-            insert(lines, true)
-            newline()
-      end)
+      local texts = {...}
+      if(texts[1] == invisible) then return end
+      local on_last_line = console.point_line == #console.lines
+      write(unpack(lume.map(texts, tostring)))
       if(on_last_line and b == console) then
          b.point_line = #b.lines
       end
    end,
+
+   write = write,
 
    get_line = function(n)
       if(not b) then return end
@@ -630,7 +638,7 @@ return {
 
    is_dirty = function() return b and b.dirty end,
 
-   invisible = {}, -- sentinel "do not print" value
+   invisible = invisible,
 
    suppress_read_only = function(f, ...)
       return f(...) -- TODO implement read-only, suppress it here
