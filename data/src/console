@@ -45,9 +45,10 @@ bind("console", "return", function()
            end
         end
 
-        local result, trace = pack(xpcall(chunk, function(e)
-                                             trace = debug.traceback()
-                                             err = e end))
+        local trace
+        local result = pack(xpcall(chunk, function(e)
+                                      trace = debug.traceback()
+                                      err = e end))
         if(result[1]) then
            local results, i = lume.serialize(result[2], true), 3
            if result[2] == ship.editor.invisible then return true end
@@ -58,9 +59,12 @@ bind("console", "return", function()
            print(results)
            return true
         else
-           print(err_msg)
-           print(trace)
-           print('! Evaluation error: ' .. err_msg)
+           print('! Evaluation error: ' .. err or "Unknown")
+           local lines = lume.split(trace, "\n")
+           for i,l in pairs(lines) do
+              -- editor infrastructure wraps 8 levels of irrelevant gunk
+              if(i < #lines - 8) then print(l) end
+           end
         end
 
 end)
@@ -69,3 +73,4 @@ end)
 -- history
 -- completion
 -- comm system
+-- mini 1-line console in flight mode
