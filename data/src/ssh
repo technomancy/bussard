@@ -1,0 +1,4 @@
+ssh = function(username, password)
+   ssh_connect(username or "guest", password or "")
+   return ship.editor.invisible
+end

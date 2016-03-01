@@ -59,10 +59,10 @@ return {
          ship_data.api = nil
          lume.extend(ship, ship_data)
 
-         ship:enter(ship.system_name)
+         ship:enter(ship.system_name, false, true)
       else
          ship.time_offset = 8383504000
-         ship:enter(ship.system_name, true)
+         ship:enter(ship.system_name, true, true)
          for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
             ship.api.src[v] = love.filesystem.read("data/src/" .. v)
          end
@@ -86,7 +86,7 @@ return {
             end
          end
       else
-         ship:enter(ship.system_name, true)
+         ship:enter(ship.system_name, true, true)
       end
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do

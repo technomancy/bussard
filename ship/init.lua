@@ -3,10 +3,10 @@ local lume = require("lume")
 
 local default_config = love.filesystem.read("data/src/config")
 
--- local comm = require("ship.comm")
 local help = require("ship.help")
 local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
+local ssh = require("ship.ssh")
 
 local mission = require("mission")
 
@@ -119,7 +119,8 @@ local sandbox = function(ship)
                         -- scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
                         define_mode = lume.fn(define_mode, ship),
-                        bind = lume.fn(bind, ship)
+                        bind = lume.fn(bind, ship),
+                        ssh_connect = lume.fn(ssh.connect, ship),
    })
 end
 
@@ -193,16 +194,18 @@ local ship = {
 
    dofile = sandbox_dofile,
 
-   enter = function(ship, system_name, reseed)
+   enter = function(ship, system_name, reseed, suppress_message)
       local from = ship.system_name
       assert(ship.systems[system_name], system_name .. " not found.")
-      ship.api.editor.print("Entering the " .. system_name .. " system.")
+      if(not suppress_message) then
+         ship.api.editor.print("Entering the " .. system_name .. " system.")
+      end
 
       -- stuff these things in there to expose to in-ship APIs
       ship.bodies = ship.systems[system_name].bodies
       ship.system_name = system_name
 
-      -- comm.logout_all(ship)
+      ssh.logout_all(ship)
       ship:recalculate()
 
       if(reseed) then
@@ -434,7 +437,6 @@ ship.api = {
          end
          ship.target = ship.bodies[ship.target_number]
       end,
-      -- login = lume.fn(comm.login, ship),
    },
 
    find = function(s, path)
@@ -479,6 +481,7 @@ ship.api = {
 
    cheat = ship,
    print = editor.print,
+   write = editor.write,
 
    read_line = function(s, prompt, callback)
       editor.activate_minibuffer(prompt, callback)

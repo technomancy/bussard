@@ -33,6 +33,4 @@ end)
 dofile("src.edit")
 dofile("src.console")
 dofile("src.hud")
-
--- convenience functions
-login = ship.actions.login
+dofile("src.ssh")

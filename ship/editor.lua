@@ -41,7 +41,7 @@ local history_max = 128
 
 local console = make_buffer(fs, "*console*", {"This is the console.", "> "})
 console.prevent_close, console.point, console.point_line = true, 2, 2
-console.mode = "console"
+console.mode, console.prompt = "console", "> "
 
 local mb
 local last_buffer -- for returning too after leaving minibuffer
@@ -447,8 +447,8 @@ return {
 
    -- internal functions
    draw = function()
-      if(not b) then -- TODO: hard-coded prompt
-         if(console.lines[#console.lines] == "> ") then
+      if(not b) then
+         if(console.lines[#console.lines] == console.prompt) then
             love.graphics.print(last_line, PADDING,
                                 love.graphics:getHeight() - ROW_HEIGHT * 2)
          else
@@ -467,7 +467,6 @@ return {
       if(b.point < 0) then b.point = 0 end
       if(b.point > string.len(b.lines[b.point_line])) then
          b.point = string.len(b.lines[b.point_line]) end
-      -- TODO: don't allow prompt to be edited
 
       -- Draw background
       love.graphics.setColor(0, 0, 0, 170)
@@ -645,4 +644,7 @@ return {
    end,
 
    save_excursion = save_excursion,
+
+   prompt = function() return b.prompt or "> " end,
+   set_prompt = function(p) b.prompt = p end,
 }
