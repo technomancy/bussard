@@ -7,6 +7,40 @@ local services = require("services")
 local sessions = {}
 
 local logout = function(ship, target)
+   local session = sessions[name]
+   if(session) then
+      local fs, env = unpack(session)
+      for k,_ in pairs(fs["/home/guest"] or {}) do
+         if(k ~= "_user" and k ~= "_group") then
+            session[1]["/home/guest/" .. k] = nil
+         end
+      end
+      sessions[name] = nil
+      if(not name:match("[Pp]ortal")) then
+         ship.api.print("\nLogged out.")
+      end
+   else
+      ship.api.print("| Not logged in.")
+   end
+   return ship.api.editor.invisible
+end
+
+local send_line = function(ship, input)
+   if(not ship:in_range(ship.target)) then
+      ship.api.print("| Out of range. Run `logout` to disconnect.")
+   elseif(not sessions[ship.target.name]) then
+      ship.api.print("Not logged in to " .. ship.target.name ..
+                        ". Run `logout` to disconnect.")
+   else
+      local fs, env = unpack(sessions[ship.target.name])
+      assert(fs and env, "Not logged into " .. ship.target.name)
+      ship.api.print(ship.api.editor.prompt() .. input)
+      if(fs[env.IN]) then
+         fs[env.IN](input)
+      else
+         env.IN(input)
+      end
+   end
 end
 
 local sandbox = function(ship)
@@ -26,10 +60,7 @@ local sandbox = function(ship)
       distance = lume.fn(utils.distance, ship, ship.target),
       os = {time = lume.fn(utils.time, ship)},
       set_prompt = function(p) ship.api.prompt = p end, -- TODO
-      disconnect = function()
-         disconnect(ship)
-         logout(target.name, ship)
-      end
+      logout = function() disconnect(ship) logout(target.name, ship) end,
    }
    if(ship.target and ship.target.portal) then
       sb.body = ship.target
@@ -46,32 +77,6 @@ local sandbox = function(ship)
       end
    end
    return lume.merge(utils.sandbox, sb)
-end
-
--- TODO: move this in-game
-local send_input = function(ship, input)
-   if(input == "logout") then
-      if(sessions[ship.comm_connected]) then
-         logout(ship.comm_connected, ship)
-      else
-         ship.api.print("| Not logged in.")
-      end
-      disconnect(ship)
-   elseif(not ship:in_range(ship.target)) then
-      ship.api.print("| Out of range. Run `logout` to disconnect.")
-   elseif(not sessions[ship.target.name]) then
-      ship.api.print("Not logged in to " .. ship.target.name ..
-                        ". Run `logout` to disconnect.")
-   else
-      local fs, env = unpack(sessions[ship.target.name])
-      assert(fs and env, "Not logged into " .. ship.target.name)
-      ship.api.print(ship.api.editor.prompt() .. input)
-      if(fs[env.IN]) then
-         fs[env.IN](input)
-      else
-         env.IN(input)
-      end
-   end
 end
 
 local sandbox_out = function(ship, target_name, output)
@@ -132,6 +137,7 @@ return {
       end
    end,
 
+   send_line = send_line,
    logout = logout,
 
    logout_all = function(ship)

@@ -607,9 +607,9 @@ return {
    end_hook = save,
    name = "edit",
 
-   current_mode_name = function()
-      return b and b.mode
-   end,
+   current_mode_name = function() return b and b.mode end,
+
+   set_mode = function(mode_name) b.mode = mode_name end,
 
    current_buffer = function() return b end,
 
@@ -645,6 +645,6 @@ return {
 
    save_excursion = save_excursion,
 
-   prompt = function() return b.prompt or "> " end,
+   prompt = function() return (b and b.prompt) or "> " end,
    set_prompt = function(p) b.prompt = p end,
 }

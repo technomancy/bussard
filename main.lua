@@ -42,7 +42,7 @@ local ui = {
 
 local safely = function(f)
    return function(...)
-      if(true) then return f(...) end
+      -- if(true) then return f(...) end
       local ok, ret = pcall(f, ...)
       if(ok) then return ret end
 

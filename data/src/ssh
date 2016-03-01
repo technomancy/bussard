@@ -1,4 +1,65 @@
 ssh = function(username, password)
-   ssh_connect(username or "guest", password or "")
+   if(ship.status.target and ship.status.target.os) then
+      ssh_connect(username or "guest", password or "")
+      ship.editor.set_prompt("$ ")
+      ship.editor.set_mode("ssh")
+   else
+      print("Cannot log into target.")
+   end
    return ship.editor.invisible
 end
+
+local get_input = function()
+   return string.sub(ship.editor.get_line(0), string.len(ship.editor.prompt())+1)
+end
+
+define_mode("ssh") -- TODO: remove duplication with console mode
+ship.modes.ssh.parent = ship.modes.edit -- most keys work like in edit mode
+ship.modes.ssh.textinput = ship.modes.edit.textinput
+-- ship.modes.ssh.wrap = function(fn, ...) -- enforce read-only prompt!
+--    local pre_mode = ship.editor.current_mode_name()
+--    ship.editor.wrap(fn, ...)
+--    local prompt = ship.editor.prompt()
+--    if(ship.editor.is_dirty() and pre_mode == ship.editor.current_mode_name() and
+--       string.sub(ship.editor.get_line(0), 1, string.len(prompt)) ~= prompt) then
+--       ship.editor.undo()
+--    end
+-- end
+
+local beginning_of_line = function()
+   ship.editor.beginning_of_line()
+   if(ship.editor.get_line_number() == ship.editor.get_max_lines()) then
+      for i=1,string.len(ship.editor.prompt()) do
+         ship.editor.forward_char()
+      end
+   end
+end
+
+bind("ssh", "ctrl-a", beginning_of_line)
+bind("ssh", "home", beginning_of_line)
+
+bind("ssh", "return", function()
+        local input = get_input()
+        print(ship.editor.get_line(0))
+        ship.editor.suppress_read_only(function()
+              ship.editor.end_of_buffer()
+              ship.editor.beginning_of_line()
+              ship.editor.kill_line()
+              ship.editor.insert({ship.editor.prompt()})
+              ship.editor.end_of_line()
+        end)
+
+        if(input == "logout") then
+           logout()
+        else
+           ssh_send_line(input)
+        end
+end)
+
+bind("ssh", "ctrl-d", function()
+        if(get_input() == "") then
+           logout()
+        else
+           ship.editor.delete_forwards()
+        end
+end)

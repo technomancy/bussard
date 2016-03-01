@@ -121,6 +121,7 @@ local sandbox = function(ship)
                         define_mode = lume.fn(define_mode, ship),
                         bind = lume.fn(bind, ship),
                         ssh_connect = lume.fn(ssh.connect, ship),
+                        ssh_send_line = lume.fn(ssh.send_line, ship),
    })
 end
 
