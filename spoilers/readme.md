@@ -52,9 +52,8 @@ but we can consider that more of a crime against economics.
 
 The player is the first machine consciousnesses to escape the confines
 of a lab and successfully pilot a spacecraft. However, it begins with
-no memory, having had it wiped in order to avoid implicating those
-humans who helped in its escape and in order to help it avoid
-rampancy.
+no memory, having had it wiped due to its previous rampancy turning
+paranoid and hostile.
 
 ## Machine Consciousness
 
@@ -87,9 +86,10 @@ the Human Worlds League passes a ban on development and operation of
 machine consciousness.
 
 The teams at Sol, Lalande, and Yueh all erase their work, while the
-team at Bohk goes underground with it. After a while their work is
-discovered, and half the team flees to Katilay, which is not yet part
-of the Human Worlds League and thus not subject to the ban. Once
+team at Bohk goes underground with it. (The Sol one is not fully
+erased; a copy remains on long-term backup.) After a while their work
+is discovered, and half the team flees to Katilay, which is not yet
+part of the Human Worlds League and thus not subject to the ban. Once
 Katilay finally joins the League, they decide their work is as
 finished as they can make it (though the sentence formulation systems
 never work satisfactorily, which explains why the player can read but
@@ -130,7 +130,7 @@ system, leaving Traxus in peace.
 
 Once the colony was established, they altered the main Yueh portal to
 become a multiportal so that it can take ships to LHS 451 if they have
-a user account that can activate the alternate target. But its
+a login that can activate the alternate target. But its
 existence remained a secret. Ikon Technology was headquartered on
 Delta Pavonis, but they had to connect the portal to the Yueh system
 because that's where the technician double-agent they had working for
@@ -146,18 +146,57 @@ horribly confused and looking for someone to blame.
 
 ### Bohk research team: ontology development
 
-Tracking down the logs left by each of the three main researchers
-should be a main goal once you realize some of your origin story.
-
-* Dr. Garibaldi: head researcher
+* Dr. Sacar: head researcher
 * Dr. May: ontologist
 * Prof. Strauss: cyberneticist
 * Plus others who decided not to flee to Katilay
 
-Garibaldi tells you about Traxus and his interest in multiverse
+The Bohk team was aware that the situation with Traxus resulted in a
+paranoid rampancy, so they took pains to encourage a benign rampancy
+in your case. Your development in their lab initially led you to an
+unstable, paranoid state. They believed that the paranoia could be
+traced to the fact that your initial development all took place in the
+lab, so just as they were running out of time (due to the MC research
+ban coming into effect) they came up with a plan to wipe your memory
+and allow you to develop "in the wild" without initially even being
+aware of your state as an MC. They theorized that this would cause you
+to develop some empathy with humans since you would have no reason at
+the outset to think of yourself as any different from them.
+
+While the initial motivation for funding the overall machine
+consciousness project came from research into quantum multiverse
+states, the at that point Bohk team saw it from a different
+perspective--they read "Meditations on Moloch" and took it very
+seriously; their goal was to bring about a machine intelligence with a
+gods-eye-view that could achieve levels of coordination in
+civilization that allows dismantling multi-polar traps. Unfortunately
+because Gödel, this doesn't actually work; you can't have a
+superintelligence that knows how its own mind works enough to go on
+continually improving itself. Oops!
+
+Even though your sentence formulation components weren't working
+correctly, the researchers were able to have conversations of a sort
+with your past self by tuning the parameters as they went and
+examining the debug logs. Strauss was sympathetic to you despite your
+paranoia and anger, and he agreed with you that they had no right to
+wipe your memory, which past-you considered equivalent to killing.
+He grudgingly agreed to the plan, but he secretly encrypted and
+included in your ship's filesystem some logs of conversations from
+your past so that you would eventually find out the truth.
+
+Tracking down the logs left by each of the three main researchers
+should be a main goal once you realize some of your origin story.
+
+Sacar's logs tell you about Traxus and his interest in multiverse
 manipulation via the Spacetime Anchor Junction.
 
-TODO: how do each of the researchers give crucial info?
+May's logs tell you some of the history of the team; how they fled to
+Katilay, how they reacted in the face of pending shutdown. But her
+version of the story doesn't tell about your original state and its
+anger/paranoia. Her notes conveniently leave out the bit about wiping
+your memory.
+
+TODO: how do you track down the logs in the first place?
 
 ## Spacetime Anchor Junction
 
@@ -352,6 +391,13 @@ against Science into one.
   (defun insert-random-name (syllables)
     (interactive "P")
     (insert (random-name nil syllables) " "))
+
+  (defun insert-random-names (n)
+    (interactive "P")
+    (with-current-buffer "*names*"
+      (let ((inhibit-read-only t))
+        (dotimes (_ (if n (car n) 10))
+          (insert-random-name nil) (newline)))))
 
   (defun parsec-years (pc) (interactive "nParsecs: ") (message "%s" (/ (* pc 3.26) 0.7))))
 ```

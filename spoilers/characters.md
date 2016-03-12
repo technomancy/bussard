@@ -204,6 +204,21 @@ scientific equipment.
 
 ## Non-colonizing exploration ships? (automated?)
 
+# Gutenberg Liberation Front
+
+The Gutenberg Liberation Front is protesting the extension of
+copyright term. They do this by posting chapters of public-domain
+works into random news groups. Some of the works they use:
+
+* The Man who was Thursday
+* Meditations on Moloch
+* The Song of Roland
+* Some Doctorow novel?
+* Shakespeare?
+* The Grand Inquisitor by Dostoyevsky
+* Kierkegaard?
+* Leiningen vs the Ants?
+
 # Historical Characters
 
 * Captain Darush, saved the SS Copernicus on the trip to Ross
@@ -225,7 +240,6 @@ scientific equipment.
  * University Students
    * Ricarad Jinod: developing more advanced sensor array
 * Sol
- * Garibaldi: Orolo researcher, eventually discovers domain injector
 * Yueh
  * Luminous engineers (2 or 3?)
  * University students
