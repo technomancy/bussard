@@ -10,6 +10,9 @@ end)
 bind("edit", "appback", lume.fn(ship.editor.next_buffer, -1))
 bind("edit", "appforward", ship.editor.next_buffer)
 
+bind("edit", "ctrl-pageup", lume.fn(ship.editor.next_buffer, -1))
+bind("edit", "ctrl-pagedown", ship.editor.next_buffer)
+
 bind("edit", "pause", pause)
 
 bind("edit", "return", ship.editor.newline_and_indent)

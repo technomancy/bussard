@@ -3,15 +3,6 @@
 define_mode("console")
 ship.modes.console.parent = ship.modes.edit -- most keys work like in edit mode
 ship.modes.console.textinput = ship.modes.edit.textinput
-ship.modes.console.wrap = function(fn, ...) -- enforce read-only prompt!
-   local pre_mode = ship.editor.current_mode_name()
-   ship.editor.wrap(fn, ...)
-   local prompt = ship.editor.prompt()
-   if(ship.editor.is_dirty() and pre_mode == ship.editor.current_mode_name() and
-      string.sub(ship.editor.get_line(0), 1, string.len(prompt)) ~= prompt) then
-      ship.editor.undo()
-   end
-end
 
 local beginning_of_line = function()
    ship.editor.beginning_of_line()

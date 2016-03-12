@@ -237,7 +237,6 @@ local write = function(...)
          b = console
          b.point, b.point_line = 0, #b.lines
          insert(lines, true)
-         newline()
    end)
 end
 
@@ -618,6 +617,7 @@ return {
       if(texts[1] == invisible) then return end
       local on_last_line = console.point_line == #console.lines
       write(unpack(lume.map(texts, tostring)))
+      newline()
       if(on_last_line and b == console) then
          b.point_line = #b.lines
       end
