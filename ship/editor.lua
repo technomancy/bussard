@@ -11,8 +11,8 @@ local kill_ring = {}
 local make_buffer = function(fs, path, lines)
    return { fs=fs, path=path, mode = "edit",
             lines = lines or lume.split(fs:find(path) or "", "\n"),
-            point = 0, point_line = 1,
-            mark = nil, mark_line = nil, last_yank = nil, mark_ring = {},
+            point = 0, point_line = 1, mark = nil, mark_line = nil,
+            props = {}, last_yank = nil, mark_ring = {},
             history = {}, undo_at = 0, dirty = false, needs_save = false,
             modeline = function(b)
                return string.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
@@ -54,14 +54,17 @@ local last_line = "Press ctrl-enter to open the console, " ..
 local invisible = {}             -- sentinel "do not print" value
 
 local state = function()
-   return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
+   return {lines = lume.clone(b.lines),
+           props = lume.deserialize(lume.serialize(b.props)),
+           point = b.point, point_line = b.point_line}
 end
 
 local undo = function()
    local prev = b.history[#b.history-b.undo_at]
    if(b.undo_at < #b.history) then b.undo_at = b.undo_at + 1 end
    if(prev) then
-      b.lines, b.point, b.point_line = prev.lines, prev.point, prev.point_line
+      b.lines, b.props = prev.lines, prev.props
+      b.point, b.point_line = prev.point, prev.point_line
    end
 end
 
@@ -102,6 +105,7 @@ local region = function()
    end
 end
 
+-- TODO: props
 local insert = function(text, point_to_end)
    b.dirty, b.needs_save = true, true
    text = lume.map(text, function(s) return s:gsub("\t", "  ") end)
@@ -130,6 +134,7 @@ local insert = function(text, point_to_end)
    end
 end
 
+-- TODO: props
 local delete = function(start_line, start, finish_line, finish)
    b.dirty, b.needs_save = true, true
    if(start_line == finish_line) then
@@ -193,6 +198,20 @@ local backward_word = function()
    end
 end
 
+local forward_char = function(n) -- lameness: n must be 1 or -1
+   n = n or 1
+   if((end_of_buffer() and n > 0) or
+      beginning_of_buffer() and n < 0) then return
+   elseif(b.point == #b.lines[b.point_line] and n > 0) then
+      b.point, b.point_line = 0, b.point_line+1
+   elseif(b.point == 0 and n < 0) then
+      b.point = #b.lines[b.point_line-1]
+      b.point_line = b.point_line-1
+   else
+      b.point = b.point + n
+   end
+end
+
 local save = function(this_fs, this_path)
    local target = this_fs or b.fs
    if(target) then
@@ -207,12 +226,7 @@ local save = function(this_fs, this_path)
 end
 
 local newline = function()
-   b.dirty, b.needs_save = true, true
-   local remainder = b.lines[b.point_line]:sub(b.point + 1, -1)
-   b.lines[b.point_line] = b.lines[b.point_line]:sub(0, b.point)
-   b.point = 0
-   b.point_line = b.point_line + 1
-   table.insert(b.lines, b.point_line, remainder)
+   insert({"", ""}, true)
 end
 
 local get_buffer = function(path)
@@ -273,44 +287,27 @@ return {
 
    -- edit commands
    delete_backwards = function()
-      b.dirty, b.needs_save = true, true
-      if(b.point == 0 and b.point_line == 1) then return end
-      if(b.point == 0) then
-         b.point_line = b.point_line - 1
-         b.point = #b.lines[b.point_line]
-         b.lines[b.point_line] = b.lines[b.point_line] .. b.lines[b.point_line+1]
-         table.remove(b.lines, b.point_line+1)
-      else
-         local l = b.lines[b.point_line]
-         b.lines[b.point_line] = l:sub(0, b.point - 1) .. l:sub(b.point + 1, #l)
-         if b.point > 0 then
-            b.point = b.point - 1
-         end
-      end
+      local line, point = b.point_line, b.point
+      local line2, point2
+      save_excursion(function()
+            forward_char(-1)
+            line2, point2 = b.point_line, b.point
+      end)
+      delete(line2, point2, line, point)
    end,
 
    delete_forwards = function()
-      b.dirty, b.needs_save = true, true
-      if(b.point == #b.lines[b.point_line]) then
-         local next_line = table.remove(b.lines, b.point_line+1)
-         b.lines[b.point_line] = b.lines[b.point_line] .. (next_line or "")
-      else
-         local l = b.lines[b.point_line]
-         b.lines[b.point_line] = l:sub(0, b.point) .. l:sub(b.point + 2, #l)
-      end
+      local line, point = b.point_line, b.point
+      local line2, point2
+      save_excursion(function()
+            forward_char()
+            line2, point2 = b.point_line, b.point
+      end)
+      delete(line, point, line2, point2)
    end,
 
    kill_line = function()
-      b.dirty, b.needs_save = true, true
-      if(b.point == #b.lines[b.point_line]) then
-         local next_line = table.remove(b.lines, b.point_line+1)
-         b.lines[b.point_line] = b.lines[b.point_line] .. next_line
-         push(kill_ring, {""}, kill_ring_max)
-      else
-         local killed = b.lines[b.point_line]:sub(b.point + 1, -1)
-         b.lines[b.point_line] = b.lines[b.point_line]:sub(0, b.point)
-         push(kill_ring, {killed}, kill_ring_max)
-      end
+      delete(b.point_line, b.point, b.point_line, #b.lines[b.point_line])
    end,
 
    beginning_of_line = function()
@@ -337,27 +334,9 @@ return {
       b.point_line = math.min(#b.lines, b.point_line + scroll_size)
    end,
 
-   forward_char = function()
-      if(end_of_buffer()) then return
-      elseif(b.point == #b.lines[b.point_line]) then
-         b.point, b.point_line = 0, b.point_line+1
-      else
-         b.point = b.point + 1
-      end
-   end,
-
-   backward_char = function()
-      if(beginning_of_buffer()) then return
-      elseif(b.point == 0) then
-         b.point = #b.lines[b.point_line-1]
-         b.point_line = b.point_line-1
-      else
-         b.point = b.point - 1
-      end
-   end,
-
+   forward_char = forward_char,
+   backward_char = lume.fn(forward_char, -1),
    forward_word = forward_word,
-
    backward_word = backward_word,
 
    backward_kill_word = function()
@@ -562,12 +541,7 @@ return {
    end,
 
    textinput = function(t)
-      wrap(function()
-            local line = b.lines[b.point_line]
-            b.dirty, b.needs_save = true, true
-            b.lines[b.point_line] = line:sub(0, b.point) .. t .. line:sub(b.point + 1)
-            b.point = b.point + 1
-      end)
+      wrap(function() insert({t}, true) end)
    end,
 
    activate_minibuffer = function(prompt, callback, exit_callback)
