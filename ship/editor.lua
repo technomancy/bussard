@@ -107,8 +107,9 @@ end
 -- would be nice to have a more general read-only property
 local in_prompt = function(line, point, line2, _point2)
    if(not b.prompt or inhibit_read_only) then return false end
-   if(line2 or line ~= #b.lines) then return false end
+   if(not line2 and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= b.prompt:len()) then return false end
+   print("in prompt!", line, point, line2, #b.lines)
    return true
    -- not sure if this covers all the cases
 end
@@ -143,8 +144,8 @@ local insert = function(text, point_to_end)
 end
 
 local delete = function(start_line, start, finish_line, finish)
-   assert(start_line <= finish_line)
-   if(start_line == finish_line) then assert(start < finish) end
+   start_line, finish_line = math.min(start_line, finish_line), math.max(start_line, finish_line)
+   start, finish = math.min(start, finish), math.max(start, finish)
    if(in_prompt(start_line, start, finish_line, finish)) then return end
 
    b.dirty, b.needs_save = true, true
@@ -257,12 +258,15 @@ end
 
 local write = function(...)
    local lines = lume.split(table.concat({...}, " "), "\n")
+   local read_only = inhibit_read_only
+   inhibit_read_only = true
    save_excursion(function()
          last_line = lume.last(lines)
          b = console
-         b.point, b.point_line = 0, #b.lines
+         b.point, b.point_line = #b.lines[#b.lines], #b.lines
          insert(lines, true)
    end)
+   inhibit_read_only = read_only
 end
 
 return {
@@ -600,14 +604,16 @@ return {
    current_buffer = function() return b end,
 
    print = function(...)
-      local texts = {...}
+      local texts, read_only = {...}, inhibit_read_only
+      inhibit_read_only = true
       if(texts[1] == invisible) then return end
       local on_last_line = console.point_line == #console.lines
+      table.insert(texts, "\n")
       write(unpack(lume.map(texts, tostring)))
-      newline()
       if(on_last_line and b == console) then
          b.point_line = #b.lines
       end
+      inhibit_read_only = read_only
    end,
 
    write = write,
@@ -638,4 +644,19 @@ return {
 
    prompt = function() return (b and b.prompt) or "> " end,
    set_prompt = function(p) b.prompt = p end,
+   print_prompt = function()
+      local read_only = inhibit_read_only
+      inhibit_read_only = true
+      write(b.prompt)
+      b.point, b.point_line = #b.lines[#b.lines], #b.lines
+      inhibit_read_only = read_only
+   end,
+
+   debug = function()
+      print("---------------", b.point_line, b.point)
+      for _,line in ipairs(b.lines) do
+         print(line)
+      end
+      print("---------------")
+   end,
 }

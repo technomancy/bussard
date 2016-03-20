@@ -24,24 +24,17 @@ bind("console", "return", function()
 
         local input = string.sub(ship.editor.get_line(0),
                                  string.len(ship.editor.prompt())+1)
-        print(ship.editor.get_line(0))
-        ship.editor.suppress_read_only(function()
-              ship.editor.end_of_buffer()
-              ship.editor.beginning_of_line()
-              ship.editor.kill_line()
-              ship.editor.insert({ship.editor.prompt()})
-              ship.editor.end_of_line()
-        end)
-
+        ship.editor.newline()
         local chunk, err = loadstring("return " .. input)
         if(err and not chunk) then
            chunk, err = loadstring(input)
            if(not chunk) then
               print("! Compilation error: " .. err or "Unknown error")
+              ship.editor.print_prompt()
+              ship.editor.end_of_buffer()
               return false
            end
         end
-
         local trace
         local result = pack(xpcall(chunk, function(e)
                                       trace = debug.traceback()
@@ -54,7 +47,6 @@ bind("console", "return", function()
               i = i + 1
            end
            print(results)
-           return true
         else
            print('! Evaluation error: ' .. err or "Unknown")
            local lines = lume.split(trace, "\n")
@@ -63,6 +55,8 @@ bind("console", "return", function()
               if(i < #lines - 8) then print(l) end
            end
         end
+        ship.editor.print_prompt()
+        ship.editor.end_of_buffer()
 
 end)
 
