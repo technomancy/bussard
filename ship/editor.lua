@@ -106,9 +106,8 @@ end
 local in_prompt = function(line, point, line2, point2)
    if(not b.prompt) then return false end
    point2, line2 = point2 or point, line2 or line
-   print(line, point, line2, point2, #b.lines, b.prompt:len())
-   if(line2 ~= #b.lines) then print(1) return false end
-   if(line == #b.lines and point >= b.prompt:len()) then print(2) return false end
+   if(line2 ~= #b.lines) then return false end
+   if(line == #b.lines and point >= b.prompt:len()) then return false end
    return true
    -- not sure if this covers all the cases
 end
