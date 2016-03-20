@@ -12,7 +12,7 @@ local make_buffer = function(fs, path, lines)
    return { fs=fs, path=path, mode = "edit",
             lines = lines or lume.split(fs:find(path) or "", "\n"),
             point = 0, point_line = 1, mark = nil, mark_line = nil,
-            props = {}, last_yank = nil, mark_ring = {},
+            last_yank = nil, mark_ring = {},
             history = {}, undo_at = 0, dirty = false, needs_save = false,
             modeline = function(b)
                return string.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
@@ -54,17 +54,14 @@ local last_line = "Press ctrl-enter to open the console, " ..
 local invisible = {}             -- sentinel "do not print" value
 
 local state = function()
-   return {lines = lume.clone(b.lines),
-           props = lume.deserialize(lume.serialize(b.props)),
-           point = b.point, point_line = b.point_line}
+   return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
 end
 
 local undo = function()
    local prev = b.history[#b.history-b.undo_at]
    if(b.undo_at < #b.history) then b.undo_at = b.undo_at + 1 end
    if(prev) then
-      b.lines, b.props = prev.lines, prev.props
-      b.point, b.point_line = prev.point, prev.point_line
+      b.lines, b.point, b.point_line = prev.lines, prev.point, prev.point_line
    end
 end
 
@@ -105,8 +102,19 @@ local region = function()
    end
 end
 
--- TODO: props
+-- would be nice to have a more general read-only property
+local in_prompt = function(line, point, line2, point2)
+   if(not b.prompt) then return false end
+   point2, line2 = point2 or point, line2 or line
+   print(line, point, line2, point2, #b.lines, b.prompt:len())
+   if(line2 ~= #b.lines) then print(1) return false end
+   if(line == #b.lines and point >= b.prompt:len()) then print(2) return false end
+   return true
+   -- not sure if this covers all the cases
+end
+
 local insert = function(text, point_to_end)
+   if(in_prompt(b.point_line, b.point + 1)) then return end
    b.dirty, b.needs_save = true, true
    text = lume.map(text, function(s) return s:gsub("\t", "  ") end)
    if(not text or #text == 0) then return end
@@ -134,8 +142,11 @@ local insert = function(text, point_to_end)
    end
 end
 
--- TODO: props
 local delete = function(start_line, start, finish_line, finish)
+   assert(start_line <= finish_line)
+   if(start_line == finish_line) then assert(start < finish) end
+   if(in_prompt(start_line, start, finish_line, finish)) then return end
+
    b.dirty, b.needs_save = true, true
    if(start_line == finish_line) then
       local line = b.lines[b.point_line]
@@ -287,6 +298,7 @@ return {
 
    -- edit commands
    delete_backwards = function()
+      if(beginning_of_buffer()) then return end
       local line, point = b.point_line, b.point
       local line2, point2
       save_excursion(function()
@@ -297,6 +309,7 @@ return {
    end,
 
    delete_forwards = function()
+      if(end_of_buffer()) then return end
       local line, point = b.point_line, b.point
       local line2, point2
       save_excursion(function()

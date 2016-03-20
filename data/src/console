@@ -17,6 +17,11 @@ bind("console", "ctrl-a", beginning_of_line)
 bind("console", "home", beginning_of_line)
 
 bind("console", "return", function()
+        if(ship.editor.get_line_number() ~= ship.editor.get_max_lines()) then
+           ship.editor.newline()
+           return
+        end
+
         local input = string.sub(ship.editor.get_line(0),
                                  string.len(ship.editor.prompt())+1)
         print(ship.editor.get_line(0))
