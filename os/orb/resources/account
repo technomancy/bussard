@@ -1,8 +1,8 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local _f, _env, args = ...
 
-local command, username, password = unpack(args)
+local _command, username, password = unpack(args)
 
 if(args[1] == "price") then
    if(station.account_price) then

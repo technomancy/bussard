@@ -36,8 +36,7 @@ bind("ssh", "return", function()
               ship.editor.end_of_buffer()
               ship.editor.beginning_of_line()
               ship.editor.kill_line()
-              ship.editor.insert({ship.editor.prompt()})
-              ship.editor.end_of_line()
+              ship.editor.insert({ship.editor.prompt()}, true)
         end)
 
         if(input == "logout") then

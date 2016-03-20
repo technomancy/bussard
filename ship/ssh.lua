@@ -7,7 +7,7 @@ local services = require("services")
 local sessions = {}
 
 local logout = function(ship, target)
-   local session = sessions[name]
+   local session = sessions[target.name]
    if(session) then
       local fs, env = unpack(session)
       for k,_ in pairs(fs["/home/guest"] or {}) do
@@ -59,7 +59,7 @@ local sandbox = function(ship)
       ship = ship.api,
       distance = lume.fn(utils.distance, ship, ship.target),
       os = {time = lume.fn(utils.time, ship)},
-      set_prompt = function(p) ship.api.prompt = p end, -- TODO
+      set_prompt = ship.api.editor.set_prompt,
       logout = function() disconnect(ship) logout(target.name, ship) end,
    }
    if(ship.target and ship.target.portal) then

@@ -39,7 +39,7 @@ local kill_ring_max = 32
 local mark_ring_max = 32
 local history_max = 128
 
-local console = make_buffer(fs, "*console*", {"This is the console.", "> "})
+local console = make_buffer(nil, "*console*", {"This is the console.", "> "})
 console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt = "console", "> "
 
@@ -47,6 +47,8 @@ local mb
 local last_buffer -- for returning too after leaving minibuffer
 local buffers = {console}
 local b = nil -- default back to flight mode
+
+local inhibit_read_only
 
 local last_line = "Press ctrl-enter to open the console, " ..
    "and run man() for more help. Zoom with = and -."
@@ -103,10 +105,9 @@ local region = function()
 end
 
 -- would be nice to have a more general read-only property
-local in_prompt = function(line, point, line2, point2)
-   if(not b.prompt) then return false end
-   point2, line2 = point2 or point, line2 or line
-   if(line2 ~= #b.lines) then return false end
+local in_prompt = function(line, point, line2, _point2)
+   if(not b.prompt or inhibit_read_only) then return false end
+   if(line2 or line ~= #b.lines) then return false end
    if(line == #b.lines and point >= b.prompt:len()) then return false end
    return true
    -- not sure if this covers all the cases
@@ -626,7 +627,11 @@ return {
    invisible = invisible,
 
    suppress_read_only = function(f, ...)
-      return f(...) -- TODO implement read-only, suppress it here
+      local read_only = inhibit_read_only
+      inhibit_read_only = true
+      local val = f(...)
+      inhibit_read_only = read_only
+      return val
    end,
 
    save_excursion = save_excursion,

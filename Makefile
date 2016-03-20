@@ -2,8 +2,18 @@ run:
 	love .
 
 check:
-	luacheck --no-color --std luajit --exclude-files metatable_monkey.lua headless.lua \
-	  --new-globals love lume orb _ -- *.lua os/orb/*.lua ship/*.lua os/lisp/*.lua
+	luacheck --no-color --std luajit --ignore 21/_.* \
+	  --exclude-files metatable_monkey.lua headless.lua ship/ssh.lua \
+	  --globals love lume orb _ \
+	  -- *.lua ship/*.lua os/lisp/*.lua
+	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
+	  --globals lume pack ship pause define_mode bind utils \
+	            ssh ssh_connect logout ssh_send_line \
+	  -- data/src/*
+	luacheck --no-color --std luajit --ignore 21/_.* \
+	  --globals lume pack orb station buy_user ship cargo_transfer refuel \
+	            accept_mission set_prompt buy_upgrade sell_upgrade upgrade_help \
+	 -- os/orb/resources/*
 
 count:
 	cloc *.lua ship/*.lua

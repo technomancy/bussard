@@ -251,7 +251,6 @@ local ship = {
       -- the engine arbitrarily powerful or use zero fuel or
       -- whatever. so these two steps must remain separate.
       if(ship.engine_on and ship.fuel > 0) then
-         -- TODO: calculate oberth effect
          local fx = (math.sin(ship.heading) * dt * ship.engine_strength)
          local fy = (math.cos(ship.heading) * dt * ship.engine_strength)
          ship.dx = ship.dx + fx / ship.mass
@@ -484,7 +483,8 @@ ship.api = {
    print = editor.print,
    write = editor.write,
 
-   read_line = function(s, prompt, callback)
+   read_line = function(_, prompt, callback)
+      -- FIXME: whatever key which activated this command will be inserted
       editor.activate_minibuffer(prompt, callback)
    end,
 }
