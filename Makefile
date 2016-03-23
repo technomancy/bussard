@@ -1,48 +1,56 @@
-run:
-	love .
+run: ; love .
+
+SHIP_LUA=ship/*.lua
+ENGINE_LUA=*.lua
+OS_LUA=os/orb/*.lua os/lisp/*.lua
+IN_OS_LUA=os/orb/resources/* os/lisp/resources/*
+IN_SHIP_LUA=data/src/*
+DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua
+
+GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA)
+ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
+
+todo: ; grep TODO $(GAME_LUA)
 
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
-	  --exclude-files metatable_monkey.lua headless.lua ship/ssh.lua \
+	  --exclude-files metatable_monkey.lua headless.lua \
 	  --globals love lume orb _ \
-	  -- *.lua ship/*.lua os/lisp/*.lua
+	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
 	  --globals lume pack ship pause define_mode bind utils \
 	            ssh ssh_connect logout ssh_send_line \
-	  -- data/src/*
+	  -- $(IN_SHIP_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel \
 	            accept_mission set_prompt buy_upgrade sell_upgrade upgrade_help \
-	 -- os/orb/resources/*
+	  -- $(IN_OS_LUA)
 
-count:
-	cloc *.lua ship/*.lua
+count: ; cloc --force-lang=lua $(GAME_LUA) $(SHIP_LUA) $(OS_LUA)
 
-countall:
-	cloc *.lua ship/*.lua os/orb/*.lua os/lisp/*.lua os/lisp/resources/* os/orb/resources/*
+count_engine: ; cloc $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 
-todo:
-	rgrep TODO .
-
-clean:
-	rm -rf releases/
+clean: ; rm -rf releases/
 
 REL=".love-release/build/love-release.sh"
 FLAGS=-a 'Phil Hagelberg' -x spoilers --description 'A space flight open-world exploration game, with a programmable ship and stations.' --love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
 
-love:
+love: $(ALL_LUA)
+	ifndef VERSION
+	  $(error VERSION is not set)
+	endif
 	$(REL) $(FLAGS) -L
 
-mac:
+mac: love
 	$(REL) $(FLAGS) -M
 
-windows:
+windows: love
 	$(REL) $(FLAGS) -W
 
 release: love mac windows
 
-sign:
-	gpg -ab releases/bussard-*
+sign: release
+	gpg -ab releases/bussard-$(VERSION)*
 
 upload: release sign
 	rsync -r releases/ p.hagelb.org:p/bussard/
