@@ -48,6 +48,8 @@ return {
          local p = love.filesystem.read("doc/intro.md")
          ship.print(p)
       end
+
+      return ship.editor.invisible
    end,
 
    get = function(page_name)

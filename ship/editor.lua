@@ -111,7 +111,7 @@ local in_prompt = function(line, point, line2, _point2)
    if(not line2 and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= b.prompt:len()) then return false end
    print("in prompt!", line, point, b.prompt, b.prompt:len(), line2, #b.lines)
-   return true
+   return false
    -- not sure if this covers all the cases
 end
 
@@ -264,17 +264,18 @@ local write = function(...)
    inhibit_read_only = true
    insert(lines, true)
    inhibit_read_only = read_only
-   return lume.last(lines)
+   return lume.last(lines), #lines
 end
 
 -- write to the end of the console buffer right before the prompt
 local io_write = function(...)
    local prev_b = b
    b = console
+   local line_count = nil
+   local old_point, old_point_line = b.point, b.point_line
    b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
-   print(b.point, b.point_line)
-   last_line = write(...)
-   b = prev_b
+   last_line, line_count = write(...)
+   b, b.point, b.point_line = prev_b, old_point + last_line:len(), old_point_line + line_count - 1
 end
 
 return {
@@ -648,14 +649,10 @@ return {
 
    prompt = function() return (b and b.prompt) or "> " end,
    set_prompt = function(p)
-      local read_only, old_prompt = inhibit_read_only, b.prompt
+      local line = b.lines[#b.lines]
+      b.lines[#b.lines] = p .. line:gsub(b.prompt, "", 1)
+      if(b.point_line == #b.lines) then b.point = p:len() end
       b.prompt = p
-      inhibit_read_only = true
-      delete(#b.lines, 0, #b.lines, old_prompt:len())
-      b.point, b.point_line = 0, #b.lines
-      write(b.prompt)
-      b.point, b.point_line = #b.lines[#b.lines], #b.lines
-      inhibit_read_only = read_only
    end,
    print_prompt = function()
       local read_only = inhibit_read_only
