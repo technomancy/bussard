@@ -110,7 +110,7 @@ local in_prompt = function(line, point, line2, _point2)
    if(not b.prompt or inhibit_read_only) then return false end
    if(not line2 and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= b.prompt:len()) then return false end
-   print("in prompt!", line, point, line2, #b.lines)
+   print("in prompt!", line, point, b.prompt, b.prompt:len(), line2, #b.lines)
    return true
    -- not sure if this covers all the cases
 end
@@ -647,7 +647,16 @@ return {
    save_excursion = save_excursion,
 
    prompt = function() return (b and b.prompt) or "> " end,
-   set_prompt = function(p) b.prompt = p end,
+   set_prompt = function(p)
+      local read_only, old_prompt = inhibit_read_only, b.prompt
+      b.prompt = p
+      inhibit_read_only = true
+      delete(#b.lines, 0, #b.lines, old_prompt:len())
+      b.point, b.point_line = 0, #b.lines
+      write(b.prompt)
+      b.point, b.point_line = #b.lines[#b.lines], #b.lines
+      inhibit_read_only = read_only
+   end,
    print_prompt = function()
       local read_only = inhibit_read_only
       inhibit_read_only = true
