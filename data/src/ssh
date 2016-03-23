@@ -1,8 +1,11 @@
+-- -*- lua -*-
+
 ssh = function(username, password)
    if(ship.status.target and ship.status.target.os) then
       ssh_connect(username or "guest", password or "")
       ship.editor.set_prompt("$ ")
-      ship.editor.set_mode("ssh")
+      ship.editor.end_of_buffer()
+      ship.editor.set_mode("ssh") -- should make a new buffer here?
    else
       print("Cannot log into target.")
    end
@@ -31,24 +34,24 @@ bind("ssh", "home", beginning_of_line)
 
 bind("ssh", "return", function()
         local input = get_input()
-        print(ship.editor.get_line(0))
-        ship.editor.suppress_read_only(function()
-              ship.editor.end_of_buffer()
-              ship.editor.beginning_of_line()
-              ship.editor.kill_line()
-              ship.editor.insert({ship.editor.prompt()}, true)
-        end)
 
         if(input == "logout") then
            logout()
+           ship.editor.set_mode("console")
+           ship.editor.set_prompt("> ")
         else
            ssh_send_line(input)
         end
+        ship.editor.newline(2)
+        ship.editor.print_prompt()
+        ship.editor.end_of_buffer()
 end)
 
 bind("ssh", "ctrl-d", function()
         if(get_input() == "") then
            logout()
+           ship.editor.set_mode("console")
+           ship.editor.set_prompt("> ")
         else
            ship.editor.delete_forwards()
         end

@@ -15,8 +15,8 @@ local logout = function(ship, target)
             session[1]["/home/guest/" .. k] = nil
          end
       end
-      sessions[name] = nil
-      if(not name:match("[Pp]ortal")) then
+      sessions[target.name] = nil
+      if(not target.name:match("[Pp]ortal")) then
          ship.api.print("\nLogged out.")
       end
    else
@@ -34,7 +34,6 @@ local send_line = function(ship, input)
    else
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env, "Not logged into " .. ship.target.name)
-      ship.api.print(ship.api.editor.prompt() .. input)
       if(fs[env.IN]) then
          fs[env.IN](input)
       else
@@ -60,8 +59,13 @@ local sandbox = function(ship)
       distance = lume.fn(utils.distance, ship, ship.target),
       os = {time = lume.fn(utils.time, ship)},
       set_prompt = ship.api.editor.set_prompt,
-      logout = function() disconnect(ship) logout(target.name, ship) end,
    }
+
+   ship.sandbox.logout = function()
+      logout(ship, target)
+      ship.comm_connected = false
+   end
+
    if(ship.target and ship.target.portal) then
       sb.body = ship.target
       sb.portal_target = ship.target.portal

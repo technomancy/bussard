@@ -63,5 +63,4 @@ end)
 -- TODO: port from old console
 -- history
 -- completion
--- comm system
 -- mini 1-line console in flight mode
