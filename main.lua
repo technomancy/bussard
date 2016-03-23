@@ -8,7 +8,6 @@ local ai = require "ship.ai"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local save = require "save"
-local keymap = require "keymap"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 local systems = require("data.systems")
@@ -23,7 +22,7 @@ local portal_offsets = {
 }
 
 local ui = {
-   version = "alpha-6",
+   version = "beta-1-prerelease",
 
    quit = function(ui)
       save.save(ship, ui)
@@ -76,30 +75,27 @@ love.load = function()
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    if arg[#arg] == "-abort" then save.abort(ship) end
-   keymap.current_mode = "flight"
    save.load_into(ship)
    body.load(systems)
+   ship.api.editor.initialize()
 
    if(love.filesystem.isFile("localhacks.lua")) then
       require("localhacks")(ship)
    end
 
-   ship.api.console.display_line =
-   "Press ` to open the console, and run man() for more help. Zoom with = and -."
-
-   xpcall(function() ship.api:load("src.config") end,
+   xpcall(function() ship:dofile("src.config") end,
       function(e)
          print("Initial load failed:", e)
-         ship.console.print(e)
-         ship.console.print(debug.traceback())
-         ship.console.display_line = "Error loading config; falling back to " ..
-            "ship.src.fallback_config."
-         local chunk = assert(loadstring("src.fallback_config"))
-         setfenv(chunk, ship.api.console.sandbox)
-         local success, msg = pcall(chunk)
-         if(not success) then
-            ship.console.print(msg)
-         end
+         ship.api.print(e)
+         ship.api.print(debug.traceback())
+         ship.api.editor.print("Error loading config!")
+         -- TODO: fix fallback config
+         -- local chunk = assert(loadstring("src.fallback_config"))
+         -- setfenv(chunk, ship.api.console.sandbox)
+         -- local success, msg = pcall(chunk)
+         -- if(not success) then
+         --    ship.api.print(msg)
+         -- end
    end)
 end
 
@@ -114,9 +110,10 @@ love.update = safely(function(dt)
 end)
 
 -- for commands that don't need repeat
-love.keypressed = safely(keymap.handle)
+love.keypressed = safely(lume.fn(ship.handle_key, ship))
+-- love.keypressed = ship.handle_key
 
-love.textinput = safely(keymap.textinput)
+love.textinput = safely(lume.fn(ship.textinput, ship))
 
 love.draw = safely(function(dt)
       starfield.render(star1, ship.x, ship.y)
@@ -193,8 +190,8 @@ love.draw = safely(function(dt)
       love.graphics.pop()
 
       hud.render(ship)
-      ship.api.console.draw()
-      ship.api.edit.draw()
+      ship.api.editor.draw(dt)
+
       for _,u in pairs(ship.upgrades) do
          if(u.draw_after) then u.draw_after(ship, dt) end
       end

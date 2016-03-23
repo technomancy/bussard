@@ -1,7 +1,7 @@
 -- -*- lua -*-
 
-local f, env, args = ...
-local env = orb.utils.shallow_copy(env)
+local f, orig_env, args = ...
+local env = orb.utils.shallow_copy(orig_env)
 
 if(args[1] == "--help") then
    print("An interactive command shell.\n")
@@ -9,7 +9,7 @@ if(args[1] == "--help") then
    print("  smash")
 else
    local smashrc = f[env.HOME .. "/.smashrc"]
-   if(smashrc) then local f = loadstring(smashrc) assert(f) return f() end
+   if(smashrc) then f = loadstring(smashrc) assert(f) return f() end
 
    while true do
       set_prompt(orb.utils.interp(env.PROMPT, env))

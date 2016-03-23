@@ -15,10 +15,6 @@ local body_fields = {
    "progress", "from_name", "target_name", "ship", "asteroid", "strength",
 }
 
-local console_fields = {
-   "history", "lines", "max_history", "max_lines",
-}
-
 local ship_filename = "ship_data.lua"
 local system_filename = "system_data.lua"
 
@@ -33,9 +29,8 @@ end
 return {
    save = function(ship)
       local ship_data = lume.pick(ship, unpack(ship_fields))
-      ship_data.time_offset = ship.api.console.sandbox.os.time()
+      ship_data.time_offset = ship.sandbox.os.time()
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
-      ship_data.console = lume.pick(ship.api.console, unpack(console_fields))
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
                             lume.serialize(lume.map(ship.bodies, body_data)))
@@ -58,29 +53,22 @@ return {
          local ship_data_string = love.filesystem.read(ship_filename)
          local ship_data = lume.deserialize(ship_data_string)
          local api_data = ship_data.api
-         local console_data = ship_data.console
 
          lume.extend(ship.api, api_data)
 
          ship_data.api = nil
-         ship_data.console = nil
          lume.extend(ship, ship_data)
-         ship.api.src.draw = ship.api.src.draw or love.filesystem.read("data/default_draw.lua")
-         if (console_data) then
-            ship.api.console.history = utils.buffer:new(console_data.history)
-            ship.api.console.max_history = console_data.max_history
-            ship.api.console.history.max = console_data.max_history
 
-            ship.api.console.lines = utils.buffer:new(console_data.lines)
-            ship.api.console.max_lines = console_data.max_lines
-            ship.api.console.lines.max = console_data.max_lines
-         end
-
-         ship:enter(ship.system_name)
-         ship.api.console.display_line = nil
+         ship:enter(ship.system_name, false, true)
       else
          ship.time_offset = 8383504000
-         ship:enter(ship.system_name, true)
+         ship:enter(ship.system_name, true, true)
+         for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
+            ship.api.src[v] = love.filesystem.read("data/src/" .. v)
+         end
+         for _,v in pairs(love.filesystem.getDirectoryItems("data/docs")) do
+            ship.api.docs[v] = love.filesystem.read("data/docs/" .. v)
+         end
       end
       if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)
@@ -98,7 +86,7 @@ return {
             end
          end
       else
-         ship:enter(ship.system_name, true)
+         ship:enter(ship.system_name, true, true)
       end
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do

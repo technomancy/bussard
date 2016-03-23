@@ -1,7 +1,7 @@
 local utils = require("utils")
 local body = require("body")
 
-local asteroid_image = love.graphics.newImage('assets/asteroid.png')
+-- local asteroid_image = love.graphics.newImage('assets/asteroid.png')
 
 local min_mass = 10
 
@@ -81,11 +81,11 @@ return {
 
       if(self.mass < min_mass) then
          if(utils.distance(ship, self) <= ship.scoop_range) then
-            ship.api.console.print("Scooped up " .. self.name)
+            ship.api.print("Scooped up " .. self.name)
             ship:move_cargo("ore", 10, true)
          else
-            ship.api.console.print("Destroyed " .. self.name ..
-                                      " but out of scoop range.")
+            ship.api.print("Destroyed " .. self.name ..
+                              " but out of scoop range.")
          end
       else
          asteroid(self.name .. "-", self.mass / 2, ship.bodies, self)

@@ -1,0 +1,28 @@
+-- Emacs keys -*- lua -*-
+
+bind("edit", "ctrl-h", ship.editor.delete_backwards)
+bind("edit", "ctrl-d", ship.editor.delete_forwards)
+bind("edit", "ctrl-k", ship.editor.kill_line)
+bind("edit", "ctrl-a", ship.editor.beginning_of_line)
+bind("edit", "ctrl-e", ship.editor.end_of_line)
+bind("edit", "ctrl-b", ship.editor.backward_char)
+bind("edit", "ctrl-f", ship.editor.forward_char)
+bind("edit", "alt-f", ship.editor.forward_word)
+bind("edit", "alt-b", ship.editor.backward_word)
+bind("edit", "ctrl-p", ship.editor.prev_line)
+bind("edit", "ctrl-n", ship.editor.next_line)
+bind("edit", "alt-,", ship.editor.beginning_of_buffer)
+bind("edit", "alt-.", ship.editor.end_of_buffer)
+
+bind("edit", "ctrl- ", ship.editor.mark)
+bind("edit", "ctrl-g", ship.editor.no_mark)
+bind("edit", "alt-w", ship.editor.kill_ring_save)
+bind("edit", "ctrl-w", ship.editor.kill_region)
+bind("edit", "ctrl-y", ship.editor.yank)
+bind("edit", "alt-y", ship.editor.yank_pop)
+
+bind("edit", "ctrl-backspace", ship.editor.backward_kill_word)
+bind("edit", "alt-d", ship.editor.forward_kill_word)
+
+bind("edit", "alt-k", ship.editor.close)
+bind("edit", "ctrl-alt-k", lume.fn(ship.editor.close, true))

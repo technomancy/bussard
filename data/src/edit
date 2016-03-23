@@ -1,0 +1,54 @@
+-- Edit mode -*- lua -*-
+
+define_mode("edit", ship.editor.textinput, ship.editor.wrap)
+
+bind("edit", "escape", function()
+        ship.editor.save()
+        ship.editor.change_buffer(nil)
+end)
+
+bind("edit", "appback", lume.fn(ship.editor.next_buffer, -1))
+bind("edit", "appforward", ship.editor.next_buffer)
+
+bind("edit", "ctrl-pageup", lume.fn(ship.editor.next_buffer, -1))
+bind("edit", "ctrl-pagedown", ship.editor.next_buffer)
+
+bind("edit", "pause", pause)
+
+bind("edit", "return", ship.editor.newline_and_indent)
+bind("edit", "ctrl-z", ship.editor.undo)
+bind("edit", "ctrl-r", ship.editor.revert)
+
+-- "Conventional" keys
+bind("edit", "backspace", ship.editor.delete_backwards)
+bind("edit", "delete", ship.editor.delete_forwards)
+
+bind("edit", "home", ship.editor.beginning_of_line)
+bind("edit", "end", ship.editor.end_of_line)
+bind("edit", "left", ship.editor.backward_char)
+bind("edit", "right", ship.editor.forward_char)
+bind("edit", "up", ship.editor.prev_line)
+bind("edit", "down", ship.editor.next_line)
+
+bind("edit", "ctrl- ", ship.editor.mark)
+bind("edit", "ctrl-c", ship.editor.kill_ring_save)
+bind("edit", "ctrl-x", ship.editor.kill_region)
+bind("edit", "ctrl-v", ship.editor.yank)
+
+bind("edit", "pageup", ship.editor.scroll_up)
+bind("edit", "pagedown", ship.editor.scroll_down)
+
+bind("edit", "ctrl-l", function()
+        ship.editor.newline()
+        ship.editor.textinput("\f")
+        ship.editor.newline()
+end)
+
+bind("edit", "alt-o", function()
+        ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
+end)
+bind("edit", "alt-w", ship.editor.close)
+bind("edit", "ctrl-alt-w", lume.fn(ship.editor.close, true))
+
+-- comment this out to disable Emacs key bindings
+dofile("src.emacs")

@@ -1,0 +1,37 @@
+-- -*- lua -*-
+
+ship.hud = {
+   { x=60, y=5, type="text",
+     format="x: %5.0f y: %5.0f", values={"status.x", "status.y"}
+   },
+   { x=60, y=20, type="text",
+     format="epoch: %s  credits: %s",
+     values={function() return utils.format_seconds(os.time()) end,
+        "status.credits"}
+   },
+   { x=5, y=5, type="vector",
+     values={"status.dx", "status.dy"},
+     width=3, color={50, 255, 50}
+   },
+   { x=-5, y=5, type="vector",
+     values={"status.target.dx", "status.target.dy"},
+     width=3, color={50, 255, 150}
+   },
+
+   { x=-70, y=5, type="text", align="right",
+     format="%s\ndistance: %0.0f\nmass: %0.0f",
+     values={"status.target.name", function(s)
+                return s.status.target and utils.distance(s.status,
+                                                          s.status.target)
+                                   end, "status.target.mass"}
+   },
+   { x=5,y=60, type="bar",
+     values={"status.fuel", "status.fuel_capacity", ship.fuel_to_stop},
+     color={255, 20, 20}
+   },
+   { x=5, y=75, type="bar",
+     values={"status.battery", "status.battery_capacity"},
+     color={20, 255, 20}, h=6,
+   },
+   ship.mission.hud,
+}

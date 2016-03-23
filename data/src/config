@@ -1,0 +1,36 @@
+-- This -*- lua -*- code runs inside your ship's own computer.
+
+ship.controls = {
+   up = ship.actions.forward,
+   left = ship.actions.left,
+   right = ship.actions.right,
+   ["="] = function(d) if d then ship.scale = ship.scale - (ship.dt/2) end end,
+   ["-"] = function(d) if d then ship.scale = ship.scale + (ship.dt/2) end end,
+}
+
+local pause = function() ship.paused = (not ship.paused) end
+
+-- Flight mode
+define_mode("flight")
+
+bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
+
+-- You can change this so escape by itself quits if you prefer.
+bind("flight", "escape", function() print("Press ctrl-q to quit.") end)
+bind("flight", "ctrl-q", ship.ui.quit)
+
+bind("flight", "tab", ship.actions.next_target)
+bind("flight", "ctrl-tab", ship.actions.closest_target)
+bind("flight", "ctrl- ", ship.actions.login)
+
+
+bind("flight", "ctrl-r",
+     function()
+        ship:load("src.config")
+        ship.editor.initialize()
+end)
+
+dofile("src.edit")
+dofile("src.console")
+dofile("src.hud")
+dofile("src.ssh")

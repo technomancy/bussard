@@ -1,6 +1,6 @@
  -- -*- lua -*-
 
-local f, env, args = ...
+local f, _env, args = ...
 
 if(#args == 2) then
    orb.add_user(f, args[1], args[2])

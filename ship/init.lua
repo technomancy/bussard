@@ -1,22 +1,20 @@
 local utils = require("utils")
 local lume = require("lume")
 
-local default_config = love.filesystem.read("data/default_config.lua")
-local fallback_config = love.filesystem.read("data/fallback_config.lua")
+local default_config = love.filesystem.read("data/src/config")
 
-local comm = require("ship.comm")
 local help = require("ship.help")
-local console = require("ship.console")
 local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
+local ssh = require("ship.ssh")
 
-local keymap = require("keymap")
-local edit = require("edit")
 local mission = require("mission")
 
 -- for shuffling systems upon entry
 local asteroid = require("asteroid")
 local body = require("body")
+
+local editor = require("ship.editor")
 
 local scale_min = 1
 
@@ -47,27 +45,83 @@ local base_stats = {
    portal_time = 40, -- in-game seconds
 }
 
+local function find_binding(ship, key, the_mode)
+   local mode = the_mode or ship.api:mode()
+   local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
+   local alt = love.keyboard.isDown("lalt", "ralt")
+   local map = (ctrl and alt and mode["ctrl-alt"]) or
+      (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
+
+   return map[key] or map["__any"] or
+      (mode.parent and find_binding(ship, key, mode.parent))
+end
+
+local define_mode = function(ship, name, textinput, wrap)
+   ship.api.modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
+                            wrap = wrap, textinput = textinput, name = name }
+end
+
+local bind = function(ship, mode, keycode, fn)
+   assert(keycode ~= nil, "Tried to bind to nil. Use false to unbind")
+   if(type(mode) == "table") then
+      for _,m in ipairs(mode) do
+         ship.sandbox.bind(m, keycode, fn)
+      end
+   else
+      -- lua regexes don't support |
+      local map, key = keycode:match("(ctrl-alt)-(.+)")
+      if not map then map, key = keycode:match("(ctrl)-(.+)") end
+      if not map then map, key = keycode:match("(alt)-(.+)") end
+      if map == "alt-ctrl" then map = "ctrl-alt" end
+      assert(ship.api.modes[mode], "No mode " .. mode)
+      ship.api.modes[mode][map or "map"][key or keycode] = fn
+   end
+end
+
+local sandbox_loadstring = function(ship, code)
+   local chunk, err = loadstring(code)
+   if(chunk) then
+      setfenv(chunk, ship.sandbox)
+      return chunk
+   else
+      return chunk, err
+   end
+end
+
 local sandbox_dofile = function(ship, filename)
    local contents = ship.api:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
-   local chunk = assert(loadstring(contents))
-   setfenv(chunk, ship.sandbox)
-   return chunk()
+   return sandbox_loadstring(ship, contents)()
+end
+
+local sandbox_loaded = {}
+
+local sandbox_require = function(ship, mod_name)
+   if(sandbox_loaded[mod_name]) then return end
+   sandbox_dofile(ship, mod_name)
+   sandbox_loaded[mod_name] = true
 end
 
 local sandbox = function(ship)
    return lume.merge(utils.sandbox,
                      {  help = help.message,
-                        keymap = keymap,
                         default_config = default_config,
-                        print = console.print,
-                        clear = console.clear_lines,
+                        print = ship.api.print,
+                        realprint = print,
+                        -- clear = ship.editor.clear_lines,
                         ship = ship.api,
+                        _LOADED = sandbox_loaded,
                         dofile = lume.fn(sandbox_dofile, ship),
-                        -- TODO: add require too; maybe loadstring
+                        require = lume.fn(sandbox_require, ship),
+                        loadstring = lume.fn(sandbox_loadstring, ship),
+                        debug = {traceback = debug.traceback},
                         os = {time = lume.fn(utils.time, ship)},
-                        scp = lume.fn(comm.scp, ship),
+                        -- scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
+                        define_mode = lume.fn(define_mode, ship),
+                        bind = lume.fn(bind, ship),
+                        ssh_connect = lume.fn(ssh.connect, ship),
+                        ssh_send_line = lume.fn(ssh.send_line, ship),
    })
 end
 
@@ -129,26 +183,30 @@ local ship = {
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
-      console.initialize()
-      edit.initialize()
+      for _,m in pairs(ship.api.modes) do
+         if(m.initialize) then m.initialize() end
+      end
 
       ship.api.ui = ui
       ship.systems = systems
 
       ship.sandbox = sandbox(ship)
-      ship.api.console.sandbox = ship.sandbox
    end,
 
-   enter = function(ship, system_name, reseed)
+   dofile = sandbox_dofile,
+
+   enter = function(ship, system_name, reseed, suppress_message)
       local from = ship.system_name
       assert(ship.systems[system_name], system_name .. " not found.")
-      ship.api.console.display_line = "Entering the " .. system_name .. " system."
+      if(not suppress_message) then
+         ship.api.editor.print("Entering the " .. system_name .. " system.")
+      end
 
       -- stuff these things in there to expose to in-ship APIs
       ship.bodies = ship.systems[system_name].bodies
       ship.system_name = system_name
 
-      comm.logout_all(ship)
+      ssh.logout_all(ship)
       ship:recalculate()
 
       if(reseed) then
@@ -178,7 +236,8 @@ local ship = {
       ship.api.dt = dt
 
       -- activate controls
-      if(keymap.current_mode == "flight") then
+      local current_mode = ship.api:mode()
+      if(current_mode and current_mode.name == "flight") then
          for k,f in pairs(ship.api.controls) do
             f(love.keyboard.isDown(k))
          end
@@ -192,7 +251,6 @@ local ship = {
       -- the engine arbitrarily powerful or use zero fuel or
       -- whatever. so these two steps must remain separate.
       if(ship.engine_on and ship.fuel > 0) then
-         -- TODO: calculate oberth effect
          local fx = (math.sin(ship.heading) * dt * ship.engine_strength)
          local fy = (math.cos(ship.heading) * dt * ship.engine_strength)
          ship.dx = ship.dx + fx / ship.mass
@@ -299,15 +357,50 @@ local ship = {
    enforce_limits = function(ship)
       if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
    end,
+
+   -- interface
+   handle_key = function(ship, key, ...)
+      local fn = find_binding(ship, key)
+      local wrap = ship.api:mode().wrap
+      if(fn and wrap) then wrap(fn, ...)
+      elseif(fn) then fn(...)
+      end
+   end,
+
+   textinput = function(ship, text, the_mode)
+      if(find_binding(ship, text)) then return end
+      if(string.len(text) > 1) then return end
+      local mode = the_mode or ship.api:mode()
+      if(mode.textinput) then
+         if(mode.wrap) then
+            mode.wrap(mode.textinput, text)
+         else
+            mode.textinput(text)
+         end
+      elseif(mode.parent) then
+         ship:textinput(text, mode.parent)
+      end
+   end,
 }
 
 -- everything in here is exposed to the sandbox. this table *is* `ship`, as far
 -- as the in-game code is concerned.
 ship.api = {
-   console = console,
-   repl = console, -- for backwards-compatibility
-   edit = edit,
+   editor = editor,
    help = help,
+
+   modes = { minibuffer = { map = { ["return"] = editor.exit_minibuffer,
+                               escape = lume.fn(editor.exit_minibuffer, true),
+                               backspace = editor.delete_backwards, },
+                            ctrl = {g=lume.fn(editor.exit_minibuffer, true),},
+                            alt = {}, ["ctrl-alt"] = {},
+                            wrap = editor.wrap, textinput = editor.textinput,
+                            name = "minibuffer",
+           }},
+
+   mode = function(s)
+      return s.modes[s.editor.current_mode_name() or "flight"]
+   end,
 
    mission = {
       list = lume.fn(mission.list, ship),
@@ -344,24 +437,7 @@ ship.api = {
          end
          ship.target = ship.bodies[ship.target_number]
       end,
-      login = lume.fn(comm.login, ship),
    },
-
-   load = function(s, filename)
-      filename = filename or "src.config"
-      local content = assert(s:find(filename), "File not found: " .. filename)
-      local chunk = assert(loadstring(content), "Failed to load " .. filename)
-      setfenv(chunk, ship.sandbox)
-      chunk()
-   end,
-
-   e = function(s, path)
-      if(type(path) == "string") then
-         keymap.change_mode("edit")
-         s.console.on(false)
-         s.edit.open(s, path)
-      end
-   end,
 
    find = function(s, path)
       local parts = lume.split(path, ".")
@@ -377,10 +453,7 @@ ship.api = {
    end,
 
    -- for user files
-   src = {
-      ["config"] = default_config,
-      ["fallback_config"] = fallback_config,
-   },
+   src = {},
    docs = {},
    persist = {"persist", "scale", "src", "docs", "trajectory_seconds",
               "trajectory", "trajectory_step_size", "trajectory_auto"},
@@ -407,6 +480,13 @@ ship.api = {
    scale = 1.9,
 
    cheat = ship,
+   print = editor.print,
+   write = editor.write,
+
+   read_line = function(_, prompt, callback)
+      -- FIXME: whatever key which activated this command will be inserted
+      editor.activate_minibuffer(prompt, callback)
+   end,
 }
 
 return ship

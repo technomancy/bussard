@@ -1,5 +1,4 @@
 local utils = require("utils")
-local keymap = require("keymap")
 local asteroid = require("asteroid")
 
 local w, h, em = love.graphics:getWidth(), love.graphics:getHeight()
@@ -103,28 +102,32 @@ return {
       end
    },
 
+   -- TODO: redo map as buffer with special draw function
    map = {
       stats = {},
       load = function(ship)
          em = love.graphics.getFont():getWidth('a')
-         if(not keymap.modes.map) then
+         if(not ship.modes.map) then
             local system = ship.systems[ship.system_name]
             local m = { x=system.x, y=system.y }
             ship.map = m
-            keymap.define_mode("map")
-            keymap.define("map", "escape", function() keymap.change_mode(map_previous_mode) end)
-            keymap.define("map", "down", lume.fn(pan, m, 0, -0.1))
-            keymap.define("map", "up", lume.fn(pan, m, 0, 0.1))
-            keymap.define("map", "left", lume.fn(pan, m, -0.1, 0))
-            keymap.define("map", "right", lume.fn(pan, m, 0.1, 0))
+            ship.sandbox.define_mode("map")
+            ship.sandbox.bind("map", "escape", function()
+                                 ship:change_mode(map_previous_mode) end)
+            ship.sandbox.bind("map", "down", lume.fn(pan, m, 0, -0.1))
+            ship.sandbox.bind("map", "up", lume.fn(pan, m, 0, 0.1))
+            ship.sandbox.bind("map", "left", lume.fn(pan, m, -0.1, 0))
+            ship.sandbox.bind("map", "right", lume.fn(pan, m, 0.1, 0))
          end
       end,
-      action = function()
-         map_previous_mode = keymap.current_mode
-         keymap.change_mode("map")
+
+      action = function(ship)
+         map_previous_mode = ship:mode().name
+         ship:change_mode("map")
       end,
+
       draw_after = function(ship)
-         if(keymap.current_mode == "map") then
+         if(ship:mode().name == "map") then
             love.graphics.setColor(0, 0, 0, 200)
             love.graphics.rectangle("fill", 0, 0, w, h)
             love.graphics.push()

@@ -1,6 +1,6 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local f, _env, args = ...
 
 if(#args == 1) then
    local contents = f[args[1]]

@@ -1,6 +1,6 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local _f, env, args = ...
 
 if(args[1] == "--help") then
    print("Print the contents of a file or files.")

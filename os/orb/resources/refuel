@@ -1,6 +1,6 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local _f, _env, args = ...
 
 if(tonumber(args[1])) then
    local success, msg = refuel(tonumber(args[1]))

@@ -1,0 +1,58 @@
+-- -*- lua -*-
+
+ssh = function(username, password)
+   if(ship.status.target and ship.status.target.os) then
+      ssh_connect(username or "guest", password or "")
+      ship.editor.set_prompt("$ ")
+      ship.editor.end_of_buffer()
+      ship.editor.set_mode("ssh") -- should make a new buffer here?
+   else
+      print("Cannot log into target.")
+   end
+   return ship.editor.invisible
+end
+
+local get_input = function()
+   return string.sub(ship.editor.get_line(0), string.len(ship.editor.prompt())+1)
+end
+
+define_mode("ssh") -- TODO: remove duplication with console mode
+ship.modes.ssh.parent = ship.modes.edit -- most keys work like in edit mode
+ship.modes.ssh.textinput = ship.modes.edit.textinput
+
+local beginning_of_line = function()
+   ship.editor.beginning_of_line()
+   if(ship.editor.get_line_number() == ship.editor.get_max_lines()) then
+      for i=1,string.len(ship.editor.prompt()) do
+         ship.editor.forward_char()
+      end
+   end
+end
+
+bind("ssh", "ctrl-a", beginning_of_line)
+bind("ssh", "home", beginning_of_line)
+
+bind("ssh", "return", function()
+        local input = get_input()
+
+        if(input == "logout") then
+           logout()
+           ship.editor.set_mode("console")
+           ship.editor.set_prompt("> ")
+        else
+           ssh_send_line(input)
+        end
+        ship.editor.newline(2)
+        ship.editor.print_prompt()
+        ship.editor.end_of_buffer()
+end)
+
+bind("ssh", "ctrl-d", function()
+        if(get_input() == "") then
+           logout()
+           ship.editor.set_mode("console")
+           ship.editor.set_prompt("> ")
+        else
+           ship.editor.delete_forwards()
+        end
+end)

@@ -1,9 +1,6 @@
 local utils = require("utils")
 local body = require("body")
 
--- TODO: rotation of this is wrong
--- local image = love.graphics.newImage("assets/ship.png")
-
 local names = lume.array(love.filesystem.lines("data/ships.txt"))
 
 local normalize = function(t)

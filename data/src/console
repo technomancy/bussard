@@ -1,0 +1,66 @@
+-- -*- lua -*-
+
+define_mode("console")
+ship.modes.console.parent = ship.modes.edit -- most keys work like in edit mode
+ship.modes.console.textinput = ship.modes.edit.textinput
+
+local beginning_of_line = function()
+   ship.editor.beginning_of_line()
+   if(ship.editor.get_line_number() == ship.editor.get_max_lines()) then
+      for i=1,string.len(ship.editor.prompt()) do
+         ship.editor.forward_char()
+      end
+   end
+end
+
+bind("console", "ctrl-a", beginning_of_line)
+bind("console", "home", beginning_of_line)
+
+bind("console", "return", function()
+        if(ship.editor.get_line_number() ~= ship.editor.get_max_lines()) then
+           ship.editor.newline()
+           return
+        end
+
+        local input = string.sub(ship.editor.get_line(0),
+                                 string.len(ship.editor.prompt())+1)
+        ship.editor.newline()
+        local chunk, err = loadstring("return " .. input)
+        if(err and not chunk) then
+           chunk, err = loadstring(input)
+           if(not chunk) then
+              print("! Compilation error: " .. err or "Unknown error")
+              ship.editor.print_prompt()
+              ship.editor.end_of_buffer()
+              return false
+           end
+        end
+        local trace
+        local result = pack(xpcall(chunk, function(e)
+                                      trace = debug.traceback()
+                                      err = e end))
+        if(result[1]) then
+           local results, i = lume.serialize(result[2], true), 3
+           if result[2] == ship.editor.invisible then return true end
+           while i <= #result do
+              results = results .. ', ' .. lume.serialize(result[i], true)
+              i = i + 1
+           end
+           print(results)
+        else
+           print('! Evaluation error: ' .. err or "Unknown")
+           local lines = lume.split(trace, "\n")
+           for i,l in pairs(lines) do
+              -- editor infrastructure wraps 8 levels of irrelevant gunk
+              if(i < #lines - 8) then print(l) end
+           end
+        end
+        ship.editor.print_prompt()
+        ship.editor.end_of_buffer()
+
+end)
+
+-- TODO: port from old console
+-- history
+-- completion
+-- mini 1-line console in flight mode

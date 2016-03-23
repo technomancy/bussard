@@ -7,7 +7,7 @@ if(args[1] == "--help") then
    print("Usage:")
    print("  ps")
 else
-   for k,v in pairs(f.proc[env.USER]) do
+   for _,v in pairs(f.proc[env.USER]) do
       if(type(v) == "table") then
          print(v.id .. " " .. coroutine.status(v.thread) .. ": " .. v.command)
       end
