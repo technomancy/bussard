@@ -238,8 +238,8 @@ local save = function(this_fs, this_path)
    end
 end
 
-local newline = function()
-   insert({"", ""}, true)
+local newline = function(n)
+   for _ = 1, (n or 1) do insert({"", ""}, true) end
 end
 
 local get_buffer = function(path)
@@ -257,17 +257,24 @@ local save_excursion = function(f) -- TODO: discards multiple values from f
    return val
 end
 
+-- write to the current point in the current buffer
 local write = function(...)
    local lines = lume.split(table.concat({...}, " "), "\n")
    local read_only = inhibit_read_only
    inhibit_read_only = true
-   save_excursion(function()
-         last_line = lume.last(lines)
-         b = console
-         b.point, b.point_line = #b.lines[#b.lines], #b.lines
-         insert(lines, true)
-   end)
+   insert(lines, true)
    inhibit_read_only = read_only
+   return lume.last(lines)
+end
+
+-- write to the end of the console buffer right before the prompt
+local io_write = function(...)
+   local prev_b = b
+   b = console
+   b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
+   print(b.point, b.point_line)
+   last_line = write(...)
+   b = prev_b
 end
 
 return {
@@ -608,16 +615,12 @@ return {
       local texts, read_only = {...}, inhibit_read_only
       inhibit_read_only = true
       if(texts[1] == invisible) then return end
-      local on_last_line = console.point_line == #console.lines
-      table.insert(texts, "\n")
-      write(unpack(lume.map(texts, tostring)))
-      if(on_last_line and b == console) then
-         b.point_line = #b.lines
-      end
+      texts[1] = "\n" .. texts[1]
+      io_write(unpack(lume.map(texts, tostring)))
       inhibit_read_only = read_only
    end,
 
-   write = write,
+   write = io_write,
 
    get_line = function(n)
       if(not b) then return end
