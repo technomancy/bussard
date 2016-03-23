@@ -25,7 +25,8 @@ end
 local scroll_size = 20
 -- How many pixels of padding are on either side
 local PADDING = 20
-
+-- how far down do you go before it starts to scroll?
+local SCROLL_POINT = 0.8
 -- How many pixels are required to display a row
 local ROW_HEIGHT
 -- Maximum amount of rows that can be displayed on the screen
@@ -477,7 +478,7 @@ return {
          end
       end
 
-      local edge = math.ceil(DISPLAY_ROWS * 0.3)
+      local edge = math.ceil(DISPLAY_ROWS * SCROLL_POINT)
 
       if(b.minibuffer) then
          mb, b = b, buffers[1]
