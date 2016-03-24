@@ -59,7 +59,6 @@ local check = function(ship)
          ship.credits = ship.credits + (mission.credits or 0)
          ship.api.print("Mission success: " .. mission.success_message)
          ship.active_missions[mission_id] = nil
-         body.seed_news(ship, ship.target) -- in case of successive missions
       end
    end
 end

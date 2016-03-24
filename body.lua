@@ -1,5 +1,4 @@
 local utils = require("utils")
-local news = require("news")
 
 local filesystem_overlays = require("data.filesystems")
 local portal_motd = "Connected to portal, checking for clearance..."
@@ -108,9 +107,6 @@ return {
       if((not body) or not body.os) then return false end
       if(not filesystems[body.name] and body.os.fs and body.os.fs.seed) then
          filesystems[body.name] = seed(body.os, body.name, body.portal)
-         if(body.os.name == "orb") then
-            news.seed(ship, body, filesystems[body.name])
-         end
       end
 
       if(body.portal) then
@@ -190,12 +186,6 @@ return {
          b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
          b.dx = math.sin(theta + math.pi / 2) * v
          b.dy = math.cos(theta + math.pi / 2) * v
-      end
-   end,
-
-   seed_news = function(ship, b)
-      if(filesystems[b.name]) then
-         news.seed(ship, b, filesystems[b.name])
       end
    end,
 
