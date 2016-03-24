@@ -56,9 +56,10 @@ local function find_binding(ship, key, the_mode)
       (mode.parent and find_binding(ship, key, mode.parent))
 end
 
-local define_mode = function(ship, name, textinput, wrap)
+local define_mode = function(ship, name, textinput, wrap, activate)
    ship.api.modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
-                            wrap = wrap, textinput = textinput, name = name }
+                            wrap = wrap, textinput = textinput,
+                            activate = activate, name = name }
 end
 
 local bind = function(ship, mode, keycode, fn)
@@ -400,6 +401,16 @@ ship.api = {
 
    mode = function(s)
       return s.modes[s.editor.current_mode_name() or "flight"]
+   end,
+
+   activate_mode = function(s, mode_name)
+      if(s:mode().deactivate) then
+         s:mode().deactivate()
+      end
+      s.editor.set_mode(mode_name)
+      if(s.modes[mode_name].activate) then
+         s.modes[mode_name].activate()
+      end
    end,
 
    mission = {

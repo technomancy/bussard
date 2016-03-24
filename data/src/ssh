@@ -5,7 +5,7 @@ ssh = function(username, password)
       ssh_connect(username or "guest", password or "")
       ship.editor.set_prompt("$ ")
       ship.editor.end_of_buffer()
-      ship.editor.set_mode("ssh") -- should make a new buffer here?
+      ship.activate_mode("ssh") -- should make a new buffer here?
    else
       print("Cannot log into target.")
    end
@@ -37,7 +37,7 @@ bind("ssh", "return", function()
 
         if(input == "logout") then
            logout()
-           ship.editor.set_mode("console")
+           ship.activate_mode("console")
            ship.editor.set_prompt("> ")
         else
            ssh_send_line(input)
@@ -50,7 +50,7 @@ end)
 bind("ssh", "ctrl-d", function()
         if(get_input() == "") then
            logout()
-           ship.editor.set_mode("console")
+           ship.activate_mode("console")
            ship.editor.set_prompt("> ")
         else
            ship.editor.delete_forwards()

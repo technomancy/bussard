@@ -608,6 +608,7 @@ return {
 
    current_mode_name = function() return b and b.mode end,
 
+   -- normally you would use ship.api.activate_mode; this is lower-level
    set_mode = function(mode_name) b.mode = mode_name end,
 
    current_buffer = function() return b end,
@@ -644,6 +645,8 @@ return {
       inhibit_read_only = read_only
       return val
    end,
+
+   set_read_only = function(s) b.read_only = s end,
 
    save_excursion = save_excursion,
 
