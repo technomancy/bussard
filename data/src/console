@@ -48,16 +48,14 @@ bind("console", "return", function()
            end
            print(results)
         else
-           print('! Evaluation error: ' .. err or "Unknown")
+           realprint('! Evaluation error: ' .. err or "Unknown")
            local lines = lume.split(trace, "\n")
            for i,l in pairs(lines) do
               -- editor infrastructure wraps 8 levels of irrelevant gunk
-              if(i < #lines - 8) then print(l) end
+              if(i < #lines - 8) then realprint(l) end
            end
         end
         ship.editor.print_prompt()
-        ship.editor.end_of_buffer()
-
 end)
 
 -- TODO: port from old console

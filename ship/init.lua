@@ -181,6 +181,7 @@ local ship = {
    active_missions={},
    events = {},
    flag = "Tana",
+   name = "Faraday",
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
@@ -218,7 +219,6 @@ local ship = {
          asteroid.populate(ship.systems[ship.system_name])
          for _,b in pairs(ship.bodies) do
             body.seed_pos(b, ship.bodies[1])
-            body.seed_news(ship, b)
             body.seed_cargo(b)
          end
 

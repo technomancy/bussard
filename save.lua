@@ -69,6 +69,8 @@ return {
          for _,v in pairs(love.filesystem.getDirectoryItems("data/docs")) do
             ship.api.docs[v] = love.filesystem.read("data/docs/" .. v)
          end
+         ship.api.docs.mail = { inbox = {["welcome"] =
+                                      love.filesystem.read("data/docs/welcome")}}
       end
       if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)

@@ -10,7 +10,7 @@ local kill_ring = {}
 
 local make_buffer = function(fs, path, lines)
    return { fs=fs, path=path, mode = "edit",
-            lines = lines or lume.split(fs:find(path) or "", "\n"),
+            lines = lines or lume.split((fs and fs:find(path)) or "", "\n"),
             point = 0, point_line = 1, mark = nil, mark_line = nil,
             last_yank = nil, mark_ring = {},
             history = {}, undo_at = 0, dirty = false, needs_save = false,
@@ -81,6 +81,14 @@ local wrap = function(fn, ...)
    end
 end
 
+local with_current_buffer = function(nb, f)
+   local old_b = b
+   b = nb
+   local val = f()
+   b = old_b
+   return val
+end
+
 local region = function()
    b.mark = math.min(string.len(b.lines[b.mark_line]), b.mark)
 
@@ -107,16 +115,21 @@ end
 
 -- would be nice to have a more general read-only property
 local in_prompt = function(line, point, line2, _point2)
-   if(not b.prompt or inhibit_read_only) then return false end
+   if(not b.prompt) then return false end
    if(not line2 and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= b.prompt:len()) then return false end
    print("in prompt!", line, point, b.prompt, b.prompt:len(), line2, #b.lines)
-   return false
+   return false -- TODO: this should return true, but it breaks ssh commands
    -- not sure if this covers all the cases
 end
 
+local edit_disallowed = function(line, point, line2, _point2)
+   if(inhibit_read_only) then return false end
+   return b.read_only or in_prompt(line, point, line2, _point2)
+end
+
 local insert = function(text, point_to_end)
-   if(in_prompt(b.point_line, b.point + 1)) then return end
+   if(edit_disallowed(b.point_line, b.point + 1)) then return end
    b.dirty, b.needs_save = true, true
    text = lume.map(text, function(s) return s:gsub("\t", "  ") end)
    if(not text or #text == 0) then return end
@@ -147,7 +160,7 @@ end
 local delete = function(start_line, start, finish_line, finish)
    start_line, finish_line = math.min(start_line, finish_line), math.max(start_line, finish_line)
    start, finish = math.min(start, finish), math.max(start, finish)
-   if(in_prompt(start_line, start, finish_line, finish)) then return end
+   if(edit_disallowed(start_line, start, finish_line, finish)) then return end
 
    b.dirty, b.needs_save = true, true
    if(start_line == finish_line) then
@@ -286,10 +299,9 @@ return {
 
    open = function(fs, path)
       b = get_buffer(path)
-
       if(not b) then
-         table.insert(buffers, make_buffer(fs, path))
-         b = buffers[#buffers]
+         b = make_buffer(fs, path)
+         table.insert(buffers, b)
       end
    end,
 
@@ -379,12 +391,12 @@ return {
 
    beginning_of_buffer = function()
       b.point, b.point_line = 0, 1
-      b.mark, b.mark_line = nil, nil
+      return b.point, b.point_line
    end,
 
    end_of_buffer = function()
       b.point, b.point_line = #b.lines[#b.lines], #b.lines
-      b.mark, b.mark_line = nil, nil
+      return b.point, b.point_line
    end,
 
    newline = newline,
@@ -622,6 +634,7 @@ return {
       inhibit_read_only = read_only
    end,
 
+   raw_write = write,
    write = io_write,
 
    get_line = function(n)
@@ -633,6 +646,8 @@ return {
    get_line_number = function() return b.point_line end,
 
    get_max_lines = function() return b and #b.lines end,
+
+   point = function() return b.point, b.point_line end,
 
    is_dirty = function() return b and b.dirty end,
 
@@ -660,8 +675,10 @@ return {
    print_prompt = function()
       local read_only = inhibit_read_only
       inhibit_read_only = true
-      write(b.prompt)
-      b.point, b.point_line = #b.lines[#b.lines], #b.lines
+      with_current_buffer(console, function()
+                             write(b.prompt)
+                             b.point, b.point_line = #b.lines[#b.lines], #b.lines
+      end)
       inhibit_read_only = read_only
    end,
 

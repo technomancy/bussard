@@ -1,0 +1,69 @@
+-- This -*- lua -*- code defines your message client.
+
+-- There are two modes; mail and view. The first is for listing/navigating your
+-- mail, and the second defines a mode for reading messages.
+
+mail = function()
+   ship.editor.open(nil, "*mail*")
+   ship:activate_mode("mail")
+end
+
+define_mode("mail")
+
+local targets = {}
+
+local subject = function(msg)
+   for _,line in ipairs(lume.split(msg, "\n")) do
+      if(line:match("Subject: (.+)")) then
+         return line:match("Subject: (.+)")
+      end
+   end
+end
+
+local open_folder = function(folder)
+   ship.editor.set_read_only(false)
+   ship.editor.end_of_buffer()
+   local point, point_line = ship.editor.point()
+   ship.editor.delete(1, 0, point_line, point)
+
+   local p = function(x) ship.editor.raw_write(x .. "\n") end
+   targets = {}
+
+   if(folder) then
+      p("Folder: " .. folder)
+      for name,msg in pairs(ship.docs.mail[folder]) do
+         table.insert(targets, {folder, name})
+         p("  " .. subject(msg))
+      end
+   else
+      p("Folders")
+      for name in pairs(ship.docs.mail) do
+         table.insert(targets, name)
+         p("  " .. name)
+      end
+   end
+
+   ship.editor.set_read_only(true)
+end
+
+ship.modes.mail.activate = open_folder
+
+ship.modes.mail.parent = ship.modes.edit -- nav keys should be intact
+
+bind("mail", "return", function()
+        local line = ship.editor.get_line_number()
+        local target = targets[line-1]
+
+        if(type(target) == "table") then
+           ship.editor.open(ship, "docs.mail." .. target[1]
+                               .. "." .. target[2])
+           ship:activate_mode("view")
+        else
+           open_folder(target)
+        end
+end)
+
+define_mode("view")
+
+ship.modes.view.parent = ship.modes.edit -- nav keys should be intact
+ship.modes.view.activate = lume.fn(ship.editor.set_read_only, true)
