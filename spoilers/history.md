@@ -1,5 +1,7 @@
 # Bussard Historical Background
 
+![Interstellar map](img src="https://p.hagelb.org/bussard_map.png)
+
 ## Early colonization Timeline
 
 The establishment of the Terran Republic.

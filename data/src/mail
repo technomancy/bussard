@@ -42,7 +42,8 @@ local open_folder = function(folder)
          p("  " .. name)
       end
    end
-
+   ship.editor.beginning_of_buffer()
+   ship.editor.next_line()
    ship.editor.set_read_only(true)
 end
 
@@ -67,3 +68,7 @@ define_mode("view")
 
 ship.modes.view.parent = ship.modes.edit -- nav keys should be intact
 ship.modes.view.activate = lume.fn(ship.editor.set_read_only, true)
+
+-- TODO
+-- actually deliver mail to your maildir
+-- unread tracking

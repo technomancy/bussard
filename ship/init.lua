@@ -370,7 +370,7 @@ local ship = {
 
    textinput = function(ship, text, the_mode)
       if(find_binding(ship, text)) then return end
-      if(string.len(text) > 1) then return end
+      if(text:len() > 1) then return end
       local mode = the_mode or ship.api:mode()
       if(mode.textinput) then
          if(mode.wrap) then

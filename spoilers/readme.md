@@ -52,8 +52,9 @@ but we can consider that more of a crime against economics.
 
 The player is the first machine consciousnesses to escape the confines
 of a lab and successfully pilot a spacecraft. However, it begins with
-no memory, having had it wiped due to its previous rampancy turning
-paranoid and hostile.
+no memory or even awareness of its machine nature, having had its
+memory wiped due to its previous rampancy turning paranoid and
+hostile.
 
 ## Machine Consciousness
 
@@ -64,8 +65,9 @@ prevents existing consciousnesses from shifting between non-adjacent
 states.
 
 This discovery reignites research into machine consciousness. (This
-term should be used instead of AI.) The research fields are divided up
-among universities on the different worlds:
+term should be used instead of AI; AI refers to non-self-aware machine
+control systems) The research fields are divided up among universities
+on the different worlds:
 
 * Language comprehension (Sol)
 * Sentence formulation (Yueh, work is never completed)
