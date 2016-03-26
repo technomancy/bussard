@@ -42,16 +42,18 @@ local ui = {
 
 local safely = function(f)
    return function(...)
-      -- if(true) then return f(...) end
-      local ok, ret = pcall(f, ...)
+      local traceback, err
+      local ok, ret = xpcall(lume.fn(f, ...), function(e)
+                                traceback, err = debug.traceback(), e
+      end)
       if(ok) then return ret end
 
-      print((debug.traceback(tostring(ret), 1):gsub("\n[^\n]+$", "")))
+      print(traceback:gsub("\n[^\n]+$", ""))
       love.draw = function()
          love.graphics.setColor(50, 50, 200)
          love.graphics.rectangle("fill", 0, 0, w, h)
          love.graphics.setColor(255, 255, 255)
-         love.graphics.print("Error: " .. ret, 100, 100)
+         love.graphics.print("Error: " .. err, 100, 100)
          love.graphics.print("Press Enter to save and quit.", 100, 200)
          love.graphics.print("Press Esc to quit without saving.", 100, 300)
          love.graphics.print("Press Ctrl-Q to wipe your save game.", 100, 400)
