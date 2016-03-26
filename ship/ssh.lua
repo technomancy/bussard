@@ -20,7 +20,7 @@ local logout = function(ship, target)
          ship.api.print("\nLogged out.")
       end
    else
-      ship.api.print("| Not logged in.")
+      (ship.api or ship).print("| Not logged in.")
    end
    return ship.api.editor.invisible
 end
@@ -69,7 +69,7 @@ local sandbox = function(ship)
    if(ship.target and ship.target.portal) then
       sb.body = ship.target
       sb.portal_target = ship.target.portal
-      sb.trip_cleared = lume.fn(portal_cleared, ship, target)
+      sb.trip_cleared = function() return true end -- stub
       sb.set_beams = function(n)
          target.beam_count = ((n or 0) * 9) / ship.portal_time
       end
@@ -83,20 +83,51 @@ local sandbox = function(ship)
    return lume.merge(utils.sandbox, sb)
 end
 
-local sandbox_out = function(ship, target_name, output)
+local sandbox_write = function(ship, target_name, output)
    if(output) then
       ship.api.write(output)
    else
       -- printing nil means EOF, close session
-      logout(target_name, ship)
-      disconnect(ship)
+      logout(ship, target_name)
    end
+end
+
+local lisp_login = function(fs, env, ship)
+   local buffer = {}
+   local max_buffer_size = 1024
+   local sb = sandbox(ship)
+   local write = lume.fn(sandbox_write, ship, ship.target.name)
+   env.IN = function(...)
+      local arg = {...}
+      if(#arg == 0 or arg[1] == "*line*") then
+         while #buffer == 0 do coroutine.yield() end
+         return table.remove(buffer, 1)
+      elseif(arg[1] == "*buffer") then
+         return buffer
+      else -- write
+         while(#buffer > max_buffer_size) do coroutine.yield() end
+         for _,output in pairs(arg) do
+            table.insert(buffer, output)
+         end
+      end
+   end
+
+   sb.disconnect = function()
+      ship.api:activate_mode("console")
+      ship.api.editor.set_prompt("> ")
+      logout(ship, ship.target.name)
+   end
+
+   sb.io = sb.io or { read = env.IN, write = write }
+   sb.print = ship.api.print
+
+   ship.target.os.shell.spawn(fs, env, sb)
 end
 
 local orb_login = function(fs, env, ship)
    env.IN, env.OUT = "/tmp/in", "/tmp/out"
    ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
-   fs[env.OUT] = lume.fn(sandbox_out, ship, ship.target.name)
+   fs[env.OUT] = lume.fn(sandbox_write, ship, ship.target.name)
    fs[env.HOME .. "/ship"] = ship.api
 
    -- free recharge upon connect
