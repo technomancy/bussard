@@ -2,15 +2,14 @@
 
 ## beta-1 / ???
 
-* Ship table is mounted to unix file system on login.
-* Always spawn asteroids in stable orbits.
+* Major rewrite of console to unify it with the editor.
+* Editor supports multiple files open at once.
+* Spawn asteroids in mostly-stable orbits.
 * Rename repl to console.
 * Automatically adjust trajectory settings to achieve decent frame rate.
-* Change default quit key to ctrl-q. (Only applies to new games.)
+* Change default quit key to ctrl-q.
 * Save state of asteroids.
 * AI-controlled ships.
-* Persist console buffer and command history.
-* New `clear()` function (clears the console buffer, also `ctrl-l`).
 
 ## alpha-6 / 2015-12-24
 
