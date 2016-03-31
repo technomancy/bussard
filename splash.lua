@@ -36,6 +36,8 @@ local x,dx,y,dy = 0,0,0,0
 local update = function(dt)
    dx, dy = dx + math.random(32) - 16, dy + math.random(32) - 16
    x, y = x + dx, y + dy
+   if(dx > 128 or dx < -128) then dx = dx * 0.9 end
+   if(dy > 128 or dy < -128) then dy = dy * 0.9 end
    scroll = scroll + dt
    if(love.keyboard.isDown(" ")) then line = line + 1
    elseif(scroll > 1 and line <= #text) then line, scroll = line + 1,0
