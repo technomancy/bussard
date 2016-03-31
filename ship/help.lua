@@ -4,7 +4,7 @@ local upgrades = {"laser", "engine", "cargo_bay", "fuel_tank", "fuel_charger",
                   "solar_panel", "comm_boost", "map",}
 
 local pages = {
-   -- FIXME: rewrite for new editor/console system
+   -- TODO/blocker: rewrite for new editor/console system
    intro = "doc/intro.md",
    intro2 = "doc/intro2.md",
    intro3 = "doc/intro3.md",

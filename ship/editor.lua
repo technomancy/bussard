@@ -119,7 +119,7 @@ local in_prompt = function(line, point, line2, _point2)
    if(not line2 and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= b.prompt:len()) then return false end
    print("in prompt!", line, point, b.prompt, b.prompt:len(), line2, #b.lines)
-   return false -- FIXME: this should return true, but it breaks ssh commands
+   return false -- TODO/blocker: this should return true, but it breaks ssh commands
    -- not sure if this covers all the cases
 end
 
@@ -583,7 +583,7 @@ return {
    end,
 
    activate_minibuffer = function(prompt, callback, exit_callback)
-      -- FIXME: prevent "o" from being inserted here
+      -- TODO/blocker: prevent "o" from being inserted here
       last_buffer, b = b, make_buffer(nil, nil, {prompt})
       b.mode = "minibuffer"
       b.minibuffer, b.prompt = true, prompt
