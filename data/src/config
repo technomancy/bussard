@@ -16,7 +16,7 @@ define_mode("flight")
 bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
 
 -- You can change this so escape by itself quits if you prefer.
-bind("flight", "escape", function() print("Press ctrl-q to quit.") end)
+bind("flight", "escape", ship.ui.splash)
 bind("flight", "ctrl-q", ship.ui.quit)
 
 bind("flight", "tab", ship.actions.next_target)

@@ -113,11 +113,12 @@ in order to make testing login interaction easier.
 * [GNU Emacs](https://www.gnu.org/software/emacs/) (architecture)
 * [Unix](https://en.wikipedia.org/wiki/Unix) (architecture)
 * [Atomic Rockets](http://www.projectrho.com/public_html/rocket/) (science)
+* [Planescape: Torment](https://www.gog.com/game/planescape_torment) (story, gameplay)
 * [Meditations on Moloch](http://slatestarcodex.com/2014/07/30/meditations-on-moloch/) (philosophy)
 
 ## Licenses
 
-Code copyright © 2015 Phil Hagelberg and contributors
+Code copyright © 2015-2016 Phil Hagelberg and contributors
 
 Distributed under the GNU General Public License version 3; see file COPYING.
 

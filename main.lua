@@ -8,6 +8,7 @@ local ai = require "ship.ai"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local save = require "save"
+local splash = require "splash"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 local systems = require("data.systems")
@@ -21,6 +22,7 @@ local portal_offsets = {
    {0, 200}, {141, 141}, {200, 0}, {141, -141},
 }
 
+local play, quit
 local ui = {
    version = "beta-1-prerelease",
 
@@ -36,6 +38,8 @@ local ui = {
       save.abort(ship)
       love.event.quit()
    end,
+
+   splash = function() splash(play, quit, "resume") end,
 
    get_fps = love.timer.getFPS,
 }
@@ -101,7 +105,7 @@ love.load = function()
    end)
 end
 
-love.update = safely(function(dt)
+local update = safely(function(dt)
       if(ship.api.paused) then return end
       local real_time_factor = ship.time_factor * 0.1 * dt
       ship:update(real_time_factor)
@@ -112,12 +116,11 @@ love.update = safely(function(dt)
 end)
 
 -- for commands that don't need repeat
-love.keypressed = safely(lume.fn(ship.handle_key, ship))
--- love.keypressed = ship.handle_key
+local keypressed = safely(lume.fn(ship.handle_key, ship))
 
-love.textinput = safely(lume.fn(ship.textinput, ship))
+local textinput = safely(lume.fn(ship.textinput, ship))
 
-love.draw = safely(function(dt)
+local draw = safely(function(dt)
       starfield.render(star1, ship.x, ship.y)
       starfield.render(star2, ship.x, ship.y)
       starfield.render(star3, ship.x, ship.y)
@@ -198,5 +201,14 @@ love.draw = safely(function(dt)
          if(u.draw_after) then u.draw_after(ship, dt) end
       end
 end)
+
+play = function()
+   love.update,love.keypressed,love.textinput,love.draw =
+      update, keypressed, textinput, draw
+end
+
+quit = ui.quit
+
+splash(play, quit)
 
 return ship -- for headless.lua
