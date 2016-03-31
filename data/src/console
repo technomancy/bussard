@@ -58,7 +58,6 @@ bind("console", "return", function()
         ship.editor.print_prompt()
 end)
 
--- TODO: port from old console
--- history
--- completion
--- mini 1-line console in flight mode
+-- port from old console
+-- FIXME: history
+-- FIXME: completion

@@ -102,7 +102,7 @@ return {
       end
    },
 
-   -- TODO: redo map as buffer with special draw function
+   -- FIXME: redo map as buffer with special draw function
    map = {
       stats = {},
       load = function(ship)

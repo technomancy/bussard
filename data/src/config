@@ -26,7 +26,7 @@ bind("flight", "ctrl- ", ship.actions.login)
 
 bind("flight", "ctrl-r",
      function()
-        ship:load("src.config")
+        ship:dofile("src.config")
         ship.editor.initialize()
 end)
 

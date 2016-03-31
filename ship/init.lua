@@ -252,6 +252,7 @@ local ship = {
       -- the engine arbitrarily powerful or use zero fuel or
       -- whatever. so these two steps must remain separate.
       if(ship.engine_on and ship.fuel > 0) then
+         -- FIXME: move to an upgrade
          local fx = (math.sin(ship.heading) * dt * ship.engine_strength)
          local fy = (math.cos(ship.heading) * dt * ship.engine_strength)
          ship.dx = ship.dx + fx / ship.mass
@@ -462,6 +463,8 @@ ship.api = {
       end
       return target
    end,
+
+   dofile = lume.fn(sandbox_dofile, ship),
 
    -- for user files
    src = {},
