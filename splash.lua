@@ -6,7 +6,7 @@ local star1 = starfield.new(10, w, h, 0.01, 100)
 local star2 = starfield.new(10, w, h, 0.05, 175)
 local star3 = starfield.new(10, w, h, 0.1, 255)
 
-local big_font = love.graphics.newFont("assets/mensch.ttf", 32)
+local title = love.graphics.newImage("assets/title.png") -- jura demibold
 local main_font = love.graphics.newFont("assets/mensch.ttf", 14)
 local font_height = main_font:getHeight()
 
@@ -15,9 +15,9 @@ local scroll = 0
 
 local files = {"main.lua","main.lua","main.lua","main.lua","main.lua",
                "main.lua","main.lua","main.lua","main.lua","main.lua",
-               "main.lua","main.lua","main.lua","main.lua","main.lua",
-               "asteroid.lua","body.lua","mission.lua", "save.lua",
-               "services.lua","splash.lua",
+               -- "main.lua","main.lua","main.lua","main.lua","main.lua",
+               -- "asteroid.lua","body.lua","mission.lua", "save.lua",
+               -- "services.lua","splash.lua",
 }
 
 local buttons = {"play", "credits", "license", "quit"}
@@ -59,9 +59,7 @@ local draw = function()
    starfield.render(star2, x, y)
    starfield.render(star3, x, y)
 
-   love.graphics.setColor(0,170,0)
-   love.graphics.setFont(big_font)
-   love.graphics.print("bussard", 30, 30)
+   love.graphics.draw(title, 30, 30)
 
    love.graphics.setFont(main_font)
    for i,name in ipairs(buttons) do
