@@ -158,7 +158,7 @@ return {
 
       b.cargo = {}
       for _,name in ipairs({"ore", "food", "equipment", "medicine"}) do
-         b.cargo[name] = math.random(20)
+         b.cargo[name] = love.math.random(20)
       end
 
       -- print("\n" .. b.name, equipment_factor)
@@ -181,7 +181,7 @@ return {
          -- calculations do not include this factor, but without it we cannot
          -- achieve orbit.
          local v = math.sqrt((g*star.mass)/b.r) / 10
-         local theta = math.random() * math.pi * 2
+         local theta = love.math.random() * math.pi * 2
 
          b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
          b.dx = math.sin(theta + math.pi / 2) * v

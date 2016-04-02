@@ -2,8 +2,8 @@ return {
    new = function(count, width, height, factor, intensity)
       local stars = {}
       for _ = 1, count do
-         table.insert(stars, {x = math.random(width),
-                              y = math.random(height) })
+         table.insert(stars, {x = love.math.random(width),
+                              y = love.math.random(height) })
       end
       return {stars = stars, width = width, height = height,
               factor = factor, intensity = intensity}

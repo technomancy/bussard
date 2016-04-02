@@ -14,7 +14,7 @@ local retarget = function(a, ship)
 end
 
 local function asteroid(name, mass_max, bodies, parent)
-   local mass = math.random(mass_max)
+   local mass = love.math.random(mass_max)
 
    local a = { name = name, mass = mass,
                image_name = "asteroid",
@@ -24,16 +24,16 @@ local function asteroid(name, mass_max, bodies, parent)
 
    if(parent) then
       -- if two new asteroids spawn in exactly the same place, gravity bugs out
-      local o = math.random(20) - 10
+      local o = love.math.random(20) - 10
       a.x, a.y, a.dx, a.dy = parent.x + o, parent.y + o, parent.dx, parent.dy
    else
       -- try to get them to spawn clustered near-ish the sun with some outliers
-      local r = utils.gaussian_random(40000)
+      local r = love.math.randomNormal(20000, 30000)
       local base_v = math.sqrt((body.g*bodies[1].mass)/math.abs(r)) / 10
       -- use the same orbit logic as planets, but with random eccentricity
-      local eccentricity = math.random() / 2 + 0.5
+      local eccentricity = love.math.random() / 2 + 0.5
       local v = base_v * eccentricity
-      local theta = math.random() * math.pi * 2
+      local theta = love.math.random() * math.pi * 2
 
       a.x, a.y = math.sin(theta) * r, math.cos(theta) * r
       a.dx = math.sin(theta + math.pi / 2) * v

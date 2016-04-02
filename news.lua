@@ -9,7 +9,7 @@ end
 local include = function(ship, b, m)
    local happened = function(event) return ship.events[event] end
    if(m.fn) then return(m.fn(ship, b, m))
-   elseif(m.chance and math.random(100) < m.chance) then return false
+   elseif(m.chance and love.math.random(100) < m.chance) then return false
    elseif(m.systems and not lume.find(m.systems, ship.system_name)) then return false
    elseif(m.worlds and not lume.find(m.worlds, b.name)) then return false
    elseif(m.govs and not lume.find(m.govs, b.gov)) then return false

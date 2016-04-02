@@ -15,9 +15,9 @@ local scroll = 0
 
 local files = {"main.lua","main.lua","main.lua","main.lua","main.lua",
                "main.lua","main.lua","main.lua","main.lua","main.lua",
-               -- "main.lua","main.lua","main.lua","main.lua","main.lua",
-               -- "asteroid.lua","body.lua","mission.lua", "save.lua",
-               -- "services.lua","splash.lua",
+               "main.lua","main.lua","main.lua","main.lua","main.lua",
+               "asteroid.lua","body.lua","mission.lua", "save.lua",
+               "services.lua","splash.lua",
 }
 
 local buttons = {"play", "credits", "license", "quit"}
@@ -34,7 +34,7 @@ local selected = 1
 local x,dx,y,dy = 0,0,0,0
 
 local update = function(dt)
-   dx, dy = dx + math.random(32) - 16, dy + math.random(32) - 16
+   dx, dy = dx + love.math.random(32) - 16, dy + love.math.random(32) - 16
    x, y = x + dx, y + dy
    if(dx > 128 or dx < -128) then dx = dx * 0.9 end
    if(dy > 128 or dy < -128) then dy = dy * 0.9 end
@@ -44,13 +44,24 @@ local update = function(dt)
    elseif(scroll > 1 and line == #text) then line, scroll = 1,0 end
 end
 
+local input = ""
+
 local keypressed = function(key)
    if(key == "up" and selected > 1) then
       selected = selected - 1
    elseif(key == "down" and selected < #buttons) then
       selected = selected + 1
    elseif(key == "return") then
-      actions[buttons[selected]]()
+      if(love.filesystem.isFile(input)) then
+         text, line = lume.split(love.filesystem.read(input), "\n"), 1
+      else
+         actions[buttons[selected]]()
+      end
+      input = ""
+   elseif(key == "escape") then
+      input = ""
+   elseif(#key == 1) then
+      input = input .. (love.keyboard.isDown("lshift") and key:upper() or key)
    end
 end
 
@@ -76,9 +87,12 @@ local draw = function()
    end
 end
 
+local random_choice = function(t) return t[love.math.random(#t)] end
+
 return function(play, quit, resume)
    if(resume) then buttons[1], actions.resume = "resume", play end
    actions.play, actions.quit = play, quit
    love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw
-   text, line = lume.split(love.filesystem.read(lume.randomchoice(files)), "\n"), 1
+   text, line = lume.split(love.filesystem.read(random_choice(files)), "\n"), 1
 end
+
