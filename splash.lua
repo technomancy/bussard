@@ -7,8 +7,9 @@ local star2 = starfield.new(10, w, h, 0.05, 175)
 local star3 = starfield.new(10, w, h, 0.1, 255)
 
 local title = love.graphics.newImage("assets/title.png") -- jura demibold
-local main_font = love.graphics.newFont("assets/mensch.ttf", 14)
-local font_height = main_font:getHeight()
+local choices_font = love.graphics.newFont("assets/mensch.ttf", 16)
+local text_font = love.graphics.newFont("assets/mensch.ttf", 10)
+local font_height = text_font:getHeight()
 
 local text, line = {}, 1
 local scroll = 0
@@ -72,14 +73,15 @@ local draw = function()
 
    love.graphics.draw(title, 30, 30)
 
-   love.graphics.setFont(main_font)
+   love.graphics.setFont(choices_font)
    for i,name in ipairs(buttons) do
       love.graphics.setColor(125,125,125)
       if i == selected then love.graphics.setColor(200,200,200) end
-      love.graphics.print(name, 100, 100 + i*30)
+      love.graphics.print(name, 80, 100 + i*30)
    end
 
    love.graphics.setColor(0,200,0)
+   love.graphics.setFont(text_font)
    for i=1, math.floor((h-100) / font_height) do
       if(text[line+i-1]) then
          love.graphics.print(text[line+i-1], 260, 100+i*font_height)

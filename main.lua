@@ -76,8 +76,6 @@ end
 
 love.load = function()
    if(arg[#arg] == "-debug") then require("mobdebug").start() end
-   local font = love.graphics.newFont("assets/mensch.ttf", 14)
-   love.graphics.setFont(font)
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    if arg[#arg] == "-abort" then save.abort(ship) end
@@ -203,6 +201,7 @@ local draw = safely(function(dt)
 end)
 
 play = function()
+   love.graphics.setFont(love.graphics.newFont("assets/mensch.ttf", 14))
    love.update,love.keypressed,love.textinput,love.draw =
       update, keypressed, textinput, draw
 end
