@@ -1,6 +1,7 @@
 local utils = require("utils")
 local body = require("body")
 
+local ship_img = love.graphics.newImage("assets/ship.png")
 local names = lume.array(love.filesystem.lines("data/ships.txt"))
 
 local normalize = function(t)
@@ -59,9 +60,8 @@ local make = function(bodies, name, from_portal)
    return {
       ship = true,
       update = update,
-      -- TODO/blocker: rotation of this is wrong
-      image_name = "ship", img = body.img,
-      scale = 10,
+      image_name = "ship", scale = 10,
+      ox = ship_img:getWidth() / 2, oy = ship_img:getHeight() / 2,
 
       x = from.x,
       y = from.y,

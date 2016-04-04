@@ -72,11 +72,10 @@ return {
       body.image = body.image or love.graphics.newImage("assets/" ..
                                                            body.image_name .. ".png")
       local scale = body.scale or 1
-      local bx = body.x - body.image:getWidth() * scale / 2
-      local by = body.y - body.image:getHeight() * scale / 2
-      love.graphics.draw(body.image, bx - x, by - y,
-                         -- these are almost always nil
-                         body.rotation, scale, scale)
+      body.ox = body.ox or body.image:getWidth() * scale / 2
+      body.oy = body.oy or body.image:getHeight() * scale / 2
+      love.graphics.draw(body.image, body.x - x, body.y - y,
+                         body.rotation, scale, scale, body.ox, body.oy)
    end,
 
    gravitate = gravitate,
