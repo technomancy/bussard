@@ -181,7 +181,7 @@ local ship = {
    active_missions={},
    events = {},
    flag = "Tana",
-   name = "Faraday",
+   name = "Adahn",
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
