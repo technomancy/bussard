@@ -67,6 +67,13 @@ local gravitate = function(body, x, y)
    return (accel * math.sin(theta)), (accel * math.cos(theta))
 end
 
+local is_gravitated_by = function(from, to)
+   if(from == to) then return false
+   elseif(to.fixed) then return false
+   elseif((to.world or to.portal) and not from.fixed) then return false
+   else return true end
+end
+
 return {
    draw = function(body, x, y)
       body.image = body.image or love.graphics.newImage("assets/" ..
@@ -91,9 +98,9 @@ return {
          ship.dx = ship.dx + dt * ddx
          ship.dy = ship.dy + dt * ddy
 
-         -- body-to-body
+         -- apply b's gravity to other bodies
          for _, b2 in ipairs(bodies) do
-            if(b ~= b2 and (not b2.fixed)) then
+            if(is_gravitated_by(b, b2)) then
                local ddx2, ddy2 = gravitate(b, b2.x, b2.y)
                b2.dx = b2.dx + (dt * ddx2)
                b2.dy = b2.dy + (dt * ddy2)
