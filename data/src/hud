@@ -6,7 +6,7 @@ ship.hud = {
    },
    { x=60, y=20, type="text",
      format="epoch: %s  credits: %s",
-     values={function() return utils.format_seconds(os.time()) end,
+     values={function() return utils.format_time(os.time()) end,
         "status.credits"}
    },
    { x=5, y=5, type="vector",

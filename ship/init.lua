@@ -127,8 +127,9 @@ local sandbox = function(ship)
 end
 
 local epoch_for = function(year)
+   local seconds_per_year = 365 * 24 * 60 * 60
    local years = year - 1970
-   return years * 365 * 52 * 7 * 24 * 60 * 60
+   return years * seconds_per_year + math.mod(os.time(), seconds_per_year)
 end
 
 local target_dt = 0.03 -- about 33 frames per second
@@ -169,7 +170,7 @@ local ship = {
    mass = 128,
    battery = 128,
    upgrades = {},
-   time_factor = 10,
+   time_factor = 1000,
 
    -- keep around
    fuel = 128,

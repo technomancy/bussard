@@ -2,6 +2,8 @@ local socket = require("socket")
 
 local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
 
+local seconds_per_year = 365 * 24 * 60 * 60
+
 local shallow_copy = function(orig)
    local orig_type = type(orig)
    local copy
@@ -31,12 +33,14 @@ local function distance(x, y)
    end
 end
 
-local format_seconds = function(s)
-   local formatted, k = tostring(math.ceil(s))
+local format_time = function(s)
+   local years = math.floor(s / seconds_per_year) + 1970
+   local seconds = math.mod(s, seconds_per_year)
+   local formatted, k = tostring(math.ceil(seconds))
    while k ~= 0 do
-      formatted, k = string.gsub(formatted, "^(-?%d+)(%d%d%d)", '%1:%2')
+      formatted, k = string.gsub(formatted, "(-?%d+)(%d%d%d)", '%1,%2')
    end
-   return formatted
+   return tostring(years) .. ":" .. formatted
 end
 
 local pairs_for = function(raw, wrap)
@@ -185,7 +189,7 @@ return {
 
    distance = distance,
 
-   format_seconds = format_seconds,
+   format_time = format_time,
 
    sandbox = {
       -- functions
@@ -212,7 +216,7 @@ return {
       -- custom
       utils = {
          distance = distance,
-         format_seconds = format_seconds,
+         format_time = format_time,
       },
       lume = lume,
    },

@@ -11,6 +11,7 @@ GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA)
 ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
 
 todo: ; grep TODO $(GAME_LUA)
+blockers: ; grep TODO/blocker $(GAME_LUA)
 
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \

@@ -23,7 +23,7 @@ about coming to your senses with no memory?
 * No "classic" evil villains; antagonists arise from [systemic factors](http://slatestarcodex.com/2014/07/30/meditations-on-moloch/)
 * Your ship cannot be destroyed; there should be no way to permanently fail
 * News messages use at least from, to, subject, content-type, message-id headers, page-break-separated
-* Use metric time for most relative amounts, years are OK for absolute events
+* Use metric time for most relative amounts, years for absolute events
 * Don't make newsgroup postings unrealistically knowledgeable
 * Or unrealistically polite
 * If referencing current events, be sure there's a record of it here
@@ -41,9 +41,9 @@ about coming to your senses with no memory?
 * Bussard collector refuels reaction mass way too quickly
 * Arguably the [high thrust](http://www.projectrho.com/public_html/rocket/torchships.php)
   with which you zoom around the system could be on this list; however
-  we explain it in-game by showing time go by at a 10x rate. This
-  factor is not enough to explain crossing the whole solar system in
-  under a minute though.
+  we explain it in-game by showing time go by at a 1000x rate. This
+  factor is not quite enough to explain crossing the whole solar system in
+  under a minute, but it blurs the lines enough for our purposes.
 
 The fact that exoplanets are colonized at all could be listed here,
 but we can consider that more of a crime against economics.

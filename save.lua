@@ -61,7 +61,6 @@ return {
 
          ship:enter(ship.system_name, false, true)
       else
-         ship.time_offset = 8383504000
          ship:enter(ship.system_name, true, true)
          for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
             ship.api.src[v] = love.filesystem.read("data/src/" .. v)
