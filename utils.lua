@@ -33,6 +33,14 @@ local function distance(x, y)
    end
 end
 
+local pad_to = function(s, width, padding)
+   padding = padding or " "
+   for i=1,width-#s,#padding do
+      s = padding .. s
+   end
+   return s
+end
+
 local format_time = function(s)
    local years = math.floor(s / seconds_per_year) + 1970
    local seconds = math.mod(s, seconds_per_year)
@@ -215,6 +223,7 @@ return {
 
       -- custom
       utils = {
+         pad_to = pad_to,
          distance = distance,
          format_time = format_time,
       },
@@ -232,5 +241,6 @@ return {
       end
    end,
 
+   pad_to = pad_to,
    buffer = buffer,
 }

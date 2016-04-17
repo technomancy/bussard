@@ -12,12 +12,19 @@ define_mode("mail")
 
 local targets = {}
 
-local subject = function(msg)
-   for _,line in ipairs(lume.split(msg, "\n")) do
-      if(line:match("Subject: (.+)")) then
-         return line:match("Subject: (.+)")
-      end
+local header = function(lines, header)
+   for _,line in ipairs(lines) do
+      local match = line:match(header .. ": (.+)")
+      if(match) then return match end
    end
+end
+
+local describe = function(msg)
+   local lines = lume.split(msg, "\n")
+   local date = utils.pad_to(header(lines, "Date"), 20)
+   local from = utils.pad_to(header(lines, "From"), 20)
+   local subject = header(lines, "Subject")
+   return date .. " | " .. from .. " | " .. subject
 end
 
 local open_folder = function(folder)
@@ -30,19 +37,28 @@ local open_folder = function(folder)
    targets = {}
 
    if(folder) then
-      p("Folder: " .. folder)
+      p("Folder: " .. folder .. "\n")
       for name,msg in pairs(ship.docs.mail[folder]) do
-         table.insert(targets, {folder, name})
-         p("  " .. subject(msg))
+         if(name ~= "_unread") then
+            table.insert(targets, {folder, name})
+            if(ship.docs.mail[folder]._unread[name]) then
+               p(" * " .. describe(msg))
+            else
+               p(" - " .. describe(msg))
+            end
+         end
       end
    else
-      p("Folders")
+      p("Folders\n")
       for name in pairs(ship.docs.mail) do
          table.insert(targets, name)
-         p("  " .. name)
+         local unread_count = lume.count(ship.docs.mail[name]._unread)
+         local count = lume.count(ship.docs.mail[name]) - 1
+         p(" [" .. unread_count .. "/" .. count .. "] " .. name)
       end
    end
    ship.editor.beginning_of_buffer()
+   ship.editor.next_line()
    ship.editor.next_line()
    ship.editor.set_read_only(true)
 end
@@ -53,13 +69,14 @@ ship.modes.mail.parent = ship.modes.edit -- nav keys should be intact
 
 bind("mail", "return", function()
         local line = ship.editor.get_line_number()
-        local target = targets[line-1]
+        local target = targets[line-2] -- two lines at the top before listing
 
-        if(type(target) == "table") then
-           ship.editor.open(ship, "docs.mail." .. target[1]
-                               .. "." .. target[2])
+        if(type(target) == "table") then -- two values means a message
+           local folder, name = unpack(target)
+           ship.editor.open(ship, "docs.mail." .. folder .. "." .. name)
            ship:activate_mode("view")
-        else
+           ship.docs.mail[folder]._unread[name] = nil
+        else -- single value means open a folder
            open_folder(target)
         end
 end)
