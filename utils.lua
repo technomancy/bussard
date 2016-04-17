@@ -119,7 +119,7 @@ function buffer:new(ob)
    local o = ob or {}
    o.entries = #o
    o.cursor = #o + 1
-   o.max = 10
+   o.max = 32
    setmetatable(o, self)
    self.__index = self
    return o

@@ -1,10 +1,10 @@
 local lume = require("lume")
+local utils = require("utils")
 
 --- Essentially a port of Emacs to Lua/Love.
 -- missing features (a very limited list)
 -- * search/replace
 -- * syntax highlighting
--- * minibuffer
 
 local kill_ring = {}
 
@@ -14,6 +14,7 @@ local make_buffer = function(fs, path, lines)
             point = 0, point_line = 1, mark = nil, mark_line = nil,
             last_yank = nil, mark_ring = {},
             history = {}, undo_at = 0, dirty = false, needs_save = false,
+            input_history = utils.buffer:new(), input_history_pos = 0,
             modeline = function(b)
                return string.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
                                     b.path, b.point_line, #b.lines, b.mode)
@@ -52,7 +53,7 @@ local b = nil -- default back to flight mode
 local inhibit_read_only
 
 local last_line = "Press ctrl-enter to open the console, " ..
-   "and run man() for more help. Zoom with = and -."
+"and run man() for more help. Zoom with = and -."
 
 local invisible = {}             -- sentinel "do not print" value
 
@@ -87,6 +88,11 @@ local with_current_buffer = function(nb, f)
    local val = f()
    b = old_b
    return val
+end
+
+local replace_input = function(input)
+   b.lines[#b.lines] = b.prompt .. input
+   b.point_line, b.point = #b.lines, #b.lines[#b.lines]
 end
 
 local region = function()
@@ -680,6 +686,26 @@ return {
                              b.point, b.point_line = #b.lines[#b.lines], #b.lines
       end)
       inhibit_read_only = read_only
+   end,
+
+   history_prev = function()
+      if b.input_history_pos + 1 <= b.input_history.entries then
+         b.input_history_pos = b.input_history_pos + 1
+         replace_input(b.input_history:get(-b.input_history_pos))
+      end
+   end,
+   history_next = function()
+      if b.input_history_pos - 1 > 0 then
+         b.input_history_pos = b.input_history_pos - 1
+         replace_input(b.input_history:get(-b.input_history_pos))
+      else
+         b.input_history_pos = 0
+         replace_input("")
+      end
+   end,
+   history_push = function(input)
+      b.input_history_pos = 0
+      b.input_history:append(input, true)
    end,
 
    debug = function()

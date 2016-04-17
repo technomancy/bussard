@@ -29,6 +29,9 @@ local beginning_of_line = function()
    end
 end
 
+bind("ssh", "alt-p", ship.editor.history_prev)
+bind("ssh", "alt-n", ship.editor.history_next)
+
 bind("ssh", "ctrl-a", beginning_of_line)
 bind("ssh", "home", beginning_of_line)
 
@@ -40,6 +43,7 @@ bind("ssh", "return", function()
            ship:activate_mode("console")
            ship.editor.set_prompt("> ")
         else
+           ship.editor.history_push(input)
            ssh_send_line(input)
         end
         ship.editor.newline(2)

@@ -16,6 +16,9 @@ end
 bind("console", "ctrl-a", beginning_of_line)
 bind("console", "home", beginning_of_line)
 
+bind("console", "alt-p", ship.editor.history_prev)
+bind("console", "alt-n", ship.editor.history_next)
+
 bind("console", "return", function()
         if(ship.editor.get_line_number() ~= ship.editor.get_max_lines()) then
            ship.editor.newline()
@@ -24,6 +27,7 @@ bind("console", "return", function()
 
         local input = string.sub(ship.editor.get_line(0),
                                  string.len(ship.editor.prompt())+1)
+        ship.editor.history_push(input)
         ship.editor.newline()
         local chunk, err = loadstring("return " .. input)
         if(err and not chunk) then
