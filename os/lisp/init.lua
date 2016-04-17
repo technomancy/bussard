@@ -98,7 +98,6 @@ return {
          }
          fs.etc = { motd = ";; Welcome to the lisp REPL." }
       end,
-      strip_special = function(_) end,
    },
 
    name = "lisp",

@@ -1,7 +1,6 @@
 -- missions are accepted by replying to newsgroup postings; see news.lua.
 
 local utils = require("utils")
-local body = require("body")
 
 local fail = function(ship, mission, aborted)
    ship.credits = ship.credits - (mission.fail_credits or 0)

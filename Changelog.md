@@ -2,6 +2,9 @@
 
 ## beta-1 / ???
 
+* Splash screen.
+* Added mail client with unread message tracking.
+* Fix some gravitation bugs between planets.
 * Major rewrite of console to unify it with the editor.
 * Editor supports multiple files open at once.
 * Spawn asteroids in mostly-stable orbits.

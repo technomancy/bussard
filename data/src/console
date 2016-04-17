@@ -63,5 +63,4 @@ bind("console", "return", function()
 end)
 
 -- port from old console
--- TODO/blocker: history
 -- TODO: completion

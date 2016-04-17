@@ -94,7 +94,7 @@ local random_choice = function(t) return t[love.math.random(#t)] end
 return function(play, quit, resume)
    if(resume) then buttons[1], actions.resume = "resume", play end
    actions.play, actions.quit = play, quit
-   love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw
+   love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw,nil
    text, line = lume.split(love.filesystem.read(random_choice(files)), "\n"), 1
 end
 
