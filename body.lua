@@ -109,7 +109,7 @@ return {
       end
    end,
 
-   login = function(ship, body, username, password)
+   login = function(_, body, username, password)
       if((not body) or not body.os) then return false end
       if(not filesystems[body.name] and body.os.fs and body.os.fs.seed) then
          filesystems[body.name] = seed(body.os, body.name, body.portal)

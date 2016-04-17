@@ -1,5 +1,2 @@
-return {
-   ["Mirduka station"] = {
-      ["/usr/lib/repl_history.lua"] = "repl history",
-   },
-}
+-- This file contains overlays for files to be contained on various worlds.
+return {}

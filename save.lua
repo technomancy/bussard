@@ -61,17 +61,11 @@ return {
 
          ship:enter(ship.system_name, false, true)
       else
+         ship.api.docs.mail = { inbox = { _unread = {} }}
          ship:enter(ship.system_name, true, true)
          for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
             ship.api.src[v] = love.filesystem.read("data/src/" .. v)
          end
-         for _,v in pairs(love.filesystem.getDirectoryItems("data/docs")) do
-            ship.api.docs[v] = love.filesystem.read("data/docs/" .. v)
-         end
-         -- TODO: replace this with general-purpose mail delivery
-         ship.api.docs.mail = { inbox = {["welcome"] =
-                                      love.filesystem.read("data/docs/welcome")}}
-         ship.api.docs.mail.inbox._unread = {welcome=true}
       end
       if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)

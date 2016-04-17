@@ -298,7 +298,7 @@ particular when you purchase an upgrade that adds new capabilities.
 
 ## Footer
 
-Copyright © 2427-2430 Kosaga Shipyards, All Rights Reserved.
+Copyright © 2365-2372 Kosaga Shipyards, All Rights Reserved.
 
 If you are viewing this manual in your ship's onboard computer, press
 the pageup key a few times to scroll to the top and begin reading there.

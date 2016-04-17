@@ -8,6 +8,7 @@ local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
 local ssh = require("ship.ssh")
 
+local mail = require("mail")
 local mission = require("mission")
 
 -- for shuffling systems upon entry
@@ -126,12 +127,6 @@ local sandbox = function(ship)
    })
 end
 
-local epoch_for = function(year)
-   local seconds_per_year = 365 * 24 * 60 * 60
-   local years = year - 1970
-   return years * seconds_per_year + math.mod(os.time(), seconds_per_year)
-end
-
 local target_dt = 0.03 -- about 33 frames per second
 
 local trajectory_auto = function(ship, dt)
@@ -175,7 +170,7 @@ local ship = {
    -- keep around
    fuel = 128,
    credits = 1024,
-   time_offset = epoch_for(2431),
+   time_offset = utils.game_start,
    system_name = "L 668-21",
    cargo = {["food"] = 2},
    upgrade_names = {},
@@ -232,6 +227,7 @@ local ship = {
             ship.y = love.math.random(30000) + 10000
          end
          ai.seed(system_name, ship.bodies)
+         mail.deliver(ship, system_name)
       end
    end,
 

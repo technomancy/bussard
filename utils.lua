@@ -35,10 +35,15 @@ end
 
 local pad_to = function(s, width, padding)
    padding = padding or " "
-   for i=1,width-#s,#padding do
+   for _=1,width-#s,#padding do
       s = padding .. s
    end
    return s
+end
+
+local epoch_for = function(year)
+   local years = year - 1970
+   return years * seconds_per_year
 end
 
 local format_time = function(s)
@@ -243,4 +248,6 @@ return {
 
    pad_to = pad_to,
    buffer = buffer,
+
+   game_start = epoch_for(2431) + 10242852, -- april 17th, 2431
 }

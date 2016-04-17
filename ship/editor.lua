@@ -10,7 +10,7 @@ local kill_ring = {}
 
 local make_buffer = function(fs, path, lines)
    return { fs=fs, path=path, mode = "edit",
-            lines = lines or lume.split((fs and fs:find(path)) or "", "\n"),
+            lines = lines or lume.split((fs and fs:find(path) or ""), "\n"),
             point = 0, point_line = 1, mark = nil, mark_line = nil,
             last_yank = nil, mark_ring = {},
             history = {}, undo_at = 0, dirty = false, needs_save = false,
@@ -290,7 +290,7 @@ end
 local io_write = function(...)
    local prev_b = b
    b = console
-   local line_count = nil
+   local line_count
    local old_point, old_point_line = b.point, b.point_line
    b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
    last_line, line_count = write(...)
@@ -634,7 +634,7 @@ return {
    print = function(...)
       local texts, read_only = {...}, inhibit_read_only
       inhibit_read_only = true
-      if(texts[1] == invisible) then return end
+      if(texts[1] == invisible or texts[1] == nil) then return end
       texts[1] = "\n" .. texts[1]
       io_write(unpack(lume.map(texts, tostring)))
       inhibit_read_only = read_only
