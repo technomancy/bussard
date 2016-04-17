@@ -2,6 +2,7 @@ local lume = require "lume"
 local body = require "body"
 local ai = require "ship.ai"
 local utils = require "utils"
+local orb = require "os.orb"
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading",
@@ -39,7 +40,7 @@ return {
          for _,b in pairs(s.bodies) do
             local fs = body.filesystems[b.name]
             if(fs) then
-               b.os.fs.strip_special(fs, {ship.api})
+               orb.fs.strip_special(fs, {ship.api})
                local fs_data = lume.serialize(fs)
                love.filesystem.write(fs_filename(b), fs_data)
             end
