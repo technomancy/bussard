@@ -42,7 +42,7 @@ local base_stats = {
    solar = 30,
 
    portal_range = 1024,
-   portal_time = 40, -- in-game seconds
+   portal_time = 4000, -- in-game seconds
 }
 
 local function find_binding(ship, key, the_mode)

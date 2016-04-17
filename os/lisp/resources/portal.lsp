@@ -17,7 +17,7 @@
       looper (lambda (last-time looper)
                (coroutine.yield)
                (let (time-since (- (os.time) init-time)
-                     power (* 2 (- (os.time) last-time))
+                     power (* 0.02 (- (os.time) last-time))
                      failure (fail-conditions power))
                  (if failure
                      (fail failure)

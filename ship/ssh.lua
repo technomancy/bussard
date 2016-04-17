@@ -9,7 +9,7 @@ local sessions = {}
 local logout = function(ship, target)
    local session = sessions[target.name]
    if(session) then
-      local fs, env = unpack(session)
+      local fs = unpack(session)
       for k,_ in pairs(fs["/home/guest"] or {}) do
          if(k ~= "_user" and k ~= "_group") then
             session[1]["/home/guest/" .. k] = nil
@@ -115,7 +115,7 @@ local lisp_login = function(fs, env, ship)
    sb.disconnect = function()
       ship.api:activate_mode("console")
       ship.api.editor.set_prompt("> ")
-      logout(ship, ship.target.name)
+      logout(ship, ship.target)
    end
 
    sb.io = sb.io or { read = env.IN, write = write }
@@ -175,6 +175,5 @@ return {
    send_line = send_line,
    logout = logout,
 
-   logout_all = function(ship)
-   end,
+   logout_all = function() end,
 }
