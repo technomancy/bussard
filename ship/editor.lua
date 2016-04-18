@@ -46,7 +46,7 @@ console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt = "console", "> "
 
 local mb
-local last_buffer -- for returning too after leaving minibuffer
+local last_buffer -- for returning to after leaving minibuffer
 local buffers = {console}
 local b = nil -- default back to flight mode
 
@@ -598,12 +598,17 @@ return {
    end,
 
    activate_minibuffer = function(prompt, callback, exit_callback)
-      -- TODO/blocker: prevent "o" from being inserted here
-      last_buffer, b = b, make_buffer(nil, nil, {prompt})
-      b.mode = "minibuffer"
-      b.minibuffer, b.prompt = true, prompt
-      b.callback, b.exit_callback = callback, exit_callback
-      b.point = #prompt
+      -- without this, the key which activated the minibuffer triggers a
+      -- call to textinput, inserting it into the input
+      local old_released = love.keyreleased
+      love.keyreleased = function()
+         love.keyreleased = old_released
+         last_buffer, b = b, make_buffer(nil, nil, {prompt})
+         b.mode = "minibuffer"
+         b.minibuffer, b.prompt = true, prompt
+         b.callback, b.exit_callback = callback, exit_callback
+         b.point = #prompt
+      end
    end,
 
    exit_minibuffer = function(cancel)
