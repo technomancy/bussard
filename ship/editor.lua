@@ -124,9 +124,8 @@ local in_prompt = function(line, point, line2, _point2)
    if(not b.prompt) then return false end
    if(not line2 and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= b.prompt:len()) then return false end
-   print("in prompt!", line, point, b.prompt, b.prompt:len(), line2, #b.lines)
-   return false -- TODO/blocker: this should return true, but it breaks ssh commands
-   -- not sure if this covers all the cases
+   print("warning: in prompt!", line, point, b.prompt:len(), line2, #b.lines)
+   return true
 end
 
 local edit_disallowed = function(line, point, line2, _point2)
@@ -258,7 +257,9 @@ local save = function(this_fs, this_path)
 end
 
 local newline = function(n)
-   for _ = 1, (n or 1) do insert({"", ""}, true) end
+   local t = {""}
+   for i=1,(n or 1) do table.insert(t, "") end
+   insert(t, true)
 end
 
 local get_buffer = function(path)

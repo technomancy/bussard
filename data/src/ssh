@@ -31,7 +31,7 @@ bind("ssh", "return", function()
            ship.editor.history_push(input)
            ssh_send_line(input)
         end
-        ship.editor.newline()
+        ship.editor.newline(2)
         ship.editor.print_prompt()
         ship.editor.end_of_buffer()
 end)
