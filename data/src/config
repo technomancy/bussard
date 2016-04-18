@@ -30,6 +30,16 @@ bind("flight", "ctrl-r",
         ship.editor.initialize()
 end)
 
+bind("flight", "ctrl-s", function()
+        ship.editor.change_buffer("*console*")
+        ssh()
+end)
+
+bind("flight", "ctrl-m", function()
+        ship.editor.change_buffer("*console*")
+        mail()
+end)
+
 dofile("src.edit")
 dofile("src.console")
 dofile("src.hud")

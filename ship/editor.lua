@@ -405,6 +405,14 @@ return {
       return b.point, b.point_line
    end,
 
+   beginning_of_input = function()
+      if(b.point_line == #b.lines and b.prompt) then
+         b.point = #b.prompt
+      else
+         b.point = 0
+      end
+   end,
+
    newline = newline,
 
    newline_and_indent = function()
