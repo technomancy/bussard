@@ -90,6 +90,7 @@ local sandbox_loadstring = function(ship, code)
    end
 end
 
+-- TODO/blocker: improve error handling for all user code
 local sandbox_dofile = function(ship, filename)
    local contents = ship.api:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
@@ -437,15 +438,14 @@ ship.api = {
          end
          ship.target = ship.bodies[ship.target_number]
       end,
-      closest_target = function()
-         local min_distance = 1000000000000
+      closest_target = function(nth)
+         local ts = utils.sort_by(ship.bodies, lume.fn(utils.distance, ship))
+         local target = ts[nth or 1]
          for i,b in ipairs(ship.bodies) do
-            if(utils.distance(ship, b) < min_distance) then
-               ship.target_number = i
-               min_distance = utils.distance(ship, b)
+            if(b == target) then
+               ship.target, ship.target_number = b, i
             end
          end
-         ship.target = ship.bodies[ship.target_number]
       end,
    },
 

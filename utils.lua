@@ -246,6 +246,12 @@ return {
       end
    end,
 
+   sort_by = function(orig, f)
+      local t = lume.clone(orig)
+      table.sort(t, function(a, b) return f(a) < f(b) end)
+      return t
+   end,
+
    pad_to = pad_to,
    buffer = buffer,
 
