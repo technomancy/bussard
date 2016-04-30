@@ -1,3 +1,4 @@
+local utf8 = require("utf8")
 local lume = require("lume")
 local utils = require("utils")
 
@@ -16,8 +17,8 @@ local make_buffer = function(fs, path, lines)
             history = {}, undo_at = 0, dirty = false, needs_save = false,
             input_history = utils.buffer:new(), input_history_pos = 0,
             modeline = function(b)
-               return string.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
-                                    b.path, b.point_line, #b.lines, b.mode)
+               return utf8.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
+                                  b.path, b.point_line, #b.lines, b.mode)
             end
    }
 end
@@ -96,11 +97,12 @@ local replace_input = function(input)
 end
 
 local region = function()
-   b.mark = math.min(string.len(b.lines[b.mark_line]), b.mark)
+   b.mark = math.min(utf.len(b.lines[b.mark_line]), b.mark)
 
    if(b.point_line == b.mark_line) then
       local start, finish = math.min(b.point, b.mark), math.max(b.point, b.mark)
-      return {b.lines[b.point_line]:sub(start+1, finish)}, b.point_line, start, b.point_line, finish
+      local r = {utf8.sub(b.lines[b.point_line], start + 1, finish)}
+      return r, b.point_line, start, b.point_line, finish
    elseif(b.mark == nil or b.mark_line == nil) then
       return {}, b.point_line, b.point, b.point_line, b.point
    else
@@ -110,11 +112,11 @@ local region = function()
       else
          start_line, start, finish_line,finish = b.mark_line,b.mark,b.point_line,b.point
       end
-      local r = {b.lines[start_line]:sub(start+1, -1)}
+      local r = {utf8.sub(b.lines[start_line], start + 1, -1)}
       for i = start_line+1, finish_line-1 do
          table.insert(r, b.lines[i])
       end
-      table.insert(r, b.lines[finish_line]:sub(0, finish))
+      table.insert(r, utf8.sub(b.lines[finish_line], 0, finish))
       return r, start_line, start, finish_line, finish
    end
 end
@@ -123,8 +125,8 @@ end
 local in_prompt = function(line, point, line2, _point2)
    if(not b.prompt) then return false end
    if(not line2 and line ~= #b.lines) then return false end
-   if(line == #b.lines and point >= b.prompt:len()) then return false end
-   print("warning: in prompt!", line, point, b.prompt:len(), line2, #b.lines)
+   if(line == #b.lines and point >= utf8.len(b.prompt)) then return false end
+   print("warning: in prompt!", line, point, utf8.len(b.prompt), line2, #b.lines)
    return true
 end
 
@@ -136,16 +138,17 @@ end
 local insert = function(text, point_to_end)
    if(edit_disallowed(b.point_line, b.point + 1)) then return end
    b.dirty, b.needs_save = true, true
-   text = lume.map(text, function(s) return s:gsub("\t", "  ") end)
+   text = lume.map(text, function(s) return utf8.gsub(s, "\t", "  ") end)
    if(not text or #text == 0) then return end
    local this_line = b.lines[b.point_line]
-   local before, after = this_line:sub(0, b.point), this_line:sub(b.point + 1)
+   local before = utf8.sub(this_line, 0, b.point)
+   local after = utf8.sub(this_line, b.point + 1)
    local first_line = text[1]
 
    if(#text == 1) then
       b.lines[b.point_line] = (before or "") .. (first_line or "") .. (after or "")
       if(point_to_end) then
-         b.point = before:len() + first_line:len()
+         b.point = utf8.len(before) + utf8.len(first_line)
       end
    else
       b.lines[b.point_line] = (before or "") .. (first_line or "")
@@ -170,13 +173,13 @@ local delete = function(start_line, start, finish_line, finish)
    b.dirty, b.needs_save = true, true
    if(start_line == finish_line) then
       local line = b.lines[b.point_line]
-      b.lines[b.point_line] = line:sub(0, start) .. line:sub(finish + 1)
+      b.lines[b.point_line] = utf8.sub(line, 0, start) .. utf8.sub(line, finish + 1)
    else
-      local after = b.lines[finish_line]:sub(finish+1, -1)
+      local after = utf8.sub(b.lines[finish_line], finish+1, -1)
       for i = finish_line, start_line + 1, -1 do
          table.remove(b.lines, i)
       end
-      b.lines[start_line] = b.lines[start_line]:sub(0, start) .. after
+      b.lines[start_line] = utf8.sub(b.lines[start_line], 0, start) .. after
    end
    b.point, b.point_line, b.mark, b.mark_line = start, start_line, start, start_line
 end
@@ -190,7 +193,7 @@ local yank = function()
    local text = kill_ring[#kill_ring]
    if(text) then
       b.last_yank = {b.point_line, b.point,
-                     b.point_line + #text - 1, string.len(text[#text])}
+                     b.point_line + #text - 1, utf8.len(text[#text])}
       insert(text, true)
    end
 end
@@ -205,25 +208,26 @@ end
 
 local forward_word = function()
    if(end_of_buffer()) then return end
-   local remainder = b.lines[b.point_line]:sub(b.point + 1, -1)
-   if(not remainder:find("%S")) then
+   local remainder = utf8.sub(b.lines[b.point_line], b.point + 1, -1)
+   if(not utf8.find(remainder, "%S")) then
       b.point, b.point_line = 0, b.point_line+1
    end
-   local _, match = b.lines[b.point_line]:find(word_break, b.point + 2)
+   local _, match = utf8.find(b.lines[b.point_line], word_break, b.point + 2)
    b.point = match and match - 1 or #b.lines[b.point_line]
 end
 
 local backward_word = function()
    if(beginning_of_buffer()) then return end
-   local before = b.lines[b.point_line]:sub(0, b.point)
-   if(not before:find("%S")) then
+   local before = utf8.sub(b.lines[b.point_line], 0, b.point)
+   if(not utf8.find(before, "%S")) then
       b.point_line = b.point_line - 1
       b.point = #b.lines[b.point_line]
    end
-   local back_line = b.lines[b.point_line]:sub(0, math.max(b.point - 1, 0)):reverse()
-   if(back_line and back_line:find(word_break)) then
-      local _, match = back_line:find(word_break)
-      b.point = string.len(back_line) - match + 1
+   local back_line = utf8.reverse(utf8.sub(b.lines[b.point_line],
+                                           0, math.max(b.point - 1, 0)))
+   if(back_line and utf8.find(back_line, word_break)) then
+      local _, match = utf8.find(back_line, word_break)
+      b.point = utf8.len(back_line) - match + 1
    else
       b.point = 0
    end
@@ -295,7 +299,8 @@ local io_write = function(...)
    local old_point, old_point_line = b.point, b.point_line
    b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
    last_line, line_count = write(...)
-   b, b.point, b.point_line = prev_b, old_point + last_line:len(), old_point_line + line_count - 1
+   b, b.point = prev_b, old_point + utf8.len(last_line)
+   b.point_line = old_point_line + line_count - 1
 end
 
 return {
@@ -417,10 +422,10 @@ return {
    newline = newline,
 
    newline_and_indent = function()
-      local indentation = (b.lines[b.point_line]:match("^ +") or ""):len()
+      local indentation = utf8.len(utf8.match(b.lines[b.point_line], "^ +") or "")
       newline()
-      local existing_indentation = (b.lines[b.point_line]:match("^ +") or ""):len()
-      insert({string.rep(" ", indentation - existing_indentation)})
+      local existing_indentation = utf8.len(utf8.match(b.lines[b.point_line], "^ +") or "")
+      insert({utf8.rep(" ", indentation - existing_indentation)})
       b.point = b.point + indentation
    end,
 
@@ -496,8 +501,8 @@ return {
       if(b.point_line < 1) then b.point_line = 1 end
       if(b.point_line > #b.lines) then b.point_line = #b.lines end
       if(b.point < 0) then b.point = 0 end
-      if(b.point > string.len(b.lines[b.point_line])) then
-         b.point = string.len(b.lines[b.point_line]) end
+      if(b.point > utf8.len(b.lines[b.point_line])) then
+         b.point = utf8.len(b.lines[b.point_line]) end
 
       -- Draw background
       love.graphics.setColor(0, 0, 0, 170)
@@ -615,8 +620,7 @@ return {
       local minibuffer = b
       b, mb = last_buffer, nil
       if(not cancel) then
-         minibuffer.callback(string.sub(minibuffer.lines[1],
-                                        #minibuffer.prompt + 1))
+         minibuffer.callback(utf8.sub(minibuffer.lines[1], #minibuffer.prompt+1))
       end
    end,
 
@@ -688,8 +692,8 @@ return {
    prompt = function() return (b and b.prompt) or "> " end,
    set_prompt = function(p)
       local line = b.lines[#b.lines]
-      b.lines[#b.lines] = p .. line:gsub(b.prompt, "", 1)
-      if(b.point_line == #b.lines) then b.point = p:len() end
+      b.lines[#b.lines] = p .. utf8.sub(line, utf8.len(b.prompt))
+      if(b.point_line == #b.lines) then b.point = utf8.len(p) end
       b.prompt = p
    end,
    print_prompt = function()

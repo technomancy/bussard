@@ -14,7 +14,7 @@ local targets = {}
 
 local header = function(lines, header)
    for _,line in ipairs(lines) do
-      local match = line:match(header .. ": (.+)")
+      local match = utf8.match(line, header .. ": (.+)")
       if(match) then return match end
    end
 end

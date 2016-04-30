@@ -13,7 +13,7 @@ ssh = function(username, password)
 end
 
 local get_input = function()
-   return string.sub(ship.editor.get_line(0), string.len(ship.editor.prompt())+1)
+   return utf8.sub(ship.editor.get_line(0), utf8.len(ship.editor.prompt())+1)
 end
 
 define_mode("ssh")

@@ -1,3 +1,4 @@
+local utf8 = require("utf8")
 local lume = require("lume")
 local body = require("body")
 
@@ -54,8 +55,8 @@ end
 
 local render_text = function(x, y, format, values, data)
    if(values and values[1]) then
-      local text = string.format(format, unpack(values))
-      local limit = data.limit or text:len() * font_width
+      local text = utf8.format(format, unpack(values))
+      local limit = data.limit or utf8.len(text) * font_width
       if(data.align == "right") then x = x - limit end
       love.graphics.printf(text, x, y, limit, data.align)
    end

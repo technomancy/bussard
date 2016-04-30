@@ -1,3 +1,4 @@
+local utf8 = require("utf8")
 local utils = require("utils")
 local lume = require("lume")
 
@@ -370,7 +371,7 @@ local ship = {
 
    textinput = function(ship, text, the_mode)
       if(find_binding(ship, text)) then return end
-      if(text:len() > 1) then return end
+      if(utf8.len(text) > 1) then return end
       local mode = the_mode or ship.api:mode()
       if(mode.textinput) then
          if(mode.wrap) then

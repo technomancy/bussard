@@ -53,7 +53,7 @@ orb.shell = {
          --    end
          --    local co = orb.process.spawn(f, env, table.concat(tokens, " "))
          --    break
-         else
+         elseif(t ~= "") then
             table.insert(args, t)
          end
          t = table.remove(tokens, 1)

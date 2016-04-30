@@ -16,8 +16,8 @@ bind("console", "return", function()
            return
         end
 
-        local input = string.sub(ship.editor.get_line(0),
-                                 string.len(ship.editor.prompt())+1)
+        local input = utf8.sub(ship.editor.get_line(0),
+                               utf8.len(ship.editor.prompt())+1)
         ship.editor.history_push(input)
         ship.editor.newline()
         local chunk, err = loadstring("return " .. input)

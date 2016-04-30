@@ -1,3 +1,4 @@
+local utf8 = require("utf8")
 local socket = require("socket")
 
 local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
@@ -174,7 +175,7 @@ return {
    includes = includes,
 
    starts_with = function(s, start)
-      return string.sub(s,1,string.len(start))==start
+      return utf8.sub(s,1,utf8.len(start))==start
    end,
 
    whitelist_table = function(source, whitelist, table_name)
@@ -225,6 +226,7 @@ return {
       math = lume.clone(math),
       table = lume.clone(table),
       string = lume.clone(string),
+      utf8 = lume.clone(utf8),
 
       -- custom
       utils = {

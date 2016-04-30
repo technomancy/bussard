@@ -1,6 +1,8 @@
 -- utils
 
 local md5 = require("md5")
+local utf8 = require("utf8")
+local lume = require("lume")
 
 -- mostly functions which are inexplicable omissions from the lua standard lib
 
@@ -9,7 +11,7 @@ orb.utils = {
       if(div=='') then return {str} end
       if(div==str) then return {} end
       local pos,res = 0,{}
-      for st,sp in function() return str:find(div,pos) end do
+      for st,sp in function() return utf8.find(str,div,pos) end do
          local s = string.sub(str,pos,st-1)
          if(s ~= "") then table.insert(res,s) end
          pos = sp + 1
