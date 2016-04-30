@@ -97,7 +97,7 @@ local sys = {
            name="Solotogo", os=orb, world=true,
 
            industry=5,tech=4,
-           remote=4, pop=2,
+           remote=4, pop=3,
            agri=0, mineral=4,
            upgrades={"laser"},
           },
@@ -247,7 +247,7 @@ local sys = {
 
                       industry=6,tech=7,
                       remote=2, pop=3,
-                      agri=5, mineral=3,
+                      agri=8, mineral=3,
                       upgrades={"fuel_tank", "fuel_charger"},
                      },
                      {r=37000, mass=200,
@@ -339,7 +339,7 @@ local sys = {
                   },
                   {r=25000, mass=430,
                    image_name = "planet-10",
-                   name="Banga", os=orb, world=true,
+                   name="Grungdop", os=orb, world=true,
 
                    industry=5,tech=4,
                    remote=5, pop=4,
@@ -425,7 +425,7 @@ local sys = {
                      },
                      {r=12000, mass=100, station=true,
                       image_name="station-round",
-                      name="Slork Station", os=orb, world=true,
+                      name="Tamada Station", os=orb, world=true,
                       industry=3,tech=3,
                       remote=8, pop=3,
                       agri=1, mineral=3,
@@ -551,12 +551,13 @@ local sys = {
 
 
    -- secret colonies
-   ["LHS 451"] = {gov="Yueh", -- GI 682
+   ["LHS 451"] = {gov=nil, -- GI 682
                   x=4.9,y=-1.1, unmapped=true,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                       image_name="sun",
                       name="LHS 451", fixed=true},
+                     -- TODO: Traxus's station
                      {name = "Portal: Yueh", multiportal=true,
                       image_name="portal-3", os=lisp,
                       r=22000, mass=60, portal="Yueh"},

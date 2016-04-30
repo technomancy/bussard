@@ -150,7 +150,7 @@ from Yueh (Jameson) that actually discovered how to bring them online.
   machine consciousness; research begins
 
 * 2348 - SS Pythagoras arrives in Katilay and colonizes, but its portal
-  proves unstable, coup enacted
+  proves unstable, civil war ensued
 
 * 2351 - SS Cherenkov establishes colony in Mecalle
 
@@ -165,13 +165,16 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2367 - Traxus crashes a ship and escapes into the Yueh network
 
-* 2368 - Machine Consciousness Research and Operation Ban passes
+* 2368 - Machine Consciousness Research and Operation Ban passes,
+         Bohk team goes underground
 
 * 2368 - Colonists from Kala Lamar found Pinan colony in Lalande
 
 * 2369 - Lalande/Sol relations improve somewhat
 
 * 2370 - SS Sagan arrives in Delta Pavonis, colony established
+
+* 2370 - Traxus founds Ikon Technologies
 
 * 2373 - SS Calandria arrives in Katilay, portal to Mecalle
   established, Lalande portal fixed
@@ -184,7 +187,9 @@ from Yueh (Jameson) that actually discovered how to bring them online.
   (Luyten), SS Planck (Tana), SS Poincare (L 668-21), and SS Rosen
   (Wolf 294)
 
-* 2380 - Bohk AC researcher team's work is uncovered, they move to Katilay
+* 2379 - Traxus discovers player MC in Bohk lab, makes contact
+
+* 2380 - Bohk AC turns against research team, they move to Katilay and wipe memory
 
 * 2385 - Katilay finally joins League
 
