@@ -21,6 +21,7 @@ local pages = {
    fuel_charger = "doc/fuel_charger.md",
    solar_panel = "doc/solar_panel.md",
    comm_boost = "doc/comm_boost.md",
+   life_support = "doc/life_support.md",
    map = "doc/map.md",
 }
 

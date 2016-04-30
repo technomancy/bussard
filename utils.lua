@@ -220,6 +220,7 @@ return {
       type = type,
       unpack = unpack,
       pack = function(...) return {...} end,
+      realprint = print,
 
       -- tables
       coroutine = lume.clone(coroutine),

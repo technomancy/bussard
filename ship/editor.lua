@@ -97,7 +97,7 @@ local replace_input = function(input)
 end
 
 local region = function()
-   b.mark = math.min(utf.len(b.lines[b.mark_line]), b.mark)
+   b.mark = math.min(utf8.len(b.lines[b.mark_line]), b.mark)
 
    if(b.point_line == b.mark_line) then
       local start, finish = math.min(b.point, b.mark), math.max(b.point, b.mark)
@@ -262,7 +262,7 @@ end
 
 local newline = function(n)
    local t = {""}
-   for i=1,(n or 1) do table.insert(t, "") end
+   for _=1,(n or 1) do table.insert(t, "") end
    insert(t, true)
 end
 

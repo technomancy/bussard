@@ -2,7 +2,6 @@
 
 local md5 = require("md5")
 local utf8 = require("utf8")
-local lume = require("lume")
 
 -- mostly functions which are inexplicable omissions from the lua standard lib
 

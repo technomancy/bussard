@@ -111,7 +111,6 @@ local sandbox = function(ship)
                      {  help = help.message,
                         default_config = default_config,
                         print = ship.api.print,
-                        realprint = print,
                         -- clear = ship.editor.clear_lines,
                         ship = ship.api,
                         _LOADED = sandbox_loaded,
