@@ -36,11 +36,11 @@ the Terran Republic. Has two internal portals under oversight from
 Terrans. Helped Lalande re-establish contact with Katilay, and also
 helped Yueh establish its Delta Pavonis colony.
 
-* [ ] Bohk Prime
-* [ ] Warnabu Station
-* [ ] Banga
-* [ ] Galure (New Phobos)
-* [ ] Tirakir (Mecalle)
+* [x] Bohk Prime
+* [x] Warnabu Station
+* [x] Changlun (New Phobos)
+* [x] Sutap (New Phobos)
+* [x] Tirakir (Mecalle)
 
 ## Yueh
 
@@ -56,15 +56,15 @@ Lalande, which is a point of tension.
 * [ ] Steele Station (Wolf 1481)
 
 The portal to Delta Pavonis is secretly a multiportal; it can take you
-to a few other locations if you have proper access.
+to other locations if you have proper access.
 
 ## Republic of Katilay
 
 Conflict-wracked even within a single system. Portal was faulty upon
 arrival; contact with Lalande only recently re-established.
 
-* [ ] Katilay Prime
-* [ ] Slork (station)
+* [x] Katilay Prime
+* [x] Tamada Station
 
 ## Tana Protectorates
 
@@ -75,7 +75,7 @@ transport, leaving it quite vulnerable.
 
 * [x] Tana Prime (Tana)
 * [x] Lioboro (Tana)
-* [ ] Kenapa Station (Tana)
+* [x] Kenapa Station (Tana)
 * [x] Solotogo (Wolf 294)
 * [x] Apkabar Station (Luyten)
 * [x] Mirduka Station (L 668-21)
@@ -230,18 +230,3 @@ works into random news groups. Some of the works they use:
 * Captain A.S. of SS Pythagoras killed in coup
 * General who took over afterward?
 * Opposing general?
-
-# Contemporary Characters
-
-* Tana
- * PTMC chairman (very old)
- * Mining captain, served on SS Archimedes
- * Kosaga Shipyards engineer
- * University Students
-   * Ricarad Jinod: developing more advanced sensor array
-* Sol
-* Yueh
- * Luminous engineers (2 or 3?)
- * University students
-* Bohk
- * Cargo captain
