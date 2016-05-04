@@ -2,6 +2,12 @@
 
 ## beta-1 / ???
 
+* Add life-support system upgrade.
+* Some support for UTF-8 characters.
+* Repeated presses of ctrl-tab select next-closest target.
+* Format times as years:seconds.
+* Simplify gravitation to avoid certain bugs.
+* Descriptions for Bohk and Katilay worlds.
 * Splash screen.
 * Added mail client with unread message tracking.
 * Fix some gravitation bugs between planets.

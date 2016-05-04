@@ -17,6 +17,11 @@
 
 TODO: how do we make sure that you don't miss Nari's mission?
 
+Code TODOs:
+* Timed delivery of messages, eg. after 1 jump
+* Re-enable mission system
+* Programmatic mission generation (cargo, passengers)
+
 ## Tracking down echoes of Traxus
 
 * Nari helps you decrypt the polyalphabetic journal(s)

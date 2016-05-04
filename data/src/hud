@@ -1,5 +1,14 @@
 -- -*- lua -*-
 
+local unread_count = function(ship)
+   local unread = lume.count(ship.docs.mail.inbox._unread)
+   if(unread > 0) then
+      return unread .. " unread messages (ctrl-m to read)"
+   else
+      return ""
+   end
+end
+
 ship.hud = {
    { x=60, y=5, type="text",
      format="x: %5.0f y: %5.0f", values={"status.x", "status.y"}
@@ -32,6 +41,9 @@ ship.hud = {
    { x=5, y=75, type="bar",
      values={"status.battery", "status.battery_capacity"},
      color={20, 255, 20}, h=6,
+   },
+   {x=-300, y=-125, type="text", format="%s",
+    values = {unread_count},
    },
    ship.mission.hud,
 }

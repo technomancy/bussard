@@ -10,8 +10,12 @@ DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua
 GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA)
 ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
 
-todo: ; grep TODO $(GAME_LUA)
+todo: ; grep -nH -e TODO $(GAME_LUA)
 blockers: ; grep TODO/blocker $(GAME_LUA)
+
+SAVE_DIR=${HOME}/.local/share/love/bussard
+
+wipe: ; rm -rf ${SAVE_DIR}
 
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
