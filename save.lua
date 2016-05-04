@@ -60,6 +60,8 @@ return {
          ship_data.api = nil
          lume.extend(ship, ship_data)
 
+         -- when we are testing a single file but don't want to lose state
+         -- ship.api.src["mail"] = love.filesystem.read("data/src/mail")
          ship:enter(ship.system_name, false, true)
       else
          ship.api.docs.mail = { inbox = { _unread = {} }}

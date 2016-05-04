@@ -27,6 +27,19 @@ local describe = function(msg)
    return date .. " | " .. from .. " | " .. subject
 end
 
+local subjects_by_date = function(msgs)
+   local by_date, names = {}, {}
+   for name, msg in pairs(msgs) do
+      if(name ~= "_unread") then
+         by_date[utils.parse_time(header(lume.split(msg, "\n"), "Date"))] = name
+      end
+   end
+   for _, date in ipairs(lume.sort(lume.keys(by_date))) do
+      table.insert(names, by_date[date])
+   end
+   return names
+end
+
 local open_folder = function(folder)
    ship.editor.set_read_only(false)
    ship.editor.end_of_buffer()
@@ -37,9 +50,10 @@ local open_folder = function(folder)
    targets = {}
 
    if(folder) then
-      -- TODO/blocker: sort by date
       p("Folder: " .. folder .. "\n")
-      for name,msg in pairs(ship.docs.mail[folder]) do
+      local msgs = ship.docs.mail[folder]
+      for _,name in ipairs(subjects_by_date(msgs)) do
+         local msg = msgs[name]
          if(name ~= "_unread") then
             table.insert(targets, {folder, name})
             if(ship.docs.mail[folder]._unread[name]) then
@@ -51,7 +65,7 @@ local open_folder = function(folder)
       end
    else
       p("Folders\n")
-      for name in pairs(ship.docs.mail) do
+      for _,name in ipairs(lume.sort(lume.keys(ship.docs.mail))) do
          table.insert(targets, name)
          local unread_count = lume.count(ship.docs.mail[name]._unread)
          local count = lume.count(ship.docs.mail[name]) - 1
@@ -65,7 +79,6 @@ local open_folder = function(folder)
 end
 
 ship.modes.mail.activate = open_folder
-
 ship.modes.mail.parent = ship.modes.edit -- nav keys should be intact
 
 bind("mail", "return", function()

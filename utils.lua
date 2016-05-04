@@ -57,6 +57,12 @@ local format_time = function(s)
    return tostring(years) .. ":" .. formatted
 end
 
+local parse_time = function(t)
+   local y,s = unpack(lume.split(t, ":"))
+   local s2 = s:gsub(",", "")
+   return tonumber(y) * seconds_per_year + tonumber(s2)
+end
+
 local pairs_for = function(raw, wrap)
    return function(_)
       local t = {}
@@ -204,6 +210,7 @@ return {
    distance = distance,
 
    format_time = format_time,
+   parse_time = parse_time,
 
    sandbox = {
       -- functions
@@ -234,6 +241,7 @@ return {
          pad_to = pad_to,
          distance = distance,
          format_time = format_time,
+         parse_time = parse_time,
       },
       lume = lume,
    },
