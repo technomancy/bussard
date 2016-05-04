@@ -7,6 +7,7 @@ local services = require("services")
 local sessions = {}
 
 local logout = function(ship, target)
+   if(not target) then return end
    local session = sessions[target.name]
    if(session) then
       local fs = unpack(session)
@@ -69,7 +70,8 @@ local sandbox = function(ship)
    if(ship.target and ship.target.portal) then
       sb.body = ship.target
       sb.portal_target = ship.target.portal
-      sb.trip_cleared = function() return true end -- stub
+      sb.no_trip_clearance = lume.fn(services.no_trip_clearance, ship,
+                                     ship.system_name, ship.target.portal)
       sb.set_beams = function(n)
          target.beam_count = ((n or 0) * 9) / ship.portal_time
       end

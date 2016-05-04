@@ -3,6 +3,7 @@
 
 local utils = require("utils")
 local body = require("body")
+local clearances = require("data.clearances")
 
 local get_price = function(good, amount, prices, direction)
    local other_direction = direction == "sell" and "buy" or "sell"
@@ -113,5 +114,14 @@ return {
          end
          return price
       end
+   end,
+
+   no_trip_clearance = function(ship, from, to)
+      for event, reason in pairs(clearances[from .. ":" .. to] or {}) do
+         if(not ship.events[event]) then
+            return reason
+         end
+      end
+      return false
    end,
 }
