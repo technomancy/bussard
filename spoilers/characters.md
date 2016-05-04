@@ -1,3 +1,60 @@
+# Companion Characters
+
+Certain characters can be recruited to join you on your ship, provided
+you have a life support upgrade installed. If you sell your life
+support, any humans onboard will be forced to disembark, aborting any
+passenger missions you may have accepted. If you have companions on
+board, they will send you irate emails asking you to pick them back up
+after you buy life support again.
+
+Your only interaction with these characters is by email. They can
+email you when certain plot points trigger (or maybe after a certain
+amount of time has passed with no plot points triggering in the case
+of hints) but you can't email them back beyond simple ACK/NACK replies.
+
+## Nari Phouen
+
+She is an older freelance repair tech with an amateur interest in
+historical computing. Gruff but kind at heart. She originally want to
+board your craft just to get passage to another system, but her
+old-fashioned style means she won't get on board without meeting the
+captain in-person first, which is obviously impossible in your
+case. At first she thinks it's a scam, but when she does a more
+detailed scan of your ship she realizes the truth (before you do).
+
+Helps you realize who you are, decrypt your journals, and get a handle
+on coding.
+
+She also offers to pretend to be the captain of the ship in any cases
+where an un-manned ship would raise too many suspicions.
+
+TODO: where is she from, who does she know, what does she want?
+
+## Clay Dorath
+
+He is a researcher who formerly held an position at the Darush
+lab. Joins your ship in order to break into the lab so you can get the
+spacetime junction, but in the end is only interested in getting
+revenge on former colleagues and abandons you in a heap of
+trouble. He's self-deprecating, funny, but unbalanced. We should get a
+hint of him snapping before it happens to us?
+
+TODO: where is he from, who does he know, why does he want revenge?
+
+## Mila Calandria
+
+Security specialist. Quiet, very professional, and deeply curious.
+
+She gives you the hints you need to implement the algorithms finally
+decrypt the last few journals.
+
+She's too paranoid to spend much time on your ship. Everything about
+her helping you is hugely illegal; not just the fact that you're an
+illegal MC, but also the fact of implementing crypto in a way that's
+non-compliant. So she has good reason to stay cautious.
+
+TODO: where does she live? does she travel with you at all?
+
 # Governments
 
 This will make more sense if you read history.md first.
@@ -5,7 +62,7 @@ This will make more sense if you read history.md first.
 ## Solar Union
 
 Home of humanity, but regressed from its height. Suffered from having
-portal delayed due to accident. Some believe the Defiant was sabotaged
+portal delayed due to accident. Some believe the Ptolemy was sabotaged
 on its mission to carry a portal to Sol.
 
 * [x] Earth
@@ -95,7 +152,8 @@ peace. Nominally they aim to advance shared scientific progress, but
 little of this happens in practice. The league is headquartered on
 Bohk Prime.
 
-(TODO: Find a way to fit in significance of Darush, New Phobos, Kowlu)
+TODO: Find a way to fit in significance of New Phobos, Kowlu, Delta Pavonis
+OR: Yueh maybe doesn't need so many worlds
 
 # Companies
 
@@ -121,6 +179,9 @@ Bohk Prime.
 
 * Allied Deliveries (Yueh)
   Handles most eastern delivery routes.
+
+* Leeft (Sol)
+  Interplanetary and interstellar passenger runs.
 
 * Aperture Technology (Lalande)
   Caretaker of portal artifacts, researches and maintains portal
@@ -168,7 +229,7 @@ either planetary colonies or re-appropriated into orbital stations.
 
 * First Wave: SS Lorentz (Lalande, 0.3c), SS Copernicus (Ross, 0.5c)
 * Second Wave: SS Bradbury (Bohk, 0.6c),
-  SS Eratosthenes † (New Phobos, 0.5c), SS Defiant (Yueh, 0.6c)
+  SS Eratosthenes † (New Phobos, 0.5c), SS Ptolemy (Yueh, 0.6c)
 * Third Wave: SS Kepler † (Kowlu)
 * Fourth Wave: SS Las Casas (Katilay), SS Cherenkov † (Mecalle),
   SS Sagan (Delta Pavonis)
@@ -184,14 +245,14 @@ From third-wave on they all have portals onboard and fly at 0.7c.
 Newer colonizers have portals on them, but existing colonies need
 ships containing just the equipment needed to create the portal.
 
-* Original portal ship: SS Defiant (converted from Yueh colonization)
+* Original portal ship: SS Ptolemy (converted from Yueh colonization)
  * Yueh->Lalande
  * Lalande->Sol (accident)
-* Second portal ship: SS Calandria
+* Second portal ship: SS Euclid
  * Lalande->Ross
  * Bohk->New Phobos
  * Mecalle->Katilay
-* Defiant Rescue ship: SS Goddard
+* Ptolemy Rescue ship: SS Goddard
 * Bohk trade ship: SS Oberth
  * carries portal from Yueh back to Bohk
 
@@ -225,7 +286,7 @@ works into random news groups. Some of the works they use:
 * Dr. Soong, credited (miscredited?) with discovery of portals, founded Aperture
 * Captain Jarkad of SS Goddard
 * Dr. Jameson, Yueh Researcher who replicated portal tech
-* Captain Armiger of the original Defiant mission
+* Captain Armiger of the original Ptolemy mission
 * Captain Irons of Lalande bomber squad from the war
 * Captain A.S. of SS Pythagoras killed in coup
 * General who took over afterward?

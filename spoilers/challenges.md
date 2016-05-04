@@ -1,14 +1,14 @@
 # Challenges
 
-## Get a passponder
+The progression is fairly linear up to the point where you get access
+to the Spacetime Junction, at which point it branches out with a
+number of "failed timelines" that you explore, and then reset back to
+the Junction point till you know enough to get to LHS 451 and finish
+the game.
 
-### Jinod missions
-
-* [x] Deliver sensor equipment to Mars
-* [x] Take sensors out for a spin; spend 1ksec within 3000 of Wolf 294
-* [x] Then study New Phobos with sensor (gives you passponder)
-
-Maybe add multiple ways to get this?
+There will be coding challenges. They can't be too contrived. Few of
+them should involve writing from scratch. In real life it's much more
+common to scrounge together solutions from existing snippets you find.
 
 ## Auto-miner
 

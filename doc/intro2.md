@@ -15,7 +15,7 @@ easier. Once you're close enough to the station, the line will
 turn bright green. This means you are within communications range, and you
 can log into the station's computer as a guest by running this function:
 
-    login()
+    ssh()
 
 At this point you can explore the station's computer as long as you
 stay within comm range. However, unless your orbit is stable, you will

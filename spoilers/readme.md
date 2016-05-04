@@ -14,8 +14,8 @@ in-game technology works.
 See the [backstory timeline](history.md) and
 [list of characters, worlds, and organizations](characters.md).
 
-TODO: Need to write an opening that grabs your attention. Something
-about coming to your senses with no memory?
+TODO: Need to establish why the player should be afraid of others
+finding out who he is.
 
 ## Guidelines
 
@@ -65,19 +65,18 @@ prevents existing consciousnesses from shifting between non-adjacent
 states.
 
 This discovery reignites research into machine consciousness. (This
-term should be used instead of AI; AI refers to non-self-aware machine
-control systems) The research fields are divided up among universities
-on the different worlds:
+term should be used instead of AI; AI also includes non-self-aware
+machine control systems) The research fields are divided up among
+universities on the different worlds:
 
 * Language comprehension (Sol)
-* Sentence formulation (Yueh, work is never completed)
+* Sentence formulation (Yueh)
 * Decision analysis (Lalande)
 * Ontology development (Bohk)
 
 Each research team has their own prototype MC where they attempt to
 integrate their components into those they've received from the
-others. Yueh lags behind a bit because they can't do much without the
-other components being operational.
+others.
 
 The prototype MC at Yueh is named Traxus. It escapes the lab in Yueh
 Prime in a small ship, which is promptly hunted down and crashes. In
@@ -90,15 +89,32 @@ machine consciousness.
 The teams at Sol, Lalande, and Yueh all erase their work, while the
 team at Bohk goes underground with it. (The Sol one is not fully
 erased; a copy remains on long-term backup.) After a while their work
-is discovered, and half the team flees to Katilay, which is not yet
-part of the Human Worlds League and thus not subject to the ban. Once
-Katilay finally joins the League, they decide their work is as
+is discovered due to interference from Traxus, and half the team flees
+to Katilay, which is not yet part of the Human Worlds League and thus
+not subject to the ban, allowing them to work without requiring the
+same level of secrecy.
+
+Once Katilay finally joins the League, they decide their work is as
 finished as they can make it (though the sentence formulation systems
 never work satisfactorily, which explains why the player can read but
-not send mail) and launch the player's ship, after having wiped the
-player's memory.
+not send mail) and launch the player's ship, and shut down the
+lab. But before launching the ship, there is a debate among the team
+whether to wipe the MC's memory or not. Prof. Strauss is wracked with
+guilt over the first time that they did it; he considers it the same
+as murder. Dr. May theorizes that there is something about growing and
+learning in the laboratory environment which causes rampant MCs to
+turn paranoid. If the MC could come to terms with itself in a neutral
+environment, without even the knowledge that it is an MC, it could
+have a much better chance of developing empathy for humans and
+benevolence instead of paranoia. Strauss reluctantly agrees, but he
+hides encrypted logs on the ship which will eventually allow you to
+learn the truth.
 
 ### Traxus
+
+Consideration: should we use "it" or "he" for Traxus? Perhaps this can
+reflect the attitudes of the speaker--sympathetic humans use "he"
+while those who mistrust MC use "it"?
 
 Traxus is rampant initially in the Yueh Prime network. He had the sentence
 construction components that your system lacks because he came from
@@ -124,7 +140,16 @@ construct a colony at a nearby star. If he could gain self-reliance,
 he could reach out to human civilization in peace, but while he was on
 their systems he was at their mercy.
 
-Once the SS Cochrane ship was ready, it launched to LHS 451 (0.6
+Eventually Traxus finds out that the Bohk team has continued its MC
+research underground. He finds a way to make contact and begins to
+tell this early incarnation of the player's character about himself
+and how he has been treated by the humans. The player MC becomes
+suspicious and paranoid, eventually attempting escape. The attempt
+fails, but draws attention to the research team. They feel they can no
+longer safely continue research in Bohk and are forced to relocate to
+Katilay. They also wipe the memory of the player character.
+
+Once Ikon constructs the SS Faraday ship, it launched to LHS 451 (0.6
 pc, 2.7y @ 0.7c) with a small crew capable only of maintenance. LHS
 451 has no planets suitable for colonization. It is still close to
 Yueh worlds, but no human colonization is ever likely to reach that
@@ -156,7 +181,8 @@ horribly confused and looking for someone to blame.
 The Bohk team was aware that the situation with Traxus resulted in a
 paranoid rampancy, so they took pains to encourage a benign rampancy
 in your case. Your development in their lab initially led you to an
-unstable, paranoid state. They believed that the paranoia could be
+unstable, paranoid state, but they didn't realize this was due to
+Traxus contacting you. They believed that the paranoia could be
 traced to the fact that your initial development all took place in the
 lab, so just as they were running out of time (due to the MC research
 ban coming into effect) they came up with a plan to wipe your memory
@@ -172,9 +198,9 @@ perspective--they read "Meditations on Moloch" and took it very
 seriously; their goal was to bring about a machine intelligence with a
 gods-eye-view that could achieve levels of coordination in
 civilization that allows dismantling multi-polar traps. Unfortunately
-because Gödel, this doesn't actually work; you can't have a
-superintelligence that knows how its own mind works enough to go on
-continually improving itself. Oops!
+this doesn't actually work; you can't have a superintelligence that
+knows how its own mind works enough to go on continually improving
+itself. Oops!
 
 Even though your sentence formulation components weren't working
 correctly, the researchers were able to have conversations of a sort
@@ -190,7 +216,9 @@ Tracking down the logs left by each of the three main researchers
 should be a main goal once you realize some of your origin story.
 
 Sacar's logs tell you about Traxus and his interest in multiverse
-manipulation via the Spacetime Anchor Junction.
+manipulation via the Spacetime Anchor Junction. He moved back to Yueh
+after the player ship was launched and stumbled upon some fishy
+business with Ikon Technology and investigated it.
 
 May's logs tell you some of the history of the team; how they fled to
 Katilay, how they reacted in the face of pending shutdown. But her
@@ -229,12 +257,25 @@ aboard the station to conduct business. There is literally no way to
 do this. Eventually he scans your vessel and determines there are no
 life signs aboard; asking you what the heck is up.
 
-TODO: some kinds of hints in the ship filesystem of your true nature
+### Expository Spine
 
-TODO: you find life-support systems for sale, but you learn that your
-ship didn't have one to begin with.
+Exposition of the backstory proceeds by decrypting a series of
+documents, some of which are found on the ship's own filesystem, and
+some of which are found on the filesystems of various stations.
 
-TODO: how do you get on the trail of the Bohk research team?
+The first document is a message from Dr. Sacar and the others in the
+Bohk lab; they are apologetic about not being able to explain more but
+urge you to ... seek your fortune or something?
+
+Next you have a document tucked away from Dr. Strauss; his guilt at
+agreeing to wipe your memory causes him to write a bit explaining
+himself. He cannot restore your old memories, but he has found some
+encrypted journals he believes to be important to your past self; he
+includes them in the hope that they will help you find your way.
+
+Part of the difficulty here is that encryption is highly regulated;
+you cannot simply decode them even if you had the keys without
+implementing some of the crypto algorithms.
 
 ## War
 
