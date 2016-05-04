@@ -1,5 +1,5 @@
 love.conf = function(t)
-   t.title, t.version, t.identity = "Bussard", "0.9.1", "bussard"
+   t.title, t.identity = "Bussard", "bussard"
 
    if(os.getenv("SCREENSHOT")) then
       t.window.width, t.window.height = 615, 500
