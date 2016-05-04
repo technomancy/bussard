@@ -125,6 +125,7 @@ local sandbox = function(ship)
                         bind = lume.fn(bind, ship),
                         ssh_connect = lume.fn(ssh.connect, ship),
                         ssh_send_line = lume.fn(ssh.send_line, ship),
+                        mission_accept = lume.fn(mission.accept, ship),
    })
 end
 
@@ -174,9 +175,10 @@ local ship = {
    time_offset = utils.game_start,
    system_name = "L 668-21",
    cargo = {["food"] = 2},
-   upgrade_names = {},
+   upgrade_names={},
    active_missions={},
-   events = {},
+   mail_delivered={},
+   events={},
    flag = "Tana",
    name = "Adahn",
 
@@ -335,18 +337,6 @@ local ship = {
       end
 
       ship.mass = ship.mass + ship:cargo_mass()
-
-      -- TODO: this needs to be declarative
-      if(ship.events["jinod3"]) then
-         for _,b in ipairs(ship.systems["Sol"].bodies) do
-            if(b.name == "Mars") then
-               if(not lume.find(b.upgrades, "comm_boost")) then
-                  table.insert(b.upgrades, "comm_boost")
-                  body.seed_cargo(b, true)
-               end
-            end
-         end
-      end
    end,
 
    cargo_mass = function(ship)

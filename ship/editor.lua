@@ -671,6 +671,8 @@ return {
 
    get_max_lines = function() return b and #b.lines end,
 
+   get_lines = function() return lume.clone(b.lines) end,
+
    point = function() return b.point, b.point_line end,
 
    is_dirty = function() return b and b.dirty end,

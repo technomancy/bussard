@@ -87,6 +87,15 @@ define_mode("view")
 ship.modes.view.parent = ship.modes.edit -- nav keys should be intact
 ship.modes.view.activate = lume.fn(ship.editor.set_read_only, true)
 
--- TODO
--- actually deliver mail to your maildir
--- unread tracking
+-- accept mission
+bind("view", "ctrl-alt-return", function()
+        local id = header(ship.editor.get_lines(), "Message-Id")
+        local success, err = mission_accept(id)
+        ship.editor.close()
+        ship.editor.open(ship, "*console*")
+        if(success) then
+           print("Mission accepted.")
+        else
+           print(err)
+        end
+end)

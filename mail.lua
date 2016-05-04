@@ -20,9 +20,10 @@ local deliver_message = function(ship, msg_name)
    local msg = read(msg_name)
    msg_name = msg_name:gsub(".msg$", "")
    local folder = folder_for(msg)
-   if(not ship.api.docs.mail[folder][msg_name]) then
+   if(not ship.mail_delivered[msg_name]) then
       ship.api.docs.mail[folder][msg_name] = msg
       ship.api.docs.mail[folder]._unread[msg_name] = true
+      ship.mail_delivered[msg_name] = true
    end
 end
 

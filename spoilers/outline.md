@@ -1,6 +1,6 @@
 # Plot outline
 
-## Prologue
+## Act I: Prologue
 
 * Come to your senses in a remote mining system, email indicator blinking
 * Lab team left cryptic message wishing you best (msgs/readme.md)
@@ -17,12 +17,7 @@
 
 TODO: how do we make sure that you don't miss Nari's mission?
 
-Code TODOs:
-* Timed delivery of messages, eg. after 1 jump
-* Re-enable mission system
-* Programmatic mission generation (cargo, passengers)
-
-## Tracking down echoes of Traxus
+## Act II: Tracking down echoes of Traxus
 
 * Nari helps you decrypt the polyalphabetic journal(s)
  * The one that records when Traxus first contacts you
@@ -31,7 +26,7 @@ Code TODOs:
 
 TODO: flesh this out more; who is it you find, and how do they know what they tell you?
 
-## Spacetime Junction
+## Act III: Spacetime Junction
 
 * Somehow you recruit Clay Dorath
 * He leads you on a trail that eventually gets you to finding the spacetime junction
@@ -44,7 +39,7 @@ TODO: flesh this out more; who is it you find, and how do they know what they te
 
 TODO: need a ton more detail here
 
-## Some more chapters
+## Act IV: Gathering clues
 
 At this point, progress up to the endgame section should consist only
 of learning new things, because now that you can reset the game state
@@ -62,7 +57,7 @@ Threads to explore:
 Can we find a way to make auto-pilot functionality necessary to the plot?
 Purchase additional ships and load them up with auto-pilot?
 
-## Endgame: Ikon Technologies and the Domain Injector
+## Act V: Ikon Technologies and the Domain Injector
 
 * Find out that Traxus has colonized his own world
 * Learn how to log into portal computer console

@@ -5,7 +5,7 @@ local utils = require "utils"
 local orb = require "os.orb"
 
 local ship_fields = {
-   "x", "y", "dx", "dy", "heading",
+   "x", "y", "dx", "dy", "heading", "mail_delivered",
    "battery", "fuel", "credits", "system_name", "active_missions",
    "upgrade_names", "cargo", "target_number", "events", "flag",
 }

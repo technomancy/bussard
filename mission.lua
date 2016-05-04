@@ -63,11 +63,14 @@ local check = function(ship)
 end
 
 local accept = function(ship, message_id)
+   -- TODO: don't allow accept of missions that haven't actually been delivered
    local mission = require("data.missions." .. message_id)
    if(not mission) then
-      return false, "no mission."
+      return false, "No mission " .. message_id
    else
       ship.active_missions[message_id] = utils.time(ship)
+      -- TODO: check for open cargo space
+      -- TODO: check for other prerequisites
       for good, amt in pairs(mission.cargo or {}) do
          ship.cargo[good] = (ship.cargo[good] or 0) + amt
       end
