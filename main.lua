@@ -46,6 +46,7 @@ local ui = {
 
 local safely = function(f)
    return function(...)
+      -- if true then return f(...) end
       local traceback, err
       local ok, ret = xpcall(lume.fn(f, ...), function(e)
                                 traceback, err = debug.traceback(), e
@@ -193,11 +194,9 @@ local draw = safely(function(dt)
       love.graphics.pop()
 
       hud.render(ship)
-      ship.api.editor.draw(dt)
-
-      for _,u in pairs(ship.upgrades) do
-         if(u.draw_after) then u.draw_after(ship, dt) end
-      end
+      local mode = ship.api:mode()
+      local draw = (mode and mode.draw) or ship.api.editor.draw
+      draw(ship)
 end)
 
 play = function()

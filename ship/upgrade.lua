@@ -27,7 +27,47 @@ local gov_colors = {
    ["Yueh"] = {0xcd, 0x00, 0x00},
 }
 
-local map_previous_mode
+local em = love.graphics.getFont():getWidth('a')
+
+local map_draw = function(ship)
+   love.graphics.setColor(0, 0, 0, 200)
+   love.graphics.rectangle("fill", 0, 0, w, h)
+   love.graphics.push()
+   love.graphics.translate(w/2 + ship.api.map.x*-100, h/2 + ship.api.map.y*100)
+   love.graphics.setColor(0, 0, 255)
+
+   for _, data in pairs(ship.systems) do
+      if(not data.unmapped) then
+         for _, b in ipairs(data.bodies) do
+            if(b.portal and not ship.systems[b.portal].unmapped) then
+               local target = ship.systems[b.portal]
+               love.graphics.line(data.x*100, data.y*-100,
+                                  target.x*100, target.y*-100)
+            end
+         end
+      end
+   end
+
+   for name, data in pairs(ship.systems) do
+      if(not data.unmapped) then
+         local x,y = data.x*100, data.y*-100
+         local r = data.bodies[1].mass / 15000
+         local label_width = name:len() * em
+         local color = gov_colors[data.gov]
+         love.graphics.setColor(unpack(color))
+         love.graphics.circle("fill", x, y, r)
+         love.graphics.print(name, x-label_width/2, y+r*1.3)
+         if(name == ship.system_name) then
+            love.graphics.circle("line", x, y, r*1.3)
+         end
+         love.graphics.setColor(77, 77, 77)
+         love.graphics.circle("line", x, y, r)
+      end
+   end
+   love.graphics.print("Copyright © 2430 Lonesome Planet Publishing" ..
+                          ", All Rights Reserved.", -640, 480)
+   love.graphics.pop()
+end
 
 local climate = { temp = 26, humidity = 0.4 }
 
@@ -113,74 +153,12 @@ return {
          else
             ship.comm_range = ship.base_stats.comm_range
          end
-      end
+      end,
    },
 
-   -- TODO/blocker: redo map as buffer with special draw function
    map = {
       stats = {},
-      load = function(ship)
-         em = love.graphics.getFont():getWidth('a')
-         if(not ship.modes.map) then
-            local system = ship.systems[ship.system_name]
-            local m = { x=system.x, y=system.y }
-            ship.map = m
-            ship.sandbox.define_mode("map")
-            ship.sandbox.bind("map", "escape", function()
-                                 ship:change_mode(map_previous_mode) end)
-            ship.sandbox.bind("map", "down", lume.fn(pan, m, 0, -0.1))
-            ship.sandbox.bind("map", "up", lume.fn(pan, m, 0, 0.1))
-            ship.sandbox.bind("map", "left", lume.fn(pan, m, -0.1, 0))
-            ship.sandbox.bind("map", "right", lume.fn(pan, m, 0.1, 0))
-         end
-      end,
-
-      action = function(ship)
-         map_previous_mode = ship:mode().name
-         ship:change_mode("map")
-      end,
-
-      draw_after = function(ship)
-         if(ship:mode().name == "map") then
-            love.graphics.setColor(0, 0, 0, 200)
-            love.graphics.rectangle("fill", 0, 0, w, h)
-            love.graphics.push()
-            love.graphics.translate(w/2 + ship.map.x*-100, h/2 + ship.map.y*100)
-            love.graphics.setColor(0, 0, 255)
-
-            for _, data in pairs(ship.systems) do
-               if(not data.unmapped) then
-                  for _, b in ipairs(data.bodies) do
-                     if(b.portal and not ship.systems[b.portal].unmapped) then
-                        local target = ship.systems[b.portal]
-                        love.graphics.line(data.x*100, data.y*-100,
-                                           target.x*100, target.y*-100)
-                     end
-                  end
-               end
-            end
-
-            for name, data in pairs(ship.systems) do
-               if(not data.unmapped) then
-                  local x,y = data.x*100, data.y*-100
-                  local r = data.bodies[1].mass / 15000
-                  local label_width = name:len() * em
-                  local color = gov_colors[data.gov]
-                  love.graphics.setColor(unpack(color))
-                  love.graphics.circle("fill", x, y, r)
-                  love.graphics.print(name, x-label_width/2, y+r*1.3)
-                  if(name == ship.system_name) then
-                     love.graphics.circle("line", x, y, r*1.3)
-                  end
-                  love.graphics.setColor(77, 77, 77)
-                  love.graphics.circle("line", x, y, r)
-               end
-            end
-            love.graphics.print("Copyright © 2430 Lonesome Planet Publishing" ..
-                                   ", All Rights Reserved.", -640, 480)
-            love.graphics.pop()
-         end
-      end,
+      action = map_draw,
    },
    -- purely stat upgrades
    engine = { stats = { engine_power = 512, burn_rate = 4, mass = 64, } },
