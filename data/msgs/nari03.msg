@@ -17,6 +17,8 @@ clues... first of all, your ship is old as the hills. Kosaga Shipyards
 has been out of business for almost half a century. But more intriguing
 is the massive amount of processing power you've got loaded into it.
 
+TODO: draw this out into another message or two
+
 This sounds completely nuts... I tried to come up with alternate
 explanations that would fit the facts, but they all sound even
 crazier. The only explanation that makes sense is that your ship

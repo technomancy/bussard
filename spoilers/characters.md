@@ -53,6 +53,8 @@ her helping you is hugely illegal; not just the fact that you're an
 illegal MC, but also the fact of implementing crypto in a way that's
 non-compliant. So she has good reason to stay cautious.
 
+Mila worked as a security consultant for Ikon Technologies.
+
 TODO: where does she live? does she travel with you at all?
 
 # Governments

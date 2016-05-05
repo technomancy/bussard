@@ -69,6 +69,7 @@ Purchase additional ships and load them up with auto-pilot?
 * Learn how to log into portal computer console
  * Subvert security features; allow portal to secret colony
 
-This is already laid out in some detail at the bottom of readme
+The progression of the endgame scenario is already laid out in some
+detail at the bottom of spoilers/readme.md.
 
 * You get the domain injector and have power to bend reality to your will; the end

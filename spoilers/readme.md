@@ -244,6 +244,13 @@ requires some digging to get a temporary boost or something). Coming
 up with a scenario that would reasonably require fancy piloting would
 be great.
 
+Alternate idea: instead of only allowing one-way reset back to the
+anchor point, the Junction could allow you to keep multiple parallel
+timelines active at once, and allow you to traverse between them at
+will. This would allow for a lot more flexibility, but also make it a
+lot harder to keep things straight. Need to see if we can come up with
+some ways to take advantage of this awesome unconventional structure.
+
 ### Self-discovery
 
 Your memory is wiped because they hope that by not realizing you are
