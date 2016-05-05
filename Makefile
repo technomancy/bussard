@@ -3,7 +3,7 @@ run: ; love .
 SHIP_LUA=ship/*.lua
 ENGINE_LUA=*.lua
 OS_LUA=os/orb/*.lua os/lisp/*.lua
-IN_OS_LUA=os/orb/resources/* os/lisp/resources/*
+IN_OS_LUA=os/orb/resources/*
 IN_SHIP_LUA=data/src/*
 DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua
 
@@ -23,8 +23,8 @@ check:
 	  --globals love lume orb _ \
 	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
-	  --globals lume pack ship pause define_mode bind utils \
-	            ssh ssh_connect logout ssh_send_line \
+	  --globals lume utf8 pack ship pause define_mode bind utils realprint \
+	            mail ssh ssh_connect logout ssh_send_line mission_accept \
 	  -- $(IN_SHIP_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel \

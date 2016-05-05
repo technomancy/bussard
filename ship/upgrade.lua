@@ -1,7 +1,7 @@
 local utils = require("utils")
 local asteroid = require("asteroid")
 
-local w, h, em = love.graphics:getWidth(), love.graphics:getHeight()
+local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 local laser_hits = function(ship, b, distance)
    -- assuming circular images
@@ -12,10 +12,6 @@ local laser_hits = function(ship, b, distance)
       local divergence = math.abs(math.sin(angular_divergence) * distance)
       return divergence < diameter
    end
-end
-
-local pan = function(m, x, y)
-   m.x, m.y = m.x + x, m.y + y
 end
 
 local gov_colors = {
