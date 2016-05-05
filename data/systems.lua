@@ -73,7 +73,7 @@ local sys = {
            industry=8,tech=6,
            remote=2, pop=1,
            agri=0, mineral=3,
-           upgrades={"cargo_bay"},
+           upgrades={"cargo_bay", "laser"},
           },
           {name = "Portal: L 668-21",
            image_name="portal-1",

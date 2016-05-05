@@ -7,20 +7,18 @@ mining of metallic asteroids.
 ## Control
 
 In order to fire your laser, it's recommended to bind it in the
-`ship.controls` table. Left Alt is a common choice. Put this in your
-ship's config file (normally accessible with ctrl-enter):
+`ship.controls` table. Left Alt is a common choice. Add this to your
+ship's configuration by pressing alt-o followed by src.config to
+open the ship config file. Add this line below the `ship.controls = {
+[...] }` section.
 
     ship.controls["lalt"] = ship.actions.laser
 
-Be sure it's below the `ship.controls = { [...] }` section.
-In order to reload your config with the changes you've made, switch to
-the console (usually `) and run:
-
-    ship:load("src.config")
-
-This will fire the laser as long as the key is held down. However, if
-you'd like a key to toggle it on and off, you can use something like
-this instead:
+In order to reload your config with the changes you've made, go back
+to flight mode and press ctrl-r. Now you will will fire the laser as
+long as the alt key is held down in flight mode. However, if you'd
+like a key to toggle it on and off, you can use something like this
+instead:
 
     keymap.define("flight", "lalt", function() ship.actions.laser("toggle") end)
 

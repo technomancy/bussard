@@ -2,19 +2,25 @@
 
 define_mode("edit", ship.editor.textinput, ship.editor.wrap)
 
+-- most of the functions these are bound to should be self-explanatory
+-- just by looking at the function name.
+
 bind("edit", "escape", function()
         ship.editor.save()
-        ship.editor.change_buffer(nil)
+        ship.editor.change_buffer(nil) -- nil buffer means flight mode
 end)
 
+bind("edit", "ctrl-q", ship.ui.quit)
+
+-- cycle forwards and backwards through open buffers
+bind("edit", "ctrl-pageup", lume.fn(ship.editor.next_buffer, -1))
 bind("edit", "appback", lume.fn(ship.editor.next_buffer, -1))
+bind("edit", "ctrl-pagedown", ship.editor.next_buffer)
 bind("edit", "appforward", ship.editor.next_buffer)
 
-bind("edit", "ctrl-pageup", lume.fn(ship.editor.next_buffer, -1))
-bind("edit", "ctrl-pagedown", ship.editor.next_buffer)
+bind("edit", "pause", function() ship.paused = (not ship.paused) end)
 
-bind("edit", "pause", pause)
-
+-- you can bind return to just ship.editor.newline to disable auto-indent
 bind("edit", "return", ship.editor.newline_and_indent)
 bind("edit", "ctrl-z", ship.editor.undo)
 bind("edit", "ctrl-r", ship.editor.revert)
@@ -38,6 +44,7 @@ bind("edit", "ctrl-v", ship.editor.yank)
 bind("edit", "pageup", ship.editor.scroll_up)
 bind("edit", "pagedown", ship.editor.scroll_down)
 
+-- insert a page-break, rendered as a horizontal line
 bind("edit", "ctrl-l", function()
         ship.editor.newline()
         ship.editor.textinput("\f")

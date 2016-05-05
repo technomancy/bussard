@@ -1,10 +1,10 @@
-# Welcome to Bussard!
+# Welcome!
 
 If you're just getting started, you'll want to acquaint yourself with
-the flight controls first. Right now you're reading this in console mode,
-which is a system in which you can interact with your ship's onboard
-computer. You'll want to hit ESC to get back to flight mode, and `
-will get you back here.
+the flight controls first. Right now you're reading this in console
+mode, which is a system in which you can interact with your ship's
+onboard computer. You'll want to hit ESC to get back to flight mode,
+and ctrl-enter will get you back here.
 
 Use the arrow keys to fly around a bit, but keep an eye on the red
 fuel gauge in the upper left. The faster you're going, the more fuel

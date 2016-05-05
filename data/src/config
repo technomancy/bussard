@@ -1,5 +1,7 @@
 -- This -*- lua -*- code runs inside your ship's own computer.
 
+-- controls are for keys that need to keep activating when held down; bind
+-- is for commands that only call their functions once even when held
 ship.controls = {
    up = ship.actions.forward,
    left = ship.actions.left,
@@ -7,8 +9,6 @@ ship.controls = {
    ["="] = function(d) if d then ship.scale = ship.scale - (ship.dt/2) end end,
    ["-"] = function(d) if d then ship.scale = ship.scale + (ship.dt/2) end end,
 }
-
-local pause = function() ship.paused = (not ship.paused) end
 
 -- Flight mode
 define_mode("flight")
@@ -26,9 +26,9 @@ bind("flight", "ctrl-tab", function()
         closest_cycle = closest_cycle + 1
 end)
 
--- regular tab selects next target in "order"; clears state of ctrl-tab cycling
+-- regular tab selects next target in "order"
 bind("flight", "tab", function()
-        closest_cycle = 1
+        closest_cycle = 1 -- clears state of ctrl-tab cycling
         ship.actions.next_target()
 end)
 
@@ -44,7 +44,7 @@ bind("flight", "ctrl-r",
         ship.editor.initialize()
 end)
 
--- connect over ssh
+-- connect to target over ssh
 bind("flight", "ctrl-s", function()
         ship.editor.change_buffer("*console*")
         ssh()
@@ -56,8 +56,10 @@ bind("flight", "ctrl-m", function()
         mail()
 end)
 
-dofile("src.edit")
-dofile("src.console")
-dofile("src.hud")
-dofile("src.ssh")
-dofile("src.mail")
+dofile("src.hud") -- heads-up display during flight mode
+
+-- other modes
+dofile("src.edit") -- editor
+dofile("src.mail") -- mail client
+dofile("src.console") -- console for interacting with ship's computer
+dofile("src.ssh") -- ssh mode for interacting with station/planet computers

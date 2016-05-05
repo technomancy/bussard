@@ -21,8 +21,8 @@ end
 
 local describe = function(msg)
    local lines = lume.split(msg, "\n")
-   local date = utils.pad_to(header(lines, "Date"), 25)
-   local from = utils.pad_to(header(lines, "From"), 25)
+   local date = utils.pad_to(header(lines, "Date"), 17)
+   local from = utils.pad_to(header(lines, "From"), 42)
    local subject = header(lines, "Subject")
    return date .. " | " .. from .. " | " .. subject
 end

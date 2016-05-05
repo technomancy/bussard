@@ -1,6 +1,6 @@
 # Next steps
 
-You're going to want to rendezvous with the station in this system as
+You're going to want to rendezvous with the nearest station or planet as
 your first step. Pressing tab will cycle through available targets in
 the system; use shift-tab to go backwards. Target the station, and
 follow the line, which points in the direction of your current
@@ -21,7 +21,9 @@ At this point you can explore the station's computer as long as you
 stay within comm range. However, unless your orbit is stable, you will
 drift out of range. If you are in console mode you can go back to
 flight mode with ESC to make course corrections and you will stay
-logged in.
+logged in. Note that drifting out of range will not close the
+connection, it will simply make it so you're unable to run more
+commands until you get back within range.
 
 While you're logged into the station, you can't run anything on your
 ship's own computer, so in order to continue, run this:

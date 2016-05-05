@@ -44,29 +44,40 @@ spacecraft is equipped with a LuaJIT-based control unit, offering a
 high degree of flexibility and customization without sacrificing
 performance.
 
-At the bottom of the screen is the interactive code console
-where you can interact directly with your ship's onboard computer. By
-default a single line is shown, which displays either the current line
-of input (if applicable) or the last line of output. Pressing ` (backtick)
-toggles the full console, which allows you to scroll through the previous
-input and output. While the full console is active, the piloting controls
-for your ship will be unavailable until you leave the console with the
-esc key. Enter any Lua code into the console to have it evaluated. See
-the API section below to learn how to control your ship from code.
+Pressing ctrl-enter toggles the console, which allows you to interact
+with your ship's computer. While the console is active, the piloting
+controls for your ship will be unavailable until you go back to flight
+mode with the esc key. Enter any Lua code into the console to have it
+evaluated and the result shown. See the API section below to learn how
+to control your ship from code.
 
-When your ship starts, it will load its init file (called src.config) in
-order to create key bindings, define helper functions, and perform any
-other setup.
+Note that some of your ship's functions will also display messages to
+the console. The last line of the console output will be visible at
+the bottom of the screen during flight mode.
 
-You can make changes to your init file using the onboard editor. Run
-this code in your REPL: `ship:e("src.config")`. (Also bound to
-ctrl-enter) Once you're done with your edits, press `esc` and load
-your changes with `ship:load("src.config")` (Also bound to
-ctrl-r). You can edit other files in your ship by passing another
-filename to `ship:e`, but by default only files in the `ship.src` and
-`ship.docs` tables will stay after your ship is restarted. You can
+When your ship starts, it will load its configuration file (called
+"src.config") in order to create key bindings, define helper
+functions, and perform any other setup. This file also loads other
+files (like "src.edit" or "src.mail") which define other specialized
+modes of interaction.
+
+### Editor
+
+You can make changes to your configuration files using the onboard
+editor. Press alt-o to open a file; start with "src.config". You can
+see where the flight mode is defined and how the flight controls and
+other commands are bound to keystrokes. The bind function can attach
+any function to a keystroke.
+
+Once you're done with your edits, press esc to go back to flight
+mode and load your changes with ctrl-r. You can edit other files
+anywhere in your ship, but by default only files in the ship.src and
+ship.docs tables will stay after your ship is restarted. You can
 configure it to save other tables by adding their names to the
-`ship.persist` table.
+ship.persist table.
+
+You can open as many files in the editor as you need with alt-o. Use
+ctrl-pageup and ctrl-pagedown to cycle through them.
 
 ### Communication system
 
@@ -80,11 +91,11 @@ and communicating with others.
 Your targeting indicator will turn light green when you are within
 range of a station that allows logins.
 
-Sessions are initiated using the `ship.actions.login` function, which
-will log you into the currently-targeted planet or station with the
-provided username and password if you are within communications range.
+Sessions are initiated using the ssh() function, which will log you
+into the currently-targeted planet or station with the provided
+username and password if you are within communications range.
 
-Most stations allow limited access via a `guest` account with an empty
+Most stations allow limited access via a "guest" account with an empty
 password, which is the default if no username and password are
 provided. Files on guest accounts are wiped upon logout. Once you are
 logged in as a guest, you may have the option to purchase an account
@@ -94,9 +105,9 @@ storage. Please note that attempting to access accounts of others is
 strictly forbidden by interstellar law.
 
 Services offered on stations vary by location, but most stations at
-least offer to buy and sell cargo. The `cargo` program takes `list`,
-`buy`, and `sell` subcommands; see its online help (`cargo --help`)
-for usage details. You can run `ls /bin` to see a list of built-in
+least offer to buy and sell cargo. The cargo program takes list,
+buy, and sell subcommands; see its online help ("cargo --help")
+for usage details. You can run "ls /bin" to see a list of built-in
 programs on most computer systems.
 
 While your login session is active, you will not be able to enter any
@@ -104,18 +115,13 @@ code into your ship's computer, and the console prompt will change to
 `$`. Enter `logout` to terminate your session and return to your
 ship's computer.
 
-If you have an account on a station server, you can copy files to and
-from the targeted station using
-`ship.comm.scp("username:password/path/to/file", "path.in.ship")`
-and `ship.comm.scp("path.in.ship", "username:password/path/to/file")`.
-
 ### Portals
 
 Your ship can travel to other star systems using the portal
 network. If your battery has enough charge, fly within range of a
 portal. You'll know when you are close enough because the targeting
-indicator will turn blue. Press ctrl-space to begin the portal
-activation sequence. You will need to stay within range for two
+indicator will turn blue. Press ctrl-s to begin the portal
+activation sequence. You will need to stay within range for a few
 seconds for it to complete.
 
 Certain portals which allow travel between systems of different
@@ -164,8 +170,8 @@ These functions affect changes to the ship's systems.
 * `next_target`: cycle sequentially through all the targets in the system.
   tab by default, shift-tab to cycle in reverse.
 * `closest_target`: select the closest available target. ctrl-tab by default.
-* `login`: accepts optional username/password, attempts to establish a
-  login session with the target if possible.
+* `ssh`: accepts optional username/password, attempts to establish an ssh
+  session with the target if possible.
 
 Upgrades often add new functions to this table. Consult the manual for
 any given upgrade for details.
@@ -207,9 +213,10 @@ of how many total seconds the engine is engaged:
 
 #### hud
 
-The heads-up-display is configurable by setting `ship.hud`. It should
-be an array of instrument tables. There are three different valid
-types of instruments, "text", "vector", and "bar"; each needs at least
+The heads-up-display is configurable by setting the `ship.hud`
+table. It is set by default in the "src.hud" file. It should be
+an array of instrument tables. There are three different valid types
+of instruments, "text", "vector", and "bar"; each needs at least
 `type`, `x`, and `y`. Negative `x` and `y` values will count backwards
 from the right or bottom of the screen.
 
@@ -258,11 +265,18 @@ you have purchased an upgrade, you can usually view its documentation
 by logging out of the station and accessing its manual page with
 `man("laser")`, etc.
 
-### Missions
+### Mail
 
-Often on computers at various worlds you can accept missions from the
-people there, usually by browsing the newsgroups in `/usr/news` and
-replying to requests for help.
+Your ship also comes with a mail client allowing you to read and
+respond to messages you receive. Press ctrl-m from flight mode to
+activate it. You'll be shown a list of folders, each with an
+unread/total message count. Pressing enter on a folder opens it up and
+shows the date, sender, and subject of each message.
+
+If a message offers a mission or makes some request of you, you can
+indicate your acceptance or acknowledgment by pressing ctrl-alt-enter.
+
+### Missions
 
 Your HUD is preconfigured with a listing for active missions. To get
 more details, you can run `ship.missions.list()`, while you can abort
@@ -281,12 +295,11 @@ function to call when the key is pressed. This function is passed a
 boolean indicating whether it is a repeated key or not.
 
 By default your ship has a "flight" mode active normally and a
-"console" mode active when the console is full-screen. Note that
-"flight" mode does have the simple one-line console available, but not
-all characters can be entered in this mode as some (like the zoom
-keys) have other flight-related functions. There is also an "edit"
-mode where the editor key bindings are defined. You can check the
-current mode with `keymap.current_mode`.
+"console" mode active when the console is full-screen. There is also
+an "edit" mode where the editor key bindings are defined. The "ssh"
+mode is active when connecting to station or planet computers, and the
+"mail" mode is active when reading your messages. You can check the
+current mode with `ship:mode()`.
 
 See the `keycodes` manual page for a detailed listing of available key
 names. You can run `man("keycodes")` to view it.
