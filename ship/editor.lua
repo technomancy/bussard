@@ -83,7 +83,14 @@ local wrap = function(fn, ...)
    end
 end
 
+local get_buffer = function(path)
+   return lume.match(buffers, function(bu) return bu.path == path end)
+end
+
 local with_current_buffer = function(nb, f)
+   if(type(nb) == "string") then
+      nb = get_buffer(nb)
+   end
    local old_b = b
    b = nb
    local val = f()
@@ -266,10 +273,6 @@ local newline = function(n)
    insert(t, true)
 end
 
-local get_buffer = function(path)
-   return lume.match(buffers, function(bu) return bu.path == path end)
-end
-
 local save_excursion = function(f) -- TODO: discards multiple values from f
    local old_b, p, pl, m, ml = b, b and b.point, b and b.point_line, b and b.mark, b and b.mark_line
    local val, err = pcall(f)
@@ -300,7 +303,7 @@ local io_write = function(...)
    b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
    last_line, line_count = write(...)
    b, b.point = prev_b, old_point + utf8.len(last_line)
-   b.point_line = old_point_line + line_count - 1
+   if(b) then b.point_line = old_point_line + line_count - 1 end
 end
 
 return {
@@ -645,7 +648,7 @@ return {
    current_mode_name = function() return b and b.mode end,
 
    -- normally you would use ship.api.activate_mode; this is lower-level
-   set_mode = function(mode_name) b.mode = mode_name end,
+   set_mode = function(mode_name) if(b) then b.mode = mode_name end end,
 
    current_buffer = function() return b end,
 
@@ -727,6 +730,8 @@ return {
       b.input_history_pos = 0
       b.input_history:append(input, true)
    end,
+
+   with_current_buffer = with_current_buffer,
 
    debug = function()
       print("---------------", b.point_line, b.point)

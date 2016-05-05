@@ -115,8 +115,10 @@ local lisp_login = function(fs, env, ship)
    end
 
    sb.disconnect = function()
-      ship.api:activate_mode("console")
-      ship.api.editor.set_prompt("> ")
+      ship.api.editor.with_current_buffer("*console*", function()
+                                             ship.api:activate_mode("console")
+                                             ship.api.editor.set_prompt("> ")
+                                                       end)
       logout(ship, ship.target)
    end
 
