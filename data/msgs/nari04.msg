@@ -1,0 +1,15 @@
+From: nari.phouen@starlink.net.sol
+To: captain@adahn.local
+Content-Type: text/plain; charset=UTF-8
+Subject: Re(4): Passenger run from Tana Prime to Apkabar Station
+Message-Id: 84f7b207-08e0-4a54-af7c-d6f97aedc703
+
+captain@adahn.local writes:
+
+> ACK
+
+"ACK"? That's all you have to say? Whatever you are, you weren't
+programmed to be much of a conversationalist.
+
+Listen, I'm probably going to regret this, but my curiosity is getting
+the best of me. Can I come aboard?

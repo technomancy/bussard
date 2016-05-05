@@ -64,7 +64,9 @@ return {
          -- ship.api.src["mail"] = love.filesystem.read("data/src/mail")
          ship:enter(ship.system_name, false, true)
       else
-         ship.api.docs.mail = { inbox = { _unread = {} }}
+         ship.api.docs.mail = { inbox = { _unread = {} },
+                                jobs = { _unread = {} },
+                              }
          ship:enter(ship.system_name, true, true)
          for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
             ship.api.src[v] = love.filesystem.read("data/src/" .. v)

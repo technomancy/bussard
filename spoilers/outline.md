@@ -28,6 +28,12 @@ TODO: flesh this out more; who is it you find, and how do they know what they te
 
 ## Act III: Spacetime Junction
 
+Need to build up the spacetime junction as if it's the endgame
+goal. "Unimaginable power; the ability to explore the spacetime
+continuum!" So when it turns out Traxus found something else much more
+important to pursue, (right before you actually get it), it should be
+a bit of a twist.
+
 * Somehow you recruit Clay Dorath
 * He leads you on a trail that eventually gets you to finding the spacetime junction
 * Then he betrays you to get revenge on his former lab mates--boo!

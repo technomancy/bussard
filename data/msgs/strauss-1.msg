@@ -1,4 +1,4 @@
-From: strauss@uofbohk.edu.bohk
+From: strauss@katilaycollege.edu.katilay
 To: captain@adahn.local
 Date: 2386:18,575,241
 Content-Type: text/plain; charset=UTF-8

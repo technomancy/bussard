@@ -35,7 +35,7 @@ username and password you can supply them as arguments to the ssh function.
 
 Finally your ship is also equipped with a mail client, which you can use
 to read your own personal mail as well as mail sent to various mailing
-lists.
+lists. Press ctrl-m to open the overview of folders.
 
 At some point you will want to familiarize yourself with the rest of the
 workings of your ship. You can read the complete manual by running this

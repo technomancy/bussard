@@ -1,4 +1,4 @@
-From: sacar@uofbohk.edu.bohk
+From: sacar@katilaycollege.edu.katilay
 To: captain@adahn.local
 Date: 2386:18,562,945
 Content-Type: text/plain; charset=UTF-8

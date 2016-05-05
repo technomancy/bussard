@@ -12,7 +12,7 @@ email you when certain plot points trigger (or maybe after a certain
 amount of time has passed with no plot points triggering in the case
 of hints) but you can't email them back beyond simple ACK/NACK replies.
 
-## Nari Phouen
+## Nari Phouen <nari.phouen@starlink.net.sol>
 
 She is an older freelance repair tech with an amateur interest in
 historical computing. Gruff but kind at heart. She originally want to
@@ -179,6 +179,9 @@ OR: Yueh maybe doesn't need so many worlds
 
 * Allied Deliveries (Yueh)
   Handles most eastern delivery routes.
+
+* Starlink (Sol)
+  An ISP. (starlink.net.sol)
 
 * Leeft (Sol)
   Interplanetary and interstellar passenger runs.

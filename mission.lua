@@ -39,6 +39,10 @@ local destination_check = function(ship, mission)
    return false
 end
 
+local record_event = function(ship, e)
+   ship.events[e] = utils.time(ship)
+end
+
 local check = function(ship)
    for mission_id,start_time in pairs(ship.active_missions) do
       local mission = require("data.missions." .. mission_id)
@@ -48,7 +52,7 @@ local check = function(ship)
          destination_check(ship, mission)) then
          if(mission.success_function) then mission.success_function(ship) end
          for _,e in ipairs(mission.success_events or {}) do
-            ship.events[e] = true
+            record_event(ship, e)
          end
          for good, amt in pairs(mission.cargo or {}) do
             ship.cargo[good] = ship.cargo[good] - amt

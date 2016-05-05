@@ -32,18 +32,25 @@ bind("flight", "tab", function()
         ship.actions.next_target()
 end)
 
+-- to open a file
+bind("flight", "alt-o", function()
+        ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
+end)
 
+-- reload config
 bind("flight", "ctrl-r",
      function()
         ship.dofile("src.config")
         ship.editor.initialize()
 end)
 
+-- connect over ssh
 bind("flight", "ctrl-s", function()
         ship.editor.change_buffer("*console*")
         ssh()
 end)
 
+-- open mail client
 bind("flight", "ctrl-m", function()
         ship.editor.change_buffer("*console*")
         mail()
