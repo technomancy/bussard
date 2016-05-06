@@ -19,6 +19,10 @@ TODO: how do we make sure that you don't miss Nari's mission?
 
 ## Act II: Tracking down echoes of Traxus
 
+Characters (especially Clay) should be deeply suspicious of Traxus,
+assuming that he is a villain opposed to humanity. This isn't true at
+all, but it fits the facts as they know them.
+
 * Nari helps you decrypt the polyalphabetic journal(s)
  * The one that records when Traxus first contacts you
 * She knows someone whose mother worked on the machine consciousness project (not Bohk team)
@@ -46,6 +50,11 @@ a bit of a twist.
 TODO: need a ton more detail here
 
 ## Act IV: Gathering clues
+
+Either here or in the previous act we need to find out that Traxus is
+not actually evil. This can be revealed as Mila reveals some of her
+stories from working with Ikon technologies, and as you understand
+that Clay may not have been the most reliable source.
 
 At this point, progress up to the endgame section should consist only
 of learning new things, because now that you can reset the game state
