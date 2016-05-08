@@ -1,6 +1,7 @@
 local lume = require("lume")
 local utils = require("utils")
 local mission = require("mission")
+local mail = require("mail")
 local body = require("body")
 local services = require("services")
 
@@ -51,10 +52,8 @@ local sandbox = function(ship)
       sell_upgrade = lume.fn(services.sell_upgrade, ship),
       refuel = lume.fn(services.refuel, ship, ship.target),
       cargo_transfer = lume.fn(services.cargo_transfer, ship.target, ship),
-      accept_mission = lume.fn(mission.accept, ship),
 
       upgrade_help = ship.api.help.get,
-      -- scp = lume.fn(scp, ship),
       station = utils.readonly_proxy(ship.target),
       ship = ship.api,
       distance = lume.fn(utils.distance, ship, ship.target),
@@ -170,7 +169,7 @@ return {
          local default_motd = "Login succeeded. Run `logout` to disconnect."
          ship.api.print(fs_raw.etc.motd or default_motd)
 
-         mission.check(ship)
+         mission.on_login(ship)
       else
          ship.api.print("Login failed.")
       end

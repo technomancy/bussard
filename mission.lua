@@ -32,24 +32,36 @@ local objectives_check = function(ship, mission)
    return true
 end
 
-local destination_check = function(ship, mission)
-   for _,destination in ipairs(mission.destinations or {}) do
-      if(destination == ship.comm_connected) then return true end
+local destination_check = function(ship, record)
+   return (not record.destinations or #record.destinations == 0)
+end
+
+local record_destination = function(record, dest)
+   if(record.destinations and record.destinations[1] == dest) then
+      table.remove(record.destinations, 1)
    end
-   return false
 end
 
 local record_event = function(ship, e)
    ship.events[e] = utils.time(ship)
 end
 
-local check = function(ship)
-   for mission_id,start_time in pairs(ship.active_missions) do
-      local mission = require("data.missions." .. mission_id)
+local find = function(id)
+   return id and love.filesystem.isFile("data/missions/" .. id .. ".lua") and
+      require("data.missions." .. id)
+end
+
+local on_login = function(ship)
+   for mission_id,record in pairs(ship.active_missions) do
+      local mission = find(mission_id)
+      record_destination(record, ship.comm_connected)
+      if(mission.on_login) then mission.on_login(ship, ship.target) end
+
+      -- success check here (maybe belongs in update)
       if((not mission.time_limit or
-             utils.time(ship) < start_time + mission.time_limit) and
+             utils.time(ship) < record.start_time + mission.time_limit) and
             cargo_check(ship, mission) and objectives_check(ship, mission) and
-         destination_check(ship, mission)) then
+         destination_check(ship, record)) then
          if(mission.success_function) then mission.success_function(ship) end
          for _,e in ipairs(mission.success_events or {}) do
             record_event(ship, e)
@@ -68,29 +80,40 @@ end
 
 local accept = function(ship, message_id)
    -- TODO: don't allow accept of missions that haven't actually been delivered
-   local mission = require("data.missions." .. message_id)
-   if(not mission) then
-      return false, "No mission " .. message_id
-   else
-      ship.active_missions[message_id] = utils.time(ship)
-      -- TODO: check for open cargo space
-      -- TODO: check for other prerequisites
-      for good, amt in pairs(mission.cargo or {}) do
-         ship.cargo[good] = (ship.cargo[good] or 0) + amt
-      end
-      if(mission.accept_function) then
-         mission.accept_function(ship)
-      end
-      return true
+   local mission = find(message_id)
+   if(not mission) then return false, "No mission " .. message_id end
+
+   if(mission.prereq) then
+      local accept, msg = mission.prereq(ship)
+      if(not accept) then return false, msg end
    end
+
+   if(mission.cargo) then
+      local sum = utils.sum(lume.values(mission.cargo))
+      if(sum > (ship.cargo_capacity - ship:cargo_mass())) then
+         return false, "Insufficient free cargo space"
+      end
+   end
+
+   ship.active_missions[mission.id] = { start = utils.time(ship),
+                                        destinations = lume.clone(mission.destinations) }
+
+   for good, amt in pairs(mission.cargo or {}) do
+      ship:move_cargo(good, amt)
+   end
+
+   if(mission.accept_function) then
+      mission.accept_function(ship)
+   end
+   return true
 end
 
 local update = function(ship, dt)
-   for mission_id,start_time in pairs(ship.active_missions) do
-      local mission = require("data.missions." .. mission_id)
-      if(mission.updater) then mission.updater(ship, dt) end
+   for mission_id,record in pairs(ship.active_missions) do
+      local mission = find(mission_id)
+      if(mission.update) then mission.update(ship, dt) end
       if(mission.time_limit and (utils.time(ship) >
-                                 start_time + mission.time_limit)) then
+                                 record.start_time + mission.time_limit)) then
          ship.api.print("Mission time limit exceeded: " .. mission.name)
          fail(ship, mission)
       end
@@ -98,8 +121,8 @@ local update = function(ship, dt)
 end
 
 local list = function(ship)
-   for mission_id,_ in pairs(ship.active_missions) do
-      local mission = require("data.missions." .. mission_id)
+   for mission_id in pairs(ship.active_missions) do
+      local mission = require(mission_id)
       ship.api.print("\n")
       ship.api.print(mission.name)
       if(mission.description) then
@@ -113,8 +136,8 @@ end
 
 local abort = function(ship, mission_name)
    local mission
-   for mission_id,_ in pairs(ship.active_missions) do
-      local this_mission = require("data.missions." .. mission_id)
+   for mission_id in pairs(ship.active_missions) do
+      local this_mission = require(mission_id)
       if(this_mission.name == mission_name) then
          mission = this_mission
       end
@@ -133,7 +156,7 @@ local readout = function(ship)
    if(lume.count(ship.active_missions) == 0) then return "\n- none" end
    local s = ""
    for mission_id in pairs(ship.active_missions) do
-      local this_mission = require("data.missions." .. mission_id)
+      local this_mission = find(mission_id)
       s = s .. "\n- " .. this_mission.name
    end
    return s
@@ -141,9 +164,10 @@ end
 
 return {
    accept = accept,
-   check = check,
+   on_login = on_login,
    update = update,
    list = list,
    abort = abort,
    readout = readout,
+   find = find,
 }

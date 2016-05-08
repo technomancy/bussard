@@ -7,7 +7,7 @@ return {
    destinations={"Solotogo", "Tana Prime"},
    credits=250,
    success_events={"passenger1"},
-   success_message="Thanks for the ride."
+   success_message="Thanks for the ride.",
    prereq=function(ship)
       if(require("lume").find(ship.upgrade_names, "life_support")) then
          return true

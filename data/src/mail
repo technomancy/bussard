@@ -101,14 +101,14 @@ ship.modes.view.parent = ship.modes.edit -- nav keys should be intact
 ship.modes.view.activate = lume.fn(ship.editor.set_read_only, true)
 
 -- accept mission
-bind("view", "ctrl-alt-return", function()
-        local id = header(ship.editor.get_lines(), "Message-Id")
-        local success, err = mission_accept(id)
+bind("view", "ctrl-return", function()
+        local id = header(ship.editor.get_lines(), "Message.Id")
+        local success, status = reply(id)
         ship.editor.close()
         ship.editor.open(ship, "*console*")
         if(success) then
-           print("Mission accepted.")
+           print("Replied.", status)
         else
-           print(err)
+           print(status)
         end
 end)

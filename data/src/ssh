@@ -21,7 +21,7 @@ ship.modes.ssh.parent = ship.modes.console
 ship.modes.ssh.textinput = ship.modes.edit.textinput
 
 bind("ssh", "return", function()
-        local input = get_input()
+        local input = lume.trim(get_input())
 
         if(input == "logout") then
            logout()

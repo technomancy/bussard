@@ -125,7 +125,7 @@ local sandbox = function(ship)
                         bind = lume.fn(bind, ship),
                         ssh_connect = lume.fn(ssh.connect, ship),
                         ssh_send_line = lume.fn(ssh.send_line, ship),
-                        mission_accept = lume.fn(mission.accept, ship),
+                        reply = lume.fn(mail.reply, ship),
    })
 end
 
