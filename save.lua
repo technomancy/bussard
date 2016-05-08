@@ -61,7 +61,11 @@ return {
          lume.extend(ship, ship_data)
 
          -- when we are testing a single file but don't want to lose state
-         -- ship.api.src["mail"] = love.filesystem.read("data/src/mail")
+         if(os.getenv("BUSSARD_RESET_SRC")) then
+            for _,s in pairs(lume.split(os.getenv("BUSSARD_RESET_SRC"), ",")) do
+               ship.api.src[s] = love.filesystem.read("data/src/" .. s)
+            end
+         end
          ship:enter(ship.system_name, false, true)
       else
          ship.api.docs.mail = { inbox = { _unread = {} },
