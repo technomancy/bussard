@@ -76,3 +76,9 @@ largely based on Emacs. See `find_binding`, `define_mode`, and `bind`
 in `ship/init.lua`, and `data/src/config` for a usage example. The
 commands which the non-flight modes bind are typically defined in
 `ship/editor.lua`.
+
+## License
+
+By making contributions, you agree to allow your material to be
+distributed under the terms of the GNU General Public License, version
+3 or later; see the file LICENSE for details.

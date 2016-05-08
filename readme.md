@@ -112,18 +112,8 @@ in order to make testing login interaction easier.
 
 ## Licenses
 
-Code copyright © 2015-2016 Phil Hagelberg and contributors
+Original code, prose, and images copyright © 2015-2016 Phil Hagelberg and contributors
 
-Distributed under the GNU General Public License version 3; see file COPYING.
+Distributed under the GNU General Public License version 3 or later; see file COPYING.
 
-[Some planet graphics](http://opengameart.org/content/planets-and-stars-set-high-res) © Rawdanitsu, CC0 licensed.
-
-[Other planet graphics](http://opengameart.org/content/27-planets-in-hi-res) © Shaber, CC-BY licensed.
-
-[Still more planet graphics](http://opengameart.org/content/more-planets) © cemkalyoncu, CC-BY licensed.
-
-[Solar system graphics](http://www.solarsystemscope.com/nexus/resources/planet_images/) © Inove, CC-BY licensed.
-
-Station graphics by [MillionthVector](http://millionthvector.blogspot.de/p/free-sprites_12.html), CC-BY licensed.
-
-Mensch font by [Robey Pointer](http://robey.lag.net/2010/06/21/mensch-font.html), distributed under the [Bitstream Vera](https://www.gnome.org/fonts/) license.
+See [credits](credits.md) for licensing of other materials.
