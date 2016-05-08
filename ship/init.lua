@@ -350,11 +350,11 @@ local ship = {
    end,
 
    -- interface
-   handle_key = function(ship, key, ...)
+   handle_key = function(ship, key)
       local fn = find_binding(ship, key)
       local wrap = ship.api:mode().wrap
-      if(fn and wrap) then wrap(fn, ...)
-      elseif(fn) then fn(...)
+      if(fn and wrap) then wrap(fn)
+      elseif(fn) then fn()
       end
    end,
 
