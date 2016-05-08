@@ -2,7 +2,8 @@ local mail = require("mail")
 local utils = require("utils")
 local mission = require("mission")
 
-local accept_time
+-- TODO: move this to mission record
+local pickup_time
 
 return {
    name="passenger2",
@@ -21,7 +22,9 @@ return {
    end,
 
    on_login = function(ship, target)
-      if(target == "Interportal: Sol" and not ship.events.try_interportal) then
+      if(not pickup_time and target == "Tana Prime") then
+         pickup_time = 0
+      elseif(target == "Interportal: Sol" and not ship.events.try_interportal) then
          mail.deliver_msg(ship, "nari07.msg")
          mission.record_event(ship, "try_interportal")
       elseif(target == "Apkabar Station" and ship.events.try_interportal
@@ -32,15 +35,15 @@ return {
    end,
 
    accept_function = function(ship)
-      accept_time = 0
       mail.deliver_msg(ship, "nari01.msg")
    end,
 
    update = function(ship, dt)
-      accept_time = accept_time + dt
-      if(accept_time > 8000 and not ship.mail_delivered["nari02"]) then
+      if(not pickup_time) then return end
+      pickup_time = pickup_time + dt
+      if(pickup_time > 8 and not ship.mail_delivered["nari02"]) then
          mail.deliver_msg(ship, "nari02.msg")
-      elseif(accept_time > 16000 and not ship.mail_delivered["nari03"]) then
+      elseif(pickup_time > 16 and not ship.mail_delivered["nari03"]) then
          mail.deliver_msg(ship, "nari03.msg")
       end
    end,
@@ -50,7 +53,7 @@ return {
 -- 01: on accept
 -- 02: timed after accept
 -- 03: timed after accept
--- 04: on ack 03
+-- 04: on ack 03 -- TODO: need to be logged in to ack 04
 -- 05: on ack 04
 -- 06: on ack 05
 -- 07: on attempt to interportal

@@ -36,6 +36,7 @@ local destination_check = function(ship, record)
    return (not record.destinations or #record.destinations == 0)
 end
 
+-- TODO: some feedback here?
 local record_destination = function(record, dest)
    if(record.destinations and record.destinations[1] == dest) then
       table.remove(record.destinations, 1)
@@ -55,7 +56,7 @@ local on_login = function(ship)
    for mission_id,record in pairs(ship.active_missions) do
       local mission = find(mission_id)
       record_destination(record, ship.comm_connected)
-      if(mission.on_login) then mission.on_login(ship, ship.target) end
+      if(mission.on_login) then mission.on_login(ship, ship.comm_connected) end
 
       -- success check here (maybe belongs in update)
       if((not mission.time_limit or

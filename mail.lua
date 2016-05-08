@@ -25,6 +25,7 @@ end
 
 local add_date = function(msg, date)
    local parts = lume.split(msg, "\n\n")
+   -- TODO/blocker: only split on the first double-newline
    return parts[1] .. "\nDate: " .. utils.format_time(date) .. "\n\n" .. parts[2]
 end
 
@@ -33,7 +34,6 @@ local deliver_msg = function(ship, msg_name)
    msg_name = msg_name:gsub(".msg$", "")
    if(msg and not ship.mail_delivered[msg_name]) then
       local folder = folder_for(msg)
-      print(add_date(msg, utils.time(ship)))
       ship.api.docs.mail[folder][msg_name] = add_date(msg, utils.time(ship))
       ship.api.docs.mail[folder]._unread[msg_name] = true
       ship.mail_delivered[msg_name] = true
@@ -58,7 +58,8 @@ return {
    reply = function(ship, msg_id)
       if(mission.find(msg_id)) then
          return mission.accept(ship, msg_id)
-      elseif(love.filesystem.isFile("data/msgs/msg_id")) then
+         -- TODO/blocker: swap symlink/file here
+      elseif(love.filesystem.isFile("data/msgs/" .. msg_id)) then
          return deliver_msg(ship, msg_id)
       end
    end,
