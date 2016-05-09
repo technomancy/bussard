@@ -3,10 +3,7 @@ local timed_msgs = require("data.msgs.timed")
 local utils = require("utils")
 local mission = require("mission")
 
--- Types of deliveries
--- [x] time-based
--- [ ] event-based
--- [ ] random?
+-- TODO: adapt messages in data/news to new mail system
 
 local read = function(msg)
    return love.filesystem.read("data/msgs/" .. msg)
@@ -25,8 +22,8 @@ end
 
 local add_date = function(msg, date)
    local parts = lume.split(msg, "\n\n")
-   -- TODO/blocker: only split on the first double-newline
-   return parts[1] .. "\nDate: " .. utils.format_time(date) .. "\n\n" .. parts[2]
+   parts[1] = parts[1] .. "\nDate: " .. utils.format_time(date)
+   return table.concat(parts, "\n\n")
 end
 
 local deliver_msg = function(ship, msg_name)
@@ -58,7 +55,6 @@ return {
    reply = function(ship, msg_id)
       if(mission.find(msg_id)) then
          return mission.accept(ship, msg_id)
-         -- TODO/blocker: swap symlink/file here
       elseif(love.filesystem.isFile("data/msgs/" .. msg_id)) then
          return deliver_msg(ship, msg_id)
       end

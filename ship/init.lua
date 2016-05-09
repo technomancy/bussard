@@ -282,6 +282,7 @@ local ship = {
          if(u.update) then u.update(ship, dt) end
       end
 
+      -- TODO/blocker: pcall
       mission.update(ship, dt)
       ship:enforce_limits()
    end,

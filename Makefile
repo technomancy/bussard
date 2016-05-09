@@ -20,6 +20,8 @@ blockers: ; grep TODO/blocker $(GAME_LUA)
 SAVE_DIR=${HOME}/.local/share/love/bussard
 
 wipe: ; rm -rf ${SAVE_DIR}
+backup: ; rm -rf ${SAVE_DIR}.bak; mv ${SAVE_DIR} ${SAVE_DIR}.bak
+restore: wipe ; cp -r ${SAVE_DIR}.bak ${SAVE_DIR}
 
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \

@@ -32,7 +32,7 @@ local objectives_check = function(ship, mission)
    return true
 end
 
-local destination_check = function(ship, record)
+local destination_check = function(record)
    return (not record.destinations or #record.destinations == 0)
 end
 
@@ -62,7 +62,7 @@ local on_login = function(ship)
       if((not mission.time_limit or
              utils.time(ship) < record.start_time + mission.time_limit) and
             cargo_check(ship, mission) and objectives_check(ship, mission) and
-         destination_check(ship, record)) then
+         destination_check(record)) then
          if(mission.success_function) then mission.success_function(ship) end
          for _,e in ipairs(mission.success_events or {}) do
             record_event(ship, e)
@@ -73,7 +73,7 @@ local on_login = function(ship)
          end
 
          ship.credits = ship.credits + (mission.credits or 0)
-         ship.api.print("Mission success: " .. mission.success_message)
+         ship.api.print("Mission success: " .. (mission.success_message or "OK."))
          ship.active_missions[mission_id] = nil
       end
    end
@@ -97,7 +97,8 @@ local accept = function(ship, message_id)
    end
 
    ship.active_missions[mission.id] = { start = utils.time(ship),
-                                        destinations = lume.clone(mission.destinations) }
+                                        destinations =
+                                           lume.clone(mission.destinations or {}) }
 
    for good, amt in pairs(mission.cargo or {}) do
       ship:move_cargo(good, amt)
@@ -171,4 +172,5 @@ return {
    abort = abort,
    readout = readout,
    find = find,
+   record_event = record_event,
 }

@@ -169,6 +169,7 @@ return {
          local default_motd = "Login succeeded. Run `logout` to disconnect."
          ship.api.print(fs_raw.etc.motd or default_motd)
 
+         -- TODO/blocker: pcall
          mission.on_login(ship)
       else
          ship.api.print("Login failed.")
