@@ -13,11 +13,8 @@ ship.controls = {
 -- Flight mode
 define_mode("flight")
 
-bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
-
--- You can change this so escape by itself quits if you prefer.
 bind("flight", "escape", ship.ui.splash)
-bind("flight", "ctrl-q", ship.ui.quit)
+bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
 
 -- ctrl-tab selects closest target; repeated ctrl-tab selects next-closest
 local closest_cycle = 1
@@ -32,30 +29,6 @@ bind("flight", "tab", function()
         ship.actions.next_target()
 end)
 
--- to open a file
-bind("flight", "alt-o", function()
-        ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
-end)
-
--- reload config
-bind("flight", "ctrl-r",
-     function()
-        ship.dofile("src.config")
-        ship.editor.initialize()
-end)
-
--- connect to target over ssh
-bind("flight", "ctrl-s", function()
-        ship.editor.change_buffer("*console*")
-        ssh()
-end)
-
--- open mail client
-bind("flight", "ctrl-m", function()
-        ship.editor.change_buffer("*console*")
-        mail()
-end)
-
 dofile("src.hud") -- heads-up display during flight mode
 
 -- other modes
@@ -63,3 +36,31 @@ dofile("src.edit") -- editor
 dofile("src.mail") -- mail client
 dofile("src.console") -- console for interacting with ship's computer
 dofile("src.ssh") -- ssh mode for interacting with station/planet computers
+
+-- multi-mode bindings
+
+bind({"flight", "edit"}, "ctrl-q", ship.ui.quit)
+
+-- open mail client
+bind({"flight", "edit"}, "ctrl-m", function()
+        ship.editor.change_buffer("*console*")
+        mail()
+end)
+
+-- to open a file
+bind({"flight", "edit"}, "alt-o", function()
+        ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
+end)
+
+-- reload config
+bind({"flight", "edit"}, "ctrl-r",
+     function()
+        ship.dofile("src.config")
+        ship.editor.initialize()
+end)
+
+-- connect to target over ssh
+bind({"flight", "edit"}, "ctrl-s", function()
+        ship.editor.change_buffer("*console*")
+        ssh()
+end)

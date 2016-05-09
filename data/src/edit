@@ -51,9 +51,6 @@ bind("edit", "ctrl-l", function()
         ship.editor.newline()
 end)
 
-bind("edit", "alt-o", function()
-        ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
-end)
 bind("edit", "alt-w", ship.editor.close)
 bind("edit", "ctrl-alt-w", lume.fn(ship.editor.close, true))
 

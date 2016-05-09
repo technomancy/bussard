@@ -107,7 +107,7 @@ local accept = function(ship, message_id)
    if(mission.accept_function) then
       mission.accept_function(ship)
    end
-   return true
+   return true, "Mission accepted."
 end
 
 local update = function(ship, dt)
