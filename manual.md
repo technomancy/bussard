@@ -309,6 +309,19 @@ example of how to create modes and bind new keys in them; it will come
 in very handy to add in new keys when operating your ship; in
 particular when you purchase an upgrade that adds new capabilities.
 
+### Config Reset
+
+It's possible for your changes to the ship's configuration to
+introduce bugs into the editor or console. In some cases, the bugs may
+interfere with your ability to fix those bugs.
+
+If this happens, you can perform a config reset with ctrl-f1. Your
+own configuration files will be moved to "ship.src.bak.config" etc,
+and "ship.src.config" will be replaced with the working stock code.
+From there you can continue your debugging. Note that this only
+affects the configuration files that came with your ship; your other
+files will be untouched.
+
 ## Footer
 
 Copyright © 2365-2372 Kosaga Shipyards, All Rights Reserved.

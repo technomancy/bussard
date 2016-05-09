@@ -2,8 +2,6 @@ local utf8 = require("utf8")
 local utils = require("utils")
 local lume = require("lume")
 
-local default_config = love.filesystem.read("data/src/config")
-
 local help = require("ship.help")
 local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
@@ -109,7 +107,6 @@ end
 local sandbox = function(ship)
    return lume.merge(utils.sandbox,
                      {  help = help.message,
-                        default_config = default_config,
                         print = ship.api.print,
                         -- clear = ship.editor.clear_lines,
                         ship = ship.api,
@@ -352,10 +349,15 @@ local ship = {
 
    -- interface
    handle_key = function(ship, key)
-      local fn = find_binding(ship, key)
-      local wrap = ship.api:mode().wrap
-      if(fn and wrap) then wrap(fn)
-      elseif(fn) then fn()
+      -- need hard-coded reset for recovering from bad config bugs
+      if(key == "f1" and love.keyboard.isDown("lctrl", "rctrl")) then
+         ship.api.ui.config_reset()
+      else
+         local fn = find_binding(ship, key)
+         local wrap = ship.api:mode().wrap
+         if(fn and wrap) then wrap(fn)
+         elseif(fn) then fn()
+         end
       end
    end,
 
@@ -463,9 +465,7 @@ ship.api = {
 
    -- added by loading config
    controls = {},
-   commands = {},
    updaters = {},
-   helm = love.keyboard,
 
    -- trajectory plotting is the single biggest perf drain by far
    -- these numbers will be changed if the frame rate is too low

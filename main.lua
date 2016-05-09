@@ -13,15 +13,6 @@ local splash = require "splash"
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 local systems = require("data.systems")
 
-local star1 = starfield.new(10, w, h, 0.01, 100)
-local star2 = starfield.new(10, w, h, 0.05, 175)
-local star3 = starfield.new(10, w, h, 0.1, 255)
-
-local portal_offsets = {
-   {0, -200}, {-141, -141}, {-200, 0}, {-141, 141},
-   {0, 200}, {141, 141}, {200, 0}, {141, -141},
-}
-
 local play, quit
 local ui = {
    version = "beta-1-prerelease",
@@ -38,6 +29,7 @@ local ui = {
       save.abort(ship)
       love.event.quit()
    end,
+   config_reset = lume.fn(save.config_reset, ship),
 
    splash = function() splash(play, quit, "resume") end,
 
@@ -61,7 +53,8 @@ local safely = function(f)
          love.graphics.print("Error: " .. err, 100, 100)
          love.graphics.print("Press Enter to save and quit.", 100, 200)
          love.graphics.print("Press Esc to quit without saving.", 100, 300)
-         love.graphics.print("Press Ctrl-Q to wipe your save game.", 100, 400)
+         love.graphics.print("Press Ctrl-R to revert to stock config.", 100, 400)
+         love.graphics.print("Press Ctrl-Q to wipe your save game.", 100, 500)
       end
       love.keypressed = function(key)
          if(key == "return") then ui.quit(ui)
@@ -69,6 +62,8 @@ local safely = function(f)
          elseif(key == "q" and love.keyboard.isDown("lctrl", "rctrl")) then
             save.abort(ship)
             love.event.quit()
+         elseif(key == "r" and love.keyboard.isDown("lctrl", "rctrl")) then
+            save.revert(ship)
          end
       end
       love.update = function() end
@@ -94,13 +89,6 @@ love.load = function()
          ship.api.print(e)
          ship.api.print(debug.traceback())
          ship.api.editor.print("Error loading config!")
-         -- TODO: fix fallback config
-         -- local chunk = assert(loadstring("src.fallback_config"))
-         -- setfenv(chunk, ship.api.console.sandbox)
-         -- local success, msg = pcall(chunk)
-         -- if(not success) then
-         --    ship.api.print(msg)
-         -- end
    end)
 end
 
@@ -118,6 +106,17 @@ end)
 local keypressed = safely(lume.fn(ship.handle_key, ship))
 
 local textinput = safely(lume.fn(ship.textinput, ship))
+
+-- drawing
+
+local star1 = starfield.new(10, w, h, 0.01, 100)
+local star2 = starfield.new(10, w, h, 0.05, 175)
+local star3 = starfield.new(10, w, h, 0.1, 255)
+
+local portal_offsets = {
+   {0, -200}, {-141, -141}, {-200, 0}, {-141, 141},
+   {0, 200}, {141, 141}, {200, 0}, {141, -141},
+}
 
 local draw = safely(function(dt)
       starfield.render(star1, ship.x, ship.y)

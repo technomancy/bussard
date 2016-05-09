@@ -60,8 +60,8 @@ When running from source, type `love .` from a checkout.
 One problem when running from source is that when new features are
 added, key bindings for them are added to the default config, but
 existing saved games will continue on using the same config. You can
-replace your ship's config with the current default config using
-`ship.src.config = default_config`.
+replace your ship's config with the current default config `ctrl-f1`;
+your existing config source will be backed up.
 
 ## Status
 

@@ -112,4 +112,20 @@ return {
             love.filesystem.remove(fs_filename(b))
          end
       end
-   end,}
+   end,
+
+   config_reset = function(ship)
+      ship.api.src.bak = ship.api.src.bak or {}
+      for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
+         ship.api.src.bak[v] = ship.api.src[v]
+         ship.api.src[v] = love.filesystem.read("data/src/" .. v)
+      end
+      ship.api.src.config = "-- Your ship's config has been reverted to stock.\n" ..
+         "-- The original files have been moved to the ship.src.bak directory." ..
+         "\n\n" .. ship.api.src.config
+      ship.api.print("Backed up config and restored to stock settings.")
+      ship.api.dofile("src.config")
+      ship.editor.initialize()
+   end,
+
+}
