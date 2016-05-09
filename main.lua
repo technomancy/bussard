@@ -55,6 +55,8 @@ local safely = function(f)
          love.graphics.print("Press Esc to quit without saving.", 100, 300)
          love.graphics.print("Press Ctrl-R to revert to stock config.", 100, 400)
          love.graphics.print("Press Ctrl-Q to wipe your save game.", 100, 500)
+         love.graphics.print("Please consider reporting this crash to " ..
+                                "help improve the game!", 200, 600)
       end
       love.keypressed = function(key)
          if(key == "return") then ui.quit(ui)

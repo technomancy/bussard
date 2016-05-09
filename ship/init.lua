@@ -93,7 +93,13 @@ end
 local sandbox_dofile = function(ship, filename)
    local contents = ship.api:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
-   return sandbox_loadstring(ship, contents)()
+   local chunk, err = sandbox_loadstring(ship, contents)
+   if(not err) then
+      return chunk()
+   else
+      ship.api.print(err)
+      return false, err
+   end
 end
 
 local sandbox_loaded = {}

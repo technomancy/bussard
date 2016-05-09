@@ -31,8 +31,8 @@ To set up the map, load this code:
     map = function() ship.editor.open(nil, "*map*") ship:activate_mode("map") end
     bind("flight", "alt-m", map)
 
-It's recommended to place this in the "src.map" file and add this to
-"src.config" at the bottom:
+It's recommended to place this in a new file called "src.map" and add
+this to the mail "src.config" file at the bottom:
 
     dofile("src.map")
 

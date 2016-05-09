@@ -30,7 +30,7 @@ check:
 	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
 	  --globals lume utf8 pack ship pause define_mode bind utils realprint \
-	            mail ssh ssh_connect logout ssh_send_line mission_accept \
+	            mail ssh ssh_connect logout ssh_send_line reply \
 	  -- $(IN_SHIP_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel \
@@ -51,7 +51,7 @@ count_prose: ; find $(PROSE_DIRS) -type f -print0 | xargs -0 wc -l
 clean: ; rm -rf releases/
 
 REL=".love-release/build/love-release.sh"
-FLAGS=-a 'Phil Hagelberg' -x spoilers --description 'A space flight open-world exploration game, with a programmable ship and stations.' --love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
+FLAGS=-a 'Phil Hagelberg' -x spoilers --description 'A space flight programming adventure game.' --love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
 
 love: $(ALL_LUA)
 	ifndef VERSION

@@ -18,5 +18,5 @@ of the more traditional (and more ambiguous) $VAR.
 About Orb OS
 
 Orb OS is a general-purpose multi-user operating system loosely based on
-Unix that respects the user's freedom. Orb is licensed under the Generally
+Unix that respects the user's freedom. Orb is licensed under the General
 Public License version 12 or later.

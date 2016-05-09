@@ -42,7 +42,9 @@ local kill_ring_max = 32
 local mark_ring_max = 32
 local history_max = 128
 
-local console = make_buffer(nil, "*console*", {"This is the console.", "> "})
+local console = make_buffer(nil, "*console*",
+                            {"This is the console. Enter any code for your " ..
+                                "ship's computer to run it.", "> "})
 console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt = "console", "> "
 

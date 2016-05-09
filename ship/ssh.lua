@@ -1,7 +1,6 @@
 local lume = require("lume")
 local utils = require("utils")
 local mission = require("mission")
-local mail = require("mail")
 local body = require("body")
 local services = require("services")
 
