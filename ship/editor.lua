@@ -9,6 +9,7 @@ local utils = require("utils")
 
 local kill_ring = {}
 
+-- TODO: move mode definitions from ship table to editor.
 local make_buffer = function(fs, path, lines)
    return { fs=fs, path=path, mode = "edit",
             lines = lines or lume.split((fs and fs:find(path) or ""), "\n"),
@@ -731,6 +732,10 @@ return {
    history_push = function(input)
       b.input_history_pos = 0
       b.input_history:append(input, true)
+   end,
+
+   set_modeline = function(modeline_function)
+      b.modeline = modeline_function
    end,
 
    with_current_buffer = with_current_buffer,

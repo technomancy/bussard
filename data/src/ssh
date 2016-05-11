@@ -3,7 +3,6 @@
 ssh = function(username, password)
    if(ship.status.target and ship.status.target.os) then
       ssh_connect(username or "guest", password or "")
-      ship.editor.set_prompt("$ ")
       ship.editor.end_of_buffer()
       ship:activate_mode("ssh") -- should make a new buffer here?
    else

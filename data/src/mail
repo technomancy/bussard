@@ -81,6 +81,20 @@ end
 ship.modes.mail.activate = open_folder
 ship.modes.mail.parent = ship.modes.edit -- nav keys should be intact
 
+local reply_key = "alt-return"
+
+local view_modeline = function(b)
+   local id = header(ship.editor.get_lines(), "Message.Id")
+   if(replyable(id)) then
+      return utf8.format(" %s  %s  (%s/%s)  %s   Press %s to reply.",
+                         b.needs_save and "*" or "-",
+                         b.path, b.point_line, #b.lines, b.mode, reply_key)
+   else
+      return utf8.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
+                         b.path, b.point_line, #b.lines, b.mode)
+   end
+end
+
 bind("mail", "return", function()
         local line = ship.editor.get_line_number()
         local target = targets[line-2] -- two lines at the top before listing
@@ -90,6 +104,7 @@ bind("mail", "return", function()
            ship.editor.open(ship, "docs.mail." .. folder .. "." .. name)
            ship:activate_mode("view")
            ship.docs.mail[folder]._unread[name] = nil
+           ship.editor.set_modeline(view_modeline)
         else -- single value means open a folder
            open_folder(target)
         end
@@ -101,7 +116,7 @@ ship.modes.view.parent = ship.modes.edit -- nav keys should be intact
 ship.modes.view.activate = lume.fn(ship.editor.set_read_only, true)
 
 -- accept mission
-bind("view", "ctrl-return", function()
+bind("view", reply_key, function()
         local id = header(ship.editor.get_lines(), "Message.Id")
         local success, status = reply(id)
         ship.editor.close()

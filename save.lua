@@ -71,6 +71,8 @@ return {
          ship.api.docs.mail = { inbox = { _unread = {} },
                                 jobs = { _unread = {} },
                               }
+         ship.api.docs.backup = { ["msg1.rot13"] =
+               love.filesystem.read("data/docs/traxus-1.rot13")}
          ship:enter(ship.system_name, true, true)
          for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
             ship.api.src[v] = love.filesystem.read("data/src/" .. v)

@@ -1,5 +1,6 @@
 local lume = require("lume")
 local timed_msgs = require("data.msgs.timed")
+local event_msgs = require("data.msgs.events")
 local utils = require("utils")
 local mission = require("mission")
 
@@ -53,10 +54,20 @@ return {
    deliver_msg = deliver_msg,
 
    reply = function(ship, msg_id)
-      if(mission.find(msg_id)) then
+      if(event_msgs[msg_id]) then
+         mission.record_event(ship, event_msgs[msg_id])
+         return true
+      elseif(mission.find(msg_id)) then
          return mission.accept(ship, msg_id)
       elseif(love.filesystem.isFile("data/msgs/" .. msg_id)) then
          return deliver_msg(ship, msg_id)
+      end
+   end,
+
+   replyable = function(msg_id)
+      if(event_msgs[msg_id] or mission.find(msg_id) or
+         love.filesystem.isFile("data/msgs/" .. msg_id)) then
+         return true
       end
    end,
 }

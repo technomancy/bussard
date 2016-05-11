@@ -29,6 +29,9 @@ return {
              and not ship.events.background_check) then
          mail.deliver_msg(ship, "nari08.msg")
          mission.record_event(ship, "background_check")
+      elseif(ship.events.invite_nari and not ship.mail_delivered["nari05"] and
+             target == "Tana Prime") then
+         mail.deliver_msg(ship, "nari05.msg")
       end
    end,
 
@@ -47,9 +50,8 @@ return {
       end
    end,
 
-   -- TODO/blocker: this never runs
    success_function = function(ship)
-      mail.deliver(ship, "nari09.msg")
+      mail.deliver_msg(ship, "nari09.msg")
    end,
 }
 

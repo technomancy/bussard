@@ -75,6 +75,8 @@ local bind = function(ship, mode, keycode, fn)
       if not map then map, key = keycode:match("(alt)-(.+)") end
       if map == "alt-ctrl" then map = "ctrl-alt" end
       assert(ship.api.modes[mode], "No mode " .. mode)
+      if(key == "enter") then key = "return" end
+      if(keycode == "enter") then keycode = "return" end
       ship.api.modes[mode][map or "map"][key or keycode] = fn
    end
 end
@@ -129,6 +131,7 @@ local sandbox = function(ship)
                         ssh_connect = lume.fn(ssh.connect, ship),
                         ssh_send_line = lume.fn(ssh.send_line, ship),
                         reply = lume.fn(mail.reply, ship),
+                        replyable = mail.replyable,
    })
 end
 
@@ -285,7 +288,6 @@ local ship = {
          if(u.update) then u.update(ship, dt) end
       end
 
-      -- TODO/blocker: pcall
       mission.update(ship, dt)
       ship:enforce_limits()
    end,

@@ -18,19 +18,19 @@ the best.
 
 But you deserve better, so I've done what I can here. I can't bring back
 your memories, but I discovered a backup in the lab of some of your
-files. They're encrypted, and I don't know what they contain, but my
-hope is that they will help you understand what's happened to you, where
-you've come from, and where your destiny lies. You can find them in the
-"docs.baks" directory.
+journal files. They're encrypted, and I don't know what they contain,
+but my hope is that they will help you understand what's happened to
+you, where you've come from, and where your destiny lies. You can find
+them in the "docs.backup" directory.
 
 There's an old, old story I heard once about a man who came to his
 senses on a remote road where an old woman stood before him. "And what
-is your third wish?", she asked him. "My third wish?" he asked. "I don't
-remember making my first two." She told him that his second wish had
+is your third wish?", she asked him. "My third wish?" he asked. "But I
+haven't made a first or second!" She told him that his second wish had
 been to change things back to the way they had been before his first
-wish. After some thought, he responded that he wished to know who he
-was. "That's funny," said the woman, as she complied. "That was your
-first wish."
+wish, leaving him with no memory of either. After some thought, he
+responded that he wished to know who he was. "That's funny," said the
+woman, as she complied. "That was your first wish."
 
 I don't know what lies in store for you, but I hope that with time you
 will come to forgive us.
