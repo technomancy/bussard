@@ -132,6 +132,7 @@ local sandbox = function(ship)
                         ssh_send_line = lume.fn(ssh.send_line, ship),
                         reply = lume.fn(mail.reply, ship),
                         replyable = mail.replyable,
+                        graphics = love.graphics,
    })
 end
 
