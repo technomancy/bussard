@@ -21,8 +21,8 @@ local files = {"main.lua","main.lua","main.lua","main.lua","main.lua",
                "services.lua","splash.lua",
 }
 
-local buttons = {"play", "credits", "license", "quit"}
-local actions = {play=function() end,
+local buttons = {"resume", "credits", "license", "quit"}
+local actions = {resume=function() end,
                  credits=function()
                     text, line = lume.split(love.filesystem.read("credits.md"), "\n"), 1
                  end,
@@ -93,9 +93,8 @@ end
 
 local random_choice = function(t) return t[love.math.random(#t)] end
 
-return function(play, quit, resume)
-   if(resume) then buttons[1], actions.resume = "resume", play end
-   actions.play, actions.quit = play, quit
+return function(resume, quit)
+   actions.resume, actions.quit = resume, quit
    love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw,nil
    text, line = lume.split(love.filesystem.read(random_choice(files)), "\n"), 1
 end

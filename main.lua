@@ -8,19 +8,22 @@ local ai = require "ship.ai"
 local ship = require "ship"
 local asteroid = require "asteroid"
 local save = require "save"
-local splash = require "splash"
+local pause = require "pause"
 
 local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 local systems = require("data.systems")
 
-local play, quit
+local play
+
+local quit = function()
+   save.save(ship)
+   love.event.quit()
+end
+
 local ui = {
    version = "beta-1-prerelease",
 
-   quit = function(ui)
-      save.save(ship, ui)
-      love.event.quit()
-   end,
+   quit = quit,
    abort = function(confirm)
       if(not confirm) then
          return("Aborting will wipe your in-process game. Call " ..
@@ -31,7 +34,7 @@ local ui = {
    end,
    config_reset = lume.fn(save.config_reset, ship),
 
-   splash = function() splash(play, quit, "resume") end,
+   pause = function() pause(play, quit) end,
 
    get_fps = love.timer.getFPS,
 }
@@ -206,8 +209,6 @@ play = function()
       update, keypressed, textinput, draw
 end
 
-quit = ui.quit
-
-splash(play, quit)
+play()
 
 return ship -- for headless.lua
