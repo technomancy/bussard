@@ -181,7 +181,7 @@ local ship = {
    credits = 1024,
    time_offset = utils.game_start,
    system_name = "L 668-21",
-   cargo = {["food"] = 2},
+   cargo = {},
    upgrade_names={},
    active_missions={},
    mail_delivered={},
@@ -246,6 +246,8 @@ local ship = {
 
       -- activate controls
       local current_mode = ship.api:mode()
+      -- TODO: this fires the laser when opening files with alt-o
+      -- if laser is bound to alt
       if(current_mode and current_mode.name == "flight") then
          for k,f in pairs(ship.api.controls) do
             f(love.keyboard.isDown(k))

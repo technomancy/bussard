@@ -57,7 +57,7 @@ local b = nil -- default back to flight mode
 local inhibit_read_only
 
 local last_line = "Press ctrl-enter to open the console, " ..
-"and run man() for more help. Zoom with = and -."
+"and run man() for help. Zoom with = and -."
 
 local invisible = {}             -- sentinel "do not print" value
 
@@ -363,6 +363,11 @@ return {
    end,
 
    kill_line = function()
+      save_excursion(function()
+            b.mark, b.mark_line = b.point, b.point_line
+            b.point = #b.lines[b.point_line]
+            push(kill_ring, region(), kill_ring_max)
+      end)
       delete(b.point_line, b.point, b.point_line, #b.lines[b.point_line])
    end,
 
@@ -490,6 +495,7 @@ return {
    -- internal functions
    draw = function()
       if(not b) then
+         love.graphics.setColor(0, 200, 0)
          if(console.lines[#console.lines] == console.prompt) then
             love.graphics.print(last_line, PADDING,
                                 love.graphics:getHeight() - ROW_HEIGHT * 2)
@@ -700,7 +706,7 @@ return {
    prompt = function() return (b and b.prompt) or "> " end,
    set_prompt = function(p)
       local line = b.lines[#b.lines]
-      b.lines[#b.lines] = p .. utf8.sub(line, utf8.len(b.prompt))
+      b.lines[#b.lines] = p .. utf8.sub(line, utf8.len(b.prompt) + 1)
       if(b.point_line == #b.lines) then b.point = utf8.len(p) end
       b.prompt = p
    end,

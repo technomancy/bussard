@@ -130,11 +130,6 @@ local orb_login = function(fs, env, ship)
    env.IN, env.OUT = "/tmp/in", "/tmp/out"
    ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
    fs[env.OUT] = lume.fn(sandbox_write, ship, ship.target.name)
-   fs[env.HOME .. "/ship"] = ship.api
-
-   -- free recharge upon connect
-   ship.battery = ship.battery_capacity
-
    -- TODO: improve error handling for problems in smashrc
    ship.target.os.process.spawn(fs, env, nil, sandbox(ship))
 end
@@ -151,9 +146,6 @@ return {
          local env = ship.target.os.shell.new_env(username)
 
          env.HOST = body.hostname(ship.target.name)
-         -- env.ROWS = tostring(ship.api.editor.rows)
-         -- env.COLS = tostring(ship.api.editor.cols)
-
          sessions[ship.target.name] = {fs, env, fs_raw}
          ship.comm_connected = ship.target.name
 
@@ -165,8 +157,7 @@ return {
             error("Unknown OS: " .. ship.target.os.name)
          end
 
-         local default_motd = "Login succeeded. Run `logout` to disconnect."
-         ship.api.print(fs_raw.etc.motd or default_motd)
+         ship.api.print(fs_raw.etc.motd)
 
          mission.on_login(ship)
       else

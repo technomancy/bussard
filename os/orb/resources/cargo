@@ -7,6 +7,7 @@ if(not station.prices) then
    return
 end
 
+-- TODO: better message when amount is missing
 if(args[1] == "list") then
    print("Prices: (buy/sell)")
    for good, prices in pairs(station.prices) do
