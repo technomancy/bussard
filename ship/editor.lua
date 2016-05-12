@@ -86,6 +86,14 @@ local wrap = function(fn, ...)
    end
 end
 
+local debug = function()
+   print("---------------", b.point_line, b.point)
+   for _,line in ipairs(b.lines) do
+      print(line)
+   end
+   print("---------------")
+end
+
 local get_buffer = function(path)
    return lume.match(buffers, function(bu) return bu.path == path end)
 end
@@ -134,7 +142,7 @@ end
 -- would be nice to have a more general read-only property
 local in_prompt = function(line, point, line2, _point2)
    if(not b.prompt) then return false end
-   if(not line2 and line ~= #b.lines) then return false end
+   if((line2 or line) == line and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= utf8.len(b.prompt)) then return false end
    print("warning: in prompt!", line, point, utf8.len(b.prompt), line2, #b.lines)
    return true
@@ -219,7 +227,7 @@ end
 local forward_word = function()
    if(end_of_buffer()) then return end -- TODO/blocker: last word crashes
    local remainder = utf8.sub(b.lines[b.point_line], b.point + 1, -1)
-   if(not utf8.find(remainder, "%S")) then
+   if(not utf8.find(remainder, "[^%s]") and b.point_line < #b.lines) then
       b.point, b.point_line = 0, b.point_line+1
    end
    local _, match = utf8.find(b.lines[b.point_line], word_break, b.point + 2)
@@ -229,7 +237,7 @@ end
 local backward_word = function()
    if(beginning_of_buffer()) then return end
    local before = utf8.sub(b.lines[b.point_line], 0, b.point)
-   if(not utf8.find(before, "%S")) then
+   if(not utf8.find(before, "[^%s]") and b.point_line > 1) then
       b.point_line = b.point_line - 1
       b.point = #b.lines[b.point_line]
    end
@@ -325,9 +333,7 @@ return {
 
    close = function(confirm)
       if(b.prevent_close) then return end
-      if(b.needs_save and not confirm) then
-         print("Save or call close(true) to confirm closing without saving.")
-      else
+      if(confirm or not b.needs_save) then
          lume.remove(buffers, b)
          b = buffers[1]
       end
@@ -746,11 +752,5 @@ return {
 
    with_current_buffer = with_current_buffer,
 
-   debug = function()
-      print("---------------", b.point_line, b.point)
-      for _,line in ipairs(b.lines) do
-         print(line)
-      end
-      print("---------------")
-   end,
+   debug = debug,
 }

@@ -25,8 +25,6 @@ bind("ssh", "return", function()
         if(input == "logout") then
            ship.editor.newline()
            logout()
-           ship:activate_mode("console")
-           ship.editor.set_prompt("> ")
         else
            ship.editor.history_push(input)
            ssh_send_line(input)
@@ -39,8 +37,6 @@ end)
 bind("ssh", "ctrl-d", function()
         if(get_input() == "") then
            logout()
-           ship:activate_mode("console")
-           ship.editor.set_prompt("> ")
         else
            ship.editor.delete_forwards()
         end

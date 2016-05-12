@@ -23,6 +23,8 @@ local logout = function(ship, target)
    else
       (ship.api or ship).print("| Not logged in.")
    end
+   ship.api:activate_mode("console")
+   ship.api.editor.set_prompt("> ")
    return ship.api.editor.invisible
 end
 
