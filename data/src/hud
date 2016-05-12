@@ -43,7 +43,7 @@ ship.hud = {
      color={20, 255, 20}, h=6,
    },
    {x=-300, y=-125, type="text", format="%s",
-    values = {unread_count},
+    values = {unread_count}, color={200,0,0},
    },
    ship.mission.hud,
 }

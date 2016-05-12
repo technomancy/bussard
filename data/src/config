@@ -13,7 +13,7 @@ ship.controls = {
 -- Flight mode
 define_mode("flight")
 
-bind("flight", "escape", ship.ui.splash)
+bind("flight", "escape", ship.ui.pause)
 bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
 
 -- ctrl-tab selects closest target; repeated ctrl-tab selects next-closest
