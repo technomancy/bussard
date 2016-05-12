@@ -94,7 +94,7 @@ local sandbox_write = function(ship, target_name, output)
    end
 end
 
-local lisp_login = function(fs, env, ship)
+local lisp_login = function(fs, env, ship, command)
    local buffer = {}
    local max_buffer_size = 1024
    local sb = sandbox(ship)
@@ -125,19 +125,19 @@ local lisp_login = function(fs, env, ship)
    sb.io = sb.io or { read = env.IN, write = write }
    sb.print = ship.api.print
 
-   ship.target.os.shell.spawn(fs, env, sb)
+   ship.target.os.shell.spawn(fs, env, sb, command)
 end
 
-local orb_login = function(fs, env, ship)
+local orb_login = function(fs, env, ship, command)
    env.IN, env.OUT = "/tmp/in", "/tmp/out"
    ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
    fs[env.OUT] = lume.fn(sandbox_write, ship, ship.target.name)
    -- TODO: improve error handling for problems in smashrc
-   ship.target.os.process.spawn(fs, env, nil, sandbox(ship))
+   ship.target.os.process.spawn(fs, env, command, sandbox(ship))
 end
 
 return {
-   connect = function(ship, username, password)
+   connect = function(ship, username, password, command)
       if(not ship:in_range(ship.target)) then
          ship.api.editor.print("| Out of range.")
       end
@@ -152,9 +152,9 @@ return {
          ship.comm_connected = ship.target.name
 
          if(ship.target.os.name == "orb") then
-            orb_login(fs, env, ship)
+            orb_login(fs, env, ship, command)
          elseif(ship.target.os.name == "lisp") then
-            lisp_login(fs, env, ship)
+            lisp_login(fs, env, ship, command)
          else
             error("Unknown OS: " .. ship.target.os.name)
          end

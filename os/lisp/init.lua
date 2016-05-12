@@ -61,12 +61,12 @@ return {
       new_env = function(user)
          return {USER = user, LOGIN = portal_rc}
       end,
-      spawn = function(fs, env, sandbox)
+      spawn = function(fs, env, sandbox, command)
          local co
          if(sandbox.portal_target and env.USER ~= "root") then
             co = coroutine.create(lume.fn(run, fs, env, sandbox, portal_rc))
          else
-            co = coroutine.create(lume.fn(repl, fs, env, sandbox))
+            co = coroutine.create(lume.fn(repl, fs, env, sandbox, command))
          end
          local id = id_for(co)
          fs.proc[id] = { thread = co, id = id }

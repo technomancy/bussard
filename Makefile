@@ -30,7 +30,7 @@ check:
 	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
 	  --globals lume utf8 pack ship pause define_mode bind utils realprint \
-	            mail ssh ssh_connect logout ssh_send_line reply \
+	            mail ssh ssh_connect logout ssh_send_line reply replyable \
 	  -- $(IN_SHIP_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel \

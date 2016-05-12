@@ -225,7 +225,7 @@ local end_of_buffer = function()
 end
 
 local forward_word = function()
-   if(end_of_buffer()) then return end -- TODO/blocker: last word crashes
+   if(end_of_buffer()) then return end
    local remainder = utf8.sub(b.lines[b.point_line], b.point + 1, -1)
    if(not utf8.find(remainder, "[^%s]") and b.point_line < #b.lines) then
       b.point, b.point_line = 0, b.point_line+1

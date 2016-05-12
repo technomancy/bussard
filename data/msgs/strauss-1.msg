@@ -25,7 +25,7 @@ them in the "docs.backup" directory.
 
 There's an old, old story I heard once about a man who came to his
 senses on a remote road where an old woman stood before him. "And what
-is your third wish?", she asked him. "My third wish?" he asked. "But I
+is your third wish?", she asked him. "My third wish?" he replied. "But I
 haven't made a first or second!" She told him that his second wish had
 been to change things back to the way they had been before his first
 wish, leaving him with no memory of either. After some thought, he
