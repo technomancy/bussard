@@ -4,6 +4,7 @@
 
 * Add life-support system upgrade.
 * Some support for UTF-8 characters.
+* Various editor bugfixes.
 * Repeated presses of ctrl-tab select next-closest target.
 * Format times as years:seconds.
 * Simplify gravitation to avoid certain bugs.

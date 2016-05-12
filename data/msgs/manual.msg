@@ -16,9 +16,10 @@ computer, the following quick start may help you get going.
 
 The flight controls use your helm keyboard's arrow keys; the up key
 engages the engines, while left and right activate the turning
-thrusters. Use the equals and minus keys to zoom in and out.  Your
+thrusters. Use the equals and minus keys to zoom in and out. Your
 ship's safety features will prevent collision with any other ships,
-asteroids, stars, etc, so there is no need to fear.
+asteroids, stars, etc, so there is no need to fear. Use the tab key to
+cycle through targets in system.
 
 Pressing control-enter opens the ship's editor, which allows you to
 interact with the onboard computer. It begins in console mode, which
@@ -26,12 +27,18 @@ lets you write code directly, but you can also activate other modes;
 most notably opening files to edit by pressing alt-o.
 
 Your ship's onboard computer also contains an SSH client, which allows
-you to connect with the port computers at various stations and planets
-you may encounter. You can log in by pressing tab to target a world with
-a port computer and flying within range (your targeting indicator will
-turn bright green when in range) then opening the console and running
-"ssh()". This will log you in as a guest, if you have an account with a
-username and password you can supply them as arguments to the ssh function.
+you to connect with the port computers at various stations and
+planets. You can log in by targeting a world with a port computer and
+flying within range (your targeting indicator will turn bright green
+when in range) then opening the console and running "ssh()". The
+commands you can run when logged in vary by station, but usually they
+will at least sell ship upgrades with the "upgrade" command and trade
+cargo with the "cargo" command. Use "ls /bin" to list all commands. Most
+commands take a "--help" argument.
+
+In order to activate interstellar portals, you must also log into them
+similarly to port worlds. However, you must stay within range for a few
+seconds in order for the portal to activate.
 
 Finally your ship is also equipped with a mail client, which you can use
 to read your own personal mail as well as mail sent to various mailing

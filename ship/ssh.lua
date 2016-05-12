@@ -28,7 +28,7 @@ end
 
 local send_line = function(ship, input)
    if(not ship:in_range(ship.target)) then
-      ship.api.print("| Out of range. Run `logout` to disconnect.")
+      ship.api.print("| Out of range. Run `logout` to disconnect or move back in range.")
    elseif(not sessions[ship.target.name]) then
       ship.api.print("Not logged in to " .. ship.target.name ..
                         ". Run `logout` to disconnect.")

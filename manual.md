@@ -93,7 +93,9 @@ range of a station that allows logins.
 
 Sessions are initiated using the ssh() function, which will log you
 into the currently-targeted planet or station with the provided
-username and password if you are within communications range.
+username and password if you are within communications range. While
+you are logged in and stay within range, the port can send automated
+loaders to your ship to transfer cargo and passengers.
 
 Most stations allow limited access via a "guest" account with an empty
 password, which is the default if no username and password are
@@ -263,7 +265,8 @@ the `upgrade` script to see their prices. Run `upgrade buy laser`, for
 instance, to purchase a laser, provided you have enough credits. Once
 you have purchased an upgrade, you can usually view its documentation
 by logging out of the station and accessing its manual page with
-`man("laser")`, etc.
+`man("laser")`, etc. Many upgrades will require making changes to your
+ship's config code to use; the changes will be described in the manual.
 
 ### Mail
 
