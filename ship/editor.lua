@@ -37,7 +37,7 @@ local DISPLAY_ROWS
 -- width of an m
 local em
 -- pattern for word breaks
-local word_break = "[%s%p]+"
+local word_break = "[%s%p]"
 
 local kill_ring_max = 32
 local mark_ring_max = 32
@@ -184,8 +184,11 @@ local insert = function(text, point_to_end)
 end
 
 local delete = function(start_line, start, finish_line, finish)
-   start_line, finish_line = math.min(start_line, finish_line), math.max(start_line, finish_line)
-   start, finish = math.min(start, finish), math.max(start, finish)
+   start_line = math.min(start_line, finish_line)
+   finish_line = math.max(start_line, finish_line)
+   if(start_line == finish_line) then
+      start, finish = math.min(start, finish), math.max(start, finish)
+   end
    if(edit_disallowed(start_line, start, finish_line, finish)) then return end
 
    b.dirty, b.needs_save = true, true
@@ -224,33 +227,6 @@ local end_of_buffer = function()
    return b.point == #b.lines[b.point_line] and b.point_line == #b.lines
 end
 
-local forward_word = function()
-   if(end_of_buffer()) then return end
-   local remainder = utf8.sub(b.lines[b.point_line], b.point + 1, -1)
-   if(not utf8.find(remainder, "[^%s]") and b.point_line < #b.lines) then
-      b.point, b.point_line = 0, b.point_line+1
-   end
-   local _, match = utf8.find(b.lines[b.point_line], word_break, b.point + 2)
-   b.point = match and match - 1 or #b.lines[b.point_line]
-end
-
-local backward_word = function()
-   if(beginning_of_buffer()) then return end
-   local before = utf8.sub(b.lines[b.point_line], 0, b.point)
-   if(not utf8.find(before, "[^%s]") and b.point_line > 1) then
-      b.point_line = b.point_line - 1
-      b.point = #b.lines[b.point_line]
-   end
-   local back_line = utf8.reverse(utf8.sub(b.lines[b.point_line],
-                                           0, math.max(b.point - 1, 0)))
-   if(back_line and utf8.find(back_line, word_break)) then
-      local _, match = utf8.find(back_line, word_break)
-      b.point = utf8.len(back_line) - match + 1
-   else
-      b.point = 0
-   end
-end
-
 local forward_char = function(n) -- lameness: n must be 1 or -1
    n = n or 1
    if((end_of_buffer() and n > 0) or
@@ -262,6 +238,32 @@ local forward_char = function(n) -- lameness: n must be 1 or -1
       b.point_line = b.point_line-1
    else
       b.point = b.point + n
+   end
+end
+
+local point_over = function()
+   return utf8.sub(b.lines[b.point_line], b.point + 1, b.point + 1)
+end
+
+local forward_word = function()
+   if(utf8.find(point_over(), word_break)) then
+      while(not end_of_buffer() and utf8.find(point_over(), word_break)) do
+         forward_char()
+      end
+   end
+   while(not end_of_buffer() and not utf8.find(point_over(), word_break)) do
+      forward_char()
+   end
+end
+
+local backward_word = function()
+   if(utf8.find(point_over(), word_break)) then
+      while(not beginning_of_buffer() and utf8.find(point_over(), word_break)) do
+         forward_char(-1)
+      end
+   end
+   while(not beginning_of_buffer() and not utf8.find(point_over(), word_break)) do
+      forward_char(-1)
    end
 end
 
@@ -369,12 +371,17 @@ return {
    end,
 
    kill_line = function()
-      save_excursion(function()
-            b.mark, b.mark_line = b.point, b.point_line
-            b.point = #b.lines[b.point_line]
-            push(kill_ring, region(), kill_ring_max)
-      end)
-      delete(b.point_line, b.point, b.point_line, #b.lines[b.point_line])
+      local remainder = utf8.sub(b.lines[b.point_line], b.point+1)
+      if(utf8.find(remainder, "[^%s]")) then
+         save_excursion(function()
+               b.mark, b.mark_line = b.point, b.point_line
+               b.point = #b.lines[b.point_line]
+               push(kill_ring, region(), kill_ring_max)
+         end)
+         delete(b.point_line, b.point, b.point_line, #b.lines[b.point_line])
+      elseif(b.point_line < #b.lines) then
+         delete(b.point_line, b.point, b.point_line+1, 0)
+      end
    end,
 
    beginning_of_line = function()
