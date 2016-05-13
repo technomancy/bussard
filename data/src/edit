@@ -10,7 +10,10 @@ bind("edit", "escape", function()
         ship.editor.change_buffer(nil) -- nil buffer means flight mode
 end)
 
-bind("edit", "ctrl-q", ship.ui.quit)
+bind("edit", "ctrl-q", function()
+        ship.editor.save()
+        ship.ui.quit()
+end)
 
 -- cycle forwards and backwards through open buffers
 bind("edit", "ctrl-pageup", lume.fn(ship.editor.next_buffer, -1))

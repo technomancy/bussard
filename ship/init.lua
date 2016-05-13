@@ -81,8 +81,8 @@ local bind = function(ship, mode, keycode, fn)
    end
 end
 
-local sandbox_loadstring = function(ship, code)
-   local chunk, err = loadstring(code)
+local sandbox_loadstring = function(ship, code, chunkname)
+   local chunk, err = loadstring(code, chunkname)
    if(chunk) then
       setfenv(chunk, ship.sandbox)
       return chunk
@@ -91,13 +91,23 @@ local sandbox_loadstring = function(ship, code)
    end
 end
 
--- TODO/blocker: improve error handling for all user code
+local with_traceback = function(f, ...)
+   local args = {...}
+   -- TODO: sandboxed traceback which trims out irrelevant layers
+   return xpcall(function() f(unpack(args)) end, function(e)
+         print(debug.traceback())
+         print(e)
+         editor.print(debug.traceback())
+         editor.print(e)
+   end)
+end
+
 local sandbox_dofile = function(ship, filename)
    local contents = ship.api:find(filename)
    assert(type(contents) == "string", filename .. " is not a file.")
-   local chunk, err = sandbox_loadstring(ship, contents)
+   local chunk, err = sandbox_loadstring(ship, contents, filename)
    if(not err) then
-      return chunk()
+      return with_traceback(chunk)
    else
       ship.api.print(err)
       return false, err
@@ -186,7 +196,7 @@ local ship = {
    active_missions={},
    mail_delivered={},
    events={},
-   flag = "Tana",
+   flag = "Katilay",
    name = "Adahn",
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
@@ -250,7 +260,7 @@ local ship = {
       -- if laser is bound to alt
       if(current_mode and current_mode.name == "flight") then
          for k,f in pairs(ship.api.controls) do
-            f(love.keyboard.isDown(k))
+            with_traceback(f, love.keyboard.isDown(k))
          end
       end
 
@@ -283,8 +293,12 @@ local ship = {
          ship.battery = ship.battery + (dt / math.log(dist*2)) * ship.solar
       end
 
-      for _,f in pairs(ship.api.updaters or {}) do
-         f(ship.api, dt)
+      for n,f in pairs(ship.api.updaters or {}) do
+         if(not with_traceback(f, ship.api, dt)) then
+            ship.api.updaters[n] = nil
+            ship.api.broken_updaters = ship.api.broken_updaters or {}
+            ship.api.broken_updaters[n] = f
+         end
       end
 
       for _,u in pairs(ship.upgrades) do
@@ -366,8 +380,8 @@ local ship = {
       else
          local fn = find_binding(ship, key)
          local wrap = ship.api:mode().wrap
-         if(fn and wrap) then wrap(fn)
-         elseif(fn) then fn()
+         if(fn and wrap) then with_traceback(wrap, fn)
+         elseif(fn) then with_traceback(fn)
          end
       end
    end,
@@ -378,9 +392,9 @@ local ship = {
       local mode = the_mode or ship.api:mode()
       if(mode.textinput) then
          if(mode.wrap) then
-            mode.wrap(mode.textinput, text)
+            with_traceback(mode.wrap, mode.textinput, text)
          else
-            mode.textinput(text)
+            with_traceback(mode.textinput, text)
          end
       elseif(mode.parent) then
          ship:textinput(text, mode.parent)

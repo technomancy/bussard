@@ -88,13 +88,7 @@ love.load = function()
       require("localhacks")(ship)
    end
 
-   xpcall(function() ship:dofile("src.config") end,
-      function(e)
-         print("Initial load failed:", e)
-         ship.api.print(e)
-         ship.api.print(debug.traceback())
-         ship.api.editor.print("Error loading config!")
-   end)
+   ship:dofile("src.config")
 end
 
 local update = safely(function(dt)
