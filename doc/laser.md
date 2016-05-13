@@ -8,7 +8,7 @@ mining of metallic asteroids.
 
 In order to fire your laser, it's recommended to bind it in the
 `ship.controls` table. Left Alt is a common choice. Add this to your
-ship's configuration by pressing alt-o followed by src.config to
+ship's configuration by pressing ctrl-o followed by src.config to
 open the ship config file. Add this line below the `ship.controls = {
 [...] }` section.
 

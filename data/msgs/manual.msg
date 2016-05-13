@@ -24,7 +24,7 @@ cycle through targets in system.
 Pressing control-enter opens the ship's editor, which allows you to
 interact with the onboard computer. It begins in console mode, which
 lets you write code directly, but you can also activate other modes;
-most notably opening files to edit by pressing alt-o.
+most notably opening files to edit by pressing ctrl-o.
 
 Your ship's onboard computer also contains an SSH client, which allows
 you to connect with the port computers at various stations and

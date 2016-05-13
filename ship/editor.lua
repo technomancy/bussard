@@ -718,6 +718,7 @@ return {
 
    prompt = function() return (b and b.prompt) or "> " end,
    set_prompt = function(p)
+      if(not b) then return end
       local line = b.lines[#b.lines]
       b.lines[#b.lines] = p .. utf8.sub(line, utf8.len(b.prompt) + 1)
       if(b.point_line == #b.lines) then b.point = utf8.len(p) end

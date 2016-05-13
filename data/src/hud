@@ -3,11 +3,18 @@
 local unread_count = function(ship)
    local unread = lume.count(ship.docs.mail.inbox._unread)
    if(unread > 0) then
-      return unread .. " unread messages (ctrl-m to read)"
+      return unread .. " unread messages"
    else
       return ""
    end
 end
+
+local quickref = "ctrl-enter: console\n" ..
+   "ctrl-m: read mail\n" ..
+   "ctrl-s: ssh login\n" ..
+   "ctrl-p: portal\n" ..
+   "ctrl-o: open file\n" ..
+   "ctrl-r: reload config"
 
 ship.hud = {
    { x=60, y=5, type="text",
@@ -42,6 +49,7 @@ ship.hud = {
      values={"status.battery", "status.battery_capacity"},
      color={20, 255, 20}, h=6,
    },
+   {x=-200, y=200, type="text", format=quickref, values={1}},
    {x=-300, y=-125, type="text", format="%s",
     values = {unread_count}, color={200,0,0},
    },

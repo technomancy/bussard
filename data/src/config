@@ -48,15 +48,17 @@ bind({"flight", "edit"}, "ctrl-m", function()
 end)
 
 -- to open a file
-bind({"flight", "edit"}, "alt-o", function()
+bind({"flight", "edit"}, "ctrl-o", function()
         ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
 end)
 
 -- reload config
 bind({"flight", "edit"}, "ctrl-r",
-     function()
-        ship.dofile("src.config")
-        ship.editor.initialize()
+   -- maybe bind this to something that isn't already used by edit mode
+   function()
+      ship.dofile("src.config")
+      ship.editor.initialize()
+      print("Successfully reloaded config.")
 end)
 
 -- connect to target over ssh
@@ -64,3 +66,5 @@ bind({"flight", "edit"}, "ctrl-s", function()
         ship.editor.change_buffer("*console*")
         ssh()
 end)
+
+bind("flight", "ctrl-p", portal)

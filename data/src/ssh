@@ -11,6 +11,15 @@ ssh = function(username, password)
    return ship.editor.invisible
 end
 
+portal = function()
+   if(ship.status.target and ship.status.target.portal) then
+      ssh_connect("guest", "")
+   else
+      print("Cannot log into target.")
+   end
+   return ship.editor.invisible
+end
+
 local get_input = function()
    return utf8.sub(ship.editor.get_line(0), utf8.len(ship.editor.prompt())+1)
 end
