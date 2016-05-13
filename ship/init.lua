@@ -1,6 +1,7 @@
 local utf8 = require("utf8")
 local utils = require("utils")
 local lume = require("lume")
+local serpent = require("serpent")
 
 local help = require("ship.help")
 local upgrade = require("ship.upgrade")
@@ -20,7 +21,7 @@ local scale_min = 1
 
 local status_whitelist = {
    "x", "y", "dx", "dy", "heading", "target", "system_name", "bodies",
-   "fuel", "fuel_capacity", "battery", "battery_capacity", "mass", "in_range",
+   "fuel", "fuel_capacity", "battery", "battery_capacity", "mass",
    "engine_on", "turning_right", "turning_left", "credits", "upgrade_names",
    "cargo", "cargo_capacity", "solar",
    "engine_strength", "turning_speed", "cpuinfo",
@@ -123,6 +124,7 @@ local sandbox_require = function(ship, mod_name)
 end
 
 local sandbox = function(ship)
+   local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
    return lume.merge(utils.sandbox,
                      {  help = help.message,
                         print = ship.api.print,
@@ -143,6 +145,8 @@ local sandbox = function(ship)
                         reply = lume.fn(mail.reply, ship),
                         replyable = mail.replyable,
                         graphics = love.graphics,
+                        pp = function(x)
+                           editor.print(serpent.block(x, serpent_opts)) end,
    })
 end
 
@@ -437,8 +441,7 @@ ship.api = {
       hud = {x=-300, y=-100, type="text", format="Missions: %s",
              values = {lume.fn(mission.readout, ship)}}
    },
-   -- data tables (read-only)
-   sensors = utils.whitelist_table(ship, status_whitelist, "sensors"),
+
    status = utils.whitelist_table(ship, status_whitelist, "status"),
 
    -- upgrades can place functions in this table when loaded

@@ -2,6 +2,7 @@
 
 ## beta-1 / ???
 
+* Better display of tables from in-game console.
 * Allow reverting to stock config as fallback recovery.
 * Add life-support system upgrade.
 * Some support for UTF-8 characters.
