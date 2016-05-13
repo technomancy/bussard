@@ -7,7 +7,6 @@ local help = require("ship.help")
 local upgrade = require("ship.upgrade")
 local ai = require("ship.ai")
 local ssh = require("ship.ssh")
-
 local mail = require("mail")
 local mission = require("mission")
 
@@ -125,10 +124,10 @@ end
 
 local sandbox = function(ship)
    local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
+   -- TODO: document these in the in-game manual
    return lume.merge(utils.sandbox,
                      {  help = help.message,
                         print = ship.api.print,
-                        -- clear = ship.editor.clear_lines,
                         ship = ship.api,
                         _LOADED = sandbox_loaded,
                         dofile = lume.fn(sandbox_dofile, ship),
@@ -136,7 +135,6 @@ local sandbox = function(ship)
                         loadstring = lume.fn(sandbox_loadstring, ship),
                         debug = {traceback = debug.traceback},
                         os = {time = lume.fn(utils.time, ship)},
-                        -- scp = lume.fn(comm.scp, ship),
                         man = lume.fn(help.man, ship.api),
                         define_mode = lume.fn(define_mode, ship),
                         bind = lume.fn(bind, ship),

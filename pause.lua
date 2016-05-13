@@ -1,15 +1,10 @@
 local lume = require "lume"
-local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 
 local starfield = require "starfield"
-local star1 = starfield.new(10, w, h, 0.01, 100)
-local star2 = starfield.new(10, w, h, 0.05, 175)
-local star3 = starfield.new(10, w, h, 0.1, 255)
+local stars = {}
 
 local title = love.graphics.newImage("assets/title.png") -- jura demibold
-local choices_font = love.graphics.newFont("assets/mensch.ttf", 16)
-local text_font = love.graphics.newFont("assets/mensch.ttf", 10)
-local font_height = text_font:getHeight()
+local choices_font, text_font, font_height
 
 local text, line = {}, 1
 local scroll = 0
@@ -69,9 +64,7 @@ local keypressed = function(key)
 end
 
 local draw = function()
-   starfield.render(star1, x, y)
-   starfield.render(star2, x, y)
-   starfield.render(star3, x, y)
+   for _,s in pairs(stars) do starfield.render(s, x, y) end
 
    love.graphics.draw(title, 30, 30)
 
@@ -84,7 +77,7 @@ local draw = function()
 
    love.graphics.setColor(0,200,0)
    love.graphics.setFont(text_font)
-   for i=1, math.floor((h-100) / font_height) do
+   for i=1, math.floor((love.graphics.getHeight()-100) / font_height) do
       if(text[line+i-1]) then
          love.graphics.print(text[line+i-1], 260, 100+i*font_height)
       end
@@ -94,6 +87,13 @@ end
 local random_choice = function(t) return t[love.math.random(#t)] end
 
 return function(resume, quit)
+   choices_font = love.graphics.newFont("assets/mensch.ttf", 16)
+   text_font = love.graphics.newFont("assets/mensch.ttf", 10)
+   font_height = text_font:getHeight()
+   stars = { starfield.new(10, 0.005, 75),
+             starfield.new(10, 0.01, 100),
+             starfield.new(10, 0.05, 175),
+             starfield.new(10, 0.1, 255), }
    actions.resume, actions.quit = resume, quit
    love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw,nil
    text, line = lume.split(love.filesystem.read(random_choice(files)), "\n"), 1

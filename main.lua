@@ -9,11 +9,9 @@ local ship = require "ship"
 local asteroid = require "asteroid"
 local save = require "save"
 local pause = require "pause"
-
-local w, h = love.graphics:getWidth(), love.graphics:getHeight()
 local systems = require("data.systems")
 
-local play
+local play, stars
 
 local quit = function()
    save.save(ship)
@@ -50,6 +48,7 @@ local safely = function(f)
 
       print(traceback:gsub("\n[^\n]+$", ""))
       love.draw = function()
+         local w, h = love.graphics:getWidth(), love.graphics:getHeight()
          love.graphics.setColor(50, 50, 200)
          love.graphics.rectangle("fill", 0, 0, w, h)
          love.graphics.setColor(255, 255, 255)
@@ -76,6 +75,20 @@ local safely = function(f)
 end
 
 love.load = function()
+   local dw, dh = love.window.getDesktopDimensions()
+
+   if(dh < 800) then
+      love.window.setMode(dw, dh, {fullscreen=true, fullscreentype="desktop"})
+   else
+      love.window.setMode(dw*0.9, dh*0.9)
+   end
+
+   love.graphics.setFont(love.graphics.newFont("assets/mensch.ttf", 14))
+
+   stars = { starfield.new(10, 0.01, 100),
+             starfield.new(10, 0.05, 175),
+             starfield.new(10, 0.1, 255), }
+
    if(arg[#arg] == "-debug") then require("mobdebug").start() end
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
@@ -108,22 +121,17 @@ local textinput = safely(lume.fn(ship.textinput, ship))
 
 -- drawing
 
-local star1 = starfield.new(10, w, h, 0.01, 100)
-local star2 = starfield.new(10, w, h, 0.05, 175)
-local star3 = starfield.new(10, w, h, 0.1, 255)
-
 local portal_offsets = {
    {0, -200}, {-141, -141}, {-200, 0}, {-141, 141},
    {0, 200}, {141, 141}, {200, 0}, {141, -141},
 }
 
 local draw = safely(function(dt)
-      starfield.render(star1, ship.x, ship.y)
-      starfield.render(star2, ship.x, ship.y)
-      starfield.render(star3, ship.x, ship.y)
+      for _,s in pairs(stars) do starfield.render(s, ship.x, ship.y) end
 
       love.graphics.push()
-      love.graphics.translate(w / 2, h / 2)
+      love.graphics.translate(love.graphics.getWidth() / 2,
+                              love.graphics.getHeight() / 2)
       love.graphics.push()
 
       local scale = math.pow(1/ship.api.scale, 8)
@@ -197,12 +205,15 @@ local draw = safely(function(dt)
       draw(ship)
 end)
 
-play = function()
-   love.graphics.setFont(love.graphics.newFont("assets/mensch.ttf", 14))
+play = function(first_time)
+   -- first time through love.graphics hasn't loaded yet; this will segfault
+   if(not first_time) then
+      love.graphics.setFont(love.graphics.newFont("assets/mensch.ttf", 14))
+   end
    love.update,love.keypressed,love.textinput,love.draw =
       update, keypressed, textinput, draw
 end
 
-play()
+play(true)
 
 return ship -- for headless.lua

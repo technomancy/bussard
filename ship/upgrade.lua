@@ -1,8 +1,6 @@
 local utils = require("utils")
 local asteroid = require("asteroid")
 
-local w, h = love.graphics:getWidth(), love.graphics:getHeight()
-
 local laser_hits = function(ship, b, distance)
    -- assuming circular images
    if(b.image) then
@@ -23,9 +21,9 @@ local gov_colors = {
    ["Yueh"] = {0xcd, 0x00, 0x00},
 }
 
-local em = love.graphics.getFont():getWidth('a')
-
 local map_draw = function(ship)
+   local em = love.graphics.getFont():getWidth('a')
+   local w,h = love.graphics:getWidth(), love.graphics:getHeight()
    love.graphics.setColor(0, 0, 0, 200)
    love.graphics.rectangle("fill", 0, 0, w, h)
    love.graphics.push()

@@ -3,7 +3,7 @@ local lume = require("lume")
 local body = require("body")
 
 local vector_size, font_width = 50, nil
-local w, h = love.graphics:getWidth(), love.graphics:getHeight()
+local w, h
 
 local get_pos = function(value)
    local x, y = value.x, value.y
@@ -107,6 +107,7 @@ end
 
 return {
    render = function(ship)
+      w, h = love.graphics:getWidth(), love.graphics:getHeight()
       font_width = love.graphics.getFont():getWidth('a')
       for _,data in ipairs(ship.api.hud or {}) do
          love.graphics.setColor(unpack(data.color or {255, 255, 255, 150}))

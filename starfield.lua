@@ -1,11 +1,12 @@
 return {
-   new = function(count, width, height, factor, intensity)
+   new = function(count, factor, intensity)
       local stars = {}
+      local w,h = love.graphics.getWidth(), love.graphics.getHeight()
       for _ = 1, count do
-         table.insert(stars, {x = love.math.random(width),
-                              y = love.math.random(height) })
+         table.insert(stars, {x = love.math.random(w),
+                              y = love.math.random(h) })
       end
-      return {stars = stars, width = width, height = height,
+      return {stars = stars, width = h, height = h,
               factor = factor, intensity = intensity}
    end,
 

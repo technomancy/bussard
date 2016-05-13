@@ -10,6 +10,11 @@ bind("edit", "escape", function()
         ship.editor.change_buffer(nil) -- nil buffer means flight mode
 end)
 
+bind("edit", "ctrl-return", function()
+        ship.editor.save()
+        ship.editor.change_buffer(nil) -- nil buffer means flight mode
+end)
+
 bind("edit", "ctrl-q", function()
         ship.editor.save()
         ship.ui.quit()
