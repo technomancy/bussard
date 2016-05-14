@@ -577,7 +577,7 @@ return {
          end
       end
 
-      love.graphics.setColor(0, 200, 0, 150)
+      love.graphics.setColor(0, 200, 0)
       love.graphics.rectangle("fill", 0, height - ROW_HEIGHT, width, ROW_HEIGHT)
       love.graphics.setColor(0, 0, 0)
       if(mb) then
@@ -600,6 +600,7 @@ return {
       local bar_height_pixels = (bar_height * (height - 10)) / 100
 
       local sx = width - 5
+      love.graphics.setColor(0, 150, 0)
       -- Handle the case where there are less actual lines than display rows
       if bar_height_pixels >= height - 10 then
          love.graphics.line(sx, 5, sx, height - 5)
