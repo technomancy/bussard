@@ -455,16 +455,19 @@ ship.api = {
             ship.target_number = ((ship.target_number + 1) %
                   (table.length(ship.bodies) + 1))
          end
+         ship.api.closest_cycle = 1
          ship.target = ship.bodies[ship.target_number]
       end,
-      closest_target = function(nth)
+      closest_target = function()
+         ship.api.closest_cycle = ship.api.closest_cycle or 1
          local ts = utils.sort_by(ship.bodies, lume.fn(utils.distance, ship))
-         local target = ts[nth or 1]
+         local target = ts[ship.api.closest_cycle]
          for i,b in ipairs(ship.bodies) do
             if(b == target) then
                ship.target, ship.target_number = b, i
             end
          end
+         ship.api.closest_cycle = ship.api.closest_cycle + 1
       end,
    },
 

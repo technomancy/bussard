@@ -17,17 +17,10 @@ bind("flight", "escape", ship.ui.pause)
 bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
 
 -- ctrl-tab selects closest target; repeated ctrl-tab selects next-closest
-local closest_cycle = 1
-bind("flight", "ctrl-tab", function()
-        ship.actions.closest_target(closest_cycle)
-        closest_cycle = closest_cycle + 1
-end)
+bind("flight", "ctrl-tab", ship.actions.closest_target)
 
 -- regular tab selects next target in "order"
-bind("flight", "tab", function()
-        closest_cycle = 1 -- clears state of ctrl-tab cycling
-        ship.actions.next_target()
-end)
+bind("flight", "tab", ship.actions.next_target)
 
 dofile("src.hud") -- heads-up display during flight mode
 

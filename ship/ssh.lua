@@ -138,8 +138,10 @@ end
 
 return {
    connect = function(ship, username, password, command)
+      ship.api.closest_cycle = 1
       if(not ship:in_range(ship.target)) then
-         ship.api.editor.print("| Out of range.")
+         ship.api.editor.print("| Out of communications range.")
+         return
       end
 
       local fs_raw = body.login(ship, ship.target, username, password)
@@ -160,6 +162,7 @@ return {
          end
 
          ship.api.print(fs_raw.etc.motd)
+         ship.api.print("Type \"logout\" to exit and \"ls /bin\" to see commands available.")
 
          mission.on_login(ship)
       else
