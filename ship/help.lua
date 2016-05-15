@@ -6,6 +6,12 @@ local upgrades = {"laser", "engine", "cargo_bay", "fuel_tank", "fuel_charger",
 local pages = {
    manual = "manual.md",
    keycodes = "doc/keycodes.md",
+   quickstart = "doc/quickstart.md",
+   quickstart2 = "doc/quickstart2.md",
+   quickstart3 = "doc/quickstart3.md",
+   tutorial = "doc/quickstart.md", -- aliases for quickstart
+   help = "doc/quickstart.md",
+   intro = "doc/quickstart.md",
 
    laser = "doc/laser.md",
    engine = "doc/engine.md",
@@ -40,7 +46,7 @@ return {
       elseif(page_name) then
          ship.print("Page not found.\n\n" .. list())
       else
-         local p = love.filesystem.read("manual.md")
+         local p = love.filesystem.read("doc/quickstart.md")
          ship.print(p)
       end
 

@@ -45,7 +45,7 @@ local history_max = 128
 
 local console = make_buffer(nil, "*console*",
                             {"This is the console. Enter any code for your " ..
-                                "ship's computer to run it.", "> "})
+                             "ship's computer to run it; run man() for help.", "> "})
 console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt = "console", "> "
 

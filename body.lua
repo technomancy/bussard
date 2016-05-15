@@ -44,7 +44,7 @@ local base_prices = {
    },
 }
 
-local g = 2000
+local g = 4196
 
 -- Without capping gravity accel, you run into a weird bug caused by
 -- the fact that we calculate gravitation discretely instead of

@@ -26,11 +26,10 @@ bind("edit", "appback", lume.fn(ship.editor.next_buffer, -1))
 bind("edit", "ctrl-pagedown", ship.editor.next_buffer)
 bind("edit", "appforward", ship.editor.next_buffer)
 
-bind("edit", "pause", function() ship.paused = (not ship.paused) end)
-
 -- you can bind return to just ship.editor.newline to disable auto-indent
 bind("edit", "return", ship.editor.newline_and_indent)
 bind("edit", "ctrl-z", ship.editor.undo)
+bind("edit", "ctrl-s", ship.editor.save)
 bind("edit", "ctrl-r", ship.editor.revert)
 
 -- "Conventional" keys
