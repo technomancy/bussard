@@ -1,4 +1,4 @@
-local utf8 = require("utf8")
+local utf8 = require("utf8.init")
 local utils = require("utils")
 local lume = require("lume")
 local serpent = require("serpent")
