@@ -19,6 +19,7 @@ bind("console", "return", function()
         local input = utf8.sub(ship.editor.get_line(0),
                                utf8.len(ship.editor.prompt())+1)
         ship.editor.history_push(input)
+        ship.editor.end_of_line()
         ship.editor.newline()
         local chunk, err = loadstring("return " .. input)
         if(err and not chunk) then
@@ -35,7 +36,7 @@ bind("console", "return", function()
                                       trace = debug.traceback()
                                       err = e end))
         if(result[1]) then
-           local results, i = pp(result[2]), 3
+           local results, i = pps(result[2]), 3
            if result[2] == ship.editor.invisible then
               ship.editor.print_prompt()
               return true
