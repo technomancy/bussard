@@ -12,34 +12,14 @@ Read [an interview on the motivation and background for the game](http://hifibya
 
 ## Playing
 
-When you start the game, you'll notice you have a couple emails. Hit
-`ctrl-m` to open up the mail client and read the messages in your
-inbox. When you're done, hit escape to go back to flight mode.
+When you're in flight mode, the arrow keys control the ship's engines
+and turning thrusters. Keys to access the ship's computer's various
+functions are listed on the side of the screen.
 
-Your next priority is to rendezvous with the nearby station. Press
-`tab` until your targeting indicator in your HUD shows the
-station. The targeting line will always point in the direction of your
-target; the blue striped line indicates your current trajectory. Head
-towards the station and try to make your trajectory match its orbit,
-but keep an eye on your velocity and fuel supply. If you accelerate
-too much, you may not have enough fuel to match velocity with the
-station. Once you get close, it will be easier to match velocity if
-you zoom in with `=`.
-
-Once you are in orbit around the station, and are in range, the line
-pointing towards the station will turn light green. Press backtick and
-type `ssh()` to establish a connection. You can see all the commands
-available on the station by typing `ls /bin`, but at this time you
-only need to concern yourself with the `upgrade` command. Run `upgrade
-buy laser`, then `logout` followed by `man("laser")` to learn how to
-use the laser. You will need to edit your config file (with
-`ctrl-enter`) to add a key binding to turn on the laser, as explained
-on the laser's manual page.
-
-From there it's off to find an asteroid to mine, and then the galaxy
-is yours to explore. To jump to another system, find a portal and
-press `ctrl-s` when you are within range. You'll want to check out
-the ship's main manual with `man()` at some point though.
+The ship's console can be accessed using `ctrl-enter`, and from there
+you can read the quick start guide by running `man("quickstart")`. The
+full reference manual is available with `man("manual")`, but you won't
+need that till later.
 
 Recommended soundtrack:
 [Contingency](http://music.biggiantcircles.com/album/contingency) by
@@ -82,7 +62,7 @@ in order to make testing login interaction easier.
 ## FAQ
 
 **Q:** How do I change the controls?  
-**A:** Press `alt-o` then type "src.config" to open the main config file. The keys here are mostly for flight mode. At the bottom you can see where it loads other modes in files like "src.edit" or "src.mail". Open these files if you want to change keys for those modes. Find the key binding you want to change, and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` to go back to flight mode, and then press `ctrl-r` to load them.
+**A:** Press `ctrl-o` then type "src.config" to open the main config file. The keys here are mostly for flight mode. At the bottom you can see where it loads other modes in files like "src.edit" or "src.mail". Open these files if you want to change keys for those modes. Find the key binding you want to change, and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` to go back to flight mode, and then press `ctrl-r` to load them.
 
 **Q:** What can I do to improve the frame rate?  
 **A:** The biggest performance drag is calculating trajectories. Reduce the calculations with `ship.trajectory = 32` and you should notice a dramatic speed boost. If you drop the trajectory length, you may want to boost the `ship.trajectory_step_size` to compensate.
