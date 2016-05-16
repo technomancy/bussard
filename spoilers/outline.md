@@ -15,18 +15,18 @@
 * She figures out that whoa holy crap; you're a machine consciousness
 * Nari helps you pass the background check needed for the portal
 
-TODO: how do we make sure that you don't miss Nari's mission?
-
 ## Act II: Tracking down echoes of Traxus
 
 Characters (especially Clay) should be deeply suspicious of Traxus,
 assuming that he is a villain opposed to humanity. This isn't true at
-all, but it fits the facts as they know them.
+all, but it fits the facts as they know them. Nari still doesn't have
+access to systems beyond Terran/Sol/Tana.
 
 * Nari helps you decrypt the polyalphabetic journal(s)
  * The one that records when Traxus first contacts you
 * She knows someone whose mother worked on the machine consciousness project (not Bohk team)
 * Track them down, find out about the connection between MC project and spacetime junction
+* Somehow you recruit Clay Dorath
 
 TODO: flesh this out more; who is it you find, and how do they know what they tell you?
 
@@ -38,14 +38,14 @@ continuum!" So when it turns out Traxus found something else much more
 important to pursue, (right before you actually get it), it should be
 a bit of a twist.
 
-* Somehow you recruit Clay Dorath
-* He leads you on a trail that eventually gets you to finding the spacetime junction
+* Clay leads you on a trail that eventually gets you to finding the spacetime junction
 * Then he betrays you to get revenge on his former lab mates--boo!
  * Tries to pin the theft on them?
 * A ship comes in to intercept you; if they reach you and board your ship it's game-over
 * But you can use the spacetime junction to reset back to the point where you first find it
  * Maybe Nari installs the junction so it triggers automatically if you're in critical danger
  * Somehow you use this trick to avert capture?
+* Even so you're blacklisted from using portals to the Terran systems
 
 TODO: need a ton more detail here
 

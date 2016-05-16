@@ -15,7 +15,7 @@ of hints) but you can't email them back beyond simple ACK/NACK replies.
 ## Nari Phouen <nari.phouen@starlink.net.sol>
 
 She is an older freelance repair tech with an amateur interest in
-historical computing. Gruff but kind at heart. She originally want to
+historical computing. Gruff but kind at heart. She originally wants to
 board your craft just to get passage to another system, but her
 old-fashioned style means she won't get on board without meeting the
 captain in-person first, which is obviously impossible in your
@@ -23,27 +23,35 @@ case. At first she thinks it's a scam, but when she does a more
 detailed scan of your ship she realizes the truth (before you do).
 
 Helps you realize who you are, decrypt your journals, and get a handle
-on coding.
+on coding. Grew up on Mars and is a citizen of Sol.
 
 She also offers to pretend to be the captain of the ship in any cases
-where an un-manned ship would raise too many suspicions.
-
-TODO: where is she from, who does she know, what does she want?
+where an un-manned ship would raise too many suspicions. She helps you
+find Clay, and she is a little too trusting of Clay at first. She is
+later really regretful about it. This causes her to be too suspicious
+of Mila. Once she boards your ship, she is motivated more by curiosity
+and a desire to help than her original goal of just getting home.
 
 ## Clay Dorath
 
-He is a researcher who formerly held an position at the Darush
-lab. Joins your ship in order to break into the lab so you can get the
-spacetime junction, but in the end is only interested in getting
-revenge on former colleagues and abandons you in a heap of
-trouble. He's self-deprecating, funny, but unbalanced. We should get a
-hint of him snapping before it happens to us?
+He is a researcher who formerly held an position at the Darush Applied
+Metaphysics lab where the spacetime junction was developed. He feels
+that he was wronged by a colleague who took some of his work and
+submitted it as his own. Though he hasn't worked there for a long
+time, he sees this as an opportunity to get back at his colleague by
+pinning the theft of the spacetime junction on him, and betraying you
+in the process.
 
-TODO: where is he from, who does he know, why does he want revenge?
+He's self-deprecating, funny, but unbalanced. We should get a hint of
+him snapping before it happens to us? He is a citizen of Yueh but has
+lived in Darush for a good chunk of his life.
+
+TODO: more about his time in the lab and his colleague
 
 ## Mila Calandria
 
-Security specialist. Quiet, very professional, and deeply curious.
+Security specialist. Quiet, very professional, and deeply
+curious. Exasperated by what she sees as incompetence around her.
 
 She gives you the hints you need to implement the algorithms finally
 decrypt the last few journals.
