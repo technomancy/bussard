@@ -143,7 +143,7 @@ local sandbox = function(ship)
                        reply = lume.fn(mail.reply, ship),
                        replyable = mail.replyable,
                        graphics = love.graphics,
-                       pps = function(x) serpent.block(x, serpent_opts) end,
+                       pps = function(x) return serpent.block(x, serpent_opts) end,
                        pp = function(x)
                           editor.print(serpent.block(x, serpent_opts)) end,
    })
@@ -259,8 +259,6 @@ local ship = {
 
       -- activate controls
       local current_mode = ship.api:mode()
-      -- TODO: this fires the laser when opening files with alt-o
-      -- if laser is bound to alt
       if(current_mode and current_mode.name == "flight") then
          for k,f in pairs(ship.api.controls) do
             with_traceback(f, love.keyboard.isDown(k))
@@ -275,7 +273,6 @@ local ship = {
       -- the engine arbitrarily powerful or use zero fuel or
       -- whatever. so these two steps must remain separate.
       if(ship.engine_on and ship.fuel > 0) then
-         -- TODO: move to an upgrade
          local fx = (math.sin(ship.heading) * dt * ship.engine_strength)
          local fy = (math.cos(ship.heading) * dt * ship.engine_strength)
          ship.dx = ship.dx + fx / ship.mass

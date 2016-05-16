@@ -22,7 +22,7 @@ bind("console", "return", function()
         ship.editor.end_of_line()
         ship.editor.newline()
         local chunk, err = loadstring("return " .. input)
-        if(err and not chunk) then
+        if(err and not chunk) then -- statement, not expression
            chunk, err = loadstring(input)
            if(not chunk) then
               print("! Compilation error: " .. err or "Unknown error")
@@ -36,16 +36,16 @@ bind("console", "return", function()
                                       trace = debug.traceback()
                                       err = e end))
         if(result[1]) then
-           local results, i = pps(result[2]), 3
+           local output, i = pps(result[2]), 3
            if result[2] == ship.editor.invisible then
               ship.editor.print_prompt()
               return true
            end
            while i <= #result do
-              results = results .. ', ' .. pp(result[i])
+              output = output .. ', ' .. pps(result[i])
               i = i + 1
            end
-           print(results)
+           print(output)
         else
            realprint('! Evaluation error: ' .. err or "Unknown")
            local lines = lume.split(trace, "\n")
