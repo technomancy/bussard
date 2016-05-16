@@ -57,20 +57,24 @@ FLAGS=-a 'Phil Hagelberg' -x spoilers --description 'A space flight programming 
 
 love: $(ALL_LUA)
 	$(REL) $(FLAGS) -L
+	cp releases/Bussard.love releases/bussard-$(VERSION).love
 
 mac: love
 	$(REL) $(FLAGS) -M
+	mv releases/Bussard-macosx-x64.zip releases/bussard-$(VERISON)-macosx-x64.zip
 
 windows: love
 	$(REL) $(FLAGS) -W
+	mv releases/Bussard-win32.zip releases/bussard-$(VERSION)-windows.zip
 
-release: love mac windows
+# don't use this until https://github.com/itchio/butler/issues/51 is fixed!
+pushlove: love
+	butler push releases/bussard-$(VERISON)-love technomancy/bussard:love
 
-sign: release
-	gpg -ab releases/bussard-$(VERSION)*
+pushmac: mac
+	butler push releases/bussard-$(VERISON)-macosx-x64.zip technomancy/bussard:mac
 
-upload: release sign
-	rsync -r releases/ p.hagelb.org:p/bussard/
+pushwindows: windows
+	butler push releases/bussard-$(VERISON)-windows.zip technomancy/bussard:windows
 
-systems:
-	lua -lheadless data/systems.lua
+push: pushlove pushmac pushwindows
