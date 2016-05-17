@@ -19,11 +19,11 @@ local quit = function()
 end
 
 local ui = {
-   version = "beta-1-prerelease",
+   version = "beta-1",
 
    quit = quit,
    abort = function(confirm)
-      if(not confirm) then
+      if(confirm ~= true) then
          return("Aborting will wipe your in-process game. Call " ..
                    "abort(true) to confirm.")
       end

@@ -2,7 +2,7 @@
 
 <img src="http://p.hagelb.org/bussard.png" alt="screenshot" />
 
-A space flight programming adventure game. Mine, trade, upgrade, and
+A space flight programming adventure. Mine, trade, upgrade, and
 unlock the potential of your spacecraft by hacking on the code that
 makes it tick.
 

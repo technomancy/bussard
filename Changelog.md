@@ -1,6 +1,6 @@
 # Bussard changelog: history of user-visible changes
 
-## beta-1 / ???
+## beta-1 / 2016-05-17
 
 * Better display of tables from in-game console.
 * Allow reverting to stock config as fallback recovery.

@@ -1,6 +1,6 @@
 run: ; love .
 
-VERSION=beta-1-pre
+VERSION=beta-1
 
 SHIP_LUA=ship/*.lua
 ENGINE_LUA=*.lua
@@ -27,8 +27,7 @@ restore: wipe ; cp -r ${SAVE_DIR}.bak ${SAVE_DIR}
 
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
-	  --exclude-files metatable_monkey.lua headless.lua \
-	  --globals love lume orb _ \
+	  --exclude-files metatable_monkey.lua --globals love lume orb _ \
 	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
 	  --globals lume utf8 pack ship pause define_mode bind utils realprint pp pps \
