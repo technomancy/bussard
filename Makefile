@@ -68,12 +68,12 @@ windows: love
 
 # don't use this until https://github.com/itchio/butler/issues/51 is fixed!
 pushlove: love
-	butler push releases/bussard-$(VERISON)-love technomancy/bussard:love
+	butler push releases/bussard-$(VERSION)-love technomancy/bussard:love
 
 pushmac: mac
-	butler push releases/bussard-$(VERISON)-macosx-x64.zip technomancy/bussard:mac
+	butler push releases/bussard-$(VERSION)-macosx-x64.zip technomancy/bussard:mac
 
 pushwindows: windows
-	butler push releases/bussard-$(VERISON)-windows.zip technomancy/bussard:windows
+	butler push releases/bussard-$(VERSION)-windows.zip technomancy/bussard:windows
 
 push: pushlove pushmac pushwindows
