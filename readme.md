@@ -43,6 +43,15 @@ existing saved games will continue on using the same config. You can
 replace your ship's config with the current default config `ctrl-f1`;
 your existing config source will be backed up.
 
+Because you may need to reset your config back to stock, it is
+advisable to make your changes in another file (say, `src.custom`) and
+simply add this to the bottom of `src.config`:
+
+    dofile("src.custom")
+
+That way you only have to add one line back into your config if you
+need to reset it back to stock.
+
 ## Status
 
 Currently most of the engine features are coded, some more polished

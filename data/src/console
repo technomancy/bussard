@@ -12,7 +12,7 @@ bind("console", "alt-n", ship.editor.history_next)
 
 bind("console", "return", function()
         if(ship.editor.get_line_number() ~= ship.editor.get_max_lines()) then
-           ship.editor.newline()
+           ship.editor.end_of_buffer()
            return
         end
 

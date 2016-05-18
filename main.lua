@@ -56,7 +56,7 @@ local safely = function(f)
          love.graphics.print("Press Enter to save and quit.", 100, 150)
          love.graphics.print("Press Esc to quit without saving.", 100, 200)
          love.graphics.print("Press Ctrl-R to revert to stock config.", 100, 250)
-         love.graphics.print("Press Ctrl-Q to wipe your save game.", 100, 300)
+         love.graphics.print("Press Ctrl-W to wipe your save game.", 100, 300)
          love.graphics.print("Please consider reporting this crash to " ..
                                 "help improve the game: ", 100, 400)
          love.graphics.print("https://gitlab.com/technomancy/bussard", 100, 450)
@@ -64,7 +64,7 @@ local safely = function(f)
       love.keypressed = function(key)
          if(key == "return") then ui.quit(ui)
          elseif(key == "escape") then love.event.quit()
-         elseif(key == "q" and love.keyboard.isDown("lctrl", "rctrl")) then
+         elseif(key == "w" and love.keyboard.isDown("lctrl", "rctrl")) then
             save.abort(ship)
             love.event.quit()
          elseif(key == "r" and love.keyboard.isDown("lctrl", "rctrl")) then
