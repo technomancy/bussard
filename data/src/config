@@ -49,9 +49,13 @@ end)
 bind({"flight", "edit"}, "ctrl-r",
    -- maybe bind this to something that isn't already used by edit mode
    function()
-      ship.dofile("src.config")
-      ship.editor.initialize()
-      print("Successfully reloaded config.")
+      local success, err = ship.dofile("src.config")
+      if(success) then
+         ship.editor.initialize()
+         print("Successfully reloaded config.")
+      else
+         print("Error loading config.")
+      end
 end)
 
 -- connect to target over ssh
