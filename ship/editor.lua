@@ -144,7 +144,6 @@ local in_prompt = function(line, point, line2, _point2)
    if(not b.prompt) then return false end
    if((line2 or line) == line and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= utf8.len(b.prompt)) then return false end
-   print("warning: in prompt!", line, point, utf8.len(b.prompt), line2, #b.lines)
    return true
 end
 
@@ -154,7 +153,8 @@ local edit_disallowed = function(line, point, line2, _point2)
 end
 
 local insert = function(text, point_to_end)
-   if(edit_disallowed(b.point_line, b.point + 1)) then return end
+   if(in_prompt(b.point_line, b.point)) then b.point = #b.prompt end
+   if(edit_disallowed(b.point_line, b.point)) then return end
    b.dirty, b.needs_save = true, true
    text = lume.map(text, function(s) return utf8.gsub(s, "\t", "  ") end)
    if(not text or #text == 0) then return end
