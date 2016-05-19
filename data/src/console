@@ -9,6 +9,8 @@ bind("console", "home", ship.editor.beginning_of_input)
 
 bind("console", "alt-p", ship.editor.history_prev)
 bind("console", "alt-n", ship.editor.history_next)
+bind("console", "ctrl-up", ship.editor.history_prev)
+bind("console", "ctrl-down", ship.editor.history_next)
 
 bind("console", "return", function()
         if(ship.editor.get_line_number() ~= ship.editor.get_max_lines()) then

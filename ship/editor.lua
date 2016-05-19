@@ -269,14 +269,23 @@ end
 
 local save = function(this_fs, this_path)
    local target = this_fs or b.fs
-   if(target) then
+   if(not target) then return end
+   b.needs_save = false
+   if(target ~= "host") then
       local parts = lume.split(this_path or b.path, ".")
       local filename = table.remove(parts, #parts)
       for _,part in ipairs(parts) do
          target = target[part]
       end
       target[filename] = table.concat(b.lines, "\n")
-      b.needs_save = false
+   else
+      local file = io.open(this_path or b.path, "w")
+      if(file) then
+         file:write(table.concat(b.lines, "\n"))
+         file:close()
+      else
+         print("Could not save " .. this_path or b.path)
+      end
    end
 end
 
@@ -328,8 +337,21 @@ return {
    open = function(fs, path)
       b = get_buffer(path)
       if(not b) then
-         b = make_buffer(fs, path)
-         table.insert(buffers, b)
+         if(fs ~= "host") then
+            b = make_buffer(fs, path)
+            table.insert(buffers, b)
+         else -- from the host filesystem
+            local lines = {}
+            local file = io.open(path, "r")
+            if(file) then
+               for line in file:lines() do table.insert(lines, line) end
+            else
+               table.insert(lines, "")
+            end
+            if(file) then file:close() end
+            b = make_buffer(fs, path, lines)
+            table.insert(buffers, b)
+         end
       end
    end,
 
