@@ -65,7 +65,10 @@ local open_folder = function(folder)
       end
    else
       p("Folders\n")
-      for _,name in ipairs(lume.sort(lume.keys(ship.docs.mail))) do
+      local folder_list = lume.sort(lume.keys(ship.docs.mail))
+      lume.remove(folder_list, "inbox")
+      table.insert(folder_list, 1, "inbox")
+      for _,name in ipairs(folder_list) do
          table.insert(targets, name)
          local unread_count = lume.count(ship.docs.mail[name]._unread)
          local count = lume.count(ship.docs.mail[name]) - 1
@@ -110,6 +113,20 @@ bind("mail", "return", function()
            open_folder(target)
         end
 end)
+
+local archive = function()
+   local line = ship.editor.get_line_number()
+   local target = targets[line-2] -- two lines at the top before listing
+   if(type(target) == "table") then -- two values means a message
+      local folder, name = unpack(target)
+      ship.docs.mail.archive[name] = ship.docs.mail[folder][name]
+      ship.docs.mail[folder][name] = nil
+      open_folder(folder)
+   end
+end
+
+-- TODO: make this visible in modeline or something?
+bind("mail", "alt-a", archive)
 
 define_mode("view")
 

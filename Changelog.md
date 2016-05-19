@@ -2,6 +2,7 @@
 
 ## beta-2 / ???
 
+* Add archive feature to mail system.
 * Allow the font to be changed.
 
 ## beta-1 / 2016-05-17

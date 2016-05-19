@@ -70,6 +70,7 @@ return {
       else
          ship.api.docs.mail = { inbox = { _unread = {} },
                                 jobs = { _unread = {} },
+                                archive = { _unread = {} },
                               }
          ship.api.docs.backup = { ["msg1-rot13"] =
                love.filesystem.read("data/docs/traxus-1.rot13")}
