@@ -73,7 +73,7 @@ local draw = function()
    for i,name in ipairs(buttons) do
       love.graphics.setColor(125,125,125)
       if i == selected then love.graphics.setColor(200,200,200) end
-      love.graphics.print(name, 80, 100 + i*30)
+      love.graphics.print(name, 80, 100 + i*40)
    end
 
    love.graphics.setColor(0,200,0)
@@ -87,9 +87,9 @@ end
 
 local random_choice = function(t) return t[love.math.random(#t)] end
 
-return function(resume, quit)
-   choices_font = love.graphics.newFont("assets/mensch.ttf", 16)
-   text_font = love.graphics.newFont("assets/mensch.ttf", 10)
+return function(resume, quit, font_path)
+   choices_font = love.graphics.newFont(font_path, 18)
+   text_font = love.graphics.newFont(font_path, 12)
    font_height = text_font:getHeight()
    stars = { starfield.new(10, 0.005, 75),
              starfield.new(10, 0.01, 100),
@@ -99,4 +99,3 @@ return function(resume, quit)
    love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw,nil
    text, line = lume.split(love.filesystem.read(random_choice(files)), "\n"), 1
 end
-

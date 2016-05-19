@@ -1,5 +1,9 @@
 # Bussard changelog: history of user-visible changes
 
+## beta-2 / ???
+
+* Allow the font to be changed.
+
 ## beta-1 / 2016-05-17
 
 * Better display of tables from in-game console.

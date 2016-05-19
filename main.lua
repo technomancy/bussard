@@ -18,6 +18,12 @@ local quit = function()
    love.event.quit()
 end
 
+local font_path = "assets/fonts/mensch.ttf"
+local font = love.graphics.newFont(font_path, 14)
+local noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 14)
+-- love 0.9.0 doesn't support this
+if(font.setFallbacks) then font:setFallbacks(noto) end
+
 local ui = {
    version = "beta-1",
 
@@ -32,8 +38,14 @@ local ui = {
    end,
    config_reset = lume.fn(save.config_reset, ship),
 
-   pause = function() pause(play, quit) end,
+   pause = function() pause(play, quit, font_path) end,
 
+   set_font = function(path, size)
+      font_path, font = path, love.graphics.newFont(path, size)
+      love.graphics.setFont(font)
+      ship.api.editor.initialize()
+      if(font.setFallbacks) then font:setFallbacks(noto) end
+   end,
    get_fps = love.timer.getFPS,
 }
 
@@ -84,7 +96,7 @@ love.load = function()
       love.window.setMode(dw*0.9, dh*0.9)
    end
 
-   love.graphics.setFont(love.graphics.newFont("assets/mensch.ttf", 14))
+   love.graphics.setFont(font)
 
    stars = { starfield.new(10, 0.01, 100),
              starfield.new(10, 0.05, 175),
@@ -102,6 +114,7 @@ love.load = function()
    end
 
    ship:dofile("src.config")
+   play()
 end
 
 local update = safely(function(dt)
@@ -206,14 +219,9 @@ local draw = safely(function(dt)
 end)
 
 play = function(first_time)
-   -- first time through love.graphics hasn't loaded yet; this will segfault
-   if(not first_time) then
-      love.graphics.setFont(love.graphics.newFont("assets/mensch.ttf", 14))
-   end
+   love.graphics.setFont(font)
    love.update,love.keypressed,love.textinput,love.draw =
       update, keypressed, textinput, draw
 end
-
-play(true)
 
 return ship -- for headless.lua

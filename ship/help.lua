@@ -35,7 +35,7 @@ end
 
 return {
    -- need to have a string message so just `help' works vs help()
-   message = "Type `man()` to view your ship's operating manual.",
+   message = "Type `man()` to view your ship's quickstart guide.",
    man = function(ship, page_name)
       if(page_name == "list") then
          ship.print(list(ship))
