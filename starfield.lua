@@ -1,21 +1,19 @@
 return {
-   new = function(count, factor, intensity)
+   new = function(count, factor, intensity, w, h)
       local stars = {}
-      local w,h = love.graphics.getWidth(), love.graphics.getHeight()
       for _ = 1, count do
-         table.insert(stars, {x = love.math.random(w),
-                              y = love.math.random(h) })
+         table.insert(stars, {x = love.math.random(16384),
+                              y = love.math.random(16384) })
       end
-      return {stars = stars, width = h, height = h,
-              factor = factor, intensity = intensity}
+      return {stars = stars, factor = factor, intensity = intensity}
    end,
 
-   render = function(field, x, y)
+   render = function(field, x, y, w, h)
       love.graphics.setColor(field.intensity, field.intensity, field.intensity);
       for _, star in ipairs(field.stars) do
          love.graphics.circle("fill",
-                              (star.x - (x * field.factor)) % field.width,
-                              (star.y - (y * field.factor)) % field.height, 1)
+                              (star.x - (x * field.factor)) % w,
+                              (star.y - (y * field.factor)) % h, 1)
       end
    end
 }

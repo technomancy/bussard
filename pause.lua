@@ -64,7 +64,8 @@ local keypressed = function(key)
 end
 
 local draw = function()
-   for _,s in pairs(stars) do starfield.render(s, x, y) end
+   local w,h = love.window.getMode()
+   for _,s in pairs(stars) do starfield.render(s, x, y, w, h) end
 
    love.graphics.draw(title, 30, 30)
 

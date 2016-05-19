@@ -96,7 +96,6 @@ love.load = function()
    if arg[#arg] == "-abort" then save.abort(ship) end
    save.load_into(ship)
    body.load(systems)
-   ship.api.editor.initialize()
 
    if(love.filesystem.isFile("localhacks.lua")) then
       require("localhacks")(ship)
@@ -128,11 +127,11 @@ local portal_offsets = {
 }
 
 local draw = safely(function(dt)
-      for _,s in pairs(stars) do starfield.render(s, ship.x, ship.y) end
+      local w,h = love.window.getMode()
+      for _,s in pairs(stars) do starfield.render(s, ship.x, ship.y, w, h) end
 
       love.graphics.push()
-      love.graphics.translate(love.graphics.getWidth() / 2,
-                              love.graphics.getHeight() / 2)
+      love.graphics.translate(w/2, h/2)
       love.graphics.push()
 
       local scale = math.pow(1/ship.api.scale, 8)

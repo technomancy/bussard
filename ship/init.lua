@@ -204,6 +204,7 @@ local ship = {
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
+      ship.api.editor.initialize()
       for _,m in pairs(ship.api.modes) do
          if(m.initialize) then m.initialize() end
       end

@@ -126,8 +126,8 @@ return {
          "-- The original files have been moved to the ship.src.bak directory." ..
          "\n\n" .. ship.api.src.config
       ship.api.print("Backed up config and restored to stock settings.")
+      ship:configure(ship.systems, ship.api.ui)
       ship.api.dofile("src.config")
-      ship.editor.initialize()
    end,
 
 }
