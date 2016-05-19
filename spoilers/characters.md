@@ -112,15 +112,14 @@ helped Yueh establish its Delta Pavonis colony.
 ## Yueh
 
 Source of where the portal tech was discovered. Runs two portals (Bohk
-and Delta Pavonis) and has two portals (Kowlu and Wolf 1481) run by
-Lalande, which is a point of tension.
+and Delta Pavonis) and has one portal (Yueh/Kowlu) run by Lalande,
+which is a point of tension.
 
 * [ ] Yueh Prime
 * [ ] Da Kau Station
 * [ ] Bata Beng (Kowlu)
 * [ ] Sim Roen (Kowlu)
 * [ ] Packsi (Delta Pavonis)
-* [ ] Steele Station (Wolf 1481)
 
 The portal to Delta Pavonis is secretly a multiportal; it can take you
 to other locations if you have proper access.

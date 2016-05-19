@@ -495,6 +495,9 @@ local sys = {
                     agri=4, mineral=4,
                     upgrades={"engine"},
                    },
+                   {name = "Lueng Prabo", world=true,
+                    image_name="shaber5",
+                    r=19000, mass=240},
                    {name = "Portal: Delta Pavonis",
                     image_name="portal-1", os=lisp,
                     r=22000, mass=60, portal="Delta Pavonis"},
@@ -509,6 +512,11 @@ local sys = {
                            {r=0, x=0, y=0, dx=0, dy=0, mass=190000,
                             image_name="sun",
                             name="Delta Pavonis", fixed=true},
+                           {r=10000, mass=200, world=true,
+                            image_name="planet-3", name="Sav'nakat"},
+                           {r=12000, mass=100, station=true, world=true,
+                            image_name="station-green",
+                            name="Steele Station", os=lisp,},
                            {r=18000, mass=300,
                             image_name="v-surface",
                             name="Packsi", os=orb, world=true,
@@ -517,37 +525,14 @@ local sys = {
                             agri=3, mineral=4,
                             upgrades={"engine", "fuel_charger", "map"},
                            },
-                           {r=10000, mass=200, world=true,
-                            image_name="planet-3", name="Sav'nakat"},
-                           {name = "Portal: Wolf 1481",
-                            image_name="portal-1", os=lisp,
-                            r=22000, mass=60, portal="Wolf 1481"},
                            {name = "Portal: Kowlu",
                             image_name="portal-1", os=lisp,
                             r=25000, mass=60, portal="Kowlu"},
                         }
-   },
-   ["Wolf 1481"] = {gov="Yueh", -- BD
-                    x=4.0, y=-2.1, asteroids=3,
-                    bodies = {
-                       {r=0, x=0, y=0, dx=0, dy=0, mass=150000,
-                        image_name="sun",
-                        name="Wolf 1481", fixed=true},
-                       {r=12000, mass=100, station=true, world=true,
-                        image_name="station-green",
-                        name="Steele Station", os=lisp,},
-                       {name = "Lueng Prabo", world=true,
-                        image_name="shaber5",
-                        r=19000, mass=240},
-                       {name = "Portal: Delta Pavonis",
-                        image_name="portal-1", os=lisp,
-                        r=25000, mass=60, portal="Delta Pavonis"}
-                    },
    }, -- location of experimental lisp station
 
-
    -- secret colonies
-   ["LHS 451"] = {gov=nil, -- GI 682
+   ["LHS 451"] = {gov="Ikon", -- GI 682
                   x=4.9,y=-1.1, unmapped=true,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
@@ -559,17 +544,6 @@ local sys = {
                       r=22000, mass=60, portal="Yueh"},
                   },
    },
-   -- ["CD-40 9712"] = {gov="Yueh", -- GI 588
-   --                   x=5.3, y=-3.1, unmapped=true,
-   --                   bodies = {
-   --                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
-   --                       image_name="sun",
-   --                       name="CD-40 9712", fixed=true},
-   --                      {name = "Portal: Yueh", multiportal=true,
-   --                       image_name="portal-3", os=lisp,
-   --                       r=22000, mass=60, portal="Yueh"},
-   --                   },
-   -- },
 }
 
 return sys
