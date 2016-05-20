@@ -44,6 +44,7 @@ bind("edit", "up", ship.editor.prev_line)
 bind("edit", "down", ship.editor.next_line)
 
 bind("edit", "ctrl- ", ship.editor.mark)
+bind("edit", "ctrl-space", ship.editor.mark)
 bind("edit", "ctrl-c", ship.editor.kill_ring_save)
 bind("edit", "ctrl-x", ship.editor.kill_region)
 bind("edit", "ctrl-v", ship.editor.yank)
