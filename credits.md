@@ -19,23 +19,27 @@ see file LICENSE.
 
 ## 3rd-party art
 
-Some planet graphics © Rawdanitsu, CC0 licensed
-http://opengameart.org/content/planets-and-stars-set-high-res
+* Some planet graphics copyright © 2013 Rawdanitsu, CC0 licensed
+  http://opengameart.org/content/planets-and-stars-set-high-res
 
-Other planet graphics © Shaber, CC-BY licensed
-http://opengameart.org/content/27-planets-in-hi-res
+* Other planet graphics copyright © 2013 GM Shaber, CC-BY licensed
+  http://opengameart.org/content/27-planets-in-hi-res
 
-Still more planet graphics © cemkalyoncu, CC-BY licensed
-http://opengameart.org/content/more-planets
+* Solar system graphics copyright © 2013 Inove, CC-BY licensed
+  http://www.solarsystemscope.com/nexus/resources/planet_images/
 
-Solar system graphics © Inove, CC-BY licensed
-http://www.solarsystemscope.com/nexus/resources/planet_images/
+* Station graphics copyright © 2014 MillionthVector, CC-BY licensed
+  http://millionthvector.blogspot.de/p/free-sprites_12.html
 
-Station graphics by MillionthVector, CC-BY licensed
-http://millionthvector.blogspot.de/p/free-sprites_12.html
+* Mensch font copyright © 2010-2012 Robey Pointer, distributed under
+  the Bitstream Vera license
+  http://robey.lag.net/2010/06/21/mensch-font.html
 
-Mensch font by Robey Pointer, distributed under the Bitstream Vera license
-http://robey.lag.net/2010/06/21/mensch-font.html
+## 3rd-party prose
+
+* Lua Programming book copyright © 2013-2016 Wikibooks contributors,
+  distributed under the Creative Commons Attribution-ShareAlike license
+  https://en.wikibooks.org/wiki/Lua_Programming
 
 ## Influences
 

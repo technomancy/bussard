@@ -45,8 +45,14 @@ return {
    deliver = function(ship, _system_name)
       local offset = utils.time(ship) - utils.game_start
       for when, name in pairs(timed_msgs) do
-         if(offset > when) then
+         if(type(when) == "number" and offset > when) then
             deliver_msg(ship, name)
+         elseif(type(when) == "table" and ship.events[when[1]]) then
+            -- can be timed for N milliseconds after an event, too
+            local event_time = ship.events[when[1]]
+            if(utils.time(ship) > event_time) then
+               deliver_msg(ship, name)
+            end
          end
       end
    end,

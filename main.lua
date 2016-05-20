@@ -218,7 +218,7 @@ local draw = safely(function(dt)
       draw(ship)
 end)
 
-play = function(first_time)
+play = function()
    love.graphics.setFont(font)
    love.update,love.keypressed,love.textinput,love.draw =
       update, keypressed, textinput, draw

@@ -3,6 +3,11 @@ local lume = require("lume")
 local upgrades = {"laser", "engine", "cargo_bay", "fuel_tank", "fuel_charger",
                   "solar_panel", "comm_boost", "map",}
 
+local events = { luabook1 = "luabook", luabook2 = "luabook",
+                 luabook3 = "luabook", luabook4 = "luabook-b",
+                 luabook5 = "luabook-b", luabook6 = "luabook-b",
+}
+
 local pages = {
    manual = "manual.md",
    keycodes = "doc/keycodes.md",
@@ -12,6 +17,14 @@ local pages = {
    tutorial = "doc/quickstart.md", -- aliases for quickstart
    help = "doc/quickstart.md",
    intro = "doc/quickstart.md",
+
+   luabook1 = "doc/lua-1-intro.md",
+   luabook2 = "doc/lua-2-expressions.md",
+   luabook3 = "doc/lua-3-statements.md",
+   -- TODO: these ones still need a lot of formatting tweaks
+   luabook4 = "doc/lua-4-functions.md",
+   luabook5 = "doc/lua-5-tables.md",
+   luabook6 = "doc/lua-6-libs.md",
 
    laser = "doc/laser.md",
    engine = "doc/engine.md",
@@ -25,7 +38,13 @@ local pages = {
 }
 
 local show_page = function(ship, p)
-   return not lume.find(upgrades, p) or lume.find(ship.status.upgrade_names, p)
+   if(lume.find(upgrades, p)) then
+      return lume.find(ship.upgrade_names, p)
+   elseif(events[p]) then
+      return ship.events[events[p]]
+   else
+      return true
+   end
 end
 
 local list = function(ship)
@@ -38,19 +57,19 @@ return {
    message = "Type `man()` to view your ship's quickstart guide.",
    man = function(ship, page_name)
       if(page_name == "list") then
-         ship.print(list(ship))
+         ship.api.print(list(ship))
       elseif(pages[page_name] and show_page(ship, page_name)) then
          -- can't inline this because read returns multiple values
          local p = love.filesystem.read(pages[page_name])
-         ship.print(p)
+         ship.api.print(p)
       elseif(page_name) then
-         ship.print("Page not found.\n\n" .. list())
+         ship.api.print("Page not found.\n\n" .. list())
       else
          local p = love.filesystem.read("doc/quickstart.md")
-         ship.print(p)
+         ship.api.print(p)
       end
 
-      return ship.editor.invisible
+      return ship.api.editor.invisible
    end,
 
    get = function(page_name)

@@ -1,5 +1,5 @@
 return {
-   new = function(count, factor, intensity, w, h)
+   new = function(count, factor, intensity)
       local stars = {}
       for _ = 1, count do
          table.insert(stars, {x = love.math.random(16384),

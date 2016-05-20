@@ -1,5 +1,4 @@
 local mail = require("mail")
-local utils = require("utils")
 local mission = require("mission")
 
 return {
@@ -18,6 +17,7 @@ return {
       end
    end,
 
+   -- TODO: start countdown when accepting the mission if you're already logged in
    on_login = function(ship, target)
       local m = ship.active_missions["d6069254-4182-4f96-a145-df309a992798"]
       if(not m.pickup and target == "Tana Prime") then
@@ -51,6 +51,7 @@ return {
    end,
 
    success_function = function(ship)
+      mission.record_event(ship, "luabook")
       mail.deliver_msg(ship, "nari-a-09.msg")
    end,
 }

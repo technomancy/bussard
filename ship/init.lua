@@ -135,7 +135,7 @@ local sandbox = function(ship)
                        loadstring = lume.fn(sandbox_loadstring, ship),
                        debug = {traceback = debug.traceback},
                        os = {time = lume.fn(utils.time, ship)},
-                       man = lume.fn(help.man, ship.api),
+                       man = lume.fn(help.man, ship),
                        define_mode = lume.fn(define_mode, ship),
                        bind = lume.fn(bind, ship),
                        ssh_connect = lume.fn(ssh.connect, ship),
