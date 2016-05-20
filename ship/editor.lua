@@ -324,7 +324,10 @@ local io_write = function(...)
    local old_point, old_point_line = b.point, b.point_line
    b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
    last_line, line_count = write(...)
-   b, b.point = prev_b, old_point + utf8.len(last_line)
+   if(old_point_line == old_lines) then
+      b.point, b.point_line = old_point, #b.lines
+   end
+   b = prev_b
    if(b) then b.point_line = old_point_line + line_count - 1 end
 end
 
@@ -359,7 +362,7 @@ return {
       if(b.prevent_close) then return end
       if(confirm or not b.needs_save) then
          lume.remove(buffers, b)
-         b = buffers[1]
+         b = buffers[#buffers]
       end
    end,
 
@@ -695,7 +698,7 @@ return {
    -- normally you would use ship.api.activate_mode; this is lower-level
    set_mode = function(mode_name) if(b) then b.mode = mode_name end end,
 
-   current_buffer = function() return b end,
+   current_buffer_path = function() return b.path end,
 
    print = function(...)
       local texts, read_only = {...}, inhibit_read_only

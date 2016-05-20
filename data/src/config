@@ -65,3 +65,7 @@ bind({"flight", "edit"}, "ctrl-s", function()
 end)
 
 bind("flight", "ctrl-p", portal)
+
+-- if you keep your personal customizations in here, they will be preserved
+-- in the event of a config reset.
+-- dofile("src.custom")

@@ -22,7 +22,7 @@ blockers: ; grep TODO/blocker $(GAME_LUA)
 SAVE_DIR=${HOME}/.local/share/love/bussard
 
 wipe: ; rm -rf ${SAVE_DIR}
-backup: ; rm -rf ${SAVE_DIR}.bak; mv ${SAVE_DIR} ${SAVE_DIR}.bak
+backup: ; rm -rf ${SAVE_DIR}.bak; cp -r ${SAVE_DIR} ${SAVE_DIR}.bak
 restore: wipe ; cp -r ${SAVE_DIR}.bak ${SAVE_DIR}
 
 check:
@@ -55,6 +55,7 @@ REL=".love-release/build/love-release.sh"
 FLAGS=-a 'Phil Hagelberg' -x spoilers --description 'A space flight programming adventure game.' --love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
 
 love: $(ALL_LUA)
+	mv localhacks.lua localhacks_old.lua || true
 	$(REL) $(FLAGS) -L
 	cp releases/Bussard.love releases/bussard-$(VERSION).love
 
@@ -68,7 +69,7 @@ windows: love
 
 # don't use this until https://github.com/itchio/butler/issues/51 is fixed!
 pushlove: love
-	butler push releases/bussard-$(VERSION)-love technomancy/bussard:love
+	butler push releases/bussard-$(VERSION).love technomancy/bussard:love
 
 pushmac: mac
 	butler push releases/bussard-$(VERSION)-macosx-x64.zip technomancy/bussard:mac
@@ -76,4 +77,5 @@ pushmac: mac
 pushwindows: windows
 	butler push releases/bussard-$(VERSION)-windows.zip technomancy/bussard:windows
 
-push: pushlove pushmac pushwindows
+push: pushmac pushwindows
+	echo "Upload releases/bussard-$(VERSION).love manually in the browser for now."

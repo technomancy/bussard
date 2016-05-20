@@ -25,7 +25,7 @@ local noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 14)
 if(font.setFallbacks) then font:setFallbacks(noto) end
 
 local ui = {
-   version = "beta-1",
+   version = "beta-2-pre",
 
    quit = quit,
    abort = function(confirm)

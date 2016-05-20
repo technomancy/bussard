@@ -10,7 +10,7 @@ The mail client shows both messages sent directly to you as well as
 messages from local mailing lists, though you will only be notified in
 your HUD about messages for you. Some messages you can reply to with
 alt-return; this is most often used for accepting missions which are
-posted to various mailing lists.
+posted to various mailing lists. Pressing alt-a will archive a message.
 
 Your ship's onboard computer also contains an SSH client, which allows
 you to connect with the port computers at various stations and

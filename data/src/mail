@@ -114,7 +114,7 @@ bind("mail", "return", function()
         end
 end)
 
-local archive = function()
+local archive_from_folder = function()
    local line = ship.editor.get_line_number()
    local target = targets[line-2] -- two lines at the top before listing
    if(type(target) == "table") then -- two values means a message
@@ -126,9 +126,21 @@ local archive = function()
 end
 
 -- TODO: make this visible in modeline or something?
-bind("mail", "alt-a", archive)
+bind("mail", "alt-a", archive_from_folder)
 
 define_mode("view")
+
+local archive = function()
+   local path = ship.editor.current_buffer_path()
+   local _, _, folder, name = unpack(lume.split(path, "."))
+   ship.docs.mail.archive[name] = ship.docs.mail[folder][name]
+   ship.docs.mail[folder][name] = nil
+   ship.editor.close()
+   ship.editor.change_buffer("*mail*")
+   open_folder(folder)
+end
+
+bind("view", "alt-a", archive)
 
 ship.modes.view.parent = ship.modes.edit -- nav keys should be intact
 ship.modes.view.activate = lume.fn(ship.editor.set_read_only, true)
