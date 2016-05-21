@@ -59,5 +59,21 @@ bind("console", "return", function()
         ship.editor.print_prompt()
 end)
 
--- port from old console
--- TODO: completion
+local complete = function()
+   local line = utf8.sub(ship.editor.get_line(0), utf8.len(ship.editor.prompt())+1)
+   local entered = lume.last(lume.array((line):gmatch("[._%a0-9]+"))) or ""
+   local completions = utils.completions_for(entered, _G, ".")
+   if(#completions == 1) then
+      ship.editor.textinput(utf8.sub(completions[1], #entered + 1))
+   elseif(#completions > 0) then
+      local common = utils.longest_common_prefix(completions)
+      if(common == entered) then
+         print(table.concat(completions, " "))
+      else
+         ship.editor.textinput(utf8.sub(common, #entered + 1))
+      end
+   end
+end
+
+bind("console", "tab", complete)
+bind("console", "ctrl-i", complete)

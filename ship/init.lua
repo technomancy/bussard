@@ -213,6 +213,7 @@ local ship = {
       ship.systems = systems
 
       ship.sandbox = sandbox(ship)
+      ship.sandbox["_G"] = ship.sandbox
    end,
 
    dofile = sandbox_dofile,

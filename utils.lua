@@ -42,6 +42,45 @@ local pad_to = function(s, width, padding)
    return s
 end
 
+local find_common = function(a, b)
+   for i=math.min(#a, #b),1,-1 do
+      if(utf8.sub(a,1,i) == utf8.sub(b,1,i)) then
+         return utf8.sub(a,1,i)
+      end
+   end
+end
+
+local longest_common_prefix = function(strings)
+   local common = strings[1]
+   for _,s in pairs(strings) do
+      common = find_common(common, s)
+      if(not common) then return "" end
+   end
+   return common
+end
+
+local function completions_for(input, context, separator, prefixes)
+   if(type(context) ~= "table") then return {} end
+   prefixes = prefixes or {}
+   local input_parts = lume.split(input, separator)
+   if(#input_parts == 1) then
+      local matches = {}
+      for k in pairs(context) do
+         if(utf8.find(k, "^" .. input)) then
+            local parts = lume.clone(prefixes)
+            table.insert(parts, k)
+            table.insert(matches, table.concat(parts, separator))
+         end
+      end
+      return matches
+   else
+      local first_part = table.remove(input_parts, 1)
+      table.insert(prefixes, first_part)
+      return completions_for(table.concat(input_parts, separator),
+                             context[first_part], separator, prefixes)
+   end
+end
+
 local epoch_for = function(year)
    local years = year - 1970
    return years * seconds_per_year
@@ -238,6 +277,8 @@ return {
 
       -- custom
       utils = {
+         completions_for = completions_for,
+         longest_common_prefix = longest_common_prefix,
          pad_to = pad_to,
          distance = distance,
          format_time = format_time,
