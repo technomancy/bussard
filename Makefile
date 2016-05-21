@@ -9,7 +9,7 @@ IN_OS_LUA=os/orb/resources/*
 IN_SHIP_LUA=data/src/*
 DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua
 MISSION_LUA=data/missions/*.lua
-DATA_LUA=data/*.lua
+DATA_LUA=data/*.lua doc/init.lua
 
 GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA)
 ALL_LUA=$(GAME_LUA) $(DEPS_LUA)

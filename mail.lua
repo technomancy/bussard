@@ -1,4 +1,5 @@
 local lume = require("lume")
+local utf8 = require("utf8.init")
 local timed_msgs = require("data.msgs.timed")
 local event_msgs = require("data.msgs.events")
 local utils = require("utils")
@@ -12,12 +13,10 @@ end
 
 local folder_for = function(msg)
    local to = msg:match("To: ([^\n]+)")
-   if(to == "jobs@news.local") then
-      return "jobs"
-   elseif(to == "captain@adahn.local") then
+   if(to == "captain@adahn.local") then
       return "inbox"
    else
-      return to
+      return utf8.gsub(to, "@news.local", "")
    end
 end
 

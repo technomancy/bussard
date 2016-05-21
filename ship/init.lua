@@ -3,8 +3,8 @@ local utils = require("utils")
 local lume = require("lume")
 local serpent = require("serpent")
 
-local help = require("ship.help")
-local upgrade = require("ship.upgrade")
+local help = require("doc")
+local upgrade = require("data.upgrades")
 local ai = require("ship.ai")
 local ssh = require("ship.ssh")
 local mail = require("mail")
@@ -193,14 +193,11 @@ local ship = {
    fuel = 128,
    credits = 1024,
    time_offset = utils.game_start,
-   system_name = "L 668-21",
    cargo = {},
    upgrade_names={},
    active_missions={},
    mail_delivered={},
    events={},
-   flag = "Katilay",
-   name = "Adahn",
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)

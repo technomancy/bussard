@@ -1,6 +1,6 @@
 # Bussard
 
-<img src="http://p.hagelb.org/bussard.png" alt="screenshot" />
+<img src="https://p.hagelb.org/bussard.png" alt="screenshot" />
 
 A space flight programming adventure. Mine, trade, upgrade, and
 unlock the potential of your spacecraft by hacking on the code that
@@ -31,11 +31,11 @@ fit too.
 
 Releases for each platform are [on itch.io](https://technomancy.itch.io/bussard).
 Windows and Mac OS X releases are standalone, but Linux releases require having
-[LÖVE](http://love2d.org) 0.9.x or 0.10.x installed.
+[LÖVE](https://love2d.org) 0.9.x or 0.10.x installed.
 
 When running from source, type `love .` from a checkout.
 
-<img src="http://p.hagelb.org/bussard-repl.png" alt="repl screenshot" />
+<img src="https://p.hagelb.org/bussard-repl.png" alt="repl screenshot" />
 
 One problem when running from source is that when new features are
 added, key bindings for them are added to the default config, but
@@ -63,7 +63,7 @@ See the list of
 upcoming features. The [changelog](Changelog.md) lists when recent
 user-visible changes were added in which releases.
 
-<img src="http://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
+<img src="https://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
 
 During development it may be expedient to run `ship.cheat.comm_range = 9999999`
 in order to make testing login interaction easier.
@@ -87,7 +87,7 @@ in order to make testing login interaction easier.
 
 ## Influences
 
-* [Escape Velocity](http://www.ambrosiasw.com/games/ev/) (gameplay)
+* [Escape Velocity](https://www.ambrosiasw.com/games/ev/) (gameplay)
 * [Kerbal Space Program](https://kerbalspaceprogram.com/en/) (mechanics)
 * [Marathon Trilogy](http://marathon.bungie.org/story/) (story)
 * [A Fire upon the Deep](http://www.tor.com/2009/06/11/the-net-of-a-million-lies-vernor-vinges-a-fire-upon-the-deep/) (story)
@@ -97,7 +97,7 @@ in order to make testing login interaction easier.
 * [Unix](https://en.wikipedia.org/wiki/Unix) (architecture)
 * [Atomic Rockets](http://www.projectrho.com/public_html/rocket/) (science)
 * [Planescape: Torment](https://www.gog.com/game/planescape_torment) (story, gameplay)
-* [Meditations on Moloch](http://slatestarcodex.com/2014/07/30/meditations-on-moloch/) (philosophy)
+* [Meditations on Moloch](https://slatestarcodex.com/2014/07/30/meditations-on-moloch/) (philosophy)
 
 ## Licenses
 

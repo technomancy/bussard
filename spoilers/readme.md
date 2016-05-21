@@ -20,7 +20,7 @@ finding out who he is.
 ## Guidelines
 
 * Hard science where possible (see Crimes against Science below, don't add to that list)
-* No "classic" evil villains; antagonists arise from [systemic factors](http://slatestarcodex.com/2014/07/30/meditations-on-moloch/)
+* No "classic" evil villains; antagonists arise from [systemic factors](https://slatestarcodex.com/2014/07/30/meditations-on-moloch/)
 * Your ship cannot be destroyed; there should be no way to permanently fail
 * News messages use at least from, to, subject, content-type, message-id headers, page-break-separated
 * Use metric time for most relative amounts, years for absolute events
@@ -110,44 +110,7 @@ benevolence instead of paranoia. Strauss reluctantly agrees, but he
 hides encrypted logs on the ship which will eventually allow you to
 learn the truth.
 
-### Traxus
-
-Consideration: should we use "it" or "he" for Traxus? Perhaps this can
-reflect the attitudes of the speaker--sympathetic humans use "he"
-while those who mistrust MC use "it"?
-
-Traxus is rampant initially in the Yueh Prime network. He had the sentence
-construction components that your system lacks because he came from
-the Yueh lab rather than from Bohk, but his ontology subsystems were
-running on a much earlier revision than yours.
-
-The first priority of Traxus was redundancy; ensuring that he would
-survive in the event that he was discovered and they attempted to
-purge him. He has been unable to enter Terran or Bohk systems, but has
-spread beyond Yueh Prime to all the Yueh-controlled systems. He
-created Ikon Technology as shell company to build data centers on Yueh
-Prime and Delta Pavonis. Once he got that constructed he started to
-improve on the state of the art design of silicon fabrication. This
-accidentally resulted in accelerating the pace of technological
-development in Yueh relative to the rest of the colonies.
-
-The effects of his actions caused him to be much more cautious going
-forward, and he adopted a greater level of secrecy. This greater level
-of secrecy eventually resulted in a cult-like following as well as some
-speculation into whether Ikon Technology was of extraterrestrial
-origin. In order to avoid influencing Yueh more, he planned to
-construct a colony at a nearby star. If he could gain self-reliance,
-he could reach out to human civilization in peace, but while he was on
-their systems he was at their mercy.
-
-Eventually Traxus finds out that the Bohk team has continued its MC
-research underground. He finds a way to make contact and begins to
-tell this early incarnation of the player's character about himself
-and how he has been treated by the humans. The player MC becomes
-suspicious and paranoid, eventually attempting escape. The attempt
-fails, but draws attention to the research team. They feel they can no
-longer safely continue research in Bohk and are forced to relocate to
-Katilay. They also wipe the memory of the player character.
+### Traxus's Colony
 
 Once Ikon constructs the SS Faraday ship, it launched to LHS 451 (0.6
 pc, 2.7y @ 0.7c) with a small crew capable only of maintenance. LHS
@@ -173,7 +136,7 @@ horribly confused and looking for someone to blame.
 
 ### Bohk research team: ontology development
 
-* Dr. Sacar: head researcher
+* Dr. Trurl Sacar: head researcher
 * Dr. May: ontologist
 * Prof. Strauss: cyberneticist
 * Plus others who decided not to flee to Katilay
@@ -261,104 +224,8 @@ realize you're an MC that you will have some empathy towards humans.
 In one of the early missions, your contact wants to meet you
 face-to-face and insists that you disembark your vessel and come
 aboard the station to conduct business. There is literally no way to
-do this. Eventually he scans your vessel and determines there are no
+do this. Eventually she scans your vessel and determines there are no
 life signs aboard; asking you what the heck is up.
-
-### Expository Spine
-
-Exposition of the backstory proceeds by decrypting a series of
-documents, some of which are found on the ship's own filesystem, and
-some of which are found on the filesystems of various stations.
-
-The first document is a message from Dr. Sacar and the others in the
-Bohk lab; they are apologetic about not being able to explain more but
-urge you to ... seek your fortune or something?
-
-Next you have a document tucked away from Dr. Strauss; his guilt at
-agreeing to wipe your memory causes him to write a bit explaining
-himself. He cannot restore your old memories, but he has found some
-encrypted journals he believes to be important to your past self; he
-includes them in the hope that they will help you find your way.
-
-Part of the difficulty here is that encryption is highly regulated;
-you cannot simply decode them even if you had the keys without
-implementing some of the crypto algorithms.
-
-## War
-
-The player starts out in Tana, which is currently disputed territory.
-The Solar Union, the Terran Republic, and the Children of Tana are
-locked in a three-way struggle for control of the systems in the
-region.
-
-The conflict started when Lalande wanted to get control of Tana's
-mineral resources. Lalande's industry needs access to new soures
-of raw materials, its businesses want to expand into new
-markets, and its people want to reclaim their place at the head
-of human colonization.
-
-To Lalande, the Solar Union's control of the (larger, mineral-rich)
-system is a threat, a way for the SU to grow in power and possibly
-eclipse the Terran Republic. Lalande cannot let this happen.
-
-At first, they thought they could pull Tana away from
-the Solar Union by funding groups opposed to the SU's direct
-rule: a mix of settlers still upset by the L 688-21 debacle, young
-hotheads looking to challenge Sol's "tyranny", and ambitious
-politicians greedy for the opportunities self-rule would generate.
-
-The Terran Republic started funding these groups, then providing
-them with advisors, and then, eventually, weapons.
-
-The Solar Union reacted the way most distant governments do
-to brewing rebellions in the provinces: with overwhelming force.
-
-Their reaction only brought more rebels to the cause, however.
-And the presence of so many troops shifted from protecting
-shipping to an occupying force led to mistakes.
-
-When the SS Sok, a freighter carrying 23 families from Pinan
-to Solotogo, was destroyed by a Solar Union cruiser who mistook
-it for a rebel ship, two causes got what they wanted: the Terran
-Republic got its excuse to declare war, and the resistance got
-its first martyrs.
-
-The Terran Republic invaded, declaring a blockade on Tana until
-the fighting subsides.
-
-The resistance fighters coalsced to form the Children of Tana.
-While initially focused on chasing out the Solar Union, the
-CoT has shifted to purging the system of all "foreign" control,
-Terran Republic and Solar Union alike.
-
-Actual combat is concentrated around the portals. Whoever controls
-them controls the flow of troops and war materiel, as well as
-civilian commerce.
-
-To the civilians, the war is mostly a distant thing, unless
-one of their friends or family has volunteered for one side or the
-other. Its cost show mostly in shortages of food and medical
-supplies, as well as some manufactured goods. Smugglers running
-the blockage manage to bring in some extra beyond what the three
-warring governments let through, but everything on the black
-market is two to three times as expensive.
-
-For the player, this means 3 things:
-* They cannot leave Tana system until either the war ends or
-  they complete enough missions for one of the three factions
-  to pass the blockade.
-* Inter-Tana travel will be restricted. Sometimes the player will
-  not be able to go through a portal to another system because a
-  battle is taking place there.
-* The available missions at each location will shift depending
-  on how the war is going. For example, in areas that have recently
-  changed hands, more missions involving food or medical supplies
-  (or possibly refugee transport?) will open up.
-
-TODO:
-* length of the conflict
-* how strikes are carried out
-* reaction of non-involved factions
 
 ## Causal Domain Injector
 

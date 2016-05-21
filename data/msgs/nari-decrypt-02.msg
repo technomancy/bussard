@@ -10,8 +10,8 @@ starting to come back to me, specifically the concept of loops.
 You're also going to need a way to do this shifting for every letter in the
 message. A "for" loop will let you run the loop body once for each letter.
 
-    for i=1,#ship.docs.backup["msg1-rot13"] do
-       local letter = string.sub(ship.docs.backup["msg1-rot13"], i, i)
+    for i=1,#ship.docs.backup.msg1_rot13 do
+       local letter = string.sub(ship.docs.backup.msg1_rot13, i, i)
        print(letter)
     end
 

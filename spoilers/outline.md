@@ -14,6 +14,7 @@
 * Eventually accept mission to take Nari home
 * She figures out that whoa holy crap; you're a machine consciousness
 * Nari helps you pass the background check needed for the portal
+* You bring Nari to Newton Station, where she contacts an old friend who has clues
 
 ## Act II: Tracking down echoes of Traxus
 
@@ -26,6 +27,7 @@ access to systems beyond Terran/Sol/Tana.
  * The one that records when Traxus first contacts you
 * She knows someone whose mother worked on the machine consciousness project (not Bohk team)
 * Track them down, find out about the connection between MC project and spacetime junction
+ * And that the spacetime junction was the goal of Traxus at one point
 * Somehow you recruit Clay Dorath
 
 TODO: flesh this out more; who is it you find, and how do they know what they tell you?
@@ -82,3 +84,13 @@ The progression of the endgame scenario is already laid out in some
 detail at the bottom of spoilers/readme.md.
 
 * You get the domain injector and have power to bend reality to your will; the end
+
+## Loose threads so far
+
+Possibly worth pursuing, but not worked into the overall storyline yet.
+
+* Sol MC
+* Traxus crash
+* Rampancy
+* Dr. May's logs
+* Dr. Sacar's logs

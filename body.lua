@@ -134,6 +134,7 @@ return {
       end
    end,
 
+   -- TODO: pricing factors maybe belong in data/ dir
    seed_cargo = function(b, no_cargo)
       if(not b.os or b.os.name ~= "orb") then return end
       local equipment_factor = (math.log(b.remote / 2) + 4) *

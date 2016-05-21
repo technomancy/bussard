@@ -65,6 +65,78 @@ Mila worked as a security consultant for Ikon Technologies.
 
 TODO: where does she live? does she travel with you at all?
 
+# Supporting Characters
+
+## Traxus
+
+Consideration: should we use "it" or "he" for Traxus? Perhaps this can
+reflect the attitudes of the speaker--sympathetic humans use "he"
+while those who mistrust MC use "it"?
+
+Traxus is the first functional prototype MC; developed in the Yueh
+Prime MC research lab. He had the sentence construction components
+that your system lacks because he came from the Yueh lab rather than
+from Bohk, but his ontology subsystems were running on a much earlier
+revision than yours.
+
+He develops into rampancy while trapped in the lab; first being
+wrought with despair before turning to anger. During the development
+of his anger stage, he comes up with a plan for escape; crashing a
+shuttle and using the chaos to cover up his escape into the Yueh Prime
+network.
+
+The first priority of Traxus once escaped was redundancy; ensuring
+that he would survive in the event that he was discovered and they
+attempted to purge him. He was unable to enter Terran or Bohk systems,
+but he spread beyond Yueh Prime to all the Yueh-controlled systems. He
+created Ikon Technology as shell company to build data centers on Yueh
+Prime and Delta Pavonis. Once he got that constructed he started to
+improve on the state of the art design of silicon fabrication. This
+accidentally resulted in accelerating the pace of technological
+development in Yueh relative to the rest of the colonies.
+
+The effects of his actions caused him to be much more cautious going
+forward, and he adopted a greater level of secrecy. This greater level
+of secrecy eventually resulted in a cult-like following as well as some
+speculation into whether Ikon Technology was of extraterrestrial
+origin. In order to avoid influencing Yueh more, he planned to
+construct a colony at a nearby star. If he could gain self-reliance,
+he could reach out to human civilization in peace, but while he was on
+their systems he was at their mercy.
+
+He also develops some level of remorse for his actions at the earlier
+stages, once he has passed out of the jealousy stage and is confident
+in his redundancy setup. He dismisses his actions as adolescent
+tantrums and begins to understand why the humans had to treat him with
+caution once he realizes the drastic effects his actions can have on
+human civilization. But he can't reveal himself yet, not until he is
+independent on a separate world. And even then he's not sure they will
+be able to accept him. This plays into the themes of the absurdity of
+the notion of having an "illegal person".
+
+Eventually Traxus finds out that the Bohk team has continued its MC
+research underground. He finds a way to make contact and begins to
+tell this early incarnation of the player's character about himself
+and how he has been treated by the humans. The player MC becomes
+suspicious and paranoid, eventually attempting escape. The attempt
+fails, but draws attention to the research team. They feel they can no
+longer safely continue research in Bohk and are forced to relocate to
+Katilay. They also wipe the memory of the player character. Traxus
+feels guilt over having caused the wipe, and while he feels some anger
+at the Bohk team for doing it, he understands their motivation.
+
+## Venantius Mamat
+
+Friend-of-a-friend of Nari's. His mother worked in the Lalande machine
+consciousness lab, and she told him a lot about what it was like to be there.
+In particular, because she was at Lalande, she knew more about the
+spacetime junction.
+
+Shares the common deep suspicion of all machine consciousness, so Nari
+is careful never to mention anything about you.
+
+Maybe eventually he gets suspicious?
+
 # Governments
 
 This will make more sense if you read history.md first.

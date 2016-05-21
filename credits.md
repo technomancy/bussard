@@ -29,7 +29,7 @@ see file LICENSE.
   http://www.solarsystemscope.com/nexus/resources/planet_images/
 
 * Station graphics copyright © 2014 MillionthVector, CC-BY licensed
-  http://millionthvector.blogspot.de/p/free-sprites_12.html
+  https://millionthvector.blogspot.de/p/free-sprites_12.html
 
 * Mensch font copyright © 2010-2012 Robey Pointer, distributed under
   the Bitstream Vera license

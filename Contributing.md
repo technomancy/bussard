@@ -1,15 +1,16 @@
 # Contributing
 
 Discussion happens mostly in the `#bussard` channel on Freenode, but
-the  [issue tracker](https://gitlab.com/technomancy/bussard/issues) is
+the [issue tracker](https://gitlab.com/technomancy/bussard/issues) is
 useful for that too.
 
 Contributions are preferred as GitLab merge requests on feature branches.
 
-Our goal is compatibility with LÖVE 0.9.0+, but 0.10.x is pretty close
-to 0.9.x, so it should be fine to test primarily in that.
+Our goal is compatibility with LÖVE 0.9.0+, but 0.10.x is pretty close to 0.9.x,
+so it should be fine to test primarily in that. A few features that only work
+in 0.10.x are OK but should be noted with comments.
 
-For story and plot background and guidelines, look in `spoilers/`.
+For story, background and guidelines, look at the dev guide in `spoilers/`.
 
 ## Code style
 
@@ -76,6 +77,13 @@ largely based on Emacs. See `find_binding`, `define_mode`, and `bind`
 in `ship/init.lua`, and `data/src/config` for a usage example. The
 commands which the non-flight modes bind are typically defined in
 `ship/editor.lua`.
+
+## Data and Mods
+
+Theoretically, replacing the `assets`, `data`, and `doc` directories would give
+you a different game using the Bussard engine. Try to keep anything specific to
+the worlds and story of Bussard in these directories, and everything elsewhere
+should be agnostic, dealing only with the engine.
 
 ## License
 

@@ -11,7 +11,7 @@ to acquire new skills.
 
 I'm not much of a hacker, but I took a course on programming when I was
 fifteen. Most of the files are completely gibberish to me, but I might be able
-to help you with one of the files, the one labeled "msg1-rot13".
+to help you with one of the files, the one labeled "msg1_rot13".
 
 I don't remember that much about the class, but for the final assignment we
 wrote a function that could perform "rot13 translation". Basically all it does

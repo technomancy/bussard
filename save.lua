@@ -3,11 +3,12 @@ local body = require "body"
 local ai = require "ship.ai"
 local utils = require "utils"
 local orb = require "os.orb"
+local ship_init = require "data.ship_init"
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading", "mail_delivered",
    "battery", "fuel", "credits", "system_name", "active_missions",
-   "upgrade_names", "cargo", "target_number", "events", "flag",
+   "upgrade_names", "cargo", "target_number", "events", "flag", "name",
 }
 
 local body_fields = {
@@ -72,8 +73,7 @@ return {
                                 jobs = { _unread = {} },
                                 archive = { _unread = {} },
                               }
-         ship.api.docs.backup = { ["msg1-rot13"] =
-               love.filesystem.read("data/docs/traxus-1.rot13")}
+         ship_init(ship)
          ship:enter(ship.system_name, true, true)
          for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
             ship.api.src[v] = love.filesystem.read("data/src/" .. v)
