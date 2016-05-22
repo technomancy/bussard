@@ -16,13 +16,25 @@ local files = {"main.lua","main.lua","main.lua","main.lua","main.lua",
                "services.lua","splash.lua",
 }
 
-local buttons = {"resume", "credits", "license", "quit"}
+local buttons = {"resume", "credits", "license", "toggle fullscreen", "quit"}
 local actions = {resume=function() end,
                  credits=function()
                     text, line = lume.split(love.filesystem.read("credits.md"), "\n"), 1
                  end,
                  license=function()
                     text, line = lume.split(love.filesystem.read("LICENSE"), "\n"), 1
+                 end,
+                 ["toggle fullscreen"]=function()
+                    local _,_,f = love.window.getMode()
+                    local dw, dh = love.window.getDesktopDimensions()
+                    if(f.fullscreen) then
+                       love.window.setMode(dw*0.9, dh*0.9)
+                       love.filesystem.write("fullscreen", "false")
+                    else
+                       love.window.setMode(dw, dh, {fullscreen=true,
+                                                    fullscreentype="desktop"})
+                       love.filesystem.write("fullscreen", "true")
+                    end
                  end,
                  quit = love.event.quit,}
 local selected = 1

@@ -90,10 +90,19 @@ end
 love.load = function()
    local dw, dh = love.window.getDesktopDimensions()
 
-   if(dh < 800) then
-      love.window.setMode(dw, dh, {fullscreen=true, fullscreentype="desktop"})
+   if(love.filesystem.isFile("fullscreen")) then
+      if(love.filesystem.read("fullscreen") == "true") then
+         love.window.setMode(dw, dh, {fullscreen=true,
+                                      fullscreentype="desktop"})
+      else
+         love.window.setMode(dw*0.9, dh*0.9)
+      end
    else
-      love.window.setMode(dw*0.9, dh*0.9)
+      if(dh < 800) then
+         love.window.setMode(dw, dh, {fullscreen=true, fullscreentype="desktop"})
+      else
+         love.window.setMode(dw*0.9, dh*0.9)
+      end
    end
 
    love.graphics.setFont(font)
