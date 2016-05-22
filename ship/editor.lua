@@ -321,7 +321,7 @@ local io_write = function(...)
    local prev_b = b
    b = console
    local line_count
-   local old_point, old_point_line = b.point, b.point_line
+   local old_point, old_point_line, old_lines = b.point, b.point_line, #b.lines
    b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
    last_line, line_count = write(...)
    if(old_point_line == old_lines) then
