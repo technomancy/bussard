@@ -10,27 +10,30 @@ starting to come back to me, specifically the concept of loops.
 You're also going to need a way to do this shifting for every letter in the
 message. A "for" loop will let you run the loop body once for each letter.
 
-    for i=1,#ship.docs.backup.msg1_rot13 do
+    local msg = string.upper(ship.docs.backup.msg1_rot13)
+    for i=1,#msg do
        local letter = string.sub(ship.docs.backup.msg1_rot13, i, i)
        print(letter)
     end
 
-You'll use string.sub function to get you a single letter out of the string.
+It'll be simpler if you use the string.upper() function so it's all upper
+case. You'll use string.sub() to get you a single letter out of the string.
 
 This will just print each letter individually; in order to decode the message
 you'll have to get the string.byte and string.char functions into the mix to
-shift everything over by 13. You can build up a string using the .. operator to
-put two shorter strings together:
+shift all the letters over by 13. You can build up a string using the
+.. operator to put two shorter strings together:
 
-    local a = "abc"
-    a = a .. "def"
-    print(a) --> abcdef
+    local decoded = "ABC"
+    decoded = decoded .. "DEF"
+    print(decoded) --> ABCDEF
+
+Remember not to change the punctuation and spaces. If a character is more than
+A but less than Z it's a letter, but otherwise you should just leave it alone!
 
 I've also found a few chapters of a book on Lua programming that I've loaded
-into your ship's help system. You can run this to read it:
+into your ship's help system. Hope that helps! You can run this to read it:
 
     man("luabook1")
-
-Hope that helps! I'm probably still missing something, but it should be a start.
 
 Nari

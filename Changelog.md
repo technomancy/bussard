@@ -2,6 +2,9 @@
 
 ## beta-2 / ???
 
+* Further mission progression.
+* Tab completion in the console.
+* Support toggling fullscreen, resizing game window.
 * Add archive feature to mail system.
 * Allow the font to be changed.
 

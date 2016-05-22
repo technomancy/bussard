@@ -19,8 +19,9 @@ is take each letter of a message and shift it over by 13 characters. It would
 turn "abc" into "nop", for instance, since "n" is 13 characters away from "a".
 For letters in the second half of the alphabet, it would loop back to the start.
 
-So you're going to need a way to turn letters into numbers and back again. The
-string.byte function and string.char function can do that.
+So you're going to need a way to turn letters into numbers and back again. (But
+ignore characters that aren't letters.) The string.byte function and string.char
+function can do that.
 
     string.byte("a") --> 97
     string.char(97) --> "a"
