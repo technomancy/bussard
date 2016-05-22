@@ -108,7 +108,7 @@ end
 local random_choice = function(t) return t[love.math.random(#t)] end
 
 return function(resume, quit, font_path)
-   choices_font = love.graphics.newFont(font_path, 18)
+   choices_font = love.graphics.newFont(font_path, 16)
    text_font = love.graphics.newFont(font_path, 12)
    font_height = text_font:getHeight()
    stars = { starfield.new(10, 0.005, 75),
