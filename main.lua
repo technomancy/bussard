@@ -89,19 +89,25 @@ end
 
 love.load = function()
    local dw, dh = love.window.getDesktopDimensions()
+   local w, h = dw*0.9, dh*0.9
+
+   if(love.filesystem.isFile("window")) then
+      local wh = lume.split(love.filesystem.read("window"), " ")
+      w, h = tonumber(wh[1]), tonumber(wh[2])
+   end
 
    if(love.filesystem.isFile("fullscreen")) then
       if(love.filesystem.read("fullscreen") == "true") then
          love.window.setMode(dw, dh, {fullscreen=true,
                                       fullscreentype="desktop"})
       else
-         love.window.setMode(dw*0.9, dh*0.9)
+         love.window.setMode(w, h, {resizable=true})
       end
    else
       if(dh < 800) then
          love.window.setMode(dw, dh, {fullscreen=true, fullscreentype="desktop"})
       else
-         love.window.setMode(dw*0.9, dh*0.9)
+         love.window.setMode(w, h, {resizable=true})
       end
    end
 
@@ -125,6 +131,8 @@ love.load = function()
    ship:dofile("src.config")
    play()
 end
+
+love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end
 
 local update = safely(function(dt)
       if(ship.api.paused) then return end

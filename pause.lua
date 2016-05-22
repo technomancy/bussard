@@ -24,11 +24,19 @@ local actions = {resume=function() end,
                  license=function()
                     text, line = lume.split(love.filesystem.read("LICENSE"), "\n"), 1
                  end,
+                 -- TODO: logic is duplicated from love.load
                  ["toggle fullscreen"]=function()
                     local _,_,f = love.window.getMode()
                     local dw, dh = love.window.getDesktopDimensions()
                     if(f.fullscreen) then
-                       love.window.setMode(dw*0.9, dh*0.9)
+                       local w, h = dw*0.9, dh*0.9
+
+                       if(love.filesystem.isFile("window")) then
+                          local wh = lume.split(love.filesystem.read("window"), " ")
+                          w, h = tonumber(wh[1]), tonumber(wh[2])
+                       end
+
+                       love.window.setMode(w, h, {resizable=true})
                        love.filesystem.write("fullscreen", "false")
                     else
                        love.window.setMode(dw, dh, {fullscreen=true,
