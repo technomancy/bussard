@@ -46,6 +46,7 @@ end)
 bind("ssh", "ctrl-d", function()
         if(get_input() == "") then
            logout()
+           print("Logged out.")
         else
            ship.editor.delete_forwards()
         end

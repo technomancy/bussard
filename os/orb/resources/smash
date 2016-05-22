@@ -9,7 +9,13 @@ if(args[1] == "--help") then
    print("  smash")
 else
    local smashrc = f[env.HOME .. "/.smashrc"]
-   if(smashrc) then f = loadstring(smashrc) assert(f) return f() end
+   if(smashrc) then
+      assert(loadstring(smashrc))()
+   else
+      print(f.etc.motd)
+      print("\nType \"logout\" to exit and \"ls /bin\"" ..
+               " to see commands available.")
+   end
 
    while true do
       set_prompt(orb.utils.interp(env.PROMPT, env))

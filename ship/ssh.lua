@@ -17,9 +17,6 @@ local logout = function(ship, target)
          end
       end
       sessions[target.name] = nil
-      if(not target.name:match("[Pp]ortal")) then
-         ship.api.print("\nLogged out.")
-      end
    else
       (ship.api or ship).print("| Not logged in.")
    end
@@ -134,6 +131,8 @@ local orb_login = function(fs, env, ship, command)
    fs[env.OUT] = lume.fn(sandbox_write, ship, ship.target.name)
    -- TODO: improve error handling for problems in smashrc
    ship.target.os.process.spawn(fs, env, command, sandbox(ship))
+   -- without this you can't have non-interactive SSH commands
+   ship.target.os.process.scheduler(fs)
 end
 
 return {
@@ -160,9 +159,6 @@ return {
          else
             error("Unknown OS: " .. ship.target.os.name)
          end
-
-         ship.api.print(fs_raw.etc.motd)
-         ship.api.print("Type \"logout\" to exit and \"ls /bin\" to see commands available.")
 
          mission.on_login(ship)
       else
