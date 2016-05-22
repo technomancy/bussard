@@ -60,7 +60,10 @@ bind("console", "return", function()
 end)
 
 local complete = function()
-   local line = utf8.sub(ship.editor.get_line(0), utf8.len(ship.editor.prompt())+1)
+   local point, point_line = ship.editor.point()
+   if(point_line ~= ship.editor.get_max_lines()) then return end
+   local line = utf8.sub(ship.editor.get_line(0),
+                         utf8.len(ship.editor.prompt())+1, point)
    local entered = lume.last(lume.array((line):gmatch("[._%a0-9]+"))) or ""
    local completions = utils.completions_for(entered, _G, ".")
    if(#completions == 1) then
