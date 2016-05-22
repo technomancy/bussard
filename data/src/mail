@@ -87,14 +87,15 @@ ship.modes.mail.parent = ship.modes.edit -- nav keys should be intact
 local reply_key = "alt-return"
 
 local view_modeline = function(b)
-   local id = header(ship.editor.get_lines(), "Message.Id")
+   local id = header(b.lines, "Message.Id")
+   local subject = header(b.lines, "Subject")
    if(replyable(id)) then
       return utf8.format(" %s  %s  (%s/%s)  %s   Press %s to reply.",
                          b.needs_save and "*" or "-",
-                         b.path, b.point_line, #b.lines, b.mode, reply_key)
+                         subject, b.point_line, #b.lines, b.mode, reply_key)
    else
       return utf8.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
-                         b.path, b.point_line, #b.lines, b.mode)
+                         subject, b.point_line, #b.lines, b.mode)
    end
 end
 
