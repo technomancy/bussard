@@ -7,7 +7,7 @@
 -- under the terms of the MIT license. See LICENSE for details.
 --
 
-local lume = { _version = "2.2.1" }
+local lume = { _version = "2.2.3" }
 
 local pairs, ipairs = pairs, ipairs
 local type, assert, unpack = type, assert, unpack or table.unpack
@@ -40,12 +40,8 @@ local iscallable = function(x)
   return mt and mt.__call ~= nil
 end
 
-local isarray = function(x)
-  return (type(x) == "table" and x[1] ~= nil) and true or false
-end
-
 local getiter = function(x)
-  if isarray(x) then
+  if lume.isarray(x) then
     return ipairs
   elseif type(x) == "table" then
     return pairs
@@ -142,6 +138,11 @@ function lume.weightedchoice(t)
 end
 
 
+function lume.isarray(x)
+  return (type(x) == "table" and x[1] ~= nil) and true or false
+end
+
+
 function lume.push(t, ...)
   local n = select("#", ...)
   for i = 1, n do
@@ -151,11 +152,11 @@ function lume.push(t, ...)
 end
 
 
-function lume.remove(t, x) 
+function lume.remove(t, x)
   local iter = getiter(t)
   for i, v in iter(t) do
     if v == x then
-      if isarray(t) then
+      if lume.isarray(t) then
         table.remove(t, i)
         break
       else
@@ -170,7 +171,7 @@ end
 
 function lume.clear(t)
   local iter = getiter(t)
-  for k, _ in iter(t) do
+  for k in iter(t) do
     t[k] = nil
   end
   return t
@@ -284,7 +285,7 @@ end
 
 function lume.set(t)
   local rtn = {}
-  for k, _ in pairs(lume.invert(t)) do
+  for k in pairs(lume.invert(t)) do
     rtn[#rtn + 1] = k
   end
   return rtn
@@ -381,7 +382,7 @@ function lume.count(t, fn)
       if fn(v) then count = count + 1 end
     end
   else
-    if isarray(t) then
+    if lume.isarray(t) then
       return #t
     end
     for _ in iter(t) do count = count + 1 end
@@ -433,7 +434,7 @@ end
 function lume.keys(t)
   local rtn = {}
   local iter = getiter(t)
-  for k, _ in iter(t) do rtn[#rtn + 1] = k end
+  for k in iter(t) do rtn[#rtn + 1] = k end
   return rtn
 end
 
@@ -487,7 +488,7 @@ end
 function lume.combine(...)
   local n = select('#', ...)
   if n == 0 then return noop end
-  if n == 1 then 
+  if n == 1 then
     local fn = select(1, ...)
     if not fn then return noop end
     assert(iscallable(fn), "expected a function or nil")
@@ -536,22 +537,19 @@ end
 
 local serialize
 
-local serialize_unreadable = false
-
 local serialize_map = {
-  [ "number"  ] = tostring,
   [ "boolean" ] = tostring,
   [ "nil"     ] = tostring,
   [ "string"  ] = function(v) return string.format("%q", v) end,
+  [ "number"  ] = function(v)
+    if      v ~=  v     then return  "0/0"      --  nan
+    elseif  v ==  1 / 0 then return  "1/0"      --  inf
+    elseif  v == -1 / 0 then return "-1/0" end  -- -inf
+    return tostring(v)
+  end,
   [ "table"   ] = function(t, stk)
     stk = stk or {}
-    if stk[t] then
-       if serialize_unreadable then
-          return "#<circular " .. tostring(t) .. ">"
-       else
-          error("circular reference")
-       end
-    end
+    if stk[t] then error("circular reference") end
     local rtn = {}
     stk[t] = true
     for k, v in pairs(t) do
@@ -563,24 +561,15 @@ local serialize_map = {
 }
 
 setmetatable(serialize_map, {
-                __index = function(_, k)
-                   return function(v)
-                      if serialize_unreadable then
-                         return "#<" .. tostring(v) .. ">"
-                      else
-                         error("unsupported serialize type: " .. k)
-                      end
-                   end
-                end
+  __index = function(_, k) error("unsupported serialize type: " .. k) end
 })
 
 serialize = function(x, stk)
   return serialize_map[type(x)](x, stk)
 end
 
-function lume.serialize(x, include_unreadable)
-   serialize_unreadable = include_unreadable
-   return serialize(x)
+function lume.serialize(x)
+  return serialize(x)
 end
 
 
@@ -691,7 +680,7 @@ function lume.hotswap(modname)
   end
   local err = nil
   local function onerror(e)
-    for k, _ in pairs(_G) do _G[k] = oldglobal[k] end
+    for k in pairs(_G) do _G[k] = oldglobal[k] end
     err = lume.trim(e)
   end
   local ok, oldmod = pcall(require, modname)
@@ -770,7 +759,7 @@ function lume.chain(value)
 end
 
 setmetatable(lume,  {
-  __call = function(...)
+  __call = function(_, ...)
     return lume.chain(...)
   end
 })
