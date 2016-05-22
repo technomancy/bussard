@@ -16,6 +16,10 @@ see file LICENSE.
   https://github.com/kikito/md5.lua
 * serpent Copyright © 2011-2013 Paul Kulchenko (paul@kulchenko.com)
   https://github.com/pkulchenko/serpent
+* utf8.lua Copyright © 2016 Stepets, distributed under the MIT license
+  https://github.com/Stepets/utf8.lua
+* l2l Copyright © 2012-2015, Eric Man and contributors, distributed under 2-clause BSD license
+  https://github.com/meric/l2l
 
 ## 3rd-party art
 
