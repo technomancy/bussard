@@ -72,6 +72,7 @@ return {
       end
    end,
 
+   -- TODO/blocker: disembark humans when you sell life_support
    sell_upgrade = function(ship, name)
       local target = ship.target
       local price = math.floor(((target.upgrade_prices and

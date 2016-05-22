@@ -21,6 +21,7 @@ local folder_for = function(msg)
 end
 
 local add_date = function(msg, date)
+   -- TODO/blocker: only add if we don't have a date already!
    local parts = lume.split(msg, "\n\n")
    parts[1] = parts[1] .. "\nDate: " .. utils.format_time(date)
    return table.concat(parts, "\n\n")

@@ -44,6 +44,7 @@ return {
                orb.fs.strip_special(fs, {ship.api})
                local fs_data = lume.serialize(fs)
                love.filesystem.write(fs_filename(b), fs_data)
+               -- TODO/blocker: save console contents/history
             end
          end
       end
