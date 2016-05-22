@@ -36,10 +36,12 @@ local destination_check = function(record)
    return (not record.destinations or #record.destinations == 0)
 end
 
--- TODO: some feedback here?
-local record_destination = function(record, dest)
+local record_destination = function(record, dest, ship)
    if(record.destinations and record.destinations[1] == dest) then
       table.remove(record.destinations, 1)
+      if(record.msgs[dest]) then
+         ship.api.print(record.msgs[dest])
+      end
    end
 end
 
@@ -55,7 +57,7 @@ end
 local on_login = function(ship)
    for mission_id,record in pairs(ship.active_missions) do
       local mission = find(mission_id)
-      record_destination(record, ship.comm_connected)
+      record_destination(record, ship.comm_connected, ship)
       if(mission.on_login) then mission.on_login(ship, ship.comm_connected) end
 
       -- success check here (maybe belongs in update)
@@ -84,6 +86,12 @@ local accept = function(ship, message_id)
    local mission = find(message_id)
    if(not mission) then return false, "No mission " .. message_id end
 
+   for _,event in pairs(mission.success_events or {}) do
+      if(ship.events[event]) then
+         return false, "Already completed this mission."
+      end
+   end
+
    if(mission.prereq) then
       local accept, msg = mission.prereq(ship)
       if(not accept) then return false, msg end
@@ -98,7 +106,9 @@ local accept = function(ship, message_id)
 
    ship.active_missions[mission.id] = { start = utils.time(ship),
                                         destinations =
-                                           lume.clone(mission.destinations or {}) }
+                                           lume.clone(mission.destinations or {}),
+                                        msgs = mission.destination_msgs or {},
+                                      }
 
    for good, amt in pairs(mission.cargo or {}) do
       ship:move_cargo(good, amt)

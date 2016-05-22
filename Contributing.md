@@ -10,6 +10,9 @@ Our goal is compatibility with LÖVE 0.9.0+, but 0.10.x is pretty close to 0.9.x
 so it should be fine to test primarily in that. A few features that only work
 in 0.10.x are OK but should be noted with comments.
 
+During development it may be expedient to run `ship.cheat.comm_range = 9999999`
+in order to make testing login interaction easier.
+
 For story, background and guidelines, look at the dev guide in `spoilers/`.
 
 ## Code style

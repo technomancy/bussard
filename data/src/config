@@ -59,7 +59,7 @@ bind({"flight", "edit"}, "ctrl-r",
 end)
 
 -- connect to target over ssh
-bind({"flight", "edit"}, "ctrl-s", function()
+bind("flight", "ctrl-s", function()
         ship.editor.change_buffer("*console*")
         ssh()
 end)

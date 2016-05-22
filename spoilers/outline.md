@@ -5,10 +5,10 @@
 * Come to your senses in a remote mining system, email indicator blinking
 * Lab team left cryptic message wishing you best (msgs/readme.md)
 * After 1 jump, get Strauss's message about encrypted journals (msgs/strauss-1.msg)
-* Buy a mining laser, do some mining to earn a bit of cash?
+* (optional) Buy a mining laser, do some mining to earn a bit of cash?
 * Do some cargo runs or missions within Tana
  * You can't leave Tana because you can't get a background check needed for Sol portal clearance
-* You can probably decrypt the rot13 journal on your own, some hints on newsgroup?
+* You can probably decrypt the rot13 journal on your own, but you can wait for act 2
 * Try to accept a passenger mission, mission aborts due to not having life-support
 * Buy life support, run a passenger mission or two
 * Eventually accept mission to take Nari home
@@ -23,10 +23,11 @@ assuming that he is a villain opposed to humanity. This isn't true at
 all, but it fits the facts as they know them. Nari still doesn't have
 access to systems beyond Terran/Sol/Tana.
 
-* Nari helps you decrypt the polyalphabetic journal(s)
+* Nari starts to try to find Venantius, but it will take a while
+* She helps you decrypt the rot13 journal
  * The one that records when Traxus first contacts you
-* She knows someone whose mother worked on the machine consciousness project (not Bohk team)
-* Track them down, find out about the connection between MC project and spacetime junction
+* Venantius's mother worked on the machine consciousness project (not Bohk team)
+* Track him down, find out about the connection between MC project and spacetime junction
  * And that the spacetime junction was the goal of Traxus at one point
 * Somehow you recruit Clay Dorath
 
