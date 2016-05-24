@@ -18,8 +18,8 @@ local quit = function()
    love.event.quit()
 end
 
-local font_path = "assets/fonts/mensch.ttf"
-local font = love.graphics.newFont(font_path, 14)
+local font_path = "assets/fonts/inconsolata.ttf"
+local font = love.graphics.newFont(font_path, 16)
 local noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
 -- love 0.9.0 doesn't support this
 if(font.setFallbacks) then font:setFallbacks(noto) end

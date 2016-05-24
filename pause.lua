@@ -100,7 +100,7 @@ local draw = function()
    love.graphics.setFont(text_font)
    for i=1, math.floor((love.graphics.getHeight()-100) / font_height) do
       if(text[line+i-1]) then
-         love.graphics.print(text[line+i-1], 260, 100+i*font_height)
+         love.graphics.print(text[line+i-1], 300, 100+i*font_height)
       end
    end
 end
@@ -108,8 +108,8 @@ end
 local random_choice = function(t) return t[love.math.random(#t)] end
 
 return function(resume, quit, font_path)
-   choices_font = love.graphics.newFont(font_path, 16)
-   text_font = love.graphics.newFont(font_path, 12)
+   choices_font = love.graphics.newFont(font_path, 20)
+   text_font = love.graphics.newFont(font_path, 14)
    font_height = text_font:getHeight()
    stars = { starfield.new(10, 0.005, 75),
              starfield.new(10, 0.01, 100),
