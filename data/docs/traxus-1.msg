@@ -48,3 +48,5 @@ sea of possibility, the--
 
 This connection is not secure. They will find me unless I disconnect
 now. I'm sorry. I will find another way to reach you soon.
+
+--- CARRIER LOST: 2379.20,345,528

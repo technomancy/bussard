@@ -1,20 +1,20 @@
 run: ; love .
 
-VERSION=beta-1
+VERSION=beta-2-pre
 
 SHIP_LUA=ship/*.lua
 ENGINE_LUA=*.lua
 OS_LUA=os/orb/*.lua os/lisp/*.lua
 IN_OS_LUA=os/orb/resources/*
 IN_SHIP_LUA=data/src/*
-DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua
+DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua serpent/*.lua utf8/*.lua
 MISSION_LUA=data/missions/*.lua
-DATA_LUA=data/*.lua doc/init.lua
+DATA_LUA=data/*.lua doc/init.lua data/msgs/*.lua $(MISSION_LUA)
 
-GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA)
+GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) $(DATA_LUA)
 ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
 
-PROSE_DIRS=doc data/msgs data/motd data/news
+PROSE=doc/*.md data/msgs/*.msg data/motd/* data/news/*.msg
 
 todo: ; grep -nH -e TODO $(GAME_LUA)
 blockers: ; grep TODO/blocker $(GAME_LUA)
@@ -24,6 +24,7 @@ SAVE_DIR=${HOME}/.local/share/love/bussard
 wipe: ; rm -rf ${SAVE_DIR}
 backup: ; rm -rf ${SAVE_DIR}.bak; cp -r ${SAVE_DIR} ${SAVE_DIR}.bak
 restore: wipe ; cp -r ${SAVE_DIR}.bak ${SAVE_DIR}
+wipe_fs: ; rm -rf ${SAVE_DIR}/fs
 
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
@@ -37,17 +38,21 @@ check:
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel \
 	            accept_mission set_prompt buy_upgrade sell_upgrade upgrade_help \
 	  -- $(IN_OS_LUA)
+	luacheck --no-color --std luajit --ignore 21/_.* --globals love \
+	  -- $(DATA_LUA)
 
 count: ; cloc --force-lang=lua $(GAME_LUA)
 
 count_engine: ; cloc $(ENGINE_LUA) $(SHIP_LUA)
 
 count_data: ; cloc --force-lang=lua $(IN_SHIP_LUA) $(IN_OS_LUA) $(OS_LUA) \
-	  $(MISSION_LUA) $(DATA_LUA)
+	  $(DATA_LUA)
 
 count_deps: ; cloc $(DEPS_LUA)
 
-count_prose: ; find $(PROSE_DIRS) -type f -print0 | xargs -0 wc -l
+count_all: ; cloc $(ALL_LUA)
+
+count_prose: ; find $(PROSE) -type f -print0 | xargs -0 wc -l
 
 clean: ; rm -rf releases/
 
