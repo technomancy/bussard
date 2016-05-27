@@ -4,7 +4,7 @@ local starfield = require "starfield"
 local stars = {}
 
 local title = love.graphics.newImage("assets/title.png") -- jura demibold
-local choices_font, text_font, font_height
+local choices_font, text_font, font_height, resize
 
 local text, line = {}, 1
 local scroll = 0
@@ -13,7 +13,7 @@ local files = {"main.lua","main.lua","main.lua","main.lua","main.lua",
                "main.lua","main.lua","main.lua","main.lua","main.lua",
                "main.lua","main.lua","main.lua","main.lua","main.lua",
                "asteroid.lua","body.lua","mission.lua", "save.lua",
-               "services.lua","splash.lua",
+               "services.lua","pause.lua",
 }
 
 local buttons = {"resume", "credits", "license", "toggle fullscreen", "quit"}
@@ -24,25 +24,14 @@ local actions = {resume=function() end,
                  license=function()
                     text, line = lume.split(love.filesystem.read("LICENSE"), "\n"), 1
                  end,
-                 -- TODO: logic is duplicated from love.load
                  ["toggle fullscreen"]=function()
                     local _,_,f = love.window.getMode()
-                    local dw, dh = love.window.getDesktopDimensions()
                     if(f.fullscreen) then
-                       local w, h = dw*0.9, dh*0.9
-
-                       if(love.filesystem.isFile("window")) then
-                          local wh = lume.split(love.filesystem.read("window"), " ")
-                          w, h = tonumber(wh[1]), tonumber(wh[2])
-                       end
-
-                       love.window.setMode(w, h, {resizable=true})
                        love.filesystem.write("fullscreen", "false")
                     else
-                       love.window.setMode(dw, dh, {fullscreen=true,
-                                                    fullscreentype="desktop"})
                        love.filesystem.write("fullscreen", "true")
                     end
+                    resize()
                  end,
                  quit = love.event.quit,}
 local selected = 1
@@ -107,7 +96,8 @@ end
 
 local random_choice = function(t) return t[love.math.random(#t)] end
 
-return function(resume, quit, font_path)
+return function(resume, quit, resize_fn, font_path)
+   resize = resize_fn
    choices_font = love.graphics.newFont(font_path, 20)
    text_font = love.graphics.newFont(font_path, 14)
    font_height = text_font:getHeight()

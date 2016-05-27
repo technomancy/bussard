@@ -24,6 +24,31 @@ local noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
 -- love 0.9.0 doesn't support this
 if(font.setFallbacks) then font:setFallbacks(noto) end
 
+local resize = function()
+   local dw, dh = love.window.getDesktopDimensions()
+   local w, h = dw*0.9, dh*0.9
+
+   if(love.filesystem.isFile("window")) then
+      local wh = lume.split(love.filesystem.read("window"), " ")
+      w, h = tonumber(wh[1]), tonumber(wh[2])
+   end
+
+   if(love.filesystem.isFile("fullscreen")) then
+      if(love.filesystem.read("fullscreen") == "true") then
+         love.window.setMode(dw, dh, {fullscreen=true,
+                                      fullscreentype="desktop"})
+      else
+         love.window.setMode(w, h, {resizable=true})
+      end
+   else
+      if(dh < 800) then
+         love.window.setMode(dw, dh, {fullscreen=true, fullscreentype="desktop"})
+      else
+         love.window.setMode(w, h, {resizable=true})
+      end
+   end
+end
+
 local ui = {
    version = "beta-2-pre",
 
@@ -38,14 +63,20 @@ local ui = {
    end,
    config_reset = lume.fn(save.config_reset, ship),
 
-   pause = function() pause(play, quit, font_path) end,
+   pause = function() pause(play, quit, resize, font_path) end,
 
    set_font = function(path, size)
-      font_path, font = path, love.graphics.newFont(path, size)
+      -- if size is nil, assume path is size
+      if(size == nil) then
+         font_path, font = font_path, love.graphics.newFont(font_path, path)
+      else
+         font_path, font = path, love.graphics.newFont(path, size)
+      end
       love.graphics.setFont(font)
       ship.api.editor.initialize()
       if(font.setFallbacks) then font:setFallbacks(noto) end
    end,
+
    get_fps = love.timer.getFPS,
 }
 
@@ -88,29 +119,7 @@ local safely = function(f)
 end
 
 love.load = function()
-   local dw, dh = love.window.getDesktopDimensions()
-   local w, h = dw*0.9, dh*0.9
-
-   if(love.filesystem.isFile("window")) then
-      local wh = lume.split(love.filesystem.read("window"), " ")
-      w, h = tonumber(wh[1]), tonumber(wh[2])
-   end
-
-   if(love.filesystem.isFile("fullscreen")) then
-      if(love.filesystem.read("fullscreen") == "true") then
-         love.window.setMode(dw, dh, {fullscreen=true,
-                                      fullscreentype="desktop"})
-      else
-         love.window.setMode(w, h, {resizable=true})
-      end
-   else
-      if(dh < 800) then
-         love.window.setMode(dw, dh, {fullscreen=true, fullscreentype="desktop"})
-      else
-         love.window.setMode(w, h, {resizable=true})
-      end
-   end
-
+   resize()
    love.graphics.setFont(font)
 
    stars = { starfield.new(10, 0.01, 100),
@@ -118,9 +127,9 @@ love.load = function()
              starfield.new(10, 0.1, 255), }
 
    if(arg[#arg] == "-debug") then require("mobdebug").start() end
+   if(arg[#arg] == "--wipe") then save.abort(ship) love.event.quit() end
    love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
-   if arg[#arg] == "-abort" then save.abort(ship) end
    save.load_into(ship)
    body.load(systems)
 
