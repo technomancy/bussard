@@ -4,6 +4,7 @@ local ai = require "ship.ai"
 local utils = require "utils"
 local orb = require "os.orb"
 local ship_init = require "data.ship_init"
+local acts = require "data.acts"
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading", "mail_delivered",
@@ -52,6 +53,17 @@ return {
 
    load_into = function(ship)
       ship.load_time = os.time()
+
+      -- cheat to load in all the events needed for a specific act
+      local act = tonumber(lume.find(arg, "--act"))
+      if(act) then
+         for i=1,act do
+            for _,event in ipairs(acts[i]) do
+               ship.events[event] = os.time()
+            end
+         end
+      end
+
       if(love.filesystem.isFile(ship_filename)) then
          local ship_data_string = love.filesystem.read(ship_filename)
          local ship_data = lume.deserialize(ship_data_string)
