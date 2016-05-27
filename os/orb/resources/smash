@@ -23,14 +23,17 @@ else
 
       local var, value = input:match("export (.+)=(.*)")
       local change_dir = input:match("cd +(.+)")
+      change_dir = change_dir and orb.normalize(change_dir, env.CWD)
 
       -- inlining primitives this way is kinda tacky
       if(input == "cd") then
          env.CWD = env.HOME
-      elseif(change_dir and not f[orb.normalize(change_dir, env.CWD)]) then
+      elseif(change_dir and not f[change_dir]) then
          print(change_dir .. " not found.")
+      elseif(change_dir and type(f[change_dir]) ~= "table") then
+         print(change_dir .. " is not a directory")
       elseif(change_dir) then
-         env.CWD = orb.normalize(change_dir, env.CWD)
+         env.CWD = change_dir
       elseif(var) then
          env[var] = value
       elseif(not input:match("^ *$")) then
