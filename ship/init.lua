@@ -177,7 +177,7 @@ local ship = {
    base_stats = base_stats,
 
    -- ephemeral
-   x=0, y=0, dx=5, dy=-20, heading = math.pi,
+   x=0, y=0, dx=0, dy=-20, heading = math.pi,
    engine_on = false,
    turning_right = false,
    turning_left = false,

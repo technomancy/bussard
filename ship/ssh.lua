@@ -7,7 +7,9 @@ local services = require("services")
 local sessions = {}
 
 local logout = function(ship, target)
-   if(not target) then return end
+   ship.api:activate_mode("console")
+   ship.api.editor.set_prompt("> ")
+   if(not target) then return ship.api.editor.invisible end
    local session = sessions[target.name]
    if(session) then
       local fs = unpack(session)
@@ -26,7 +28,9 @@ local logout = function(ship, target)
 end
 
 local send_line = function(ship, input)
-   if(not ship:in_range(ship.target)) then
+   if(not ship.comm_connected) then
+      logout(ship, nil) -- shouldn't happen, but get out of ssh mode anyway
+   elseif(not ship:in_range(ship.target)) then
       ship.api.print("| Out of range. Run `logout` to disconnect or move back in range.")
    elseif(not sessions[ship.target.name]) then
       ship.api.print("Not logged in to " .. ship.target.name ..
