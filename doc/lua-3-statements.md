@@ -214,25 +214,25 @@ return the boolean value `true`. Otherwise, they return the boolean
 value `false`.
 
   ------------------------------------------------------------------------------
-                          equal to   not equal to   greater than   less than 
-                                                                             
-  ------------------------------------------------------------------------------
-  Mathematical notation   =          ≠               >              <        
-                                                                             
+                          equal to   not equal to   greater than   less than
 
-  Lua operator            ==         ~=              >              <        
-                                                                             
+  ------------------------------------------------------------------------------
+  Mathematical notation   =          ≠               >              <
+
+
+  Lua operator            ==         ~=              >              <
+
   ------------------------------------------------------------------------------
 
   ------------------------------------------------------------------------------
                           greater than or equal to      less than or equal to
-                                                                                                          
+
   ------------------------------------------------------------------------------
   Mathematical notation     ≥                             ≤
-                                                                                                          
+
 
   Lua operator              >=                            <=
-                                                                                                          
+
   ------------------------------------------------------------------------------
 
 The code above also demonstrates how the `and` keyword can be used to combine

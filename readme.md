@@ -2,9 +2,8 @@
 
 <img src="https://p.hagelb.org/bussard.png" alt="screenshot" />
 
-A space flight programming adventure. Mine, trade, upgrade, and
-unlock the potential of your spacecraft by hacking on the code that
-makes it tick.
+A space flight programming adventure. Mine, trade, upgrade, and unlock the
+potential of your spacecraft by hacking on the code that makes it tick.
 
 Read the [in-game manual](manual.md) for a taste of how the game works.
 
@@ -43,30 +42,22 @@ existing saved games will continue on using the same config. You can
 replace your ship's config with the current default config `ctrl-f1`;
 your existing config source will be backed up.
 
-Because you may need to reset your config back to stock, it is
-advisable to make your changes in another file (say, `src.custom`) and
-simply add this to the bottom of `src.config`:
-
-    dofile("src.custom")
-
-That way you only have to add one line back into your config if you
-need to reset it back to stock.
-
 ## Status
 
-Currently most of the engine features are coded, some more polished
-than others. However, there are only a handful of missions, and the
-characters are not sketched out in much detail at all yet.
+Currently most of the engine features are coded, some more polished than
+others. However, there are only a handful of missions, and the characters are
+not sketched out in much detail yet.
 
-See the list of
-[open issues](https://gitlab.com/technomancy/bussard/issues) to see
-upcoming features. The [changelog](Changelog.md) lists when recent
+See the list of [open issues](https://gitlab.com/technomancy/bussard/issues) to
+see upcoming features. The [changelog](Changelog.md) lists when recent
 user-visible changes were added in which releases.
 
-<img src="https://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
+The game will contain programming challenges you must solve in order to
+proceed. (Currently only one is implemented.) Eventually the goal is that you
+will be able to learn it without any (or much) prior programming experience
+through in-game hints and tutorials.
 
-During development it may be expedient to run `ship.cheat.comm_range = 9999999`
-in order to make testing login interaction easier.
+<img src="https://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
 
 ## FAQ
 
