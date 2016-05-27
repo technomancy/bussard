@@ -6,7 +6,7 @@ return {
    destinations={"Solotogo", "Tana Prime"},
    destination_msgs={["Solotogo"] = "Serepiem Kacien has boarded.",
       ["Tana Prime"] = "Serepiem Kacien has disembarked.",
-   }
+   },
    credits=250,
    success_events={"passenger1"},
    success_message="Thanks for the ride.",

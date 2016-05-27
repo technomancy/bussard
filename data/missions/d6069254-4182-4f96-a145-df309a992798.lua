@@ -6,7 +6,7 @@ return {
    description="Passenger run from Tana Prime to Apkabar Station",
    id="d6069254-4182-4f96-a145-df309a992798",
    destinations={"Tana Prime", "Newton Station"},
-   destination_msgs={["Tana Prime"] = "Nari Phouen has boarded."}
+   destination_msgs={["Tana Prime"] = "Nari Phouen has boarded."},
    credits=250,
    success_events={"passenger2"},
 

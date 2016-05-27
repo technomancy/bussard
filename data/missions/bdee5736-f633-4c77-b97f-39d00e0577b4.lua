@@ -4,7 +4,7 @@ return {
    id="bdee5736-f633-4c77-b97f-39d00e0577b4",
    destinations={"Apkabar Station", "Mirduka Station"},
    destination_msgs={["Apkabar Station"] = "Merous Kiebeb has boarded.",
-   ["Mirduka Station"] = "Merous Kiebeb has disembarked."}
+   ["Mirduka Station"] = "Merous Kiebeb has disembarked."},
    credits=325,
    success_events={"passenger3"},
 
