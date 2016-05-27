@@ -2,6 +2,7 @@
 
 ## beta-2 / ???
 
+* Improved graphical effect during portal jump.
 * Further mission progression.
 * Tab completion in the console.
 * Support toggling fullscreen, resizing game window.

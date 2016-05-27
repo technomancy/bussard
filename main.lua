@@ -135,7 +135,6 @@ end
 love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end
 
 local update = safely(function(dt)
-      if(ship.api.paused) then return end
       local real_time_factor = ship.time_factor * 0.001 * dt
       ship:update(real_time_factor)
       body.update(ship.bodies, dt)
@@ -216,6 +215,13 @@ local draw = safely(function(dt)
       end
 
       love.graphics.pop()
+
+      if(ship.target and ship.target.beam_count and
+         ship.target.beam_count > 8) then -- portal flash
+         local flash = (ship.target.beam_count - 8) * 255
+         love.graphics.setColor(255,255,255, flash)
+         love.graphics.rectangle("fill", -w, -h, w*2, h*2)
+      end
 
       -- the ship itself
       love.graphics.setColor(255, 50, 50);
