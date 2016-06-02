@@ -214,6 +214,8 @@ function buffer:get(idx)
    end
 end
 
+local timers = {}
+
 return {
    shallow_copy = shallow_copy,
 
@@ -290,6 +292,17 @@ return {
    time = function(ship)
       return ship.time_offset + (socket.gettime() - ship.load_time)
          * ship.time_factor
+   end,
+
+   timer = function(period, callback)
+      timers[callback] = 0
+      return function(dt)
+         timers[callback] = timers[callback] + dt
+         if(timers[callback] >= period) then
+            callback(timers[callback])
+            timers[callback] = 0
+         end
+      end
    end,
 
    find_by = function(ts, key, value)

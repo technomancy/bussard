@@ -42,7 +42,7 @@ local deliver_msg = function(ship, msg_name)
 end
 
 return {
-   deliver = function(ship, _system_name)
+   deliver = function(ship)
       local offset = utils.time(ship) - utils.game_start
       for when, name in pairs(timed_msgs) do
          if(type(when) == "number" and offset > when) then

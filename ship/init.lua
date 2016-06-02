@@ -211,6 +211,11 @@ local ship = {
 
       ship.sandbox = sandbox(ship)
       ship.sandbox["_G"] = ship.sandbox
+      ship.timer = utils.timer(4, function(dt)
+                                  mission.update(ship, dt)
+                                  ship:enforce_limits()
+                                  mail.deliver(ship)
+      end)
    end,
 
    dofile = sandbox_dofile,
@@ -249,7 +254,6 @@ local ship = {
             ship.y = love.math.random(30000) + 10000
          end
          ai.seed(system_name, ship.bodies)
-         mail.deliver(ship, system_name)
       end
    end,
 
@@ -304,8 +308,7 @@ local ship = {
          if(u.update) then u.update(ship, dt) end
       end
 
-      mission.update(ship, dt)
-      ship:enforce_limits()
+      ship.timer(dt)
    end,
 
    in_range = function(ship, b, range)
