@@ -9,7 +9,8 @@ local acts = require "data.acts"
 local ship_fields = {
    "x", "y", "dx", "dy", "heading", "mail_delivered",
    "battery", "fuel", "credits", "system_name", "active_missions",
-   "upgrade_names", "cargo", "target_number", "events", "flag", "name",
+   "humans", "humans_left_at", "upgrade_names", "cargo", "target_number",
+   "events", "flag", "name",
 }
 
 local body_fields = {

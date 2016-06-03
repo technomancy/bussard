@@ -35,5 +35,3 @@ I've also found a few chapters of a book on Lua programming that I've loaded
 into your ship's help system. Hope that helps! You can run this to read it:
 
     man("luabook1")
-
-Nari

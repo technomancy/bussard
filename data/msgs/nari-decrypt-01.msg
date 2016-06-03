@@ -33,6 +33,3 @@ remember more about how to do that from the class I took, but I'm so rusty.
 You'll want to put your code in a file somewhere using ctrl-o, like "src.rot13",
 then you can run it with dofile("src.rot13") in the console. I hope that makes
 sense. Remember, a little trial and error will go a long way.
-
-Good luck,
-Nari

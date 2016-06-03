@@ -1,4 +1,5 @@
 -- TODO: auto-generate passenger missions
+local lume = require("lume")
 return {
    name="passenger1",
    description="Passenger run from Solotogo to Tana Prime",
@@ -11,10 +12,13 @@ return {
    success_events={"passenger1"},
    success_message="Thanks for the ride.",
    prereq=function(ship)
-      if(require("lume").find(ship.upgrade_names, "life_support")) then
+      if(lume.find(ship.upgrade_names, "life_support")) then
          return true
       else
          return false, "Cannot take passengers without onboard life support sytem."
       end
-   end
+   end,
+   accept_function = function(ship)
+      ship.humans["Serepiem Kacien"] = "4d6ce083-4d5e-4ca9-b58f-479ae6de27dc"
+   end,
 }

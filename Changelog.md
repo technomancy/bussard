@@ -2,6 +2,7 @@
 
 ## beta-2 / ???
 
+* Messages can be delivered at any time, not just after portal jumps.
 * Improved graphical effect during portal jump.
 * Further mission progression.
 * Tab completion in the console.

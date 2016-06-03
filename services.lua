@@ -4,6 +4,7 @@
 local utils = require("utils")
 local body = require("body")
 local clearances = require("data.clearances")
+local upgrades = require("data.upgrades")
 
 local get_price = function(good, amount, prices, direction)
    local other_direction = direction == "sell" and "buy" or "sell"
@@ -65,6 +66,7 @@ return {
       elseif(utils.includes(ship.upgrade_names, name)) then
          return false, "You already have this upgrade."
       else
+         if(upgrades[name].buy) then upgrades[name].buy(ship) end
          table.insert(ship.upgrade_names, name)
          ship:recalculate()
          ship.credits = ship.credits - price
@@ -72,7 +74,6 @@ return {
       end
    end,
 
-   -- TODO/blocker: disembark humans when you sell life_support
    sell_upgrade = function(ship, name)
       local target = ship.target
       local price = math.floor(((target.upgrade_prices and
@@ -83,6 +84,7 @@ return {
       elseif(not utils.includes(ship.upgrade_names, name)) then
          return false, "You don't have this upgrade."
       else
+         if(upgrades[name].sell) then upgrades[name].sell(ship) end
          lume.remove(ship.upgrade_names, name)
          ship:recalculate()
          ship.credits = ship.credits + price

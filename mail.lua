@@ -21,7 +21,7 @@ local folder_for = function(msg)
 end
 
 local add_date = function(msg, date)
-   -- TODO/blocker: only add if we don't have a date already!
+   if(msg:match("\nDate:")) then return end
    local parts = lume.split(msg, "\n\n")
    parts[1] = parts[1] .. "\nDate: " .. utils.format_time(date)
    return table.concat(parts, "\n\n")
@@ -63,7 +63,7 @@ return {
       if(event_msgs[msg_id]) then
          mission.record_event(ship, event_msgs[msg_id])
          return true
-      elseif(mission.find(msg_id)) then
+      elseif(mission.find(nil, msg_id)) then
          return mission.accept(ship, msg_id)
       elseif(love.filesystem.isFile("data/msgs/" .. msg_id)) then
          return deliver_msg(ship, msg_id)
@@ -71,7 +71,7 @@ return {
    end,
 
    replyable = function(msg_id)
-      if(event_msgs[msg_id] or mission.find(msg_id) or
+      if(event_msgs[msg_id] or mission.find(nil, msg_id) or
          love.filesystem.isFile("data/msgs/" .. msg_id)) then
          return true
       end

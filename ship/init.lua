@@ -198,6 +198,8 @@ local ship = {
    active_missions={},
    mail_delivered={},
    events={},
+   humans={},
+   humans_left_at={},
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
@@ -372,6 +374,19 @@ local ship = {
 
    enforce_limits = function(ship)
       if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
+   end,
+
+   disembark = function(ship, human)
+      local m = ship.humans[human]
+      ship.humans[human] = nil
+      if(m == "companion") then
+         ship.humans_left_at[human] = assert(ship.comm_connected,
+                                             "Can't disembark nowhere.")
+         mission.accept(ship, "recover_" .. human)
+         mail.deliver_msg(ship, "recover_" .. human .. ".msg")
+      elseif(m) then
+         mission.fail(ship, m, false)
+      end
    end,
 
    -- interface

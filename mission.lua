@@ -1,14 +1,16 @@
--- missions are accepted by replying to newsgroup postings; see news.lua.
+-- missions are accepted by replying to messages; see mail.lua
 
+local recover = require("data.recover")
 local utils = require("utils")
+local lume = require("lume")
 
 local fail = function(ship, mission, aborted)
    ship.credits = ship.credits - (mission.fail_credits or 0)
    if(mission.fail_function) then
       mission.fail_function(ship, aborted)
    end
-   if(not aborted and mission.fail_message) then
-      ship.api.print("Mission failed: " .. mission.fail_message)
+   if(not aborted) then
+      ship.api.print("Mission failed: " .. mission.fail_message or mission.name)
    end
    for good, amt in pairs(mission.cargo or {}) do
       ship.cargo[good] = ship.cargo[good] - amt
@@ -49,14 +51,15 @@ local record_event = function(ship, e)
    ship.events[e] = utils.time(ship)
 end
 
-local find = function(id)
+local find = function(ship, id)
+   if(id and id:match("^recover")) then return recover(ship, id) end
    return id and love.filesystem.isFile("data/missions/" .. id .. ".lua") and
       require("data.missions." .. id)
 end
 
 local on_login = function(ship)
    for mission_id,record in pairs(ship.active_missions) do
-      local mission = find(mission_id)
+      local mission = find(ship, mission_id)
       record_destination(record, ship.comm_connected, ship)
       if(mission.on_login) then mission.on_login(ship, ship.comm_connected) end
 
@@ -64,8 +67,9 @@ local on_login = function(ship)
       if((not mission.time_limit or
              utils.time(ship) < record.start_time + mission.time_limit) and
             cargo_check(ship, mission) and objectives_check(ship, mission) and
-         destination_check(record)) then
-         if(mission.success_function) then mission.success_function(ship) end
+            destination_check(record) and
+         (not mission.success_check or mission.success_check(ship))) then
+         if(mission.on_success) then mission.on_success(ship) end
          for _,e in ipairs(mission.success_events or {}) do
             record_event(ship, e)
          end
@@ -83,7 +87,7 @@ end
 
 local accept = function(ship, message_id)
    -- TODO: don't allow accept of missions that haven't actually been delivered
-   local mission = find(message_id)
+   local mission = find(ship, message_id)
    if(not mission) then return false, "No mission " .. message_id end
 
    for _,event in pairs(mission.success_events or {}) do
@@ -122,7 +126,7 @@ end
 
 local update = function(ship, dt)
    for mission_id,record in pairs(ship.active_missions) do
-      local mission = find(mission_id)
+      local mission = find(ship, mission_id)
       if(mission.update) then mission.update(ship, dt) end
       if(mission.time_limit and (utils.time(ship) >
                                  record.start_time + mission.time_limit)) then
@@ -134,7 +138,7 @@ end
 
 local list = function(ship)
    for mission_id in pairs(ship.active_missions) do
-      local mission = require(mission_id)
+      local mission = find(ship, mission_id)
       ship.api.print("\n")
       ship.api.print(mission.name)
       if(mission.description) then
@@ -149,7 +153,7 @@ end
 local abort = function(ship, mission_name)
    local mission
    for mission_id in pairs(ship.active_missions) do
-      local this_mission = require(mission_id)
+      local this_mission = find(ship, mission_id)
       if(this_mission.name == mission_name) then
          mission = this_mission
       end
@@ -168,7 +172,7 @@ local readout = function(ship)
    if(lume.count(ship.active_missions) == 0) then return "\n- none" end
    local s = ""
    for mission_id in pairs(ship.active_missions) do
-      local this_mission = find(mission_id)
+      local this_mission = find(ship, mission_id)
       s = s .. "\n- " .. this_mission.name
    end
    return s

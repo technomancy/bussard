@@ -6,7 +6,6 @@ return {
    description="Passenger run from Tana Prime to Apkabar Station",
    id="d6069254-4182-4f96-a145-df309a992798",
    destinations={"Tana Prime", "Newton Station"},
-   destination_msgs={["Tana Prime"] = "Nari Phouen has boarded."},
    credits=250,
    success_events={"passenger2"},
 
@@ -32,6 +31,7 @@ return {
          mission.record_event(ship, "background_check")
       elseif(ship.events.invite_nari and not ship.mail_delivered["nari-a-05"] and
              target == "Tana Prime") then
+         ship.humans.nari = "companion"
          mail.deliver_msg(ship, "nari-a-05.msg")
       end
    end,
@@ -51,7 +51,7 @@ return {
       end
    end,
 
-   success_function = function(ship)
+   on_success = function(ship)
       mission.record_event(ship, "luabook")
       mail.deliver_msg(ship, "nari-a-09.msg")
    end,

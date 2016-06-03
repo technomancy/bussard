@@ -65,16 +65,6 @@ end
 
 local climate = { temp = 26, humidity = 0.4 }
 
-local set_climate = function(temp, humidity)
-   assert(temp < 30 and temp > 15, "Temperature unsafe for human life.")
-   assert(humidity > 0 and humidity < 1, "Invalid humidity parameter.")
-   climate.temp, climate.humidity = temp, humidity
-end
-
-local get_climate = function()
-   return { temp = climate.temp, humidity = climate.humidity }
-end
-
 return {
    laser = {
       stats = {
@@ -160,10 +150,23 @@ return {
    fuel_tank = { stats = { fuel_capacity = 128, mass = 32, } },
    solar_panel = { stats = { solar = 30, mass = 32 }},
    life_support = { stats = { mass = 8 },
-                    load = function(ship)
-                       ship.api.get_climate = get_climate
-                       ship.api.set_climate = set_climate
-                    end
+                    action = function(temp, humidity)
+                       if(temp == nil and humidity == nil) then
+                          return { temp = climate.temp,
+                                   humidity = climate.humidity }
+                       else
+                          assert(temp < 30 and temp > 15,
+                                 "Temperature unsafe for human life.")
+                          assert(humidity > 0 and humidity < 1,
+                                 "Invalid humidity parameter.")
+                          climate.temp, climate.humidity = temp, humidity
+                       end
+                    end,
+                    sell = function(ship)
+                       for name, mission in pairs(ship.humans) do
+                          ship:disembark(name)
+                       end
+                    end,
                   },
    passponder = {}, -- in order not to explode existing saves
 }

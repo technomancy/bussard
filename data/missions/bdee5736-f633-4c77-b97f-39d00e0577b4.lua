@@ -14,5 +14,8 @@ return {
       else
          return false, "Cannot take passengers without onboard life support sytem."
       end
-   end
+   end,
+   accept_function = function(ship)
+      ship.humans["Merous Kiebeb"] = "bdee5736-f633-4c77-b97f-39d00e0577b4"
+   end,
 }

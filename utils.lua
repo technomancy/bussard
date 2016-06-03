@@ -1,5 +1,6 @@
 local utf8 = require("utf8.init")
 local socket = require("socket")
+local lume = require("lume")
 
 local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
 
