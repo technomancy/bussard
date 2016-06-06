@@ -2,6 +2,7 @@
 
 ## beta-2 / ???
 
+* Add socket repl so you can play the game from another process.
 * Messages can be delivered at any time, not just after portal jumps.
 * Improved graphical effect during portal jump.
 * Further mission progression.
