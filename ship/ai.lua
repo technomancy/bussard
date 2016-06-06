@@ -1,7 +1,7 @@
 local utils = require("utils")
 local body = require("body")
 
-local ship_img = love.graphics.newImage("assets/ship.png")
+local ship_img
 local names = lume.array(love.filesystem.lines("data/ships.txt"))
 
 local normalize = function(t)
@@ -47,6 +47,7 @@ end
 local make = function(bodies, name, from_portal)
    local targets = lume.filter(bodies, "os")
    local target, from = targets[love.math.random(#targets)]
+   ship_img = ship_img or love.graphics.newImage("assets/ship.png")
 
    if(from_portal) then
       local portals = lume.filter(bodies, "portal")

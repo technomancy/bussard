@@ -18,11 +18,7 @@ local quit = function()
    love.event.quit()
 end
 
-local font_path = "assets/fonts/inconsolata.ttf"
-local font = love.graphics.newFont(font_path, 16)
-local noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
--- love 0.9.0 doesn't support this
-if(font.setFallbacks) then font:setFallbacks(noto) end
+local font_path, font, noto = "assets/fonts/inconsolata.ttf"
 
 local resize = function()
    local dw, dh = love.window.getDesktopDimensions()
@@ -74,6 +70,7 @@ local ui = {
       end
       love.graphics.setFont(font)
       ship.api.editor.initialize()
+      -- love 0.9.0 doesn't support this
       if(font.setFallbacks) then font:setFallbacks(noto) end
    end,
 
@@ -120,6 +117,8 @@ end
 
 love.load = function()
    resize()
+   font = love.graphics.newFont(font_path, 16)
+   noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
    love.graphics.setFont(font)
 
    stars = { starfield.new(10, 0.01, 100),

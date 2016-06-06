@@ -3,8 +3,7 @@ local lume = require "lume"
 local starfield = require "starfield"
 local stars = {}
 
-local title = love.graphics.newImage("assets/title.png") -- jura demibold
-local choices_font, text_font, font_height, resize
+local title, choices_font, text_font, font_height, resize
 
 local text, line = {}, 1
 local scroll = 0
@@ -97,6 +96,7 @@ end
 local random_choice = function(t) return t[love.math.random(#t)] end
 
 return function(resume, quit, resize_fn, font_path)
+   title = love.graphics.newImage("assets/title.png") -- jura demibold
    resize = resize_fn
    choices_font = love.graphics.newFont(font_path, 20)
    text_font = love.graphics.newFont(font_path, 14)
