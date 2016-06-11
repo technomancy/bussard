@@ -137,10 +137,6 @@ love.load = function()
    end
 
    ship:dofile("src.config")
-   local port_arg = lume.find(arg, "--port")
-   if(port_arg) then
-      require("ship.socketrepl").start(ship, tonumber(arg[port_arg + 1] or 9822))
-   end
    play()
 end
 

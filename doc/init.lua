@@ -35,6 +35,7 @@ local pages = {
    comm_boost = "doc/comm_boost.md",
    life_support = "doc/life_support.md",
    map = "doc/map.md",
+   jeejah = "doc/jeejah.md",
 }
 
 local show_page = function(ship, p)

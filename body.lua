@@ -1,5 +1,6 @@
 local utils = require("utils")
 
+local base_prices = require("data.prices")
 local filesystem_overlays = require("data.filesystems")
 local portal_motd = "Connected to portal, checking for clearance..."
 
@@ -24,25 +25,6 @@ local seed = function(os, body_name)
 end
 
 local filesystems = {}
-
-local base_prices = {
-   fuel = 1,
-   ore = 8,
-   food = 5,
-   equipment = 10,
-   medicine = 20,
-   account = 256,
-   upgrades = {
-      laser = 256,
-      engine = 1024,
-      cargo_bay = 768,
-      fuel_tank = 1024,
-      fuel_charger = 768,
-      comm_boost = 2048,
-      solar_panel = 712,
-      map = 512,
-   },
-}
 
 local g = 4196
 
@@ -134,7 +116,6 @@ return {
       end
    end,
 
-   -- TODO: pricing factors maybe belong in data/ dir
    seed_cargo = function(b, no_cargo)
       if(not b.os or b.os.name ~= "orb") then return end
       local equipment_factor = (math.log(b.remote / 2) + 4) *

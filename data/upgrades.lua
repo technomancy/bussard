@@ -1,5 +1,6 @@
 local utils = require("utils")
 local asteroid = require("asteroid")
+local jeejah = require("jeejah")
 
 local laser_hits = function(ship, b, distance)
    -- assuming circular images
@@ -168,5 +169,11 @@ return {
                        end
                     end,
                   },
+   jeejah = { stats = { mass = 2 },
+              action = function(ship, port)
+                 local coro = jeejah(nil, port, {sandbox=ship.sandbox})
+                 ship.api.updaters.jeejah = lume.fn(coroutine.resume, coro)
+              end
+            },
    passponder = {}, -- in order not to explode existing saves
 }
