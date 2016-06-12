@@ -66,6 +66,10 @@ end)
 
 bind("flight", "ctrl-p", portal)
 
+ship.handle_wheel = function(_, y)
+   ship.scale = ship.scale + y / 100
+end
+
 -- if you keep your personal customizations in here, they will be preserved
 -- in the event of a config reset.
 -- dofile("src.custom")

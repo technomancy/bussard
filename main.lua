@@ -115,6 +115,12 @@ local safely = function(f)
    end
 end
 
+love.wheelmoved = function(x, y)
+   if(ship.api.handle_wheel) then
+      ship.api.handle_wheel(x, y)
+   end
+end
+
 love.load = function()
    resize()
    font = love.graphics.newFont(font_path, 16)
