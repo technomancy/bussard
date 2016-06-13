@@ -68,9 +68,9 @@ end
 local climate = { temp = 26, humidity = 0.4 }
 
 local status_target = function(ship, body)
-   local body_type = (body.station and "station") or (body.os and "planet") or
-      (body.fixed and "star") or (body.asteroid and "asteroid") or
-      (body.ship and "ship") or "unknown"
+   local body_type = (body.station and "station") or (body.portal and "portal")
+      or (body.fixed and "star") or (body.asteroid and "asteroid")
+      or (body.ship and "ship") or (body.os and "planet") or "unknown"
    local t = {body.name, body_type, math.floor(utils.distance(ship, body))}
    if(ship.target == body) then table.insert(t, "selected") end
    return t

@@ -1,16 +1,17 @@
 ;;; bussard.el --- Interface for Bussard game
 
-;;; status buffer
-;; x,y, time, credits, current system
-;; target: name, distance, mass, type
-;; targets: name, distance, type
-
-;;; repl buffer
+;; TODO
+;; * change target
+;; * autopilot
+;; * portal
+;; * load/save
+;; * ssh
+;; * mail
 
 (require 'monroe)
 
 (defvar bussard-status-message "x,y: %s,%s speed: %s
-credits: %s    epoch: %s ")
+epoch: %s    credits: %s ")
 
 (defvar bussard-status-buffer-name "*bussard-status*")
 
@@ -28,7 +29,7 @@ credits: %s    epoch: %s ")
   (monroe-dbind-response msg (x y speed credits time fuel battery targets)
     (with-current-buffer (get-buffer-create bussard-status-buffer-name)
       (delete-region (point-min) (point-max))
-      (insert (format bussard-status-message x y speed credits time))
+      (insert (format bussard-status-message x y speed time credits))
       (insert "\n\n")
       (dolist (ta targets)
         (bussard-insert-target ta)))))
