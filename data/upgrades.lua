@@ -1,4 +1,5 @@
 local utils = require("utils")
+local lume = require("lume")
 local asteroid = require("asteroid")
 local jeejah = require("jeejah")
 
@@ -65,6 +66,27 @@ local map_draw = function(ship)
 end
 
 local climate = { temp = 26, humidity = 0.4 }
+
+local status_target = function(ship, body)
+   local body_type = (body.station and "station") or (body.os and "planet") or
+      (body.fixed and "star") or (body.asteroid and "asteroid") or
+      (body.ship and "ship") or "unknown"
+   local t = {body.name, body_type, math.floor(utils.distance(ship, body))}
+   if(ship.target == body) then table.insert(t, "selected") end
+   return t
+end
+
+local status_msg = function(ship)
+   return {
+      id = math.random(999999999), op = "bussard/status",
+      x = math.floor(ship.x), y = math.floor(ship.y),
+      speed = math.floor(utils.distance(ship.dx, ship.dy)),
+      credits = ship.credits, time = utils.format_time(utils.time(ship)),
+      fuel = math.floor(ship.fuel / ship.fuel_capacity * 100),
+      battery = math.floor(ship.battery / ship.battery_capacity * 100),
+      targets = lume.map(ship.bodies, lume.fn(status_target, ship)),
+   }
+end
 
 return {
    laser = {
@@ -171,8 +193,13 @@ return {
                   },
    jeejah = { stats = { mass = 2 },
               action = function(ship, port)
-                 local coro = jeejah(nil, port, {sandbox=ship.sandbox})
+                 local coro = jeejah.start(nil, port, {sandbox=ship.sandbox
+                 ,debug=true})
                  ship.api.updaters.jeejah = lume.fn(coroutine.resume, coro)
+                 ship.api.long_updaters.jeejah_status = function()
+                    local status = status_msg(ship)
+                    jeejah.broadcast(status)
+                 end
               end
             },
    passponder = {}, -- in order not to explode existing saves

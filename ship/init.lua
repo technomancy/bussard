@@ -215,7 +215,7 @@ local ship = {
       ship.sandbox["_G"] = ship.sandbox
       ship.timer = utils.timer(4, function(dt)
                                   mission.update(ship, dt)
-                                  ship:enforce_limits()
+                                  ship:long_update(dt)
                                   mail.deliver(ship)
       end)
    end,
@@ -372,7 +372,15 @@ local ship = {
       return m
    end,
 
-   enforce_limits = function(ship)
+   long_update = function(ship, dt)
+      for n,f in pairs(ship.api.long_updaters or {}) do
+         if(not with_traceback(f, ship.api, dt)) then
+            ship.api.long_updaters[n] = nil
+            ship.api.broken_updaters = ship.api.broken_updaters or {}
+            ship.api.broken_updaters[n] = f
+         end
+      end
+
       if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
    end,
 
@@ -510,6 +518,7 @@ ship.api = {
    -- added by loading config
    controls = {},
    updaters = {},
+   long_updaters = {},
 
    -- trajectory plotting is the single biggest perf drain by far
    -- these numbers will be changed if the frame rate is too low

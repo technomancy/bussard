@@ -44,7 +44,6 @@ end
 
 -- for stuff that's shared between eval and load_file
 local execute_chunk = function(session, chunk)
-   -- p(session)
    local old_write, old_print = io.write, print
    if(session.sandbox) then
       old_write = (session.sandbox.io or {}).write or io.write
@@ -210,7 +209,9 @@ local function handle_loop(conn, sandbox, handlers)
    end
 end
 
-local function loop(server, sandbox, handlers, connections)
+local connections = {}
+
+local function loop(server, sandbox, handlers)
    local conn, err = server:accept()
    coroutine.yield()
    if(conn) then
@@ -221,11 +222,11 @@ local function loop(server, sandbox, handlers, connections)
             d("Connection closed: " .. h_err)
       end)
       table.insert(connections, coro)
-      return loop(server, sandbox, handlers, connections)
+      return loop(server, sandbox, handlers)
    else
       if(err ~= "timeout") then print("  | Socket error: " .. err) end
       for _,c in ipairs(connections) do coroutine.resume(c) end
-      return loop(server, sandbox, handlers, connections)
+      return loop(server, sandbox, handlers)
    end
 end
 
@@ -234,20 +235,28 @@ end
 -- verbose logging, and sandbox={...} to evaluate all code in a sandbox.
 -- You can also give an opts.handlers table keying ops to handler functions
 -- which take the socket, the decoded message, and the optional sandbox table.
-return function(host, port, opts)
-   host, port = host or "localhost", port or 7888
-   local server, err = assert(socket.bind(host, port))
-   opts = opts or {}
-   if(opts.debug) then d = print end
-   if(opts.timeout) then timeout = tonumber(opts.timeout) end
+return {
+   start = function(host, port, opts)
+      host, port = host or "localhost", port or 7888
+      local server, err = assert(socket.bind(host, port))
+      opts = opts or {}
+      if(opts.debug) then d = print end
+      if(opts.timeout) then timeout = tonumber(opts.timeout) end
 
-   if(server) then
-      server:settimeout(0.000001)
-      print("Server started on " .. host .. ":" .. port .. "...")
-      return coroutine.create(function()
-            loop(server, opts.sandbox, opts.handlers, {})
-      end)
-   else
-      print("  | Error starting socket repl server: " .. err)
-   end
-end
+      if(server) then
+         server:settimeout(0.000001)
+         print("Server started on " .. host .. ":" .. port .. "...")
+         return coroutine.create(function()
+               loop(server, opts.sandbox, opts.handlers, {})
+         end)
+      else
+         print("  | Error starting socket repl server: " .. err)
+      end
+   end,
+
+   broadcast = function(msg)
+      for _,session in pairs(sessions) do
+         send(session.conn, msg)
+      end
+   end,
+}
