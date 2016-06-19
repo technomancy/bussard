@@ -76,6 +76,7 @@ local status_target = function(ship, body)
    return t
 end
 
+local jeejah_coro = nil
 local status_msg = function(ship)
    return {
       id = math.random(999999999), op = "bussard/status",
@@ -186,19 +187,29 @@ return {
                        end
                     end,
                     sell = function(ship)
-                       for name, mission in pairs(ship.humans) do
+                       for name in pairs(ship.humans) do
                           ship:disembark(name)
                        end
                     end,
                   },
    jeejah = { stats = { mass = 2 },
               action = function(ship, port)
-                 local coro = jeejah.start(nil, port, {sandbox=ship.sandbox
-                 ,debug=true})
-                 ship.api.updaters.jeejah = lume.fn(coroutine.resume, coro)
-                 ship.api.long_updaters.jeejah_status = function()
-                    local status = status_msg(ship)
-                    jeejah.broadcast(status)
+                 if(port == "stop") then
+                    jeejah.stop(jeejah_coro)
+                    ship.api.updaters.jeejah = nil
+                    ship.api.long_updaters.jeejah_status = nil
+                 elseif(jeejah_coro and
+                        coroutine.status(jeejah_coro) == "suspended") then
+                    print("Already started.")
+                 else
+                    jeejah_coro = jeejah.start(nil, port, {sandbox=ship.sandbox
+                                                          ,debug=true})
+                    ship.api.updaters.jeejah = lume.fn(coroutine.resume,
+                                                       jeejah_coro)
+                    ship.api.long_updaters.jeejah_status = function()
+                       local status = status_msg(ship)
+                       jeejah.broadcast(status)
+                    end
                  end
               end
             },

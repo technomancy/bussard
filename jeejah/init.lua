@@ -213,7 +213,7 @@ local connections = {}
 
 local function loop(server, sandbox, handlers)
    local conn, err = server:accept()
-   coroutine.yield()
+   local stop = coroutine.yield() == "stop"
    if(conn) then
       conn:settimeout(timeout)
       d("Connected.")
@@ -226,7 +226,11 @@ local function loop(server, sandbox, handlers)
    else
       if(err ~= "timeout") then print("  | Socket error: " .. err) end
       for _,c in ipairs(connections) do coroutine.resume(c) end
-      return loop(server, sandbox, handlers)
+      if(stop) then
+         print("Server stopped.")
+      else
+         return loop(server, sandbox, handlers)
+      end
    end
 end
 
@@ -252,6 +256,10 @@ return {
       else
          print("  | Error starting socket repl server: " .. err)
       end
+   end,
+
+   stop = function(coro)
+      coroutine.resume(coro, "stop")
    end,
 
    broadcast = function(msg)

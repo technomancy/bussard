@@ -32,7 +32,7 @@ later really regretful about it. This causes her to be too suspicious
 of Mila. Once she boards your ship, she is motivated more by curiosity
 and a desire to help than her original goal of just getting home.
 
-## Clay Dorath
+## Clay Fenton
 
 He is a researcher who formerly held an position at the Darush Applied
 Metaphysics lab where the spacetime junction was developed. He feels
