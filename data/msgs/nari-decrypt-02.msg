@@ -10,14 +10,14 @@ starting to come back to me, specifically the concept of loops.
 You're also going to need a way to do this shifting for every letter in the
 message. A "for" loop will let you run the loop body once for each letter.
 
+It'll be simpler if you use the string.upper() function so it's all upper
+case. You'll use string.sub() to get you a single letter out of the string.
+
     local msg = string.upper(ship.docs.backup.msg1_rot13)
     for i=1,#msg do
        local letter = string.sub(ship.docs.backup.msg1_rot13, i, i)
        print(letter)
     end
-
-It'll be simpler if you use the string.upper() function so it's all upper
-case. You'll use string.sub() to get you a single letter out of the string.
 
 This will just print each letter individually; in order to decode the message
 you'll have to get the string.byte and string.char functions into the mix to

@@ -7,8 +7,8 @@ local timeout = 0.001
 local pack = function(...) return {...} end
 local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
 local d = function(_) end
-local p = function(x) print(serpent.block(x, serpent_opts)) end
 local sessions = {}
+-- local p = function(x) print(serpent.block(x, serpent_opts)) end
 
 local response_for = function(old_msg, msg)
    msg.session, msg.id, msg.ns = old_msg.session, old_msg.id, ""
@@ -218,7 +218,7 @@ local function loop(server, sandbox, handlers)
       conn:settimeout(timeout)
       d("Connected.")
       local coro = coroutine.create(function()
-            local h_err = handle_loop(conn, sandbox, handlers, yield)
+            local h_err = handle_loop(conn, sandbox, handlers)
             d("Connection closed: " .. h_err)
       end)
       table.insert(connections, coro)
