@@ -1,2 +1,3 @@
 version=3
-https://github.com/SimonLarsen/mrrescue/releases/ .*/v?(\d\S*)\.tar\.gz
+opts=filenamemangle=s/.*\.tar\.gz\?ref=v?(\d\S*)/bussard-$1\.tar\.gz/g \
+  https://gitlab.com/technomancy/bussard/tags .*archive\.tar\.gz\?ref=v?(\d\S*)
