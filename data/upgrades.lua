@@ -1,7 +1,6 @@
 local utils = require("utils")
 local lume = require("lume")
 local asteroid = require("asteroid")
-local jeejah = require("jeejah")
 
 local laser_hits = function(ship, b, distance)
    -- assuming circular images
@@ -194,6 +193,7 @@ return {
                   },
    jeejah = { stats = { mass = 2 },
               action = function(ship, port)
+                 local jeejah = require("jeejah")
                  if(port == "stop") then
                     jeejah.stop(jeejah_coro)
                     ship.api.updaters.jeejah = nil
