@@ -2,19 +2,22 @@ run: ; love .
 
 VERSION=beta-2-pre
 
-SHIP_LUA=ship/*.lua
+SHIP_LUA=ship/*.lua jeejah/init.lua
 ENGINE_LUA=*.lua
 OS_LUA=os/orb/*.lua os/lisp/*.lua
 IN_OS_LUA=os/orb/resources/*
 IN_SHIP_LUA=data/src/*
-DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua serpent/*.lua utf8/*.lua
+DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua \
+	serpent/*.lua utf8/*.lua bencode/init.lua
 MISSION_LUA=data/missions/*.lua
 DATA_LUA=data/*.lua doc/init.lua data/msgs/*.lua $(MISSION_LUA)
 
-GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) $(DATA_LUA)
+GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) $(DATA_LUA) os/lisp/resources/portal.lsp
 ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
 
-PROSE=doc/*.md data/msgs/*.msg data/motd/* data/news/*.msg
+PROSE=manual.md doc/*.md data/msgs/* data/motd/* data/news/* data/ships.txt data/docs/*
+MEDIA=assets/* assets/fonts/*
+META=readme.md LICENSE credits.md Changelog.md bussard.el
 
 todo: ; grep -nH -e TODO $(GAME_LUA)
 blockers: ; grep TODO/blocker $(GAME_LUA)
@@ -34,7 +37,7 @@ check:
 	  --globals lume utf8 pack ship pause define_mode bind utils realprint pp pps \
 	            mail ssh ssh_connect portal logout ssh_send_line reply replyable \
 	  -- $(IN_SHIP_LUA)
-	luacheck --no-color --std luajit --ignore 21/_.* \
+	luacheck --no-color --std luajit --ignore 21/_.* --exclude-files=*.lsp \
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel \
 	            accept_mission set_prompt buy_upgrade sell_upgrade upgrade_help \
 	  -- $(IN_OS_LUA)
@@ -57,12 +60,16 @@ count_prose: ; find $(PROSE) -type f -print0 | xargs -0 wc -l
 clean: ; rm -rf releases/
 
 REL=".love-release/build/love-release.sh"
-FLAGS=-a 'Phil Hagelberg' -x spoilers --description 'A space flight programming adventure game.' --love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
+FLAGS=-a 'Phil Hagelberg' -x spoilers \
+	--description 'A space flight programming adventure game.' \
+	--love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
 
-love: $(ALL_LUA)
-	mv localhacks.lua localhacks_old.lua || true
-	$(REL) $(FLAGS) -L
-	cp releases/Bussard.love releases/bussard-$(VERSION).love
+releases/bussard-$(VERSION).love: $(ALL_LUA) $(PROSE) $(MEDIA) $(META) Makefile
+	mkdir -p releases/
+	find $(ALL_LUA) $(PROSE) $(MEDIA) $(META) -type f | LC_ALL=C sort | \
+               env TZ=UTC zip -r -q -9 -X $@ -@
+
+love: releases/bussard-$(VERSION).love
 
 mac: love
 	$(REL) $(FLAGS) -M
@@ -71,6 +78,9 @@ mac: love
 windows: love
 	$(REL) $(FLAGS) -W
 	mv releases/Bussard-win32.zip releases/bussard-$(VERSION)-windows.zip
+
+deb: love
+	dpkg-buildpackage -us -uc -b
 
 # don't use this until https://github.com/itchio/butler/issues/51 is fixed!
 pushlove: love

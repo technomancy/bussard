@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Bussard
+Comment=A space flight programming adventure
+Exec=bussard
+Icon=bussard
+Terminal=false
+Type=Application
+Categories=Game;Simulation;
+GenericName=
+Keywords=game

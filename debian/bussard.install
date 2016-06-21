@@ -1,0 +1,4 @@
+debian/scripts/bussard usr/games
+debian/bussard.desktop usr/share/applications
+bussard.love  usr/share/games/bussard
+bussard.png usr/share/icons

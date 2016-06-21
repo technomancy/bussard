@@ -1,0 +1,2 @@
+#upstream do not include a changelog in the source.
+bussard binary: no-upstream-changelog

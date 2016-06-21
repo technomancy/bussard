@@ -1,0 +1,11 @@
+#!/usr/bin/make -f
+
+BUILD_DATE=$(shell dpkg-parsechangelog --show-field=Date)
+
+%:
+	dh $@
+
+override_dh_auto_build:
+	find . -type f -exec touch --date='$(BUILD_DATE)' {} \;
+	make love VERSION=$(VERSION)
+	mv releases/bussard-$(VERSION).love bussard.love

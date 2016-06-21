@@ -1,0 +1,17 @@
+Source: bussard
+Section: games
+Priority: extra
+Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
+Uploaders: Phil Hagelberg <technomancy@gmail.com>
+Build-Depends: debhelper (>= 9), zip
+Standards-Version: 3.9.7
+Homepage: https://gitlab.com/technomancy/bussard
+Vcs-Git: https://gitlab.com/technomancy/bussard.git
+Vcs-Browser: https://gitlab.com/technomancy/bussard
+
+Package: bussard
+Architecture: all
+Depends: love (>=0.9.1), ${misc:Depends}, fonts-noto, fonts-inconsolata, lua-socket
+Description: Bussard is a space flight programming adventure
+ A space flight programming adventure game. Mine, trade, upgrade, and unlock
+ the potential of your spacecraft by hacking on the code that makes it tick.

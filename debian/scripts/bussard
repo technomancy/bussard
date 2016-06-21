@@ -1,0 +1,2 @@
+#!/bin/sh
+exec love /usr/share/games/bussard/bussard.love

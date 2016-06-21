@@ -14,7 +14,7 @@ see file LICENSE.
 * md5.lua copyright © 2013 Enrique García Cota + Adam Baldwin +
     hanzao + Equi 4 Software, distributed under the MIT license
   https://github.com/kikito/md5.lua
-* serpent Copyright © 2011-2013 Paul Kulchenko (paul@kulchenko.com)
+* serpent Copyright © 2011-2013 Paul Kulchenko, distributed under the MIT license
   https://github.com/pkulchenko/serpent
 * utf8.lua Copyright © 2016 Stepets, distributed under the MIT license
   https://github.com/Stepets/utf8.lua
@@ -23,6 +23,7 @@ see file LICENSE.
 * bencode Copyright © 2009, 2010, 2011, 2012, 2014, 2016 by Moritz Wilhelmy
   Copyright © 2012, 2014 by Jorge Visca
   Copyright © 2009 by Kristofer Karlsson
+  Distributed under the MIT license
   https://bitbucket.org/wilhelmy/lua-bencode/
 
 ## 3rd-party art
@@ -38,6 +39,9 @@ see file LICENSE.
 
 * Station graphics copyright © 2014 MillionthVector, CC-BY licensed
   https://millionthvector.blogspot.de/p/free-sprites_12.html
+
+* Asteroid graphics copyright © 2014 para, CC0 licensed
+  http://opengameart.org/content/low-poly-rocks
 
 * Inconsolata font copyright © 2006 Raph Levien
   Released under the SIL Open Font License
