@@ -6,5 +6,5 @@ return {
                 [200000] = "passenger2.msg",
                [1200000] = "passenger3.msg",
    [{"luabook",  20000}] = "nari-decrypt-01.msg",
-   [{"luabook", 120000}] = "nari-decrypt-02.msg",
+   [{"rot13-decrypt-accept", 20000}] = "nari-decrypt-03.msg",
 }

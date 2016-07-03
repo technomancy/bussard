@@ -4,7 +4,7 @@ Content-Type: text/plain; charset=UTF-8
 Subject: Re(5): Passenger run from Tana Prime to Apkabar Station
 Message-Id: c83c2439-f4cf-475f-95a6-f15cafc3db16
 
-Well, I wouldn't believe this, except for seeing it with my own
+Well, I wouldn't believe this if I weren't seeing it with my own
 eyes. You're the real deal, a functioning machine consciousness. I've
 got so many questions right now I'm not sure where to start.
 

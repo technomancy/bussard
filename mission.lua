@@ -63,7 +63,7 @@ local on_login = function(ship)
       record_destination(record, ship.comm_connected, ship)
       if(mission.on_login) then mission.on_login(ship, ship.comm_connected) end
 
-      -- success check here (maybe belongs in update)
+      -- TODO/blocker: success check in update instead
       if((not mission.time_limit or
              utils.time(ship) < record.start_time + mission.time_limit) and
             cargo_check(ship, mission) and objectives_check(ship, mission) and

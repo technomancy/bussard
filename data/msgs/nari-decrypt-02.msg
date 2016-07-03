@@ -4,34 +4,27 @@ Content-Type: text/plain; charset=UTF-8
 Subject: Re: Encrypted files
 Message-Id: 01abcc58-03eb-4d77-84a9-ff3959e48425
 
-OK, I've done a bit more fiddling around in my own console, and some of this is
-starting to come back to me, specifically the concept of loops.
+I don't remember that much about the programming class I took, but for the final
+assignment we wrote a function that could perform "rot13 translation". Basically
+all it does is take each letter of a message and shift it over by 13
+characters. It would turn "abc" into "nop", for instance, since "n" is 13
+characters away from "a".  For letters in the second half of the alphabet, it
+would loop back to the start.
 
-You're also going to need a way to do this shifting for every letter in the
-message. A "for" loop will let you run the loop body once for each letter.
+So, are you up for some coding? You're going to need a way to turn letters into
+numbers and back again. (But you need to ignore characters that aren't letters.)
+The string.byte function and string.char function can do that transformation.
 
-It'll be simpler if you use the string.upper() function so it's all upper
-case. You'll use string.sub() to get you a single letter out of the string.
+    string.byte("a") --> 97
+    string.char(97) --> "a"
+    string.char(string.byte("b") + 13) --> "o"
 
-    local msg = string.upper(ship.docs.backup.msg1_rot13)
-    for i=1,#msg do
-       local letter = string.sub(ship.docs.backup.msg1_rot13, i, i)
-       print(letter)
-    end
+That needs to happen for every letter in the message, basically. I wish I could
+remember more about how to do that from the class I took, but it's been so long.
 
-This will just print each letter individually; in order to decode the message
-you'll have to get the string.byte and string.char functions into the mix to
-shift all the letters over by 13. You can build up a string using the
-.. operator to put two shorter strings together:
+You'll want to put your code in a file somewhere using ctrl-o, like "src.rot13",
+then you can run it with dofile("src.rot13") in the console. I hope that makes
+sense. Remember, a little trial and error will go a long way.
 
-    local decoded = "ABC"
-    decoded = decoded .. "DEF"
-    print(decoded) --> ABCDEF
-
-Remember not to change the punctuation and spaces. If a character is more than
-A but less than Z it's a letter, but otherwise you should just leave it alone!
-
-I've also found a few chapters of a book on Lua programming that I've loaded
-into your ship's help system. Hope that helps! You can run this to read it:
-
-    man("luabook1")
+I'm dying to know what's in the file. After you decrypt it, can you place it in
+"docs.msg1" on your system so I can take a look?

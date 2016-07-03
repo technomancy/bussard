@@ -125,6 +125,7 @@ love.load = function()
    resize()
    font = love.graphics.newFont(font_path, 16)
    noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
+   if(font.setFallbacks) then font:setFallbacks(noto) end
    love.graphics.setFont(font)
 
    stars = { starfield.new(10, 0.01, 100),
