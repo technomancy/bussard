@@ -9,3 +9,5 @@
 /bussard/usr/share/man/man6/bussard.6.gz
 /files
 /bussard/usr/share/doc/bussard/changelog.gz
+/bussard.postinst.debhelper
+/bussard.postrm.debhelper

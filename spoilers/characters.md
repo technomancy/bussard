@@ -32,15 +32,14 @@ later really regretful about it. This causes her to be too suspicious
 of Mila. Once she boards your ship, she is motivated more by curiosity
 and a desire to help than her original goal of just getting home.
 
-## Clay Fenton
+## Elwin Dorath
 
-He is a researcher who formerly held an position at the Darush Applied
-Metaphysics lab where the spacetime junction was developed. He feels
-that he was wronged by a colleague who took some of his work and
-submitted it as his own. Though he hasn't worked there for a long
-time, he sees this as an opportunity to get back at his colleague by
-pinning the theft of the spacetime junction on him, and betraying you
-in the process.
+He was student who studied under the man who is now the head of the Darush
+Applied Metaphysics lab where the spacetime junction was developed. He feels
+that he was wronged by a colleague who took some of his work and submitted it as
+his own. Though he hasn't worked there for a long time, he sees this as an
+opportunity to get back at his colleague by pinning the theft of the spacetime
+junction on him, and betraying you in the process.
 
 He's self-deprecating, funny, but unbalanced. We should get a hint of
 him snapping before it happens to us? He is a citizen of Yueh but has
@@ -50,8 +49,9 @@ TODO: more about his time in the lab and his colleague
 
 ## Mila Calandria
 
-Security specialist. Quiet, very professional, and deeply
-curious. Exasperated by what she sees as incompetence around her.
+Security specialist. Quiet, very professional, and deeply curious.
+Exasperated by what she sees as incompetence around her. "Mila" is her
+surname.
 
 She gives you the hints you need to implement the algorithms finally
 decrypt the last few journals.
@@ -61,7 +61,8 @@ her helping you is hugely illegal; not just the fact that you're an
 illegal MC, but also the fact of implementing crypto in a way that's
 non-compliant. So she has good reason to stay cautious.
 
-Mila worked as a security consultant for Ikon Technologies.
+Calandria worked as a security consultant for Ikon Technologies. "Mila" is her
+surname.
 
 TODO: where does she live? does she travel with you at all?
 
@@ -124,6 +125,11 @@ longer safely continue research in Bohk and are forced to relocate to
 Katilay. They also wipe the memory of the player character. Traxus
 feels guilt over having caused the wipe, and while he feels some anger
 at the Bohk team for doing it, he understands their motivation.
+
+## Clay Fenton
+
+Bit of a shady rogue who lives on Mecalle and deals in black-market
+equipment. He owes Elwin Dorath a favor from ages ago.
 
 ## Venantius Mamat
 

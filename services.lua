@@ -42,7 +42,9 @@ return {
       if(target.fuel_price) then
          local cost = target.fuel_price * amount
          local open_fuel_capacity = ship.fuel_capacity - ship.fuel
-         if(amount > open_fuel_capacity) then
+         if(open_fuel_capacity <= 0) then
+            return false, "Fuel tank is full."
+         elseif(amount > open_fuel_capacity) then
             return false, "Fuel tank only has room for " .. open_fuel_capacity .. "."
          elseif(cost < ship.credits) then
             ship.fuel = ship.fuel + amount

@@ -1,6 +1,6 @@
 -- -*- lua -*-
 
-local _f, env, args = ...
+local f, env, args = ...
 
 if(args[1] == "--help") then
    print("Print the contents of a file or files.")
@@ -8,8 +8,12 @@ if(args[1] == "--help") then
    print("  cat FILE1 [FILE2 ...]")
 else
    for _,filename in ipairs(args) do
-      print(filename .. ":")
-      print(orb.read(orb.normalize(filename, env.CWD)))
-      print("")
+      if(f[filename]) then
+         print(filename .. ":")
+         print(orb.read(orb.normalize(filename, env.CWD)))
+         print("")
+      else
+         print(filename .. " not found.")
+      end
    end
 end
