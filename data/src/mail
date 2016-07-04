@@ -40,11 +40,22 @@ local subjects_by_date = function(msgs)
    return names
 end
 
+local archive_key = "alt-a"
+
+local folder_modeline = function(b)
+   return utf8.format(" %s  %s  (%s/%s)  %s   Press %s to archive.",
+                      b.needs_save and "*" or "-",
+                      subject, b.point_line, #b.lines, b.mode, archive_key)
+end
+
 local open_folder = function(folder)
    ship.editor.set_read_only(false)
    ship.editor.end_of_buffer()
    local point, point_line = ship.editor.point()
    ship.editor.delete(1, 0, point_line, point)
+   if(folder ~= "archive") then
+      ship.editor.set_modeline(folder_modeline)
+   end
 
    local p = function(x) ship.editor.raw_write(x .. "\n") end
    targets = {}
@@ -126,8 +137,7 @@ local archive_from_folder = function()
    end
 end
 
--- TODO: make this visible in modeline or something?
-bind("mail", "alt-a", archive_from_folder)
+bind("mail", archive_key, archive_from_folder)
 
 define_mode("view")
 
