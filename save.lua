@@ -83,15 +83,8 @@ return {
          end
          ship:enter(ship.system_name, false, true)
       else
-         ship.api.docs.mail = { inbox = { _unread = {} },
-                                jobs = { _unread = {} },
-                                archive = { _unread = {} },
-                              }
          ship_init(ship)
          ship:enter(ship.system_name, true, true)
-         for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
-            ship.api.src[v] = love.filesystem.read("data/src/" .. v)
-         end
       end
       if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)

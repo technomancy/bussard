@@ -555,7 +555,7 @@ return {
          b.point = utf8.len(b.lines[b.point_line]) end
 
       -- Draw background
-      love.graphics.setColor(0, 0, 0, 220)
+      love.graphics.setColor(0, 0, 0, 240)
       love.graphics.rectangle("fill", 0, 0, width, height)
 
       -- maximum characters in a rendered line of text
