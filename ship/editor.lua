@@ -743,6 +743,7 @@ return {
    save_excursion = save_excursion,
 
    prompt = function() return (b and b.prompt) or "> " end,
+   get_prompt = function() return (b and b.prompt) or "> " end,
    set_prompt = function(p)
       if(not b) then return end
       local line = b.lines[#b.lines]

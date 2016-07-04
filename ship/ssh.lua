@@ -3,6 +3,7 @@ local utils = require("utils")
 local mission = require("mission")
 local body = require("body")
 local services = require("services")
+local serpent = require("serpent")
 
 local sessions = {}
 
@@ -12,10 +13,12 @@ local logout = function(ship, target)
    if(not target) then return ship.api.editor.invisible end
    local session = sessions[target.name]
    if(session) then
-      local fs = unpack(session)
-      for k,_ in pairs(fs["/home/guest"] or {}) do
-         if(k ~= "_user" and k ~= "_group") then
-            session[1]["/home/guest/" .. k] = nil
+      local fs, env = unpack(session)
+      if(env.USER == "guest") then
+         for k,_ in pairs(fs["/home/guest"] or {}) do
+            if(k ~= "_user" and k ~= "_group") then
+               session[1]["/home/guest/" .. k] = nil
+            end
          end
       end
       sessions[target.name] = nil
@@ -48,6 +51,7 @@ end
 
 local sandbox = function(ship)
    local target = ship.target
+   local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
    local sb = {
       buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
       buy_upgrade = lume.fn(services.buy_upgrade, ship),
@@ -61,11 +65,18 @@ local sandbox = function(ship)
       distance = lume.fn(utils.distance, ship, ship.target),
       os = {time = lume.fn(utils.time, ship)},
       set_prompt = ship.api.editor.set_prompt,
+      get_prompt = ship.api.editor.get_prompt,
+      pps = function(x) return serpent.block(x, serpent_opts) end,
    }
+   sb.pp = function(x) sb.print(serpent.block(x, serpent_opts)) end
 
    ship.sandbox.logout = function()
       logout(ship, target)
       ship.comm_connected = false
+   end
+
+   if(ship.target and ship.target.subnet) then
+      sb.subnet = services.subnet
    end
 
    if(ship.target and ship.target.portal) then

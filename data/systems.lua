@@ -68,7 +68,7 @@ local sys = {
           },
           {r=33000, mass=100, station=true,
            image_name="station-pointed",
-           name="Kenapa Station", os=orb, world=true,
+           name="Kenapa Station", os=orb, world=true, subnet=true,
 
            industry=8,tech=6,
            remote=2, pop=1,
@@ -115,7 +115,7 @@ local sys = {
            name="Luyten's Star", fixed=true },
           {r=32000, mass=120,
            image_name="station-pointed", station=true,
-           name="Apkabar Station", os=orb, world=true,
+           name="Apkabar Station", os=orb, world=true, subnet=true,
 
            industry=6,tech=6,
            remote=5, pop=2,

@@ -8,9 +8,9 @@ if(args[1] == "--help") then
    print("Usage:")
    print("  smash")
 else
-   local smashrc = f[env.HOME .. "/.smashrc"]
+   local smashrc = f[env.HOME .. "/_smashrc"]
    if(smashrc) then
-      assert(loadstring(smashrc))()
+      assert(loadstring(smashrc))(f, env, args)
    else
       print("\n" .. f.etc.motd .. "\nType \"logout\" to exit and \"ls /bin\"" ..
                " to see commands available.")

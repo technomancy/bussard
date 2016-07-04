@@ -1,8 +1,8 @@
 -- -*- lua -*-
 
-ssh = function(username, password)
+ssh = function(username, password, command)
    if(ship.status.target and ship.status.target.os) then
-      ssh_connect(username or "guest", password or "")
+      ssh_connect(username or "guest", password or "", command)
       ship.editor.end_of_buffer()
       ship:activate_mode("ssh") -- should make a new buffer here?
    else
@@ -21,7 +21,7 @@ portal = function()
 end
 
 local get_input = function()
-   return utf8.sub(ship.editor.get_line(0), utf8.len(ship.editor.prompt())+1)
+   return utf8.sub(ship.editor.get_line(0), utf8.len(ship.editor.get_prompt())+1)
 end
 
 define_mode("ssh")

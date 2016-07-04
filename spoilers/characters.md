@@ -270,6 +270,9 @@ OR: Yueh maybe doesn't need so many worlds
 * Starlink (Sol)
   An ISP. (starlink.net.sol)
 
+* WonderChannel
+  Another ISP. (wonderchannel.net.sol)
+
 * Leeft (Sol)
   Interplanetary and interstellar passenger runs.
 

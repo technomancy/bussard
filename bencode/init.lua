@@ -85,15 +85,16 @@ local function encode_str(t, x)
 	insert(t,  x  )
 end
 
-encode_rec = function(t, x)
+encode_rec = function(t, x, nolist)
 
 	local  typx = type(x)
 	if     typx == "string" then  return encode_str  (t, x)
 	elseif typx == "number" then  return encode_int  (t, x)
 	elseif typx == "table"  then
 
-		if islist(x)    then  return encode_list (t, x)
-		else                  return encode_dict (t, x)
+       -- PNH: patched to support nolist for simpler semantics
+		if not nolist and islist(x) then  return encode_list (t, x)
+		else                              return encode_dict (t, x)
 		end
 	else
 		return "type cannot be converted to an acceptable type for bencoding", typx
@@ -102,10 +103,10 @@ end
 
 -- call recursive bencoder function with empty table, stringify that table.
 -- this is the only encode* function visible to module users.
-M.encode = function (x)
+M.encode = function (x, nolist)
 
 	local t = {}
-	local err, val = encode_rec(t,x)
+	local err, val = encode_rec(t,x, nolist)
 	if not err then
 		return concat(t)
 	else

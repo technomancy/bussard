@@ -1,7 +1,7 @@
 local utils = require("utils")
 
 local base_prices = require("data.prices")
-local filesystem_overlays = require("data.filesystems")
+local seed_users = require("data.seed_users")
 local portal_motd = "Connected to portal, checking for clearance..."
 
 local hostname = function(body_name)
@@ -11,13 +11,20 @@ end
 local seed = function(os, body_name)
    local raw = os.fs.new_raw()
    local proxy = os.fs.proxy(raw, "root", raw)
-   os.fs.seed(proxy, {guest = ""})
-
-   for k,v in pairs(filesystem_overlays[body_name] or {}) do
-      local dir,_ = os.fs.dirname(k)
-      os.fs.mkdir(proxy, dir)
-      proxy[k] = v
+   local users = {guest = ""}
+   for _,u in pairs(seed_users[body_name] or {}) do
+      users[u.username] = u.password
    end
+   os.fs.seed(proxy, users)
+
+   for _,user in pairs(seed_users[body_name] or {}) do
+      for name,contents in pairs(user.files) do
+         local dir,_ = os.fs.dirname(name)
+         os.fs.mkdir(proxy, dir)
+         proxy[name] = contents
+      end
+   end
+
    if(love.filesystem.isFile("data/motd/" .. body_name)) then
       proxy.etc.motd = love.filesystem.read("data/motd/" .. body_name)
    end

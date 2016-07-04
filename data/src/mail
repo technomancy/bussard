@@ -42,10 +42,18 @@ end
 
 local archive_key = "alt-a"
 
-local folder_modeline = function(b)
-   return utf8.format(" %s  %s  (%s/%s)  %s   Press %s to archive.",
-                      b.needs_save and "*" or "-",
-                      subject, b.point_line, #b.lines, b.mode, archive_key)
+local set_modeline = function(folder)
+   if(folder == "archive") then
+      ship.editor.set_modeline(function(b)
+            return utf8.format(" %s  -  (%s/%s)  %s",
+                               folder, b.point_line, #b.lines,
+                               b.mode, archive_key) end)
+   else
+      ship.editor.set_modeline(function(b)
+            return utf8.format(" %s  -  (%s/%s)  %s   Press %s to archive.",
+                               folder or "folders", b.point_line, #b.lines,
+                               b.mode, archive_key) end)
+   end
 end
 
 local open_folder = function(folder)
@@ -53,9 +61,7 @@ local open_folder = function(folder)
    ship.editor.end_of_buffer()
    local point, point_line = ship.editor.point()
    ship.editor.delete(1, 0, point_line, point)
-   if(folder ~= "archive") then
-      ship.editor.set_modeline(folder_modeline)
-   end
+   set_modeline(folder)
 
    local p = function(x) ship.editor.raw_write(x .. "\n") end
    targets = {}
@@ -101,11 +107,10 @@ local view_modeline = function(b)
    local id = header(b.lines, "Message.Id")
    local subject = header(b.lines, "Subject")
    if(replyable(id)) then
-      return utf8.format(" %s  %s  (%s/%s)  %s   Press %s to reply.",
-                         b.needs_save and "*" or "-",
+      return utf8.format(" %s  (%s/%s)  %s   Press %s to reply.",
                          subject, b.point_line, #b.lines, b.mode, reply_key)
    else
-      return utf8.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
+      return utf8.format(" %s  (%s/%s)  %s",
                          subject, b.point_line, #b.lines, b.mode)
    end
 end

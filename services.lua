@@ -3,6 +3,7 @@
 
 local utils = require("utils")
 local body = require("body")
+local bencode = require("bencode")
 local clearances = require("data.clearances")
 local upgrades = require("data.upgrades")
 
@@ -129,4 +130,33 @@ return {
       end
       return false
    end,
+
+   subnet = {
+      request = function(input_string)
+         local enc = function(x) return bencode.encode(x, true) end
+         local fs = love.filesystem
+         local input, err = bencode.decode(input_string)
+         if(not input) then return nil, err end
+
+         -- TODO: not all messages should be immediately accessible
+         if(input.command == "groups") then
+            local groups = fs.getDirectoryItems("data/news")
+            groups = lume.filter(groups, function(g)
+                                    return fs.isDirectory("data/news/" .. g)
+            end)
+            return enc({status="ok", groups=groups})
+         elseif(input.command == "list") then
+            local posts = fs.getDirectoryItems("data/news/" .. input.group)
+            return enc({status="ok", posts=posts})
+         elseif(input.command == "get") then
+            local text = fs.read("data/news/"..input.group.."/"..input.post)
+            return enc({status="ok",content=text})
+         elseif(input.command == "help") then -- "d7:command4:helpe"
+            return enc(love.filesystem.read("doc/subnet.md"))
+         else
+            return enc({status="unknown command",
+                        commands={"groups","list","get","help"}})
+         end
+      end
+   },
 }
