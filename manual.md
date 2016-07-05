@@ -12,14 +12,15 @@ Most upgrades that you purchase will come with new manuals too.
 ## Display
 
 The first thing you'll see when you launch your ship is its
-heads-up-display. A targeting indicator will point from your ship in
-the direction of your current target. If you are within range of a
-target you can act upon, the indicator will change color depending on
-the type of the target. The upper left shows basic velocity, local
-coordinates, fuel and battery readout, credits, and a clock, while the
-upper right shows target details if a target is selected. A light blue
-striped path plots a trajectory estimate of where you're headed, while
-a darker blue striped path plots one for your target, if applicable.
+heads-up-display. A targeting indicator will point from your ship in the
+direction of your current target (changed by pressing tab). If you are
+within range of a target you can act upon, the indicator will change
+color depending on the type of the target. The upper left shows basic
+velocity, local coordinates, fuel and battery readout, credits, and a
+clock, while the upper right shows target details if a target is
+selected. A light blue striped path plots a trajectory estimate of where
+you're headed, while a darker blue striped path plots one for your
+target, if applicable.
 
 ## Helm control
 
@@ -64,29 +65,28 @@ modes of interaction.
 ### Editor
 
 You can make changes to your configuration files using the onboard
-editor. Press alt-o to open a file; start with "src.config". You can
+editor. Press ctrl-o to open a file; start with "src.config". You can
 see where the flight mode is defined and how the flight controls and
 other commands are bound to keystrokes. The bind function can attach
 any function to a keystroke.
 
-Once you're done with your edits, press esc to go back to flight
-mode and load your changes with ctrl-r. You can edit other files
-anywhere in your ship, but by default only files in the ship.src and
-ship.docs tables will stay after your ship is restarted. You can
-configure it to save other tables by adding their names to the
-ship.persist table.
+Once you're done with your edits, press esc to go back to flight mode
+and load your changes with ctrl-r. You can edit other files anywhere in
+your ship, but by default only files in the "ship.src" and "ship.docs"
+tables will stay after your ship is restarted. You can configure it to
+save other tables by adding their names to the "ship.persist" table.
 
-You can open as many files in the editor as you need with alt-o. Use
+You can open as many files in the editor as you need with ctrl-o. Use
 ctrl-pageup and ctrl-pagedown to cycle through them.
 
 ### Communication system
 
 When you are in range of a planet or space station with an active
 computer, you can initiate a login session using your ship's
-communication system. This will allow you to access any of the
-station's services, including refueling, cargo transactions,
-purchasing upgrades, downloading new code, renting cargo storage,
-and communicating with others.
+communication system. This will allow you to access any of the station's
+services, including refueling, cargo transactions, purchasing upgrades,
+downloading new code, renting cargo storage, and communicating with
+others.
 
 Your targeting indicator will turn light green when you are within
 range of a station that allows logins.
@@ -122,7 +122,7 @@ ship's computer.
 Your ship can travel to other star systems using the portal
 network. If your battery has enough charge, fly within range of a
 portal. You'll know when you are close enough because the targeting
-indicator will turn blue. Press ctrl-s to begin the portal
+indicator will turn blue. Press ctrl-p to begin the portal
 activation sequence. You will need to stay within range for a few
 seconds for it to complete.
 
@@ -277,7 +277,8 @@ unread/total message count. Pressing enter on a folder opens it up and
 shows the date, sender, and subject of each message.
 
 If a message offers a mission or makes some request of you, you can
-indicate your acceptance or acknowledgment by pressing ctrl-alt-enter.
+indicate your acceptance or acknowledgment by pressing
+alt-enter. Pressing alt-a will move the message to the "archive" folder.
 
 ### Missions
 
@@ -290,27 +291,28 @@ will forfeit any cargo from the mission.
 
 The currently active mode and its keymaps will dictate how your ship
 will react to keys on your helm keyboard. Once a mode is defined, you
-can add key bindings to it like so: `keymap.define("flight", "ctrl-p",
-function() ship.ui.paused = true end)`.  The first argument is the
-name of the mode you're adding the key binding to, the second argument
-is a string describing the key to bind, and the third argument is the
-function to call when the key is pressed. This function is passed a
-boolean indicating whether it is a repeated key or not.
+can add key bindings to it like so: `keymap.define("flight", "ctrl-k",
+function() print(ship.status.dx, ship.status.dy) end)`. The first
+argument is the name of the mode you're adding the key binding to, the
+second argument is a string describing the key to bind, and the third
+argument is the function to call when the key is pressed.
 
-By default your ship has a "flight" mode active normally and a
-"console" mode active when the console is full-screen. There is also
-an "edit" mode where the editor key bindings are defined. The "ssh"
-mode is active when connecting to station or planet computers, and the
-"mail" mode is active when reading your messages. You can check the
-current mode with `ship:mode()`.
+By default your ship has a "flight" mode active normally and a "console"
+mode for entering code directly. There is also an "edit" mode where the
+editor key bindings are defined. The "ssh" mode is active when
+connecting to station or planet computers, and the "mail" mode is active
+when reading your messages. You can check the current mode with
+`ship:mode()`.
 
 See the `keycodes` manual page for a detailed listing of available key
 names. You can run `man("keycodes")` to view it.
 
 Take a look at the default config code that came with your ship for an
 example of how to create modes and bind new keys in them; it will come
-in very handy to add in new keys when operating your ship; in
-particular when you purchase an upgrade that adds new capabilities.
+in very handy to add in new keys when operating your ship; in particular
+when you purchase an upgrade that adds new capabilities.  You can also
+define new modes that are based on existing modes; see "src.ssh", which
+shows that the "ssh" mode has a parent mode of "console".
 
 ### Config Reset
 

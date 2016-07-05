@@ -42,7 +42,7 @@ check:
 	            accept_mission set_prompt buy_upgrade sell_upgrade upgrade_help \
 	  -- $(IN_OS_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --globals love lume \
-	  get_prompt set_prompt subnet \
+	  get_prompt set_prompt subnet logout \
 	  -- $(DATA_LUA)
 
 count: ; cloc --force-lang=lua $(GAME_LUA)

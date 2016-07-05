@@ -137,15 +137,19 @@ local update = function(ship, dt)
 end
 
 local list = function(ship)
-   for mission_id in pairs(ship.active_missions) do
-      local mission = find(ship, mission_id)
-      ship.api.print("\n")
-      ship.api.print(mission.name)
-      if(mission.description) then
-         ship.api.print(mission.description)
-      end
-      if(mission.credits) then
-         ship.api.print("Credits: " .. mission.credits)
+   if(lume.count(ship.active_missions) == 0) then
+      ship.api.print("No missions.")
+   else
+      for mission_id in pairs(ship.active_missions) do
+         local mission = find(ship, mission_id)
+         ship.api.print("\n")
+         ship.api.print(mission.name)
+         if(mission.description) then
+            ship.api.print(mission.description)
+         end
+         if(mission.credits) then
+            ship.api.print("Credits: " .. mission.credits)
+         end
       end
    end
 end

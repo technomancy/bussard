@@ -62,7 +62,7 @@ through in-game hints and tutorials.
 ## FAQ
 
 **Q:** How do I change the controls?  
-**A:** Press `ctrl-o` then type "src.config" to open the main config file. The keys here are mostly for flight mode. At the bottom you can see where it loads other modes in files like "src.edit" or "src.mail". Open these files if you want to change keys for those modes. Find the key binding you want to change, and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` to go back to flight mode, and then press `ctrl-r` to load them.
+**A:** Press `ctrl-o` then type "src.config" to open the main config file. The keys here are mostly for flight mode. At the bottom you can see where it loads other modes in files like "src.edit" or "src.mail". Open these other files with `ctrl-o` if you want to change keys for those modes. Find the key binding you want to change, and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` to go back to flight mode, and then press `ctrl-r` to load them.
 
 **Q:** What can I do to improve the frame rate?  
 **A:** The biggest performance drag is calculating trajectories. Reduce the calculations with `ship.trajectory = 32` and you should notice a dramatic speed boost. If you drop the trajectory length, you may want to boost the `ship.trajectory_step_size` to compensate.
