@@ -1,1 +1,0 @@
-return { gov = {"Sol", "Tana"}}
