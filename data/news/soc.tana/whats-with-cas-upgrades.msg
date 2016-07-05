@@ -75,6 +75,6 @@ up by the kind of acceleration you seen in the gravity well of even a
 mid-sized planet, and a typical freighter impact would easily be in the
 hundred-megaton range.
 
-So yeah, let's have a little less whining and a little more being glad
+So yeah, let's have a little less whining and a little more gratitude that
 entire colonies don't get razed when some sleep-deprived captain bumps
 his elbow against his throttle.

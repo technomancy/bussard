@@ -54,4 +54,5 @@ Subject: Re: Targeting orientation
 Message-Id: 9662d784-9b59-43d0-ac67-6433c0b8d992
 In-Reply-To: 8ff16302-b137-4a90-9527-bbe59a167426
 
-That looks like what I'm looking for; thanks.
+That looks like what I'm looking for; thanks. Need to factor in future
+trajectory of the target, but it's a start.

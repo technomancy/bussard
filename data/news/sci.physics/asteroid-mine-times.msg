@@ -47,7 +47,7 @@ This is technically true, but really the problem he's asking about is
 not knowing how the progress on mining is coming. Most ships can use
 their sensors to determine asteroid strength. Try running this instead:
 
-  ship.sensors.target.strength / ship.sensors.target.mass
+  ship.status.target.strength / ship.status.target.mass
 
 That will show you how much further you have to go till the target is
 destroyed. You probably want to bind it to a key that will display it.
@@ -68,28 +68,7 @@ Good point. That's actually much more useful than my original question;
 thanks. I made some changes to my HUD config, and now this is visible
 there as well:
 
-    {x=-70, y=70, type="text", format="Strength: %0.0f",
-     values={function(ship) return ship.sensors.target.strength end}}
+    {x=-70, y=70, type="bar", color = {50, 50, 50},
+     values = {"status.target.strength", "status.target.mass"}}
 
 That way it shows up clearly under my target indicator.
-
-
-
-From: Ditoun Deriesucoum
-Subject: Re: Asteroid mine times
-To: sci.physics
-Message-Id: f0ba9efa-6212-bfaf-93b5-178e222f8460
-In-Reply-To: 7c9aa766-b7a1-146c-a3ad-170ac2907052
-Content-Type: text/plain; charset=UTF-8
-
->    {x=-70, y=70, type="text", format="Strength: %0.0f",
->     values={"sensors.target.strength"}}
-
-Not bad, but why not make it a bar readout instead of just text?
-
-    {x=-70, y=70, type="bar", color = {50, 50, 50},
-     values = {"sensors.target.strength", "sensors.target.mass"}}
-
-That's a bit more readable at a glance. Also, for a nested lookup in the
-ship table you can use a string instead of a function in the values
-section; just put the keys separated by dots and it will look them up.

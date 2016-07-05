@@ -41,7 +41,7 @@ alt key on my Atreus helm control, so I've got it wired in to run
 continuously via updaters instead:
 
   local az = function()
-    if(not on or not ship.status.target) then return end
+    if(not ship.autozoom or not ship.status.target) then return end
     local d = utils.distance(ship.status, ship.status.target)
     local s = math.pow(ship.scale, 8) * 1000
     local f = d/s
@@ -53,6 +53,7 @@ continuously via updaters instead:
   end
 
   table.insert(ship.updaters, az)
+  ship.autozoom = true
 
 I've made the zoom more gradual since it can happen when you're not
 expecting it; 25 as the ship.dt factor feels nice and subtle.

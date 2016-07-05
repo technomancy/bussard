@@ -51,7 +51,3 @@ for self-sufficient agriculture.
 Maybe we'd be better off if the Tana colony ships had done the same, but
 my understanding is that once the Republic authorized sending portals on
 the colony ships, they wanted to get them out as quickly as possible.
-
-Also, posting about gaining independence in a public forum is not the
-smartest thing in the galaxy. Sol is no Terran Republic, but you might
-want to show a little more discretion in the future.
