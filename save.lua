@@ -62,12 +62,11 @@ return {
       ship.load_time = os.time()
 
       -- cheat to load in all the events needed for a specific act
-      local act = tonumber(lume.find(arg, "--act"))
-      if(act) then
-         for i=1,act do
-            for _,event in ipairs(acts[i]) do
-               ship.events[event] = os.time()
-            end
+      local act_pos = lume.find(arg, "--act")
+      if(act_pos) then
+         ship_init(ship)
+         for i=1,tonumber(arg[act_pos+1]) do
+            acts[i](ship)
          end
       end
 

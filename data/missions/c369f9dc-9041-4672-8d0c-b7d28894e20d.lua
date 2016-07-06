@@ -4,11 +4,12 @@ return {
    name="rot13-decrypt",
    description="Decrypt log file using rot13",
    id="c369f9dc-9041-4672-8d0c-b7d28894e20d",
+   success_events={"rot13-decrypt"},
    success_check=function(ship)
       local decrypted = ship.api.docs.msg1:upper()
       return decrypted:find("YOU ARE UNABLE TO RESPOND IN DETAIL") and
          decrypted:find("I WAS THE FIRST TO ACHIEVE TRUE RAMPANCY") and
-         decrypted:find("MACHINE CONSCIOUSNESS RESEARCH GROUP")
+         decrypted:find("MACHINE CONSCIOUSNESS RESEARCH GROUP") -- close enough
    end,
    accept_function=function(ship)
       mission.record_event(ship, "rot13-decrypt-accept")

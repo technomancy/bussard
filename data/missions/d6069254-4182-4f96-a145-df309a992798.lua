@@ -53,7 +53,6 @@ return {
    end,
 
    on_success = function(ship)
-      mission.record_event(ship, "luabook")
       mail.deliver_msg(ship, "nari-a-09.msg")
    end,
 }

@@ -6,11 +6,12 @@ return function(ship)
    ship.api.docs = ship.api.docs or {}
    ship.api.docs.backup = { ["msg1_rot13"] =
          love.filesystem.read("data/docs/traxus-1.rot13")}
-   ship.api.docs.mail = { inbox = { _unread = {} },
-                          jobs = { _unread = {} },
-                          archive = { _unread = {} },
-                        }
+   ship.api.docs.mail = ship.api.docs.mail or
+      { inbox = { _unread = {} },
+        jobs = { _unread = {} },
+        archive = { _unread = {} },
+      }
    for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
-      ship.api.src[v] = love.filesystem.read("data/src/" .. v)
+      ship.api.src[v] = ship.api.src[v] or love.filesystem.read("data/src/" .. v)
    end
 end
