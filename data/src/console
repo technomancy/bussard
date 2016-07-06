@@ -23,7 +23,7 @@ bind("console", "return", function()
         ship.editor.history_push(input)
         ship.editor.end_of_line()
         ship.editor.newline()
-        ship.editor.unmark()
+        ship.editor.no_mark()
         local chunk, err = loadstring("return " .. input)
         if(err and not chunk) then -- statement, not expression
            chunk, err = loadstring(input)

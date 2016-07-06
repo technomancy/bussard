@@ -490,10 +490,6 @@ return {
       b.mark, b.mark_line = b.point, b.point_line
    end,
 
-   unmark = function()
-      b.mark, b.mark_line = nil, nil
-   end,
-
    jump_to_mark = function()
       b.point, b.point_line = b.mark or b.point, b.mark_line or b.point_line
       if(#b.mark_ring > 0) then
@@ -766,6 +762,8 @@ return {
       local read_only = inhibit_read_only
       inhibit_read_only = true
       with_current_buffer(console, function()
+                             b.mark, b.mark_line = nil, nil
+                             delete(#b.lines, 0, #b.lines, #b.lines[#b.lines])
                              write(b.prompt)
                              b.point, b.point_line = #b.lines[#b.lines], #b.lines
       end)
@@ -810,6 +808,9 @@ return {
       local buffer = get_buffer(loaded.path) or make_buffer(fs, loaded.path)
       lume.extend(buffer, loaded)
       buffer.input_history = utils.buffer:new(loaded.input_history)
+      if(buffer.path == "*console*") then
+         buffer.prompt, buffer.mode = "> ", "console"
+      end
    end,
 
    buffer_names = function()

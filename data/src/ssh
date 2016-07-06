@@ -4,7 +4,7 @@ ssh = function(username, password, command)
    if(ship.status.target and ship.status.target.os) then
       ssh_connect(username or "guest", password or "", command)
       ship.editor.end_of_buffer()
-      ship.editor.unmark()
+      ship.editor.no_mark()
       ship:activate_mode("ssh") -- should make a new buffer here?
    else
       print("Cannot log into target.")
@@ -41,7 +41,7 @@ bind("ssh", "return", function()
            ship.editor.newline(2)
            ship.editor.print_prompt()
            ship.editor.end_of_buffer()
-           ship.editor.unmark()
+           ship.editor.no_mark()
         end
 end)
 
