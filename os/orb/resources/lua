@@ -2,11 +2,27 @@
 
 local f, _env, args = ...
 
+local eval = function(input)
+   local chunk, err = loadstring("return " .. input)
+   if(err and not chunk) then -- statement, not expression
+      chunk, err = loadstring(input)
+      if(not chunk) then
+         print("! Compilation error: " .. err or "Unknown error")
+         return
+      end
+   end
+   local ok, val = pcall(chunk)
+   if(ok) then
+      print(pps(val))
+   else
+      print("Error: " .. val)
+   end
+end
+
 if(#args == 1) then
    local contents = f[args[1]]
    if(contents) then
-      local chunk = assert(loadstring(contents))
-      chunk()
+      eval(contents)
    else
       print(args[1] .. " not found.")
    end
@@ -18,12 +34,10 @@ elseif(args[1] == "--help" or #args > 0) then
 else
    print("Lua 5.1.6259 Copyright (C) 1994-2422 Lua.org, PUC-Rio")
    print("Run `exit()` to exit.")
+   set_prompt(">> ")
    while true do
-      io.write("> ")
       local input = io.read()
       if(not input or input == "exit" or input == "exit()") then return end
-
-      local chunk = assert(loadstring(input))
-      chunk()
+      eval(input)
    end
 end
