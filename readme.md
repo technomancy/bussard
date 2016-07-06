@@ -76,6 +76,9 @@ through in-game hints and tutorials.
 **Q:** Where are the missions?  
 **A:** There are currently only a few missions. The main chain starts at Tana Prime. Open up the "jobs" folder in your mail client to see available missions.
 
+**Q:** I'm stuck on a mission!  
+**A:** If you've received a message, check the bottom of the screen when it's open to see if it's one that you can reply to by pressing `alt-enter`. This is how you initially accept missions, but some missions will need you to respond to messages you get in order to proceed.
+
 ## Influences
 
 * [Escape Velocity](https://www.ambrosiasw.com/games/ev/) (gameplay)

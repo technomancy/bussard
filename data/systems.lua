@@ -141,7 +141,7 @@ local sys = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
            image_name="sun",
            name="L 668-21", fixed=true },
-          {r=20000, mass=500, station=true,
+          {r=20000, mass=700, station=true,
            image_name="station-pointed",
            name="Mirduka Station", os=orb, world=true,
 
