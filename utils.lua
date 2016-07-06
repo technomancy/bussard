@@ -1,6 +1,9 @@
 local utf8 = require("utf8.init")
 local socket = require("socket")
 local lume = require("lume")
+local serpent = require("serpent")
+
+function pp(x) print(serpent.block(x, {maxlevel=8,maxnum=64,nocode=true})) end
 
 local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
 

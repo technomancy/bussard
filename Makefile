@@ -31,7 +31,7 @@ wipe_fs: ; rm -rf ${SAVE_DIR}/fs
 
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
-	  --exclude-files metatable_monkey.lua --globals love lume orb _ \
+	  --exclude-files metatable_monkey.lua --globals love lume orb pp _ \
 	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
 	  --globals lume utf8 pack ship pause define_mode bind utils realprint pp pps \

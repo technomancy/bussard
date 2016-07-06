@@ -47,7 +47,7 @@ local console = make_buffer(nil, "*console*",
                             {"This is the console. Enter any code for your " ..
                              "ship's computer to run it; run man() for help.", "> "})
 console.prevent_close, console.point, console.point_line = true, 2, 2
-console.mode, console.prompt = "console", "> "
+console.mode, console.prompt, console.max_lines = "console", "> ", 512
 
 local mb
 local last_buffer -- for returning to after leaving minibuffer
@@ -83,6 +83,11 @@ local wrap = function(fn, ...)
    end
    if(b and #b.history > history_max) then
       table.remove(b.history, 1)
+   end
+   for _=1,(#b.lines - (b.max_lines or #b.lines)) do
+      table.remove(b.lines, 1)
+      if(b.point_line >= 1) then b.point_line = b.point_line - 1 end
+      if(b.mark_line) then b.mark_line = b.mark_line - 1 end
    end
 end
 
@@ -483,6 +488,10 @@ return {
       b.mark, b.mark_line = b.point, b.point_line
    end,
 
+   unmark = function()
+      b.mark, b.mark_line = nil, nil
+   end,
+
    jump_to_mark = function()
       b.point, b.point_line = b.mark or b.point, b.mark_line or b.point_line
       if(#b.mark_ring > 0) then
@@ -786,6 +795,24 @@ return {
    end,
 
    with_current_buffer = with_current_buffer,
+
+   dump_buffer = function(name)
+      local to_dump = lume.pick(get_buffer(name), "prompt",
+                                "path", "mode", "lines", "point", "mark",
+                                "point_line", "mark_line", "input_history")
+      return lume.serialize(to_dump)
+   end,
+
+   load_buffer = function(fs, dumped)
+      local loaded = lume.deserialize(dumped)
+      local buffer = get_buffer(loaded.path) or make_buffer(fs, loaded.path)
+      lume.extend(buffer, loaded)
+      buffer.input_history = utils.buffer:new(loaded.input_history)
+   end,
+
+   buffer_names = function()
+      return lume.map(buffers, function(bu) return bu.path end)
+   end,
 
    debug = debug,
 }

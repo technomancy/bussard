@@ -514,6 +514,7 @@ ship.api = {
    docs = {},
    persist = {"persist", "scale", "src", "docs", "trajectory_seconds",
               "trajectory", "trajectory_step_size", "trajectory_auto"},
+   persist_buffers = {"*console*"},
 
    -- added by loading config
    controls = {},

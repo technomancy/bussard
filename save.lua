@@ -38,6 +38,13 @@ return {
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
                             lume.serialize(lume.map(ship.bodies, body_data)))
+
+      for _,buffer in ipairs(ship.api.persist_buffers or {}) do
+         local path = "buffers/" .. buffer
+         love.filesystem.createDirectory("buffers")
+         love.filesystem.write(path, ship.api.editor.dump_buffer(buffer))
+      end
+
       love.filesystem.createDirectory("fs")
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do
@@ -46,7 +53,6 @@ return {
                orb.fs.strip_special(fs, {ship.api})
                local fs_data = lume.serialize(fs)
                love.filesystem.write(fs_filename(b), fs_data)
-               -- TODO/blocker: save console contents/history
             end
          end
       end
@@ -103,6 +109,10 @@ return {
          end
       else
          ship:enter(ship.system_name, true, true)
+      end
+      for _,b in ipairs(love.filesystem.getDirectoryItems("buffers")) do
+         local dumped = love.filesystem.read("buffers/" .. b)
+         ship.api.editor.load_buffer(ship.api, dumped)
       end
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do

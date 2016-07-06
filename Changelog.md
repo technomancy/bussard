@@ -2,7 +2,10 @@
 
 ## beta-2 / ???
 
+* Persist console history between runs.
+* New challenge: connect to Subnet.
 * Add socket repl so you can play the game from another process.
+* New coding challenge: rot13 decryption.
 * Messages can be delivered at any time, not just after portal jumps.
 * Improved graphical effect during portal jump.
 * Further mission progression.
