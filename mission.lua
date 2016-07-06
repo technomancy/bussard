@@ -57,38 +57,49 @@ local find = function(ship, id)
       require("data.missions." .. id)
 end
 
+local success_check = function(ship, mission)
+   local record = ship.active_missions[mission.id]
+   if(mission.time_limit and (utils.time(ship) >
+                              record.start_time + mission.time_limit)) then
+      ship.api.print("Mission time limit exceeded: " .. mission.name)
+      fail(ship, mission)
+      return false
+   end
+
+   return cargo_check(ship, mission) and objectives_check(ship, mission) and
+      (not mission.success_check or mission.success_check(ship)) and
+      destination_check(record)
+end
+
+local succeed = function(ship, mission)
+   if(mission.on_success) then mission.on_success(ship) end
+   lume.map(mission.success_events, lume.fn(record_event, ship))
+   for good, amt in pairs(mission.cargo or {}) do
+      ship.cargo[good] = ship.cargo[good] - amt
+      assert(ship.cargo[good] >= 0, "Negative cargo amount.")
+   end
+
+   ship.credits = ship.credits + (mission.credits or 0)
+   ship.api.print("Mission success: " .. (mission.success_message or "OK."))
+   ship.active_missions[mission.id] = nil
+end
+
 local on_login = function(ship)
    for mission_id,record in pairs(ship.active_missions) do
       local mission = find(ship, mission_id)
       record_destination(record, ship.comm_connected, ship)
       if(mission.on_login) then mission.on_login(ship, ship.comm_connected) end
-
-      -- TODO/blocker: success check in update instead
-      if((not mission.time_limit or
-             utils.time(ship) < record.start_time + mission.time_limit) and
-            cargo_check(ship, mission) and objectives_check(ship, mission) and
-            destination_check(record) and
-         (not mission.success_check or mission.success_check(ship))) then
-         if(mission.on_success) then mission.on_success(ship) end
-         for _,e in ipairs(mission.success_events or {}) do
-            record_event(ship, e)
-         end
-         for good, amt in pairs(mission.cargo or {}) do
-            ship.cargo[good] = ship.cargo[good] - amt
-            assert(ship.cargo[good] >= 0, "Negative cargo amount.")
-         end
-
-         ship.credits = ship.credits + (mission.credits or 0)
-         ship.api.print("Mission success: " .. (mission.success_message or "OK."))
-         ship.active_missions[mission_id] = nil
-      end
+      if(success_check(ship, mission)) then succeed(ship, mission) end
    end
 end
 
 local accept = function(ship, message_id)
-   -- TODO: don't allow accept of missions that haven't actually been delivered
    local mission = find(ship, message_id)
    if(not mission) then return false, "No mission " .. message_id end
+
+   if(ship.active_missions[mission.id]) then
+      return false, "Mission is in progress."
+   end
 
    for _,event in pairs(mission.success_events or {}) do
       if(ship.events[event]) then
@@ -125,14 +136,10 @@ local accept = function(ship, message_id)
 end
 
 local update = function(ship, dt)
-   for mission_id,record in pairs(ship.active_missions) do
+   for mission_id in pairs(ship.active_missions) do
       local mission = find(ship, mission_id)
       if(mission.update) then mission.update(ship, dt) end
-      if(mission.time_limit and (utils.time(ship) >
-                                 record.start_time + mission.time_limit)) then
-         ship.api.print("Mission time limit exceeded: " .. mission.name)
-         fail(ship, mission)
-      end
+      if(success_check(ship, mission)) then succeed(ship, mission) end
    end
 end
 
