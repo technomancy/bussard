@@ -113,6 +113,7 @@ return {
          local dumped = love.filesystem.read("buffers/" .. b)
          ship.api.editor.load_buffer(ship.api, dumped)
       end
+      ship.api.editor.print_prompt()
       for _,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do
             if(love.filesystem.isFile(fs_filename(b))) then
