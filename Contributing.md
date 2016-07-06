@@ -15,6 +15,14 @@ in order to make testing login interaction easier.
 
 For story, background and guidelines, look at the dev guide in `spoilers/`.
 
+In order to skip around in the game for debugging, you can run `love . --act 1`
+to set all the flags and deliver all the messages that you would normally get
+by a real play-through of the game up to that point.
+
+Any changes made to the stock config in `data/src` will not be visible to games
+begun before the changes were made. Use `ctrl-f1` to update your in-game config
+with the latest stock. Your old config files will be backed up.
+
 ## Code style
 
 Three-space indent; don't leave out parentheses just because they're

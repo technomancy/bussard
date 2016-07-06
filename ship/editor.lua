@@ -84,10 +84,12 @@ local wrap = function(fn, ...)
    if(b and #b.history > history_max) then
       table.remove(b.history, 1)
    end
-   for _=1,(#b.lines - (b.max_lines or #b.lines)) do
-      table.remove(b.lines, 1)
-      if(b.point_line >= 1) then b.point_line = b.point_line - 1 end
-      if(b.mark_line) then b.mark_line = b.mark_line - 1 end
+   if(b and b.max_lines) then
+      for _=1,(#b.lines - b.max_lines) do
+         table.remove(b.lines, 1)
+         if(b.point_line >= 1) then b.point_line = b.point_line - 1 end
+         if(b.mark_line) then b.mark_line = b.mark_line - 1 end
+      end
    end
 end
 
