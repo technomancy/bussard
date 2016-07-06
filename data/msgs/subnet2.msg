@@ -19,4 +19,4 @@ venantius.m@wonderchannel.net.sol writes:
 > the top of my head, but I do think there's a way to get documentation once
 > you're connected. Try entering this:
 >
->    "d7:command4:helpe".
+>    d7:command4:helpe

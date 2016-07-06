@@ -1,7 +1,7 @@
 From: nari.phouen@starlink.net.sol
 To: captain@adahn.local
 Content-Type: text/plain; charset=UTF-8
-Subject: Re(3): Encrypted files
+Subject: Re(2): Encrypted files
 Message-Id: cd2305a7-64f2-42c5-aadf-fd756ada3742
 
 OK, I've done a bit more fiddling around in my own console, and some of this is

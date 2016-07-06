@@ -4,7 +4,7 @@ Content-Type: text/plain; charset=UTF-8
 Subject: Fwd: Connecting to Subnet
 Message-Id: 54894f43-df6d-4c5f-befc-258a5b067aaa
 
-Well, this looks promising.
+Well, this looks promising. It's from my friend on Newton Station.
 
 venantius.m@wonderchannel.net.sol writes:
 
@@ -17,7 +17,7 @@ venantius.m@wonderchannel.net.sol writes:
 >>>> elsewhere.
 >>>
 >>> Nari, Nari...you're right--I need to be done with this! I deleted the Subnet
->>> client from all my accounts and haven't logged on in years. What do you want
+>>> client from all my drives and haven't logged on in years. What do you want
 >>> from me?
 >>
 >> Come on, V--just point me in the right direction. A hostname, a connection
