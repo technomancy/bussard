@@ -122,6 +122,10 @@ local sandbox_require = function(ship, mod_name)
    sandbox_loaded[mod_name] = true
 end
 
+local universe_api = utils.readonly_proxy {
+   g = body.g,
+}
+
 local sandbox = function(ship)
    local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
    -- TODO: document these in the in-game manual
@@ -129,6 +133,7 @@ local sandbox = function(ship)
                      { help = help.message,
                        print = ship.api.editor.print,
                        ship = ship.api,
+                       universe = universe_api,
                        _LOADED = sandbox_loaded,
                        dofile = lume.fn(sandbox_dofile, ship),
                        require = lume.fn(sandbox_require, ship),
