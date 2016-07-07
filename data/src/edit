@@ -49,6 +49,9 @@ bind("edit", "ctrl-c", ship.editor.kill_ring_save)
 bind("edit", "ctrl-x", ship.editor.kill_region)
 bind("edit", "ctrl-v", ship.editor.yank)
 
+bind("edit", "alt-v", ship.editor.system_yank)
+bind("edit", "alt-c", ship.editor.system_copy_region)
+
 bind("edit", "pageup", ship.editor.scroll_up)
 bind("edit", "pagedown", ship.editor.scroll_down)
 
