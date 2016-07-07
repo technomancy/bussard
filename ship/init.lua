@@ -146,7 +146,12 @@ local sandbox = function(ship)
                        pps = function(x) return serpent.block(x, serpent_opts) end,
                        pp = function(x)
                           editor.print(serpent.block(x, serpent_opts)) end,
-   })
+                       ls = function(path)
+                          for k,v in pairs(ship.api:find(path or ".")) do
+                             ship.api.editor.print(k .. "   " .. type(v))
+                          end
+                          return ship.api.editor.invisible
+                       end,})
 end
 
 local target_dt = 0.03 -- about 33 frames per second
@@ -495,6 +500,7 @@ ship.api = {
    },
 
    find = function(s, path)
+      if(path == ".") then return s end
       local parts = lume.split(path, ".")
       local target = s
       for _,p in ipairs(parts) do
