@@ -14,7 +14,7 @@ case. You'll use string.sub() to get you a single letter out of the string.
 
     local msg = string.upper(ship.docs.backup.msg1_rot13)
     for i=1,#msg do
-       local letter = string.sub(ship.docs.backup.msg1_rot13, i, i)
+       local letter = string.sub(msg, i, i)
        print(letter)
     end
 
