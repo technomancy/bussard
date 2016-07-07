@@ -3,8 +3,8 @@ local lume = require("lume")
 local upgrades = {"laser", "engine", "cargo_bay", "fuel_tank", "fuel_charger",
                   "solar_panel", "comm_boost", "map",}
 
-local events = { luabook1 = "luabook", luabook2 = "luabook",
-                 luabook3 = "luabook", luabook4 = "luabook-b",
+local events = { luabook1 = "passenger2", luabook2 = "passenger2",
+                 luabook3 = "passenger2", luabook4 = "luabook-b",
                  luabook5 = "luabook-b", luabook6 = "luabook-b",
 }
 
@@ -64,7 +64,7 @@ return {
          local p = love.filesystem.read(pages[page_name])
          ship.api.print(p)
       elseif(page_name) then
-         ship.api.print("Page not found.\n\n" .. list())
+         ship.api.print("Page not found.\n\n" .. list(ship))
       else
          local p = love.filesystem.read("doc/quickstart.md")
          ship.api.print(p)
