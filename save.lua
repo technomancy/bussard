@@ -132,6 +132,9 @@ return {
             love.filesystem.remove(fs_filename(b))
          end
       end
+      for _,b in ipairs(love.filesystem.getDirectoryItems("buffers")) do
+         love.filesystem.remove("buffers/" .. b);
+      end
    end,
 
    config_reset = function(ship)
