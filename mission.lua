@@ -48,7 +48,7 @@ local record_destination = function(record, dest, ship)
 end
 
 local record_event = function(ship, e)
-   ship.events[e] = utils.time(ship)
+   ship.events[e] = ship.events[e] or utils.time(ship)
 end
 
 local find = function(ship, id)

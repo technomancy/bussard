@@ -5,8 +5,6 @@ local event_msgs = require("data.msgs.events")
 local utils = require("utils")
 local mission = require("mission")
 
--- TODO: adapt messages in data/news to new mail system
-
 local read = function(msg)
    return love.filesystem.read("data/msgs/" .. msg)
 end
