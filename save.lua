@@ -127,8 +127,8 @@ return {
    abort = function(ship)
       love.filesystem.remove(ship_filename)
       love.filesystem.remove(system_filename)
-      for _,s in pairs(ship.systems) do
-         for _,b in pairs(s.bodies) do
+      for _,s in pairs(ship.systems or {}) do
+         for _,b in pairs(s.bodies or {}) do
             love.filesystem.remove(fs_filename(b))
          end
       end
