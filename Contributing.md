@@ -16,8 +16,8 @@ in order to make testing login interaction easier.
 For story, background and guidelines, look at the dev guide in `spoilers/`.
 
 In order to skip around in the game for debugging, you can run `love . --act 1`
-to set all the flags and deliver all the messages that you would normally get
-by a real play-through of the game up to that point.
+to set all the event flags and deliver all the messages that you would normally
+get by a real play-through of the game up to that point.
 
 Any changes made to the stock config in `data/src` will not be visible to games
 begun before the changes were made. Use `ctrl-f1` to update your in-game config
@@ -25,58 +25,133 @@ with the latest stock. Your old config files will be backed up.
 
 ## Code style
 
-Three-space indent; don't leave out parentheses just because they're
-technically optional. `local f = function() ... end` preferred to
-`local function f() ... end` unless the latter is needed for
-recursion. Try to keep it under 80 columns unless it would be awkward
-(usually strings for output). Lume is great; learn it inside out and
-use it.
+Three-space indent; don't leave out parentheses just because they're technically
+optional. `local f = function() ... end` preferred to `local function f()
+... end` unless the latter is needed for recursion. Try to keep it under 80
+columns unless it would be awkward (usually strings for output). Lume is great;
+learn it inside out and use it.
 
 Some code (primarily the lisp and forth compilers) were imported from
-elsewhere and don't follow these rules all that well.
+elsewhere and don't follow these rules.
 
 ## Philosophy
 
-The whole game is about exploring a simulated world, pushing up
-against its boundaries, and breaking through those
-boundaries. Allowing the user to explore without fear of screwing
-something up irreparably is of paramount importance.
+The whole game is about exploring a simulated world, pushing up against its
+boundaries, and breaking through those boundaries. Allowing the user to explore
+without fear of screwing something up irreparably is of paramount importance.
 
-In-game documentation written as fictional technical manuals
-contributes to the hard-science hacker realism.
+In particular; there should be no failure states for the game before the
+spacetime junction is acquired. After the player has the junction, they can
+recover from failure states by activating it and jumping back to an earlier
+point in time. However, as much as possible, (prior to the finale sequence)
+progress that happens after the junction is acquired should be measured in terms
+of information acquired (which persists across junction activation), not about
+events which occur outside the ship and get undone by the junction.
 
-As much of the game as possible should be implemented in userspace so
-it's modifiable by any intrepid player, except for places where that
-would result in cheating. However, in some places there are in-game
-explanations for behavior that would usually be classified as
-cheating; this is to be embraced.
+In-game documentation written as fictional technical manuals contributes to the
+hard-science hacker realism.
+
+As much of the game as possible should be implemented in userspace so it's
+modifiable by any intrepid player, except for places where that would result in
+cheating. However, in some places there are in-game explanations for behavior
+that would usually be classified as cheating; this is to be embraced.
 
 When in doubt, do what Emacs does.
 
 ## Code Organization
 
-The `ship` table (loaded from `ship/init.lua`) contains all game
-state. In particular, `ship.bodies` is the table for all the worlds,
-asteroids, and ships in the current system, and `ship.systems`
-contains all systems. (I guess it doesn't make all that much sense,
-but it's very convenient.) The `ship` table furthermore has a `.api`
-field on it which is the part of the ship which is exposed to the
-in-game sandboxed user code. Certain fields of `ship` are exposed
-through the `status` metatable as read-only fields (like position or
-velocity) in order to disallow cheating. The `ship.api.actions` table
-contains functions likely to be bound to in-game keys. Upgrades can
-introduce new functions here. The contents of the `src` and `docs`
-tables in `.api` are saved.
+The `ship` table (loaded from `ship/init.lua`) contains all game state. In
+particular, `ship.bodies` is the table for all the worlds, asteroids, and ships
+in the current system, and `ship.systems` contains all systems. (I guess it
+doesn't make all that much sense, but it's very convenient.) The `ship.systems`
+table is loaded from the `data/systems.lua` file.
 
-The `data/` directory contains mostly non-code stuff like mail,
-missions, and definitions of star systems, but `data/src` also
-contains all the code that is loaded into the in-game computer by
-default and can be edited by the player.
+The `ship` table furthermore has a `.api` field on it which is the part of the
+ship which is exposed to the in-game sandboxed user code. Certain fields of
+`ship` are exposed through the `status` metatable as read-only fields (like
+position or velocity) in order to disallow cheating. The `ship.api.actions`
+table contains functions likely to be bound to in-game keys. Upgrades can
+introduce new functions here.
 
-The worlds you SSH into mostly run the Orb operating system, which is
-found in `os/orb`. All the scripts that run inside the OS are found in
-`resources` in that directory. The portals run the `os/lisp` operating
-system, and the `os/forth` OS will be used for the domain injector.
+The `ship.sandbox` table contains all the functions that are exposed as
+top-level values in the in-game Lua environment. Generic Lua functionality comes
+from `utils.sandbox`, while ship-specific things are added in the `sandbox`
+function in `ship/init.lua`; for instance, `print` is defined to be
+`ship.api.editor.print`, which places its output in the console.
+
+The player's progress through the game is tracked in the `ship.events` table,
+which keys strings to numbers which indicate when a specific event
+occurred. Events mostly affect mail and missions.
+
+Note that from an in-game perspective, the `ship.api` table is referred to as
+just `ship`.
+
+### Data
+
+The `data/` directory contains mostly non-code stuff like mail, missions, and
+definitions of star systems, but `data/src` also contains all the code that is
+loaded into the in-game computer by default and can be edited by the player.
+
+Theoretically, replacing the `assets`, `data`, and `doc` directories would give
+you a different game using the Bussard engine. Try to keep anything specific to
+the worlds and story of Bussard in these directories, and everything elsewhere
+should be agnostic, dealing only with the engine.
+
+#### Missions
+
+Missions are found in the `data/missions` directory. You accept them by replying
+to mail. The fields that a mission may have are all documented at the top of
+`mission.lua`. See `data/missions/passenger2` for an example of a complex
+mission. Usually completing a mission sets events, which allows for other
+missions to come available through new mail.
+
+The `ship.active_missions` table stores a record about each mission that is
+currently ongoing, containing at least its start time, required destinations,
+and messages to show upon reaching said destinations. This table is persisted,
+and missions can write arbitrary data to it in order to track mission progress
+in `mission.update` and other functions.
+
+#### Mail
+
+Mail is stored in-game in `ship.api.docs.mail`. There are basically 3 things
+that trigger mail delivery: timed events based on `data/msgs/timed.lua`,
+replying to a message, or something happening within a mission. Messages are in
+`data/msgs`.
+
+Certain messages are replyable. Pressing `alt-enter` when viewing them will
+either accept a mission (in `data/missions/` and named after the message-id of
+the original message), or cause an event to be triggered
+(`data/msgs/event.lua`), or cause another message to be sent to you, if there is
+a file in `data/msgs` whose filename is the message-id of the original message
+you reply to in order to get it.
+
+Files in `data/missions` and `data/msgs` that are named after message-id headers
+should also have symlinks to them for human-readable names.
+
+Mail should stick to the typical header/body pattern; roughly RFC 822.
+
+### OS and SSH
+
+The worlds you SSH into mostly run the Orb operating system, which is found in
+`os/orb`. All the scripts that run inside the OS are found in `resources` in
+that directory. The portals run the `os/lisp` operating system, and the
+`os/forth` OS will be used for the domain injector in the finale.
+
+The code that runs inside SSH connections is sandboxed similarly to code that
+runs on the ship's computer, but a different set of functions is exposed; see
+`sandbox` in `ship/ssh.lua`. Each world you log into offers services you can
+access using shell commands (cargo, upgrades, refueling, etc.) when you log in;
+the underlying (out-of-userspace, and therefore cheat-proof) functionality for
+these is implemented in `services.lua` and placed in the sandbox table so
+scripts in `/bin` can call them.
+
+The UI side of the SSH client is defined in `data/src/ssh`; it is based on the
+ship's computer's console mode, but it calls `ssh_send_line` from the ship's own
+sandbox rather than eval when you press enter.
+
+TODO: further explanation of SSH IO here.
+
+### Editor
 
 The onboard computer uses the `ship/editor.lua` interface for
 everything, not just editing code. Lua console sessions are run in an
@@ -89,12 +164,20 @@ in `ship/init.lua`, and `data/src/config` for a usage example. The
 commands which the non-flight modes bind are typically defined in
 `ship/editor.lua`.
 
-## Data and Mods
+### Save
 
-Theoretically, replacing the `assets`, `data`, and `doc` directories would give
-you a different game using the Bussard engine. Try to keep anything specific to
-the worlds and story of Bussard in these directories, and everything elsewhere
-should be agnostic, dealing only with the engine.
+Certain fields of `ship` are saved off when you quit, but there is a whitelist;
+not everything is saved between exits. (See `ship_fields` and `body_fields` in
+`save.lua`.) Within user data of `ship.api`, the fields that get persisted are
+listed in `ship.api.persist`, allowing the player to declare additional fields
+as persistent.
+
+Ship fields go in `ship_data.lua` in Love's save directory, while status of the
+current system goes in `system_data.lua`. The OS filesystems and editor buffers
+are also saved off into their own files. Nothing is saved from the status of
+systems other than the current one except the filesystems. Filesystems are
+created on-demand, which means that bodies which haven't been logged into yet
+aren't saved.
 
 ## License
 

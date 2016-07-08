@@ -40,6 +40,7 @@ local deliver_msg = function(ship, msg_name)
 end
 
 return {
+   -- check to see if any messages need delivering
    deliver = function(ship)
       local offset = utils.time(ship) - utils.game_start
       for when, name in pairs(timed_msgs) do
@@ -68,6 +69,8 @@ return {
       end
    end,
 
+   -- three kinds of replyable messages; some accept missions, some trigger
+   -- events, some trigger delivery
    replyable = function(msg_id)
       if(event_msgs[msg_id] or mission.find(nil, msg_id) or
          love.filesystem.isFile("data/msgs/" .. msg_id)) then

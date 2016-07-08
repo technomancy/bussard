@@ -127,7 +127,7 @@ local sandbox = function(ship)
    -- TODO: document these in the in-game manual
    return lume.merge(utils.sandbox,
                      { help = help.message,
-                       print = ship.api.print,
+                       print = ship.api.editor.print,
                        ship = ship.api,
                        _LOADED = sandbox_loaded,
                        dofile = lume.fn(sandbox_dofile, ship),

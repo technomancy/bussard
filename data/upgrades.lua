@@ -185,6 +185,8 @@ return {
                           climate.temp, climate.humidity = temp, humidity
                        end
                     end,
+                    -- you can sell your life support system, but it's going to
+                    -- make any humans you have onboard very annoyed!
                     sell = function(ship)
                        for name in pairs(ship.humans) do
                           ship:disembark(name)

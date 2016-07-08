@@ -4,10 +4,34 @@ local recover = require("data.recover")
 local utils = require("utils")
 local lume = require("lume")
 
+-- # Mission structure
+-- required fields: name, description, id
+
+-- TODO: rename to all start with on_* or check_*
+-- optional callbacks:
+-- * accept_function(ship)
+-- * prereq(ship) -> boolean
+-- * update(ship, dt)
+-- * on_login(ship, connected_name)
+-- * success_check(ship) -> boolean
+-- * on_success(ship)
+-- * on_fail(ship)
+
+-- other optional fields:
+-- * time_limit: number of in-game seconds allowed to finish
+-- * credits: to gain upon success
+-- * destinations: a table of body names you must visit, in order
+-- * destination_msgs: table of body names->messages to show when logging in
+-- * cargo: table of goods->tons that need to be delivered
+-- * objectives: array of events that need to have happened to succeed
+-- * success_events: array of events to set upon success
+-- * success_message: prints upon mission success
+-- * fail_message: prints upon mission failure
+
+
 local fail = function(ship, mission, aborted)
-   ship.credits = ship.credits - (mission.fail_credits or 0)
-   if(mission.fail_function) then
-      mission.fail_function(ship, aborted)
+   if(mission.on_fail) then
+      mission.on_fail(ship, aborted)
    end
    if(not aborted) then
       ship.api.print("Mission failed: " .. mission.fail_message or mission.name)
@@ -52,6 +76,10 @@ local record_event = function(ship, e)
 end
 
 local find = function(ship, id)
+   -- recovery missions are special-cased: when you sell your life-support
+   -- system and have a companion human on board, a recovery mission is
+   -- generated to remind you that you need to come back to that planet and pick
+   -- them back up once you purchase life support again.
    if(id and id:match("^recover")) then return recover(ship, id) end
    return id and love.filesystem.isFile("data/missions/" .. id .. ".lua") and
       require("data.missions." .. id)
@@ -119,6 +147,7 @@ local accept = function(ship, message_id)
       end
    end
 
+   -- TODO: do missions really need name and id? name must be unique already
    ship.active_missions[mission.id] = { start = utils.time(ship),
                                         destinations =
                                            lume.clone(mission.destinations or {}),

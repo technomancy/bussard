@@ -2,6 +2,7 @@
 
 ## beta-2 / ???
 
+* Integrate with system clipboard (alt-c and alt-v).
 * Persist console history between runs.
 * New challenge: connect to Subnet.
 * Add socket repl so you can play the game from another process.
