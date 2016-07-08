@@ -226,6 +226,13 @@ local yank = function()
    end
 end
 
+local system_yank = function ()
+   local text = love.system.getClipboardText()
+   if(text) then
+      insert(lume.split(text, "\n"), true)
+   end
+end
+
 local beginning_of_buffer = function()
    return b.point == 0 and b.point_line == 1
 end
@@ -514,6 +521,11 @@ return {
       delete(start_line, start, finish_line, finish)
    end,
 
+   system_copy_region = function()
+      if(b.mark == nil or b.mark_line == nil) then return end
+      love.system.setClipboardText(table.concat(region(), "\n"))
+   end,
+
    yank = yank,
 
    yank_pop = function()
@@ -522,6 +534,8 @@ return {
       delete(ly_line1, ly_point1, ly_line2, ly_point2)
       yank()
    end,
+
+   system_yank = system_yank,
 
    print_kill_ring = function()
       print("Ring:")
