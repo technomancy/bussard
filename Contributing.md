@@ -132,10 +132,10 @@ Mail should stick to the typical header/body pattern; roughly RFC 822.
 
 ### OS and SSH
 
-The worlds you SSH into mostly run the Orb operating system, which is found in
-`os/orb`. All the scripts that run inside the OS are found in `resources` in
-that directory. The portals run the `os/lisp` operating system, and the
-`os/forth` OS will be used for the domain injector in the finale.
+The worlds you SSH into mostly run the Orb unix-like operating system, which is
+found in `os/orb`. All the scripts that run inside the OS are found in
+`resources` in that directory. The portals run the `os/lisp` operating system,
+and the `os/forth` OS will be used for the domain injector in the finale.
 
 The code that runs inside SSH connections is sandboxed similarly to code that
 runs on the ship's computer, but a different set of functions is exposed; see
@@ -149,20 +149,18 @@ The UI side of the SSH client is defined in `data/src/ssh`; it is based on the
 ship's computer's console mode, but it calls `ssh_send_line` from the ship's own
 sandbox rather than eval when you press enter.
 
-TODO: further explanation of SSH IO here.
+See the comments at the top of `ship/ssh.lua` for details about how I/O works.
 
 ### Editor
 
-The onboard computer uses the `ship/editor.lua` interface for
-everything, not just editing code. Lua console sessions are run in an
-editor buffer, as are SSH sessions which connect you to worlds and the
-messaging system. The user is free to define their own modes as
-well. Key presses are translated by the editor into text insertions or
-commands based on the keymap for the current mode; a system which is
-largely based on Emacs. See `find_binding`, `define_mode`, and `bind`
-in `ship/init.lua`, and `data/src/config` for a usage example. The
-commands which the non-flight modes bind are typically defined in
-`ship/editor.lua`.
+The onboard computer uses the `ship/editor.lua` interface for everything, not
+just editing code. Lua console sessions are run in an editor buffer, as are SSH
+sessions which connect you to worlds and the messaging system. The user is free
+to define their own modes as well. Key presses are translated by the editor into
+text insertions or commands based on the keymap for the current mode; a system
+which is largely based on Emacs. See `find_binding`, `define_mode`, and `bind`
+in `ship/init.lua`, and `data/src/config` for a usage example. The commands
+which the non-flight modes bind are typically defined in `ship/editor.lua`.
 
 ### Save
 

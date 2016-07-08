@@ -7,6 +7,23 @@ local serpent = require("serpent")
 
 local sessions = {}
 
+-- The I/O model for SSH sessions is pretty confusing, so listen up. Logging
+-- in involves attempting to authenticate with the target, and storing a tuple
+-- of {fs, env, fs_raw} in the sessions table. The first fs is a proxied table
+-- which enforces access limitations.
+
+-- From there it logs into orb (portal logins are different; using lisp_login)
+-- by setting env.IN and env.OUT; the former to a FIFO file node, and the
+-- latter to a function which writes its output to the console.
+
+-- In the "ssh" mode of the editor, enter is rebound to `send_line`, which
+-- looks up the env.IN FIFO node and puts the input into it, provided the ship
+-- is within range.
+
+-- Within remote OSes, `io.write` is bound to a function that calls env.OUT,
+-- and `io.read` pulls from the env.IN FIFO. All the code that runs on the OS
+-- uses the sandbox below.
+
 local logout = function(ship, target)
    ship.api:activate_mode("console")
    ship.api.editor.set_prompt("> ")
