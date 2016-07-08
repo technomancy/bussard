@@ -18,6 +18,11 @@ local quit = function()
    love.event.quit()
 end
 
+love.quit = function()
+   save.save(ship)
+   return false
+end
+
 local font_path, font, noto = "assets/fonts/inconsolata.ttf"
 
 local resize = function()
