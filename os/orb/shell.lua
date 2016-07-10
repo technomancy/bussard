@@ -192,9 +192,10 @@ orb.shell = {
       assert(orb.shell.in_group(raw_fs, env.USER, "sudoers"),
              "Must be in the sudoers group.")
       assert(raw_fs.etc.passwords[user] or user == "root",
-             "User does not exist.")
+             "User does not exist: " .. user)
       local new_f = orb.fs.proxy(raw_fs, user, raw_fs)
       local new_env = orb.shell.new_env(user)
+      new_env.IN, new_env.OUT = env.IN, env.OUT
       orb.shell.exec(new_f, new_env, args, extra_sandbox)
    end,
 

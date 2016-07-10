@@ -266,7 +266,8 @@ orb.fs = {
             local f2 = {}
             for k,v in pairs(raw) do
                if(type(v) == "string" or type(v) == "function" or
-                  type(v) == "number" or type(v) == "boolean") then
+                  type(v) == "number" or type(v) == "boolean" or
+                  type(v) == "thread") then
                   f2[k] = v
                elseif(type(v) == "table" and
                       orb.fs.readable(raw_root, v, user)) then

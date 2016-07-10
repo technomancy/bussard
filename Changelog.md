@@ -2,6 +2,7 @@
 
 ## beta-2 / ???
 
+* Fix a bug where contents of proxy tables wouldn't print.
 * Integrate with system clipboard (alt-c and alt-v).
 * Persist console history between runs.
 * New challenge: connect to Subnet.
