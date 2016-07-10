@@ -27,14 +27,14 @@ local host_fs_proxy_set = function(prefix)
          local name = prefix .. "/" .. key
          if(type(content)=="string") then
             if(love.filesystem.isDirectory(name)) then
-               error("The path " .. name .. 
+               error("The path " .. name ..
                   " is a directory, cannot replace with a file")
             else
-               love.filesystem.write(name, content)
+               assert(love.filesystem.write(name, content), "Could not write.")
             end
          elseif(type(content)=="table") then
             if(love.filesystem.exists(name)) then
-               error("The path " .. name .. 
+               error("The path " .. name ..
                   "already exists, can't create a directory")
             else
                love.filesystem.createDirectory(name)
@@ -62,7 +62,8 @@ local host_fs_proxy_mt = function(prefix, readonly)
 end
 
 local host_fs_proxy = function (prefix, readonly)
-  local t = {}
+   local t = {}
+   love.filesystem.createDirectory(prefix)
   setmetatable(t, host_fs_proxy_mt(prefix, readonly))
   return t
 end
