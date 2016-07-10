@@ -9,6 +9,7 @@ local ai = require("ship.ai")
 local ssh = require("ship.ssh")
 local mail = require("mail")
 local mission = require("mission")
+local host_fs_proxy = require("host_fs_proxy")
 
 -- for shuffling systems upon entry
 local asteroid = require("asteroid")
@@ -554,6 +555,8 @@ ship.api = {
    read_line = function(_, prompt, callback)
       editor.activate_minibuffer(prompt, callback)
    end,
+
+   host = host_fs_proxy.create("host_fs"),
 }
 
 return ship

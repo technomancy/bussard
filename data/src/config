@@ -73,3 +73,7 @@ end
 -- if you keep your personal customizations in here, they will be preserved
 -- in the event of a config reset.
 -- dofile("src.custom")
+--
+-- wipe-safe host-accessible directory structure
+-- host_fs/config in the game save directory
+-- dofile("host.config")
