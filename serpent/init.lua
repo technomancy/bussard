@@ -53,7 +53,8 @@ local function s(t, opts)
     if ttype == "table" then
       if level >= maxl then return tag..'{}'..comment('max', level) end
       seen[t] = insref or spath
-      if next(t) == nil then return tag..'{}'..comment(t, level) end -- table empty
+      -- PNH: this breaks with our metatable monkeypatch to support iterators
+      -- if next(t) == nil then return tag..'{}'..comment(t, level) end -- table empty
       local maxn, o, out = math.min(#t, maxnum or #t), {}, {}
       for key = 1, maxn do o[key] = key end
       if not maxnum or #o < maxnum then
