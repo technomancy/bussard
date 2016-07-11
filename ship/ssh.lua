@@ -66,8 +66,7 @@ local send_line = function(ship, input)
    end
 end
 
-local sandbox = function(ship)
-   local target = ship.target
+local sandbox = function(ship, target)
    local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
    local sb = {
       buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
@@ -93,7 +92,7 @@ local sandbox = function(ship)
    end
 
    if(ship.target and ship.target.subnet) then
-      sb.subnet = services.subnet
+      sb.subnet = lume.fn(services.subnet.request, ship)
    end
 
    if(ship.target and ship.target.portal) then
@@ -114,20 +113,11 @@ local sandbox = function(ship)
    return lume.merge(utils.sandbox, sb)
 end
 
-local sandbox_write = function(ship, target_name, output)
-   if(output) then
-      ship.api.write(output)
-   else
-      -- printing nil means EOF, close session
-      logout(ship, target_name)
-   end
-end
-
 local lisp_login = function(fs, env, ship, command)
    local buffer = {}
    local max_buffer_size = 1024
-   local sb = sandbox(ship)
-   local write = lume.fn(sandbox_write, ship, ship.target.name)
+   local sb = sandbox(ship, ship.target)
+   local write = ship.api.write
    env.IN = function(...)
       local arg = {...}
       if(#arg == 0 or arg[1] == "*line*") then
@@ -147,7 +137,7 @@ local lisp_login = function(fs, env, ship, command)
       ship.api.editor.with_current_buffer("*console*", function()
                                              ship.api:activate_mode("console")
                                              ship.api.editor.set_prompt("> ")
-                                                       end)
+      end)
       logout(ship, ship.target)
    end
 
@@ -160,11 +150,50 @@ end
 local orb_login = function(fs, env, ship, command)
    env.IN, env.OUT = "/tmp/in", "/tmp/out"
    ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
-   fs[env.OUT] = lume.fn(sandbox_write, ship, ship.target.name)
+   fs[env.OUT] = ship.api.write
    -- TODO: improve error handling for problems in smashrc
-   ship.target.os.process.spawn(fs, env, command, sandbox(ship))
-   -- without this you can't have non-interactive SSH commands
+   ship.target.os.process.spawn(fs, env, command, sandbox(ship, ship.target))
+   -- without this you can't have non-shell SSH commands
    ship.target.os.process.scheduler(fs)
+end
+
+local get_connection = function(ship, username, password)
+   if(not ship:in_range(ship.target)) then
+      ship.api.editor.print("| Out of communications range.")
+      return
+   end
+
+   assert(ship.target.os.name == "orb", "TODO: support non-orb")
+   local fs_raw = body.login(ship, ship.target, username, password)
+   if(fs_raw) then
+      local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
+      local env = ship.target.os.shell.new_env(username)
+      local session_id = tostring(love.math.random(99999999))
+      local target = ship.target
+      env.HOST = body.hostname(ship.target.name)
+      env.OUT = "/tmp/out-" .. session_id
+
+      mission.on_login(ship)
+      return function(command)
+         assert(fs, "Already logged out; establish a new connection.")
+         if(command == "logout") then
+            fs[env.OUT], fs, env = nil, nil, nil
+            return
+         end
+
+         local output = ""
+         fs[env.OUT] = function(...)
+            for _,x in ipairs({...}) do
+               output = output .. x
+            end
+         end
+         -- TODO: problem is that subnet is implemented by repl in .smashrc
+         ship.target.os.shell.exec(fs, env, command, sandbox(ship, target))
+         return output
+      end
+   else
+      return nil, "Login failed."
+   end
 end
 
 return {
@@ -197,6 +226,8 @@ return {
          ship.api.print("Login failed.")
       end
    end,
+
+   get_connection = get_connection,
 
    send_line = send_line,
    logout = logout,

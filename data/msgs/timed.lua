@@ -5,8 +5,10 @@ return {
    [120000]                           = "passenger1.msg",
    [200000]                           = "passenger2.msg",
    [1200000]                          = "passenger3.msg",
+   -- TODO: maybe merge nari-decrypt-01.msg with nari-a-09.msg
    [{"passenger2",  15000}]           = "nari-decrypt-01.msg",
    [{"rot13-decrypt-accept", 60000}]  = "nari-decrypt-03.msg",
    [{"rot13-decrypt-accept", 120000}] = "subnet.msg",
    [{"rot13-decrypt-accept", 220000}] = "subnet2.msg",
+   [{"subnet", 1000}]                 = "subnet3.msg",
 }

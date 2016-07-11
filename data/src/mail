@@ -21,7 +21,7 @@ end
 
 local describe = function(msg)
    local lines = lume.split(msg, "\n")
-   local date = utils.pad_to(header(lines, "Date"), 17)
+   local date = utils.pad_to(header(lines, "Date") or "", 17)
    local from = utils.pad_to(header(lines, "From"), 42)
    local subject = header(lines, "Subject")
    return date .. " | " .. from .. " | " .. subject
@@ -31,7 +31,10 @@ local subjects_by_date = function(msgs)
    local by_date, names = {}, {}
    for name, msg in pairs(msgs) do
       if(name ~= "_unread") then
-         by_date[utils.parse_time(header(lume.split(msg, "\n"), "Date"))] = name
+         local date = header(lume.split(msg, "\n"), "Date")
+         local key = key and utils.parse_time(key) or
+            header(lume.split(msg, "\n"), "Subject")
+         by_date[key] = name
       end
    end
    for _, date in ipairs(lume.sort(lume.keys(by_date))) do

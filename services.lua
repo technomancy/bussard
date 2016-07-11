@@ -6,6 +6,7 @@ local body = require("body")
 local bencode = require("bencode")
 local clearances = require("data.clearances")
 local upgrades = require("data.upgrades")
+local mission = require("mission")
 
 local get_price = function(good, amount, prices, direction)
    local other_direction = direction == "sell" and "buy" or "sell"
@@ -132,7 +133,7 @@ return {
    end,
 
    subnet = {
-      request = function(input_string)
+      request = function(ship, input_string)
          local enc = function(x) return bencode.encode(x, true) end
          local fs = love.filesystem
          local input, err = bencode.decode(input_string)
@@ -144,13 +145,18 @@ return {
             groups = lume.filter(groups, function(g)
                                     return fs.isDirectory("data/news/" .. g)
             end)
+            mission.record_event(ship, "subnet")
             return enc({status="ok", groups=groups})
          elseif(input.command == "list") then
             local posts = fs.getDirectoryItems("data/news/" .. input.group)
-            return enc({status="ok", posts=posts})
+            return enc({status="ok", posts=posts, group=input.group})
          elseif(input.command == "get") then
             local text = fs.read("data/news/"..input.group.."/"..input.post)
-            return enc({status="ok",content=text})
+            if(text) then
+               return enc({status="ok", content=text, post=input.post})
+            else
+               return(enc({status="failed"}))
+            end
          elseif(input.command == "help") then -- "d7:command4:helpe"
             return enc(love.filesystem.read("doc/subnet.md"))
          else

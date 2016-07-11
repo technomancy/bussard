@@ -4,7 +4,8 @@ local subnet_client = love.filesystem.read("data/subnet.lua")
 
 local subnet_user = { username="subnet",
                       password="reindeerflotilla",
-                      files={["/home/subnet/_smashrc"]=subnet_client} }
+                      files={["/home/subnet/_smashrc"]=subnet_client,
+                         ["/home/subnet/bin/subnet"]=subnet_client} }
 
 local data = {}
 

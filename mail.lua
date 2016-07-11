@@ -73,7 +73,7 @@ return {
    -- events, some trigger delivery
    replyable = function(msg_id)
       if(event_msgs[msg_id] or mission.find(nil, msg_id) or
-         love.filesystem.isFile("data/msgs/" .. msg_id)) then
+         msg_id and love.filesystem.isFile("data/msgs/" .. msg_id)) then
          return true
       end
    end,
