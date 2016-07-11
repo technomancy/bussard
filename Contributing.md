@@ -23,6 +23,13 @@ Any changes made to the stock config in `data/src` will not be visible to games
 begun before the changes were made. Use `ctrl-f1` to update your in-game config
 with the latest stock. Your old config files will be backed up.
 
+If you symlink your checkout of the game source into
+`~/.local/share/love/bussard/game` (or wherever LÖVE stores saves on your
+platform) then it will be available for in-game editing using the `ship.game`
+table. However, it won't work properly from within the editor unless you open
+the file starting with a slash; for instance, this file would be opened with
+ctrl-o then `/Contributing.md`.
+
 ## Code style
 
 Three-space indent; don't leave out parentheses just because they're technically

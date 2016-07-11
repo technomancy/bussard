@@ -2,6 +2,8 @@
 
 ## beta-2 / ???
 
+* Add API for connecting over SSH and getting output back.
+* Make it possible to edit the game from within the game during development.
 * Fix a bug where contents of proxy tables wouldn't print.
 * Integrate with system clipboard (alt-c and alt-v).
 * Persist console history between runs.

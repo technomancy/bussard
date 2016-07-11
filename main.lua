@@ -80,6 +80,7 @@ local ui = {
    end,
 
    get_fps = love.timer.getFPS,
+   powersave = love.system.getPowerInfo() == "battery",
 }
 
 local safely = function(f)
@@ -212,9 +213,13 @@ local draw = safely(function(dt)
          love.graphics.setLineWidth(1)
       end
 
-      hud.trajectory(ship, ship.bodies, ship.api.trajectory,
-                     ship.api.trajectory_step_size,
-                     {190, 190, 255}, {99, 99, 168}, {90, 90, 155}, {60, 60, 102})
+      -- save battery by disabling trajectory when not in flight mode
+      if(not ui.powersave or ship.api:mode().name == "flight") then
+        hud.trajectory(ship, ship.bodies, ship.api.trajectory,
+                       ship.api.trajectory_step_size,
+                       {190, 190, 255}, {99, 99, 168},
+                       {90, 90, 155}, {60, 60, 102})
+      end
 
       love.graphics.setColor(255, 255, 255)
       for _,b in pairs(ship.bodies) do

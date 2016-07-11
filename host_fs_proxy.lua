@@ -1,3 +1,5 @@
+local host_fs_proxy
+
 local host_fs_proxy_entry = function(name, readonly)
    if love.filesystem.isDirectory(name) then
       return host_fs_proxy(name, readonly)
@@ -61,7 +63,7 @@ local host_fs_proxy_mt = function(prefix, readonly)
    }
 end
 
-local host_fs_proxy = function (prefix, readonly)
+host_fs_proxy = function (prefix, readonly)
    local t = {}
    love.filesystem.createDirectory(prefix)
   setmetatable(t, host_fs_proxy_mt(prefix, readonly))

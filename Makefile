@@ -22,13 +22,6 @@ META=readme.md LICENSE credits.md Changelog.md bussard.el
 todo: ; grep -nH -e TODO $(GAME_LUA)
 blockers: ; grep TODO/blocker $(GAME_LUA)
 
-SAVE_DIR=${HOME}/.local/share/love/bussard
-
-wipe: ; rm -rf ${SAVE_DIR}
-backup: ; rm -rf ${SAVE_DIR}.bak; cp -r ${SAVE_DIR} ${SAVE_DIR}.bak
-restore: wipe ; cp -r ${SAVE_DIR}.bak ${SAVE_DIR}
-wipe_fs: ; rm -rf ${SAVE_DIR}/fs
-
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --exclude-files metatable_monkey.lua --globals love lume orb pp _ \

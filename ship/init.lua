@@ -436,6 +436,9 @@ local ship = {
          ship:textinput(text, mode.parent)
       end
    end,
+
+   -- for debugging during development
+   realdofile = dofile,
 }
 
 -- everything in here is exposed to the sandbox. this table *is* `ship`, as far
@@ -557,6 +560,7 @@ ship.api = {
    end,
 
    host = host_fs_proxy.create("host_fs"),
+   game = love.filesystem.exists("game") and host_fs_proxy.create("game"),
 }
 
 return ship
