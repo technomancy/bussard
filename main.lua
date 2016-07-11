@@ -11,7 +11,7 @@ local save = require "save"
 local pause = require "pause"
 local systems = require("data.systems")
 
-local play, stars
+local stars
 
 local quit = function()
    save.save(ship)
@@ -23,7 +23,7 @@ love.quit = function()
    return false
 end
 
-local font_path, font, noto = "assets/fonts/inconsolata.ttf"
+local font_path = "assets/fonts/inconsolata.ttf"
 
 local resize = function()
    local dw, dh = love.window.getDesktopDimensions()
@@ -129,10 +129,10 @@ end
 
 love.load = function()
    resize()
-   font = love.graphics.newFont(font_path, 16)
-   noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
-   if(font.setFallbacks) then font:setFallbacks(noto) end
-   love.graphics.setFont(font)
+   ui.font = love.graphics.newFont(font_path, 16)
+   ui.noto_font = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
+   if(ui.font.setFallbacks) then ui.font:setFallbacks(ui.noto_font) end
+   love.graphics.setFont(ui.font)
 
    stars = { starfield.new(10, 0.01, 100),
              starfield.new(10, 0.05, 175),
@@ -150,7 +150,7 @@ love.load = function()
    end
 
    ship:dofile("src.config")
-   play()
+   ui.play()
 end
 
 love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end
@@ -266,8 +266,8 @@ local draw = safely(function(dt)
       draw(ship)
 end)
 
-play = function()
-   love.graphics.setFont(font)
+ui.play = function()
+   love.graphics.setFont(ui.font)
    love.update,love.keypressed,love.textinput,love.draw =
       update, keypressed, textinput, draw
 end

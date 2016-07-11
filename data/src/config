@@ -51,7 +51,6 @@ bind({"flight", "edit"}, "ctrl-r",
    function()
       local success, err = ship.dofile("src.config")
       if(success) then
-         ship.editor.initialize()
          print("Successfully reloaded config.")
       else
          print("Error loading config.")

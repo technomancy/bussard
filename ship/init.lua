@@ -214,7 +214,6 @@ local ship = {
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
-      ship.api.editor.initialize()
       for _,m in pairs(ship.api.modes) do
          if(m.initialize) then m.initialize() end
       end
@@ -437,8 +436,8 @@ local ship = {
       end
    end,
 
-   -- for debugging during development
-   realdofile = dofile,
+   -- for debugging during development: ship.cheat:realdofile("main.lua")
+   realdofile = function(ship, x) dofile(x) ship.api.ui.play() end,
 }
 
 -- everything in here is exposed to the sandbox. this table *is* `ship`, as far

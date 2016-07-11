@@ -283,7 +283,7 @@ end
 
 local save = function(this_fs, this_path)
    local target = this_fs or b.fs
-   if(not target) then return end
+   if(not target or not b.needs_save) then return end
    b.needs_save = false
    if(b.path:find("^/")) then
       if(not love.filesystem.write("game" .. b.path,
@@ -343,11 +343,6 @@ local io_write = function(...)
 end
 
 return {
-   initialize = function()
-      ROW_HEIGHT = love.graphics.getFont():getHeight()
-      em = love.graphics.getFont():getWidth('a')
-   end,
-
    open = function(fs, path)
       b = get_buffer(path)
       if(not b) then
@@ -551,6 +546,9 @@ return {
 
    -- internal functions
    draw = function()
+      ROW_HEIGHT = ROW_HEIGHT or love.graphics.getFont():getHeight()
+      em = em or love.graphics.getFont():getWidth('a')
+
       if(not b) then
          love.graphics.setColor(0, 200, 0)
          if(console.lines[#console.lines] == console.prompt) then

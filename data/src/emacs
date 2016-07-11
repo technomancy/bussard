@@ -15,6 +15,7 @@ bind("edit", "alt-,", ship.editor.beginning_of_buffer)
 bind("edit", "alt-.", ship.editor.end_of_buffer)
 
 bind("edit", "ctrl- ", ship.editor.mark)
+bind("edit", "ctrl-space", ship.editor.mark)
 bind("edit", "ctrl-g", ship.editor.no_mark)
 bind("edit", "alt-w", ship.editor.kill_ring_save)
 bind("edit", "ctrl-w", ship.editor.kill_region)

@@ -107,6 +107,7 @@ return {
    end,
 
    update = function(bodies, dt)
+      -- move this to long_update in ship update loop?
       if(update_counter < 16) then
          update_counter = update_counter + dt
       else
