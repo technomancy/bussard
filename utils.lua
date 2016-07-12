@@ -220,6 +220,17 @@ end
 
 local timers = {}
 
+local timer = function(period, callback)
+   timers[callback] = 0
+   return function(dt)
+      timers[callback] = timers[callback] + dt
+      if(timers[callback] >= period) then
+         callback(timers[callback])
+         timers[callback] = 0
+      end
+   end
+end
+
 return {
    shallow_copy = shallow_copy,
 
@@ -298,15 +309,13 @@ return {
          * ship.time_factor
    end,
 
-   timer = function(period, callback)
-      timers[callback] = 0
-      return function(dt)
-         timers[callback] = timers[callback] + dt
-         if(timers[callback] >= period) then
-            callback(timers[callback])
-            timers[callback] = 0
-         end
-      end
+   timer = timer,
+
+   ptimer = function(period, callback)
+      timer(period, function(x)
+               local ok, err = pcall(function() callback(x) end)
+               if(not ok) then print("Timer error: " .. error) end
+      end)
    end,
 
    find_by = function(ts, key, value)

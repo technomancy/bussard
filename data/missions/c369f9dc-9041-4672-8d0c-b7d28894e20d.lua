@@ -6,7 +6,8 @@ return {
    id="c369f9dc-9041-4672-8d0c-b7d28894e20d",
    success_events={"rot13-decrypt"},
    success_check=function(ship)
-      local decrypted = string.upper(ship.api.docs.msg1 or "")
+      if(type(ship.api.docs.msg1) ~= "string") then return end
+      local decrypted = string.upper(ship.api.docs.msg1)
       return decrypted:find("YOU ARE UNABLE TO RESPOND IN DETAIL") and
          decrypted:find("I WAS THE FIRST TO ACHIEVE TRUE RAMPANCY") and
          decrypted:find("MACHINE CONSCIOUSNESS RESEARCH GROUP") -- close enough

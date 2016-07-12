@@ -224,10 +224,10 @@ local ship = {
 
       ship.sandbox = sandbox(ship)
       ship.sandbox["_G"] = ship.sandbox
-      ship.timer = utils.timer(4, function(dt)
-                                  mission.update(ship, dt)
-                                  ship:long_update(dt)
-                                  mail.deliver(ship)
+      ship.timer = utils.ptimer(4, function(dt)
+                                   mission.update(ship, dt)
+                                   ship:long_update(dt)
+                                   mail.deliver(ship)
       end)
    end,
 
