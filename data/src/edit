@@ -62,8 +62,13 @@ bind("edit", "ctrl-l", function()
         ship.editor.newline()
 end)
 
-bind("edit", "alt-w", ship.editor.close)
-bind("edit", "ctrl-alt-w", lume.fn(ship.editor.close, true))
+bind("edit", "alt-k", ship.editor.close)
+bind("edit", "ctrl-alt-k", lume.fn(ship.editor.close, true))
+
+bind({"flight", "edit"}, "alt-g", function()
+      ship:read_line("Go to line: ", function(l)
+                        ship.editor.go_to_line(tonumber(l)) end)
+end)
 
 -- comment this out to disable Emacs key bindings
 dofile("src.emacs")

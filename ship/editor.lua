@@ -827,5 +827,9 @@ return {
       return lume.map(buffers, function(bu) return bu.path end)
    end,
 
+   go_to_line = function(line)
+      if(line > 0 and line <= #b.lines) then b.point_line = line end
+   end,
+
    debug = debug,
 }
