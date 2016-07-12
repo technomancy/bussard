@@ -15,13 +15,17 @@ case. You'll use string.sub() to get you a single letter out of the string.
     local msg = string.upper(ship.docs.backup.msg1_rot13)
     for i=1,#msg do
        local letter = string.sub(msg, i, i)
-       print(letter)
+       if(letter >= "A") then
+         print(letter) -- or whatever
+       elseif(...) then
+       end
     end
 
 This will just print each letter individually; in order to decode the message
 you'll have to get the string.byte and string.char functions into the mix to
-shift all the letters over by 13. You build up a string using the .. operator
-(dot-dot) to turn two strings into one:
+shift all the letters over by 13. Letters in the first half of the alphabet go
+up by 13, and letters in the second half go down by 13. You build up a string
+using the .. operator (dot-dot) to turn two strings into one:
 
     local decoded = "ABC"
     decoded = decoded .. "DEF"

@@ -133,6 +133,12 @@ equipment. He owes Elwin Dorath a favor from ages ago.
 
 ## Venantius Mamat
 
+Old friend of Nari's. He has a shady past but has given all that up years
+ago. He owes her a favor for some reason, and helps you get access to Subnet. He
+lives on Newton Station.
+
+## Gahitur Covoti
+
 Friend-of-a-friend of Nari's. His mother worked in the Lalande machine
 consciousness lab, and she told him a lot about what it was like to be there.
 In particular, because she was at Lalande, she knew more about the

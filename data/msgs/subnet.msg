@@ -12,9 +12,8 @@ venantius.m@wonderchannel.net.sol writes:
 >
 >>>> I know you told me you were done with this stuff and needed to move on with
 >>>> your life, but I'm calling in a favor you owe me. I need you to help me
->>>> connect to Subnet. Some day I hope I'll be able to explain why, but I can't
->>>> right now. There are people there with answers I need. Answers I can't find
->>>> elsewhere.
+>>>> connect to Subnet. I can't explain why right now other than to say that
+>>>> there are people there with answers I need.
 >>>
 >>> Nari, Nari...you're right--I need to be done with this! I deleted the Subnet
 >>> client from all my drives and haven't logged on in years. What do you want

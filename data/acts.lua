@@ -13,10 +13,10 @@ return {
       ship.humans.nari = "companion"
    end,
    [2] = function(ship)
-      local events = {"rot13-decrypt"}
-      local msgs = {"nari-decrypt-01.msg", "nari-decrypt-02.msg",
-                    "nari-decrypt-03.msg", "nari-decrypted.msg",
-                    "subnet.msg", "subnet2.msg"}
+      local events = {"rot13-decrypt", "subnet"}
+      local msgs = {"nari-decrypt-02.msg", "nari-decrypt-03.msg",
+                    "nari-decrypted.msg",
+                    "subnet.msg", "subnet2.msg", "subnet3.msg"}
       for _,e in ipairs(events) do ship.events[e] = ship.sandbox.os.time() end
       for _,m in ipairs(msgs) do mail.deliver_msg(ship, m) end
    end,

@@ -10,8 +10,8 @@
  * You can't leave Tana because you can't get a background check needed for Sol portal clearance
 * You can probably decrypt the rot13 journal on your own, but you can wait for act 2
 * Try to accept a passenger mission, mission aborts due to not having life-support
-* Buy life support, run a passenger mission or two
-* Eventually accept mission to take Nari home
+* Buy life support, run a passenger mission or two (optional missions: passenger1, passenger3)
+* Eventually accept mission to take Nari home (mission: passenger2)
 * She figures out that whoa holy crap; you're a machine consciousness
 * Nari helps you pass the background check needed for the portal
 * You bring Nari to Newton Station, where she contacts an old friend who has clues
@@ -23,10 +23,13 @@ assuming that he is a villain opposed to humanity. This isn't true at
 all, but it fits the facts as they know them. Nari still doesn't have
 access to systems beyond Terran/Sol/Tana.
 
-* Nari starts to try to find Venantius, but it will take a while
-* She helps you decrypt the rot13 journal
+* Nari helps you decrypt the rot13 journal (mission: decrypt)
  * The one that records when Traxus first contacts you
-* Venantius's mother worked on the machine consciousness project (not Bohk team)
+* Whether you succeed or not with the rot13, she eventually forwards you a
+  message about connecting to subnet where you can find more (message: subnet.msg)
+* Once you get on subnet, Nari sends out feelers that lead here eventually to Covoti.
+
+* Covoti's mother worked on the machine consciousness project (not Bohk team)
 * Track him down, find out about the connection between MC project and spacetime junction
  * And that the spacetime junction was the goal of Traxus at one point
 * Somehow you recruit Clay Dorath

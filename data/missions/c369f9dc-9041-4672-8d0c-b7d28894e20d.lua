@@ -1,3 +1,5 @@
+-- -*- lua -*-
+
 local mail = require("mail")
 local mission = require("mission")
 return {
