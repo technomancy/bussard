@@ -312,9 +312,9 @@ return {
    timer = timer,
 
    ptimer = function(period, callback)
-      timer(period, function(x)
-               local ok, err = pcall(function() callback(x) end)
-               if(not ok) then print("Timer error: " .. error) end
+      return timer(period, function(x)
+                      local ok, err = pcall(function() callback(x) end)
+                      if(not ok) then print("Timer error: " .. error) end
       end)
    end,
 
