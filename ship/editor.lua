@@ -588,7 +588,7 @@ return {
       local edge = math.ceil(DISPLAY_ROWS * SCROLL_POINT)
 
       if(b.minibuffer) then
-         mb, b = b, buffers[1]
+         mb, b = b, last_buffer or buffers[1]
       end
 
       local offset = (b.point_line < edge and 0) or (b.point_line - edge)
