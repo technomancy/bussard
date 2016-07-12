@@ -422,6 +422,20 @@ local ship = {
       end
    end,
 
+   handle_wheel = function(ship, x, y)
+      local wheel_dir = nil
+      if(x < 0) then wheel_dir = "wheelleft"
+      elseif(x > 0) then wheel_dir = "wheelright"
+      elseif(y < 0) then wheel_dir = "wheeldown"
+      elseif(y > 0) then wheel_dir = "wheelup"
+      end
+      local fn = find_binding(ship, wheel_dir)
+      local wrap = ship.api:mode().wrap
+      if(fn and wrap) then with_traceback(wrap, fn)
+      elseif(fn) then with_traceback(fn)
+      end
+   end,
+
    textinput = function(ship, text, the_mode)
       if(find_binding(ship, text)) then return end
       if(utf8.len(text) > 1) then return end

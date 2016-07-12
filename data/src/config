@@ -13,6 +13,9 @@ ship.controls = {
 -- Flight mode
 define_mode("flight")
 
+bind("flight", "wheelup", function() ship.scale = ship.scale - (ship.dt/2) end)
+bind("flight", "wheeldown", function() ship.scale = ship.scale + (ship.dt/2) end)
+
 bind("flight", "escape", ship.ui.pause)
 bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
 
@@ -64,10 +67,6 @@ bind("flight", "ctrl-s", function()
 end)
 
 bind("flight", "ctrl-p", portal)
-
-ship.handle_wheel = function(_, y)
-   ship.scale = ship.scale + y / 100
-end
 
 -- if you keep your personal customizations in here, they will be preserved
 -- in the event of a config reset.

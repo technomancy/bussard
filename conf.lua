@@ -3,7 +3,7 @@ local lume = require("lume")
 love.conf = function(t)
    t.gammacorrect = true
    t.title, t.identity = "Bussard", "bussard"
-   t.modules.mouse, t.modules.joystick, t.modules.physics = false, false, false
+   t.modules.joystick, t.modules.physics = false, false
    t.modules.audio, t.modules.sound = false, false
 
    -- need to run this: luarocks install --local lua-repl

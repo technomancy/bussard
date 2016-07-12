@@ -42,6 +42,8 @@ bind("edit", "left", ship.editor.backward_char)
 bind("edit", "right", ship.editor.forward_char)
 bind("edit", "up", ship.editor.prev_line)
 bind("edit", "down", ship.editor.next_line)
+bind("edit", "wheelup", ship.editor.prev_line)
+bind("edit", "wheeldown", ship.editor.next_line)
 
 bind("edit", "ctrl- ", ship.editor.mark)
 bind("edit", "ctrl-space", ship.editor.mark)

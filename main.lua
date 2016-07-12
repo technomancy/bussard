@@ -121,12 +121,6 @@ local safely = function(f)
    end
 end
 
-love.wheelmoved = function(x, y)
-   if(ship.api.handle_wheel) then
-      ship.api.handle_wheel(x, y)
-   end
-end
-
 love.load = function()
    resize()
    ui.font = love.graphics.newFont(font_path, 16)
@@ -166,6 +160,8 @@ end)
 
 -- for commands that don't need repeat
 local keypressed = safely(lume.fn(ship.handle_key, ship))
+
+local wheelmoved = safely(lume.fn(ship.handle_wheel, ship))
 
 local textinput = safely(lume.fn(ship.textinput, ship))
 
@@ -268,8 +264,8 @@ end)
 
 ui.play = function()
    love.graphics.setFont(ui.font)
-   love.update,love.keypressed,love.textinput,love.draw =
-      update, keypressed, textinput, draw
+   love.update,love.keypressed,love.wheelmoved,love.textinput,love.draw =
+      update, keypressed, wheelmoved, textinput, draw
 end
 
 return ship -- for headless.lua

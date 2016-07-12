@@ -174,3 +174,10 @@ application 	Application key 	Windows contextual menu, compose key.
 power 	Power key
 currencyunit 	Currency unit key 	e.g. the Euro (€) key.
 undo 	Undo key
+
+## Mouse buttons
+
+wheelup	Mousewheel Up
+wheeldown	Mousewheel Down
+wheelleft	Mousewheel Left
+wheelright	Mousewheel Right
