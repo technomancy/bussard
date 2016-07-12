@@ -4,11 +4,13 @@
 
 Development is currently [happening at GitLab](https://gitlab.com/technomancy/bussard) instead of this repo, so update your bookmarks or whatever.
 
+Downloadable releases are [on itch.io](https://technomancy.itch.io/bussard).
+
 -----
 
 <img src="http://p.hagelb.org/bussard.png" alt="screenshot" />
 
-A space flight open-world exploration game, with a programmable space
+A space flight programming adventure game, with a programmable space
 ship and space stations. Mine, trade, upgrade, and unlock the potential of your
 spacecraft by hacking on the code that makes it tick.
 
