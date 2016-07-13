@@ -77,11 +77,11 @@ return {
    gravitate = gravitate,
 
    gravitate_all = function(bodies, ship, dt)
-      ship.x = ship.x + (ship.dx * dt * 100)
-      ship.y = ship.y + (ship.dy * dt * 100)
+      ship.x = ship.x + (ship.dx * dt)
+      ship.y = ship.y + (ship.dy * dt)
       for _, b in ipairs(bodies) do
-         b.x = b.x + (b.dx * dt * 100)
-         b.y = b.y + (b.dy * dt * 100)
+         b.x = b.x + (b.dx * dt)
+         b.y = b.y + (b.dy * dt)
 
          local ddx, ddy = gravitate(b, ship.x, ship.y)
          ship.dx = ship.dx + dt * ddx
@@ -173,10 +173,7 @@ return {
       else
          assert(star.fixed, star.name .. " is not a star.")
 
-         -- Unclear why it's necessary to divide by ten here; standard orbital
-         -- calculations do not include this factor, but without it we cannot
-         -- achieve orbit.
-         local v = math.sqrt((g*star.mass)/b.r) / 10
+         local v = math.sqrt((g*star.mass)/b.r)
          local theta = love.math.random() * math.pi * 2
 
          b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r

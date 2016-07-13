@@ -149,7 +149,7 @@ end
 love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end
 
 local update = safely(function(dt)
-      local real_time_factor = ship.time_factor * 0.001 * dt
+      local real_time_factor = ship.time_factor * dt
       ship:update(real_time_factor)
       body.update(ship.bodies, dt)
       body.gravitate_all(ship.bodies, ship, real_time_factor)

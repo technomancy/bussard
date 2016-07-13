@@ -6,8 +6,8 @@ ship.controls = {
    up = ship.actions.forward,
    left = ship.actions.left,
    right = ship.actions.right,
-   ["="] = function(d) if d then ship.scale = ship.scale - (ship.dt/2) end end,
-   ["-"] = function(d) if d then ship.scale = ship.scale + (ship.dt/2) end end,
+   ["="] = function(d) if d then ship.scale = ship.scale - (ship.dt/ship.status.time_factor/2) end end,
+   ["-"] = function(d) if d then ship.scale = ship.scale + (ship.dt/ship.status.time_factor/2) end end,
 }
 
 -- Flight mode

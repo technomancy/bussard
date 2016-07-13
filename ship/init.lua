@@ -27,6 +27,7 @@ local status_whitelist = {
    "engine_strength", "turning_speed", "cpuinfo",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
    "portal_range", "portal_time", "flag", "target", "comm_boost",
+   "time_factor"
 }
 
 local base_stats = {
@@ -35,15 +36,15 @@ local base_stats = {
    fuel_capacity = 192,
    scoop_range = 0,
    comm_range = 2048,
-   recharge_rate = 4,
-   burn_rate = 16,
-   engine_strength = 1024,
-   turning_speed = 4,
+   recharge_rate = 1/2,
+   burn_rate = 1,
+   engine_strength = 128,
+   turning_speed = 1/2,
    battery_capacity = 128,
    solar = 30,
 
    portal_range = 1024,
-   portal_time = 4000, -- in-game seconds
+   portal_time = 40, -- in-game seconds
 }
 
 local function find_binding(ship, key, the_mode)
@@ -165,23 +166,25 @@ local target_dt = 0.03 -- about 33 frames per second
 
 local trajectory_auto = function(ship, dt)
    if(not ship.trajectory_adjust_progress) then
-      ship.trajectory_adjust_progress = 5
+      ship.trajectory_adjust_progress = 0
       return
    end
 
-   ship.trajectory_adjust_progress = ship.trajectory_adjust_progress - dt
+   ship.trajectory_adjust_progress = ship.trajectory_adjust_progress + dt
 
    if(ship.trajectory_adjust_progress <= 0) then
       ship.updaters.trajectory_auto = nil
       ship.trajectory_adjust_progress = nil
    elseif(ship.trajectory_adjust_progress < 4) then
       return -- give it a second to stabilize, then reduce
-   elseif(dt > target_dt * 1.3) then
+   elseif(dt > target_dt * 1.3 * ship.status.time_factor) then
       ship.trajectory = ship.trajectory * 0.8
-      ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
-   elseif(dt < target_dt * 0.7) then
+      ship.trajectory_step_size = ship.trajectory_seconds * ship.status.time_factor / ship.trajectory
+      ship.trajectory_adjust_progress = 0
+   elseif(dt < target_dt * 0.7 * ship.status.time_factor) then
       ship.trajectory = ship.trajectory * 1.2
-      ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
+      ship.trajectory_step_size = ship.trajectory_seconds * ship.status.time_factor / ship.trajectory
+      ship.trajectory_adjust_progress = 0
    end
 end
 
@@ -199,7 +202,7 @@ local ship = {
    mass = 128,
    battery = 128,
    upgrades = {},
-   time_factor = 1000,
+   time_factor = 10,
 
    -- keep around
    fuel = 128,

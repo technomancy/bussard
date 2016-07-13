@@ -135,8 +135,8 @@ return {
       update = function(ship, dt)
          if(ship.api.fuel_charger_on and
             ship.fuel < ship.fuel_capacity and ship.battery > 0) then
-            ship.fuel = ship.fuel + (ship.recharge_rate * dt * 3)
-            ship.battery = ship.battery - (dt * 12)
+            ship.fuel = ship.fuel + (ship.recharge_rate * dt * 1/3)
+            ship.battery = ship.battery - (dt * 1)
          end
       end,
    },
@@ -169,7 +169,7 @@ return {
       action = map_draw,
    },
    -- purely stat upgrades
-   engine = { stats = { engine_power = 512, burn_rate = 4, mass = 64, } },
+   engine = { stats = { engine_strength = 64, burn_rate = 4, mass = 64, } },
    cargo_bay = { stats = { cargo_capacity = 64, mass = 12, } },
    fuel_tank = { stats = { fuel_capacity = 128, mass = 32, } },
    solar_panel = { stats = { solar = 30, mass = 32 }},
