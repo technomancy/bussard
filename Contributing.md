@@ -28,7 +28,8 @@ If you symlink your checkout of the game source into
 platform) then it will be available for in-game editing using the `ship.game`
 table. However, it won't work properly from within the editor unless you open
 the file starting with a slash; for instance, this file would be opened with
-ctrl-o then `/Contributing.md`.
+ctrl-o then `/Contributing.md`. You may find the contents of
+`spoilers/solutions` useful during development.
 
 ## Code style
 

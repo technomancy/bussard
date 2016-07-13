@@ -1,0 +1,51 @@
+-- -*- lua -*-
+
+function decode_table(str, t, total_len)
+   local key, k_len = decode(str)
+   local value, v_len = decode(str:sub(k_len+1))
+   local end_pos = 1 + k_len + v_len
+   t[key] = value
+   total_len = total_len + k_len + v_len
+   if(str:sub(end_pos) == "e") then
+      return t, total_len + 1
+   else
+      return decode_table(str:sub(end_pos), t, total_len)
+   end
+end
+
+function decode(str)
+   if(str:sub(1,1) == "d") then
+      return decode_table(str:sub(2), {}, 1)
+   elseif(str:sub(1,1) == "i") then
+      return(tonumber(str:sub(2, str:find("e") - 1))), str:find("e")
+   elseif(str:match("[0-9]+")) then
+      local num_str = str:match("[0-9]+")
+      local beginning_of_string = #num_str + 2
+      local str_len = tonumber(num_str)
+      local total_len = beginning_of_string + str_len - 1
+      return str:sub(beginning_of_string, total_len), total_len
+   else
+      error("Could not parse "..str)
+   end
+end
+
+function encode_str(s) return #s .. ":" .. s end
+
+function encode(t) -- only works for simple k/v strings
+   local s = "d"
+   for k,v in pairs(t) do
+      s = s .. encode_str(k) .. encode_str(v)
+   end
+   return s .. "e"
+end
+
+subnet_sync = function()
+  local c = ssh_get_connection("subnet", "reindeerflotilla")
+  for _,group in decode(c(encode({command="groups"}))) do
+     for _,post in decode(c(encode(subnet({command="list",group=group})))) do
+        print(post)
+        print(decode(c(encode(subnet({command="get",group=group,post=post})))).content)
+     end
+  end
+  c("logout")
+end

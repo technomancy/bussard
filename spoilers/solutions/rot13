@@ -1,0 +1,18 @@
+-- -*- lua -*-
+
+local msg = ship.docs.backup.msg1_rot13
+local cleartext = ""
+
+for i=1,#msg do
+   local letter = string.sub(msg, i, i)
+   local n = string.byte(letter)
+   if((letter >= "A" and letter < "M") or (letter >= "a" and letter < "m")) then
+     cleartext = cleartext .. string.char(n+13)
+   elseif((letter >= "M" and letter <= "Z") or (letter >= "m" and letter <= "z")) then
+     cleartext = cleartext .. string.char(n-13)
+   else
+     cleartext = cleartext .. letter
+   end
+end
+
+ship.docs.msg1 = cleartext
