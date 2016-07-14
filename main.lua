@@ -116,7 +116,7 @@ local safely = function(f)
             save.abort(ship)
             love.event.quit()
          elseif(key == "r" and love.keyboard.isDown("lctrl", "rctrl")) then
-            save.revert(ship)
+            save.config_reset(ship)
          end
       end
       love.update = function() end
