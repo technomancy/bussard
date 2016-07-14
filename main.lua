@@ -59,29 +59,31 @@ local ui = {
          return("Aborting will wipe your in-process game. Call " ..
                    "abort(true) to confirm.")
       end
-      save.abort(ship)
+      save.abort()
       love.event.quit()
    end,
    config_reset = lume.fn(save.config_reset, ship),
 
-   pause = function() pause(play, quit, resize, font_path) end,
-
-   set_font = function(path, size)
-      -- if size is nil, assume path is size
-      if(size == nil) then
-         font_path, font = font_path, love.graphics.newFont(font_path, path)
-      else
-         font_path, font = path, love.graphics.newFont(path, size)
-      end
-      love.graphics.setFont(font)
-      ship.api.editor.initialize()
-      -- love 0.9.0 doesn't support this
-      if(font.setFallbacks) then font:setFallbacks(noto) end
-   end,
-
    get_fps = love.timer.getFPS,
    powersave = love.system.getPowerInfo() == "battery",
 }
+
+ui.pause = function() pause(ui.play, quit, resize, font_path) end
+ui.set_font = function(path, size)
+   -- if size is nil, assume path is size
+   local font
+   if(size == nil) then
+      font = love.graphics.newFont(font_path, path)
+   else
+      font_path = path
+      font = love.graphics.newFont(path, size)
+   end
+   love.graphics.setFont(font)
+
+   -- love 0.9.0 doesn't support this
+   local noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
+   if(font.setFallbacks) then font:setFallbacks(noto) end
+end
 
 local safely = function(f)
    return function(...)
@@ -123,10 +125,7 @@ end
 
 love.load = function()
    resize()
-   ui.font = love.graphics.newFont(font_path, 16)
-   ui.noto_font = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
-   if(ui.font.setFallbacks) then ui.font:setFallbacks(ui.noto_font) end
-   love.graphics.setFont(ui.font)
+   ui.set_font(16)
 
    stars = { starfield.new(10, 0.01, 100),
              starfield.new(10, 0.05, 175),
@@ -263,7 +262,7 @@ local draw = safely(function(dt)
 end)
 
 ui.play = function()
-   love.graphics.setFont(ui.font)
+   ui.set_font(16)
    love.update,love.keypressed,love.wheelmoved,love.textinput,love.draw =
       update, keypressed, wheelmoved, textinput, draw
 end

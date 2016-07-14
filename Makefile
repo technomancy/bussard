@@ -2,7 +2,7 @@ run: ; love .
 
 VERSION=beta-2-pre
 
-SHIP_LUA=ship/*.lua jeejah/init.lua
+SHIP_LUA=ship/*.lua jeejah/init.lua doc/init.lua
 ENGINE_LUA=*.lua
 OS_LUA=os/orb/*.lua os/lisp/*.lua
 IN_OS_LUA=os/orb/resources/*
@@ -10,7 +10,7 @@ IN_SHIP_LUA=data/src/*
 DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua \
 	serpent/*.lua utf8/*.lua bencode/init.lua
 MISSION_LUA=data/missions/*.lua
-DATA_LUA=data/*.lua doc/init.lua data/msgs/*.lua $(MISSION_LUA)
+DATA_LUA=data/*.lua data/msgs/*.lua $(MISSION_LUA)
 
 GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) $(DATA_LUA) os/lisp/resources/portal.lsp
 ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
@@ -22,10 +22,11 @@ META=readme.md LICENSE credits.md Changelog.md bussard.el
 todo: ; grep -nH -e TODO $(GAME_LUA)
 blockers: ; grep TODO/blocker $(GAME_LUA)
 
+# different contexts have different rules about what's OK, globals, etc
 check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --exclude-files metatable_monkey.lua --globals love lume orb pp _ \
-	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
+	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA) # engine code
 	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
 	  --globals lume utf8 pack ship pause define_mode bind utils realprint pp pps \
 	            mail ssh ssh_connect portal logout ssh_send_line reply replyable \

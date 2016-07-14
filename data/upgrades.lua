@@ -25,6 +25,7 @@ local gov_colors = {
 local map_draw = function(ship)
    local em = love.graphics.getFont():getWidth('a')
    local w,h = love.graphics:getWidth(), love.graphics:getHeight()
+   ship.api.map = ship.api.map or {x=0,y=0}
    love.graphics.setColor(0, 0, 0, 200)
    love.graphics.rectangle("fill", 0, 0, w, h)
    love.graphics.push()

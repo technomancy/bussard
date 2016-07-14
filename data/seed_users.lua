@@ -1,6 +1,6 @@
 local systems = require("data.systems")
 
-local subnet_client = love.filesystem.read("data/subnet.lua")
+local subnet_client = love.filesystem.read("os/orb/resources/subnet")
 
 local subnet_user = { username="subnet",
                       password="reindeerflotilla",

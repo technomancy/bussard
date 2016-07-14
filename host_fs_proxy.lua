@@ -9,7 +9,7 @@ local host_fs_proxy_entry = function(name, readonly)
 end
 
 local host_fs_proxy_pairs = function(prefix, readonly)
-   return function(self)
+   return function()
       local t = {}
       for _, name in pairs(love.filesystem.getDirectoryItems(prefix)) do
          t[name] = host_fs_proxy_entry(prefix .. "/" .. name, readonly)
@@ -18,7 +18,7 @@ local host_fs_proxy_pairs = function(prefix, readonly)
    end
 end
 
-local host_fs_proxy_set = function(prefix)
+local host_fs_proxy_set = function(prefix, readonly)
    return function(self, key, content)
       -- Setting the same value as currently stored is a NOP even for
       -- readonly proxies
@@ -54,12 +54,12 @@ end
 
 local host_fs_proxy_mt = function(prefix, readonly)
    return {
-      __index = function(self, key)
+      __index = function(_, key)
          local name = prefix .. "/" .. key
          return host_fs_proxy_entry(name, readonly)
       end,
-      __pairs = host_fs_proxy_pairs(prefix,readonly),
-      __newindex = host_fs_proxy_set(prefix),
+      __pairs = host_fs_proxy_pairs(prefix, readonly),
+      __newindex = host_fs_proxy_set(prefix, readonly),
    }
 end
 

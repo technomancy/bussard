@@ -5,10 +5,11 @@ the [issue tracker](https://gitlab.com/technomancy/bussard/issues) is
 useful for that too.
 
 Contributions are preferred as GitLab merge requests on feature branches.
+Emailing patches is OK too.
 
 Our goal is compatibility with LÖVE 0.9.0+, but 0.10.x is pretty close to 0.9.x,
-so it should be fine to test primarily in that. A few features that only work
-in 0.10.x are OK but should be noted with comments.
+so it should be fine to test primarily in that. A few non-essential features
+that only work in 0.10.x are OK but should be noted with comments.
 
 During development it may be expedient to run `ship.cheat.comm_range = 9999999`
 in order to make testing login interaction easier.
@@ -26,10 +27,12 @@ with the latest stock. Your old config files will be backed up.
 If you symlink your checkout of the game source into
 `~/.local/share/love/bussard/game` (or wherever LÖVE stores saves on your
 platform) then it will be available for in-game editing using the `ship.game`
-table. However, it won't work properly from within the editor unless you open
-the file starting with a slash; for instance, this file would be opened with
-ctrl-o then `/Contributing.md`. You may find the contents of
-`spoilers/solutions` useful during development.
+table. However, opening "real" files typically won't work properly from within
+the editor unless you open the file starting with a slash; (because dots in the
+filenames are interpreted differently for in-game files) for instance, this file
+would be opened with ctrl-o then `/Contributing.md`. Dogfooding for the win.
+
+You may find the contents of `spoilers/solutions` useful during development.
 
 ## Code style
 
@@ -38,6 +41,18 @@ optional. `local f = function() ... end` preferred to `local function f()
 ... end` unless the latter is needed for recursion. Try to keep it under 80
 columns unless it would be awkward (usually strings for output). Lume is great;
 learn it inside out and use it.
+
+Use `camel_case` for all the things.
+
+There are three different code contexts (at the time of this writing; more may
+be introduced in the future): engine code, in-ship code, and OS code. The
+standards for the engine code are the strictest; no new globals may be
+introduced. Inside the ship or OS contexts, it is often OK to introduce new
+global functions.
+
+Always try to keep `make check` happy by ensuring that
+[luacheck](https://github.com/mpeterv/luacheck) doesn't have any problems with
+the code before submitting patches. This catches a lot of bugs.
 
 Some code (primarily the lisp and forth compilers) were imported from
 elsewhere and don't follow these rules.

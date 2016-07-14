@@ -314,7 +314,7 @@ return {
    ptimer = function(period, callback)
       return timer(period, function(x)
                       local ok, err = pcall(function() callback(x) end)
-                      if(not ok) then print("Timer error: " .. error) end
+                      if(not ok) then print("Timer error: " .. err) end
       end)
    end,
 

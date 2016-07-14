@@ -124,7 +124,7 @@ return {
       end
    end,
 
-   abort = function(ship)
+   abort = function()
       love.filesystem.remove(ship_filename)
       love.filesystem.remove(system_filename)
       for _,b in ipairs(love.filesystem.getDirectoryItems("fs")) do
