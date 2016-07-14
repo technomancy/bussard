@@ -255,7 +255,17 @@ local draw = safely(function(dt)
 
       love.graphics.pop()
 
-      hud.render(ship)
+      local ok, err = pcall(function() hud.render(ship) end)
+      if(not ok) then
+         ship.api.print("HUD rendering error: " .. err)
+         ship.api.print("Resetting HUD back to stock.")
+         -- of course this is not perfect; other files can modify ship.hud
+         ship.api.src.bak = ship.api.src.bak or {}
+         ship.api.src.bak.hud = ship.api.src.hud
+         ship.api.src.hud = love.filesystem.read("data/src/hud")
+         ship.api.dofile("src.hud")
+      end
+
       local mode = ship.api:mode()
       local draw = (mode and mode.draw) or ship.api.editor.draw
       draw(ship)
