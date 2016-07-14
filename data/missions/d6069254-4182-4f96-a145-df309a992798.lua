@@ -22,7 +22,8 @@ return {
       local m = ship.active_missions["d6069254-4182-4f96-a145-df309a992798"]
       if(not m.pickup and target == "Tana Prime") then
          m.pickup = 0
-      elseif(target == "Interportal: Sol" and not ship.events.try_interportal) then
+      elseif(target == "Interportal: Sol" and not ship.events.try_interportal
+             and ship.mail_delivered["nari-a-06.msg"]) then
          mail.deliver_msg(ship, "nari-a-07.msg")
          mission.record_event(ship, "try_interportal")
       elseif(target == "Apkabar Station" and ship.events.try_interportal
