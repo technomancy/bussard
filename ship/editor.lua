@@ -51,6 +51,7 @@ console.mode, console.prompt, console.max_lines = "console", "> ", 512
 
 local mb
 local last_buffer -- for returning to after leaving minibuffer
+local last_edit_buffer = console -- for the default value in interactive buffer switching
 local buffers = {console}
 local b = nil -- default back to flight mode
 
@@ -344,6 +345,7 @@ end
 
 return {
    open = function(fs, path)
+      last_edit_buffer = b
       b = get_buffer(path)
       if(not b) then
          if(not path:find("^/")) then
@@ -699,7 +701,13 @@ return {
    end,
 
    change_buffer = function(path)
+      -- Do not set last edit 'buffer' to flight mode
+      if(b) then last_edit_buffer = b end
       b = get_buffer(path)
+   end,
+
+   last_buffer = function()
+      return last_edit_buffer
    end,
 
    insert = insert,
