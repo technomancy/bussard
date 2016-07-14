@@ -35,6 +35,7 @@ return {
       local ship_data = lume.pick(ship, unpack(ship_fields))
       ship_data.time_offset = ship.sandbox.os.time()
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
+      orb.fs.strip_special(ship_data.api, {})
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
                             lume.serialize(lume.map(ship.bodies, body_data)))
