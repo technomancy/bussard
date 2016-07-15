@@ -11,10 +11,10 @@ fuel gauge in the upper left. The faster you're going, the more fuel
 but it takes time. You can't collide with anything, so don't
 fear. Switch to flight mode now and try it out for a bit.
 
-The striped blue line plots your estimated trajectory, and the box in
-the upper left shows your velocity vector. Use the equals and minus
-keys to zoom in and out. The tab key cycles through all targets
-linearly, while ctrl-tab selects the closest target.
+The striped blue line plots your estimated trajectory, and the box in the
+upper left shows your velocity vector. Use the equals and minus keys, or the
+scroll wheel on your mouse, to zoom in and out. The tab key cycles through
+all targets linearly, while ctrl-tab selects the closest target.
 
 Once you've got a feel for the controls and instrumentation, run this:
 
