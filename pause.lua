@@ -51,10 +51,11 @@ end
 local input = ""
 
 local keypressed = function(key)
-   if(key == "up" and selected > 1) then
+   if(key == "up") then
       selected = selected - 1
-   elseif(key == "down" and selected < #buttons) then
-      selected = selected + 1
+      if(selected == 0) then selected = #buttons end
+   elseif(key == "down") then
+      selected = (selected % #buttons) + 1
    elseif(key == "return") then
       if(love.filesystem.isFile(input)) then
          text, line = lume.split(love.filesystem.read(input), "\n"), 1
