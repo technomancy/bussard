@@ -58,7 +58,7 @@ local b = nil -- default back to flight mode
 local inhibit_read_only
 
 local last_line = "Press ctrl-enter to open the console, " ..
-"and run man() for help. Zoom with = and -."
+"and run man() for help. Zoom with = and - or scroll wheel."
 
 local invisible = {}             -- sentinel "do not print" value
 

@@ -24,12 +24,11 @@ target, if applicable.
 
 ## Helm control
 
-Your ship comes pre-configured with a keymap which allows piloting the
-ship using the up, right, and left arrow keys on your helm
-keyboard. The = and - keys also allow you to zoom in and out of your
-view. You can fly around the system as your fuel supply permits. The
-ship's onboard collectors will replenish the fuel supply, though
-slowly.
+Your ship comes pre-configured with a keymap which allows piloting the ship
+using the up, right, and left arrow keys on your helm keyboard. The = and -
+keys or your mouse's scroll wheel also allow you to zoom in and out of your
+view. You can fly around the system as your fuel supply permits. The ship's
+onboard collectors will replenish the fuel supply, though slowly.
 
 In accordance with interstellar law, your ship is equipped with
 Collision Avoidance System (CAS) which prevent you from plotting a
