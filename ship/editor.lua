@@ -840,4 +840,5 @@ return {
    end,
 
    debug = debug,
+   initialize = function() end, -- dummy for compatibility with existing saves
 }
