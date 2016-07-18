@@ -32,6 +32,7 @@ end
 
 return {
    save = function(ship)
+      if(ship.aborting) then return end
       local ship_data = lume.pick(ship, unpack(ship_fields))
       ship_data.time_offset = ship.sandbox.os.time()
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
@@ -129,7 +130,7 @@ return {
       end
    end,
 
-   abort = function()
+   abort = function(ship)
       love.filesystem.remove(ship_filename)
       love.filesystem.remove(system_filename)
       for _,b in ipairs(love.filesystem.getDirectoryItems("fs")) do
@@ -138,6 +139,7 @@ return {
       for _,b in ipairs(love.filesystem.getDirectoryItems("buffers")) do
          love.filesystem.remove("buffers/" .. b);
       end
+      ship.aborting = true
    end,
 
    config_reset = function(ship)
