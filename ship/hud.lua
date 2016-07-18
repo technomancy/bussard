@@ -28,9 +28,10 @@ end
 local render_vector = function(at_x, at_y, values)
    if(not values or not values[1]) then return end
    local half = vector_size / 2
-   local x, y = unpack(values)
+   local x, y, scale = unpack(values)
 
    if(type(x) == "number" and type(y) == "number") then
+      if(scale) then x, y = x * scale, y * scale end
       love.graphics.line(at_x + half, at_y + half,
                          at_x + half + x, at_y + half + y)
       love.graphics.setLineWidth(1)
@@ -63,7 +64,7 @@ local render_text = function(x, y, format, values, data)
 end
 
 local trajectory = function(ship, bodies, steps, step_size,
-                            color1, color2, color3, color4)
+                     color1, color2, color3, color4)
    local last_x, last_y
    local sim_ship = {x = ship.x, y = ship.y, dx = ship.dx, dy = ship.dy,
                      mass = ship.mass}

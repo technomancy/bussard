@@ -26,11 +26,11 @@ ship.hud = {
         "status.credits"}
    },
    { x=5, y=5, type="vector",
-     values={"status.dx", "status.dy"},
+     values={"status.dx", "status.dy", 0.1},
      width=3, color={50, 255, 50}
    },
    { x=-5, y=5, type="vector",
-     values={"status.target.dx", "status.target.dy"},
+     values={"status.target.dx", "status.target.dy", 0.1},
      width=3, color={50, 255, 150}
    },
 
