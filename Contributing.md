@@ -36,26 +36,47 @@ You may find the contents of `spoilers/solutions` useful during development.
 
 ## Code style
 
-Three-space indent; don't leave out parentheses just because they're technically
-optional. `local f = function() ... end` preferred to `local function f()
-... end` unless the latter is needed for recursion. Try to keep it under 80
-columns unless it would be awkward (usually strings for output). Lume is great;
-learn it inside out and use it.
+* Three-space indent. No tabs.
+* Use `snake_case` for all the things.
+* Don't leave out parentheses just because they're technically optional.
+* Unused arguments should be named `_`.
+* Try to keep it under 80 columns unless breaking would be awkward (usually strings for output).
+* Lume is great; learn it inside out and use it.
+* Pick names for locals that avoid shadowing other locals.
+* The `local f = function() ... end` construct is preferred to `local function f() ... end` unless the latter is needed for recursion.
 
-Use `camel_case` for all the things.
+The last rule exists to make recursive functions more obvious. If you see `local
+function f()`, you know to pay more attention because a recursive function is
+coming.
 
 There are three different code contexts (at the time of this writing; more may
 be introduced in the future): engine code, in-ship code, and OS code. The
 standards for the engine code are the strictest; no new globals may be
-introduced. Inside the ship or OS contexts, it is often OK to introduce new
-global functions.
-
-Always try to keep `make check` happy by ensuring that
-[luacheck](https://github.com/mpeterv/luacheck) doesn't have any problems with
-the code before submitting patches. This catches a lot of bugs.
+introduced. Inside the ship or OS sandboxes, it is often OK to introduce new
+"global" functions because their scope is much more limited.
 
 Some code (primarily the lisp and forth compilers) were imported from
 elsewhere and don't follow these rules.
+
+## Tests and Static Analysis
+
+While a test suite technically exists, it is far from comprehensive. If you're
+working on a feature that would be easy to write tests for, great! We use
+[lunatest](https://github.com/silentbicycle/lunatest), which is a pretty typical
+xUnit style tool. However, most work is not like that and relies on manual
+playtesting. This is OK. Please do *run* the existing tests before sending a
+patch though!
+
+You should also run [luacheck](https://github.com/mpeterv/luacheck) against your
+changes to check for simple mistakes that can be caught with static analysis,
+like typos or accidental globals. It also catches certain style issues.
+
+You'll need [luarocks](https://luarocks.org), which hopefully is provided by
+your package manager.
+
+    $ luarocks install --local luacheck && luarocks install --local lunatest
+    [...]
+    $ make check test
 
 ## Philosophy
 

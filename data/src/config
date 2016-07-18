@@ -56,7 +56,7 @@ bind({"flight", "edit"}, "ctrl-r",
       if(success) then
          print("Successfully reloaded config.")
       else
-         print("Error loading config.")
+         print("Error loading config: " .. err)
       end
 end)
 

@@ -27,7 +27,7 @@ check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --exclude-files metatable_monkey.lua --globals love lume orb pp _ \
 	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA) # engine code
-	luacheck --no-color --std luajit --ignore 21/_.* --no-unused \
+	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --globals lume utf8 pack ship pause define_mode bind utils realprint pp pps \
 	            mail ssh ssh_connect portal logout ssh_send_line reply replyable \
 	  -- $(IN_SHIP_LUA)
