@@ -162,29 +162,17 @@ local sandbox = function(ship)
                        end,})
 end
 
-local target_dt = 0.03 -- about 33 frames per second
+local target_dt = 1/33
 
 local trajectory_auto = function(ship, dt)
-   if(not ship.trajectory_adjust_progress) then
-      ship.trajectory_adjust_progress = 0
-      return
-   end
-
-   ship.trajectory_adjust_progress = ship.trajectory_adjust_progress + dt
-
-   if(ship.trajectory_adjust_progress <= 0) then
-      ship.updaters.trajectory_auto = nil
-      ship.trajectory_adjust_progress = nil
-   elseif(ship.trajectory_adjust_progress < 4) then
-      return -- give it a second to stabilize, then reduce
-   elseif(dt > target_dt * 1.3 * ship.status.time_factor) then
+   if(dt > target_dt * 1.3 * ship.status.time_factor) then
       ship.trajectory = ship.trajectory * 0.8
-      ship.trajectory_step_size = ship.trajectory_seconds * ship.status.time_factor / ship.trajectory
-      ship.trajectory_adjust_progress = 0
+      ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
    elseif(dt < target_dt * 0.7 * ship.status.time_factor) then
       ship.trajectory = ship.trajectory * 1.2
-      ship.trajectory_step_size = ship.trajectory_seconds * ship.status.time_factor / ship.trajectory
-      ship.trajectory_adjust_progress = 0
+      ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
+   else -- if we've stabilized our FPS sufficiently, disable adjustment
+      ship.updaters.trajectory_auto = nil
    end
 end
 
@@ -241,6 +229,10 @@ local ship = {
       assert(ship.systems[system_name], system_name .. " not found.")
       if(not suppress_message) then
          ship.api.editor.print("Entering the " .. system_name .. " system.")
+      end
+
+      if(ship.api.trajectory_auto) then
+         ship.api.updaters.trajectory_auto = trajectory_auto
       end
 
       -- stuff these things in there to expose to in-ship APIs
@@ -355,9 +347,6 @@ local ship = {
    -- run when cargo or upgrades change; always idempotent
    recalculate = function(ship)
       ship.target = ship.bodies[ship.target_number]
-      if(ship.api.trajectory_auto) then
-         ship.api.updaters.trajectory_auto = trajectory_auto
-      end
 
       for k,v in pairs(base_stats) do
          ship[k] = v
@@ -557,7 +546,7 @@ ship.api = {
    -- these numbers will be changed if the frame rate is too low
    trajectory = 256,
    trajectory_step_size = 0.1,
-   trajectory_seconds = 15, -- how far out the trajectory should go
+   trajectory_seconds = 128, -- how far out the trajectory should go
    trajectory_auto = true, -- turn this off to disable auto-adjustment
 
    fuel_to_stop = function(s)
