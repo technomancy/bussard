@@ -1,8 +1,6 @@
 local utils = require("utils")
 local body = require("body")
 
--- local asteroid_image = love.graphics.newImage('assets/asteroid.png')
-
 local min_mass = 10
 
 local max_asteroid_distance = 1000000

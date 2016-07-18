@@ -115,8 +115,12 @@ return {
          ship.api.editor.load_buffer(ship.api, dumped)
       end
       ship.api.editor.print_prompt()
-      for _,s in pairs(ship.systems) do
+      for system_name,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do
+            b.system, b.gov = system_name, s.gov
+            if(b.portal) then assert(b.os, "OS-less portal") end
+            if(b.fixed) then assert(not b.os, "OS on a fixed body") end
+
             if(love.filesystem.isFile(fs_filename(b))) then
                local fs_data = love.filesystem.read(fs_filename(b))
                body.filesystems[b.name] = lume.deserialize(fs_data)

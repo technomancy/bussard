@@ -188,16 +188,6 @@ return {
 
    filesystems = filesystems,
 
-   load = function(systems)
-      for system_name,system in pairs(systems) do
-         for _,body in ipairs(system.bodies) do
-            body.system, body.gov = system_name, system.gov
-            if(body.portal) then assert(body.os, "OS-less portal") end
-            if(body.fixed) then assert(not body.os, "OS on a fixed body") end
-         end
-      end
-   end,
-
    base_prices = base_prices,
 
    hostname = hostname,

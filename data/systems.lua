@@ -303,8 +303,7 @@ local sys = {
                   },
                   {name = "Interportal: Sol",
                    image_name="portal-2", interportal=true,
-                   r=25000, mass=60, portal="Sol",
-                   interportal=true, os=lisp},
+                   r=25000, mass=60, portal="Sol", os=lisp},
                   {name = "Portal: Lalande",
                    image_name="portal-1",
                    r=21000, mass=60, portal="Lalande", os=lisp}

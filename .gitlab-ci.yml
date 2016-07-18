@@ -1,0 +1,8 @@
+before_script:
+  - apt-get update -qq && apt-get install -y luarocks love
+  - luarocks install luacheck
+  - luarocks install lunatest
+
+luacheck:
+  script:
+    - make check test

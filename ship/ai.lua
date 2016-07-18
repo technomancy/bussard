@@ -1,7 +1,7 @@
 local utils = require("utils")
 local body = require("body")
 
-local ship_img
+local ship_img = love.graphics and love.graphics.newImage("assets/ship.png")
 local names = lume.array(love.filesystem.lines("data/ships.txt"))
 
 local normalize = function(t)
@@ -47,7 +47,6 @@ end
 local make = function(bodies, name, from_portal)
    local targets = lume.filter(bodies, "os")
    local target, from = targets[love.math.random(#targets)]
-   ship_img = ship_img or love.graphics.newImage("assets/ship.png")
 
    if(from_portal) then
       local portals = lume.filter(bodies, "portal")
@@ -62,7 +61,8 @@ local make = function(bodies, name, from_portal)
       ship = true,
       update = update,
       image_name = "ship", scale = 10,
-      ox = ship_img:getWidth() / 2, oy = ship_img:getHeight() / 2,
+      ox = ship_img and ship_img:getWidth() / 2,
+      oy = ship_img and ship_img:getHeight() / 2,
 
       x = from.x,
       y = from.y,

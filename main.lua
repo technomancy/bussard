@@ -124,25 +124,25 @@ local safely = function(f)
 end
 
 love.load = function()
+   ship:configure(systems, ui)
+   save.load_into(ship)
+   ship:dofile("src.config")
+   if(love.filesystem.isFile("localhacks.lua")) then
+      require("localhacks")(ship)
+   end
+
+   if(arg[#arg] == "-debug") then require("mobdebug").start() end
+   if(arg[#arg] == "--wipe") then save.abort(ship) love.event.quit() end
+   if(arg[#arg] == "--test") then return require("tests") end
+
    resize()
    ui.set_font(16)
 
    stars = { starfield.new(10, 0.01, 100),
              starfield.new(10, 0.05, 175),
              starfield.new(10, 0.1, 255), }
-
-   if(arg[#arg] == "-debug") then require("mobdebug").start() end
-   if(arg[#arg] == "--wipe") then save.abort(ship) love.event.quit() end
    love.keyboard.setKeyRepeat(true)
-   ship:configure(systems, ui)
-   save.load_into(ship)
-   body.load(systems)
 
-   if(love.filesystem.isFile("localhacks.lua")) then
-      require("localhacks")(ship)
-   end
-
-   ship:dofile("src.config")
    ui.play()
 end
 

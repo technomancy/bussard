@@ -40,6 +40,9 @@ check:
 	  get_prompt set_prompt \
 	  -- $(DATA_LUA)
 
+test:
+	love . --test
+
 count: ; cloc --force-lang=lua $(GAME_LUA)
 
 count_engine: ; cloc $(ENGINE_LUA) $(SHIP_LUA)
