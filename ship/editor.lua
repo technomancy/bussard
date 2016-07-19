@@ -78,17 +78,19 @@ local undo = function()
 end
 
 local wrap = function(fn, ...)
+   if(not b) then return fn(...) end -- no undo tracking for flight mode
    b.dirty = false
-   local last_state = state()
+   local last_state = b and state()
    if(fn ~= undo) then b.undo_at = 0 end
    fn(...)
-   if(b and b.dirty) then
+   if(not b) then return end -- did we switch to flight mode?
+   if(b.dirty) then
       table.insert(b.history, last_state)
    end
-   if(b and #b.history > history_max) then
+   if(#b.history > history_max) then
       table.remove(b.history, 1)
    end
-   if(b and b.max_lines) then
+   if(b.max_lines) then
       for _=1,(#b.lines - b.max_lines) do
          table.remove(b.lines, 1)
          if(b.point_line >= 1) then b.point_line = b.point_line - 1 end
@@ -378,11 +380,12 @@ local function find_binding(key, the_mode)
       (mode.parent and find_binding(key, mode.parent))
 end
 
-local define_mode = function(name, parent, read_only)
+local define_mode = function(name, parent_name, read_only)
    -- backwards-compatibility with beta-1
    if(name == "edit" and parent) then parent, read_only = nil, false end
    modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
-                   parent = parent, name = name, read_only = read_only }
+                   parent = modes[parent_name], name = name,
+                   read_only = read_only }
    return modes[name]
 end
 
@@ -406,7 +409,7 @@ local function bind(mode_name, keycode, fn)
 end
 
 local function handle_textinput(text)
-   if(b and not find_binding(text, the_mode) and utf8.len(text) == 1) then
+   if(b and not find_binding(text) and utf8.len(text) == 1) then
       with_traceback(textinput, text)
    end
 end
@@ -928,11 +931,8 @@ return {
 
    handle_key = function(key)
       local fn = find_binding(key)
-      local the_wrap = get_current_mode().wrap
-      if(fn and the_wrap) then
-         with_traceback(the_wrap, fn)
-      elseif(fn) then
-         with_traceback(fn)
+      if(fn) then
+         with_traceback(wrap, fn)
       end
    end,
 
@@ -944,11 +944,8 @@ return {
       elseif(y > 0) then wheel_dir = "wheelup"
       end
       local fn = find_binding(wheel_dir)
-      local the_wrap = get_current_mode().wrap
-      if(fn and the_wrap) then
-         with_traceback(the_wrap, fn)
-      elseif(fn) then
-         with_traceback(fn)
+      if(fn) then
+         with_traceback(wrap, fn)
       end
    end,
 
