@@ -198,7 +198,8 @@ orb.fs = {
             f[k] = nil
          elseif(type(v) == "table") then
             orb.fs.strip_special(v, blacklist)
-         elseif(type(v) ~= "string" and type(v) ~= "number") then
+         elseif(type(v) ~= "string" and type(v) ~= "number"
+                and type(v) ~= "boolean") then
             f[k] = nil
          end
       end

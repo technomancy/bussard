@@ -23,17 +23,14 @@ return {
       if(not m.pickup and target == "Tana Prime") then
          m.pickup = 0
       elseif(target == "Interportal: Sol" and not ship.events.try_interportal
-             and ship.mail_delivered["nari-a-06.msg"]) then
+             -- this is nari-a-06
+             and ship.mail_delivered["c83c2439-f4cf-475f-95a6-f15cafc3db16"]) then
          mail.deliver_msg(ship, "nari-a-07.msg")
          mission.record_event(ship, "try_interportal")
       elseif(target == "Apkabar Station" and ship.events.try_interportal
              and not ship.events.background_check) then
          mail.deliver_msg(ship, "nari-a-08.msg")
          mission.record_event(ship, "background_check")
-      elseif(ship.events.invite_nari and not ship.mail_delivered["nari-a-05"] and
-             target == "Tana Prime") then
-         ship.humans.nari = "companion"
-         mail.deliver_msg(ship, "nari-a-05.msg")
       end
    end,
 
@@ -51,6 +48,10 @@ return {
          mail.deliver_msg(ship, "nari-a-02.msg")
       elseif(m.pickup > 32 and not ship.mail_delivered["nari-a-03"]) then
          mail.deliver_msg(ship, "nari-a-03.msg")
+      elseif(ship.events.invite_nari and not ship.humans.nari and
+             ship.comm_connected == "Tana Prime") then
+         ship.humans.nari = "companion"
+         mail.deliver_msg(ship, "nari-a-05.msg")
       end
    end,
 
