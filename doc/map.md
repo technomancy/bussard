@@ -20,25 +20,27 @@ To set up the map, load this code:
        ship.map.x, ship.map.y = ship.map.x + x, ship.map.y + y
     end
 
-    define_mode("map")
+    local map_mode = define_mode("map")
     bind("map", "escape", ship.editor.close)
     bind("map", "down", lume.fn(map_pan, 0, -0.1))
     bind("map", "up", lume.fn(map_pan, 0, 0.1))
     bind("map", "left", lume.fn(map_pan, -0.1, 0))
     bind("map", "right", lume.fn(map_pan, 0.1, 0))
-    ship.modes.map.draw = ship.actions.map
+    map_mode.draw = ship.actions.map
 
-    map = function() ship.editor.open(nil, "*map*") ship:activate_mode("map") end
-    bind("flight", "alt-m", map)
+    map = function()
+      ship.editor.open(nil, "*map*")
+      ship.editor.activate_mode("map")
+    end
 
 It's recommended to place this in a new file called "src.map" and add
 this to the mail "src.config" file at the bottom:
 
     dofile("src.map")
 
-Then running map() from the console or pressing alt-m from flight mode
-will activate the map. You can pan around the map with the arrows and
-close it with escape, but of course you can change the keys in the code.
+Then running map() from the console from flight mode will activate the map.
+You can pan around the map with the arrows and close it with escape, but of
+course you can change the keys in the code.
 
 Happy Travels!
 

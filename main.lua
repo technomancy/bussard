@@ -94,6 +94,7 @@ local safely = function(f)
       end)
       if(ok) then return ret end
 
+      print(err)
       print(traceback:gsub("\n[^\n]+$", ""))
       love.draw = function()
          local w, h = love.graphics:getWidth(), love.graphics:getHeight()
@@ -158,11 +159,18 @@ local update = safely(function(dt)
 end)
 
 -- for commands that don't need repeat
-local keypressed = safely(lume.fn(ship.handle_key, ship))
+local keypressed = safely(function(key)
+      -- need hard-coded reset for recovering from bad config bugs
+      if(key == "f1" and love.keyboard.isDown("lctrl", "rctrl")) then
+         ship.api.ui.config_reset()
+      else
+         ship.api.editor.handle_key(key)
+      end
+end)
 
-local wheelmoved = safely(lume.fn(ship.handle_wheel, ship))
+local wheelmoved = safely(ship.api.editor.handle_wheel)
 
-local textinput = safely(lume.fn(ship.textinput, ship))
+local textinput = safely(ship.api.editor.handle_textinput)
 
 -- drawing
 
@@ -266,9 +274,7 @@ local draw = safely(function(dt)
          ship.api.dofile("src.hud")
       end
 
-      local mode = ship.api:mode()
-      local draw = (mode and mode.draw) or ship.api.editor.draw
-      draw(ship)
+      ship.api.editor.draw(ship)
 end)
 
 ui.play = function()

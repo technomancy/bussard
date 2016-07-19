@@ -1,4 +1,3 @@
-local utf8 = require("utf8.init")
 local utils = require("utils")
 local lume = require("lume")
 local serpent = require("serpent")
@@ -17,7 +16,9 @@ local body = require("body")
 
 local editor = require("ship.editor")
 
-local scale_min = 1
+local with_traceback = lume.fn(utils.with_traceback, editor.print)
+
+local scale_min = 2
 
 local status_whitelist = {
    "x", "y", "dx", "dy", "heading", "target", "system_name", "bodies",
@@ -47,42 +48,6 @@ local base_stats = {
    portal_time = 40, -- in-game seconds
 }
 
-local function find_binding(ship, key, the_mode)
-   local mode = the_mode or ship.api:mode()
-   local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
-   local alt = love.keyboard.isDown("lalt", "ralt")
-   local map = (ctrl and alt and mode["ctrl-alt"]) or
-      (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
-
-   return map[key] or map["__any"] or
-      (mode.parent and find_binding(ship, key, mode.parent))
-end
-
-local define_mode = function(ship, name, textinput, wrap, activate)
-   ship.api.modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
-                            wrap = wrap, textinput = textinput,
-                            activate = activate, name = name }
-end
-
-local bind = function(ship, mode, keycode, fn)
-   assert(keycode ~= nil, "Tried to bind to nil. Use false to unbind")
-   if(type(mode) == "table") then
-      for _,m in ipairs(mode) do
-         ship.sandbox.bind(m, keycode, fn)
-      end
-   else
-      -- lua regexes don't support |
-      local map, key = keycode:match("(ctrl-alt)-(.+)")
-      if not map then map, key = keycode:match("(ctrl)-(.+)") end
-      if not map then map, key = keycode:match("(alt)-(.+)") end
-      if map == "alt-ctrl" then map = "ctrl-alt" end
-      assert(ship.api.modes[mode], "No mode " .. mode)
-      if(key == "enter") then key = "return" end
-      if(keycode == "enter") then keycode = "return" end
-      ship.api.modes[mode][map or "map"][key or keycode] = fn
-   end
-end
-
 local sandbox_loadstring = function(ship, code, chunkname)
    local chunk, err = loadstring(code, chunkname)
    if(chunk) then
@@ -91,17 +56,6 @@ local sandbox_loadstring = function(ship, code, chunkname)
    else
       return chunk, err
    end
-end
-
-local with_traceback = function(f, ...)
-   local args = {...}
-   -- TODO: sandboxed traceback which trims out irrelevant layers
-   return xpcall(function() f(unpack(args)) end, function(e)
-         print(debug.traceback())
-         print(e)
-         editor.print(debug.traceback())
-         editor.print(e)
-   end)
 end
 
 local sandbox_dofile = function(ship, filename)
@@ -143,8 +97,8 @@ local sandbox = function(ship)
                        debug = {traceback = debug.traceback},
                        os = {time = lume.fn(utils.time, ship)},
                        man = lume.fn(help.man, ship),
-                       define_mode = lume.fn(define_mode, ship),
-                       bind = lume.fn(bind, ship),
+                       define_mode = editor.define_mode,
+                       bind = editor.bind,
                        ssh_connect = lume.fn(ssh.connect, ship),
                        ssh_send_line = lume.fn(ssh.send_line, ship),
                        ssh_get_connection = lume.fn(ssh.get_connection, ship),
@@ -210,16 +164,12 @@ local ship = {
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
-      for _,m in pairs(ship.api.modes) do
-         if(m.initialize) then m.initialize() end
-      end
-
       ship.api.ui = ui
       ship.systems = systems
 
       ship.sandbox = sandbox(ship)
       ship.sandbox["_G"] = ship.sandbox
-      ship.timer = utils.ptimer(4, function(dt)
+      ship.timer = utils.ptimer(40, function(dt)
                                    mission.update(ship, dt)
                                    ship:long_update(dt)
                                    mail.deliver(ship)
@@ -273,8 +223,7 @@ local ship = {
       ship.api.dt = dt
 
       -- activate controls
-      local current_mode = ship.api:mode()
-      if(current_mode and current_mode.name == "flight") then
+      if(editor.current_mode_name() == "flight") then
          for k,f in pairs(ship.api.controls) do
             with_traceback(f, love.keyboard.isDown(k), dt)
          end
@@ -320,6 +269,7 @@ local ship = {
          if(u.update) then u.update(ship, dt) end
       end
 
+      if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
       ship.timer(dt)
    end,
 
@@ -387,8 +337,6 @@ local ship = {
             ship.api.broken_updaters[n] = f
          end
       end
-
-      if(ship.api.scale < scale_min) then ship.api.scale = scale_min end
    end,
 
    disembark = function(ship, human)
@@ -404,49 +352,6 @@ local ship = {
       end
    end,
 
-   -- interface
-   handle_key = function(ship, key)
-      -- need hard-coded reset for recovering from bad config bugs
-      if(key == "f1" and love.keyboard.isDown("lctrl", "rctrl")) then
-         ship.api.ui.config_reset()
-      else
-         local fn = find_binding(ship, key)
-         local wrap = ship.api:mode().wrap
-         if(fn and wrap) then with_traceback(wrap, fn)
-         elseif(fn) then with_traceback(fn)
-         end
-      end
-   end,
-
-   handle_wheel = function(ship, x, y)
-      local wheel_dir = nil
-      if(x < 0) then wheel_dir = "wheelleft"
-      elseif(x > 0) then wheel_dir = "wheelright"
-      elseif(y < 0) then wheel_dir = "wheeldown"
-      elseif(y > 0) then wheel_dir = "wheelup"
-      end
-      local fn = find_binding(ship, wheel_dir)
-      local wrap = ship.api:mode().wrap
-      if(fn and wrap) then with_traceback(wrap, fn)
-      elseif(fn) then with_traceback(fn)
-      end
-   end,
-
-   textinput = function(ship, text, the_mode)
-      if(find_binding(ship, text)) then return end
-      if(utf8.len(text) > 1) then return end
-      local mode = the_mode or ship.api:mode()
-      if(mode.textinput) then
-         if(mode.wrap) then
-            with_traceback(mode.wrap, mode.textinput, text)
-         else
-            with_traceback(mode.textinput, text)
-         end
-      elseif(mode.parent) then
-         ship:textinput(text, mode.parent)
-      end
-   end,
-
    -- for debugging during development: ship.cheat:realdofile("main.lua")
    realdofile = function(ship, x) dofile(x) ship.api.ui.play() end,
 }
@@ -456,29 +361,6 @@ local ship = {
 ship.api = {
    editor = editor,
    help = help,
-
-   modes = { minibuffer = { map = { ["return"] = editor.exit_minibuffer,
-                               escape = lume.fn(editor.exit_minibuffer, true),
-                               backspace = editor.delete_backwards, },
-                            ctrl = {g=lume.fn(editor.exit_minibuffer, true),},
-                            alt = {}, ["ctrl-alt"] = {},
-                            wrap = editor.wrap, textinput = editor.textinput,
-                            name = "minibuffer",
-           }},
-
-   mode = function(s)
-      return s.modes[s.editor.current_mode_name() or "flight"]
-   end,
-
-   activate_mode = function(s, mode_name)
-      if(s:mode().deactivate) then
-         s:mode().deactivate()
-      end
-      s.editor.set_mode(mode_name)
-      if(s.modes[mode_name].activate) then
-         s.modes[mode_name].activate()
-      end
-   end,
 
    mission = {
       list = lume.fn(mission.list, ship),
@@ -571,6 +453,11 @@ ship.api = {
 
    host = host_fs_proxy.create("host_fs"),
    game = love.filesystem.exists("game") and host_fs_proxy.create("game"),
+
+   -- deprecated:
+   modes = editor.modes,
+   mode = editor.mode,
+   activate_mode = function(_, mode) editor.activate_mode(mode) end,
 }
 
 return ship

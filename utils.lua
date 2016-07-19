@@ -333,5 +333,16 @@ return {
    pad_to = pad_to,
    buffer = buffer,
 
+   with_traceback = function(print2, f, ...)
+      local args = {...}
+      -- TODO: sandboxed traceback which trims out irrelevant layers
+      return xpcall(function() f(unpack(args)) end, function(e)
+            print(debug.traceback())
+            print(e)
+            print2(debug.traceback())
+            print2(e)
+      end)
+   end,
+
    game_start = epoch_for(2431) + 10242852, -- april 17th, 2431
 }

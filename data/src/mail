@@ -8,8 +8,8 @@ mail = function()
    ship:activate_mode("mail")
 end
 
-define_mode("mail")
-ship.modes.mail.parent = ship.modes.edit -- nav keys should work like edit mode.
+-- inherit most bindings from edit, but disable text insertion
+define_mode("mail", "edit", true)
 
 local targets = {} -- things you can press enter to open
 
@@ -105,7 +105,7 @@ local open_folder = function(folder)
    ship.editor.set_read_only(true)
 end
 
-ship.modes.mail.activate = open_folder
+ship.editor.modes.mail.activate = open_folder
 
 local reply_key = "alt-return"
 
@@ -153,8 +153,8 @@ end
 
 bind("mail", archive_key, archive_from_folder)
 
-define_mode("view")
-ship.modes.view.parent = ship.modes.edit -- nav keys should work like edit mode.
+-- inherit most bindings from edit, but disable text insertion
+define_mode("view", "edit", true)
 
 local archive = function()
    local path = ship.editor.current_buffer_path()

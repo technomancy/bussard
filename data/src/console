@@ -1,9 +1,7 @@
 -- This -*- lua -*- defines a console mode which is for entering Lua code
 -- to run directly for experimentation.
 
-define_mode("console")
-ship.modes.console.parent = ship.modes.edit -- most keys work like in edit mode
-ship.modes.console.textinput = ship.modes.edit.textinput
+define_mode("console", "edit") -- inherit bindings from edit
 
 bind("console", "ctrl-a", ship.editor.beginning_of_input)
 bind("console", "home", ship.editor.beginning_of_input)

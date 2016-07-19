@@ -8,7 +8,7 @@ ssh = function(username, password, command)
       ssh_connect(username or "guest", password or "", command)
       ship.editor.end_of_buffer()
       ship.editor.no_mark()
-      ship:activate_mode("ssh")
+      ship.editor.activate_mode("ssh")
    else
       print("Cannot log into target.")
    end
@@ -29,9 +29,7 @@ local get_input = function()
                    utf8.len(ship.editor.get_prompt()) + 1)
 end
 
-define_mode("ssh")
-ship.modes.ssh.parent = ship.modes.console -- inherit bindings from console mode
-ship.modes.ssh.textinput = ship.modes.edit.textinput
+define_mode("ssh", "console") -- inherit bindings from console
 
 -- send input to whatever remote OS you're connected to.
 bind("ssh", "return", function()

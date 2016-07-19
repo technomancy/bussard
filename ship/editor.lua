@@ -3,13 +3,15 @@ local lume = require("lume")
 local utils = require("utils")
 
 --- Essentially a port of Emacs to Lua/Love.
+
 -- missing features (a very limited list)
 -- * search/replace
 -- * syntax highlighting
 
 local kill_ring = {}
 
--- TODO: move mode definitions from ship table to editor.
+local modes = {}
+
 local make_buffer = function(fs, path, lines)
    return { fs=fs, path=path, mode = "edit",
             lines = lines or lume.split((fs and fs:find(path) or ""), "\n"),
@@ -18,7 +20,8 @@ local make_buffer = function(fs, path, lines)
             history = {}, undo_at = 0, dirty = false, needs_save = false,
             input_history = utils.buffer:new(), input_history_pos = 0,
             modeline = function(b)
-               return utf8.format(" %s  %s  (%s/%s)  %s", b.needs_save and "*" or "-",
+               return utf8.format(" %s  %s  (%s/%s)  %s",
+                                  b.needs_save and "*" or "-",
                                   b.path, b.point_line, #b.lines, b.mode)
             end
    }
@@ -106,6 +109,10 @@ local get_buffer = function(path)
    return lume.match(buffers, function(bu) return bu.path == path end)
 end
 
+local get_current_mode = function()
+   return modes[b and b.mode or "flight"]
+end
+
 local with_current_buffer = function(nb, f)
    if(type(nb) == "string") then
       nb = get_buffer(nb)
@@ -157,7 +164,8 @@ end
 
 local edit_disallowed = function(line, point, line2, _point2)
    if(inhibit_read_only) then return false end
-   return b.read_only or in_prompt(line, point, line2, _point2)
+   return get_current_mode().read_only or b.read_only or
+      in_prompt(line, point, line2, _point2)
 end
 
 local insert = function(text, point_to_end)
@@ -211,6 +219,10 @@ local delete = function(start_line, start, finish_line, finish)
       b.lines[start_line] = utf8.sub(b.lines[start_line], 0, start) .. after
    end
    b.point, b.point_line, b.mark, b.mark_line = start, start_line, start, start_line
+end
+
+local textinput = function(t)
+   wrap(function() insert({t}, true) end)
 end
 
 local push = function(ring, item, max)
@@ -307,8 +319,9 @@ local newline = function(n)
    insert(t, true)
 end
 
-local save_excursion = function(f) -- TODO: discards multiple values from f
-   local old_b, p, pl, m, ml = b, b and b.point, b and b.point_line, b and b.mark, b and b.mark_line
+local save_excursion = function(f)
+   local old_b, p, pl = b, b and b.point, b and b.point_line
+   local m, ml = b and b.mark, b and b.mark_line
    local val, err = pcall(f)
    b = old_b
    if(b) then
@@ -342,6 +355,86 @@ local io_write = function(...)
    b = prev_b
    if(b) then b.point_line = old_point_line + line_count - 1 end
 end
+
+local the_print = function(...)
+   local texts, read_only = {...}, inhibit_read_only
+   inhibit_read_only = true
+   if(texts[1] == invisible or texts[1] == nil) then return end
+   texts[1] = "\n" .. texts[1]
+   io_write(unpack(lume.map(texts, tostring)))
+   inhibit_read_only = read_only
+end
+
+local with_traceback = lume.fn(utils.with_traceback, the_print)
+
+local function find_binding(key, the_mode)
+   local mode = the_mode or get_current_mode()
+   local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
+   local alt = love.keyboard.isDown("lalt", "ralt")
+   local map = (ctrl and alt and mode["ctrl-alt"]) or
+      (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
+
+   return map[key] or map["__any"] or
+      (mode.parent and find_binding(key, mode.parent))
+end
+
+local define_mode = function(name, parent, read_only)
+   -- backwards-compatibility with beta-1
+   if(name == "edit" and parent) then parent, read_only = nil, false end
+   modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
+                   parent = parent, name = name, read_only = read_only }
+   return modes[name]
+end
+
+local function bind(mode_name, keycode, fn)
+   assert(keycode ~= nil, "Tried to bind to nil. Use false to unbind")
+   if(type(mode_name) == "table") then
+      for _,m in ipairs(mode_name) do
+         bind(m, keycode, fn)
+      end
+   else
+      -- lua regexes don't support |
+      local map, key = keycode:match("(ctrl-alt)-(.+)")
+      if not map then map, key = keycode:match("(ctrl)-(.+)") end
+      if not map then map, key = keycode:match("(alt)-(.+)") end
+      if map == "alt-ctrl" then map = "ctrl-alt" end
+      assert(modes[mode_name], "No mode " .. mode_name)
+      if(key == "enter") then key = "return" end
+      if(keycode == "enter") then keycode = "return" end
+      modes[mode_name][map or "map"][key or keycode] = fn
+   end
+end
+
+local function handle_textinput(text)
+   if(b and not find_binding(text, the_mode) and utf8.len(text) == 1) then
+      with_traceback(textinput, text)
+   end
+end
+
+local exit_minibuffer = function(cancel)
+   local minibuffer = b
+   b, mb = last_buffer, nil
+   if(not cancel) then
+      minibuffer.callback(utf8.sub(minibuffer.lines[1], #minibuffer.prompt+1))
+   end
+end
+
+local delete_backwards = function()
+   if(beginning_of_buffer()) then return end
+   local line, point = b.point_line, b.point
+   local line2, point2
+   save_excursion(function()
+         forward_char(-1)
+         line2, point2 = b.point_line, b.point
+   end)
+   delete(line2, point2, line, point)
+end
+
+define_mode("minibuffer")
+bind("minibuffer", "return", exit_minibuffer)
+bind("minibuffer", "escape", lume.fn(exit_minibuffer, true))
+bind("minibuffer", "ctrl-g", lume.fn(exit_minibuffer, true))
+bind("minibuffer", "backspace", delete_backwards)
 
 return {
    open = function(fs, path)
@@ -382,16 +475,7 @@ return {
    save = save,
 
    -- edit commands
-   delete_backwards = function()
-      if(beginning_of_buffer()) then return end
-      local line, point = b.point_line, b.point
-      local line2, point2
-      save_excursion(function()
-            forward_char(-1)
-            line2, point2 = b.point_line, b.point
-      end)
-      delete(line2, point2, line, point)
-   end,
+   delete_backwards = delete_backwards,
 
    delete_forwards = function()
       if(end_of_buffer()) then return end
@@ -547,7 +631,10 @@ return {
    undo = undo,
 
    -- internal functions
-   draw = function()
+   draw = function(ship)
+      local mode = get_current_mode()
+      if(mode.draw) then return mode.draw(ship) end
+
       ROW_HEIGHT = ROW_HEIGHT or love.graphics.getFont():getHeight()
       em = em or love.graphics.getFont():getWidth('a')
 
@@ -668,9 +755,7 @@ return {
       if(mb) then b, mb = mb, nil end
    end,
 
-   textinput = function(t)
-      wrap(function() insert({t}, true) end)
-   end,
+   textinput = textinput,
 
    activate_minibuffer = function(prompt, callback, exit_callback)
       -- without this, the key which activated the minibuffer triggers a
@@ -686,13 +771,7 @@ return {
       end
    end,
 
-   exit_minibuffer = function(cancel)
-      local minibuffer = b
-      b, mb = last_buffer, nil
-      if(not cancel) then
-         minibuffer.callback(utf8.sub(minibuffer.lines[1], #minibuffer.prompt+1))
-      end
-   end,
+   exit_minibuffer = exit_minibuffer,
 
    next_buffer = function(n)
       local current = lume.find(buffers, b) - 1
@@ -718,21 +797,14 @@ return {
    end_hook = save,
    name = "edit",
 
-   current_mode_name = function() return b and b.mode end,
+   current_mode_name = function() return b and b.mode or "flight" end,
 
-   -- normally you would use ship.api.activate_mode; this is lower-level
+   -- normally you would use activate_mode; this is lower-level
    set_mode = function(mode_name) if(b) then b.mode = mode_name end end,
 
    current_buffer_path = function() return b.path end,
 
-   print = function(...)
-      local texts, read_only = {...}, inhibit_read_only
-      inhibit_read_only = true
-      if(texts[1] == invisible or texts[1] == nil) then return end
-      texts[1] = "\n" .. texts[1]
-      io_write(unpack(lume.map(texts, tostring)))
-      inhibit_read_only = read_only
-   end,
+   print = the_print,
 
    raw_write = write,
    write = io_write,
@@ -839,6 +911,53 @@ return {
       if(line > 0 and line <= #b.lines) then b.point_line = line end
    end,
 
+   activate_mode = function(mode_name)
+      if(not b) then return end
+      assert(modes[mode_name], mode_name .. " mode does not exist.")
+      local current_mode = get_current_mode()
+      local new_mode = modes[mode_name]
+
+      if(current_mode.deactivate) then current_mode.deactivate() end
+      b.mode = mode_name
+      if(new_mode.activate) then new_mode.activate() end
+   end,
+
+   define_mode = define_mode,
+   bind = bind,
+   handle_textinput = handle_textinput,
+
+   handle_key = function(key)
+      local fn = find_binding(key)
+      local the_wrap = get_current_mode().wrap
+      if(fn and the_wrap) then
+         with_traceback(the_wrap, fn)
+      elseif(fn) then
+         with_traceback(fn)
+      end
+   end,
+
+   handle_wheel = function(x, y)
+      local wheel_dir = nil
+      if(x < 0) then wheel_dir = "wheelleft"
+      elseif(x > 0) then wheel_dir = "wheelright"
+      elseif(y < 0) then wheel_dir = "wheeldown"
+      elseif(y > 0) then wheel_dir = "wheelup"
+      end
+      local fn = find_binding(wheel_dir)
+      local the_wrap = get_current_mode().wrap
+      if(fn and the_wrap) then
+         with_traceback(the_wrap, fn)
+      elseif(fn) then
+         with_traceback(fn)
+      end
+   end,
+
    debug = debug,
-   initialize = function() end, -- dummy for compatibility with existing saves
+
+   -- deprecated
+   initialize = function() end,
+   modes = modes,
+   mode = function()
+      return modes[b and b.mode.name or "flight"]
+   end,
 }

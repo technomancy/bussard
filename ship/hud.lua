@@ -121,7 +121,7 @@ return {
          else error("Unknown hud type " .. data.type) end
       end
       -- hard-code this for now
-      local scale_y = math.log(ship.api.scale) * h
+      local scale_y = math.log(ship.api.scale / 2) * h
       love.graphics.line(w - 5, scale_y, w, scale_y)
    end,
 

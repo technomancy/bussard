@@ -1,6 +1,6 @@
 -- Edit mode -*- lua -*-
 
-define_mode("edit", ship.editor.textinput, ship.editor.wrap)
+define_mode("edit")
 
 -- most of the functions these are bound to should be self-explanatory
 -- just by looking at the function name.
