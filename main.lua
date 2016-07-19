@@ -135,6 +135,7 @@ love.load = function()
    if(arg[#arg] == "-debug") then require("mobdebug").start() end
    if(arg[#arg] == "--wipe") then save.abort(ship) love.event.quit() end
    if(arg[#arg] == "--test") then return require("tests") end
+   if(arg[#arg] == "--fuzz") then return require("tests.fuzz") end
 
    resize()
    ui.set_font(16)

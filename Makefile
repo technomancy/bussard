@@ -41,8 +41,9 @@ check:
 	  get_prompt set_prompt \
 	  -- $(DATA_LUA)
 
-test:
-	love . --test
+test: ; love . --test
+
+fuzz: ; love . --fuzz
 
 count: ; cloc --force-lang=lua $(GAME_LUA)
 

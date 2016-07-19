@@ -382,7 +382,7 @@ end
 
 local define_mode = function(name, parent_name, read_only)
    -- backwards-compatibility with beta-1
-   if(name == "edit" and parent) then parent, read_only = nil, false end
+   if(name == "edit" and parent_name) then parent_name,read_only = nil, nil end
    modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
                    parent = modes[parent_name], name = name,
                    read_only = read_only }

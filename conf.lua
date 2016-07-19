@@ -15,7 +15,7 @@ love.conf = function(t)
       repl:loadplugin("pretty_print")
       t.window, love.run = false, function() repl:run() end
    end
-   if(lume.find(arg, "--test")) then
+   if(lume.find(arg, "--test") or lume.find(arg, "--fuzz")) then
       t.window, t.modules.window, t.modules.graphics = false, false, false
       t.identity = "bussard-test"
    end
