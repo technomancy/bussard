@@ -7,7 +7,14 @@ local subnet_user = { username="subnet",
                       files={["/home/subnet/_smashrc"]=subnet_client,
                          ["/home/subnet/bin/subnet"]=subnet_client} }
 
-local data = {}
+local go4_source = love.filesystem.read("os/orb/resources/gangof4")
+
+local go4_files = {files={["/home/guest/bin/gangof4"] = go4_source}}
+
+local data = { ["Mirduka Station"] = { root = go4_files },
+   ["Apkabar Station"] = { root = go4_files },
+   ["Kenapa Station"] = { root = go4_files },
+   ["Earth"] = { root = go4_files },}
 
 for _,sys in pairs(systems) do
    for _,body in pairs(sys.bodies) do

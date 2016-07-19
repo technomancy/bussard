@@ -12,8 +12,10 @@ local seed = function(os, body_name)
    local raw = os.fs.new_raw()
    local proxy = os.fs.proxy(raw, "root", raw)
    local users = {guest = ""}
-   for _,u in pairs(seed_users[body_name] or {}) do
-      users[u.username] = u.password
+   for name,u in pairs(seed_users[body_name] or {}) do
+      if(name ~= "root") then
+         users[u.username] = u.password
+      end
    end
    os.fs.seed(proxy, users)
 

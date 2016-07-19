@@ -21,6 +21,7 @@ META=readme.md LICENSE credits.md Changelog.md bussard.el
 
 todo: ; grep -nH -e TODO $(GAME_LUA)
 blockers: ; grep TODO/blocker $(GAME_LUA)
+wipe_fs: ; rm -rf $(HOME)/.local/share/love/bussard/fs
 
 # different contexts have different rules about what's OK, globals, etc
 check:
