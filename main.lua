@@ -179,7 +179,7 @@ local draw = safely(function(dt)
       love.graphics.translate(w/2, h/2)
       love.graphics.push()
 
-      local scale = math.pow(1/ship.api.scale, 8)
+      local scale = math.pow(2/ship.api.scale, 8)
       love.graphics.scale(scale)
 
       for _,u in pairs(ship.upgrades) do

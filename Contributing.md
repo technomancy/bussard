@@ -55,8 +55,12 @@ standards for the engine code are the strictest; no new globals may be
 introduced. Inside the ship or OS sandboxes, it is often OK to introduce new
 "global" functions because their scope is much more limited.
 
-Some code (primarily the lisp and forth compilers) were imported from
-elsewhere and don't follow these rules.
+New to Lua? This
+[style guide](http://kiki.to/blog/2014/03/30/a-guide-to-authoring-lua-modules/)
+has some great advice. The main difference is that in our code rather than
+creating the table at the top of the lib and adding to it as you go, we
+construct a table at the very end that contains all the values we need to
+expose, because it is more declarative and less imperative.
 
 ## Tests and Static Analysis
 

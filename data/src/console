@@ -1,4 +1,5 @@
--- -*- lua -*-
+-- This -*- lua -*- defines a console mode which is for entering Lua code
+-- to run directly for experimentation.
 
 define_mode("console")
 ship.modes.console.parent = ship.modes.edit -- most keys work like in edit mode
@@ -13,19 +14,22 @@ bind("console", "ctrl-up", ship.editor.history_prev)
 bind("console", "ctrl-down", ship.editor.history_next)
 
 bind("console", "return", function()
+        -- if you're not on the last line, enter just bumps you down.
         if(ship.editor.get_line_number() ~= ship.editor.get_max_lines()) then
            ship.editor.end_of_buffer()
            return
         end
 
         local input = utf8.sub(ship.editor.get_line(0),
-                               utf8.len(ship.editor.get_prompt())+1)
+                               utf8.len(ship.editor.get_prompt()) + 1)
         ship.editor.history_push(input)
         ship.editor.end_of_line()
         ship.editor.newline()
         ship.editor.no_mark()
+
+        -- try to compile the input.
         local chunk, err = loadstring("return " .. input)
-        if(err and not chunk) then -- statement, not expression
+        if(err and not chunk) then -- maybe it's a statement, not an expression
            chunk, err = loadstring(input)
            if(not chunk) then
               print("! Compilation error: " .. err or "Unknown error")
@@ -34,6 +38,8 @@ bind("console", "return", function()
               return false
            end
         end
+
+        -- try runnig the compiled code in protected mode.
         local trace
         local result = pack(xpcall(chunk, function(e)
                                       trace = debug.traceback()
@@ -44,12 +50,14 @@ bind("console", "return", function()
               ship.editor.print_prompt()
               return true
            end
+           -- pretty-print out the values it returned.
            while i <= #result do
               output = output .. ', ' .. pps(result[i])
               i = i + 1
            end
            print(output)
         else
+           -- display the error and stack trace.
            realprint('! Evaluation error: ' .. err or "Unknown")
            print('! Evaluation error: ' .. err or "Unknown")
            local lines = lume.split(trace, "\n")
@@ -61,13 +69,20 @@ bind("console", "return", function()
         ship.editor.print_prompt()
 end)
 
+-- auto-completion saves you typing!
 local complete = function()
    local point, point_line = ship.editor.point()
+   -- only complete if you're on the last line (input area)
    if(point_line ~= ship.editor.get_max_lines()) then return end
+   -- strip out the prompt.
    local line = utf8.sub(ship.editor.get_line(0),
-                         utf8.len(ship.editor.get_prompt())+1, point)
+                         utf8.len(ship.editor.get_prompt()) + 1, point)
+   -- what's the expression being completed?
    local entered = lume.last(lume.array((line):gmatch("[._%a0-9]+"))) or ""
    local completions = utils.completions_for(entered, _G, ".")
+
+   -- if there's only one completion candidate, insert it. otherwise insert the
+   -- longest unambiguous substring and display a list of candidates.
    if(#completions == 1) then
       ship.editor.textinput(utf8.sub(completions[1], #entered + 1))
    elseif(#completions > 0) then

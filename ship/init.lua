@@ -151,7 +151,8 @@ local sandbox = function(ship)
                        reply = lume.fn(mail.reply, ship),
                        replyable = mail.replyable,
                        graphics = love.graphics,
-                       pps = function(x) return serpent.block(x, serpent_opts) end,
+                       pps = function(x)
+                          return serpent.block(x, serpent_opts) end,
                        pp = function(x)
                           editor.print(serpent.block(x, serpent_opts)) end,
                        ls = function(path)
@@ -175,6 +176,9 @@ local trajectory_auto = function(ship, dt)
       ship.updaters.trajectory_auto = nil
    end
 end
+
+-- TODO: we should probably refactor this to not be stateful; return a ship.make
+-- function instead of a ready-to-use stateful table.
 
 local ship = {
    base_stats = base_stats,
@@ -243,7 +247,6 @@ local ship = {
       ship:recalculate()
 
       if(reseed) then
-         ship.engine_on, ship.turning_right, ship.turning_left = false,false,false
          ship.comm_connected, ship.target_number, ship.target = false, 0, nil
 
          -- re-seed system-level things
@@ -253,7 +256,8 @@ local ship = {
             body.seed_cargo(b)
          end
 
-         local portal = lume.match(ship.bodies, function(b) return b.portal == from end)
+         local portal = lume.match(ship.bodies,
+                                   function(b) return b.portal == from end)
          if(portal) then
             ship.x, ship.y = portal.x + 100, portal.y + 100
             ship.dx, ship.dy = portal.dx, portal.dy
@@ -272,7 +276,7 @@ local ship = {
       local current_mode = ship.api:mode()
       if(current_mode and current_mode.name == "flight") then
          for k,f in pairs(ship.api.controls) do
-            with_traceback(f, love.keyboard.isDown(k))
+            with_traceback(f, love.keyboard.isDown(k), dt)
          end
       end
 
@@ -555,7 +559,7 @@ ship.api = {
          s.status.engine_strength * s.status.burn_rate / (s.status.mass * 20)
    end,
 
-   scale = 1.9,
+   scale = 3.5,
 
    cheat = ship,
    print = editor.print,

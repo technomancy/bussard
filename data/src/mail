@@ -9,8 +9,9 @@ mail = function()
 end
 
 define_mode("mail")
+ship.modes.mail.parent = ship.modes.edit -- nav keys should work like edit mode.
 
-local targets = {}
+local targets = {} -- things you can press enter to open
 
 local header = function(lines, header)
    for _,line in ipairs(lines) do
@@ -19,6 +20,7 @@ local header = function(lines, header)
    end
 end
 
+-- returns a string which summarizes a message in a single line for folder view.
 local describe = function(msg)
    local lines = lume.split(msg, "\n")
    local date = utils.pad_to(header(lines, "Date") or "", 17)
@@ -27,6 +29,7 @@ local describe = function(msg)
    return date .. " | " .. from .. " | " .. subject
 end
 
+-- return a sorted table of messages by date field, if present.
 local subjects_by_date = function(msgs)
    local by_date, names = {}, {}
    for name, msg in pairs(msgs) do
@@ -45,6 +48,7 @@ end
 
 local archive_key = "alt-a"
 
+-- sometimes the modeline should show a hint hint for the archive command.
 local set_modeline = function(folder)
    if(folder == "archive") then
       ship.editor.set_modeline(function(b)
@@ -69,7 +73,7 @@ local open_folder = function(folder)
    local p = function(x) ship.editor.raw_write(x .. "\n") end
    targets = {}
 
-   if(folder) then
+   if(folder) then -- display the contents of the current folder.
       p("Folder: " .. folder .. "\n")
       local msgs = ship.docs.mail[folder]
       for _,name in ipairs(subjects_by_date(msgs)) do
@@ -83,7 +87,7 @@ local open_folder = function(folder)
             end
          end
       end
-   else
+   else -- display a list of folders.
       p("Folders\n")
       local folder_list = lume.sort(lume.keys(ship.docs.mail))
       lume.remove(folder_list, "inbox")
@@ -102,7 +106,6 @@ local open_folder = function(folder)
 end
 
 ship.modes.mail.activate = open_folder
-ship.modes.mail.parent = ship.modes.edit -- nav keys should be intact
 
 local reply_key = "alt-return"
 
@@ -118,21 +121,24 @@ local view_modeline = function(b)
    end
 end
 
-bind("mail", "return", function()
-        local line = ship.editor.get_line_number()
-        local target = targets[line-2] -- two lines at the top before listing
+local open_message_or_folder = function()
+   local line = ship.editor.get_line_number()
+   local target = targets[line-2] -- two lines at the top before listing
 
-        if(type(target) == "table") then -- two values means a message
-           local folder, name = unpack(target)
-           ship.docs.mail[folder]._unread[name] = nil
-           open_folder(folder)
-           ship.editor.open(ship, "docs.mail." .. folder .. "." .. name)
-           ship:activate_mode("view")
-           ship.editor.set_modeline(view_modeline)
-        else -- single value means open a folder
-           open_folder(target)
-        end
-end)
+   if(type(target) == "table") then -- two values means open individual msg
+      local folder, name = unpack(target)
+      ship.docs.mail[folder]._unread[name] = nil
+      open_folder(folder)
+      ship.editor.open(ship, "docs.mail." .. folder .. "." .. name)
+      ship:activate_mode("view")
+      ship.editor.set_read_only(true)
+      ship.editor.set_modeline(view_modeline)
+   else -- single value means open a folder
+      open_folder(target)
+   end
+end
+
+bind("mail", "return", open_message_or_folder)
 
 local archive_from_folder = function()
    local line = ship.editor.get_line_number()
@@ -148,6 +154,7 @@ end
 bind("mail", archive_key, archive_from_folder)
 
 define_mode("view")
+ship.modes.view.parent = ship.modes.edit -- nav keys should work like edit mode.
 
 local archive = function()
    local path = ship.editor.current_buffer_path()
@@ -161,18 +168,16 @@ end
 
 bind("view", "alt-a", archive)
 
-ship.modes.view.parent = ship.modes.edit -- nav keys should be intact
-ship.modes.view.activate = lume.fn(ship.editor.set_read_only, true)
+local reply = function()
+   local id = header(ship.editor.get_lines(), "Message.Id")
+   local success, status = reply(id)
+   ship.editor.close()
+   ship.editor.open(ship, "*console*")
+   if(success) then
+      print("Replied.", status)
+   else
+      print(status)
+   end
+end
 
--- accept mission
-bind("view", reply_key, function()
-        local id = header(ship.editor.get_lines(), "Message.Id")
-        local success, status = reply(id)
-        ship.editor.close()
-        ship.editor.open(ship, "*console*")
-        if(success) then
-           print("Replied.", status)
-        else
-           print(status)
-        end
-end)
+bind("view", reply_key, reply)

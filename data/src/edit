@@ -5,40 +5,38 @@ define_mode("edit", ship.editor.textinput, ship.editor.wrap)
 -- most of the functions these are bound to should be self-explanatory
 -- just by looking at the function name.
 
-bind("edit", "escape", function()
-        ship.editor.save()
-        ship.editor.change_buffer(nil) -- nil buffer means flight mode
-end)
+local exit = function()
+   ship.editor.save()
+   ship.editor.change_buffer(nil) -- nil buffer means flight mode
+end
 
-bind("edit", "ctrl-return", function()
-        ship.editor.save()
-        ship.editor.change_buffer(nil) -- nil buffer means flight mode
-end)
+bind("edit", "escape", exit)
+bind("edit", "ctrl-return", exit)
 
 bind("edit", "ctrl-q", function()
         ship.editor.save()
         ship.ui.quit()
 end)
 
--- cycle forwards and backwards through open buffers
+-- cycle forwards and backwards through open buffers.
 bind("edit", "ctrl-pageup", lume.fn(ship.editor.next_buffer, -1))
-bind("edit", "appback", lume.fn(ship.editor.next_buffer, -1))
 bind("edit", "ctrl-pagedown", ship.editor.next_buffer)
+
+-- not all keyboards have these keys, but they're handy.
+bind("edit", "appback", lume.fn(ship.editor.next_buffer, -1))
 bind("edit", "appforward", ship.editor.next_buffer)
 
--- switch buffer by name
+-- switch buffer by name.
 bind("edit", "alt-x", function()
         local last_buffer = ship.editor.last_buffer()
-        ship:read_line("Switch to buffer (default: "
-                          .. last_buffer.path .. "): ",
-                       function(b)
-                          ship.editor.change_buffer(b ~= ""
-                                                       and b
-                                                       or last_buffer.path)
-        end)
+        local callback = function(b)
+           ship.editor.change_buffer(b ~= "" and b or last_buffer.path)
+        end
+        ship:read_line("Switch to buffer (default: " ..last_buffer.path.. "): ",
+                       callback)
 end)
 
--- you can bind return to just ship.editor.newline to disable auto-indent
+-- you can bind return to just ship.editor.newline to disable auto-indent.
 bind("edit", "return", ship.editor.newline_and_indent)
 bind("edit", "ctrl-z", ship.editor.undo)
 bind("edit", "ctrl-s", ship.editor.save)
@@ -69,7 +67,7 @@ bind("edit", "alt-c", ship.editor.system_copy_region)
 bind("edit", "pageup", ship.editor.scroll_up)
 bind("edit", "pagedown", ship.editor.scroll_down)
 
--- insert a page-break, rendered as a horizontal line
+-- insert a page-break, rendered as a horizontal line.
 bind("edit", "ctrl-l", function()
         ship.editor.newline()
         ship.editor.textinput("\f")
@@ -77,12 +75,16 @@ bind("edit", "ctrl-l", function()
 end)
 
 bind("edit", "alt-k", ship.editor.close)
-bind("edit", "ctrl-alt-k", lume.fn(ship.editor.close, true))
 
-bind({"flight", "edit"}, "alt-g", function()
-      ship:read_line("Go to line: ", function(l)
-                        ship.editor.go_to_line(tonumber(l)) end)
+-- force close even if unsaved changes exist.
+bind("edit", "ctrl-alt-k", function()
+        ship.editor.close(true)
 end)
 
--- comment this out to disable Emacs key bindings
+bind("edit", "alt-g", function()
+        ship:read_line("Go to line: ", function(l)
+                          ship.editor.go_to_line(tonumber(l)) end)
+end)
+
+-- comment this out to disable Emacs key bindings.
 dofile("src.emacs")

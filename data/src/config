@@ -1,31 +1,54 @@
--- This -*- lua -*- code runs inside your ship's own computer.
+-- This -*- lua -*- code is the entry point for your ship's computer's config.
 
--- controls are for keys that need to keep activating when held down; bind
--- is for commands that only call their functions once even when held
-ship.controls = {
-   up = ship.actions.forward,
-   left = ship.actions.left,
-   right = ship.actions.right,
-   ["="] = function(d) if d then ship.scale = ship.scale - (ship.dt/ship.status.time_factor/2) end end,
-   ["-"] = function(d) if d then ship.scale = ship.scale + (ship.dt/ship.status.time_factor/2) end end,
-}
+-- It sets up the keys for flight mode and loads files containing definitions
+-- of other modes.
 
--- Flight mode
+local zoom_in = function(pressed, dt)
+   if(pressed) then
+      ship.scale = ship.scale - dt / ship.status.time_factor
+   end
+end
+
+local zoom_out = function(pressed, dt)
+   if(pressed) then
+      ship.scale = ship.scale + dt / ship.status.time_factor
+   end
+end
+
+-- controls are for keys that need to keep activating when held down.
+ship.controls["up"] = ship.actions.forward
+ship.controls["left"] = ship.actions.left
+ship.controls["right"] = ship.actions.right
+ship.controls["="] = zoom_in
+ship.controls["-"] = zoom_out
+
+-- # Flight mode
 define_mode("flight")
 
-bind("flight", "wheelup", function() ship.scale = ship.scale - (ship.dt/2) end)
-bind("flight", "wheeldown", function() ship.scale = ship.scale + (ship.dt/2) end)
-
+-- bind is for commands that only call their functions once even when held.
+-- it takes the name of a mode, a key combo, and a function to run when pressed.
 bind("flight", "escape", ship.ui.pause)
-bind("flight", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
 
--- ctrl-tab selects closest target; repeated ctrl-tab selects next-closest
-bind("flight", "ctrl-tab", ship.actions.closest_target)
+-- you can bind keys to existing functions or inline functions.
+bind("flight", "ctrl-return", function()
+        ship.editor.change_buffer("*console*")
+end)
 
--- regular tab selects next target in "order"
+-- the mouse wheel is handled just like any other key press.
+bind("flight", "wheelup", zoom_in)
+bind("flight", "wheeldown", zoom_out)
+
+-- regular tab selects next target in order of distance from the star.
 bind("flight", "tab", ship.actions.next_target)
 
-dofile("src.hud") -- heads-up display during flight mode
+-- ctrl-tab selects next closest target in order of distance from your ship.
+bind("flight", "ctrl-tab", ship.actions.closest_target)
+
+-- quit auto-saves; don't worry.
+bind("flight", "ctrl-q", ship.ui.quit)
+
+-- contains configuration for heads-up display during flight mode.
+dofile("src.hud")
 
 -- other modes
 dofile("src.edit") -- editor
@@ -33,24 +56,22 @@ dofile("src.mail") -- mail client
 dofile("src.console") -- console for interacting with ship's computer
 dofile("src.ssh") -- ssh mode for interacting with station/planet computers
 
--- multi-mode bindings
+-- bindings can affect more than one mode at a time:
+bind({"flight", "edit"}, "ctrl-m", mail)
 
-bind({"flight", "edit"}, "ctrl-q", ship.ui.quit)
-
--- open mail client
-bind({"flight", "edit"}, "ctrl-m", function()
-        ship.editor.change_buffer("*console*")
-        mail()
-end)
-
--- to open a file
+-- to open a file.
 bind({"flight", "edit"}, "ctrl-o", function()
-        ship:read_line("Open: ", lume.fn(ship.editor.open, ship))
+      local callback = function(input)
+         -- open whatever file is given.
+         ship.editor.open(ship, input)
+      end
+      -- read_line takes a callback function that is called with input.
+      ship:read_line("Open: ", callback)
 end)
 
 -- reload config
 bind({"flight", "edit"}, "ctrl-r",
-   -- maybe bind this to something that isn't already used by edit mode
+   -- TODO: maybe bind this to something that isn't already used by edit mode?
    function()
       local success, err = ship.dofile("src.config")
       if(success) then
@@ -60,12 +81,10 @@ bind({"flight", "edit"}, "ctrl-r",
       end
 end)
 
--- connect to target over ssh
-bind("flight", "ctrl-s", function()
-        ship.editor.change_buffer("*console*")
-        ssh()
-end)
+-- connect to target over ssh.
+bind("flight", "ctrl-s", ssh)
 
+-- activate portal sequence.
 bind("flight", "ctrl-p", portal)
 
 -- if you keep your personal customizations in here, they will be preserved
