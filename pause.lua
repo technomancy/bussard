@@ -64,7 +64,7 @@ local keypressed = function(key)
       end
       input = ""
    elseif(key == "escape") then
-      input = ""
+      actions["resume"]()
    elseif(key == "q" and love.keyboard.isDown("lctrl", "rctrl")) then
       love.event.quit()
    elseif(#key == 1) then
