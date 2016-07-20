@@ -77,6 +77,8 @@ local complete = function()
                          utf8.len(ship.editor.get_prompt()) + 1, point)
    -- what's the expression being completed?
    local entered = lume.last(lume.array((line):gmatch("[._%a0-9]+"))) or ""
+   -- only complete if something is entered
+   if(#entered < 1) then return end
    local completions = utils.completions_for(entered, _G, ".")
 
    -- if there's only one completion candidate, insert it. otherwise insert the
