@@ -71,7 +71,6 @@ end)
 
 -- reload config
 bind({"flight", "edit"}, "ctrl-r",
-   -- TODO: maybe bind this to something that isn't already used by edit mode?
    function()
       local success, err = ship.dofile("src.config")
       if(success) then

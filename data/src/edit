@@ -29,10 +29,11 @@ bind("edit", "appforward", ship.editor.next_buffer)
 -- switch buffer by name.
 bind("edit", "alt-x", function()
         local last_buffer = ship.editor.last_buffer()
+        last_buffer = last_buffer and last_buffer.path or "*console*"
         local callback = function(b)
-           ship.editor.change_buffer(b ~= "" and b or last_buffer.path)
+           ship.editor.change_buffer(b ~= "" and b or last_buffer)
         end
-        ship:read_line("Switch to buffer (default: " ..last_buffer.path.. "): ",
+        ship:read_line("Switch to buffer (default: " ..last_buffer.. "): ",
                        callback)
 end)
 
@@ -40,7 +41,7 @@ end)
 bind("edit", "return", ship.editor.newline_and_indent)
 bind("edit", "ctrl-z", ship.editor.undo)
 bind("edit", "ctrl-s", ship.editor.save)
-bind("edit", "ctrl-r", ship.editor.revert)
+bind("edit", "alt-r", ship.editor.revert)
 
 -- "Conventional" keys
 bind("edit", "backspace", ship.editor.delete_backwards)

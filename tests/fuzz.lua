@@ -25,8 +25,7 @@ local find = function(mode, command)
    end
 end
 
-local try = function(f, msg)
-   msg()
+local try = function(f)
    local traceback, err
    local ok, ret = xpcall(f, function(e)
                              traceback, err = debug.traceback(), e
@@ -41,17 +40,20 @@ local try = function(f, msg)
 end
 
 local function fuzz(n)
-   for _=1,n do
-      editor.change_buffer(lume.randomchoice(editor.buffer_names()))
+   for i=1,n do
+      if(#editor.buffer_names() == 1) then
+         editor.open(ship.api, "newfile")
+      else
+         editor.change_buffer(lume.randomchoice(editor.buffer_names()))
+      end
+
       local mode = editor.mode()
       local commands = lume.concat(vals(mode.map), vals(mode.ctrl),
                                    vals(mode.alt), vals(mode["ctrl-alt"]))
       local command = lume.randomchoice(commands)
 
-      try(command, function() print("running " .. find(mode, command)) end)
-      if(editor.mode().name ~= mode.name) then
-         print("Changed mode:", mode.name, "to", editor.mode().name)
-      end
+      print("running " .. find(mode, command) .. " in mode " .. mode.name)
+      try(lume.fn(editor.wrap, command))
 
       if(love.math.random(5) == 1) then
          local input = ""
@@ -59,12 +61,12 @@ local function fuzz(n)
             input = input .. string.char(love.math.random(127-32) + 32)
             if(love.math.random(5) == 1) then input = input .. " " end
          end
-         try(lume.fn(editor.handle_textinput, input),
-             function() print("inserting " .. input) end)
+         try(lume.fn(editor.handle_textinput, input))
       end
    end
 end
 
 editor.open(ship.api, "newfile")
 
-fuzz(tonumber(os.getenv("BUSSARD_FUZZ_COUNT") or 128))
+fuzz(tonumber(os.getenv("BUSSARD_FUZZ_COUNT") or 256))
+os.exit(0)

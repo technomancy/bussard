@@ -82,6 +82,14 @@ your package manager.
     [...]
     $ make check test
 
+If you make changes to the editor, try fuzzing it a few times to ensure none of
+the commands can crash if given random input:
+
+    $ make fuzz
+
+Note that this will only catch problems in commands which are bound to keys in
+the default config.
+
 ## Philosophy
 
 The whole game is about exploring a simulated world, pushing up against its

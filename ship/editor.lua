@@ -90,6 +90,15 @@ local wrap = function(fn, ...)
    if(#b.history > history_max) then
       table.remove(b.history, 1)
    end
+   -- These should never happen, but let's be forgiving instead of asserting.
+   if(b.mark_line and (b.mark_line > #b.lines or b.mark_line < 1)) then
+      print("Mark out of bounds!", b.mark_line, #b.lines)
+      b.mark, b.mark_line = nil, nil
+   end
+   if(b.point_line > #b.lines or b.point_line < 1) then
+      print("Point out of bounds!", b.point_line, #b.lines)
+      b.point_line = 1
+   end
    if(b.max_lines) then
       for _=1,(#b.lines - b.max_lines) do
          table.remove(b.lines, 1)
@@ -100,7 +109,7 @@ local wrap = function(fn, ...)
 end
 
 local debug = function()
-   print("---------------", b.point_line, b.point)
+   print("---------------", b.path, b.point_line, b.point, b.mark_line, b.mark)
    for _,line in ipairs(b.lines) do
       print(line)
    end
@@ -143,9 +152,11 @@ local region = function()
    else
       local start_line, start, finish_line, finish
       if(b.point_line < b.mark_line) then
-         start_line, start, finish_line,finish = b.point_line,b.point,b.mark_line,b.mark
+         start_line, start, finish_line,finish =
+            b.point_line, b.point, b.mark_line, b.mark
       else
-         start_line, start, finish_line,finish = b.mark_line,b.mark,b.point_line,b.point
+         start_line, start, finish_line,finish =
+            b.mark_line, b.mark, b.point_line, b.point
       end
       local r = {utf8.sub(b.lines[start_line], start + 1, -1)}
       for i = start_line+1, finish_line-1 do
@@ -242,7 +253,8 @@ local yank = function()
 end
 
 local system_yank = function ()
-   local text = love.system.getClipboardText()
+   -- don't crash in headless mode
+   local text = love.window and love.system.getClipboardText()
    if(text) then
       insert(lume.split(text, "\n"), true)
    end
@@ -271,7 +283,7 @@ local forward_char = function(n) -- lameness: n must be 1 or -1
 end
 
 local point_over = function()
-   return utf8.sub(b.lines[b.point_line], b.point + 1, b.point + 1)
+   return utf8.sub(b.lines[b.point_line], b.point + 1, b.point + 1) or ""
 end
 
 local forward_word = function()
@@ -355,7 +367,7 @@ local io_write = function(...)
       b.point, b.point_line = old_point, #b.lines
    end
    b = prev_b
-   if(b) then b.point_line = old_point_line + line_count - 1 end
+   if(b == console) then b.point_line = old_point_line + line_count - 1 end
 end
 
 local the_print = function(...)
@@ -472,7 +484,11 @@ return {
    end,
 
    revert = function()
-      b.lines = lume.split(b.fs:find(b.path), "\n")
+      local contents = b.fs:find(b.path)
+      if(not contents) then return end
+      b.lines, b.point = lume.split(contents, "\n"), 0
+      if(b.point_line > #b.lines) then b.point_line = #b.lines end
+      if(b.mark and (b.mark_line > #b.lines)) then b.mark_line = #b.lines end
    end,
 
    save = save,
@@ -522,7 +538,7 @@ return {
    end,
 
    scroll_up = function()
-      b.point_line = math.max(0, b.point_line - scroll_size)
+      b.point_line = math.max(1, b.point_line - scroll_size)
    end,
 
    scroll_down = function()
@@ -604,17 +620,19 @@ return {
    end,
 
    system_copy_region = function()
-      if(b.mark == nil or b.mark_line == nil) then return end
+      if(b.mark == nil or b.mark_line == nil or not love.window) then return end
       love.system.setClipboardText(table.concat(region(), "\n"))
    end,
 
    yank = yank,
 
    yank_pop = function()
-      table.insert(kill_ring, 1, table.remove(kill_ring))
-      local ly_line1, ly_point1, ly_line2, ly_point2 = unpack(b.last_yank)
-      delete(ly_line1, ly_point1, ly_line2, ly_point2)
-      yank()
+      if(b.last_yank) then
+         table.insert(kill_ring, 1, table.remove(kill_ring))
+         local ly_line1, ly_point1, ly_line2, ly_point2 = unpack(b.last_yank)
+         delete(ly_line1, ly_point1, ly_line2, ly_point2)
+         yank()
+      end
    end,
 
    system_yank = system_yank,
@@ -796,7 +814,6 @@ return {
    region = region,
    delete = delete,
 
-   wrap = wrap,
    end_hook = save,
    name = "edit",
 
@@ -953,8 +970,9 @@ return {
 
    -- deprecated
    initialize = function() end,
+   wrap = wrap,
    modes = modes,
    mode = function()
-      return modes[b and b.mode.name or "flight"]
+      return modes[b and b.mode or "flight"]
    end,
 }

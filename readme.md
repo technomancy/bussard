@@ -52,6 +52,9 @@ See the list of [open issues](https://gitlab.com/technomancy/bussard/issues) to
 see upcoming features. The [changelog](Changelog.md) lists when recent
 user-visible changes were added in which releases.
 
+The [contributing guide](Contributing.md) contains details about the structure
+of the codebase and how to submit good patches.
+
 The game will contain programming challenges you must solve in order to
 proceed. (Currently only one is implemented.) Eventually the goal is that you
 will be able to learn it without any (or much) prior programming experience
