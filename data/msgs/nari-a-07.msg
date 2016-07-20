@@ -7,4 +7,5 @@ Message-Id: 8c81f12d-2614-4721-9af3-1f29f6354752
 Ugh; I forgot about the security checks. Of course you don't have clearance
 for this ship yet, and the panjandrums don't much like that.
 
-If you swing by the station I can probably get us what we need at Apkabar.
+If you swing by the station and log in I can probably get us what we need at
+Apkabar.

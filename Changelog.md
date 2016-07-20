@@ -4,7 +4,7 @@
 
 * Mouse wheel zooms and scrolls; can be rebound.
 * Add `go_to_line` command, defaults to to alt-g.
-* Add API for connecting over SSH and getting output back.
+* Add API for connecting over SSH and getting output back programmatically.
 * Make it possible to edit the game from within the game during development.
 * Fix a bug where contents of proxy tables wouldn't print.
 * Integrate with system clipboard (alt-c and alt-v).
