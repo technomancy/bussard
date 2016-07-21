@@ -654,7 +654,7 @@ return {
    -- internal functions
    draw = function(ship)
       local mode = get_current_mode()
-      if(mode.draw) then return mode.draw(ship) end
+      if(mode and mode.draw) then return mode.draw(ship) end
 
       ROW_HEIGHT = ROW_HEIGHT or love.graphics.getFont():getHeight()
       em = em or love.graphics.getFont():getWidth('a')

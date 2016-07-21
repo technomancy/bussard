@@ -66,6 +66,7 @@ local sandbox_dofile = function(ship, filename)
       return with_traceback(chunk)
    else
       ship.api.print(err)
+      -- TODO/blocker: err seems to always be nil?
       return false, err
    end
 end
