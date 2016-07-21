@@ -107,6 +107,41 @@ bind("edit", "alt-s", function()
         ship:read_line("Search: ", callback)
 end)
 
+-- Search and replace
+-- FIXME: there is a lot of code in common between this and the regular search
+-- function. See if it is reasonable to factor out some common functionality.
+bind("edit", "alt-r", function()
+        local b = ship.editor.current_buffer()
+        local old_point, old_point_line, old_mark, old_mark_line =
+           b.point, b.point_line, b.mark, b.mark_line
+        local last_line = b.mark_line
+        local callback_s = function(s)
+           local callback_r = function(r)
+              if(s == "") then return end
+              local replace = function(l, n)
+                 if(n ~= last_line) then b.mark = 0 end
+                 local new_line = utf8.gsub(l, s, r, 1)
+                 if(new_line == l) then
+                    return false
+                 else
+                    b.lines[n] = new_line
+                    return true
+                 end
+              end
+              for line = b.point_line, #b.lines do
+                 if(replace(b.lines[line], line)) then
+                    return
+                 end
+              end
+              -- No matches, restore point and mark
+              b.point, b.point_line, b,mark, b.mark_line =
+                 old_point, old_point_line, old_mark, old_mark_line
+           end
+           ship:read_line("Replace '" .. s .. "' with: ", callback_r)
+        end
+        ship:read_line("Search: ", callback_s)
+end)
+
 bind("edit", "alt-k", ship.editor.close)
 
 -- force close even if unsaved changes exist.
