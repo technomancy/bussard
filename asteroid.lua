@@ -22,12 +22,12 @@ local function asteroid(name, mass_max, bodies, parent)
 
    if(parent) then
       -- if two new asteroids spawn in exactly the same place, gravity bugs out
-      local o = love.math.random(20) - 10
+      local o = love.math.random(50) - 25
       a.x, a.y, a.dx, a.dy = parent.x + o, parent.y + o, parent.dx, parent.dy
    else
       -- try to get them to spawn clustered near-ish the sun with some outliers
-      local r = love.math.randomNormal(20000, 30000)
-      local base_v = math.sqrt((body.g*bodies[1].mass)/math.abs(r)) / 10
+      local r = love.math.randomNormal(30000, 50000)
+      local base_v = math.sqrt((body.g*bodies[1].mass)/math.abs(r))
       -- use the same orbit logic as planets, but with random eccentricity
       local eccentricity = love.math.random() / 2 + 0.5
       local v = base_v * eccentricity
