@@ -99,8 +99,10 @@ return {
       action = function(ship, down)
          if(down == "toggle") then
             ship.laser = not ship.laser
+         elseif(ship.laser == "off") then
+            ship.laser = false
          else
-            ship.laser = down
+            ship.laser = ship.laser or down
          end
       end,
       update = function(ship, dt)
@@ -123,6 +125,10 @@ return {
             love.graphics.setLineWidth(3)
             love.graphics.line(0, 0, 0, -1000)
             love.graphics.pop()
+            -- I know it's horrible to make state changes in draw, but if we
+            -- don't do this we can't do ORing together in the action function
+            -- which means you can't have two controls which can fire the laser
+            ship.laser = false
          end
       end,
    },
