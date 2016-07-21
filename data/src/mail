@@ -67,7 +67,7 @@ local open_folder = function(folder)
    ship.editor.set_read_only(false)
    ship.editor.end_of_buffer()
    local point, point_line = ship.editor.point()
-   ship.editor.delete(1, 0, point_line, point)
+   ship.editor.suppress_read_only(ship.editor.delete, 1, 0, point_line, point)
    set_modeline(folder)
 
    local p = function(x) ship.editor.raw_write(x .. "\n") end
