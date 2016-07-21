@@ -806,6 +806,10 @@ return {
       b = get_buffer(path)
    end,
 
+   current_buffer = function()
+      return b
+   end,
+
    last_buffer = function()
       return last_edit_buffer
    end,
