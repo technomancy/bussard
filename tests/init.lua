@@ -12,6 +12,5 @@ love.event.quit()
 
 -- TODO: write tests for:
 -- * missions
--- * mail delivery
 -- * services: cargo
 -- * ship: disembark?
