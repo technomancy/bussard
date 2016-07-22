@@ -45,6 +45,8 @@ test: ; love . --test
 
 fuzz: ; love . --fuzz
 
+ci: check test fuzz
+
 count: ; cloc --force-lang=lua $(GAME_LUA)
 
 count_engine: ; cloc $(ENGINE_LUA) $(SHIP_LUA)

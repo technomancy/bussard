@@ -187,7 +187,7 @@ local get_connection = function(ship, username, password)
                output = output .. x
             end
          end
-         -- TODO: problem is that subnet is implemented by repl in .smashrc
+
          ship.target.os.shell.exec(fs, env, command, sandbox(ship, target))
          return output
       end
