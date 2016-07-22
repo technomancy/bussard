@@ -807,7 +807,7 @@ return {
    end,
 
    last_buffer = function()
-      return last_edit_buffer
+      return last_edit_buffer and last_edit_buffer.path
    end,
 
    insert = insert,

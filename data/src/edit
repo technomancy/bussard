@@ -29,7 +29,7 @@ bind("edit", "appforward", ship.editor.next_buffer)
 -- switch buffer by name.
 bind("edit", "alt-x", function()
         local last_buffer = ship.editor.last_buffer()
-        last_buffer = last_buffer and last_buffer.path or "*console*"
+        last_buffer = last_buffer or "*console*"
         local callback = function(b)
            ship.editor.change_buffer(b ~= "" and b or last_buffer)
         end
