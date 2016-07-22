@@ -106,6 +106,7 @@ local sandbox = function(ship)
                        reply = lume.fn(mail.reply, ship),
                        replyable = mail.replyable,
                        graphics = love.graphics,
+                       is_key_down = love.keyboard.isDown,
                        pps = function(x)
                           return serpent.block(x, serpent_opts) end,
                        pp = function(x)
@@ -218,6 +219,7 @@ local ship = {
          end
          ai.seed(system_name, ship.bodies)
       end
+      ship.api.on_enter(system_name)
    end,
 
    update = function(ship, dt)
@@ -428,6 +430,7 @@ ship.api = {
    controls = {},
    updaters = {},
    long_updaters = {},
+   on_enter = function(_) end,
 
    -- trajectory plotting is the single biggest perf drain by far
    -- these numbers will be changed if the frame rate is too low

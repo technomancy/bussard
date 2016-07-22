@@ -218,6 +218,10 @@ of how many total seconds the engine is engaged:
       end
     end
 
+In addition, there is a `ship.on_enter` function you can set; this will be
+called once for every time you enter a new system. It will receive as an
+argument the name of the system you are entering.
+
 #### hud
 
 The heads-up-display is configurable by setting the `ship.hud`
