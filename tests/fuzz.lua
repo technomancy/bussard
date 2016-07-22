@@ -12,13 +12,14 @@ local function vals(t)
    return rtn
 end
 
-local binding_for = function(mode, command)
+local function binding_for(mode, command)
    for mn,m in pairs({main=mode.map, ctrl=mode.ctrl,
                       alt=mode.alt, ctrl_alt=mode["ctrl-alt"]}) do
       for k,v in pairs(m) do
          if(v == command) then return mn .. "-" .. k end
       end
    end
+   if(mode.parent) then return binding_for(mode.parent, command) end
 end
 
 local try = function(f)
@@ -44,6 +45,17 @@ local random_text = function()
    return input
 end
 
+local commands_by_mode = {}
+local function commands_for(mode)
+   if(commands_by_mode[mode]) then return commands_by_mode[mode] end
+   -- smush together all the different sub-maps (ctrl, alt, ctrl-alt)
+   local commands = lume.concat(vals(mode.map), vals(mode.ctrl),
+                                      vals(mode.alt), vals(mode["ctrl-alt"]))
+   commands_by_mode[mode] = lume.concat(commands, mode.parent and
+                                           commands_for(mode.parent))
+   return commands_by_mode[mode]
+end
+
 local function fuzz(n)
    -- need to display the seed so we can replay problematic sequences
    local seed = tonumber(os.getenv("BUSSARD_FUZZ_SEED") or os.time())
@@ -57,10 +69,7 @@ local function fuzz(n)
          editor.change_buffer(lume.randomchoice(editor.buffer_names()))
       end
       local mode = editor.mode()
-      -- smush together all the different sub-maps (ctrl, alt, ctrl-alt)
-      local commands = lume.concat(vals(mode.map), vals(mode.ctrl),
-                                   vals(mode.alt), vals(mode["ctrl-alt"]))
-      local command = lume.randomchoice(commands)
+      local command = lume.randomchoice(commands_for(mode))
 
       print("run " .. binding_for(mode, command) .. " in mode " .. mode.name)
       try(lume.fn(editor.wrap, command))

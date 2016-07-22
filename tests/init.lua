@@ -14,3 +14,4 @@ love.event.quit()
 -- * missions
 -- * services: cargo
 -- * ship: disembark?
+-- * fuzz the map
