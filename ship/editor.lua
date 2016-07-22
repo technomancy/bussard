@@ -12,13 +12,23 @@ local kill_ring = {}
 
 local modes = {}
 
+-- This is the structure of a buffer table. However, the fields it contains
+-- should be considered an internal implementation detail of the editor.
+-- We expose functions to make changes to a buffer, but we don't let user code
+-- make any changes directly; otherwise we will not be able to change the
+-- structure of the table without breaking user code.
 local make_buffer = function(fs, path, lines)
+   -- fs is the filesystem; right now it is always the ship table.
    return { fs=fs, path=path, mode = "edit",
             lines = lines or lume.split((fs and fs:find(path) or ""), "\n"),
             point = 0, point_line = 1, mark = nil, mark_line = nil,
-            last_yank = nil, mark_ring = {},
-            history = {}, undo_at = 0, dirty = false, needs_save = false,
+            last_yank = nil, mark_ring = {}, history = {}, undo_at = 0,
+            -- dirty is a per-cycle change flag (for undo tracking) while
+            -- needs_save is an overall change flag.
+            dirty = false, needs_save = false,
+            -- console-style modes need input history tracking and a prompt
             input_history = utils.buffer:new(), input_history_pos = 0,
+            prompt = nil,
             modeline = function(b)
                return utf8.format(" %s  %s  (%s/%s)  %s",
                                   b.needs_save and "*" or "-",
@@ -53,17 +63,18 @@ console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt, console.max_lines = "console", "> ", 512
 
 local mb
-local last_buffer -- for returning to after leaving minibuffer
-local last_edit_buffer = console -- for the default value in interactive buffer switching
+local last_buffer_before_minibuffer -- for returning to after leaving minibuffer
+-- for the default value in interactive buffer switching
+local last_edit_buffer = console
 local buffers = {console}
 local b = nil -- default back to flight mode
 
-local inhibit_read_only
+local inhibit_read_only = false
 
 local last_line = "Press ctrl-enter to open the console, " ..
 "and run man() for help. Zoom with = and - or scroll wheel."
 
-local invisible = {}             -- sentinel "do not print" value
+local invisible = {} -- sentinel "do not print" value
 
 local state = function()
    return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
@@ -77,6 +88,8 @@ local undo = function()
    end
 end
 
+-- all edits (commands and insertions) run inside this function; it handles
+-- tracking undo status as well as enforcing certain rules.
 local wrap = function(fn, ...)
    if(not b) then return fn(...) end -- no undo tracking for flight mode
    b.dirty = false
@@ -99,6 +112,7 @@ local wrap = function(fn, ...)
       print("Point out of bounds!", b.point_line, #b.lines)
       b.point_line = 1
    end
+   -- Cycle out old content for console-like buffers.
    if(b.max_lines) then
       for _=1,(#b.lines - b.max_lines) do
          table.remove(b.lines, 1)
@@ -167,7 +181,6 @@ local region = function()
    end
 end
 
--- would be nice to have a more general read-only property
 local in_prompt = function(line, point, line2, _point2)
    if(not b.prompt) then return false end
    if((line2 or line) == line and line ~= #b.lines) then return false end
@@ -260,18 +273,18 @@ local system_yank = function ()
    end
 end
 
-local beginning_of_buffer = function()
+local is_beginning_of_buffer = function()
    return b.point == 0 and b.point_line == 1
 end
 
-local end_of_buffer = function()
+local is_end_of_buffer = function()
    return b.point == #b.lines[b.point_line] and b.point_line == #b.lines
 end
 
 local forward_char = function(n) -- lameness: n must be 1 or -1
    n = n or 1
-   if((end_of_buffer() and n > 0) or
-      beginning_of_buffer() and n < 0) then return
+   if((is_end_of_buffer() and n > 0) or
+      is_beginning_of_buffer() and n < 0) then return
    elseif(b.point == #b.lines[b.point_line] and n > 0) then
       b.point, b.point_line = 0, b.point_line+1
    elseif(b.point == 0 and n < 0) then
@@ -288,22 +301,24 @@ end
 
 local forward_word = function()
    if(utf8.find(point_over(), word_break)) then
-      while(not end_of_buffer() and utf8.find(point_over(), word_break)) do
+      while(not is_end_of_buffer() and utf8.find(point_over(), word_break)) do
          forward_char()
       end
    end
-   while(not end_of_buffer() and not utf8.find(point_over(), word_break)) do
+   while(not is_end_of_buffer() and not utf8.find(point_over(), word_break)) do
       forward_char()
    end
 end
 
 local backward_word = function()
    if(utf8.find(point_over(), word_break)) then
-      while(not beginning_of_buffer() and utf8.find(point_over(), word_break)) do
+      while(not is_beginning_of_buffer() and
+            utf8.find(point_over(), word_break)) do
          forward_char(-1)
       end
    end
-   while(not beginning_of_buffer() and not utf8.find(point_over(), word_break)) do
+   while(not is_beginning_of_buffer() and
+         not utf8.find(point_over(), word_break)) do
       forward_char(-1)
    end
 end
@@ -420,7 +435,7 @@ local function bind(mode_name, keycode, fn)
    end
 end
 
-local function handle_textinput(text)
+local handle_textinput = function(text)
    if(b and not find_binding(text) and utf8.len(text) == 1) then
       with_traceback(textinput, text)
    end
@@ -428,14 +443,14 @@ end
 
 local exit_minibuffer = function(cancel)
    local minibuffer = b
-   b, mb = last_buffer, nil
+   b, mb = last_buffer_before_minibuffer, nil
    if(not cancel) then
       minibuffer.callback(utf8.sub(minibuffer.lines[1], #minibuffer.prompt+1))
    end
 end
 
 local delete_backwards = function()
-   if(beginning_of_buffer()) then return end
+   if(is_beginning_of_buffer()) then return end
    local line, point = b.point_line, b.point
    local line2, point2
    save_excursion(function()
@@ -451,6 +466,7 @@ bind("minibuffer", "escape", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "ctrl-g", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "backspace", delete_backwards)
 
+-- TODO: organize these better
 return {
    open = function(fs, path)
       last_edit_buffer = b
@@ -460,6 +476,7 @@ return {
             b = make_buffer(fs, path)
             table.insert(buffers, b)
          else -- from the host filesystem
+            -- TODO: ensure that it's a valid path
             local fs_path = "game" .. path
             local lines = {}
             if(love.filesystem.exists(fs_path)) then
@@ -497,7 +514,7 @@ return {
    delete_backwards = delete_backwards,
 
    delete_forwards = function()
-      if(end_of_buffer()) then return end
+      if(is_end_of_buffer()) then return end
       local line, point = b.point_line, b.point
       local line2, point2
       save_excursion(function()
@@ -698,7 +715,7 @@ return {
       local edge = math.ceil(DISPLAY_ROWS * SCROLL_POINT)
 
       if(b.minibuffer) then
-         mb, b = b, last_buffer or buffers[1]
+         mb, b = b, last_buffer_before_minibuffer or buffers[1]
       end
 
       local offset = (b.point_line < edge and 0) or (b.point_line - edge)
@@ -784,7 +801,7 @@ return {
       local old_released = love.keyreleased
       love.keyreleased = function()
          love.keyreleased = old_released
-         last_buffer, b = b, make_buffer(nil, nil, {prompt})
+         last_buffer_before_minibuffer, b = b, make_buffer(nil, nil, {prompt})
          b.mode = "minibuffer"
          b.minibuffer, b.prompt = true, prompt
          b.callback, b.exit_callback = callback, exit_callback
@@ -842,8 +859,6 @@ return {
    get_lines = function() return lume.clone(b.lines) end,
 
    point = function() return b.point, b.point_line end,
-
-   is_dirty = function() return b and b.dirty end,
 
    invisible = invisible,
 
