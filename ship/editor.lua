@@ -201,6 +201,7 @@ local insert = function(text, point_to_end)
    text = lume.map(text, function(s) return utf8.gsub(s, "\t", "  ") end)
    if(not text or #text == 0) then return end
    local this_line = b.lines[b.point_line]
+   -- TODO: this_line can be nil when yanking
    local before = utf8.sub(this_line, 0, b.point)
    local after = utf8.sub(this_line, b.point + 1)
    local first_line = text[1]
@@ -301,6 +302,7 @@ end
 
 local forward_word = function()
    if(utf8.find(point_over(), word_break)) then
+      -- TODO: fuzzer found an infinite loop here: 1469196339
       while(not is_end_of_buffer() and utf8.find(point_over(), word_break)) do
          forward_char()
       end
@@ -376,6 +378,7 @@ local io_write = function(...)
    b = console
    local line_count
    local old_point, old_point_line, old_lines = b.point, b.point_line, #b.lines
+   -- TODO: breaks if #b.lines == 1
    b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
    last_line, line_count = write(...)
    if(old_point_line == old_lines) then
@@ -501,7 +504,7 @@ return {
    end,
 
    revert = function()
-      local contents = b.fs:find(b.path)
+      local contents = b.fs and b.fs:find(b.path)
       if(not contents) then return end
       b.lines, b.point = lume.split(contents, "\n"), 0
       if(b.point_line > #b.lines) then b.point_line = #b.lines end
