@@ -30,8 +30,10 @@ bind("edit", "appforward", ship.editor.next_buffer)
 bind("edit", "alt-x", function()
         local last_buffer = ship.editor.last_buffer()
         last_buffer = last_buffer or "*console*"
-        local callback = function(b)
-           ship.editor.change_buffer(b ~= "" and b or last_buffer)
+        local callback = function(b, cancel)
+           if(not cancel) then
+              ship.editor.change_buffer(b ~= "" and b or last_buffer)
+           end
         end
         ship.editor.read_line("Switch to buffer (default: " .. last_buffer ..
                                  "): ", callback)
@@ -83,8 +85,9 @@ bind("edit", "ctrl-alt-k", function()
 end)
 
 bind("edit", "alt-g", function()
-        ship.editor.read_line("Go to line: ", function(l)
-                                 ship.editor.go_to_line(tonumber(l)) end)
+        ship.editor.read_line("Go to line: ", function(l, cancel)
+                                 if(not cancel) then
+                                    ship.editor.go_to_line(tonumber(l)) end end)
 end)
 
 -- comment this out to disable Emacs key bindings.

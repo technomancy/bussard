@@ -421,7 +421,7 @@ local define_mode = function(name, parent_name, props)
    -- backwards-compatibility with beta-1
    if(name == "edit" and parent_name) then parent_name, props = nil, nil end
    modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
-                   parent = modes[parent_name], name = name, props = props }
+                   parent = modes[parent_name], name = name, props = props or {} }
    return modes[name]
 end
 

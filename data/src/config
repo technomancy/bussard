@@ -61,9 +61,9 @@ bind({"flight", "edit"}, "ctrl-m", mail)
 
 -- to open a file.
 bind({"flight", "edit"}, "ctrl-o", function()
-      local callback = function(input)
+      local callback = function(input, cancel)
          -- open whatever file is given.
-         ship.editor.open(ship, input)
+         if(not cancel) then ship.editor.open(ship, input) end
       end
       -- read_line takes a callback function that is called with input.
       ship.editor.read_line("Open: ", callback)
