@@ -451,10 +451,6 @@ ship.api = {
    print = editor.print,
    write = editor.write,
 
-   read_line = function(_, prompt, callback)
-      editor.activate_minibuffer(prompt, callback)
-   end,
-
    host = host_fs_proxy.create("host_fs"),
    game = love.filesystem.exists("game") and host_fs_proxy.create("game"),
 
@@ -462,6 +458,7 @@ ship.api = {
    modes = editor.modes,
    mode = editor.mode,
    activate_mode = function(_, mode) editor.activate_mode(mode) end,
+   read_line = function(_, p, cb) editor.activate_minibuffer(p, cb) end,
 }
 
 return ship

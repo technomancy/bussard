@@ -98,6 +98,7 @@ local wrap = function(fn, ...)
    fn(...)
    if(not b) then return end -- did we switch to flight mode?
    if(b.dirty) then
+      if(b.on_change) then b.on_change() end
       table.insert(b.history, last_state)
    end
    if(#b.history > history_max) then
@@ -445,11 +446,9 @@ local handle_textinput = function(text)
 end
 
 local exit_minibuffer = function(cancel)
-   local minibuffer = b
+   local input, callback = utf8.sub(b.lines[1], #b.prompt+1), b.callback
    b, mb = last_buffer_before_minibuffer, nil
-   if(not cancel) then
-      minibuffer.callback(utf8.sub(minibuffer.lines[1], #minibuffer.prompt+1))
-   end
+   callback(input, cancel)
 end
 
 local delete_backwards = function()
@@ -798,7 +797,7 @@ return {
 
    textinput = textinput,
 
-   activate_minibuffer = function(prompt, callback, exit_callback)
+   activate_minibuffer = function(prompt, callback, on_change)
       -- without this, the key which activated the minibuffer triggers a
       -- call to textinput, inserting it into the input
       local old_released = love.keyreleased
@@ -807,7 +806,7 @@ return {
          last_buffer_before_minibuffer, b = b, make_buffer(nil, nil, {prompt})
          b.mode = "minibuffer"
          b.minibuffer, b.prompt = true, prompt
-         b.callback, b.exit_callback = callback, exit_callback
+         b.callback, b.on_change = callback, on_change
          b.point = #prompt
       end
    end,

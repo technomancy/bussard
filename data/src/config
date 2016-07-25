@@ -66,7 +66,7 @@ bind({"flight", "edit"}, "ctrl-o", function()
          ship.editor.open(ship, input)
       end
       -- read_line takes a callback function that is called with input.
-      ship:read_line("Open: ", callback)
+      ship.editor.read_line("Open: ", callback)
 end)
 
 -- reload config
