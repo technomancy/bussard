@@ -461,6 +461,7 @@ end
 local exit_minibuffer = function(cancel)
    local input, callback = get_input(), b.callback
    b, mb = last_buffer_before_minibuffer, nil
+   -- TODO/blocker: check for partial completion and expand
    callback(input, cancel)
 end
 
@@ -480,6 +481,7 @@ bind("minibuffer", "return", exit_minibuffer)
 bind("minibuffer", "escape", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "ctrl-g", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "backspace", delete_backwards)
+bind("minibuffer", "tab", nil) -- TODO/blocker: implement
 
 local read_line = function(prompt, callback, completer)
    -- without this, the key which activated the minibuffer triggers a
@@ -489,7 +491,7 @@ local read_line = function(prompt, callback, completer)
       love.keyreleased = old_released
       last_buffer_before_minibuffer, b = b, make_buffer(nil, "minibuffer",
                                                         {prompt})
-      b.mode = "minibuffer"
+      b.mode = "minibuffer", b.completer = completer
       b.prompt, b.callback, b.point = prompt, callback, #prompt
       if(completer) then
          b.render = function(mini)

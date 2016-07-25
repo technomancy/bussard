@@ -66,12 +66,23 @@ bind({"flight", "edit"}, "ctrl-o", function()
          if(not cancel) then ship.editor.open(ship, input) end
       end
       -- show completions as you type
-      local completions = function(input)
-         -- TODO/blocker: distinguish tables from strings
-         return utils.completions_for(input, ship, ".")
+      local completer = function(input)
+         local completions = utils.completions_for(input, ship, ".")
+         -- different types should display differently
+         local decorate_type = function(path)
+            local x = ship:find(path)
+            if(type(x) == "table") then
+               return path .. "."
+            elseif(type(x) == "string") then
+               return path
+            else
+               return path .. "?"
+            end
+         end
+         return lume.map(completions, decorate_type)
       end
       -- read_line takes a callback function that is called with input.
-      ship.editor.read_line("Open: ", callback, completions)
+      ship.editor.read_line("Open: ", callback, completer)
 end)
 
 -- reload config
