@@ -109,8 +109,10 @@ hard-science hacker realism.
 
 As much of the game as possible should be implemented in userspace so it's
 modifiable by any intrepid player, except for places where that would result in
-cheating. However, in some places there are in-game explanations for behavior
-that would usually be classified as cheating; this is to be embraced.
+cheating. The other exception is that sometimes we avoid exposing things to
+userspace (like the table structure behind editor buffers) because it would make
+it impossible to know if it's safe to make changes to the table structure
+without breaking user code.
 
 When in doubt, do what Emacs does.
 

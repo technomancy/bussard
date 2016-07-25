@@ -64,7 +64,7 @@ local set_modeline = function(folder)
 end
 
 local open_folder = function(folder)
-   ship.editor.set_read_only(false)
+   ship.editor.set_prop("read_only", false)
    ship.editor.end_of_buffer()
    local point, point_line = ship.editor.point()
    ship.editor.suppress_read_only(ship.editor.delete, 1, 0, point_line, point)
@@ -102,7 +102,7 @@ local open_folder = function(folder)
    ship.editor.beginning_of_buffer()
    ship.editor.next_line()
    ship.editor.next_line()
-   ship.editor.set_read_only(true)
+   ship.editor.set_prop("read_only", true)
 end
 
 ship.editor.modes.mail.activate = open_folder
@@ -131,7 +131,7 @@ local open_message_or_folder = function()
       open_folder(folder)
       ship.editor.open(ship, "docs.mail." .. folder .. "." .. name)
       ship:activate_mode("view")
-      ship.editor.set_read_only(true)
+      ship.editor.set_prop("read_only", true)
       ship.editor.set_modeline(view_modeline)
    else -- single value means open a folder
       open_folder(target)

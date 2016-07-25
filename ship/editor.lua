@@ -29,6 +29,8 @@ local make_buffer = function(fs, path, lines)
             -- console-style modes need input history tracking and a prompt
             input_history = utils.buffer:new(), input_history_pos = 0,
             prompt = nil,
+            -- arbitrary key/value storage
+            props = {},
             modeline = function(b)
                return utf8.format(" %s  %s  (%s/%s)  %s",
                                   b.needs_save and "*" or "-",
@@ -76,8 +78,17 @@ local last_line = "Press ctrl-enter to open the console, " ..
 
 local invisible = {} -- sentinel "do not print" value
 
+local get_current_mode = function()
+   return modes[b and b.mode or "flight"]
+end
+
+local get_prop = function(prop, default)
+   return b.props[prop] or get_current_mode().props[prop] or default
+end
+
 local state = function()
-   return {lines = lume.clone(b.lines), point = b.point, point_line = b.point_line}
+   return {lines = lume.clone(b.lines),
+           point = b.point, point_line = b.point_line}
 end
 
 local undo = function()
@@ -98,7 +109,7 @@ local wrap = function(fn, ...)
    fn(...)
    if(not b) then return end -- did we switch to flight mode?
    if(b.dirty) then
-      if(b.on_change) then b.on_change() end
+      if(b.props.on_change) then b.props.on_change() end
       table.insert(b.history, last_state)
    end
    if(#b.history > history_max) then
@@ -133,10 +144,6 @@ end
 
 local get_buffer = function(path)
    return lume.match(buffers, function(bu) return bu.path == path end)
-end
-
-local get_current_mode = function()
-   return modes[b and b.mode or "flight"]
 end
 
 local with_current_buffer = function(nb, f)
@@ -191,8 +198,7 @@ end
 
 local edit_disallowed = function(line, point, line2, _point2)
    if(inhibit_read_only) then return false end
-   return get_current_mode().read_only or b.read_only or
-      in_prompt(line, point, line2, _point2)
+   return get_prop("read_only", in_prompt(line, point, line2, _point2))
 end
 
 local insert = function(text, point_to_end)
@@ -411,12 +417,11 @@ local function find_binding(key, the_mode)
       (mode.parent and find_binding(key, mode.parent))
 end
 
-local define_mode = function(name, parent_name, read_only)
+local define_mode = function(name, parent_name, props)
    -- backwards-compatibility with beta-1
-   if(name == "edit" and parent_name) then parent_name,read_only = nil, nil end
+   if(name == "edit" and parent_name) then parent_name, props = nil, nil end
    modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
-                   parent = modes[parent_name], name = name,
-                   read_only = read_only }
+                   parent = modes[parent_name], name = name, props = props }
    return modes[name]
 end
 
@@ -806,7 +811,7 @@ return {
          last_buffer_before_minibuffer, b = b, make_buffer(nil, nil, {prompt})
          b.mode = "minibuffer"
          b.minibuffer, b.prompt = true, prompt
-         b.callback, b.on_change = callback, on_change
+         b.callback, b.props.on_change = callback, on_change
          b.point = #prompt
       end
    end,
@@ -872,7 +877,8 @@ return {
       return val
    end,
 
-   set_read_only = function(s) b.read_only = s end,
+   get_prop = get_prop,
+   set_prop = function(prop, value) b.props[prop] = value end,
 
    save_excursion = save_excursion,
 
