@@ -24,11 +24,6 @@ portal = function()
    return ship.editor.invisible
 end
 
-local get_input = function()
-   return utf8.sub(ship.editor.get_line(0),
-                   utf8.len(ship.editor.get_prompt()) + 1)
-end
-
 define_mode("ssh", "console") -- inherit bindings from console
 
 -- send input to whatever remote OS you're connected to.

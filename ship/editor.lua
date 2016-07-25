@@ -450,8 +450,13 @@ local handle_textinput = function(text)
    end
 end
 
+local get_input = function()
+   assert(b.prompt, "Buffer does not have a prompt.")
+   return utf8.sub(b.lines[#b.lines], #b.prompt+1)
+end
+
 local exit_minibuffer = function(cancel)
-   local input, callback = utf8.sub(b.lines[1], #b.prompt+1), b.callback
+   local input, callback = get_input(), b.callback
    b, mb = last_buffer_before_minibuffer, nil
    callback(input, cancel)
 end
@@ -863,8 +868,6 @@ return {
 
    get_max_lines = function() return b and #b.lines end,
 
-   get_lines = function() return lume.clone(b.lines) end,
-
    point = function() return b.point, b.point_line end,
 
    invisible = invisible,
@@ -902,6 +905,7 @@ return {
       end)
       inhibit_read_only = read_only
    end,
+   get_input = get_input,
 
    history_prev = function()
       if b.input_history_pos + 1 <= b.input_history.entries then
@@ -998,4 +1002,5 @@ return {
    mode = function()
       return modes[b and b.mode or "flight"]
    end,
+   get_lines = function() return lume.clone(b.lines) end,
 }

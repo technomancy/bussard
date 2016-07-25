@@ -18,8 +18,7 @@ bind("console", "return", function()
            return
         end
 
-        local input = utf8.sub(ship.editor.get_line(0),
-                               utf8.len(ship.editor.get_prompt()) + 1)
+        local input = ship.editor.get_input()
         ship.editor.history_push(input)
         ship.editor.end_of_line()
         ship.editor.newline()
