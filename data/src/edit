@@ -36,10 +36,7 @@ bind("edit", "alt-x", function()
            end
         end
         local completer = function(input)
-           -- TODO: completions_for doesn't work with arrays
-           local context = {}
-           for _,x in ipairs(ship.editor.buffer_names()) do context[x] = x end
-           return utils.completions_for(input, context)
+           return utils.completions_for(input, ship.editor.buffer_names())
         end
         ship.editor.read_line("Switch to buffer (default: " .. last_buffer ..
                                  "): ", callback, completer)

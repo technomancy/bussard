@@ -491,7 +491,7 @@ local read_line = function(prompt, callback, completer)
       love.keyreleased = old_released
       last_buffer_before_minibuffer, b = b, make_buffer(nil, "minibuffer",
                                                         {prompt})
-      b.mode = "minibuffer", b.completer = completer
+      b.mode, b.completer = "minibuffer", completer
       b.prompt, b.callback, b.point = prompt, callback, #prompt
       if(completer) then
          b.render = function(mini)

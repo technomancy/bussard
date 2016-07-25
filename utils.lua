@@ -69,10 +69,13 @@ local function completions_for(input, context, separator, prefixes)
    local input_parts = lume.split(input, separator)
    if(#input_parts == 1) then
       local matches = {}
-      for k in pairs(context) do
-         if(utf8.find(k, "^" .. input)) then
+      if(#context ~= lume.count(context)) then
+         context = lume.keys(context)
+      end
+      for _,v in pairs(context) do
+         if(utf8.find(v, "^" .. input)) then
             local parts = lume.clone(prefixes)
-            table.insert(parts, k)
+            table.insert(parts, v)
             table.insert(matches, table.concat(parts, separator))
          end
       end
