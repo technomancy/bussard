@@ -65,8 +65,13 @@ bind({"flight", "edit"}, "ctrl-o", function()
          -- open whatever file is given.
          if(not cancel) then ship.editor.open(ship, input) end
       end
+      -- show completions as you type
+      local completions = function(input)
+         -- TODO/blocker: distinguish tables from strings
+         return utils.completions_for(input, ship, ".")
+      end
       -- read_line takes a callback function that is called with input.
-      ship.editor.read_line("Open: ", callback)
+      ship.editor.read_line("Open: ", callback, completions)
 end)
 
 -- reload config

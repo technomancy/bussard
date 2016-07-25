@@ -28,7 +28,7 @@ define_mode("ssh", "console") -- inherit bindings from console
 
 -- send input to whatever remote OS you're connected to.
 bind("ssh", "return", function()
-        local input = lume.trim(get_input())
+        local input = lume.trim(ship.editor.get_input())
 
         if(input == "logout") then
            ship.editor.newline()
@@ -44,7 +44,7 @@ bind("ssh", "return", function()
 end)
 
 bind("ssh", "ctrl-d", function()
-        if(get_input() == "") then
+        if(ship.editor.get_input() == "") then
            logout()
            print("Logged out.")
         else

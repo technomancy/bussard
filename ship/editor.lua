@@ -64,12 +64,11 @@ local console = make_buffer(nil, "*console*",
 console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt, console.max_lines = "console", "> ", 512
 
-local mb
 local last_buffer_before_minibuffer -- for returning to after leaving minibuffer
 -- for the default value in interactive buffer switching
 local last_edit_buffer = console
 local buffers = {console}
-local b = nil -- default back to flight mode
+local b, mb = nil -- default back to flight mode
 
 local inhibit_read_only = false
 
@@ -385,8 +384,11 @@ local io_write = function(...)
    b = console
    local line_count
    local old_point, old_point_line, old_lines = b.point, b.point_line, #b.lines
-   -- TODO: breaks if #b.lines == 1
-   b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
+   if(#b.lines > 1) then
+      b.point, b.point_line = #b.lines[#b.lines - 1], #b.lines - 1
+   else
+      b.point, b.point_line = 0, 1
+   end
    last_line, line_count = write(...)
    if(old_point_line == old_lines) then
       b.point, b.point_line = old_point, #b.lines
@@ -450,9 +452,10 @@ local handle_textinput = function(text)
    end
 end
 
-local get_input = function()
-   assert(b.prompt, "Buffer does not have a prompt.")
-   return utf8.sub(b.lines[#b.lines], #b.prompt+1)
+local get_input = function(tb)
+   tb = tb or b
+   assert(tb.prompt, "Buffer does not have a prompt.")
+   return utf8.sub(tb.lines[#tb.lines], #tb.prompt+1)
 end
 
 local exit_minibuffer = function(cancel)
@@ -477,6 +480,27 @@ bind("minibuffer", "return", exit_minibuffer)
 bind("minibuffer", "escape", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "ctrl-g", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "backspace", delete_backwards)
+
+local read_line = function(prompt, callback, completer)
+   -- without this, the key which activated the minibuffer triggers a
+   -- call to textinput, inserting it into the input
+   local old_released = love.keyreleased
+   love.keyreleased = function()
+      love.keyreleased = old_released
+      last_buffer_before_minibuffer, b = b, make_buffer(nil, "minibuffer",
+                                                        {prompt})
+      b.mode = "minibuffer"
+      b.prompt, b.callback, b.point = prompt, callback, #prompt
+      if(completer) then
+         b.render = function(mini)
+            local input = get_input(mini)
+            return mini.lines[1] .. " " .. table.concat(completer(input), " | ")
+         end
+      else
+         b.render = function() return b.lines[1] end
+      end
+   end
+end
 
 -- TODO: organize these better
 return {
@@ -726,7 +750,7 @@ return {
 
       local edge = math.ceil(DISPLAY_ROWS * SCROLL_POINT)
 
-      if(b.minibuffer) then
+      if(b.path == "minibuffer") then
          mb, b = b, last_buffer_before_minibuffer or buffers[1]
       end
 
@@ -762,7 +786,7 @@ return {
       love.graphics.rectangle("fill", 0, height - ROW_HEIGHT, width, ROW_HEIGHT)
       love.graphics.setColor(0, 0, 0)
       if(mb) then
-         love.graphics.print(mb.lines[1], PADDING, height - ROW_HEIGHT)
+         love.graphics.print(mb:render(), PADDING, height - ROW_HEIGHT)
          love.graphics.setColor(0, 225, 0)
          love.graphics.rectangle("fill", PADDING+mb.point*em,
                                  height - ROW_HEIGHT, em, ROW_HEIGHT)
@@ -807,19 +831,7 @@ return {
 
    textinput = textinput,
 
-   activate_minibuffer = function(prompt, callback, on_change)
-      -- without this, the key which activated the minibuffer triggers a
-      -- call to textinput, inserting it into the input
-      local old_released = love.keyreleased
-      love.keyreleased = function()
-         love.keyreleased = old_released
-         last_buffer_before_minibuffer, b = b, make_buffer(nil, nil, {prompt})
-         b.mode = "minibuffer"
-         b.minibuffer, b.prompt = true, prompt
-         b.callback, b.props.on_change = callback, on_change
-         b.point = #prompt
-      end
-   end,
+   read_line = read_line,
 
    exit_minibuffer = exit_minibuffer,
 
@@ -1003,4 +1015,5 @@ return {
       return modes[b and b.mode or "flight"]
    end,
    get_lines = function() return lume.clone(b.lines) end,
+   activate_minibuffer = read_line,
 }

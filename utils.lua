@@ -304,6 +304,8 @@ return {
       lume = lume,
    },
 
+   completions_for = completions_for,
+
    time = function(ship)
       return ship.time_offset + (socket.gettime() - ship.load_time)
          * ship.time_factor
