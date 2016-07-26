@@ -6,6 +6,11 @@ local mock = {}
 setmetatable(mock, {__index= function() return function() return mock end end})
 love.graphics = mock
 
+-- need to display the seed so we can replay problematic sequences
+local seed = tonumber(os.getenv("BUSSARD_FUZZ_SEED") or os.time())
+print("seeding with", seed)
+math.randomseed(seed)
+
 local function vals(t)
    local rtn = {}
    for k,v in pairs(t) do rtn[#rtn + 1] = v end
@@ -31,6 +36,7 @@ local try = function(f)
       print(err)
       print(traceback)
       editor.debug()
+      print("BUSSARD_FUZZ_SEED=" .. seed .. " make fuzz")
       love.filesystem.append("seeds", tostring(seed) .. "\n")
       os.exit(1)
    end
@@ -57,22 +63,21 @@ local function commands_for(mode)
 end
 
 local function fuzz(n)
-   -- need to display the seed so we can replay problematic sequences
-   local seed = tonumber(os.getenv("BUSSARD_FUZZ_SEED") or os.time())
-   print("seeding with", seed)
-   math.randomseed(seed)
-
    for i=1,n do
-      if(#editor.buffer_names() == 1) then
+      if(#editor.buffer_names() == 1 and
+         editor.current_buffer_path ~= "minibuffer") then
          editor.open(ship.api, "newfile")
-      else
-         editor.change_buffer(lume.randomchoice(editor.buffer_names()))
       end
+
       local mode = editor.mode()
       local command = lume.randomchoice(commands_for(mode))
 
       print("run " .. binding_for(mode, command) .. " in mode " .. mode.name)
       try(lume.fn(editor.wrap, command))
+
+      -- the minibuffer doesn't activate till you run this to work around
+      -- a race condition in keyboard input.
+      if(love.keyreleased) then love.keyreleased() end
 
       -- sometimes we should try inserting some text too
       if(love.math.random(5) == 1) then
