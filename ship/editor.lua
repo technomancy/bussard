@@ -2,6 +2,8 @@ local utf8 = require("utf8.init")
 local lume = require("lume")
 local utils = require("utils")
 
+local dprint = os.getenv("DEBUG") and print or function() end
+
 --- Essentially a port of Emacs to Lua/Love.
 
 -- missing features (a very limited list)
@@ -70,6 +72,7 @@ local last_edit_buffer = console
 local buffers = {console}
 local b, mb = nil -- default back to flight mode
 
+local printing_prompt = false
 local inhibit_read_only = false
 
 local last_line = "Press ctrl-enter to open the console, " ..
@@ -98,6 +101,34 @@ local undo = function()
    end
 end
 
+local debug = function()
+   if(not os.getenv("DEBUG")) then return end
+   print("---------------", b.path, b.point_line, b.point, b.mark_line, b.mark)
+   for _,line in ipairs(b.lines) do
+      print(line)
+   end
+   print("---------------")
+end
+
+local out_of_bounds = function(line, point)
+   return not (b.lines[line] and point >= 0 and point <= #b.lines[line])
+end
+
+local bounds_check = function()
+   -- These should never happen, but let's be forgiving instead of asserting.
+   if(b.mark_line and b.mark and out_of_bounds(b.mark_line, b.mark)) then
+      dprint("Mark out of bounds!", b.mark_line, #b.lines)
+      debug()
+      b.mark, b.mark_line = nil, nil
+   end
+   if(out_of_bounds(b.point_line, b.point)) then
+      dprint("Point out of bounds!", b.point_line, b.point,
+             #b.lines, b.lines[b.point_line] and #b.lines[b.point_line])
+      debug()
+      b.point, b.point_line = 0, 1
+   end
+end
+
 -- all edits (commands and insertions) run inside this function; it handles
 -- tracking undo status as well as enforcing certain rules.
 local wrap = function(fn, ...)
@@ -114,15 +145,7 @@ local wrap = function(fn, ...)
    if(#b.history > history_max) then
       table.remove(b.history, 1)
    end
-   -- These should never happen, but let's be forgiving instead of asserting.
-   if(b.mark_line and (b.mark_line > #b.lines or b.mark_line < 1)) then
-      print("Mark out of bounds!", b.mark_line, #b.lines)
-      b.mark, b.mark_line = nil, nil
-   end
-   if(b.point_line > #b.lines or b.point_line < 1) then
-      print("Point out of bounds!", b.point_line, #b.lines)
-      b.point_line = 1
-   end
+   bounds_check()
    -- Cycle out old content for console-like buffers.
    if(b.max_lines) then
       for _=1,(#b.lines - b.max_lines) do
@@ -131,14 +154,6 @@ local wrap = function(fn, ...)
          if(b.mark_line) then b.mark_line = b.mark_line - 1 end
       end
    end
-end
-
-local debug = function()
-   print("---------------", b.path, b.point_line, b.point, b.mark_line, b.mark)
-   for _,line in ipairs(b.lines) do
-      print(line)
-   end
-   print("---------------")
 end
 
 local get_buffer = function(path)
@@ -189,7 +204,7 @@ local region = function()
 end
 
 local in_prompt = function(line, point, line2, _point2)
-   if(not b.prompt) then return false end
+   if(printing_prompt or not b.prompt) then return false end
    if((line2 or line) == line and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= utf8.len(b.prompt)) then return false end
    return true
@@ -203,11 +218,15 @@ end
 local insert = function(text, point_to_end)
    if(in_prompt(b.point_line, b.point)) then b.point = #b.prompt end
    if(edit_disallowed(b.point_line, b.point)) then return end
+   if(out_of_bounds(b.point_line, b.point)) then
+      dprint("Inserting out of bounds!")
+      return
+   end
+
    b.dirty, b.needs_save = true, true
    text = lume.map(text, function(s) return utf8.gsub(s, "\t", "  ") end)
    if(not text or #text == 0) then return end
-   local this_line = b.lines[b.point_line]
-   -- TODO: this_line can be nil when yanking
+   local this_line = b.lines[b.point_line] or ""
    local before = utf8.sub(this_line, 0, b.point)
    local after = utf8.sub(this_line, b.point + 1)
    local first_line = text[1]
@@ -239,19 +258,33 @@ local delete = function(start_line, start, finish_line, finish)
       start, finish = math.min(start, finish), math.max(start, finish)
    end
    if(edit_disallowed(start_line, start, finish_line, finish)) then return end
+   if(out_of_bounds(start_line, start) or
+      out_of_bounds(finish_line, finish)) then
+      dprint("Deleting out of bounds!")
+      return
+   end
 
    b.dirty, b.needs_save = true, true
    if(start_line == finish_line) then
-      local line = b.lines[b.point_line]
-      b.lines[b.point_line] = utf8.sub(line, 0, start) .. utf8.sub(line, finish + 1)
+      local line = b.lines[start_line]
+      b.lines[start_line] = utf8.sub(line, 0, start)..utf8.sub(line, finish + 1)
+      if(b.point_line == start_line and start <= b.point) then
+         b.point = start
+      elseif(b.point_line == start_line and b.point <= finish) then
+         b.point = b.point - (finish - start)
+      end
    else
       local after = utf8.sub(b.lines[finish_line], finish+1, -1)
       for i = finish_line, start_line + 1, -1 do
          table.remove(b.lines, i)
       end
       b.lines[start_line] = utf8.sub(b.lines[start_line], 0, start) .. after
+      if(b.point_line > start_line and b.point_line <= finish_line) then
+         b.point, b.point_line = start, start_line
+      elseif(b.point_line > finish_line) then
+         b.point_line = b.point_line - (finish_line - start_line)
+      end
    end
-   b.point, b.point_line, b.mark, b.mark_line = start, start_line, start, start_line
 end
 
 local textinput = function(t)
@@ -281,10 +314,12 @@ local system_yank = function ()
 end
 
 local is_beginning_of_buffer = function()
+   bounds_check()
    return b.point == 0 and b.point_line == 1
 end
 
 local is_end_of_buffer = function()
+   bounds_check()
    return b.point == #b.lines[b.point_line] and b.point_line == #b.lines
 end
 
@@ -292,9 +327,9 @@ local forward_char = function(n) -- lameness: n must be 1 or -1
    n = n or 1
    if((is_end_of_buffer() and n > 0) or
       is_beginning_of_buffer() and n < 0) then return
-   elseif(b.point == #b.lines[b.point_line] and n > 0) then
+   elseif(b.point >= #b.lines[b.point_line] and n > 0) then
       b.point, b.point_line = 0, b.point_line+1
-   elseif(b.point == 0 and n < 0) then
+   elseif(b.point <= 0 and n < 0) then
       b.point = #b.lines[b.point_line-1]
       b.point_line = b.point_line-1
    else
@@ -306,27 +341,31 @@ local point_over = function()
    return utf8.sub(b.lines[b.point_line], b.point + 1, b.point + 1) or ""
 end
 
+local moved_last_point, moved_last_line
+local point_moved = function()
+   local lp, ll = moved_last_point, moved_last_line
+   moved_last_point, moved_last_line = b.point, b.point_line
+   return not (lp == b.point and ll == b.point_line)
+end
+
 local forward_word = function()
    if(utf8.find(point_over(), word_break)) then
-      -- TODO: fuzzer found an infinite loop here: 1469196339
-      while(not is_end_of_buffer() and utf8.find(point_over(), word_break)) do
+      while(point_moved() and not utf8.find(point_over(), word_break)) do
          forward_char()
       end
    end
-   while(not is_end_of_buffer() and not utf8.find(point_over(), word_break)) do
+   while(point_moved() and not utf8.find(point_over(), word_break)) do
       forward_char()
    end
 end
 
 local backward_word = function()
    if(utf8.find(point_over(), word_break)) then
-      while(not is_beginning_of_buffer() and
-            utf8.find(point_over(), word_break)) do
+      while(point_moved() and utf8.find(point_over(), word_break)) do
          forward_char(-1)
       end
    end
-   while(not is_beginning_of_buffer() and
-         not utf8.find(point_over(), word_break)) do
+   while(point_moved() and not utf8.find(point_over(), word_break)) do
       forward_char(-1)
    end
 end
@@ -488,7 +527,7 @@ local complete = function()
          b.point = #b.lines[#b.lines]
       else
          local common = utils.longest_common_prefix(completions)
-         b.lines[#b.lines] = b.prompt .. common
+         b.lines[#b.lines] = b.prompt .. (common or "")
          b.point = #b.lines[#b.lines]
       end
    end
@@ -529,10 +568,14 @@ return {
       b = get_buffer(path)
       if(not b) then
          if(not path:find("^/")) then
-            b = make_buffer(fs, path)
-            table.insert(buffers, b)
+            if(fs and fs:find(path) and type(fs:find(path)) ~= "string") then
+               -- Could support opening tables as directories like dired?
+               the_print("Tried to open a directory or something.")
+            else
+               b = make_buffer(fs, path)
+               table.insert(buffers, b)
+            end
          else -- from the host filesystem
-            -- TODO: ensure that it's a valid path
             local fs_path = "game" .. path
             local lines = {}
             if(love.filesystem.exists(fs_path)) then
@@ -540,6 +583,7 @@ return {
                   table.insert(lines, line)
                end
             else
+               -- TODO: ensure that it's a valid path
                table.insert(lines, "")
             end
             b = make_buffer(fs, path, lines)
@@ -928,14 +972,14 @@ return {
    end,
    print_prompt = function()
       local read_only = inhibit_read_only
-      inhibit_read_only = true
+      printing_prompt, inhibit_read_only = true, true
       with_current_buffer(console, function()
                              b.mark, b.mark_line = nil, nil
                              delete(#b.lines, 0, #b.lines, #b.lines[#b.lines])
                              write(b.prompt)
                              b.point, b.point_line = #b.lines[#b.lines], #b.lines
       end)
-      inhibit_read_only = read_only
+      printing_prompt, inhibit_read_only = false, read_only
    end,
    get_input = get_input,
 
@@ -987,6 +1031,7 @@ return {
    end,
 
    go_to_line = function(line)
+      if(type(line) ~= "number") then return end
       if(line > 0 and line <= #b.lines) then b.point_line = line end
    end,
 
