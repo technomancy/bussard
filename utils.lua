@@ -64,11 +64,13 @@ local longest_common_prefix = function(strings)
 end
 
 local function completions_for(input, context, separator, prefixes)
+   -- TODO/blocker: escape pattern metachars in input?
    if(type(context) ~= "table") then return {} end
    prefixes = prefixes or {}
    local input_parts = lume.split(input, separator)
    if(#input_parts == 1) then
       local matches = {}
+      -- if we have an array, use it as-is. if we have a k/v table, use keys.
       if(#context ~= lume.count(context)) then
          context = lume.keys(context)
       end
@@ -308,6 +310,7 @@ return {
    },
 
    completions_for = completions_for,
+   longest_common_prefix = longest_common_prefix,
 
    time = function(ship)
       return ship.time_offset + (socket.gettime() - ship.load_time)

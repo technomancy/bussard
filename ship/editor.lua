@@ -459,10 +459,14 @@ local get_input = function(tb)
 end
 
 local exit_minibuffer = function(cancel)
-   local input, callback = get_input(), b.callback
+   local input, callback, completer = get_input(), b.callback, b.completer
    b, mb = last_buffer_before_minibuffer, nil
-   -- TODO/blocker: check for partial completion and expand
-   callback(input, cancel)
+   if(completer) then
+      local completions = completer(input)
+      callback(completions[1] or input, cancel)
+   else
+      callback(input, cancel)
+   end
 end
 
 local delete_backwards = function()
@@ -476,12 +480,26 @@ local delete_backwards = function()
    delete(line2, point2, line, point)
 end
 
+local complete = function()
+   if(b.completer) then
+      local completions = b.completer(get_input())
+      if(#completions == 1) then
+         b.lines[#b.lines] = b.prompt .. completions[1]
+         b.point = #b.lines[#b.lines]
+      else
+         local common = utils.longest_common_prefix(completions)
+         b.lines[#b.lines] = b.prompt .. common
+         b.point = #b.lines[#b.lines]
+      end
+   end
+end
+
 define_mode("minibuffer")
 bind("minibuffer", "return", exit_minibuffer)
 bind("minibuffer", "escape", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "ctrl-g", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "backspace", delete_backwards)
-bind("minibuffer", "tab", nil) -- TODO/blocker: implement
+bind("minibuffer", "tab", complete)
 
 local read_line = function(prompt, callback, completer)
    -- without this, the key which activated the minibuffer triggers a
