@@ -62,8 +62,10 @@ bind({"flight", "edit"}, "ctrl-m", mail)
 -- to open a file.
 bind({"flight", "edit"}, "ctrl-o", function()
       local callback = function(input, cancel)
-         -- open whatever file is given.
-         if(not cancel) then ship.editor.open(ship, input) end
+         -- open the file is given, but we don't support opening tables yet
+         if(not cancel and type(ship:find(input)) ~= "table") then
+            ship.editor.open(ship, input)
+         end
       end
       -- show completions as you type
       local completer = function(input)
@@ -75,11 +77,10 @@ bind({"flight", "edit"}, "ctrl-o", function()
                return path .. "."
             elseif(type(x) == "string") then
                return path
-            else
-               return path .. "?"
             end
          end
-         return lume.map(completions, decorate_type)
+         -- filter out non-table, non-string entries
+         return lume.filter(lume.map(completions, decorate_type))
       end
       -- read_line takes a callback function that is called with input.
       ship.editor.read_line("Open: ", callback, completer)

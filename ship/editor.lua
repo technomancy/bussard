@@ -936,6 +936,7 @@ return {
 
    get_line = function(n)
       if(not b) then return end
+      if(not n) then return b.lines[b.point_line]
       if(n < 1) then n = #b.lines - n end
       return b.lines[n]
    end,

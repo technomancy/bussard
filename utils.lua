@@ -64,7 +64,6 @@ local longest_common_prefix = function(strings)
 end
 
 local function completions_for(input, context, separator, prefixes)
-   -- TODO/blocker: escape pattern metachars in input?
    if(type(context) ~= "table") then return {} end
    prefixes = prefixes or {}
    local input_parts = lume.split(input, separator)
@@ -75,7 +74,7 @@ local function completions_for(input, context, separator, prefixes)
          context = lume.keys(context)
       end
       for _,v in pairs(context) do
-         if(utf8.find(v, "^" .. input)) then
+         if(type(v) == "string" and utf8.sub(v, 1, #input) == input) then
             local parts = lume.clone(prefixes)
             table.insert(parts, v)
             table.insert(matches, table.concat(parts, separator))

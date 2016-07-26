@@ -133,14 +133,11 @@ local trajectory_auto = function(ship, dt)
    end
 end
 
--- TODO: we should probably refactor this to not be stateful; return a ship.make
--- function instead of a ready-to-use stateful table.
-
 local ship = {
    base_stats = base_stats,
 
    -- ephemeral
-   x=0, y=0, dx=0, dy=-20, heading = math.pi,
+   x=0, y=0, dx=0, dy=-200, heading = math.pi,
    engine_on = false,
    turning_right = false,
    turning_left = false,
@@ -408,9 +405,9 @@ ship.api = {
       local parts = lume.split(path, ".")
       local target = s
       for _,p in ipairs(parts) do
-         if(type(target) == "table") then
+         if(type(target) == "table" and p ~= "") then
             target = target[p]
-         else
+         elseif(p ~= "") then
             return nil
          end
       end
