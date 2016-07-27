@@ -8,9 +8,6 @@ mail = function()
    ship:activate_mode("mail")
 end
 
--- inherit most bindings from edit, but disable text insertion
-define_mode("mail", "edit", true)
-
 local targets = {} -- things you can press enter to open
 
 local header = function(lines, header)
@@ -67,7 +64,7 @@ local open_folder = function(folder)
    ship.editor.set_prop("read_only", false)
    ship.editor.end_of_buffer()
    local point, point_line = ship.editor.point()
-   ship.editor.suppress_read_only(ship.editor.delete, 1, 0, point_line, point)
+   ship.editor.delete(1, 0, point_line, point)
    set_modeline(folder)
 
    local p = function(x) ship.editor.raw_write(x .. "\n") end
@@ -105,7 +102,8 @@ local open_folder = function(folder)
    ship.editor.set_prop("read_only", true)
 end
 
-ship.editor.modes.mail.activate = open_folder
+-- inherit most bindings from edit, but disable text insertion
+define_mode("mail", "edit", {activate=open_folder})
 
 local reply_key = "alt-enter"
 

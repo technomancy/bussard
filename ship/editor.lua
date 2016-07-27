@@ -33,6 +33,7 @@ local make_buffer = function(fs, path, lines)
             prompt = nil,
             -- arbitrary key/value storage
             props = {},
+            -- TODO: this leaks buffer structure to userspace.
             modeline = function(b)
                return utf8.format(" %s  %s  (%s/%s)  %s",
                                   b.needs_save and "*" or "-",
@@ -66,11 +67,12 @@ local console = make_buffer(nil, "*console*",
 console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt, console.max_lines = "console", "> ", 512
 
-local last_buffer_before_minibuffer -- for returning to after leaving minibuffer
+local behind_minibuffer -- for returning to after leaving minibuffer
 -- for the default value in interactive buffer switching
 local last_edit_buffer = console
 local buffers = {console}
 local b, mb = nil -- default back to flight mode
+local echo_message, echo_message_new = nil, false
 
 local printing_prompt = false
 local inhibit_read_only = false
@@ -137,6 +139,13 @@ local wrap = function(fn, ...)
    local last_state = b and state()
    if(fn ~= undo) then b.undo_at = 0 end
    fn(...)
+
+   if(echo_message_new) then
+      echo_message_new = false
+   else
+      echo_message = nil
+   end
+
    if(not b) then return end -- did we switch to flight mode?
    if(b.dirty) then
       if(b.props.on_change) then b.props.on_change() end
@@ -215,9 +224,15 @@ local edit_disallowed = function(line, point, line2, _point2)
    return get_prop("read_only", in_prompt(line, point, line2, _point2))
 end
 
+local echo = function(...)
+   echo_message, echo_message_new = table.concat({...}, " "), true
+end
+
 local insert = function(text, point_to_end)
    if(in_prompt(b.point_line, b.point)) then b.point = #b.prompt end
-   if(edit_disallowed(b.point_line, b.point)) then return end
+   if(edit_disallowed(b.point_line, b.point)) then
+      return echo("Read-only.")
+   end
    if(out_of_bounds(b.point_line, b.point)) then
       dprint("Inserting out of bounds!")
       return
@@ -460,10 +475,11 @@ end
 
 local define_mode = function(name, parent_name, props)
    -- backwards-compatibility with beta-1
-   if(name == "edit" and parent_name) then parent_name, props = nil, nil end
+   if(parent_name and type(parent_name) ~= "string") then parent_name = nil end
+   if(type(props) ~= "table") then props = {} end
+
    modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
                    parent = modes[parent_name], name = name, props = props or {} }
-   return modes[name]
 end
 
 local function bind(mode_name, keycode, fn)
@@ -499,7 +515,7 @@ end
 
 local exit_minibuffer = function(cancel)
    local input, callback, completer = get_input(), b.callback, b.completer
-   b, mb = last_buffer_before_minibuffer, nil
+   b, mb = behind_minibuffer, nil
    if(completer) then
       local completions = completer(input)
       callback(completions[1] or input, cancel)
@@ -540,14 +556,13 @@ bind("minibuffer", "ctrl-g", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "backspace", delete_backwards)
 bind("minibuffer", "tab", complete)
 
-local read_line = function(prompt, callback, completer)
+local read_line = function(prompt, callback, completer, props)
    -- without this, the key which activated the minibuffer triggers a
    -- call to textinput, inserting it into the input
    local old_released = love.keyreleased
    love.keyreleased = function()
       love.keyreleased = old_released
-      last_buffer_before_minibuffer, b = b, make_buffer(nil, "minibuffer",
-                                                        {prompt})
+      behind_minibuffer, b = b, make_buffer(nil, "minibuffer", {prompt}, props)
       b.mode, b.completer = "minibuffer", completer
       b.prompt, b.callback, b.point = prompt, callback, #prompt
       if(completer) then
@@ -771,7 +786,7 @@ return {
    -- internal functions
    draw = function(ship)
       local mode = get_current_mode()
-      if(mode and mode.draw) then return mode.draw(ship) end
+      if(mode and mode.props.draw) then return mode.props.draw(ship) end
 
       ROW_HEIGHT = ROW_HEIGHT or love.graphics.getFont():getHeight()
       em = em or love.graphics.getFont():getWidth('a')
@@ -815,7 +830,7 @@ return {
       local edge = math.ceil(DISPLAY_ROWS * SCROLL_POINT)
 
       if(b.path == "minibuffer") then
-         mb, b = b, last_buffer_before_minibuffer or buffers[1]
+         mb, b = b, behind_minibuffer or buffers[1]
       end
 
       local offset = (b.point_line < edge and 0) or (b.point_line - edge)
@@ -854,6 +869,8 @@ return {
          love.graphics.setColor(0, 225, 0)
          love.graphics.rectangle("fill", PADDING+mb.point*em,
                                  height - ROW_HEIGHT, em, ROW_HEIGHT)
+      elseif(echo_message) then
+         love.graphics.print(echo_message, PADDING, height - ROW_HEIGHT)
       else
          love.graphics.print(b:modeline(), PADDING, height - ROW_HEIGHT)
       end
@@ -936,7 +953,7 @@ return {
 
    get_line = function(n)
       if(not b) then return end
-      if(not n) then return b.lines[b.point_line]
+      if(not n) then return b.lines[b.point_line] end
       if(n < 1) then n = #b.lines - n end
       return b.lines[n]
    end,
@@ -983,6 +1000,9 @@ return {
       printing_prompt, inhibit_read_only = false, read_only
    end,
    get_input = get_input,
+
+   -- this is for feedback within the editor where print wouldn't make sense
+   echo = echo,
 
    history_prev = function()
       if b.input_history_pos + 1 <= b.input_history.entries then
@@ -1042,8 +1062,10 @@ return {
       local current_mode = get_current_mode()
       local new_mode = modes[mode_name]
 
-      if(current_mode.deactivate) then current_mode.deactivate() end
+      if(current_mode.props.deactivate) then current_mode.props.deactivate() end
       b.mode = mode_name
+      if(new_mode.props.activate) then new_mode.props.activate() end
+      -- for backwards-compatibility; activate should be under props from now on
       if(new_mode.activate) then new_mode.activate() end
    end,
 
