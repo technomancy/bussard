@@ -104,8 +104,7 @@ bind("console", "ctrl-j", function()
         -- Pattern matches "<spaces>[string "buffer-name"]:line-number"
         local buffer, line = line:match("%s*%[string \"(.*)\"%]:(%d*)")
         if(not buffer) then
-           ship:read_line("No error on line ", function() end)
-           return
+           return ship.editor.echo("No error on line.")
         end
         ship.editor.open(ship, buffer)
         ship.editor.go_to_line(tonumber(line))
