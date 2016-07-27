@@ -1,5 +1,7 @@
 -- Edit mode -*- lua -*-
 
+local e = ship.editor
+
 define_mode("edit")
 
 -- most of the functions these are bound to should be self-explanatory
@@ -39,7 +41,7 @@ bind("edit", "alt-x", function()
            return utils.completions_for(input, ship.editor.buffer_names())
         end
         ship.editor.read_line("Switch to buffer (default: " .. last_buffer ..
-                                 "): ", callback, completer)
+                                 "): ", callback, {completer=completer})
 end)
 
 -- you can bind return to just ship.editor.newline to disable auto-indent.
@@ -81,71 +83,60 @@ bind("edit", "ctrl-l", function()
 end)
 
 -- Search
-bind("edit", "alt-s", function()
-        local b = ship.editor.current_buffer()
-        local old_point, old_point_line, old_mark, old_mark_line =
-           b.point, b.point_line, b.mark, b.mark_line
-        local last_line = b.mark_line
-        local callback = function(s)
-           if(s == "") then return end
-           local search = function(l, n)
-              if(n ~= last_line) then b.mark = 0 end
-              local start, finish = utf8.find(l, s, b.mark)
-              if(start) then
-                 b.point_line = n
-                 b.point = start - 1
-                 b.mark_line = n
-                 b.mark = finish
-                 last_line = n
-              end
-              return start
-           end
-           for line = b.point_line, #b.lines do
-              if(search(b.lines[line], line)) then
-                 return
-              end
-           end
-           -- No matches, restore point and mark
-           b.point, b.point_line, b,mark, b.mark_line =
-              old_point, old_point_line, old_mark, old_mark_line
-        end
-        ship:read_line("Search: ", callback)
-end)
+local search = function()
+   local lines, point, point_line = e.get_lines(), e.point()
+   local continue_from, path = point_line, e.current_buffer_path()
+   local on_change = function(find_next)
+      local input = e.get_input()
+      if(input == "") then return end
+      local line = find_next and continue_from or point_line
+      for i=line, #lines do
+         local match_point = lines[i]:find(input)
+         if(match_point) then
+            continue_from = i+1
+            return e.go_to(i, match_point-1, path)
+         end
+      end
+      -- wrap around to beginning if not found
+      if(find_next) then continue_from = 1 end
+   end
+   local callback = function(_, cancel)
+      if(cancel) then e.go_to(point_line, point) end
+   end
+   e.read_line("Search: ", callback,
+               {on_change=on_change,
+                bind={["alt-s"]=lume.fn(on_change, true)}})
+end
+bind("edit", "alt-s", search)
 
--- Search and replace
--- FIXME: there is a lot of code in common between this and the regular search
--- function. See if it is reasonable to factor out some common functionality.
-bind("edit", "alt-r", function()
-        local b = ship.editor.current_buffer()
-        local old_point, old_point_line, old_mark, old_mark_line =
-           b.point, b.point_line, b.mark, b.mark_line
-        local last_line = b.mark_line
-        local callback_s = function(s)
-           local callback_r = function(r)
-              if(s == "") then return end
-              local replace = function(l, n)
-                 if(n ~= last_line) then b.mark = 0 end
-                 local new_line = utf8.gsub(l, s, r, 1)
-                 if(new_line == l) then
-                    return false
-                 else
-                    b.lines[n] = new_line
-                    return true
-                 end
-              end
-              for line = b.point_line, #b.lines do
-                 if(replace(b.lines[line], line)) then
-                    return
-                 end
-              end
-              -- No matches, restore point and mark
-              b.point, b.point_line, b,mark, b.mark_line =
-                 old_point, old_point_line, old_mark, old_mark_line
-           end
-           ship:read_line("Replace '" .. s .. "' with: ", callback_r)
-        end
-        ship:read_line("Search: ", callback_s)
-end)
+local replace = function()
+   local lines, point, point_line = e.get_lines(), e.point()
+   local path = e.current_buffer_path()
+   local function replacer(replace, with, cancel, continue_from)
+      for i=continue_from or point_line, #lines do
+         if(cancel) then e.go_to(point_line, point) return end
+         local match_point = lines[i]:find(replace)
+         if(match_point) then
+            e.go_to(i, match_point-1, path)
+            e.read_line("Replace? [Y/n] ", function(y, inner_cancel)
+                           if(not inner_cancel and y == "" or
+                                 y:lower() == "y" or y:lower() == "yes") then
+                              local new_line = lines[i]:gsub(replace, with)
+                              e.set_line(new_line, i, path)
+                              replacer(replace, with, false, i+1)
+                           end
+            end)
+            return
+         end
+      end
+   end
+   e.read_line("Replace: ", function(replace_text, cancel)
+                  if(cancel) then return end
+                  e.read_line("Replace " .. replace_text .. " with: ",
+                              lume.fn(replacer, replace_text))
+   end)
+end
+bind("edit", "alt-r", replace)
 
 bind("edit", "alt-k", ship.editor.close)
 
@@ -157,7 +148,7 @@ end)
 bind("edit", "alt-g", function()
         ship.editor.read_line("Go to line: ", function(l, cancel)
                                  if(not cancel) then
-                                    ship.editor.go_to_line(tonumber(l)) end end)
+                                    ship.editor.go_to(tonumber(l)) end end)
 end)
 
 -- comment this out to disable Emacs key bindings.

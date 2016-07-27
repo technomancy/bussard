@@ -19,7 +19,7 @@ local modes = {}
 -- We expose functions to make changes to a buffer, but we don't let user code
 -- make any changes directly; otherwise we will not be able to change the
 -- structure of the table without breaking user code.
-local make_buffer = function(fs, path, lines)
+local make_buffer = function(fs, path, lines, props)
    -- fs is the filesystem; right now it is always the ship table.
    return { fs=fs, path=path, mode = "edit",
             lines = lines or lume.split((fs and fs:find(path) or ""), "\n"),
@@ -32,7 +32,7 @@ local make_buffer = function(fs, path, lines)
             input_history = utils.buffer:new(), input_history_pos = 0,
             prompt = nil,
             -- arbitrary key/value storage
-            props = {},
+            props = props or {},
             -- TODO: this leaks buffer structure to userspace.
             modeline = function(b)
                return utf8.format(" %s  %s  (%s/%s)  %s",
@@ -514,7 +514,11 @@ local get_input = function(tb)
 end
 
 local exit_minibuffer = function(cancel)
-   local input, callback, completer = get_input(), b.callback, b.completer
+   local input, callback = get_input(), b.callback
+   local completer = b.props and b.props.completer
+   for k in pairs(b.props and b.props.bind or {}) do
+      bind("minibuffer", k, nil) -- undo one-off bindings created in read_line
+   end
    b, mb = behind_minibuffer, nil
    if(completer) then
       local completions = completer(input)
@@ -536,8 +540,8 @@ local delete_backwards = function()
 end
 
 local complete = function()
-   if(b.completer) then
-      local completions = b.completer(get_input())
+   if(b.props.completer) then
+      local completions = b.props.completer(get_input())
       if(#completions == 1) then
          b.lines[#b.lines] = b.prompt .. completions[1]
          b.point = #b.lines[#b.lines]
@@ -556,22 +560,28 @@ bind("minibuffer", "ctrl-g", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "backspace", delete_backwards)
 bind("minibuffer", "tab", complete)
 
-local read_line = function(prompt, callback, completer, props)
+local read_line = function(prompt, callback, props)
    -- without this, the key which activated the minibuffer triggers a
    -- call to textinput, inserting it into the input
    local old_released = love.keyreleased
    love.keyreleased = function()
       love.keyreleased = old_released
-      behind_minibuffer, b = b, make_buffer(nil, "minibuffer", {prompt}, props)
-      b.mode, b.completer = "minibuffer", completer
+      if(not b or b.path ~= "minibuffer") then
+         behind_minibuffer, b = b, make_buffer(nil, "minibuffer",
+                                               {prompt}, props)
+      end
+      b.mode = "minibuffer"
       b.prompt, b.callback, b.point = prompt, callback, #prompt
-      if(completer) then
+      for k,f in pairs(props and props.bind or {}) do
+         bind("minibuffer", k, f)
+      end
+      if(props and props.completer) then
          b.render = function(mini)
-            local input = get_input(mini)
-            return mini.lines[1] .. " " .. table.concat(completer(input), " | ")
+            local completions = props.completer(get_input(mini))
+            return mini.lines[1] .. " " .. table.concat(completions, " | ")
          end
       else
-         b.render = function() return b.lines[1] end
+         b.render = function(mini) return mini.lines[1] end
       end
    end
 end
@@ -703,6 +713,9 @@ return {
       b.point, b.point_line = #b.lines[#b.lines], #b.lines
       return b.point, b.point_line
    end,
+
+   is_end_of_buffer = is_end_of_buffer,
+   is_beginning_of_buffer = is_beginning_of_buffer,
 
    beginning_of_input = function()
       if(b.point_line == #b.lines and b.prompt) then
@@ -850,11 +863,9 @@ return {
                love.graphics.setColor(0, 50, 0, 190)
                love.graphics.rectangle("fill", 0, y, width, ROW_HEIGHT)
                -- point
-               if(not mb) then
-                  love.graphics.setColor(0, 125, 0)
-                  love.graphics.rectangle("fill", PADDING+b.point*em, y,
-                                          em, ROW_HEIGHT)
-               end
+               love.graphics.setColor(0, 125, 0)
+               love.graphics.rectangle(mb and "line" or "fill",
+                                       PADDING+b.point*em, y, em, ROW_HEIGHT)
             end
             love.graphics.setColor(0, 200, 0)
             render_line(line, y)
@@ -928,10 +939,6 @@ return {
       b = get_buffer(path)
    end,
 
-   current_buffer = function()
-      return b
-   end,
-
    last_buffer = function()
       return last_edit_buffer and last_edit_buffer.path
    end,
@@ -955,6 +962,8 @@ return {
    raw_write = write,
    write = io_write,
 
+   get_lines = function() return lume.clone(b.lines) end,
+
    get_line = function(n)
       if(not b) then return end
       if(not n) then return b.lines[b.point_line] end
@@ -962,11 +971,16 @@ return {
       return b.lines[n]
    end,
 
-   get_line_number = function() return b.point_line end,
+   get_line_number = function() return b and b.point_line end,
 
-   get_max_lines = function() return b and #b.lines end,
+   get_max_line = function() return b and #b.lines end,
 
    point = function() return b.point, b.point_line end,
+
+   set_line = function(line, number, path)
+      local buffer = get_buffer(path) or b
+      buffer.lines[number] = line
+   end,
 
    invisible = invisible,
 
@@ -1055,9 +1069,15 @@ return {
       return lume.map(buffers, function(bu) return bu.path end)
    end,
 
-   go_to_line = function(line)
-      if(type(line) ~= "number") then return end
-      if(line > 0 and line <= #b.lines) then b.point_line = line end
+   go_to = function(line, point, buffer_name)
+      local buffer = get_buffer(buffer_name) or b
+      if(type(point) == "number" and point >= 0 and
+         point <= #buffer.lines[buffer.point_line]) then
+         buffer.point = point
+      end
+      if(type(line) == "number" and line > 0 and line <= #buffer.lines) then
+         buffer.point_line = line
+      end
    end,
 
    activate_mode = function(mode_name)
@@ -1106,6 +1126,6 @@ return {
    mode = function()
       return modes[b and b.mode or "flight"]
    end,
-   get_lines = function() return lume.clone(b.lines) end,
    activate_minibuffer = read_line,
+   get_max_lines = function() return b and #b.lines end,
 }

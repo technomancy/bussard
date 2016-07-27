@@ -25,6 +25,7 @@ local function binding_for(mode, command)
       end
    end
    if(mode.parent) then return binding_for(mode.parent, command) end
+   return "none"
 end
 
 local try = function(f)

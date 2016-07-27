@@ -2,8 +2,13 @@
 
 ## beta-2 / ???
 
+* Add search and replace command to editor; defaults to alt-r.
+* Add incremental search command to editor; defaults to alt-s.
+* Add command to switch editor to buffer of choice; defaults to alt-x.
+* Live-feedback when opening files.
+* Many reliability fixes for the editor.
 * Mouse wheel zooms and scrolls; can be rebound.
-* Add `go_to_line` command, defaults to to alt-g.
+* Add `go_to` command for jumping to line; defaults to to alt-g.
 * Add API for connecting over SSH and getting output back programmatically.
 * Make it possible to edit the game from within the game during development.
 * Fix a bug where contents of proxy tables wouldn't print.

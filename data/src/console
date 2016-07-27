@@ -15,18 +15,17 @@ local jump_to_error = function()
    local _, point_line = ship.editor.point()
    local line = ship.editor.get_line(point_line)
    -- Pattern matches "<spaces>[string "buffer-name"]:line-number"
-   local buffer, line = line:match("%s*%[string \"([^\"]*)\"%]:(%d*)")
+   local buffer, line_num = line:match("%s*%[string \"([^\"]*)\"%]:(%d*)")
    if(buffer and ship:find(buffer)) then
-      realprint(buffer, line)
       ship.editor.open(ship, buffer)
-      ship.editor.go_to_line(tonumber(line))
+      ship.editor.go_to(tonumber(line_num))
       return true
    end
 end
 
 bind("console", "return", function()
         -- if you're not on the last line, enter just bumps you down.
-        if(ship.editor.get_line_number() ~= ship.editor.get_max_lines()) then
+        if(ship.editor.get_line_number() ~= ship.editor.get_max_line()) then
            if(not jump_to_error()) then
               ship.editor.end_of_buffer()
            end
@@ -84,7 +83,7 @@ end)
 local complete = function()
    local point, point_line = ship.editor.point()
    -- only complete if you're on the last line (input area)
-   if(point_line ~= ship.editor.get_max_lines()) then return end
+   if(point_line ~= ship.editor.get_max_line()) then return end
    -- strip out the prompt.
    local line = utf8.sub(ship.editor.get_line(0),
                          utf8.len(ship.editor.get_prompt()) + 1, point)

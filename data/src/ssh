@@ -44,7 +44,9 @@ bind("ssh", "return", function()
 end)
 
 bind("ssh", "ctrl-d", function()
-        if(ship.editor.get_input() == "") then
+        local _, line = ship.editor.point()
+        if(line == ship.editor.get_max_line() and
+           ship.editor.get_input() == "") then
            logout()
            print("Logged out.")
         else

@@ -13,6 +13,8 @@ bind("edit", "ctrl-p", ship.editor.prev_line)
 bind("edit", "ctrl-n", ship.editor.next_line)
 bind("edit", "alt-,", ship.editor.beginning_of_buffer)
 bind("edit", "alt-.", ship.editor.end_of_buffer)
+bind("edit", "alt-<", ship.editor.beginning_of_buffer)
+bind("edit", "alt->", ship.editor.end_of_buffer)
 
 bind("edit", "ctrl- ", ship.editor.mark)
 bind("edit", "ctrl-space", ship.editor.mark)

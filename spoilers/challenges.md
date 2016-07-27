@@ -10,23 +10,28 @@ There will be coding challenges. They can't be too contrived. Few of
 them should involve writing from scratch. In real life it's much more
 common to scrounge together solutions from existing snippets you find.
 
-## Required
+We can structure it around progressing from language to language. Obviously you
+start with Lua, and the Sol/Tana worlds should all use the Orb OS, which is
+written in Lua.
 
-* decrypt journals
-* SQL injection (to get off the portal blacklist?)
-* light curve analysis of telescope data (to find which system Traxus colonized)
-* password hash dictionary attack
-* learn scheme
-* learn forth
+## Decrypt journals (Lua)
 
-## Optional
+This is the first challenge; you write the solution in Lua. Nari gives you a
+fair bit of hints if you go for too long without solving it.
 
-* Cargo pricing tracker
-* Auto-pilot
+It confirms that you are a machine consciousness, introduces the character of
+Traxus, and indicates that you are connected to him.
 
-## Not sure?
+## Get off travel blacklist (SQL)
 
-* Sokoban-style thing?
-* Reconnecting power
-* Add logger to an account with a shared password
-* Buffer overflow
+## Mess with portal code (Lisp)
+
+## Light curve analysis (Lily?)
+
+## Reactivate mining robot (Forth)
+
+## Add password logger to compromised account (Moonscript?)
+
+## Password dictionary attack (???)
+
+## Buffer overflow attack (???)

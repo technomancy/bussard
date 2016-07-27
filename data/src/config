@@ -83,7 +83,7 @@ bind({"flight", "edit"}, "ctrl-o", function()
          return lume.filter(lume.map(completions, decorate_type))
       end
       -- read_line takes a callback function that is called with input.
-      ship.editor.read_line("Open: ", callback, completer)
+      ship.editor.read_line("Open: ", callback, {completer=completer})
 end)
 
 -- reload config
