@@ -87,6 +87,7 @@ local function fuzz(n)
 end
 
 editor.open(ship.api, "newfile")
+-- TODO: load map code so we can fuzz that too
 
 fuzz(tonumber(os.getenv("BUSSARD_FUZZ_COUNT") or 256))
 os.exit(0)

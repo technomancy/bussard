@@ -89,12 +89,8 @@ end)
 -- reload config
 bind({"flight", "edit"}, "ctrl-r",
    function()
-      local success, err = ship.dofile("src.config")
-      if(success) then
-         print("Successfully reloaded config.")
-      else
-         print("Error loading config: " .. err)
-      end
+      ship.dofile("src.config")
+      print("Successfully reloaded config.")
 end)
 
 -- connect to target over ssh.

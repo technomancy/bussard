@@ -63,11 +63,9 @@ local sandbox_dofile = function(ship, filename)
    assert(type(contents) == "string", filename .. " is not a file.")
    local chunk, err = sandbox_loadstring(ship, contents, filename)
    if(not err) then
-      return with_traceback(chunk)
+      return chunk()
    else
-      ship.api.print(err)
-      -- TODO/blocker: err seems to always be nil?
-      return false, err
+      error(err)
    end
 end
 

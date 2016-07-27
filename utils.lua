@@ -343,11 +343,13 @@ return {
    with_traceback = function(print2, f, ...)
       local args = {...}
       -- TODO: sandboxed traceback which trims out irrelevant layers
-      return xpcall(function() f(unpack(args)) end, function(e)
+      return xpcall(function() return f(unpack(args)) end, function(e)
             print(debug.traceback())
             print(e)
-            print2(debug.traceback())
-            print2(e)
+            if(print2) then
+               print2(debug.traceback())
+               print2(e)
+            end
       end)
    end,
 
