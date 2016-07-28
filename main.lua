@@ -125,6 +125,8 @@ local safely = function(f)
 end
 
 love.load = function()
+   if(arg[#arg] == "--test") then save.abort(ship) end
+
    ship:configure(systems, ui)
    save.load_into(ship)
    ship:dofile("src.config")

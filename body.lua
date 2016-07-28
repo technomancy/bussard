@@ -59,7 +59,6 @@ local gravitate = function(body, x, y)
    local ny = dy / distance
 
    local accel = math.min((body.mass * g) / (distance * distance), max_accel)
-   
    return (accel * nx), (accel * ny)
 end
 

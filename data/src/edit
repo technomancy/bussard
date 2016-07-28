@@ -59,6 +59,9 @@ bind("edit", "alt-c", ship.editor.system_copy_region)
 bind("edit", "pageup", ship.editor.scroll_up)
 bind("edit", "pagedown", ship.editor.scroll_down)
 
+bind("edit", "ctrl-home", ship.editor.beginning_of_buffer)
+bind("edit", "ctrl-end", ship.editor.end_of_buffer)
+
 bind("edit", "ctrl-w", ship.editor.close)
 
 -- force close even if unsaved changes exist.
