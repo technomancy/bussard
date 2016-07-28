@@ -47,15 +47,20 @@ local g = 4196
 
 local max_accel = 10
 
+-- return the acceleration felt at (x,y) due to body
 local gravitate = function(body, x, y)
-   local dx = (x - body.x)
-   local dy = (y - body.y)
-
+   -- a vector that points from (x,y) to the body
+   local dx = (body.x - x)
+   local dy = (body.y - y)
    local distance = utils.distance(dx, dy)
-   local theta = math.atan2(dx, dy) + math.pi
+
+   -- the same vector but with unit length
+   local nx = dx / distance
+   local ny = dy / distance
 
    local accel = math.min((body.mass * g) / (distance * distance), max_accel)
-   return (accel * math.sin(theta)), (accel * math.cos(theta))
+   
+   return (accel * nx), (accel * ny)
 end
 
 local is_gravitated_by = function(from, to)
