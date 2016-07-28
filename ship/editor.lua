@@ -67,18 +67,22 @@ local console = make_buffer(nil, "*console*",
 console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt, console.max_lines = "console", "> ", 512
 
-local behind_minibuffer -- for returning to after leaving minibuffer
+-- b here is the current buffer; when it is nil it means you're in flight mode
+-- mb is the minibuffer, when active, and behind_minibuffer is the buffer that
+-- is shown while the minibuffer is active
+local b, mb, behind_minibuffer = nil, nil, nil
+local echo_message, echo_message_new = nil, false
+
 -- for the default value in interactive buffer switching
 local last_edit_buffer = console
 local buffers = {console}
-local b, mb = nil -- default back to flight mode
-local echo_message, echo_message_new = nil, false
 
-local printing_prompt = false
-local inhibit_read_only = false
+local inhibit_read_only, printing_prompt = false, false
 
+-- the last line printed is shown at the bottom when in flight mode; defaults
+-- to a helpful message
 local last_line = "Press ctrl-enter to open the console, " ..
-"and run man() for help. Zoom with = and - or scroll wheel."
+   "Zoom with = and - or the scroll wheel."
 
 local invisible = {} -- sentinel "do not print" value
 
@@ -479,17 +483,17 @@ local define_mode = function(name, parent_name, props)
    if(type(props) ~= "table") then props = {} end
 
    modes[name] = { map = {}, ctrl = {}, alt = {}, ["ctrl-alt"] = {},
-                   parent = modes[parent_name], name = name, props = props or {} }
+                   parent = modes[parent_name], name = name, props = props }
 end
 
 local function bind(mode_name, keycode, fn)
-   assert(keycode ~= nil, "Tried to bind to nil. Use false to unbind")
+   assert(keycode ~= nil, "Tried to bind to nil. Use false to unbind.")
    if(type(mode_name) == "table") then
       for _,m in ipairs(mode_name) do
          bind(m, keycode, fn)
       end
    else
-      -- lua regexes don't support |
+      -- lua patterns don't support |
       local map, key = keycode:match("(ctrl-alt)-(.+)")
       if not map then map, key = keycode:match("(ctrl)-(.+)") end
       if not map then map, key = keycode:match("(alt)-(.+)") end
@@ -1123,9 +1127,7 @@ return {
    initialize = function() end,
    wrap = wrap,
    modes = modes,
-   mode = function()
-      return modes[b and b.mode or "flight"]
-   end,
+   mode = function() return modes[b and b.mode or "flight"] end,
    activate_minibuffer = read_line,
    get_max_lines = function() return b and #b.lines end,
 }

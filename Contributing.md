@@ -118,6 +118,9 @@ When in doubt, do what Emacs does.
 
 ## Code Organization
 
+The [overview diagram](https://p.hagelb.org/bussard-overview.jpg) shows how the
+different parts of the codebase are related to each other.
+
 The `ship` table (loaded from `ship/init.lua`) contains all game state. In
 particular, `ship.bodies` is the table for all the worlds, asteroids, and ships
 in the current system, and `ship.systems` contains all systems. (I guess it
