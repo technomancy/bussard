@@ -2,8 +2,9 @@
 
 ## beta-2 / ???
 
+* Emacs bindings are more accurate, but off by default; uncomment to load.
 * Add search and replace command to editor; defaults to alt-r.
-* Add incremental search command to editor; defaults to alt-s.
+* Add incremental search command to editor; defaults to ctrl-f.
 * Add command to switch editor to buffer of choice; defaults to alt-x.
 * Live-feedback when opening files.
 * Many reliability fixes for the editor.

@@ -22,7 +22,7 @@ ship.controls["right"] = ship.actions.right
 ship.controls["="] = zoom_in
 ship.controls["-"] = zoom_out
 
--- # Flight mode
+---- Flight mode
 define_mode("flight")
 
 -- bind is for commands that only call their functions once even when held.
@@ -61,13 +61,14 @@ bind({"flight", "edit"}, "ctrl-m", mail)
 
 -- to open a file.
 bind({"flight", "edit"}, "ctrl-o", function()
+      -- this is more complicated because it offers live feedback as you type.
       local callback = function(input, cancel)
          -- open the file is given, but we don't support opening tables yet
          if(not cancel and type(ship:find(input)) ~= "table") then
             ship.editor.open(ship, input)
          end
       end
-      -- show completions as you type
+      -- show completions as you go
       local completer = function(input)
          local completions = utils.completions_for(input, ship, ".")
          -- different types should display differently
@@ -99,10 +100,7 @@ bind("flight", "ctrl-s", ssh)
 -- activate portal sequence.
 bind("flight", "ctrl-p", portal)
 
--- if you keep your personal customizations in here, they will be preserved
--- in the event of a config reset.
--- dofile("src.custom")
---
--- wipe-safe host-accessible directory structure
--- host_fs/config in the game save directory
+-- If you keep your customizations in this file, they will be preserved even if
+-- you start a new game, and they can be edited in an external editor; all files
+-- under "host." are stored in the host_fs/ directory in the game save directory
 -- dofile("host.config")

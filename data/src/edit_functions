@@ -1,0 +1,72 @@
+local e = ship.editor
+
+ship.editor.search = function(direction)
+   direction = direction or 1
+   local lines, point, point_line = e.get_lines(), e.point()
+   local continue_from, path = point_line, e.current_buffer_path()
+   local on_change = function(find_next)
+      local input = e.get_input()
+      if(input == "") then return end
+      local line = find_next and continue_from or point_line
+      for i=line, #lines, direction do
+         local match_point = lines[i]:find(input)
+         if(match_point) then
+            continue_from = i + direction
+            return e.go_to(i, match_point-1, path)
+         end
+      end
+      -- wrap around to beginning if not found
+      if(find_next) then continue_from = 1 end
+   end
+   local callback = function(_, cancel)
+      if(cancel) then e.go_to(point_line, point) end
+   end
+   e.read_line("Search: ", callback,
+               {on_change=on_change,
+                bind={["ctrl-g"]=lume.fn(on_change, true),
+                   ["ctrl-f"]=lume.fn(on_change, true)
+                   ["ctrl-s"]=lume.fn(on_change, true)}})
+end
+
+ship.editor.replace = function()
+   local lines, point, point_line = e.get_lines(), e.point()
+   local path = e.current_buffer_path()
+   local function replacer(replace, with, cancel, continue_from)
+      for i=continue_from or point_line, #lines do
+         if(cancel) then e.go_to(point_line, point) return end
+         local match_point = lines[i]:find(replace)
+         if(match_point) then
+            e.go_to(i, match_point-1, path)
+            e.read_line("Replace? [Y/n] ", function(y, inner_cancel)
+                           if(not inner_cancel and y == "" or
+                              y:lower() == "y" or y:lower() == "yes") then
+                              local new_line = lines[i]:gsub(replace, with)
+                              e.set_line(new_line, i, path)
+                              replacer(replace, with, false, i+1)
+                           end
+            end)
+            return
+         end
+      end
+   end
+   e.read_line("Replace: ", function(replace_text, cancel)
+                  if(cancel) then return end
+                  e.read_line("Replace " .. replace_text .. " with: ",
+                              lume.fn(replacer, replace_text))
+   end)
+end
+
+ship.editor.switch_buffer = function()
+   local last_buffer = ship.editor.last_buffer()
+   last_buffer = last_buffer or "*console*"
+   local callback = function(b, cancel)
+      if(not cancel) then
+         ship.editor.change_buffer(b ~= "" and b or last_buffer)
+      end
+   end
+   local completer = function(input)
+      return utils.completions_for(input, ship.editor.buffer_names())
+   end
+   ship.editor.read_line("Switch to buffer (default: " .. last_buffer ..
+                            "): ", callback, {completer=completer})
+end

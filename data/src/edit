@@ -1,6 +1,6 @@
 -- Edit mode -*- lua -*-
 
-local e = ship.editor
+dofile("src.edit_functions")
 
 define_mode("edit")
 
@@ -27,22 +27,6 @@ bind("edit", "ctrl-pagedown", ship.editor.next_buffer)
 -- not all keyboards have these keys, but they're handy.
 bind("edit", "appback", lume.fn(ship.editor.next_buffer, -1))
 bind("edit", "appforward", ship.editor.next_buffer)
-
--- switch buffer by name.
-bind("edit", "alt-x", function()
-        local last_buffer = ship.editor.last_buffer()
-        last_buffer = last_buffer or "*console*"
-        local callback = function(b, cancel)
-           if(not cancel) then
-              ship.editor.change_buffer(b ~= "" and b or last_buffer)
-           end
-        end
-        local completer = function(input)
-           return utils.completions_for(input, ship.editor.buffer_names())
-        end
-        ship.editor.read_line("Switch to buffer (default: " .. last_buffer ..
-                                 "): ", callback, {completer=completer})
-end)
 
 -- you can bind return to just ship.editor.newline to disable auto-indent.
 bind("edit", "return", ship.editor.newline_and_indent)
@@ -75,75 +59,16 @@ bind("edit", "alt-c", ship.editor.system_copy_region)
 bind("edit", "pageup", ship.editor.scroll_up)
 bind("edit", "pagedown", ship.editor.scroll_down)
 
--- insert a page-break, rendered as a horizontal line.
-bind("edit", "ctrl-l", function()
-        ship.editor.newline()
-        ship.editor.textinput("\f")
-        ship.editor.newline()
+bind("edit", "ctrl-w", ship.editor.close)
+
+-- force close even if unsaved changes exist.
+bind("edit", "ctrl-alt-w", function()
+        ship.editor.close(true)
 end)
 
 -- Search
-local search = function()
-   local lines, point, point_line = e.get_lines(), e.point()
-   local continue_from, path = point_line, e.current_buffer_path()
-   local on_change = function(find_next)
-      local input = e.get_input()
-      if(input == "") then return end
-      local line = find_next and continue_from or point_line
-      for i=line, #lines do
-         local match_point = lines[i]:find(input)
-         if(match_point) then
-            continue_from = i+1
-            return e.go_to(i, match_point-1, path)
-         end
-      end
-      -- wrap around to beginning if not found
-      if(find_next) then continue_from = 1 end
-   end
-   local callback = function(_, cancel)
-      if(cancel) then e.go_to(point_line, point) end
-   end
-   e.read_line("Search: ", callback,
-               {on_change=on_change,
-                bind={["alt-s"]=lume.fn(on_change, true)}})
-end
-bind("edit", "alt-s", search)
-
-local replace = function()
-   local lines, point, point_line = e.get_lines(), e.point()
-   local path = e.current_buffer_path()
-   local function replacer(replace, with, cancel, continue_from)
-      for i=continue_from or point_line, #lines do
-         if(cancel) then e.go_to(point_line, point) return end
-         local match_point = lines[i]:find(replace)
-         if(match_point) then
-            e.go_to(i, match_point-1, path)
-            e.read_line("Replace? [Y/n] ", function(y, inner_cancel)
-                           if(not inner_cancel and y == "" or
-                                 y:lower() == "y" or y:lower() == "yes") then
-                              local new_line = lines[i]:gsub(replace, with)
-                              e.set_line(new_line, i, path)
-                              replacer(replace, with, false, i+1)
-                           end
-            end)
-            return
-         end
-      end
-   end
-   e.read_line("Replace: ", function(replace_text, cancel)
-                  if(cancel) then return end
-                  e.read_line("Replace " .. replace_text .. " with: ",
-                              lume.fn(replacer, replace_text))
-   end)
-end
-bind("edit", "alt-r", replace)
-
-bind("edit", "alt-k", ship.editor.close)
-
--- force close even if unsaved changes exist.
-bind("edit", "ctrl-alt-k", function()
-        ship.editor.close(true)
-end)
+bind("edit", "ctrl-f", ship.editor.search)
+bind("edit", "alt-r", ship.editor.replace)
 
 bind("edit", "alt-g", function()
         ship.editor.read_line("Go to line: ", function(l, cancel)
@@ -151,5 +76,6 @@ bind("edit", "alt-g", function()
                                     ship.editor.go_to(tonumber(l)) end end)
 end)
 
--- comment this out to disable Emacs key bindings.
-dofile("src.emacs")
+-- uncomment this out to enable Emacs key bindings, which conflict with
+-- some of the more conventional bindings.
+-- dofile("src.emacs")
