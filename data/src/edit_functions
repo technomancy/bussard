@@ -24,7 +24,7 @@ ship.editor.search = function(direction)
    e.read_line("Search: ", callback,
                {on_change=on_change,
                 bind={["ctrl-g"]=lume.fn(on_change, true),
-                   ["ctrl-f"]=lume.fn(on_change, true)
+                   ["ctrl-f"]=lume.fn(on_change, true),
                    ["ctrl-s"]=lume.fn(on_change, true)}})
 end
 
