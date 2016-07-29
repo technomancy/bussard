@@ -36,6 +36,7 @@ return {
       local ship_data = lume.pick(ship, unpack(ship_fields))
       ship_data.time_offset = ship.sandbox.os.time()
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
+      ship_data.meta = {version = ship.api.ui.version}
       orb.fs.strip_special(ship_data.api, {})
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
@@ -61,6 +62,7 @@ return {
    end,
 
    load_into = function(ship)
+      local meta
       ship.load_time = os.time()
 
       -- cheat to load in all the events needed for a specific act
@@ -76,10 +78,11 @@ return {
          local ship_data_string = love.filesystem.read(ship_filename)
          local ship_data = lume.deserialize(ship_data_string)
          local api_data = ship_data.api
+         meta = ship_data.meta
 
          lume.extend(ship.api, api_data)
 
-         ship_data.api = nil
+         ship_data.api, ship_data.meta = nil, nil
          lume.extend(ship, ship_data)
 
          -- when we are testing a single file but don't want to lose state
@@ -107,6 +110,9 @@ return {
             else
                ship.bodies[i] = data
             end
+         end
+         if(not meta) then -- coming from beta-1; need to re-seed position
+            ship:enter(ship.system_name, true, true)
          end
       else
          ship:enter(ship.system_name, true, true)

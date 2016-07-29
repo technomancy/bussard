@@ -65,7 +65,7 @@ clean: ; rm -rf releases/
 REL=".love-release/build/love-release.sh"
 FLAGS=-a 'Phil Hagelberg' -x spoilers \
 	--description 'A space flight programming adventure game.' \
-	--love 0.9.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
+	--love 0.10.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
 
 releases/bussard-$(VERSION).love: $(ALL_LUA) $(PROSE) $(MEDIA) $(META) Makefile
 	mkdir -p releases/

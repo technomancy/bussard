@@ -173,12 +173,10 @@ return {
    seed_pos = function(b, star)
       if(b.fixed) then
          b.x, b.y = 0, 0
-         return
-      elseif(not b.r) then
-         return
-      else
+      elseif(b.r or (b.x and b.y)) then
          assert(star.fixed, star.name .. " is not a star.")
 
+         b.r = b.r or utils.distance(b.x, b.y)
          local v = math.sqrt((g*star.mass)/b.r)
          local theta = love.math.random() * math.pi * 2
 
