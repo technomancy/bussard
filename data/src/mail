@@ -169,7 +169,7 @@ end
 bind("view", "alt-a", archive)
 
 local reply = function()
-   local id = header(ship.editor.state().lines, "Message.Id")
+   local id = header(ship.editor.get_lines(), "Message.Id")
    local success, status = reply(id)
    ship.editor.close()
    ship.editor.open(ship, "*console*")

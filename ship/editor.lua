@@ -1130,4 +1130,5 @@ return {
    mode = function() return modes[b and b.mode or "flight"] end,
    activate_minibuffer = read_line,
    get_max_lines = function() return b and #b.lines end,
+   set_read_only = function(x) b.props["read_only"] = x end,
 }
