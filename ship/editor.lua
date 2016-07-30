@@ -121,8 +121,11 @@ local out_of_bounds = function(line, point)
 end
 
 local bounds_check = function()
-   -- These should never happen, but let's be forgiving instead of asserting.
-   if(b.mark_line and b.mark and out_of_bounds(b.mark_line, b.mark)) then
+   -- The first one is a normal occurance; the second two should never happen,
+   -- but let's be forgiving instead of asserting.
+   if(#b.lines[b.point_line] and b.point > #b.lines[b.point_line]) then
+      b.point = #b.lines[b.point_line]
+   elseif(b.mark_line and b.mark and out_of_bounds(b.mark_line, b.mark)) then
       dprint("Mark out of bounds!", b.mark_line, #b.lines)
       debug()
       b.mark, b.mark_line = nil, nil

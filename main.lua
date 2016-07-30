@@ -80,7 +80,7 @@ ui.set_font = function(path, size)
    end
    love.graphics.setFont(font)
 
-   -- love 0.9.0 doesn't support this
+   -- love 0.9.x doesn't support this
    local noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
    if(font.setFallbacks) then font:setFallbacks(noto) end
 end

@@ -70,7 +70,6 @@ bind({"flight", "edit"}, "ctrl-o", function()
       end
       -- show completions as you go
       local completer = function(input)
-         -- TODO/blocker: handle host_fs sanely
          local completions = utils.completions_for(input, ship, ".")
          -- different types should display differently
          local decorate_type = function(path)
