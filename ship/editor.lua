@@ -370,6 +370,7 @@ local point_moved = function()
    return not (lp == b.point and ll == b.point_line)
 end
 
+-- TODO/blocker: this is all wrong
 local forward_word = function()
    if(utf8.find(point_over(), word_break)) then
       while(point_moved() and not utf8.find(point_over(), word_break)) do
@@ -398,7 +399,7 @@ local save = function(this_fs, this_path)
    b.needs_save = false
    if(b.path:find("^/")) then
       if(not love.filesystem.write("game" .. b.path,
-                                   table.concat(b.lines, "\n"))) then
+                                   table.concat(b.lines, "\n") .. "\n")) then
          print("Could not save " .. this_path or b.path)
       end
    else
