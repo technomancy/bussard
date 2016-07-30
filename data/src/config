@@ -78,6 +78,8 @@ bind({"flight", "edit"}, "ctrl-o", function()
                return path .. "."
             elseif(type(x) == "string") then
                return path
+            else
+               return false
             end
          end
          -- filter out non-table, non-string entries
