@@ -7,8 +7,8 @@ local dprint = os.getenv("DEBUG") and print or function() end
 --- Essentially a port of Emacs to Lua/Love.
 
 -- missing features (a very limited list)
--- * search/replace
 -- * syntax highlighting
+-- * smarter indentation
 
 local kill_ring = {}
 

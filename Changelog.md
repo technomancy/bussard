@@ -26,6 +26,8 @@
 * Add archive feature to mail system.
 * Allow the font to be changed.
 
+If upgrading from beta-1 to beta-2, please see the [upgrade guide](Upgrading.md).
+
 ## beta-1 / 2016-05-17
 
 * Better display of tables from in-game console.
