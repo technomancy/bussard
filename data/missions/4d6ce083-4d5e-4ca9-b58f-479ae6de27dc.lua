@@ -11,14 +11,14 @@ return {
    credits=250,
    success_events={"passenger1"},
    success_message="Thanks for the ride.",
-   prereq=function(ship)
+   check_prereq=function(ship)
       if(lume.find(ship.upgrade_names, "life_support")) then
          return true
       else
          return false, "Cannot take passengers without onboard life support sytem."
       end
    end,
-   accept_function = function(ship)
+   on_accept = function(ship)
       ship.humans["Serepiem Kacien"] = "4d6ce083-4d5e-4ca9-b58f-479ae6de27dc"
    end,
 }

@@ -9,11 +9,11 @@ local lume = require("lume")
 
 -- TODO: rename to all start with on_* or check_*
 -- optional callbacks:
--- * accept_function(ship)
--- * prereq(ship) -> boolean
+-- * on_accept(ship)
+-- * check_prereq(ship) -> boolean
 -- * update(ship, dt)
 -- * on_login(ship, connected_name)
--- * success_check(ship) -> boolean
+-- * check_success(ship) -> boolean
 -- * on_success(ship)
 -- * on_fail(ship)
 
@@ -85,7 +85,7 @@ local find = function(ship, id)
       require("data.missions." .. id)
 end
 
-local success_check = function(ship, mission)
+local check_success = function(ship, mission)
    local record = ship.active_missions[mission.id]
    if(mission.time_limit and (utils.time(ship) >
                               record.start_time + mission.time_limit)) then
@@ -95,7 +95,7 @@ local success_check = function(ship, mission)
    end
 
    return cargo_check(ship, mission) and objectives_check(ship, mission) and
-      (not mission.success_check or mission.success_check(ship)) and
+      (not mission.check_success or mission.check_success(ship)) and
       destination_check(record)
 end
 
@@ -117,7 +117,7 @@ local on_login = function(ship)
       local mission = find(ship, mission_id)
       record_destination(record, ship.comm_connected, ship)
       if(mission.on_login) then mission.on_login(ship, ship.comm_connected) end
-      if(success_check(ship, mission)) then succeed(ship, mission) end
+      if(check_success(ship, mission)) then succeed(ship, mission) end
    end
 end
 
@@ -135,8 +135,8 @@ local accept = function(ship, message_id)
       end
    end
 
-   if(mission.prereq) then
-      local accept, msg = mission.prereq(ship)
+   if(mission.check_prereq) then
+      local accept, msg = mission.check_prereq(ship)
       if(not accept) then return false, msg end
    end
 
@@ -158,9 +158,7 @@ local accept = function(ship, message_id)
       ship:move_cargo(good, amt)
    end
 
-   if(mission.accept_function) then
-      mission.accept_function(ship)
-   end
+   if(mission.on_accept) then mission.on_accept(ship) end
    return true, "Mission accepted."
 end
 
@@ -168,7 +166,7 @@ local update = function(ship, dt)
    for mission_id in pairs(ship.active_missions) do
       local mission = find(ship, mission_id)
       if(mission.update) then mission.update(ship, dt) end
-      if(success_check(ship, mission)) then succeed(ship, mission) end
+      if(check_success(ship, mission)) then succeed(ship, mission) end
    end
 end
 

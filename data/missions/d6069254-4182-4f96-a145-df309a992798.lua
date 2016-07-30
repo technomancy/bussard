@@ -10,7 +10,7 @@ return {
    credits=250,
    success_events={"passenger2"},
 
-   prereq=function(ship)
+   check_prereq=function(ship)
       if(require("lume").find(ship.upgrade_names, "life_support")) then
          return true
       else
@@ -34,7 +34,7 @@ return {
       end
    end,
 
-   accept_function = function(ship)
+   on_accept = function(ship)
       mail.deliver_msg(ship, "nari-a-01.msg")
       local m = ship.active_missions["d6069254-4182-4f96-a145-df309a992798"]
       if(ship.comm_connected == "Tana Prime") then m.pickup = 0 end
