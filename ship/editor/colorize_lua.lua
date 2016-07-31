@@ -11,6 +11,8 @@ local function colorize_keyword(l, n, offset)
    -- hoo boy, not having access to | in lua patterns is a pain!
    -- if this code makes you cringe at the performance implications, just
    -- remember that luajit is faster than you could possibly hope for.
+   -- (the longest file in the codebase, 1200 lines, colorizes in 0.3 seconds
+   -- on a 2009-era core 2 duo thinkpad)
    if(n and n > #keywords) then return {colors.text, l} end
    local s,e = string.find(l, keywords[n or 1], offset, true)
    if(s and string.find(string.sub(l,s-1,s-1), "[%w_]") or

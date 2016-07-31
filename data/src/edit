@@ -82,6 +82,8 @@ end)
 
 dofile("src.lua")
 
+-- ship.editor.set_color("text", {200, 255, 200})
+
 -- uncomment this out to enable Emacs key bindings, which conflict with
 -- some of the more conventional bindings.
 -- dofile("src.emacs")

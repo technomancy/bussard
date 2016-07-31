@@ -2,7 +2,8 @@
 
 ## beta-2 / ???
 
-* Syntax highlighting for Lua code.
+* All editor colors can be customized.
+* Syntax highlighting for Lua code. (requires LÖVE 0.10.x or higher)
 * Emacs bindings are more accurate, but off by default; uncomment to load.
 * Add search and replace command to editor; defaults to alt-r.
 * Add incremental search command to editor; defaults to ctrl-f.

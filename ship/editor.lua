@@ -56,6 +56,23 @@ local DISPLAY_ROWS
 -- width of an m
 local em
 
+-- table of classifier -> {red, green, blue} color
+local colors = {flight_text = {0,200,0},
+                mark = {0, 125, 0},
+                point = {0, 125, 0},
+                point_line = {0, 50, 0, 190},
+                -- only used when colorizer isn't active
+                text = {0, 200, 0},
+                minibuffer_bg = {0, 200, 0},
+                minibuffer_fg = {0, 0, 0},
+                scroll_bar = {0, 150, 0},
+                lua = {text={0, 180 ,0},
+                       keyword={0, 255, 0},
+                       str={200, 100, 0},
+                       number={50, 175, 120},
+                       comment={0, 100, 0}},
+               }
+
 local kill_ring_max = 32
 local mark_ring_max = 32
 local history_max = 128
@@ -833,7 +850,7 @@ return {
       em = em or love.graphics.getFont():getWidth('a')
 
       if(not b) then
-         love.graphics.setColor(0, 200, 0)
+         love.graphics.setColor(colors.flight_text)
          if(console.lines[#console.lines] == console.prompt) then
             love.graphics.print(last_line, PADDING,
                                 love.graphics:getHeight() - ROW_HEIGHT * 2)
@@ -882,35 +899,34 @@ return {
             -- elseif(y > height) then break end
             -- mark
             if(i == b.mark_line) then
-               -- TODO: colors here should be customizable
-               love.graphics.setColor(0, 125, 0)
+               love.graphics.setColor(colors.mark)
                love.graphics.rectangle("line", PADDING+b.mark*em, y,
                                        em, ROW_HEIGHT)
             end
             if(i == b.point_line) then
                -- point_line line
-               love.graphics.setColor(0, 50, 0, 190)
+               love.graphics.setColor(colors.point_line)
                love.graphics.rectangle("fill", 0, y, width, ROW_HEIGHT)
                -- point
-               love.graphics.setColor(0, 125, 0)
+               love.graphics.setColor(colors.point)
                love.graphics.rectangle(mb and "line" or "fill",
                                        PADDING+b.point*em, y, em, ROW_HEIGHT)
             end
             if(b.props.render_lines) then
                love.graphics.setColor(255, 255, 255)
             else
-               love.graphics.setColor(0, 200, 0)
+               love.graphics.setColor(colors.text)
             end
             render_line(line, y)
          end
       end
 
-      love.graphics.setColor(0, 200, 0)
+      love.graphics.setColor(colors.minibuffer_bg)
       love.graphics.rectangle("fill", 0, height - ROW_HEIGHT, width, ROW_HEIGHT)
-      love.graphics.setColor(0, 0, 0)
+      love.graphics.setColor(colors.minibuffer_fg)
       if(mb) then
          love.graphics.print(mb:render(), PADDING, height - ROW_HEIGHT)
-         love.graphics.setColor(0, 225, 0)
+         love.graphics.setColor(colors.point)
          love.graphics.rectangle("fill", PADDING+mb.point*em,
                                  height - ROW_HEIGHT, em, ROW_HEIGHT)
       elseif(echo_message) then
@@ -930,7 +946,7 @@ return {
       local bar_height_pixels = (bar_height * (height - 10)) / 100
 
       local sx = width - 5
-      love.graphics.setColor(0, 150, 0)
+      love.graphics.setColor(colors.scroll_bar)
       -- Handle the case where there are less actual lines than display rows
       if bar_height_pixels >= height - 10 then
          love.graphics.line(sx, 5, sx, height - 5)
@@ -1139,10 +1155,27 @@ return {
       end
    end,
 
-   colorize_lua = function(colors)
+   set_colors = function(new_colors)
+      lume.extend(colors, new_colors)
+   end,
+
+   set_color = function(color, value)
+      if(type(color) == "string") then
+         colors[color] = value
+      else -- nested set
+         local target = colors
+         local last = table.remove(color, #color)
+         for _,v in ipairs(color) do
+            target = target[v] or {}
+         end
+         target[last] = value
+      end
+   end,
+
+   colorize_lua = function()
       -- 0.9.x doesn't have multi-colored print
       if(love._version_major > 0 or love._version_minor < 10) then return end
-      b.props.render_lines = colorize_lua(b.lines, colors)
+      b.props.render_lines = colorize_lua(b.lines, colors.lua)
    end,
 
    debug = debug,
