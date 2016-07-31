@@ -2,7 +2,7 @@
 
 <img src="https://p.hagelb.org/bussard.png" alt="screenshot" />
 
-A space flight programming adventure. Mine, trade, upgrade, and unlock the
+A spaceflight programming adventure. Mine, trade, upgrade, and unlock the
 potential of your spacecraft by hacking on the code that makes it tick.
 
 Read the [in-game manual](manual.md) for a taste of how the game works.
@@ -31,8 +31,9 @@ fit too.
 ## Installation
 
 Releases for each platform are [on itch.io](https://technomancy.itch.io/bussard).
-Windows and Mac OS X releases are standalone, but Linux releases require having
-[LÖVE](https://love2d.org) 0.9.x or 0.10.x installed.
+Windows and Mac OS X releases are standalone, but `.love` file releases require having
+[LÖVE](https://love2d.org). Most things will work on 0.9.x, but syntax
+highlighting requires 0.10.0 or higher.
 
 When running from source, type `love .` from a checkout.
 
@@ -60,10 +61,9 @@ user-visible changes were added in which releases.
 The [contributing guide](Contributing.md) contains details about the structure
 of the codebase and how to submit good patches.
 
-The game will contain programming challenges you must solve in order to
-proceed. (Currently only one is implemented.) Eventually the goal is that you
-will be able to learn it without any (or much) prior programming experience
-through in-game hints and tutorials.
+The game contains programming challenges you must solve in order to
+progress. Eventually the goal is that you will be able to learn it without any
+(or much) prior programming experience through in-game hints and tutorials.
 
 <img src="https://p.hagelb.org/bussard-edit.png" alt="edit screenshot" />
 

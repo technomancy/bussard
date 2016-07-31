@@ -1,9 +1,9 @@
 # Bussard credits
 
 Original code, art, and prose copyright © 2015-2016 Phil Hagelberg and contributors
+https://gitlab.com/technomancy/bussard/graphs/master
 
-Distributed under the GNU General Public License version 3 or later;
-see file LICENSE.
+Distributed under the GNU General Public License version 3 or later; see LICENSE
 
 ## 3rd-party code
 
@@ -49,7 +49,7 @@ see file LICENSE.
 
 ## 3rd-party prose
 
-* Lua Programming book copyright © 2013-2016 Wikibooks contributors,
+* Lua Programming book copyright © 2013-2016 Mark Otaris and Wikibooks contributors,
   distributed under the Creative Commons Attribution-ShareAlike license
   https://en.wikibooks.org/wiki/Lua_Programming
 
