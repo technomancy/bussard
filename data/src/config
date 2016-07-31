@@ -83,7 +83,8 @@ bind({"flight", "edit"}, "ctrl-o", function()
             end
          end
          -- filter out non-table, non-string entries
-         return lume.filter(lume.map(completions, decorate_type))
+         return lume.sort(lume.filter(lume.map(completions, decorate_type)),
+                          function(s1, s2) return #s1 < #s2 end)
       end
       -- read_line takes a callback function that is called with input.
       ship.editor.read_line("Open: ", callback, {completer=completer})
