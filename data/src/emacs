@@ -26,6 +26,7 @@ bind("edit", "alt-y", ship.editor.yank_pop)
 
 bind("edit", "ctrl-backspace", ship.editor.backward_kill_word)
 bind("edit", "alt-d", ship.editor.forward_kill_word)
+bind("edit", "ctrl-alt-r", ship.editor.reload)
 
 bind("edit", "ctrl-s", ship.editor.search)
 bind("edit", "ctrl-r", lume.fn(ship.editor.search, -1))

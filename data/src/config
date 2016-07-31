@@ -31,7 +31,7 @@ bind("flight", "escape", ship.ui.pause)
 
 -- you can bind keys to existing functions or inline functions.
 bind("flight", "ctrl-return", function()
-        ship.editor.change_buffer("*console*")
+        ship.editor.change_buffer(ship.editor.last_buffer() or "*console*")
 end)
 
 -- the mouse wheel is handled just like any other key press.
@@ -91,11 +91,7 @@ bind({"flight", "edit"}, "ctrl-o", function()
 end)
 
 -- reload config
-bind({"flight", "edit"}, "ctrl-r",
-   function()
-      ship.dofile("src.config")
-      print("Successfully reloaded config.")
-end)
+bind({"flight", "edit"}, "ctrl-r", ship.editor.reload)
 
 -- connect to target over ssh.
 bind("flight", "ctrl-s", ssh)
