@@ -1,6 +1,7 @@
 local utf8 = require("utf8.init")
 local lume = require("lume")
 local utils = require("utils")
+local colorize_lua = require("ship.editor.colorize_lua")
 
 local dprint = os.getenv("DEBUG") and print or function() end
 
@@ -1138,12 +1139,11 @@ return {
       end
    end,
 
-   colorize = require("ship.editor.colorize"),
-   colors = {text={0,200,0},
-             keyword={50,255,150},
-             str={200,100,0},
-             number={10, 100, 200},
-             comment={0,100,0},},
+   colorize_lua = function(colors)
+      -- 0.9.x doesn't have multi-colored print
+      if(love._version_major > 0 or love._version_minor < 10) then return end
+      b.props.render_lines = colorize_lua(b.lines, colors)
+   end,
 
    debug = debug,
 

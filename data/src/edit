@@ -2,8 +2,15 @@
 
 dofile("src.edit_functions")
 
-define_mode("edit", nil, {on_change=lume.fn(ship.editor.colorize, ship.editor),
-                          activate=lume.fn(ship.editor.colorize, ship.editor)})
+-- table of classifier -> {red, green, blue} color
+local colors = {text={0, 180 ,0},
+                keyword={0, 255, 0},
+                str={200, 100, 0},
+                number={50, 175, 120},
+                comment={0, 100, 0},}
+
+define_mode("edit", nil, {on_change = lume.fn(ship.editor.colorize_lua, colors),
+                          activate = lume.fn(ship.editor.colorize_lua, colors)})
 
 -- most of the functions these are bound to should be self-explanatory
 -- just by looking at the function name.

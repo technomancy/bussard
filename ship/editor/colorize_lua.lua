@@ -7,7 +7,8 @@ local colors, comment_match
 local function colorize_keyword(l, n)
    if(n and n > #keywords) then return {colors.text, l} end
    local s,e = l:find(keywords[n or 1], nil, true)
-   if(s and l:sub(s-1,s-1):find("%w") or (e and l:sub(e+1,e+1):find("%w"))) then
+   if(s and l:sub(s-1,s-1):find("[%w_]") or
+      (e and l:sub(e+1,e+1):find("[%w_]"))) then
       -- if it's inside a larger word, no match!
       return colorize_keyword(l, (n or 1) + 1)
    elseif(s == 1) then
@@ -21,9 +22,11 @@ local function colorize_keyword(l, n)
 end
 
 local function colorize_number(l)
-   -- TODO: 3   3.0   3.1416   314.16e-2   0.31416E1   0xff   0x56
+   -- TODO: scientific notation, hex
    local s,e = l:find("[\\.0-9]+")
-   if(s == 1) then
+   if(s and l:sub(s-1,s-1):find("[%w_]")) then
+      return colorize_keyword(l) -- numbers at the end of identifiers: nope
+   elseif(s == 1) then
       return {colors.number, l:sub(1,e), unpack(colorize_number(l:sub(e+1)))}
    elseif(s) then
       local line = colorize_keyword(l:sub(1, s-1))
@@ -55,6 +58,8 @@ local function colorize_string(l)
    elseif(s) then
       local pre = colorize_comment(l:sub(1,s-1))
       if(comment_match) then
+         table.insert(pre, colors.comment)
+         table.insert(pre, l:sub(s))
          return pre
       else
          local post = colorize_string(l:sub(e+1))
@@ -65,13 +70,9 @@ local function colorize_string(l)
    end
 end
 
-local function colorize(l)
-   return colorize_string(l)
-end
-
-return function(editor)
-   colors = editor.colors
-   -- 0.9.x doesn't have multi-colored print
-   if(love._version_major > 0 or love._version_minor < 10) then return end
-   editor.set_prop("render_lines", lume.map(editor.get_lines(), colorize))
+return function(lines, color_table)
+   colors = color_table
+   local t = {}
+   for _,l in ipairs(lines) do table.insert(t, colorize_string(l)) end
+   return t   
 end
