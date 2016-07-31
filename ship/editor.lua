@@ -55,8 +55,6 @@ local ROW_HEIGHT
 local DISPLAY_ROWS
 -- width of an m
 local em
--- pattern for word breaks
-local word_break = "[%s%p]"
 
 local kill_ring_max = 32
 local mark_ring_max = 32
@@ -366,7 +364,7 @@ local forward_char = function(n) -- lameness: n must be 1 or -1
 end
 
 local point_over = function()
-   return utf8.sub(b.lines[b.point_line], b.point + 1, b.point + 1) or ""
+   return utf8.sub(b.lines[b.point_line], b.point + 1, b.point + 1) or " "
 end
 
 local moved_last_point, moved_last_line
@@ -376,28 +374,22 @@ local point_moved = function()
    return not (lp == b.point and ll == b.point_line)
 end
 
--- TODO/blocker: this is all wrong
-local forward_word = function()
+local word_break = "[%s%p]"
+
+local forward_word = function(n)
+   moved_last_point, moved_last_line = nil, nil
    if(utf8.find(point_over(), word_break)) then
-      while(point_moved() and not utf8.find(point_over(), word_break)) do
-         forward_char()
+      while(point_moved() and utf8.find(point_over(), word_break)) do
+         forward_char(n)
       end
    end
+   forward_char(n)
    while(point_moved() and not utf8.find(point_over(), word_break)) do
-      forward_char()
+      forward_char(n)
    end
 end
 
-local backward_word = function()
-   if(utf8.find(point_over(), word_break)) then
-      while(point_moved() and utf8.find(point_over(), word_break)) do
-         forward_char(-1)
-      end
-   end
-   while(point_moved() and not utf8.find(point_over(), word_break)) do
-      forward_char(-1)
-   end
-end
+local backward_word = lume.fn(forward_word, -1)
 
 local save = function(this_fs, this_path)
    local target = this_fs or b.fs
