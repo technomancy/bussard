@@ -645,6 +645,8 @@ return {
          local auto_mode = parts[2] and lume.trim(parts[2])
          if(auto_mode) then
             activate_mode(auto_mode)
+         elseif(path:find("/.*lua")) then
+            activate_mode("lua")
          else
             activate_mode("edit")
          end
@@ -888,6 +890,7 @@ return {
             -- elseif(y > height) then break end
             -- mark
             if(i == b.mark_line) then
+               -- TODO: colors here should be customizable
                love.graphics.setColor(0, 125, 0)
                love.graphics.rectangle("line", PADDING+b.mark*em, y,
                                        em, ROW_HEIGHT)
