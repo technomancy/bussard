@@ -155,8 +155,13 @@ local wrap = function(fn, ...)
 
    if(not b) then return end -- did we switch to flight mode?
    if(b.dirty) then
-      if(b.props.on_change) then b.props.on_change() end
       table.insert(b.history, last_state)
+      local on_change = get_prop("on_change")
+      if(type(on_change) == "function") then
+         on_change()
+      elseif(type(on_change) == "table") then
+         for _,f in pairs(on_change) do f() end
+      end
    end
    if(#b.history > history_max) then
       table.remove(b.history, 1)
@@ -594,6 +599,19 @@ local read_line = function(prompt, callback, props)
    end
 end
 
+local activate_mode = function(mode_name)
+   if(not b) then return end
+   assert(modes[mode_name], mode_name .. " mode does not exist.")
+   local current_mode = get_current_mode()
+   local new_mode = modes[mode_name]
+
+   if(current_mode.props.deactivate) then current_mode.props.deactivate() end
+   b.mode = mode_name
+   if(new_mode.props.activate) then new_mode.props.activate() end
+   -- for backwards-compatibility; activate should be under props from now on
+   if(new_mode.activate) then new_mode.activate() end
+end
+
 -- TODO: organize these better
 return {
    open = function(fs, path)
@@ -622,6 +640,8 @@ return {
             b = make_buffer(fs, path, lines)
             table.insert(buffers, b)
          end
+         -- TODO/blocker: calculate the correct mode
+         activate_mode("edit")
       end
    end,
 
@@ -855,7 +875,7 @@ return {
       end
 
       local offset = (b.point_line < edge and 0) or (b.point_line - edge)
-      for i,line in ipairs(b.lines) do
+      for i,line in ipairs(b.props.render_lines or b.lines) do
          if(i >= offset) then
             local y = ROW_HEIGHT * (i - offset)
             if(y >= height - ROW_HEIGHT) then break end
@@ -875,7 +895,11 @@ return {
                love.graphics.rectangle(mb and "line" or "fill",
                                        PADDING+b.point*em, y, em, ROW_HEIGHT)
             end
-            love.graphics.setColor(0, 200, 0)
+            if(b.props.render_lines) then
+               love.graphics.setColor(255, 255, 255)
+            else
+               love.graphics.setColor(0, 200, 0)
+            end
             render_line(line, y)
          end
       end
@@ -1088,18 +1112,7 @@ return {
       end
    end,
 
-   activate_mode = function(mode_name)
-      if(not b) then return end
-      assert(modes[mode_name], mode_name .. " mode does not exist.")
-      local current_mode = get_current_mode()
-      local new_mode = modes[mode_name]
-
-      if(current_mode.props.deactivate) then current_mode.props.deactivate() end
-      b.mode = mode_name
-      if(new_mode.props.activate) then new_mode.props.activate() end
-      -- for backwards-compatibility; activate should be under props from now on
-      if(new_mode.activate) then new_mode.activate() end
-   end,
+   activate_mode = activate_mode,
 
    define_mode = define_mode,
    bind = bind,
@@ -1124,6 +1137,13 @@ return {
          with_traceback(wrap, fn)
       end
    end,
+
+   colorize = require("ship.editor.colorize"),
+   colors = {text={0,200,0},
+             keyword={50,255,150},
+             str={200,100,0},
+             number={10, 100, 200},
+             comment={0,100,0},},
 
    debug = debug,
 

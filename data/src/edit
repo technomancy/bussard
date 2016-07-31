@@ -2,7 +2,8 @@
 
 dofile("src.edit_functions")
 
-define_mode("edit")
+define_mode("edit", nil, {on_change=lume.fn(ship.editor.colorize, ship.editor),
+                          activate=lume.fn(ship.editor.colorize, ship.editor)})
 
 -- most of the functions these are bound to should be self-explanatory
 -- just by looking at the function name.
