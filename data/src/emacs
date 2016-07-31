@@ -31,8 +31,6 @@ bind("edit", "ctrl-s", ship.editor.search)
 bind("edit", "ctrl-r", lume.fn(ship.editor.search, -1))
 bind("edit", "alt-5", ship.editor.replace)
 
-bind("edit", "alt-x", ship.editor.switch_buffer)
-
 -- insert a page-break character, rendered as a horizontal line.
 bind("edit", "ctrl-l", function()
         ship.editor.newline()

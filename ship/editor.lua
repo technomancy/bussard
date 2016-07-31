@@ -504,10 +504,9 @@ local function bind(mode_name, keycode, fn)
       end
    else
       -- lua patterns don't support |
-      local map, key = keycode:match("(ctrl-alt)-(.+)")
+      local map, key = keycode:match("(ctrl[-]alt)-(.+)")
       if not map then map, key = keycode:match("(ctrl)-(.+)") end
       if not map then map, key = keycode:match("(alt)-(.+)") end
-      if map == "alt-ctrl" then map = "ctrl-alt" end
       assert(modes[mode_name], "No mode " .. mode_name)
       if(key == "enter") then key = "return" end
       if(keycode == "enter") then keycode = "return" end

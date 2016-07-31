@@ -6,7 +6,7 @@
 * Emacs bindings are more accurate, but off by default; uncomment to load.
 * Add search and replace command to editor; defaults to alt-r.
 * Add incremental search command to editor; defaults to ctrl-f.
-* Add command to switch editor to buffer of choice; defaults to alt-x.
+* Add command to switch editor to buffer of choice; defaults to ctrl-alt-b.
 * Live-feedback when opening files.
 * Many reliability fixes for the editor.
 * Mouse wheel zooms and scrolls; can be rebound.

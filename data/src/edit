@@ -63,6 +63,7 @@ bind("edit", "ctrl-home", ship.editor.beginning_of_buffer)
 bind("edit", "ctrl-end", ship.editor.end_of_buffer)
 
 bind("edit", "ctrl-w", ship.editor.close)
+bind("edit", "ctrl-alt-b", ship.editor.switch_buffer)
 
 -- force close even if unsaved changes exist.
 bind("edit", "ctrl-alt-w", function()

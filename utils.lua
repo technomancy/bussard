@@ -66,7 +66,7 @@ end
 local function completions_for(input, context, separator, prefixes)
    if(type(context) ~= "table") then return {} end
    prefixes = prefixes or {}
-   local input_parts = lume.split(input, separator)
+   local input_parts = separator and lume.split(input, separator) or {input}
    if(#input_parts == 1) then
       local matches = {}
       -- if we have an array, use it as-is. if we have a k/v table, use keys.
