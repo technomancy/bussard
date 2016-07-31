@@ -2,6 +2,7 @@
 
 ## beta-2 / ???
 
+* Syntax highlighting for Lua code.
 * Emacs bindings are more accurate, but off by default; uncomment to load.
 * Add search and replace command to editor; defaults to alt-r.
 * Add incremental search command to editor; defaults to ctrl-f.

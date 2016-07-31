@@ -1,3 +1,4 @@
+-- -*- lua -*-
 local e = ship.editor
 
 ship.editor.search = function(direction)

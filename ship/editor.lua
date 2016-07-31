@@ -641,8 +641,14 @@ return {
             b = make_buffer(fs, path, lines)
             table.insert(buffers, b)
          end
-         -- TODO/blocker: calculate the correct mode
-         activate_mode("edit")
+
+         local parts = lume.split(b.lines[1], "-*-")
+         local auto_mode = parts[2] and lume.trim(parts[2])
+         if(auto_mode) then
+            activate_mode(auto_mode)
+         else
+            activate_mode("edit")
+         end
       end
    end,
 
