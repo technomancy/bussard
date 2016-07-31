@@ -11,22 +11,23 @@ local keywords = {"and", "break", "do", "else", "elseif", "end", "false",
 
 local colors, comment_match
 
-local function colorize_keyword(l, n)
+local function colorize_keyword(l, n, offset)
    -- hoo boy, not having access to | in lua patterns is a pain!
    -- if this code makes you cringe at the performance implications, just
    -- remember that luajit is faster than you could possibly hope for.
    if(n and n > #keywords) then return {colors.text, l} end
-   local s,e = utf8.find(l, keywords[n or 1], nil, true)
+   local s,e = utf8.find(l, keywords[n or 1], offset, true)
    if(s and utf8.find(utf8.sub(l,s-1,s-1), "[%w_]") or
       (e and utf8.find(utf8.sub(l,e+1,e+1), "[%w_]"))) then
       -- if it's inside a larger word, no match!
-      return colorize_keyword(l, (n or 1) + 1)
+      return colorize_keyword(l, n, e+1)
    elseif(s == 1) then
       return {colors.keyword, utf8.sub(l,1,e),
               unpack(colorize_keyword(utf8.sub(l, e+1)))}
    elseif(s) then
-      return {colors.text, utf8.sub(l,1, s-1), colors.keyword,
-              utf8.sub(l,s,e), unpack(colorize_keyword(utf8.sub(l,e+1))) }
+      local pre = colorize_keyword(utf8.sub(l,1, s-1))
+      return lume.concat(pre, {colors.keyword, utf8.sub(l,s,e),
+                               unpack(colorize_keyword(utf8.sub(l,e+1))) })
    else
       return colorize_keyword(l, (n or 1) + 1)
    end
