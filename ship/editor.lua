@@ -395,8 +395,8 @@ end
 local backward_word = lume.fn(forward_word, -1)
 
 local save = function(this_fs, this_path)
-   local target = this_fs or b.fs
-   local this_b = b.path == "minibuffer" and behind_minibuffer or b
+   local target = this_fs or b and b.fs
+   local this_b = (b and b.path == "minibuffer") and behind_minibuffer or b
    if(not target or not this_b.needs_save) then return end
    this_b.needs_save = false
    if(this_b.path:find("^/")) then
