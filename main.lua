@@ -65,7 +65,7 @@ local ui = {
    config_reset = lume.fn(save.config_reset, ship),
 
    get_fps = love.timer.getFPS,
-   get_screen_size = love.window.getMode,
+   get_screen_size = love.window and love.window.getMode,
    powersave = love.system.getPowerInfo() == "battery",
 }
 

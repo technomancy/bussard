@@ -81,6 +81,10 @@ ship.editor.switch_buffer = function()
 end
 
 ship.editor.reload = function()
+   -- save all open buffers before reloading
+   for _,b in pairs(e.buffer_names()) do
+      ship.editor.save(nil, b)
+   end
    ship.dofile("src.config")
    print("Successfully reloaded config.")
 end

@@ -888,7 +888,7 @@ return {
 
    change_buffer = function(path)
       -- Do not set last edit 'buffer' to flight mode
-      if(b) then last_edit_buffer = b end
+      if(b and b ~= last_edit_buffer) then last_edit_buffer = b end
       b = get_buffer(path)
    end,
 

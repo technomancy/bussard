@@ -1,4 +1,4 @@
-local row_height, display_rows, em, w, h
+local row_height, scroll_rows, em, w, h
 local padding, buffer_padding, scroll_point = 10, 0, 0.8
 
 local render_line = function(ln2, y)
@@ -13,23 +13,26 @@ local render_buffer = function(b, colors, x, y, bw, bh, focused)
    love.graphics.push()
    love.graphics.translate(x, y)
    love.graphics.setScissor(x, y, bw, bh)
+   local display_rows = math.floor(bh / row_height)
    local edge = math.ceil(display_rows * scroll_point)
    local offset = (b.point_line < edge and 0) or (b.point_line - edge)
+   if(focused or not scroll_rows) then scroll_rows = display_rows end
    for i,line in ipairs(b.props.render_lines or b.lines) do
       if(i >= offset) then
-         local y = row_height * (i - offset)
-         if(y >= h - row_height) then break end
+         local row_y = row_height * (i - offset)
+         if(row_y >= h - row_height) then break end
 
          if(i == b.mark_line) then -- mark
             love.graphics.setColor(colors.mark)
-            love.graphics.rectangle("line", b.mark*em, y, em, row_height)
+            love.graphics.rectangle("line", b.mark*em, row_y, em, row_height)
          end
          if(i == b.point_line) then -- point and point line
             love.graphics.setColor(colors.point_line)
-            love.graphics.rectangle("fill", 0, y, w, row_height)
+            love.graphics.rectangle("fill", 0, row_y, w, row_height)
             love.graphics.setColor(colors.point)
             love.graphics.rectangle(focused and "fill" or "line",
-                                    buffer_padding+b.point*em, y, em, row_height)
+                                    buffer_padding+b.point*em, row_y,
+                                    em, row_height)
          end
 
          if(b.props.render_lines) then -- fancy colors get ANDed w base colors
@@ -37,7 +40,7 @@ local render_buffer = function(b, colors, x, y, bw, bh, focused)
          else
             love.graphics.setColor(colors.text)
          end
-         render_line(line, y)
+         render_line(line, row_y)
       end
    end
    love.graphics.pop()
@@ -49,7 +52,7 @@ local draw_scroll_bar = function(b, colors)
    -- lines entered rather than the lines drawn, but close enough
 
    -- height is percentage of the possible lines
-   local bar_height = math.min(100, (display_rows * 100) / #b.lines)
+   local bar_height = math.min(100, (scroll_rows * 100) / #b.lines)
    -- convert to pixels (percentage of screen height, minus 10px padding)
    local bar_height_pixels = (bar_height * (h - 10)) / 100
 
@@ -81,7 +84,6 @@ return function(b, buffers_where, echo_message, colors)
    row_height = row_height or love.graphics.getFont():getHeight()
    em = em or love.graphics.getFont():getWidth('a')
    w, h = love.window.getMode()
-   display_rows = math.floor((h - (row_height * 2)) / row_height)
 
    -- Draw background
    love.graphics.setColor(colors.background)
