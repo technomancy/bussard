@@ -7,7 +7,6 @@ local lume = require("lume")
 -- # Mission structure
 -- required fields: name, description, id
 
--- TODO: rename to all start with on_* or check_*
 -- optional callbacks:
 -- * on_accept(ship)
 -- * check_prereq(ship) -> boolean

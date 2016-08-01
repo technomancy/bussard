@@ -2,15 +2,16 @@ local utf8 = require("utf8.init")
 local lume = require("lume")
 local utils = require("utils")
 local colorize_lua = require("ship.editor.colorize_lua")
+local draw = require("ship.editor.draw")
 
 local dprint = os.getenv("DEBUG") and print or function() end
 
 --- Essentially a port of Emacs to Lua/Love.
 
--- missing features (a very limited list)
--- * syntax highlighting
--- * smarter indentation
-
+local scroll_size = 20
+local kill_ring_max = 32
+local mark_ring_max = 32
+local history_max = 128
 local kill_ring = {}
 
 local modes = {}
@@ -43,26 +44,11 @@ local make_buffer = function(fs, path, lines, props)
    }
 end
 
--- how many lines do pageup/pagedown scroll?
-local scroll_size = 20
--- How many pixels of padding are on either side
-local PADDING = 20
--- how far down do you go before it starts to scroll?
-local SCROLL_POINT = 0.8
--- How many pixels are required to display a row
-local ROW_HEIGHT
--- Maximum amount of rows that can be displayed on the screen
-local DISPLAY_ROWS
--- width of an m
-local em
-
 -- table of classifier -> {red, green, blue} color
 local colors = {flight_text = {0,200,0},
                 mark = {0, 125, 0},
                 point = {0, 125, 0},
                 point_line = {0, 50, 0, 190},
-                -- only used when colorizer isn't active
-                text = {0, 200, 0},
                 minibuffer_bg = {0, 200, 0},
                 minibuffer_fg = {0, 0, 0},
                 scroll_bar = {0, 150, 0},
@@ -71,11 +57,10 @@ local colors = {flight_text = {0,200,0},
                        str={200, 100, 0},
                        number={50, 175, 120},
                        comment={0, 100, 0}},
+                -- only used when colorizer isn't active
+                text = {0, 200, 0},
+                background = {0, 0, 0, 240},
                }
-
-local kill_ring_max = 32
-local mark_ring_max = 32
-local history_max = 128
 
 local console = make_buffer(nil, "*console*",
                             {"This is the console. Enter any code for your " ..
@@ -84,14 +69,15 @@ console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt, console.max_lines = "console", "> ", 512
 
 -- b here is the current buffer; when it is nil it means you're in flight mode
--- mb is the minibuffer, when active, and behind_minibuffer is the buffer that
--- is shown while the minibuffer is active
-local b, mb, behind_minibuffer = nil, nil, nil
+-- behind_minibuffer is the buffer that  is shown while the minibuffer is active
+local b, behind_minibuffer = nil, nil
+-- echo messages show feedback while in the editor, until a new key is pressed
 local echo_message, echo_message_new = nil, false
 
 -- for the default value in interactive buffer switching
 local last_edit_buffer = console
 local buffers = {console}
+local splits = nil
 
 local inhibit_read_only, printing_prompt = false, false
 
@@ -410,20 +396,21 @@ local backward_word = lume.fn(forward_word, -1)
 
 local save = function(this_fs, this_path)
    local target = this_fs or b.fs
-   if(not target or not b.needs_save) then return end
-   b.needs_save = false
-   if(b.path:find("^/")) then
-      if(not love.filesystem.write("game" .. b.path,
-                                   table.concat(b.lines, "\n") .. "\n")) then
-         print("Could not save " .. this_path or b.path)
+   local this_b = b.path == "minibuffer" and behind_minibuffer or b
+   if(not target or not this_b.needs_save) then return end
+   this_b.needs_save = false
+   if(this_b.path:find("^/")) then
+      if(not love.filesystem.write("game" .. this_b.path,
+                                   table.concat(this_b.lines, "\n") .. "\n")) then
+         print("Could not save " .. this_path or this_b.path)
       end
    else
-      local parts = lume.split(this_path or b.path, ".")
+      local parts = lume.split(this_path or this_b.path, ".")
       local filename = table.remove(parts, #parts)
       for _,part in ipairs(parts) do
          target = target[part]
       end
-      target[filename] = table.concat(b.lines, "\n")
+      target[filename] = table.concat(this_b.lines, "\n")
    end
 end
 
@@ -541,7 +528,7 @@ local exit_minibuffer = function(cancel)
    for k in pairs(b.props and b.props.bind or {}) do
       bind("minibuffer", k, nil) -- undo one-off bindings created in read_line
    end
-   b, mb = behind_minibuffer, nil
+   b = behind_minibuffer
    if(completer) then
       local completions = completer(input)
       callback(completions[1] or input, cancel)
@@ -619,6 +606,17 @@ local activate_mode = function(mode_name)
    if(new_mode.props.activate) then new_mode.props.activate() end
    -- for backwards-compatibility; activate should be under props from now on
    if(new_mode.activate) then new_mode.activate() end
+end
+
+local draw_flight = function()
+   love.graphics.setColor(colors.flight_text)
+   local x, y = 20, (love.graphics:getHeight() -
+                        love.graphics.getFont():getHeight() * 2)
+   if(console.lines[#console.lines] == console.prompt) then
+      love.graphics.print(last_line, x, y)
+   else
+      love.graphics.print(console.lines[#console.lines], x, y)
+   end
 end
 
 -- TODO: organize these better
@@ -828,10 +826,8 @@ return {
    system_yank = system_yank,
 
    print_kill_ring = function()
-      print("Ring:")
-      for i,l in ipairs(kill_ring) do
-         print(i, lume.serialize(l))
-      end
+      print("Kill ring:")
+      pp(kill_ring)
    end,
 
    eval_buffer = function()
@@ -841,134 +837,37 @@ return {
 
    undo = undo,
 
-   -- internal functions
    draw = function(ship)
       local mode = get_current_mode()
-      if(mode and mode.props.draw) then return mode.props.draw(ship) end
-
-      ROW_HEIGHT = ROW_HEIGHT or love.graphics.getFont():getHeight()
-      em = em or love.graphics.getFont():getWidth('a')
-
       if(not b) then
-         love.graphics.setColor(colors.flight_text)
-         if(console.lines[#console.lines] == console.prompt) then
-            love.graphics.print(last_line, PADDING,
-                                love.graphics:getHeight() - ROW_HEIGHT * 2)
-         else
-            love.graphics.print(console.lines[#console.lines], PADDING,
-                                love.graphics:getHeight() - ROW_HEIGHT * 2)
-         end
-         return
-      end
-
-      local width, height = love.graphics:getWidth(), love.graphics:getHeight()
-      DISPLAY_ROWS = math.floor((height - (ROW_HEIGHT * 2)) / ROW_HEIGHT)
-
-      -- enforce consistency
-      if(b.point_line < 1) then b.point_line = 1 end
-      if(b.point_line > #b.lines) then b.point_line = #b.lines end
-      if(b.point < 0) then b.point = 0 end
-      if(b.point > utf8.len(b.lines[b.point_line])) then
-         b.point = utf8.len(b.lines[b.point_line]) end
-
-      -- Draw background
-      love.graphics.setColor(0, 0, 0, 240)
-      love.graphics.rectangle("fill", 0, 0, width, height)
-
-      -- maximum characters in a rendered line of text
-      local render_line = function(ln2, y)
-         if(ln2 == "\f\n" or ln2 == "\f") then
-            love.graphics.line(PADDING, y + 0.5 * ROW_HEIGHT,
-                               width - PADDING, y + 0.5 * ROW_HEIGHT)
-         else
-            love.graphics.print(ln2, PADDING, y)
-         end
-      end
-
-      local edge = math.ceil(DISPLAY_ROWS * SCROLL_POINT)
-
-      if(b.path == "minibuffer") then
-         mb, b = b, behind_minibuffer or buffers[1]
-      end
-
-      local offset = (b.point_line < edge and 0) or (b.point_line - edge)
-      for i,line in ipairs(b.props.render_lines or b.lines) do
-         if(i >= offset) then
-            local y = ROW_HEIGHT * (i - offset)
-            if(y >= height - ROW_HEIGHT) then break end
-            -- elseif(y > height) then break end
-            -- mark
-            if(i == b.mark_line) then
-               love.graphics.setColor(colors.mark)
-               love.graphics.rectangle("line", PADDING+b.mark*em, y,
-                                       em, ROW_HEIGHT)
-            end
-            if(i == b.point_line) then
-               -- point_line line
-               love.graphics.setColor(colors.point_line)
-               love.graphics.rectangle("fill", 0, y, width, ROW_HEIGHT)
-               -- point
-               love.graphics.setColor(colors.point)
-               love.graphics.rectangle(mb and "line" or "fill",
-                                       PADDING+b.point*em, y, em, ROW_HEIGHT)
-            end
-            if(b.props.render_lines) then
-               love.graphics.setColor(255, 255, 255)
-            else
-               love.graphics.setColor(colors.text)
-            end
-            render_line(line, y)
-         end
-      end
-
-      love.graphics.setColor(colors.minibuffer_bg)
-      love.graphics.rectangle("fill", 0, height - ROW_HEIGHT, width, ROW_HEIGHT)
-      love.graphics.setColor(colors.minibuffer_fg)
-      if(mb) then
-         love.graphics.print(mb:render(), PADDING, height - ROW_HEIGHT)
-         love.graphics.setColor(colors.point)
-         love.graphics.rectangle("fill", PADDING+mb.point*em,
-                                 height - ROW_HEIGHT, em, ROW_HEIGHT)
-      elseif(echo_message) then
-         love.graphics.print(echo_message, PADDING, height - ROW_HEIGHT)
+         draw_flight()
+      elseif(mode and mode.props.draw) then
+         mode.props.draw(ship)
       else
-         love.graphics.print(b:modeline(), PADDING, height - ROW_HEIGHT)
-      end
+         local w,h = love.window.getMode()
+         local full = {10,10,w,h}
+         local to_show = b.path == "minibuffer" and
+            (behind_minibuffer or console) or b
+         local buffers_where = {[full]=to_show}
 
-      -- draw scroll bar
-
-      -- this only gives you an estimate since it uses the amount of
-      -- lines entered rather than the lines drawn, but close enough
-
-      -- height is percentage of the possible lines
-      local bar_height = math.min(100, (DISPLAY_ROWS * 100) / #b.lines)
-      -- convert to pixels (percentage of screen height, minus 10px padding)
-      local bar_height_pixels = (bar_height * (height - 10)) / 100
-
-      local sx = width - 5
-      love.graphics.setColor(colors.scroll_bar)
-      -- Handle the case where there are less actual lines than display rows
-      if bar_height_pixels >= height - 10 then
-         love.graphics.line(sx, 5, sx, height - 5)
-      else
-         -- now determine location on the screen by taking the offset in
-         -- history and converting it first to a percentage of total
-         -- lines and then a pixel offset on the screen
-         local bar_end = (b.point_line * 100) / #b.lines
-         bar_end = ((height - 10) * bar_end) / 100
-
-         local bar_begin = bar_end - bar_height_pixels
-         -- Handle overflows
-         if bar_begin < 5 then
-            love.graphics.line(sx, 5, sx, bar_height_pixels)
-         elseif bar_end > height - 5 then
-            love.graphics.line(sx, height - 5 - bar_height_pixels, sx, height - 5)
-         else
-            love.graphics.line(sx, bar_begin, sx, bar_end)
+         if(splits) then
+            buffers_where = {}
+            for pos,buffer_name in pairs(splits) do
+               if(buffer_name == "current") then
+                  buffers_where[pos] = to_show
+               elseif(buffer_name == "last") then
+                  buffers_where[pos] = last_edit_buffer
+               else
+                  buffers_where[pos] = get_buffer(buffer_name)
+               end
+            end
          end
+         draw(b, buffers_where, echo_message, colors)
       end
-      if(mb) then b, mb = mb, nil end
    end,
+
+   set_splits = function(s) splits = s end,
+   get_splits = function() return splits end,
 
    textinput = textinput,
 

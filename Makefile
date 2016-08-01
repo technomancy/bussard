@@ -2,7 +2,7 @@ run: ; love .
 
 VERSION=beta-2-pre
 
-SHIP_LUA=ship/*.lua doc/init.lua
+SHIP_LUA=ship/*.lua ship/editor/*.lua doc/init.lua
 ENGINE_LUA=*.lua
 OS_LUA=os/orb/*.lua os/lisp/*.lua
 IN_OS_LUA=os/orb/resources/*

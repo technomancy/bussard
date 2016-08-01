@@ -15,7 +15,7 @@ end
 bind("edit", "escape", exit)
 bind("edit", "ctrl-return", exit)
 
-bind("edit", "ctrl-q", function()
+bind({"edit", "minibuffer"}, "ctrl-q", function()
         ship.editor.save()
         ship.ui.quit()
 end)
