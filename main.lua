@@ -65,6 +65,7 @@ local ui = {
    config_reset = lume.fn(save.config_reset, ship),
 
    get_fps = love.timer.getFPS,
+   get_screen_size = love.window.getMode,
    powersave = love.system.getPowerInfo() == "battery",
 }
 
@@ -127,6 +128,7 @@ end
 love.load = function()
    if(arg[#arg] == "--test") then save.abort(ship) end
 
+   love.keyboard.setKeyRepeat(true)
    ship:configure(systems, ui)
    save.load_into(ship)
    ship:dofile("src.config")
@@ -142,12 +144,17 @@ love.load = function()
    resize()
    ui.set_font(16)
 
-   stars = { starfield.new(10, 0.01, 100),
-             starfield.new(10, 0.05, 175),
-             starfield.new(10, 0.1, 255), }
-   love.keyboard.setKeyRepeat(true)
-
-   ui.play()
+   if(arg[#arg] == "--no-game") then
+      love.draw = lume.fn(ship.api.editor.draw, ship)
+      love.keypressed = safely(ship.api.editor.handle_key)
+      love.textinput = safely(ship.api.editor.handle_textinput)
+      ship.api.editor.open(ship, "*console*")
+   else
+      stars = { starfield.new(10, 0.01, 100),
+                starfield.new(10, 0.05, 175),
+                starfield.new(10, 0.1, 255), }
+      ui.play()
+   end
 end
 
 love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end
