@@ -641,8 +641,13 @@ return {
                   table.insert(lines, line)
                end
             else
-               -- TODO: ensure that it's a valid path
-               table.insert(lines, "")
+               local parts = lume.split(path, "/")
+               table.remove(parts, #parts)
+               if(love.filesystem.isDirectory(table.concat(parts), "/")) then
+                  table.insert(lines, "")
+               else
+                  return echo("Not a valid location")
+               end
             end
             b = make_buffer(fs, path, lines)
             table.insert(buffers, b)
