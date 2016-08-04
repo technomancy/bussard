@@ -9,7 +9,8 @@ local unread_count = function(ship)
    end
 end
 
-local quickref = "ctrl-enter: console\n" ..
+local quickref = "tab: next target\n" ..
+   "ctrl-enter: console\n" ..
    "ctrl-m: read mail\n" ..
    "ctrl-s: ssh login\n" ..
    "ctrl-p: portal\n" ..
@@ -17,13 +18,11 @@ local quickref = "ctrl-enter: console\n" ..
    "ctrl-r: reload config"
 
 ship.hud = {
-   { x=60, y=5, type="text",
-     format="x: %5.0f y: %5.0f", values={"status.x", "status.y"}
-   },
-   { x=60, y=20, type="text",
-     format="epoch: %s  credits: %s",
-     values={function() return utils.format_time(os.time()) end,
-        "status.credits"}
+   { x=60, y=3, type="text",
+     format="x: %5.0f y: %5.0f\nepoch: %s\ncredits: %s",
+     values={"status.x", "status.y",
+             function() return utils.format_time(os.time()) end,
+             "status.credits"}
    },
    { x=5, y=5, type="vector",
      values={"status.dx", "status.dy", 0.1},
@@ -55,3 +54,14 @@ ship.hud = {
    },
    ship.mission.hud,
 }
+
+toggle_fps = function()
+   local h = ship.hud[1]
+   if(h.format:find("FPS")) then
+      h.format = "x: %5.0f y: %5.0f\nepoch: %s\ncredits: %s"
+      h.values[5] = nil
+   else
+      h.format = "x: %5.0f y: %5.0f\nepoch: %s\ncredits: %s   FPS: %s"
+      h.values[5] = ship.ui.get_fps
+   end
+end
