@@ -104,7 +104,7 @@ return {
             if(existing) then
                lume.extend(existing, data)
             elseif(data.ship) then
-               local other = ai.make(ship.bodies, data.name)
+               local other = ai.make(ship, ship.bodies, data.name)
                lume.extend(other, data)
                ship.bodies[i] = other
             else

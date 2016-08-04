@@ -5,13 +5,7 @@ local min_mass = 10
 
 local max_asteroid_distance = 1000000
 
-local retarget = function(a, ship)
-   if(ship.target == a) then
-      ship.target, ship.target_number = nil, 0
-   end
-end
-
-local function asteroid(name, mass_max, bodies, parent)
+local function asteroid(name, mass_max, bodies, parent, offset)
    local mass = love.math.random(mass_max)
 
    local a = { name = name, mass = mass,
@@ -22,8 +16,8 @@ local function asteroid(name, mass_max, bodies, parent)
 
    if(parent) then
       -- if two new asteroids spawn in exactly the same place, gravity bugs out
-      local o = love.math.random(50) - 25
-      a.x, a.y, a.dx, a.dy = parent.x + o, parent.y + o, parent.dx, parent.dy
+      a.x, a.y = parent.x + offset, parent.y + offset
+      a.dx, a.dy = parent.dx, parent.dy
    else
       -- try to get them to spawn clustered near-ish the sun with some outliers
       local r = love.math.randomNormal(30000, 50000)
@@ -45,12 +39,11 @@ return {
    -- if asteroids get too far from the player cycle them out and introduce more
    recycle = function(ship)
       local asteroid_count = 0
-      for i,b in pairs(ship.bodies) do
+      for _,b in pairs(ship.bodies) do
          if(b.asteroid) then
             if(utils.distance(b, ship.bodies[1]) > max_asteroid_distance and
                utils.distance(b, ship) > max_asteroid_distance) then
-               table.remove(ship.bodies, i)
-               retarget(b, ship)
+               ship:remove_body(b)
             else
                asteroid_count = asteroid_count + 1
             end
@@ -75,7 +68,7 @@ return {
 
    split = function(self, ship)
       lume.remove(ship.bodies, self)
-      retarget(self, ship)
+      ship:remove_body(self)
 
       if(self.mass < min_mass) then
          if(utils.distance(ship, self) <= ship.scoop_range) then
@@ -86,8 +79,9 @@ return {
                               " but out of scoop range.")
          end
       else
-         asteroid(self.name .. "-", self.mass / 2, ship.bodies, self)
-         asteroid(self.name .. "+", self.mass / 2, ship.bodies, self)
+         local offset = love.math.random(25) + 25
+         asteroid(self.name .. "-", self.mass / 2, ship.bodies, self, -offset)
+         asteroid(self.name .. "+", self.mass / 2, ship.bodies, self, offset)
       end
    end
 

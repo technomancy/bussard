@@ -212,7 +212,7 @@ local ship = {
             ship.x = love.math.random(30000) + 10000
             ship.y = love.math.random(30000) + 10000
          end
-         ai.seed(system_name, ship.bodies)
+         ai.seed(ship)
       end
       ship.api.on_enter(system_name)
    end,
@@ -334,6 +334,13 @@ local ship = {
             ship.api.broken_updaters = ship.api.broken_updaters or {}
             ship.api.broken_updaters[n] = f
          end
+      end
+   end,
+
+   remove_body = function(ship, b)
+      lume.remove(ship.bodies, b)
+      if(ship.target == b) then
+         ship.target, ship.target_number = nil, 0
       end
    end,
 

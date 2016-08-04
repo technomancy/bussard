@@ -165,7 +165,7 @@ local update = safely(function(dt)
       body.update(ship.bodies, dt)
       body.gravitate_all(ship.bodies, ship, real_time_factor)
       asteroid.recycle(ship)
-      ai.update(ship.bodies, dt)
+      ai.update(ship, ship.bodies, dt)
 end)
 
 -- for commands that don't need repeat

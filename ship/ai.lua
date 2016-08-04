@@ -44,7 +44,7 @@ local update = function(self, dt)
    end
 end
 
-local make = function(bodies, name, from_portal)
+local make = function(ship, bodies, name, from_portal)
    local targets = lume.filter(bodies, "os")
    local target, from = targets[love.math.random(#targets)]
 
@@ -78,14 +78,13 @@ local make = function(bodies, name, from_portal)
       target = target, target_name = target.name,
       from = from, from_name = from.name,
       progress = love.math.random(90),
-      -- TODO: if the ship is targeted when it disappears, targeting acts weird
-      remove = lume.fn(lume.remove, bodies),
+      remove = lume.fn(ship.remove_body, ship),
    }
 end
 
-local insert_new = function(bodies, from_portal)
-   local ship = make(bodies, "SS. " .. names[love.math.random(#names)], from_portal)
-   table.insert(bodies, ship)
+local insert_new = function(ship, bodies, from_portal)
+   local s = make(ship, bodies, names[love.math.random(#names)], from_portal)
+   table.insert(bodies, s)
 end
 
 local sys_pop = function(bodies)
@@ -98,15 +97,16 @@ local update_counter = 0
 local ship_factor = 0.3
 
 return {
-   seed = function(_, bodies)
-      for i,b in ipairs(bodies) do -- remove existing ships
-         if(b.ship) then table.remove(bodies, i) end
+   seed = function(ship)
+      for i,b in ipairs(ship.bodies) do -- remove existing ships
+         if(b.ship) then table.remove(ship.bodies, i) end
       end
-      local ship_count = love.math.random(math.ceil(sys_pop(bodies) * ship_factor))
-      for _ = 1, ship_count do insert_new(bodies) end
+      local ship_count = love.math.random(math.ceil(sys_pop(ship.bodies)
+                                                       * ship_factor))
+      for _ = 1, ship_count do insert_new(ship, ship.bodies) end
    end,
 
-   update = function(bodies, dt)
+   update = function(ship, bodies, dt)
       -- move this to long_update in ship update loop?
       if(update_counter < 16) then
          update_counter = update_counter + dt
@@ -114,7 +114,7 @@ return {
          update_counter = 0
          local ship_count = lume.count(bodies, "ship")
          if(ship_count < (love.math.random() * sys_pop(bodies) * ship_factor)) then
-            insert_new(bodies, true)
+            insert_new(ship, bodies, true)
          end
       end
    end,
