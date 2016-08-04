@@ -141,17 +141,17 @@ return {
 
          -- TODO: not all messages should be immediately accessible
          if(input.command == "groups") then
-            local groups = fs.getDirectoryItems("data/news")
+            local groups = fs.getDirectoryItems("data/subnet")
             groups = lume.filter(groups, function(g)
-                                    return fs.isDirectory("data/news/" .. g)
+                                    return fs.isDirectory("data/subnet/" .. g)
             end)
             mission.record_event(ship, "subnet")
             return enc({status="ok", groups=groups})
          elseif(input.command == "list") then
-            local posts = fs.getDirectoryItems("data/news/" .. input.group)
+            local posts = fs.getDirectoryItems("data/subnet/" .. input.group)
             return enc({status="ok", posts=posts, group=input.group})
          elseif(input.command == "get") then
-            local text = fs.read("data/news/"..input.group.."/"..input.post)
+            local text = fs.read("data/subnet/"..input.group.."/"..input.post)
             if(text) then
                return enc({status="ok", content=text, post=input.post})
             else

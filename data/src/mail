@@ -73,6 +73,7 @@ local open_folder = function(folder)
    if(folder) then -- display the contents of the current folder.
       p("Folder: " .. folder .. "\n")
       local msgs = ship.docs.mail[folder]
+      ship.docs.mail[folder]._unread = ship.docs.mail[folder]._unread or {}
       for _,name in ipairs(subjects_by_date(msgs)) do
          local msg = msgs[name]
          if(name ~= "_unread") then
@@ -91,7 +92,7 @@ local open_folder = function(folder)
       table.insert(folder_list, 1, "inbox")
       for _,name in ipairs(folder_list) do
          table.insert(targets, name)
-         local unread_count = lume.count(ship.docs.mail[name]._unread)
+         local unread_count = lume.count(ship.docs.mail[name]._unread or {})
          local count = lume.count(ship.docs.mail[name]) - 1
          p(" [" .. unread_count .. "/" .. count .. "] " .. name)
       end

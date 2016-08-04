@@ -1,20 +1,30 @@
 -- -*- lua -*-
 
+function decode_list(str, t, total_len)
+   -- print("list", str, lume.serialize(t))
+   if(str:sub(1,1) == "e") then return t, total_len + 1 end
+   local value, v_len = decode(str)
+   table.insert(t, value)
+   total_len = total_len + v_len
+   return decode_list(str:sub(v_len + 1), t, total_len)
+end
+
 function decode_table(str, t, total_len)
+   -- print("table", str, lume.serialize(t))
+   if(str:sub(1,1) == "e") then return t, total_len + 1 end
    local key, k_len = decode(str)
    local value, v_len = decode(str:sub(k_len+1))
    local end_pos = 1 + k_len + v_len
    t[key] = value
    total_len = total_len + k_len + v_len
-   if(str:sub(end_pos) == "e") then
-      return t, total_len + 1
-   else
-      return decode_table(str:sub(end_pos), t, total_len)
-   end
+   return decode_table(str:sub(end_pos), t, total_len)
 end
 
 function decode(str)
-   if(str:sub(1,1) == "d") then
+   -- print("decoding", str)
+   if(str:sub(1,1) == "l") then
+      return decode_list(str:sub(2), {}, 1)
+   elseif(str:sub(1,1) == "d") then
       return decode_table(str:sub(2), {}, 1)
    elseif(str:sub(1,1) == "i") then
       return(tonumber(str:sub(2, str:find("e") - 1))), str:find("e")
@@ -31,7 +41,7 @@ end
 
 function encode_str(s) return #s .. ":" .. s end
 
-function encode(t) -- only works for simple k/v strings
+function encode(t) -- only works for simple k/v string tables
    local s = "d"
    for k,v in pairs(t) do
       s = s .. encode_str(k) .. encode_str(v)
@@ -40,12 +50,18 @@ function encode(t) -- only works for simple k/v strings
 end
 
 subnet_sync = function()
-  local c = ssh_get_connection("subnet", "reindeerflotilla")
-  for _,group in decode(c(encode({command="groups"}))) do
-     for _,post in decode(c(encode(subnet({command="list",group=group})))) do
-        print(post)
-        print(decode(c(encode(subnet({command="get",group=group,post=post})))).content)
-     end
-  end
-  c("logout")
+   local connection = ssh_get_connection("subnet", "reindeerflotilla")
+   if(not connection) then return "Could not connect." end
+   local c = function(command) return connection("subnet " .. command) end
+   local g_resp = c(encode({command="groups"}))
+   for _,group in ipairs(decode(g_resp).groups) do
+      ship.docs.mail[group] = ship.docs.mail[group] or {}
+      local group_table = ship.docs.mail[group]
+      local listing = c(encode({command="list",group=group}))
+      for _,post in ipairs(decode(listing).posts) do
+         local response = c(encode({command="get", group=group, post=post}))
+         group_table[post] = decode(response).content
+      end
+   end
+   c("logout")
 end

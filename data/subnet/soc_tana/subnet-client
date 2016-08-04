@@ -1,0 +1,39 @@
+From: Logefad Rivoud
+Subject: subnet client
+To: soc.tana
+Message-Id: 129f0b2b-c973-42b0-a2de-688b23e739e3
+Content-Type: text/plain; charset=UTF-8
+
+I'm curious to learn about protocols, so I'm thinking of writing my own subnet
+client. It looks like the `ssh_get_connection` function on my ship can be used
+to run commands and get the output back in a way I can use for my own programs,
+but the output itself is pretty confusing.
+
+
+
+From: Gigovecijum Louwat
+Subject: Re: subnet client
+To: soc.tana
+Message-Id: db9f722a-8197-4468-a66a-74820f7d4aa1
+In-Reply-To: 129f0b2b-c973-42b0-a2de-688b23e739e3
+Content-Type: text/plain; charset=UTF-8
+
+There's actually pretty decent description of the subnet protocol available
+online if you use the subnet system's built-in help. Here's the encoded message
+for the help command:
+
+    d7:command4:helpe
+
+That will tell you a fair bit about how to handle the decoding part. But you'll
+also need to know about how to get messages; I think that would be something
+like sending this and parsing the response to get a table of groups that contain
+messages:
+
+    d7:command6:groupe
+
+You'd have an outer loop that lists all the groups, then an inner loop that
+takes each group and lists all the messages, requesting each one and copying it
+into your ship's `docs.mail[group]` table.
+
+Just remember that the encoding/decoding of commands and responses is a separate
+step from the action of fetching and storing the messages.
