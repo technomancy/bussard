@@ -24,15 +24,20 @@ Any changes made to the stock config in `data/src` will not be visible to games
 begun before the changes were made. Use `ctrl-f1` to update your in-game config
 with the latest stock. Your old config files will be backed up.
 
-If you symlink your checkout of the game source into
-`~/.local/share/love/bussard/game` (or wherever LÖVE stores saves on your
-platform) then it will be available for in-game editing using the `ship.game`
-table. However, opening "real" files typically won't work properly from within
-the editor unless you open the file starting with a slash; (because dots in the
-filenames are interpreted differently for in-game files) for instance, this file
-would be opened with ctrl-o then `/Contributing.md`. Dogfooding for the win.
-
 You may find the contents of `spoilers/solutions` useful during development.
+
+## Self-hosting
+
+The text editor inside Bussard is very capable and should be comfortable to use
+for editing Lua by all but the most die-hard Emacs/Vim fans. It can be used not
+only for editing in-game code, but also for the source to the game itself if you
+are running from a checkout. When you press `ctrl-o` to open a file, put a `/`
+in front of the path of any files inside the checkout of the game to open it in
+the editor; for instance, `/Contributing.md` would open this file.
+
+If you want to use Bussard solely as a text editor, launch it with the `--no-game`
+argument and the update loop will be adjusted to use much less CPU by leaving
+out all the game calculations.
 
 ## Code style
 
