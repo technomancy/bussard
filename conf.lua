@@ -14,9 +14,41 @@ love.conf = function(t)
       repl:loadplugin("autoreturn")
       repl:loadplugin("pretty_print")
       t.window, love.run = false, function() repl:run() end
-   end
-   if(lume.find(arg, "--test") or lume.find(arg, "--fuzz")) then
+   elseif(lume.find(arg, "--test") or lume.find(arg, "--fuzz")) then
       t.window, t.modules.window, t.modules.graphics = false, false, false
       t.identity = "bussard-test"
+   elseif(lume.find(arg, "--no-game")) then
+      function love.run()
+         local ship = require("ship")
+         love.load()
+         love.keypressed = ship.api.editor.handle_key
+         love.textinput = ship.api.editor.handle_textinput
+         love.wheelmoved = ship.api.editor.handle_wheel
+         love.keyreleased = function() end
+         ship.api.editor.open(ship, "*console*")
+
+         while true do
+            love.event.pump()
+            for name, a,b,c,d,e,f in love.event.wait do
+               if(name == "quit") then
+                  if(not love.quit()) then os.exit() end
+               elseif(name == "keypressed") then
+                  love.keypressed(a,b,c,d,e,f)
+               elseif(name == "keyreleased") then
+                  love.keyreleased(a,b,c,d,e,f)
+               elseif(name == "textinput") then
+                  love.textinput(a,b,c,d,e,f)
+               elseif(name == "wheelmoved") then
+                  love.wheelmoved(a,b,c,d,e,f)
+               end
+
+               love.graphics.clear(love.graphics.getBackgroundColor())
+               love.graphics.origin()
+               ship.api.editor.draw(ship)
+               love.graphics.present()
+               love.event.pump()
+            end
+         end
+      end
    end
 end

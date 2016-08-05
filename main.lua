@@ -144,17 +144,10 @@ love.load = function()
    resize()
    ui.set_font(16)
 
-   if(arg[#arg] == "--no-game") then
-      love.draw = lume.fn(ship.api.editor.draw, ship)
-      love.keypressed = safely(ship.api.editor.handle_key)
-      love.textinput = safely(ship.api.editor.handle_textinput)
-      ship.api.editor.open(ship, "*console*")
-   else
-      stars = { starfield.new(10, 0.01, 100),
-                starfield.new(10, 0.05, 175),
-                starfield.new(10, 0.1, 255), }
-      ui.play()
-   end
+   stars = { starfield.new(10, 0.01, 100),
+             starfield.new(10, 0.05, 175),
+             starfield.new(10, 0.1, 255), }
+   ui.play()
 end
 
 love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end

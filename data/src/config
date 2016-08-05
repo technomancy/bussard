@@ -60,35 +60,7 @@ dofile("src.ssh") -- ssh mode for interacting with station/planet computers
 bind({"flight", "edit"}, "ctrl-m", mail)
 
 -- to open a file.
-bind({"flight", "edit"}, "ctrl-o", function()
-      -- this is more complicated because it offers live feedback as you type.
-      local callback = function(input, cancel)
-         -- open the file is given, but we don't support opening tables yet
-         if(not cancel and type(ship:find(input)) ~= "table") then
-            ship.editor.open(ship, input)
-         end
-      end
-      -- show completions as you go
-      local completer = function(input)
-         local completions = utils.completions_for(input, ship, ".")
-         -- different types should display differently
-         local decorate_type = function(path)
-            local x = ship:find(path)
-            if(type(x) == "table") then
-               return path .. "."
-            elseif(type(x) == "string") then
-               return path
-            else
-               return false
-            end
-         end
-         -- filter out non-table, non-string entries
-         return lume.sort(lume.filter(lume.map(completions, decorate_type)),
-                          function(s1, s2) return #s1 < #s2 end)
-      end
-      -- read_line takes a callback function that is called with input.
-      ship.editor.read_line("Open: ", callback, {completer=completer})
-end)
+bind({"flight", "edit"}, "ctrl-o", ship.editor.find_file)
 
 -- reload config
 bind({"flight", "edit"}, "ctrl-r", ship.editor.reload)

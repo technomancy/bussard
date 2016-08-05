@@ -634,7 +634,7 @@ return {
                table.insert(buffers, b)
             end
          else -- from the host filesystem
-            local fs_path = "game" .. path
+            local fs_path = path:sub(2)
             local lines = {}
             if(love.filesystem.exists(fs_path)) then
                for line in love.filesystem.lines(fs_path) do

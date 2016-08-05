@@ -1,15 +1,16 @@
 -- -*- lua -*-
 local e = ship.editor
 
-ship.editor.search = function(direction)
-   direction = direction or 1
+ship.editor.search = function(original_direction)
    local lines, point, point_line = e.get_lines(), e.point()
    local continue_from, path = point_line, e.current_buffer_path()
-   local on_change = function(find_next)
+   local on_change = function(find_next, new_direction)
       local input = e.get_input()
+      local direction = new_direction or original_direction or 1
+      local to = (direction < 1) and 1 or #lines
       if(input == "") then return end
       local line = find_next and continue_from or point_line
-      for i=line, #lines, direction do
+      for i=line, to, direction do
          local match_point = lines[i]:find(input)
          if(match_point) then
             continue_from = i + direction
@@ -34,7 +35,8 @@ ship.editor.search = function(direction)
                      ship.editor.prev_line()
                    end,
                    ["ctrl-f"]=lume.fn(on_change, true),
-                   ["ctrl-s"]=lume.fn(on_change, true)}})
+                   ["ctrl-s"]=lume.fn(on_change, true, 1),
+                   ["ctrl-r"]=lume.fn(on_change, true, -1),}})
 end
 
 ship.editor.replace = function()
@@ -81,7 +83,6 @@ ship.editor.switch_buffer = function()
 end
 
 ship.editor.reload = function()
-   -- save all open buffers before reloading
    for _,b in pairs(e.buffer_names()) do
       ship.editor.save(nil, b)
    end

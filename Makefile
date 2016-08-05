@@ -15,7 +15,7 @@ DATA_LUA=data/*.lua data/msgs/*.lua $(MISSION_LUA)
 GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) $(DATA_LUA) os/lisp/resources/portal.lsp
 ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
 
-PROSE=manual.md doc/*.md data/msgs/* data/motd/* data/news/* data/ships.txt data/docs/*
+PROSE=manual.md doc/*.md data/msgs/* data/motd/* data/subnet/* data/ships.txt data/docs/*
 MEDIA=assets/* assets/fonts/*
 META=readme.md LICENSE credits.md Changelog.md bussard.el
 
