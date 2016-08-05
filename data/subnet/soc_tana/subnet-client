@@ -37,3 +37,64 @@ into your ship's `docs.mail[group]` table.
 
 Just remember that the encoding/decoding of commands and responses is a separate
 step from the action of fetching and storing the messages.
+
+
+
+From: Logefad Rivoud
+Subject: Re: (2) subnet client
+To: soc.tana
+Message-Id: c9c5a8c9-e240-43c0-95a0-db86021472d7
+In-Reply-To: db9f722a-8197-4468-a66a-74820f7d4aa1
+Content-Type: text/plain; charset=UTF-8
+
+Cool; thanks. Here's what I figured out:
+
+    local decode = ship.actions.bencode_decode
+    local encode_str = function (s) return #s .. ":" .. s end
+    local encode = function(t) -- only works for simple k/v string tables
+      return table.concat({"d", unpack(lume.map(t, encode_str)), "e"})
+    end
+
+    subnet_sync = function()
+       local connection = ssh_get_connection("subnet", subnet_password)
+       if(not connection) then return "Could not connect." end
+
+       local sub = function(command) return connection("subnet " .. command) end
+       local g_resp = sub(encode({command="groups"}))
+
+       for _,group in ipairs(decode(g_resp).groups) do
+          ship.docs.mail[group] = ship.docs.mail[group] or {}
+          local listing = sub(encode({command="list",group=group}))
+
+          for _,post in ipairs(decode(listing).posts) do
+             local response = sub(encode({command="get", group=group, post=post}))
+             ship.docs.mail[group][post] = decode(response).content
+          end
+       end
+       c("logout")
+    end
+
+
+
+From: Ruvad Busaratut
+Subject: Re: (3) subnet client
+To: soc.tana
+Message-Id: 4094624d-3053-4a7b-b37e-6343a58b4ff6
+In-Reply-To: c9c5a8c9-e240-43c0-95a0-db86021472d7
+Content-Type: text/plain; charset=UTF-8
+
+Wait, where does the `decode' function here come from? I don't have
+access to that on my machine.
+
+
+
+From: Logefad Rivoud
+Subject: Re: (4) subnet client
+To: soc.tana
+Message-Id: c1d66e92-03ea-4ad5-b14c-8bebefa333d3
+In-Reply-To: 4094624d-3053-4a7b-b37e-6343a58b4ff6
+Content-Type: text/plain; charset=UTF-8
+
+Oh, that functionality comes from a bencode_decoder upgrade I bought; I
+think they're for sale at least on Nee Soon Station and Warnabu Station.
+Not cheap though.

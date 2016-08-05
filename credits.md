@@ -20,11 +20,6 @@ Distributed under the GNU General Public License version 3 or later; see LICENSE
   https://github.com/Stepets/utf8.lua
 * l2l Copyright © 2012-2015, Eric Man and contributors, distributed under 2-clause BSD license
   https://github.com/meric/l2l
-* bencode Copyright © 2009, 2010, 2011, 2012, 2014, 2016 by Moritz Wilhelmy
-  Copyright © 2012, 2014 by Jorge Visca
-  Copyright © 2009 by Kristofer Karlsson
-  Distributed under the MIT license
-  https://bitbucket.org/wilhelmy/lua-bencode/
 
 ## 3rd-party art
 

@@ -1,187 +1,71 @@
---[[
-	Lua module for handling bencoded data as used by bittorrent.
-
-	This module includes both a recursive decoder and a recursive encoder.
-
-	See the file COPYING included with the lua-bencode distribution for
-	details on copyright holders and the terms and conditions which apply
-	when copying this file.
-
-]]--
-
-local sort, concat, insert = table.sort, table.concat, table.insert
-local pairs, ipairs, type, tonumber = pairs, ipairs, type, tonumber
-local sub, find = string.sub, string.find
-
-local M = {version="2.2.0-1"}
-
--- helpers
-
-local function islist(t) 
-	local n = #t 
-	for k, v in pairs(t) do 
-		if type(k) ~= "number" 
-		or k % 1 ~= 0 		-- integer?
-		or k < 1
-		or k > n 
-		then 
-			return false 
-		end 
-	end 
-	for i = 1, n do
-		if t[i] == nil then 
-			return false 
-		end 
-	end 
-	return true
-end 
-
--- encoder functions
-
-local encode_rec -- encode_list/dict and encode_rec are mutually recursive...
-
-local function encode_list(t, x)
-
-	insert(t, "l")
-
-	for _,v in ipairs(x) do 
-		local err,ev = encode_rec(t, v);    if err then return err,ev end
-	end
-
-	insert(t, "e") 
+local function decode_list(str, t, total_len)
+   -- print("list", str, lume.serialize(t))
+   if(str:sub(1,1) == "e") then return t, total_len + 1 end
+   local value, v_len = decode(str)
+   table.insert(t, value)
+   total_len = total_len + v_len
+   return decode_list(str:sub(v_len + 1), t, total_len)
 end
 
-local function encode_dict(t, x)
-	insert(t, "d")
-	-- bittorrent requires the keys to be sorted.
-	local sortedkeys = {}
-	for k, v in pairs(x) do
-		if type(k) ~= "string" then
-			return "bencoding requires dictionary keys to be strings", k
-		end
-		insert(sortedkeys, k)
-	end
-	sort(sortedkeys)
-
-	for k, v in ipairs(sortedkeys) do
-		local err,ev = encode_rec(t, v);    if err then return err,ev end
-		      err,ev = encode_rec(t, x[v]); if err then return err,ev end
-	end
-	insert(t, "e")
+local function decode_table(str, t, total_len)
+   -- print("table", str, lume.serialize(t))
+   if(str:sub(1,1) == "e") then return t, total_len + 1 end
+   local key, k_len = decode(str)
+   local value, v_len = decode(str:sub(k_len+1))
+   local end_pos = 1 + k_len + v_len
+   t[key] = value
+   total_len = total_len + k_len + v_len
+   return decode_table(str:sub(end_pos), t, total_len)
 end
 
-local function encode_int(t, x)
-
-	if x % 1 ~= 0 then return "number is not an integer", x end
-	insert(t, "i" )
-	insert(t,  x  )
-	insert(t, "e" )
+local function decode(str)
+   -- print("decoding", str)
+   if(str:sub(1,1) == "l") then
+      return decode_list(str:sub(2), {}, 1)
+   elseif(str:sub(1,1) == "d") then
+      return decode_table(str:sub(2), {}, 1)
+   elseif(str:sub(1,1) == "i") then
+      return(tonumber(str:sub(2, str:find("e") - 1))), str:find("e")
+   elseif(str:match("[0-9]+")) then
+      local num_str = str:match("[0-9]+")
+      local beginning_of_string = #num_str + 2
+      local str_len = tonumber(num_str)
+      local total_len = beginning_of_string + str_len - 1
+      return str:sub(beginning_of_string, total_len), total_len
+   else
+      error("Could not parse "..str)
+   end
 end
 
-local function encode_str(t, x)
+local encode
 
-	insert(t, #x  ) 
-	insert(t, ":" )
-	insert(t,  x  )
+local function encode_str(s) return #s .. ":" .. s end
+local function encode_int(n) return "i" .. tostring(n) .. "e" end
+
+local function encode_table(t)
+   local s = "d"
+   for k,v in pairs(t) do s = s .. encode(k) .. encode(v) end
+   return s .. "e"
 end
 
-encode_rec = function(t, x, nolist)
-
-	local  typx = type(x)
-	if     typx == "string" then  return encode_str  (t, x)
-	elseif typx == "number" then  return encode_int  (t, x)
-	elseif typx == "table"  then
-
-       -- PNH: patched to support nolist for simpler semantics
-		if not nolist and islist(x) then  return encode_list (t, x)
-		else                              return encode_dict (t, x)
-		end
-	else
-		return "type cannot be converted to an acceptable type for bencoding", typx
-	end
+local function encode_list(l)
+   local s = "l"
+   for _,x in ipairs(l) do s = s .. encode(x) end
+   return s .. "e"
 end
 
--- call recursive bencoder function with empty table, stringify that table.
--- this is the only encode* function visible to module users.
-M.encode = function (x, nolist)
-
-	local t = {}
-	local err, val = encode_rec(t,x, nolist)
-	if not err then
-		return concat(t)
-	else
-		return nil, err, val
-	end
+function encode(x)
+   if(type(x) == "table" and select("#", unpack(x)) == lume.count(x)) then
+      return encode_list(x)
+   elseif(type(x) == "table") then
+      return encode_table(t)
+   elseif(type(x) == "number" and math.floor(x) == x) then
+      return encode_int(x)
+   elseif(type(x) == "string") then
+      return encode_str(x)
+   else
+      error("Could not encode " .. type(x) .. ": " .. tostring(x))
+   end
 end
 
--- decoder functions
-
-local function decode_integer(s, index) 
-	local a, b, int = find(s, "^(%-?%d+)e", index) 
-	if not int then return nil, "not a number", nil end
-	int = tonumber(int) 
-	if not int then return nil, "not a number", int end
-	return int, b + 1 
-end 
-
-local function decode_list(s, index) 
-	local t = {} 
-	while sub(s, index, index) ~= "e" do 
-		local obj, ev
-		obj, index, ev = M.decode(s, index) 
-		if not obj then return obj, index, ev end
-		insert(t, obj)
-	end 
-	index = index + 1 
-	return t, index 
-end 
-	 
-local function decode_dictionary(s, index) 
-	local t = {} 
-	while sub(s, index, index) ~= "e" do 
-		local obj1, obj2, ev
-
-		obj1, index, ev = M.decode(s, index) 
-		if not obj1 then return obj1, index, ev end
-
-		obj2, index, ev = M.decode(s, index) 
-		if not obj2 then return obj2, index, ev end
-
-		t[obj1] = obj2 
-	end 
-	index = index + 1 
-	return t, index 
-end 
-	 
-local function decode_string(s, index) 
-	local a, b, len = find(s, "^([0-9]+):", index) 
-	if not len then return nil, "not a length", len end
-	index = b + 1 
-	 
-	local v = sub(s, index, index + len - 1) 
-	if #v < tonumber(len) then return nil, "truncated string at end of input", v end
-	index = index + len 
-	return v, index 
-end 
-	 
-	 
-M.decode = function (s, index) 
-	if not s then return nil, "no data", nil end
-	index = index or 1 
-	local t = sub(s, index, index) 
-	if not t then return nil, "truncation error", nil end
-
-	if t == "i" then 
-		return decode_integer(s, index + 1) 
-	elseif t == "l" then 
-		return decode_list(s, index + 1) 
-	elseif t == "d" then 
-		return decode_dictionary(s, index + 1) 
-	elseif t >= '0' and t <= '9' then 
-		return decode_string(s, index) 
-	else 
-		return nil, "invalid type", t
-	end 
-end
-
-return M
+return {decode=decode, encode=encode}

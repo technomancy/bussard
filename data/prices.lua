@@ -15,5 +15,6 @@ return {
       solar_panel = 712,
       map = 512,
       jeejah = 1024,
+      bencode_decoder = 1024,
    },
 }

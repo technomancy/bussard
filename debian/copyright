@@ -38,13 +38,6 @@ Copyright: 2012-2015, Eric Man and contributors
 License: BSD-2-clause
 Comment: https://github.com/meric/l2l
 
-Files: bencode/init.lua
-Copyright: 2009, 2010, 2011, 2012, 2014, 2016 by Moritz Wilhelmy
-Copyright: 2012, 2014 by Jorge Visca
-Copyright: 2009 by Kristofer Karlsson
-License: Expat
-Comment: https://bitbucket.org/wilhelmy/lua-bencode/
-
 Files: assets/planet-*.png
 Copyright: 2013 Rawdanitsu
 License: CC0

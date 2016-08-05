@@ -222,5 +222,10 @@ return {
                  end
               end
             },
+   bencode_decoder = { stats = { mass = 0 },
+                       action = function(_, data)
+                          return require("bencode").decode(data)
+                       end
+                     },
    passponder = {}, -- in order not to explode existing saves
 }
