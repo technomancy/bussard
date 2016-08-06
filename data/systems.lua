@@ -426,9 +426,6 @@ local sys = {
                       agri=1, mineral=3,
                       upgrades={"laser"},
                      },
-                     {name = "Interportal: Lalande",
-                      image_name="portal-2", interportal=true,
-                      r=32000, mass=60, portal="Lalande", os=lisp},
                      {name = "Interportal: Mecalle",
                       image_name="portal-2", interportal=true,
                       r=36000, mass=60, portal="Mecalle", os=lisp}

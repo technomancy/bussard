@@ -178,8 +178,7 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2370 - Traxus founds Ikon Technologies
 
-* 2373 - SS Euclid arrives in Katilay, portal to Mecalle
-  established, Lalande portal fixed
+* 2373 - SS Euclid arrives in Katilay, portal to Mecalle established
 
 ## Fifth wave: Tana's colonization
 
