@@ -2,6 +2,12 @@
 
 BUILD_DATE=$(shell dpkg-parsechangelog --show-field=Date)
 
+# TODO:
+# * use fonts from apt
+# * patch makefile to remove "check" target
+# * package embedded libs? (lume, globtopattern, serpent, utf8)
+# * replace md5 lib with an FFI call
+
 %:
 	dh $@
 

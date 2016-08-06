@@ -1,3 +1,5 @@
+local encode, decode
+
 local function decode_list(str, t, total_len)
    -- print("list", str, lume.serialize(t))
    if(str:sub(1,1) == "e") then return t, total_len + 1 end
@@ -18,7 +20,7 @@ local function decode_table(str, t, total_len)
    return decode_table(str:sub(end_pos), t, total_len)
 end
 
-local function decode(str)
+function decode(str)
    -- print("decoding", str)
    if(str:sub(1,1) == "l") then
       return decode_list(str:sub(2), {}, 1)
@@ -36,8 +38,6 @@ local function decode(str)
       error("Could not parse "..str)
    end
 end
-
-local encode
 
 local function encode_str(s) return #s .. ":" .. s end
 local function encode_int(n) return "i" .. tostring(n) .. "e" end
@@ -58,7 +58,7 @@ function encode(x)
    if(type(x) == "table" and select("#", unpack(x)) == lume.count(x)) then
       return encode_list(x)
    elseif(type(x) == "table") then
-      return encode_table(t)
+      return encode_table(x)
    elseif(type(x) == "number" and math.floor(x) == x) then
       return encode_int(x)
    elseif(type(x) == "string") then
