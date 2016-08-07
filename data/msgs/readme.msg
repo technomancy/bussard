@@ -13,9 +13,9 @@ clear I can only tell you that further details would endanger everything
 we have worked so hard to achieve. Your memories may not return, but we
 are all confident that your purpose will become clear with time.
 
-Until then, there is much for you to discover here in this section of
-the galaxy. Know that we wish we could be with you now, but we will have
-died decades before you read this.
+Until then, there is much for you to discover here in this part of the
+galaxy. Know that we wish we could be with you now, but we will have died
+decades before you read this.
 
 Go now with our blessing.
 

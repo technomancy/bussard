@@ -16,6 +16,16 @@ in order to make testing login interaction easier.
 
 For story, background and guidelines, look at the dev guide in `spoilers/`.
 
+Non-code contributions are greatly appreciated; in particular in art and
+writing. The "subnet" discussions (see below) could use more threads to give
+texture to the universe.
+
+## Coding
+
+If you have never coded Lua before, don't fret! It's a very simple language;
+once you learn how [tables](doc/lua-5-tables.md) work it's very much like any
+other imperative dynamic language that leans heavily on closures.
+
 In order to skip around in the game for debugging, you can run `love . --act 1`
 to set all the event flags and deliver all the messages that you would normally
 get by a real play-through of the game up to that point.
@@ -195,6 +205,15 @@ Files in `data/missions` and `data/msgs` that are named after message-id headers
 should also have symlinks to them for human-readable names.
 
 Mail should stick to the typical header/body pattern; roughly RFC 822.
+
+#### Subnet
+
+Subnet is a usenet-like discussion platform in the game that is technically
+legal but has a reputation for being used for unsavory activities. Each subnet
+group corresponds to a directory in the `data/subnet` folder, and each file
+inside that corresponds to a thread in that group. Many threads are just random
+chatter to provide background and story, but some missions can only be accepted
+from subnet threads, and they also often contain useful code snippets.
 
 ### OS and SSH
 
