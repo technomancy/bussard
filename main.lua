@@ -140,6 +140,7 @@ love.load = function()
    if(arg[#arg] == "--wipe") then save.abort(ship) love.event.quit() end
    if(arg[#arg] == "--test") then return require("tests") end
    if(arg[#arg] == "--fuzz") then return require("tests.fuzz") end
+   if(arg[#arg-1] == "--backup") then save.backup(ship, arg[#arg]) end
 
    resize()
    ui.set_font(16)

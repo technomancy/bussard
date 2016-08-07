@@ -148,6 +148,11 @@ return {
       ship.aborting = true
    end,
 
+   backup = function(ship, path)
+      local save_dir = love.filesystem.getSaveDirectory()
+      os.execute("cp -r " .. save_dir .. " " .. save_dir .. "/../" .. path)
+   end,
+
    config_reset = function(ship)
       ship.api.src.bak = ship.api.src.bak or {}
       for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
