@@ -625,31 +625,11 @@ return {
       last_edit_buffer = b
       b = get_buffer(path)
       if(not b) then
-         if(not path:find("^/")) then
-            if(fs and fs:find(path) and type(fs:find(path)) ~= "string") then
-               -- Could support opening tables as directories like dired?
-               the_print("Tried to open a directory or something.")
-            else
-               b = make_buffer(fs, path)
-               table.insert(buffers, b)
-            end
-         else -- from the host filesystem
-            local fs_path = path:sub(2)
-            local lines = {}
-            if(love.filesystem.exists(fs_path)) then
-               for line in love.filesystem.lines(fs_path) do
-                  table.insert(lines, line)
-               end
-            else
-               local parts = lume.split(path, "/")
-               table.remove(parts, #parts)
-               if(love.filesystem.isDirectory(table.concat(parts), "/")) then
-                  table.insert(lines, "")
-               else
-                  return echo("Not a valid location")
-               end
-            end
-            b = make_buffer(fs, path, lines)
+         if(fs and fs:find(path) and type(fs:find(path)) ~= "string") then
+            -- Could support opening tables as directories like dired?
+            the_print("Tried to open a directory or something.")
+         else
+            b = make_buffer(fs, path)
             table.insert(buffers, b)
          end
 

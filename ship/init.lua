@@ -408,16 +408,30 @@ ship.api = {
 
    find = function(s, path)
       if(path == ".") then return s end
-      local parts = lume.split(path, ".")
-      local target = s
-      for _,p in ipairs(parts) do
-         if(type(target) == "table" and p ~= "") then
-            target = target[p]
-         elseif(p ~= "") then
-            return nil
+      if(path:find("^/")) then
+         if(love.filesystem.isFile(path)) then
+            return love.filesystem.read(path)
+         else
+            local parts = lume.split(path, "/")
+            table.remove(parts, #parts)
+            if(love.filesystem.isDirectory(table.concat(parts), "/")) then
+               return ""
+            else
+               return s.editor.echo("Not a valid location")
+            end
          end
+      else
+         local parts = lume.split(path, ".")
+         local target = s
+         for _,p in ipairs(parts) do
+            if(type(target) == "table" and p ~= "") then
+               target = target[p]
+            elseif(p ~= "") then
+               return nil
+            end
+         end
+         return target
       end
-      return target
    end,
 
    dofile = lume.fn(sandbox_dofile, ship),
