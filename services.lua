@@ -134,10 +134,13 @@ return {
 
    subnet = {
       request = function(ship, input_string)
-         local enc = function(x) return bencode.encode(x, true) end
+         local enc = function(x)
+            local ok, val = pcall(bencode.encode, x)
+            return (ok and val), (ok or val)
+         end
          local fs = love.filesystem
-         local input, err = bencode.decode(input_string)
-         if(not input) then return nil, err end
+         local ok, input = pcall(bencode.decode, input_string)
+         if(not ok) then return nil, input end
 
          -- TODO: not all messages should be immediately accessible
          if(input.command == "groups") then
