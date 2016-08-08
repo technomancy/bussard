@@ -80,7 +80,7 @@ mac: love
 	mv releases/Bussard-macosx-x64.zip releases/bussard-$(VERSION)-macosx-x64.zip
 
 windows: love
-	$(REL) $(FLAGS) -W
+	$(REL) $(FLAGS) -W -W32
 	mv releases/Bussard-win32.zip releases/bussard-$(VERSION)-windows.zip
 
 deb: love

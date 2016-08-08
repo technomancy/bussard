@@ -148,7 +148,7 @@ return {
       ship.aborting = true
    end,
 
-   backup = function(ship, path)
+   backup = function(path)
       local save_dir = love.filesystem.getSaveDirectory()
       os.execute("cp -r " .. save_dir .. " " .. save_dir .. "/../" .. path)
    end,
