@@ -14,8 +14,8 @@ return {["Luyten's Star:Sol"] = {["background_check"] = "Interportal requires ba
 
    ["Sol:Ross"] = {["find_dorath_accept"] = no_terran},
    ["Sol:Lalande"] = {["find_dorath_accept"] = no_terran},
-   ["Lalande:Katilay"] = {["find_dorath_accept"] = katilay_damaged},
-   ["Mecalle:Katilay"] = {["find_dorath_accept"] = no_katilay},
-   ["Lalande:Yueh"] = {["find_dorath_accept"] = no_yueh},
-   ["Bohk:Yueh"] = {["find_dorath_accept"] = no_yueh},
+   ["Lalande:Katilay"] = {[{}] = katilay_damaged},
+   ["Mecalle:Katilay"] = {[{}] = no_katilay},
+   ["Lalande:Yueh"] = {[{}] = no_yueh},
+   ["Bohk:Yueh"] = {[{}] = no_yueh},
 }

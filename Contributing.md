@@ -24,7 +24,9 @@ texture to the universe.
 
 If you have never coded Lua before, don't fret! It's a very simple language;
 once you learn how [tables](doc/lua-5-tables.md) work it's very much like any
-other imperative dynamic language that leans heavily on closures.
+other imperative dynamic language that leans heavily on closures. The only parts
+that use advanced language features (metatables and coroutines) are the OS
+filesystem and scheduler, and the read-only proxy tables like `ship.api.status`.
 
 In order to skip around in the game for debugging, you can run `love . --act 1`
 to set all the event flags and deliver all the messages that you would normally
@@ -32,7 +34,8 @@ get by a real play-through of the game up to that point.
 
 Any changes made to the stock config in `data/src` will not be visible to games
 begun before the changes were made. Use `ctrl-f1` to update your in-game config
-with the latest stock. Your old config files will be backed up.
+with the latest stock. Your old config files will be backed up, and the
+`ship.host` table will remain between wiping save games.
 
 You may find the contents of `spoilers/solutions` useful during development.
 
@@ -140,7 +143,8 @@ The `ship` table (loaded from `ship/init.lua`) contains all game state. In
 particular, `ship.bodies` is the table for all the worlds, asteroids, and ships
 in the current system, and `ship.systems` contains all systems. (I guess it
 doesn't make all that much sense, but it's very convenient.) The `ship.systems`
-table is loaded from the `data/systems.lua` file.
+table is loaded from the `data/systems.lua` file; `ship.bodies` is set with the
+worlds of the current system when you enter it, plus asteroids and ships as needed.
 
 The `ship` table furthermore has a `.api` field on it which is the part of the
 ship which is exposed to the in-game sandboxed user code. Certain fields of
@@ -190,7 +194,7 @@ in `mission.update` and other functions.
 #### Mail
 
 Mail is stored in-game in `ship.api.docs.mail`. There are basically 3 things
-that trigger mail delivery: timed events based on `data/msgs/timed.lua`,
+that can trigger mail delivery: timed events based on `data/msgs/timed.lua`,
 replying to a message, or something happening within a mission. Messages are in
 `data/msgs`.
 
@@ -215,12 +219,15 @@ inside that corresponds to a thread in that group. Many threads are just random
 chatter to provide background and story, but some missions can only be accepted
 from subnet threads, and they also often contain useful code snippets.
 
+Subnet threads should be a series of line-break-delimited RFC 822-ish messages
+without `Date:` headers.
+
 ### OS and SSH
 
 The worlds you SSH into mostly run the Orb unix-like operating system, which is
 found in `os/orb`. All the scripts that run inside the OS are found in
 `resources` in that directory. The portals run the `os/lisp` operating system,
-and the `os/forth` OS will be used for the domain injector in the finale.
+and the `os/forth` OS will be used later on.
 
 The code that runs inside SSH connections is sandboxed similarly to code that
 runs on the ship's computer, but a different set of functions is exposed; see
@@ -244,7 +251,7 @@ sessions which connect you to worlds and the messaging system. The user is free
 to define their own modes as well. Key presses are translated by the editor into
 text insertions or commands based on the keymap for the current mode; a system
 which is largely based on Emacs. See `find_binding`, `define_mode`, and `bind`
-in `ship/init.lua`, and `data/src/config` for a usage example. The commands
+in `ship/editor.lua`, and `data/src/config` for a usage example. The commands
 which the non-flight modes bind are typically defined in `ship/editor.lua`.
 
 ### Save

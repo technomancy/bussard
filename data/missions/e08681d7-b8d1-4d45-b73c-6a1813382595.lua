@@ -18,7 +18,11 @@ return {
    end,
 
    on_accept = function(ship)
-      mail.deliver_msg("ship", "find-dorath-accept.msg")
+      mail.deliver_msg(ship, "find-dorath-accept.msg")
       mission.record_event(ship, "find_dorath_accept")
+   end,
+
+   check_success = function(ship)
+      return false -- TODO: make this mission winnable
    end,
 }
