@@ -22,7 +22,7 @@ return {
       mission.record_event(ship, "find_dorath_accept")
    end,
 
-   check_success = function(ship)
+   check_success = function(_)
       return false -- TODO: make this mission winnable
    end,
 }
