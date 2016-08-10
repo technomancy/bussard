@@ -22,8 +22,13 @@ ship.controls["right"] = ship.actions.right
 ship.controls["="] = zoom_in
 ship.controls["-"] = zoom_out
 
+local draw = function()
+   local y = (graphics:getHeight() - graphics.getFont():getHeight() * 2)
+   graphics.print(ship.editor.last_line(), 20, y)
+end
+
 ---- Flight mode
-define_mode("flight")
+define_mode("flight", nil, {draw=draw})
 
 -- bind is for commands that only call their functions once even when held.
 -- it takes the name of a mode, a key combo, and a function to run when pressed.

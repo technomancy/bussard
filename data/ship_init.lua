@@ -12,6 +12,8 @@ return function(ship)
         archive = { _unread = {} },
       }
    for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
-      ship.api.src[v] = ship.api.src[v] or love.filesystem.read("data/src/" .. v)
+      ship.api.src[v] = ship.api.src[v] or love.filesystem.read("data/src/"..v)
    end
+   ship.api.editor.print("This is the console. Enter any code for your " ..
+                         "ship's computer to run it; run man() for help.")
 end

@@ -477,6 +477,11 @@ ship.api = {
    mode = editor.mode,
    activate_mode = function(_, mode) editor.activate_mode(mode) end,
    read_line = function(_, p, cb) editor.activate_minibuffer(p, cb) end,
+   draw_flight = function()
+      local y = (love.graphics:getHeight() -
+                    love.graphics.getFont():getHeight() * 2)
+      love.graphics.print(ship.api.editor.last_line(), 20, y)
+   end,
 }
 
 return ship

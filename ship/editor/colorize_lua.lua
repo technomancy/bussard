@@ -1,6 +1,8 @@
 -- Take a table of lines and turn it into a table of {color, string,
 -- color2, string2} which can be used by love.graphics.print.
 
+local lume = require("lume")
+
 local keywords = {"and", "break", "do", "else", "elseif", "end", "false",
                   "for", "function", "if", "in", "local", "nil", "not", "or",
                   "repeat", "return", "then", "true", "until", "while", }

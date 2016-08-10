@@ -45,8 +45,7 @@ local make_buffer = function(fs, path, lines, props)
 end
 
 -- table of classifier -> {red, green, blue} color
-local colors = {flight_text = {0,200,0},
-                mark = {0, 125, 0},
+local colors = {mark = {0, 125, 0},
                 point = {0, 125, 0},
                 point_line = {0, 50, 0, 190},
                 minibuffer_bg = {0, 200, 0},
@@ -62,13 +61,11 @@ local colors = {flight_text = {0,200,0},
                 background = {0, 0, 0, 240},
                }
 
-local console = make_buffer(nil, "*console*",
-                            {"This is the console. Enter any code for your " ..
-                             "ship's computer to run it; run man() for help.", "> "})
+local console = make_buffer(nil, "*console*", {"", "> "})
 console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt, console.max_lines = "console", "> ", 512
 
--- b here is the current buffer; when it is nil it means you're in flight mode
+-- b here is the current buffer; when it is nil it means the editor is disabled
 -- behind_minibuffer is the buffer that  is shown while the minibuffer is active
 local b, behind_minibuffer = nil, nil
 -- echo messages show feedback while in the editor, until a new key is pressed
@@ -143,7 +140,7 @@ end
 -- all edits (commands and insertions) run inside this function; it handles
 -- tracking undo status as well as enforcing certain rules.
 local wrap = function(fn, ...)
-   if(not b) then return fn(...) end -- no undo tracking for flight mode
+   if(not b) then return fn(...) end -- no undo tracking when disabled
    b.dirty = false
    local last_state = b and state()
    if(fn ~= undo) then b.undo_at = 0 end
@@ -155,7 +152,7 @@ local wrap = function(fn, ...)
       echo_message = nil
    end
 
-   if(not b) then return end -- did we switch to flight mode?
+   if(not b) then return end -- did we disable?
    if(b.dirty) then
       table.insert(b.history, last_state)
       local on_change = get_prop("on_change")
@@ -226,7 +223,7 @@ local region = function()
    end
 end
 
-local in_prompt = function(line, point, line2, _point2)
+local in_prompt = function(line, point, line2)
    if(printing_prompt or not b.prompt) then return false end
    if((line2 or line) == line and line ~= #b.lines) then return false end
    if(line == #b.lines and point >= utf8.len(b.prompt)) then return false end
@@ -608,17 +605,6 @@ local activate_mode = function(mode_name)
    if(new_mode.activate) then new_mode.activate() end
 end
 
-local draw_flight = function()
-   love.graphics.setColor(colors.flight_text)
-   local x, y = 20, (love.graphics:getHeight() -
-                        love.graphics.getFont():getHeight() * 2)
-   if(console.lines[#console.lines] == console.prompt) then
-      love.graphics.print(last_line, x, y)
-   else
-      love.graphics.print(console.lines[#console.lines], x, y)
-   end
-end
-
 -- TODO: organize these better
 return {
    open = function(fs, path)
@@ -810,11 +796,6 @@ return {
 
    system_yank = system_yank,
 
-   print_kill_ring = function()
-      print("Kill ring:")
-      pp(kill_ring)
-   end,
-
    eval_buffer = function()
       assert(b.fs and b.fs.load, "No loading context available.")
       b.fs:load(b.path)
@@ -822,12 +803,12 @@ return {
 
    undo = undo,
 
-   draw = function(ship)
+   draw = function(status)
       local mode = get_current_mode()
-      if(not b) then
-         draw_flight()
-      elseif(mode and mode.props.draw) then
-         mode.props.draw(ship)
+      -- TODO/blocker: backwards-compatibility with drawless flight mode
+      if(mode and mode.props.draw) then
+         love.graphics.setColor(colors.text)
+         mode.props.draw(status)
       else
          local w,h = love.window.getMode()
          local full = {10,10,w,h}
@@ -874,6 +855,14 @@ return {
 
    last_buffer = function()
       return last_edit_buffer and last_edit_buffer.path
+   end,
+
+   last_line = function()
+      if(console.lines[#console.lines] == console.prompt) then
+         return last_line
+      else
+         return console.lines[#console.lines]
+      end
    end,
 
    insert = insert,
