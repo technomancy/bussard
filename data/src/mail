@@ -4,7 +4,7 @@
 -- mail, and the second defines a mode for reading messages.
 
 mail = function()
-   ship.editor.open(nil, "*mail*")
+   editor.open(nil, "*mail*")
    ship:activate_mode("mail")
 end
 
@@ -48,12 +48,12 @@ local archive_key = "alt-a"
 -- sometimes the modeline should show a hint hint for the archive command.
 local set_modeline = function(folder)
    if(folder == "archive") then
-      ship.editor.set_modeline(function(b)
+      editor.set_modeline(function(b)
             return utf8.format(" %s  -  (%s/%s)  %s",
                                folder, b.point_line, #b.lines,
                                b.mode, archive_key) end)
    else
-      ship.editor.set_modeline(function(b)
+      editor.set_modeline(function(b)
             return utf8.format(" %s  -  (%s/%s)  %s   Press %s to archive.",
                                folder or "folders", b.point_line, #b.lines,
                                b.mode, archive_key) end)
@@ -61,13 +61,13 @@ local set_modeline = function(folder)
 end
 
 local open_folder = function(folder)
-   ship.editor.set_prop("read_only", false)
-   ship.editor.end_of_buffer()
-   local point, point_line = ship.editor.point()
-   ship.editor.delete(1, 0, point_line, point)
+   editor.set_prop("read_only", false)
+   editor.end_of_buffer()
+   local point, point_line = editor.point()
+   editor.delete(1, 0, point_line, point)
    set_modeline(folder)
 
-   local p = function(x) ship.editor.raw_write(x .. "\n") end
+   local p = function(x) editor.raw_write(x .. "\n") end
    targets = {}
 
    if(folder) then -- display the contents of the current folder.
@@ -97,10 +97,10 @@ local open_folder = function(folder)
          p(" [" .. unread_count .. "/" .. count .. "] " .. name)
       end
    end
-   ship.editor.beginning_of_buffer()
-   ship.editor.next_line()
-   ship.editor.next_line()
-   ship.editor.set_prop("read_only", true)
+   editor.beginning_of_buffer()
+   editor.next_line()
+   editor.next_line()
+   editor.set_prop("read_only", true)
 end
 
 -- inherit most bindings from edit, but disable text insertion
@@ -121,17 +121,17 @@ local view_modeline = function(b)
 end
 
 local open_message_or_folder = function()
-   local line = ship.editor.get_line_number()
+   local line = editor.get_line_number()
    local target = targets[line-2] -- two lines at the top before listing
 
    if(type(target) == "table") then -- two values means open individual msg
       local folder, name = unpack(target)
       ship.docs.mail[folder]._unread[name] = nil
       open_folder(folder)
-      ship.editor.open(ship, "docs.mail." .. folder .. "." .. name)
+      editor.open(ship, "docs.mail." .. folder .. "." .. name)
       ship:activate_mode("view")
-      ship.editor.set_prop("read_only", true)
-      ship.editor.set_modeline(view_modeline)
+      editor.set_prop("read_only", true)
+      editor.set_modeline(view_modeline)
    else -- single value means open a folder
       open_folder(target)
    end
@@ -140,7 +140,7 @@ end
 bind("mail", "return", open_message_or_folder)
 
 local archive_from_folder = function()
-   local line = ship.editor.get_line_number()
+   local line = editor.get_line_number()
    local target = targets[line-2] -- two lines at the top before listing
    if(type(target) == "table") then -- two values means a message
       local folder, name = unpack(target)
@@ -157,23 +157,23 @@ bind("mail", archive_key, archive_from_folder)
 define_mode("view", "edit", true)
 
 local archive = function()
-   local path = ship.editor.current_buffer_path()
+   local path = editor.current_buffer_path()
    local _, _, folder, name = unpack(lume.split(path, "."))
    ship.docs.mail.archive[name] = ship.docs.mail[folder][name]
    ship.docs.mail[folder]._unread[name] = nil
    ship.docs.mail[folder][name] = nil
-   ship.editor.close()
-   ship.editor.change_buffer("*mail*")
+   editor.close()
+   editor.change_buffer("*mail*")
    open_folder(folder)
 end
 
 bind("view", "alt-a", archive)
 
 local reply = function()
-   local id = header(ship.editor.get_lines(), "Message.Id")
+   local id = header(editor.get_lines(), "Message.Id")
    local success, status = reply(id)
-   ship.editor.close()
-   ship.editor.open(ship, "*console*")
+   editor.close()
+   editor.open(ship, "*console*")
    if(success) then
       print("Replied.", status)
    else

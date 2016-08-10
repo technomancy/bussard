@@ -31,7 +31,7 @@ bind("flight", "escape", ship.ui.pause)
 
 -- you can bind keys to existing functions or inline functions.
 bind("flight", "ctrl-return", function()
-        ship.editor.change_buffer(ship.editor.last_buffer() or "*console*")
+        editor.change_buffer(editor.last_buffer() or "*console*")
 end)
 
 -- the mouse wheel is handled just like any other key press.
@@ -60,10 +60,10 @@ dofile("src.ssh") -- ssh mode for interacting with station/planet computers
 bind({"flight", "edit"}, "ctrl-m", mail)
 
 -- to open a file.
-bind({"flight", "edit"}, "ctrl-o", ship.editor.find_file)
+bind({"flight", "edit"}, "ctrl-o", editor.find_file)
 
 -- reload config
-bind({"flight", "edit"}, "ctrl-r", ship.editor.reload)
+bind({"flight", "edit"}, "ctrl-r", editor.reload)
 
 -- connect to target over ssh.
 bind("flight", "ctrl-s", ssh)

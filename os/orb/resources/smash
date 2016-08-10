@@ -17,7 +17,7 @@ else
    end
 
    while true do
-      set_prompt(orb.utils.interp(env.PROMPT, env))
+      term.set_prompt(orb.utils.interp(env.PROMPT, env))
       local input = orb.expand_globs(f, orb.utils.interp(io.read(), env), env)
       if not input or input == "exit" or input == "logout" then return end
 

@@ -88,6 +88,7 @@ local sandbox = function(ship)
                      { help = help.message,
                        print = ship.api.editor.print,
                        ship = ship.api,
+                       editor = editor,
                        universe = universe_api,
                        _LOADED = sandbox_loaded,
                        dofile = lume.fn(sandbox_dofile, ship),

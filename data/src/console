@@ -3,39 +3,39 @@
 
 define_mode("console", "edit") -- inherit bindings from edit
 
-bind("console", "ctrl-a", ship.editor.beginning_of_input)
-bind("console", "home", ship.editor.beginning_of_input)
+bind("console", "ctrl-a", editor.beginning_of_input)
+bind("console", "home", editor.beginning_of_input)
 
-bind("console", "alt-p", ship.editor.history_prev)
-bind("console", "alt-n", ship.editor.history_next)
-bind("console", "ctrl-up", ship.editor.history_prev)
-bind("console", "ctrl-down", ship.editor.history_next)
+bind("console", "alt-p", editor.history_prev)
+bind("console", "alt-n", editor.history_next)
+bind("console", "ctrl-up", editor.history_prev)
+bind("console", "ctrl-down", editor.history_next)
 
 local jump_to_error = function()
-   local _, point_line = ship.editor.point()
-   local line = ship.editor.get_line(point_line)
+   local _, point_line = editor.point()
+   local line = editor.get_line(point_line)
    -- Pattern matches "<spaces>[string "buffer-name"]:line-number"
    local buffer, line_num = line:match("%s*%[string \"([^\"]*)\"%]:(%d*)")
    if(buffer and ship:find(buffer)) then
-      ship.editor.open(ship, buffer)
-      ship.editor.go_to(tonumber(line_num))
+      editor.open(ship, buffer)
+      editor.go_to(tonumber(line_num))
       return true
    end
 end
 
 bind("console", "return", function()
         -- if you're not on the last line, enter just bumps you down.
-        if(ship.editor.get_line_number() ~= ship.editor.get_max_line()) then
+        if(editor.get_line_number() ~= editor.get_max_line()) then
            if(not jump_to_error()) then
-              ship.editor.end_of_buffer()
+              editor.end_of_buffer()
            end
         end
 
-        local input = ship.editor.get_input()
-        ship.editor.history_push(input)
-        ship.editor.end_of_line()
-        ship.editor.newline()
-        ship.editor.no_mark()
+        local input = editor.get_input()
+        editor.history_push(input)
+        editor.end_of_line()
+        editor.newline()
+        editor.no_mark()
 
         -- try to compile the input.
         local chunk, err = loadstring("return " .. input)
@@ -43,8 +43,8 @@ bind("console", "return", function()
            chunk, err = loadstring(input)
            if(not chunk) then
               print("! Compilation error: " .. err or "Unknown error")
-              ship.editor.print_prompt()
-              ship.editor.end_of_buffer()
+              editor.print_prompt()
+              editor.end_of_buffer()
               return false
            end
         end
@@ -56,8 +56,8 @@ bind("console", "return", function()
                                       err = e end))
         if(result[1]) then
            local output, i = pps(result[2]), 3
-           if result[2] == ship.editor.invisible then
-              ship.editor.print_prompt()
+           if result[2] == editor.invisible then
+              editor.print_prompt()
               return true
            end
            -- pretty-print out the values it returned.
@@ -76,17 +76,17 @@ bind("console", "return", function()
               if(i < #lines - 8) then realprint(l) print(l) end
            end
         end
-        ship.editor.print_prompt()
+        editor.print_prompt()
 end)
 
 -- auto-completion saves you typing!
 local complete = function()
-   local point, point_line = ship.editor.point()
+   local point, point_line = editor.point()
    -- only complete if you're on the last line (input area)
-   if(point_line ~= ship.editor.get_max_line()) then return end
+   if(point_line ~= editor.get_max_line()) then return end
    -- strip out the prompt.
-   local line = utf8.sub(ship.editor.get_line(0),
-                         utf8.len(ship.editor.get_prompt()) + 1, point)
+   local line = utf8.sub(editor.get_line(0),
+                         utf8.len(editor.get_prompt()) + 1, point)
    -- what's the expression being completed?
    local entered = lume.last(lume.array((line):gmatch("[._%a0-9]+"))) or ""
    -- only complete if something is entered
@@ -96,13 +96,13 @@ local complete = function()
    -- if there's only one completion candidate, insert it. otherwise insert the
    -- longest unambiguous substring and display a list of candidates.
    if(#completions == 1) then
-      ship.editor.textinput(utf8.sub(completions[1], #entered + 1))
+      editor.textinput(utf8.sub(completions[1], #entered + 1))
    elseif(#completions > 0) then
       local common = utils.longest_common_prefix(completions)
       if(common == entered) then
          print(table.concat(completions, " "))
       else
-         ship.editor.textinput(utf8.sub(common, #entered + 1))
+         editor.textinput(utf8.sub(common, #entered + 1))
       end
    end
 end

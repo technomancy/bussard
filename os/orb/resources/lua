@@ -34,7 +34,7 @@ elseif(args[1] == "--help" or #args > 0) then
 else
    print("Lua 5.1.6259 Copyright (C) 1994-2422 Lua.org, PUC-Rio")
    print("Run `exit()` to exit.")
-   set_prompt(">> ")
+   term.set_prompt(">> ")
    while true do
       local input = io.read()
       if(not input or input == "exit" or input == "exit()") then return end

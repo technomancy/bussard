@@ -6,7 +6,7 @@ if(lume.find(args, "--help")) then
    print("Establish raw subnet connection.")
 elseif(#args == 0) then
    while true do
-      set_prompt("@ ")
+      term.set_prompt("@ ")
       local input = io.read()
       if(not input or input == "exit" or input == "logout") then
          logout()

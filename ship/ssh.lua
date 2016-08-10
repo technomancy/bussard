@@ -80,6 +80,8 @@ local sandbox = function(ship, target)
       ship = ship.api,
       distance = lume.fn(utils.distance, ship, ship.target),
       os = {time = lume.fn(utils.time, ship)},
+      term = { set_prompt = ship.api.editor.set_prompt,
+               get_prompt = ship.api.editor.get_prompt },
       set_prompt = ship.api.editor.set_prompt,
       get_prompt = ship.api.editor.get_prompt,
       pps = function(x) return serpent.block(x, serpent_opts) end,

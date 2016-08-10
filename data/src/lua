@@ -1,7 +1,7 @@
 -- Mode for -*- lua -*- files
 
--- change color for comments:              red green blue
-ship.editor.set_colors({"lua", "comment"}, {10, 120, 10})
+-- change color for comments:         red green blue
+editor.set_colors({"lua", "comment"}, {10, 120, 10})
 
-define_mode("lua", "edit", {on_change = ship.editor.colorize_lua,
-                            activate = ship.editor.colorize_lua,})
+define_mode("lua", "edit", {on_change = editor.colorize_lua,
+                            activate = editor.colorize_lua,})

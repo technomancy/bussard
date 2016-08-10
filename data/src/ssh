@@ -3,16 +3,16 @@
 
 -- initiate the connection. command may be nil.
 ssh = function(username, password, command)
-   ship.editor.change_buffer("*console*")
+   editor.change_buffer("*console*")
    if(ship.status.target and ship.status.target.os) then
       ssh_connect(username or "guest", password or "", command)
-      ship.editor.end_of_buffer()
-      ship.editor.no_mark()
-      ship.editor.activate_mode("ssh")
+      editor.end_of_buffer()
+      editor.no_mark()
+      editor.activate_mode("ssh")
    else
       print("Cannot log into target.")
    end
-   return ship.editor.invisible
+   return editor.invisible
 end
 
 portal = function()
@@ -21,35 +21,35 @@ portal = function()
    else
       print("Cannot activate portal.")
    end
-   return ship.editor.invisible
+   return editor.invisible
 end
 
 define_mode("ssh", "console") -- inherit bindings from console
 
 -- send input to whatever remote OS you're connected to.
 bind("ssh", "return", function()
-        local input = lume.trim(ship.editor.get_input())
+        local input = lume.trim(editor.get_input())
 
         if(input == "logout") then
-           ship.editor.newline()
+           editor.newline()
            logout()
         else
-           ship.editor.history_push(input)
+           editor.history_push(input)
            ssh_send_line(input)
-           ship.editor.newline(2)
-           ship.editor.print_prompt()
-           ship.editor.end_of_buffer()
-           ship.editor.no_mark()
+           editor.newline(2)
+           editor.print_prompt()
+           editor.end_of_buffer()
+           editor.no_mark()
         end
 end)
 
 bind("ssh", "ctrl-d", function()
-        local _, line = ship.editor.point()
-        if(line == ship.editor.get_max_line() and
-           ship.editor.get_input() == "") then
+        local _, line = editor.point()
+        if(line == editor.get_max_line() and
+           editor.get_input() == "") then
            logout()
            print("Logged out.")
         else
-           ship.editor.delete_forwards()
+           editor.delete_forwards()
         end
 end)

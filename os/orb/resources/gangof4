@@ -1,7 +1,7 @@
 -- -*- lua -*-
 
-local original_prompt = get_prompt()
-set_prompt("] ")
+local original_prompt = term.get_prompt()
+term.set_prompt("] ")
 
 local clone = function(x)
    return lume.deserialize(lume.serialize(x))
@@ -311,7 +311,7 @@ local function round(hands, turn, played, players)
                p:close()
             end
          end
-         set_prompt(original_prompt)
+         term.set_prompt(original_prompt)
       else
          local play = get_cards(hand, input)
          printall(players, "Player " .. turn .. " played: " ..

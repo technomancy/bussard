@@ -31,15 +31,14 @@ check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --globals lume utf8 pack ship define_mode bind utils realprint pp pps \
 	            mail ssh ssh_connect portal logout ssh_send_line reply \
-	            toggle_fps replyable \
+	            editor toggle_fps replyable \
 	  -- $(IN_SHIP_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --exclude-files=*.lsp \
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel pps \
-	            accept_mission set_prompt get_prompt buy_upgrade sell_upgrade \
+	            accept_mission term buy_upgrade sell_upgrade \
 	            subnet logout upgrade_help \
 	  -- $(IN_OS_LUA)
-	luacheck --no-color --std luajit --ignore 21/_.* --globals love lume \
-	  get_prompt set_prompt \
+	luacheck --no-color --std luajit --ignore 21/_.* --globals love lume term \
 	  -- $(DATA_LUA)
 
 test: ; love . --test
