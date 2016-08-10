@@ -129,6 +129,7 @@ love.load = function()
    if(arg[#arg] == "--test") then save.abort(ship) end
 
    love.keyboard.setKeyRepeat(true)
+   love.keyboard.setTextInput(true)
    ship:configure(systems, ui)
    save.load_into(ship)
    ship:dofile("src.config")
