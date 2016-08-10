@@ -46,7 +46,6 @@ love.conf = function(t)
                love.graphics.origin()
                ship.api.editor.draw(ship)
                love.graphics.present()
-               love.event.pump()
             end
          end
       end
