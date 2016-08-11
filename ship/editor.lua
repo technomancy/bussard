@@ -1039,7 +1039,7 @@ return {
          local target = colors
          local last = table.remove(color, #color)
          for _,v in ipairs(color) do
-            target = target[v] or {}
+            target = target[v]
          end
          target[last] = value
       end
