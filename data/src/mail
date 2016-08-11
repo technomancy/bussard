@@ -138,6 +138,7 @@ local open_message_or_folder = function()
 end
 
 bind("mail", "return", open_message_or_folder)
+bind("mail", "alt-up", open_folder)
 
 local archive_from_folder = function()
    local line = editor.get_line_number()
@@ -156,6 +157,12 @@ bind("mail", archive_key, archive_from_folder)
 -- inherit most bindings from edit, but disable text insertion
 define_mode("view", "edit", true)
 
+local open_up_folder = function()
+   local path = editor.current_buffer_path()
+   local folder = path:match("docs.mail.([^\\.]+).")
+   open_folder(folder)
+end
+
 local archive = function()
    local path = editor.current_buffer_path()
    local _, _, folder, name = unpack(lume.split(path, "."))
@@ -168,6 +175,7 @@ local archive = function()
 end
 
 bind("view", "alt-a", archive)
+bind("view", "alt-up", open_up_folder)
 
 local reply = function()
    local id = header(editor.get_lines(), "Message.Id")

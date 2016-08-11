@@ -2,6 +2,7 @@
 
 ## beta-2 / ???
 
+* Added alt-up key binding to go up a folder in mail mode.
 * All editor colors can be customized.
 * Syntax highlighting for Lua code. (requires LÖVE 0.10.x or higher)
 * Emacs bindings are more accurate, but off by default; uncomment to load.
