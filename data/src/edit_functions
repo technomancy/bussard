@@ -98,15 +98,19 @@ editor.replace = function()
 end
 
 editor.switch_buffer = function()
-   local last_buffer = editor.last_buffer()
+   local buffers, last_buffer = editor.buffer_names(), editor.last_buffer()
+   -- move last buffer up to the font of the list of choices
    last_buffer = last_buffer or "*console*"
+   lume.remove(buffers, last_buffer)
+
+   table.insert(buffers, 1, last_buffer)
    local callback = function(b, cancel)
       if(not cancel) then
          editor.change_buffer(b ~= "" and b or last_buffer)
       end
    end
    local completer = function(input)
-      return utils.completions_for(input, editor.buffer_names())
+      return utils.completions_for(input, buffers)
    end
    editor.read_line("Switch to buffer (default: " .. last_buffer ..
                        "): ", callback, {completer=completer})
