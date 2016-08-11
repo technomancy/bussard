@@ -40,8 +40,8 @@ bind("flight", "ctrl-return", function()
 end)
 
 -- the mouse wheel is handled just like any other key press.
-bind("flight", "wheelup", zoom_in)
-bind("flight", "wheeldown", zoom_out)
+bind("flight", "wheelup", lume.fn(zoom_in, true, 0.5))
+bind("flight", "wheeldown", lume.fn(zoom_out, true, 0.5))
 
 -- regular tab selects next target in order of distance from the star.
 bind("flight", "tab", ship.actions.next_target)
