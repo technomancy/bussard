@@ -995,10 +995,10 @@ return {
       local buffer = get_buffer(buffer_name) or b
       if(type(point) == "number" and point >= 0 and
          point <= #buffer.lines[buffer.point_line]) then
-         buffer.point = point
+         buffer.point = math.floor(point)
       end
-      if(type(line) == "number" and line > 0 and line <= #buffer.lines) then
-         buffer.point_line = line
+      if(type(line) == "number" and line >= 1 and line <= #buffer.lines) then
+         buffer.point_line = math.floor(line)
       end
    end,
 
