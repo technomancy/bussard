@@ -81,8 +81,8 @@ local draw_scroll_bar = function(b, colors)
 end
 
 return function(b, buffers_where, echo_message, colors)
-   row_height = row_height or love.graphics.getFont():getHeight()
-   em = em or love.graphics.getFont():getWidth('a')
+   row_height = love.graphics.getFont():getHeight()
+   em = love.graphics.getFont():getWidth('a')
    w, h = love.window.getMode()
 
    -- Draw background
