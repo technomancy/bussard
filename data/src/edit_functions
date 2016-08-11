@@ -83,8 +83,8 @@ editor.replace = function()
                               y:lower() == "y" or y:lower() == "yes") then
                               local new_line = lines[i]:gsub(replace, with)
                               e.set_line(new_line, i, path)
-                              replacer(replace, with, false, i+1)
                            end
+                           replacer(replace, with, false, i+1)
             end)
             return
          end
