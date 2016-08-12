@@ -34,7 +34,7 @@ local subjects_by_date = function(msgs)
          local date = header(lume.split(msg, "\n"), "Date")
          local key = date and utils.parse_time(date) or
             header(lume.split(msg, "\n"), "Subject")
-         by_date[key or ""] = name
+         by_date[key or 0] = name
       end
    end
    for _, date in ipairs(lume.sort(lume.keys(by_date))) do
@@ -160,6 +160,8 @@ define_mode("view", "edit", true)
 local open_up_folder = function()
    local path = editor.current_buffer_path()
    local folder = path:match("docs.mail.([^\\.]+).")
+   editor.open(nil, "*mail*")
+   ship:activate_mode("mail")
    open_folder(folder)
 end
 

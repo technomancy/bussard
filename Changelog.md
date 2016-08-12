@@ -8,7 +8,7 @@
 * Emacs bindings are more accurate, but off by default; uncomment to load.
 * Add replace command to editor; defaults to alt-r.
 * Add incremental search command to editor; defaults to ctrl-f.
-* Add command to switch editor to buffer of choice; defaults to ctrl-alt-b.
+* Add command to select buffer to switch to; defaults to ctrl-alt-b.
 * Live-feedback when opening files.
 * Many reliability fixes for the editor.
 * Mouse wheel zooms and scrolls; can be rebound.
@@ -42,7 +42,7 @@ If upgrading from beta-1 to beta-2, please see the [upgrade guide](Upgrading.md)
 * Format times as years:seconds.
 * Simplify gravitation to avoid certain bugs.
 * Descriptions for Bohk and Katilay worlds.
-* Splash screen.
+* Pause screen.
 * Added mail client with unread message tracking.
 * Fix some gravitation bugs between planets.
 * Major rewrite of console to unify it with the editor.
