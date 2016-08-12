@@ -398,7 +398,7 @@ local save = function(this_fs, this_path)
    this_b.needs_save = false
    if(this_b.path:find("^/")) then
       if(not love.filesystem.write("game" .. this_b.path,
-                                   table.concat(this_b.lines, "\n") .. "\n")) then
+                                   table.concat(this_b.lines, "\n").."\n")) then
          print("Could not save " .. this_path or this_b.path)
       end
    else

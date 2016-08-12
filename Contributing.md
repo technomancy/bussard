@@ -44,9 +44,10 @@ You may find the contents of `spoilers/solutions` useful during development.
 The text editor inside Bussard is very capable and should be comfortable to use
 for editing Lua by all but the most die-hard Emacs/Vim fans. It can be used not
 only for editing in-game code, but also for the source to the game itself if you
-are running from a checkout. When you press `ctrl-o` to open a file, put a `/`
-in front of the path of any files inside the checkout of the game to open it in
-the editor; for instance, `/Contributing.md` would open this file.
+are running from a checkout. Symlink your checkout to `game` inside the save
+directory. When you press `ctrl-o` to open a file, put a `/` in front of the
+path of any files inside the checkout of the game to open it in the editor; for
+instance, `/Contributing.md` would open this file.
 
 If you want to use Bussard solely as a text editor, launch it with the `--no-game`
 argument and the update loop will be adjusted to use much less CPU by leaving
