@@ -1,7 +1,8 @@
 local lume = require("lume")
 
 local upgrades = {"laser", "engine", "cargo_bay", "fuel_tank", "fuel_charger",
-                  "solar_panel", "comm_boost", "map",}
+                  "solar_panel", "comm_boost", "map", "jeejah", "life_support",
+                  "bencode_decoder", }
 
 local events = { luabook1 = "passenger2", luabook2 = "passenger2",
                  luabook3 = "passenger2", luabook4 = "luabook-b",
@@ -16,7 +17,6 @@ local pages = {
    quickstart3 = "doc/quickstart3.md",
    tutorial = "doc/quickstart.md", -- aliases for quickstart
    help = "doc/quickstart.md",
-   intro = "doc/quickstart.md",
 
    luabook1 = "doc/lua-1-intro.md",
    luabook2 = "doc/lua-2-expressions.md",
@@ -36,6 +36,7 @@ local pages = {
    life_support = "doc/life_support.md",
    map = "doc/map.md",
    jeejah = "doc/jeejah.md",
+   bencode_decoder = "doc/bencode_decoder.md",
 }
 
 local show_page = function(ship, p)
@@ -78,3 +79,4 @@ return {
       return p
    end
 }
+
