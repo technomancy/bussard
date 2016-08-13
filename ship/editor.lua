@@ -395,10 +395,11 @@ local save = function(this_fs)
    local target = this_fs or b and b.fs
    local this_b = (b and b.path == "minibuffer") and behind_minibuffer or b
    if(not target or not this_b.needs_save) then return end
+   if(this_b.lines[#this_b.lines] ~= "") then table.insert(this_b.lines, "") end
    this_b.needs_save = false
    if(this_b.path:find("^/")) then
       if(not love.filesystem.write("game" .. this_b.path,
-                                   table.concat(this_b.lines, "\n").."\n")) then
+                                   table.concat(this_b.lines, "\n"))) then
          echo("Could not save " .. this_b.path)
       end
    else
