@@ -29,8 +29,9 @@ venantius.m@wonderchannel.net.sol writes:
 > outer systems.
 >
 > Anyway, if you find a station that runs a relay, you'll need to log in with
-> SSH using the username "subnet", and the password "reindeerflotilla". That's
-> the point at which your subnet client would normally take over, but you're on
-> your own for that; sorry. I don't have a copy of the client anymore.
+> ssh("subnet", "reindeerflotilla") instead of using the default guest username
+> and password. That's the point at which your subnet client would normally take
+> over, but you're on your own for that; sorry. I don't have a copy of the
+> client anymore.
 >
 > I don't want to know what you're looking for. But I wish you luck finding it.
