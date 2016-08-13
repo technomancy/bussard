@@ -49,10 +49,12 @@ Content-Type: text/plain; charset=UTF-8
 
 Cool; thanks. Here's what I figured out:
 
-    local decode = ship.actions.bencode_decode
+    local decode = ship.actions.bencode_decoder
     local encode_str = function (s) return #s .. ":" .. s end
     local encode = function(t) -- only works for simple k/v string tables
-      return table.concat({"d", unpack(lume.map(t, encode_str)), "e"})
+      local s = "d"
+      for k,v in pairs(t) do s = s .. encode_str(k) .. encode_str(v) end
+      return s .. "e"
     end
 
     subnet_sync = function()
@@ -65,14 +67,18 @@ Cool; thanks. Here's what I figured out:
        for _,group in ipairs(decode(g_resp).groups) do
           ship.docs.mail[group] = ship.docs.mail[group] or {}
           local listing = sub(encode({command="list",group=group}))
+          ship.docs.mail[group]._unread = {}
 
           for _,post in ipairs(decode(listing).posts) do
              local response = sub(encode({command="get", group=group, post=post}))
              ship.docs.mail[group][post] = decode(response).content
+             ship.docs.mail[group]._unread[post] = true
           end
        end
-       c("logout")
+       connection("logout")
     end
+
+Be sure to set the `subnet_password` local to the proper value first, of course.
 
 
 
