@@ -798,8 +798,13 @@ return {
    system_yank = system_yank,
 
    eval_buffer = function()
-      assert(b.fs and b.fs.load, "No loading context available.")
-      b.fs:load(b.path)
+      if(not b.fs or not b.fs.dofile) then
+         echo("No loading context available.")
+      else
+         save()
+         b.fs.dofile(b.path)
+         echo("Loaded " .. b.path)
+      end
    end,
 
    undo = undo,
