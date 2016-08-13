@@ -12,8 +12,7 @@ venantius.m@wonderchannel.net.sol writes:
 >
 >>>> I know you told me you were done with this stuff and needed to move on with
 >>>> your life, but I'm calling in a favor you owe me. I need you to help me
->>>> connect to Subnet. I can't explain why right now other than to say that
->>>> there are people there with answers I need.
+>>>> connect to Subnet.
 >>>
 >>> Nari, Nari...you're right--I need to be done with this! I deleted the Subnet
 >>> client from all my drives and haven't logged on in years. What do you want
@@ -33,3 +32,5 @@ venantius.m@wonderchannel.net.sol writes:
 > SSH using the username "subnet", and the password "reindeerflotilla". That's
 > the point at which your subnet client would normally take over, but you're on
 > your own for that; sorry. I don't have a copy of the client anymore.
+>
+> I don't want to know what you're looking for. But I wish you luck finding it.

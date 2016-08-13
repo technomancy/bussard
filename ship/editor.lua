@@ -391,7 +391,7 @@ end
 
 local backward_word = lume.fn(forward_word, -1)
 
-local save = function(this_fs, this_path)
+local save = function(this_fs)
    local target = this_fs or b and b.fs
    local this_b = (b and b.path == "minibuffer") and behind_minibuffer or b
    if(not target or not this_b.needs_save) then return end
@@ -399,7 +399,7 @@ local save = function(this_fs, this_path)
    if(this_b.path:find("^/")) then
       if(not love.filesystem.write("game" .. this_b.path,
                                    table.concat(this_b.lines, "\n").."\n")) then
-         print("Could not save " .. this_path or this_b.path)
+         echo("Could not save " .. this_b.path)
       end
    else
       local parts = lume.split(this_path or this_b.path, ".")

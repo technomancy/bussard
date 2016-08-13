@@ -20,7 +20,7 @@ on a course back into the middle of a densely-populated district before the Yueh
 defense forces were able to shoot it down.
 
 As you can imagine, having the crown jewel of the machine consciousness research
-effort go rogue so spectacularly didn't do much good for public opinion, and not
+effort go spectacularly rogue didn't do much good for public opinion, and not
 only was the whole project axed within the year, but all further research was
 strictly banned. All the existing MC implementations were said to have been
 destroyed and all records wiped, but obviously this wasn't completely true.

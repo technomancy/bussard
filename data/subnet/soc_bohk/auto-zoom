@@ -1,6 +1,6 @@
 From: Genur Rodot
 Subject: Auto zoom
-To: soc.bohk
+To: soc_bohk
 Message-Id: b922cb68-9da0-4c77-8cae-aea72ba7deb9
 Content-Type: text/plain; charset=UTF-8
 
@@ -31,7 +31,7 @@ less gradual; sometimes it feels a bit abrupt.
 
 From: Diejoud Malomis
 Subject: Re: Auto zoom
-To: soc.bohk
+To: soc_bohk
 Message-Id: f0cd6932-819b-4c8a-88d4-83821c9921fb
 In-Reply-To: b922cb68-9da0-4c77-8cae-aea72ba7deb9
 Content-Type: text/plain; charset=UTF-8
@@ -62,7 +62,7 @@ expecting it; 25 as the ship.dt factor feels nice and subtle.
 
 From: Diejoud Malomis
 Subject: Re: Auto zoom
-To: soc.bohk
+To: soc_bohk
 Message-Id: e3cf56df-5f1b-4530-84b6-78bdc26a5799
 In-Reply-To: f0cd6932-819b-4c8a-88d4-83821c9921fb
 Content-Type: text/plain; charset=UTF-8
@@ -102,7 +102,7 @@ target:
 
 From: Riris Kimepusas
 Subject: Re: Auto zoom
-To: soc.bohk
+To: soc_bohk
 Message-Id: 922d1331-1cf2-49ad-8081-2b1c89a62388
 In-Reply-To: e3cf56df-5f1b-4530-84b6-78bdc26a5799
 Content-Type: text/plain; charset=UTF-8

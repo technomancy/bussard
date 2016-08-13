@@ -1,6 +1,6 @@
 From: Logefad Rivoud
 Subject: subnet client
-To: soc.tana
+To: soc_tana
 Message-Id: 129f0b2b-c973-42b0-a2de-688b23e739e3
 Content-Type: text/plain; charset=UTF-8
 
@@ -13,7 +13,7 @@ but the output itself is pretty confusing.
 
 From: Gigovecijum Louwat
 Subject: Re: subnet client
-To: soc.tana
+To: soc_tana
 Message-Id: db9f722a-8197-4468-a66a-74820f7d4aa1
 In-Reply-To: 129f0b2b-c973-42b0-a2de-688b23e739e3
 Content-Type: text/plain; charset=UTF-8
@@ -42,7 +42,7 @@ step from the action of fetching and storing the messages.
 
 From: Logefad Rivoud
 Subject: Re: (2) subnet client
-To: soc.tana
+To: soc_tana
 Message-Id: c9c5a8c9-e240-43c0-95a0-db86021472d7
 In-Reply-To: db9f722a-8197-4468-a66a-74820f7d4aa1
 Content-Type: text/plain; charset=UTF-8
@@ -78,7 +78,7 @@ Cool; thanks. Here's what I figured out:
 
 From: Ruvad Busaratut
 Subject: Re: (3) subnet client
-To: soc.tana
+To: soc_tana
 Message-Id: 4094624d-3053-4a7b-b37e-6343a58b4ff6
 In-Reply-To: c9c5a8c9-e240-43c0-95a0-db86021472d7
 Content-Type: text/plain; charset=UTF-8
@@ -90,7 +90,7 @@ access to that on my machine.
 
 From: Logefad Rivoud
 Subject: Re: (4) subnet client
-To: soc.tana
+To: soc_tana
 Message-Id: c1d66e92-03ea-4ad5-b14c-8bebefa333d3
 In-Reply-To: 4094624d-3053-4a7b-b37e-6343a58b4ff6
 Content-Type: text/plain; charset=UTF-8

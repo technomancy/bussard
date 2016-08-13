@@ -11,18 +11,18 @@ posts. All posts are categorized into groups. You can get a listing of
 groups with the "groups" command:
 
     > {command="groups"}
-    < {status="ok", groups={"comp.os.orb", "comp.lang.lua", ...}}
+    < {status="ok", groups={"comp_os_orb", "comp_lang_lua", ...}}
 
 To get the posts for a specific group, use the "list" command:
 
-    > {command="list",group="comp.lang.lua"}
+    > {command="list",group="comp_lang_lua"}
     < {status="ok", posts={"patterns-for-filenames.msg",
                            "question-about-tables.msg"}}
 
 Getting an individual post uses the "get" command:
 
-    > {command="get",group="comp.lang.lua",post="patterns-for-filenames.msg"}
-    > {status="ok", content="From: Tegeb Douggesiem\nTo: comp.lang.lua\n..."}
+    > {command="get",group="comp_lang_lua",post="patterns-for-filenames.msg"}
+    > {status="ok", content="From: Tegeb Douggesiem\nTo: comp_lang_lua\n..."}
 
 ## Encoding
 

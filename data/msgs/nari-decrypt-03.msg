@@ -29,12 +29,12 @@ using the .. operator (dot-dot) to turn two strings into one:
 
     local decoded = "ABC"
     decoded = decoded .. "DEF"
-    (decoded) --> ABCDEF
+    print(decoded) --> ABCDEF
 
 Remember not to change the punctuation and spaces. If a character is more than
 A but less than Z it's a letter, but otherwise you should just leave it alone!
 
-I've also found a few chapters of a book on Lua programming that I've loaded
+I've also found a few chapters of a book on programming that I've loaded
 into your ship's help system. Hope that helps! You can run this to read it:
 
     man("luabook1")
