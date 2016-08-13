@@ -20,7 +20,7 @@ functions are listed on the side of the screen.
 The ship's console can be accessed using `ctrl-enter`, and from there
 you can read the quick start guide by running `man("quickstart")`. The
 full reference manual is available with `man("manual")`, but you won't
-need that till later.
+need that right away.
 
 Recommended soundtrack:
 [Contingency](http://music.biggiantcircles.com/album/contingency) by
@@ -32,8 +32,8 @@ fit too.
 
 Releases for each platform are [on itch.io](https://technomancy.itch.io/bussard).
 Windows and Mac OS X releases are standalone, but `.love` file releases require having
-[LÖVE](https://love2d.org). Most things will work on 0.9.x, but syntax
-highlighting requires 0.10.0 or higher.
+[LÖVE](https://love2d.org). Version 0.9.x is supported, but 0.10.0 is recommended
+for syntax highlighting support.
 
 When running from source, type `love .` from a checkout.
 

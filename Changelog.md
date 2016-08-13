@@ -1,6 +1,6 @@
 # Bussard changelog: history of user-visible changes
 
-## beta-2 / ???
+## beta-2 / 2016-08-13
 
 * Added alt-up key binding to go up a folder in mail mode.
 * All editor colors can be customized.
@@ -125,3 +125,4 @@ If upgrading from beta-1 to beta-2, please see the [upgrade guide](Upgrading.md)
 * Logging into space station computers with faux-unix.
 * Asteroid mining using lasers.
 * Trade cargo on stations.
+

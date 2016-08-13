@@ -1,6 +1,6 @@
 run: ; love .
 
-VERSION=beta-2-pre
+VERSION=beta-2
 
 SHIP_LUA=ship/*.lua ship/editor/*.lua doc/init.lua
 ENGINE_LUA=*.lua

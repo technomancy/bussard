@@ -51,7 +51,7 @@ local resize = function()
 end
 
 local ui = {
-   version = "beta-2-pre",
+   version = "beta-2",
 
    quit = quit,
    abort = function(confirm)
