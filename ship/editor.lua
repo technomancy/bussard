@@ -61,7 +61,9 @@ local colors = {mark = {0, 125, 0},
                 background = {0, 0, 0, 240},
                }
 
-local console = make_buffer(nil, "*console*", {"", "> "})
+local console_line = "This is the console. Enter any code for your " ..
+                         "ship's computer to run it; run man() for help."
+local console = make_buffer(nil, "*console*", {console_line, "> "})
 console.prevent_close, console.point, console.point_line = true, 2, 2
 console.mode, console.prompt, console.max_lines = "console", "> ", 512
 

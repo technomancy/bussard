@@ -1,4 +1,4 @@
-local lume = require("lume")
+local lume = require("lume.init")
 
 love.conf = function(t)
    t.gammacorrect = true
