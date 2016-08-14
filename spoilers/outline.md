@@ -4,39 +4,39 @@
 
 * Come to your senses in a remote mining system, email indicator blinking
 * Lab team left cryptic message wishing you best (msgs/readme.md)
-* After 1 jump, get Strauss's message about encrypted journals (msgs/strauss-1.msg)
+* After a short time, get Strauss's message about encrypted journals (msgs/strauss-1.msg)
 * (optional) Buy a mining laser, do some mining to earn a bit of cash?
 * Do some cargo runs or missions within Tana
- * You can't leave Tana because you can't get a background check needed for Sol portal clearance
+ * You can't leave Tana because you can't get a security check needed for Sol portal clearance
 * You can probably decrypt the rot13 journal on your own, but you can wait for act 2
 * Try to accept a passenger mission, mission aborts due to not having life-support
 * Buy life support, run a passenger mission or two (optional missions: passenger1, passenger3)
 * Eventually accept mission to take Nari home (mission: passenger2)
 * She figures out that whoa holy crap; you're a machine consciousness
-* Nari helps you pass the background check needed for the portal
+* Nari helps you pass the security check needed for the portal
 * You bring Nari to Newton Station, where she contacts an old friend who has clues
 
-## Act II: Tracking down echoes of Traxus
+## Act II: Plugging into Subnet
 
-Characters (especially Clay) should be deeply suspicious of Traxus,
-assuming that he is a villain opposed to humanity. This isn't true at
-all, but it fits the facts as they know them. Nari still doesn't have
-access to systems beyond Terran/Sol/Tana.
+Nari still doesn't have access to systems beyond Sol/Tana, but once you get
+access to subnet, you can accept a mission which can get you access to
+Terran/Bohk systems.
 
 * Nari helps you decrypt the rot13 journal (mission: decrypt)
  * The one that records when Traxus first contacts you
 * Whether you succeed or not with the rot13, she eventually forwards you a
   message about connecting to subnet where you can find more (message: subnet.msg)
-* Once you get on subnet, Nari sends out feelers that lead here eventually to Covoti.
-
-* Covoti's mother worked on the machine consciousness project (not Bohk team)
-* Track him down, find out about the connection between MC project and spacetime junction
- * And that the spacetime junction was the goal of Traxus at one point
-* Somehow you recruit Clay Dorath
-
-TODO: flesh this out more; who is it you find, and how do they know what they tell you?
+* After a short delay, you get another message with a bit more details about subnet.
+* Once you get on subnet, you find a mission to find Dorath.
+ * but you can't accept it directly from subnet.
+ * also on subnet: code to sync to your mail client.
+  * once the message is in your client, you can accept the mission.
 
 ## Act III: Spacetime Junction
+
+Characters (especially Dorath) should be deeply suspicious of Traxus,
+assuming that he is a villain opposed to humanity. This isn't true at
+all, but it fits the facts as they know them.
 
 Need to build up the spacetime junction as if it's the endgame
 goal. "Unimaginable power; the ability to explore the spacetime
@@ -71,7 +71,7 @@ thrown away.
 Threads to explore:
 
 * Tracking down logs from the MC research team that created you
-* Learning more about the portal system and its Scheme OS
+* Learning more about the portal system and its Lisp OS
 * Find out that Ikon is a shell company for Traxus
  * You should have heard about Ikon a fair bit before finding this out
 
@@ -83,11 +83,6 @@ Purchase additional ships and load them up with auto-pilot?
 * Find out that Traxus has colonized his own world
 * Learn how to log into portal computer console
  * Subvert security features; allow portal to secret colony
-
-The progression of the endgame scenario is already laid out in some
-detail at the bottom of spoilers/readme.md.
-
-* You get the domain injector and have power to bend reality to your will; the end
 
 ## Loose threads so far
 
