@@ -17,6 +17,16 @@ local quickref = "tab: next target\n" ..
    "ctrl-o: open file\n" ..
    "ctrl-r: reload config"
 
+local target_type = function()
+   if(ship.status.target) then
+      for _,t in ipairs({"ship", "star", "asteroid",
+                         "portal", "station", "world"}) do
+         if(ship.status.target[t]) then return t end
+      end
+      return "unknown"
+   end
+end
+
 ship.hud = {
    { x=60, y=3, type="text",
      format="x: %5.0f y: %5.0f\nepoch: %s\ncredits: %s",
@@ -34,8 +44,9 @@ ship.hud = {
    },
 
    { x=-70, y=5, type="text", align="right",
-     format="%s\ndistance: %0.0f\nmass: %0.0f",
-     values={"status.target.name", function(s)
+     format="%s: %s\ndistance: %0.0f\nmass: %0.0f",
+     values={"status.target.name", target_type,
+             function(s)
                 return s.status.target and utils.distance(s.status,
                                                           s.status.target)
                                    end, "status.target.mass"}

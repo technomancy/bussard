@@ -64,8 +64,8 @@ end
 
 local is_gravitated_by = function(from, to)
    if(from == to) then return false
-   elseif(to.fixed) then return false
-   elseif((to.world or to.portal) and not from.fixed) then return false
+   elseif(to.star) then return false
+   elseif((to.world or to.portal) and not from.star) then return false
    else return true end
 end
 
@@ -171,10 +171,10 @@ return {
    end,
 
    seed_pos = function(b, star)
-      if(b.fixed) then
+      if(b.star) then
          b.x, b.y = 0, 0
       elseif(b.r or (b.x and b.y)) then
-         assert(star.fixed, star.name .. " is not a star.")
+         assert(star.star, star.name .. " is not a star.")
 
          b.r = b.r or utils.distance(b.x, b.y)
          local v = math.sqrt((g*star.mass)/b.r)

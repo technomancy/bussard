@@ -47,7 +47,7 @@ local sys = {
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=230000,
            image_name="sun",
-           name="Tana", fixed=true },
+           name="Tana", star=true },
           {r=15000, mass=500,
            image_name = "planet-9",
            name="Lioboro", os=orb, world=true,
@@ -91,7 +91,7 @@ local sys = {
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=160000,
            image_name="sun",
-           name="Wolf 294", fixed=true},
+           name="Wolf 294", star=true},
           {r=25000, mass=500,
            image_name="planet-14", -- ice
            name="Solotogo", os=orb, world=true,
@@ -112,7 +112,7 @@ local sys = {
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
            image_name="sun",
-           name="Luyten's Star", fixed=true },
+           name="Luyten's Star", star=true },
           {r=32000, mass=120,
            image_name="station-pointed", station=true,
            name="Apkabar Station", os=orb, world=true, subnet=true,
@@ -140,7 +140,7 @@ local sys = {
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
            image_name="sun",
-           name="L 668-21", fixed=true },
+           name="L 668-21", star=true },
           {r=20000, mass=700, station=true,
            image_name="station-pointed",
            name="Mirduka Station", os=orb, world=true,
@@ -163,7 +163,7 @@ local sys = {
               bodies = {
                  {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
                   image_name="sol",
-                  name="Sol", fixed=true},
+                  name="Sol", star=true},
                  {r=10000, mass=220,
                   image_name="mercury", world=true,
                   name="Mercury"},
@@ -240,7 +240,7 @@ local sys = {
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
                       image_name="sun",
-                      name="Lalande 25372", fixed=true},
+                      name="Lalande 25372", star=true},
                      {r=14000, mass=200,
                       image_name="shaber8",
                       name="Pinan", os=orb, world=true,
@@ -282,7 +282,7 @@ local sys = {
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=410000,
                    image_name="sun",
-                   name="Ross 128", fixed=true},
+                   name="Ross 128", star=true},
                   {r=35000, mass=200, gov="darush",
                    image_name="shaber3", -- dark red volcanic
                    name="Darush", os=orb, world=true,
@@ -317,7 +317,7 @@ local sys = {
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
                    image_name="sun",
-                   name="Bohk 832", fixed=true},
+                   name="Bohk 832", star=true},
                   {r=15000, mass=500,
                    image_name = "shaber1",
                    name="Bohk Prime", os=orb, world=true,
@@ -354,7 +354,7 @@ local sys = {
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=390000,
                          image_name="sun",
-                         name="New Phobos 4523", fixed=true},
+                         name="New Phobos 4523", star=true},
                         {r=18000, mass=630,
                          image_name = "shaber4",
                          name="Sutap", os=orb, world=true,
@@ -383,7 +383,7 @@ local sys = {
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
                       image_name="sun",
-                      name="Mecalle 8760", fixed=true},
+                      name="Mecalle 8760", star=true},
                      {r=27000, mass=342,
                       image_name = "planet-11",
                       name="Tirakir", os=orb, world=true,
@@ -409,7 +409,7 @@ local sys = {
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=210000,
                       image_name="sun",
-                      name="Katilay 103039", fixed=true},
+                      name="Katilay 103039", star=true},
                      {r=25000, mass=350,
                       image_name="shaber10",
                       name="Katilay Prime", os=orb, world=true,
@@ -439,7 +439,7 @@ local sys = {
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=390000,
                    image_name="sun",
-                   name="Yueh 674", fixed=true},
+                   name="Yueh 674", star=true},
                   {r=19000, mass=350, asteroids=4,
                    image_name="planet-6",
                    name="Yueh Prime", os=orb, world=true,
@@ -474,7 +474,7 @@ local sys = {
                 bodies = {
                    {r=0, x=0, y=0, dx=0, dy=0, mass=440000,
                     image_name="sun",
-                    name="Kowlu 693", fixed=true},
+                    name="Kowlu 693", star=true},
                    {r=9000, mass=500,
                     image_name="shaber6",
                     name="Bata Beng", os=orb, world=true,
@@ -507,7 +507,7 @@ local sys = {
                         bodies = {
                            {r=0, x=0, y=0, dx=0, dy=0, mass=190000,
                             image_name="sun",
-                            name="Delta Pavonis", fixed=true},
+                            name="Delta Pavonis", star=true},
                            {r=8000, mass=200, world=true,
                             image_name="planet-3", name="Sav'nakat"},
                            {r=12000, mass=100, station=true, world=true,
@@ -533,7 +533,7 @@ local sys = {
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
                       image_name="sun",
-                      name="LHS 451", fixed=true},
+                      name="LHS 451", star=true},
                      -- TODO: Traxus's station
                      {name = "Portal: Yueh", multiportal=true,
                       image_name="portal-3", os=lisp,
