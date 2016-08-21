@@ -451,6 +451,9 @@ ship.api = {
    long_updaters = {},
    on_enter = function(_) end,
 
+   ui_helpers = {},
+   navigation_ui_helpers = {},
+
    -- trajectory plotting is the single biggest perf drain by far
    -- these numbers will be changed if the frame rate is too low
    trajectory = 256,
