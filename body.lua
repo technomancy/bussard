@@ -197,4 +197,5 @@ return {
    hostname = hostname,
 
    g = g,
+   max_accel = max_accel,
 }
