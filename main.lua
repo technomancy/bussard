@@ -131,6 +131,10 @@ love.load = function()
    love.keyboard.setKeyRepeat(true)
    love.keyboard.setTextInput(true) -- needed for mobile
    ship:configure(systems, ui)
+
+   if(arg[#arg-1] == "--backup") then save.backup(arg[#arg]) end
+   if(arg[#arg] == "--wipe") then save.abort(ship) love.event.quit() end
+
    save.load_into(ship)
    ship:dofile("src.config")
 
@@ -142,10 +146,8 @@ love.load = function()
    end
 
    if(arg[#arg] == "-debug") then require("mobdebug").start() end
-   if(arg[#arg] == "--wipe") then save.abort(ship) love.event.quit() end
    if(arg[#arg] == "--test") then return require("tests") end
    if(arg[#arg] == "--fuzz") then return require("tests.fuzz") end
-   if(arg[#arg-1] == "--backup") then save.backup(arg[#arg]) end
 
    resize()
    ui.set_font(16)
