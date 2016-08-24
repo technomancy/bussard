@@ -79,6 +79,7 @@ end
 
 local universe_api = utils.readonly_proxy {
    g = body.g,
+   max_accel = body.max_accel,
 }
 
 local sandbox = function(ship)
