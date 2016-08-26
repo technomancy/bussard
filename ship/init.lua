@@ -178,6 +178,10 @@ local ship = {
    dofile = sandbox_dofile,
 
    enter = function(ship, system_name, reseed, suppress_message)
+      -- if something was waiting for a key release, let it get its
+      -- event, as we are going to change context
+      if love.keyreleased then love.keyreleased() end
+
       local from = ship.system_name
       assert(ship.systems[system_name], system_name .. " not found.")
       if(not suppress_message) then
