@@ -227,5 +227,10 @@ return {
                           return require("bencode").decode(data)
                        end
                      },
+   underclocker = { stats = { mass = 1 },
+                    action = function(ship, data)
+                       ship.time_factor = math.max(data, ship.base_time_factor)
+                    end
+                  },
    passponder = {}, -- in order not to explode existing saves
 }

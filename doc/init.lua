@@ -2,7 +2,7 @@ local lume = require("lume")
 
 local upgrades = {"laser", "engine", "cargo_bay", "fuel_tank", "fuel_charger",
                   "solar_panel", "comm_boost", "map", "jeejah", "life_support",
-                  "bencode_decoder", }
+                  "bencode_decoder", "underclocker", }
 
 local events = { luabook1 = "passenger2", luabook2 = "passenger2",
                  luabook3 = "passenger2", luabook4 = "luabook-b",
@@ -37,6 +37,7 @@ local pages = {
    map = "doc/map.md",
    jeejah = "doc/jeejah.md",
    bencode_decoder = "doc/bencode_decoder.md",
+   underclocker = "doc/underclocker.md",
 }
 
 local show_page = function(ship, p)

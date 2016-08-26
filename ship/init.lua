@@ -28,7 +28,7 @@ local status_whitelist = {
    "engine_strength", "turning_speed", "cpuinfo",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
    "portal_range", "portal_time", "flag", "target", "comm_boost",
-   "time_factor"
+   "time_factor", "base_time_factor"
 }
 
 local base_stats = {
@@ -148,6 +148,7 @@ local ship = {
    battery = 128,
    upgrades = {},
    time_factor = 10,
+   base_time_factor = 10,
 
    -- keep around
    fuel = 128,
