@@ -235,6 +235,29 @@ local timer = function(period, callback)
    end
 end
 
+local with_traceback = function(print2, f, ...)
+   local args = {...}
+   -- TODO: sandboxed traceback which trims out irrelevant layers
+   return xpcall(function() return f(unpack(args)) end, function(e)
+         print(debug.traceback())
+         print(e)
+         if(print2) then
+            print2(debug.traceback())
+            print2(e)
+         end
+   end)
+end
+
+local run_handlers = function(object, handlers_name, broken_name, args, print)
+   for n,f in pairs(object[handlers_name]) do
+      if not with_traceback(print, f, unpack(args)) then
+         object[broken_name] = object[broken_name] or {}
+         object[broken_name][n] = f
+         object[handlers_name][n] = nil
+      end
+   end
+end
+
 return {
    shallow_copy = shallow_copy,
 
@@ -340,18 +363,9 @@ return {
    pad_to = pad_to,
    buffer = buffer,
 
-   with_traceback = function(print2, f, ...)
-      local args = {...}
-      -- TODO: sandboxed traceback which trims out irrelevant layers
-      return xpcall(function() return f(unpack(args)) end, function(e)
-            print(debug.traceback())
-            print(e)
-            if(print2) then
-               print2(debug.traceback())
-               print2(e)
-            end
-      end)
-   end,
+   with_traceback = with_traceback,
+
+   run_handlers = run_handlers,
 
    game_start = epoch_for(2431) + 10242852, -- april 17th, 2431
 }

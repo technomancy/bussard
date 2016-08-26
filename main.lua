@@ -255,14 +255,8 @@ local draw = safely(function(dt)
       end
 
       -- the navigation ui helpers in the system coordinates
-      for n,f in pairs(ship.api.navigation_ui_helpers or {}) do
-         if(not utils.with_traceback(ship.api.editor, f)) then
-            ship.api.navigation_ui_helpers[n] = nil
-            ship.api.broken_navigation_ui_helpers =
-               ship.api.broken_navigation_ui_helpers or {}
-            ship.api.broken_navigation_ui_helpers[n] = f
-         end
-      end
+      utils.run_handlers(ship.api, "navigation_ui_helpers",
+         "broken_navigation_ui_helpers", {dt}, ship.api.editor.print)
 
       love.graphics.pop()
 
@@ -274,14 +268,8 @@ local draw = safely(function(dt)
       end
 
       -- the navigation ui helpers in the ship-drawing coordinates
-      for n,f in pairs(ship.api.ui_helpers or {}) do
-         if(not utils.with_traceback(ship.api.editor, f)) then
-            ship.api.ui_helpers[n] = nil
-            ship.api.broken_ui_helpers =
-               ship.api.broken_ui_helpers or {}
-            ship.api.broken_ui_helpers[n] = f
-         end
-      end
+      utils.run_handlers(ship.api, "ui_helpers", "broken_ui_helpers",
+         {dt}, ship.api.editor.print)
 
       -- the ship itself
       love.graphics.setColor(255, 50, 50);
