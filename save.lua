@@ -37,7 +37,7 @@ return {
       ship_data.time_offset = ship.sandbox.os.time()
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
       ship_data.meta = {version = ship.api.ui.version}
-      if ship.api.cheat then ship_data.api.cheat = true end
+      if(ship.api.cheat) then ship_data.api.cheat = true end
       orb.fs.strip_special(ship_data.api, {})
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
@@ -82,7 +82,7 @@ return {
          meta = ship_data.meta
 
          lume.extend(ship.api, api_data)
-         if ship.api.cheat then ship.api.cheat = ship end
+         if(ship.api.cheat) then ship.api.cheat = ship end
 
          ship_data.api, ship_data.meta = nil, nil
          lume.extend(ship, ship_data)
