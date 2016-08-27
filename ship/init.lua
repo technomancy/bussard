@@ -261,13 +261,7 @@ local ship = {
          ship.battery = ship.battery + (dt / math.log(dist*2)) * ship.solar
       end
 
-      for n,f in pairs(ship.api.updaters or {}) do
-         if(not with_traceback(f, ship.api, dt)) then
-            ship.api.updaters[n] = nil
-            ship.api.broken_updaters = ship.api.broken_updaters or {}
-            ship.api.broken_updaters[n] = f
-         end
-      end
+      utils.run_handlers(ship.api, "updaters", "broken_updaters", {ship.api, dt}, editor.print)
 
       for _,u in pairs(ship.upgrades) do
          if(u.update) then u.update(ship, dt) end
@@ -334,13 +328,8 @@ local ship = {
    end,
 
    long_update = function(ship, dt)
-      for n,f in pairs(ship.api.long_updaters or {}) do
-         if(not with_traceback(f, ship.api, dt)) then
-            ship.api.long_updaters[n] = nil
-            ship.api.broken_updaters = ship.api.broken_updaters or {}
-            ship.api.broken_updaters[n] = f
-         end
-      end
+      utils.run_handlers(ship.api, "long_updaters", "broken_updaters",
+         {ship.api, dt}, editor.print)
    end,
 
    remove_body = function(ship, b)
@@ -454,6 +443,9 @@ ship.api = {
    updaters = {},
    long_updaters = {},
    on_enter = function(_) end,
+
+   ui_helpers = {},
+   navigation_ui_helpers = {},
 
    -- trajectory plotting is the single biggest perf drain by far
    -- these numbers will be changed if the frame rate is too low

@@ -10,6 +10,7 @@ local asteroid = require "asteroid"
 local save = require "save"
 local pause = require "pause"
 local systems = require("data.systems")
+local utils = require("utils")
 
 local stars
 
@@ -253,6 +254,10 @@ local draw = safely(function(dt)
          end
       end
 
+      -- the navigation ui helpers in the system coordinates
+      utils.run_handlers(ship.api, "navigation_ui_helpers",
+         "broken_navigation_ui_helpers", {dt}, ship.api.editor.print)
+
       love.graphics.pop()
 
       if(ship.target and ship.target.beam_count and
@@ -261,6 +266,10 @@ local draw = safely(function(dt)
          love.graphics.setColor(255,255,255, flash)
          love.graphics.rectangle("fill", -w, -h, w*2, h*2)
       end
+
+      -- the navigation ui helpers in the ship-drawing coordinates
+      utils.run_handlers(ship.api, "ui_helpers", "broken_ui_helpers",
+         {dt}, ship.api.editor.print)
 
       -- the ship itself
       love.graphics.setColor(255, 50, 50);
