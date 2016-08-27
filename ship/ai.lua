@@ -96,6 +96,8 @@ local update_counter = 0
 -- for every 1 population in a system, there should be this many ships:
 local ship_factor = 0.3
 
+local ship_spawn_period = 160
+
 return {
    seed = function(ship)
       for i,b in ipairs(ship.bodies) do -- remove existing ships
@@ -108,7 +110,7 @@ return {
 
    update = function(ship, bodies, dt)
       -- move this to long_update in ship update loop?
-      if(update_counter < 16) then
+      if(update_counter < ship_spawn_period) then
          update_counter = update_counter + dt
       else
          update_counter = 0

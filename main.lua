@@ -163,10 +163,10 @@ love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end
 local update = safely(function(dt)
       local real_time_factor = ship.time_factor * dt
       ship:update(real_time_factor)
-      body.update(ship.bodies, dt)
+      body.update(ship.bodies, real_time_factor)
       body.gravitate_all(ship.bodies, ship, real_time_factor)
       asteroid.recycle(ship)
-      ai.update(ship, ship.bodies, dt)
+      ai.update(ship, ship.bodies, real_time_factor)
 end)
 
 -- for commands that don't need repeat
