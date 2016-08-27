@@ -464,7 +464,6 @@ ship.api = {
 
    scale = 3.5,
 
-   cheat = ship,
    print = editor.print,
    write = editor.write,
 
