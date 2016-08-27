@@ -10,8 +10,7 @@ local unread_count = function(ship)
 end
 
 local quickref = "tab: next target\n" ..
-   "ctrl-enter: editor\n" ..
-   "(including console)\n" ..
+   "ctrl-enter: ship's computer\n" ..
    "ctrl-m: read mail\n" ..
    "ctrl-s: ssh login\n" ..
    "ctrl-p: portal\n" ..

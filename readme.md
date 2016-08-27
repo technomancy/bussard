@@ -17,8 +17,8 @@ When you're in flight mode, the arrow keys control the ship's engines
 and turning thrusters. Keys to access the ship's computer's various
 functions are listed on the side of the screen.
 
-The ship's console/editor can be accessed using `ctrl-enter`, and from
-there you can read the quick start guide by running `man("quickstart")`.
+The ship's computer can be accessed using `ctrl-enter`, and from
+the console you can read the quick start guide by running `man("quickstart")`.
 The full reference manual is available with `man("manual")`, but you
 won't need that right away.
 
