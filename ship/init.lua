@@ -355,6 +355,7 @@ local ship = {
 
    -- for debugging during development: ship.cheat:realdofile("main.lua")
    realdofile = function(ship, x) dofile(x) ship.api.ui.play() end,
+   realrequire = require,
    love = love,
 }
 

@@ -151,6 +151,14 @@ love.load = function()
    if(arg[#arg] == "--test") then return require("tests") end
    if(arg[#arg] == "--fuzz") then return require("tests.fuzz") end
 
+   if(arg[#arg] == "--cheat") then
+      ship.api.cheat = ship
+   end
+
+   if(arg[#arg] == "--no-cheat") then
+      ship.api.cheat = nil
+   end
+
    resize()
    ui.set_font(16)
 
