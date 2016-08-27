@@ -82,7 +82,7 @@ local inhibit_read_only, printing_prompt = false, false
 
 -- the last line printed is shown at the bottom when in flight mode; defaults
 -- to a helpful message
-local last_line = "Press ctrl-enter to open the console, " ..
+local last_line = "Press ctrl-enter to open the console/editor, " ..
    "Zoom with = and - or the scroll wheel."
 
 local invisible = {} -- sentinel "do not print" value

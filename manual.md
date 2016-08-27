@@ -44,12 +44,16 @@ spacecraft is equipped with a LuaJIT-based control unit, offering a
 high degree of flexibility and customization without sacrificing
 performance.
 
-Pressing ctrl-enter toggles the console, which allows you to interact
-with your ship's computer. While the console is active, the piloting
-controls for your ship will be unavailable until you go back to flight
-mode with the esc key. Enter any Lua code into the console to have it
-evaluated and the result shown. See the API section below to learn how
-to control your ship from code.
+Pressing ctrl-enter toggles the console/editor, which allows you to
+interact with your ship's computer. While the console is active, the
+piloting controls for your ship will be unavailable until you go back to
+flight mode with the esc key. Enter any Lua code into the console to
+have it evaluated and the result shown. See the API section below to
+learn how to control your ship from code.
+
+The console is just one of the buffers in the editor (it is called
+`*console*`), so `ctrl-enter` may open the editor and you will need to
+use `ctrl-pageup` or `ctrl-pagedown` a few times to get to the console.
 
 Note that some of your ship's functions will also display messages to
 the console. The last line of the console output will be visible at
