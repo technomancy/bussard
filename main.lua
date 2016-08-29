@@ -138,6 +138,7 @@ love.load = function()
 
    save.load_into(ship)
    ship:dofile("src.config")
+   if(ship.api.host.autoload) then ship:dofile("host.autoload") end
 
    -- backwards-compatibility with beta-1
    ship.api.editor.modes.flight.props.draw =
