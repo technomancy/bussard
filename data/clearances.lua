@@ -10,7 +10,8 @@ local no_yueh = "Please see visit a Yueh embassy on a nearby world to obtain pas
 local no_katilay = "The Katilay portal only operates at scheduled times; please visit the Katilay\noffice on Tirakir to apply for a permit to pass."
 local katilay_damaged = "This portal is inoperable."
 
-return {["Luyten's Star:Sol"] = {["background_check"] = "Interportal requires background check for security.\nPlease visit immigration at the nearest station to obtain a permit for travel."},
+return {["Luyten's Star:Sol"] = {function(ship) return ship.humans.nari end =
+      "Interportal requires background check for security."},
 
    ["Sol:Ross"] = {["find_dorath_accept"] = no_terran},
    ["Sol:Lalande"] = {["find_dorath_accept"] = no_terran},

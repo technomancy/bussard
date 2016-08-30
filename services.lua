@@ -124,8 +124,10 @@ return {
    end,
 
    no_trip_clearance = function(ship, from, to)
-      for event, reason in pairs(clearances[from .. ":" .. to] or {}) do
-         if(not ship.events[event]) then
+      for check, reason in pairs(clearances[from .. ":" .. to] or {}) do
+         if(type(check) == "string" and not ship.events[check]) then
+            return reason
+         elseif(type(check) == "function" and not check(ship)) then
             return reason
          end
       end
