@@ -1,6 +1,5 @@
 -- -*- lua -*-
 local mail = require("mail")
-local mission = require("mission")
 
 return {
    name="passenger2",

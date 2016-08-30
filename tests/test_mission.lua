@@ -4,6 +4,7 @@ local ship = require("ship")
 local body = require("body")
 local ssh = require("ship.ssh")
 local mail = require("mail")
+local mission = require("mission")
 
 local d = lume.fn(ship.api.editor.with_current_buffer, "*console*",
                   ship.api.editor.debug)
@@ -29,7 +30,7 @@ local portal = function(target, fail_ok)
    body.update(ship.bodies, 1) -- pass first yield
    if(not fail_ok) then
       local target_system = target:gsub("Inter", ""):gsub("[pP]ortal: ", "")
-      t.assert_equal(ship.system_name, target_system)
+      t.assert_equal(target_system, ship.system_name)
    end
 end
 
@@ -38,6 +39,7 @@ local ssh_run = function(ship, target, command)
    ship.sandbox.ssh_connect("guest", "")
    t.assert_equal(target, ship.comm_connected)
    ship.sandbox.ssh_send_line(command or "echo greetings")
+   mission.update(ship, 1)
    body.update(ship.bodies, 1)
    ssh.logout_all(ship)
 end
@@ -63,15 +65,11 @@ function test_missions()
    t.assert_true(ship.mail_delivered["6e1b94ec-c317-487b-a00b-d410ae6bd495"])
    mail.reply(ship, "84f7b207-08e0-4a54-af7c-d6f97aedc703") -- nari-a-04
    ssh_run(ship, "Tana Prime")
+   t.assert_equal("companion", ship.humans.nari)
    mail.reply(ship, "c83c2439-f4cf-475f-95a6-f15cafc3db16") -- nari-a-05
    t.assert_true(ship.mail_delivered["c83c2439-f4cf-475f-95a6-f15cafc3db16"])
 
    portal("Portal: Luyten's Star")
-   portal("Interportal: Sol", true)
-   ship:update(64)
-   t.assert_true(ship.mail_delivered["nari-a-07"])
-   ssh_run(ship, "Apkabar Station")
-   t.assert_true(ship.mail_delivered["nari-a-08"])
    portal("Interportal: Sol")
    ssh_run(ship, "Newton Station")
    t.assert_true(ship.mail_delivered["nari-a-09"])
