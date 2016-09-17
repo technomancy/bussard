@@ -11,8 +11,18 @@ Our goal is compatibility with LÖVE 0.9.0+, but 0.10.x is pretty close to 0.9.x
 so it should be fine to test primarily in that. A few non-essential features
 that only work in 0.10.x are OK but should be noted with comments.
 
-During development it may be expedient to run `ship.cheat.comm_range = 9999999`
-in order to make testing login interaction easier.
+During development you can enable cheating (`ship.cheat`) to make debugging
+easier. To enable cheating run Bussard with `--cheat` argument; you can
+disable it again by running with `--no-cheat` argument. The state of cheating
+is saved when you restart the game without parameters, resetting the game
+switches cheating off again. The `ship.cheat` variable provides access to the
+real, read-write unfiltered `ship` object.
+
+It may be expedient to run `ship.cheat.comm_range = 9999999` in order to make
+testing login interaction easier.
+
+You can also use `ship.cheat.realdofile` to reload some file from the game
+source and `ship.cheat.realrequire` to load modules.
 
 For story, background and guidelines, look at the dev guide in `spoilers/`.
 
