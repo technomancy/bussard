@@ -71,7 +71,8 @@ local trajectory = function(ship, bodies, steps, step_size,
    local sim_bodies, sim_target, target_points = {}, nil, {}
    for _, b in pairs(bodies) do
       if(b ~= ship) then
-         local sim = lume.pick(b, "x", "y", "dx", "dy", "mass")
+         local sim = lume.pick(b, "x", "y", "dx", "dy", "mass",
+           "star", "world", "portal")
          table.insert(sim_bodies, sim)
          if(b == ship.target and not b.fixed) then sim_target = sim end
       end

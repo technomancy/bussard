@@ -45,7 +45,7 @@ local g = 4196
 -- a chance to slow you back down. This is only noticeable when you pass over
 -- what is essentially the heart of a star, but it's very annoying when you do.
 
-local max_accel = 10
+local max_accel = 100
 
 -- return the acceleration felt at (x,y) due to body
 local gravitate = function(body, x, y)

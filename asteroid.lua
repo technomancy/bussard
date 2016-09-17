@@ -20,7 +20,9 @@ local function asteroid(name, mass_max, bodies, parent, offset)
       a.dx, a.dy = parent.dx, parent.dy
    else
       -- try to get them to spawn clustered near-ish the sun with some outliers
-      local r = love.math.randomNormal(30000, 50000)
+      local min_r = math.sqrt(bodies[1].mass*body.g/body.max_accel)*1.5
+      local r = math.max(min_r, 30000)
+      r = love.math.randomNormal(r, 2*r)
       local base_v = math.sqrt((body.g*bodies[1].mass)/math.abs(r))
       -- use the same orbit logic as planets, but with random eccentricity
       local eccentricity = love.math.random() / 2 + 0.5
