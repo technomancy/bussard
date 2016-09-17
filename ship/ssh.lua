@@ -175,6 +175,10 @@ local get_connection = function(ship, username, password)
       env.HOST = body.hostname(ship.target.name)
       env.OUT = "/tmp/out-" .. session_id
 
+      env.IN = "/tmp/in-" .. session_id
+      ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
+      fs[env.IN](false, 0)
+
       mission.on_login(ship)
       return function(command)
          assert(fs, "Already logged out; establish a new connection.")
