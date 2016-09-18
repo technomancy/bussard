@@ -122,10 +122,10 @@ local lisp_login = function(fs, env, ship, command)
    local write = ship.api.write
    env.IN = function(...)
       local arg = {...}
-      if(#arg == 0 or arg[1] == "*line*") then
+      if(#arg == 0) then
          while #buffer == 0 do coroutine.yield() end
          return table.remove(buffer, 1)
-      elseif(arg[1] == "*buffer") then
+      elseif(arg[1] == {}) then
          return buffer
       else -- write
          while(#buffer > max_buffer_size) do coroutine.yield() end
