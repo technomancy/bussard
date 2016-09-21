@@ -86,7 +86,8 @@ ui.set_font = function(path, size)
 
    -- love 0.9.x doesn't support this
    local noto = love.graphics.newFont("assets/fonts/noto-thai.ttf", 16)
-   if(font.setFallbacks) then font:setFallbacks(noto) end
+   local djvu = love.graphics.newFont("assets/fonts/DejaVuSansMono.ttf", 16)
+   if(font.setFallbacks) then font:setFallbacks(noto,djvu) end
 end
 
 local safely = function(f)
