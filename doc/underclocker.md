@@ -14,3 +14,5 @@ Various computers have different default dividers. Note that higher
 values of the divider correspond to lower speed. The underclocker will
 refuse to overclock your computation device for safety reasons; it will
 silently use the default divider instead of a smaller one.
+
+This model of underclocker cannot go beyond one million as the divider.
