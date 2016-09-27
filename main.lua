@@ -238,7 +238,8 @@ local draw = safely(function(dt)
       end
 
       -- save battery by disabling trajectory when not in flight mode
-      if(ship.api.editor.current_mode_name() == "flight") then
+      if((ship.api.editor.current_mode_name() == "flight") and
+              ship.api.trajectory_visible) then
         hud.trajectory(ship, ship.bodies, ship.api.trajectory,
                        ship.api.trajectory_step_size,
                        {190, 190, 255}, {99, 99, 168},

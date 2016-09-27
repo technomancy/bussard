@@ -437,7 +437,8 @@ ship.api = {
    src = {},
    docs = {},
    persist = {"persist", "scale", "src", "docs", "trajectory_seconds",
-              "trajectory", "trajectory_step_size", "trajectory_auto"},
+              "trajectory", "trajectory_step_size", "trajectory_auto",
+              "trajectory_visible"},
    persist_buffers = {"*console*"},
 
    -- added by loading config
@@ -455,6 +456,7 @@ ship.api = {
    trajectory_step_size = 0.1,
    trajectory_seconds = 128, -- how far out the trajectory should go
    trajectory_auto = true, -- turn this off to disable auto-adjustment
+   trajectory_visible = true, -- turn this off to disable trajectory
 
    fuel_to_stop = function(s)
       -- no idea where this 20 factor comes from

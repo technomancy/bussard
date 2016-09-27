@@ -20,7 +20,8 @@ velocity, local coordinates, fuel and battery readout, credits, and a
 clock, while the upper right shows target details if a target is
 selected. A light blue striped path plots a trajectory estimate of where
 you're headed, while a darker blue striped path plots one for your
-target, if applicable.
+target, if applicable. You can switch it by setting `ship.trajectory` to
+`false`.
 
 ## Helm control
 
