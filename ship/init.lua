@@ -116,7 +116,9 @@ local sandbox = function(ship)
                              ship.api.editor.print(k .. "   " .. type(v))
                           end
                           return ship.api.editor.invisible
-                       end,})
+                       end,
+                       setmetatable = setmetatable,
+                     })
 end
 
 local target_dt = 1/33
