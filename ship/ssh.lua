@@ -153,6 +153,15 @@ local orb_login = function(fs, env, ship, command)
    env.IN, env.OUT = "/tmp/in", "/tmp/out"
    ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
    fs[env.OUT] = ship.api.write
+   local old_in = fs[env.IN]
+   fs[env.IN] = function(x)
+     assert((not x) or (type(x)=="string") or
+         ((type(x)=="table") and not pairs(x)(x)),
+       "Error transmitting non-text data")
+     return old_in(x)
+   end
+   assert((not command) or (type(command)=="string"),
+     "Error transmitting non-text data")
    -- TODO: improve error handling for problems in smashrc
    ship.target.os.process.spawn(fs, env, command, sandbox(ship, ship.target))
    -- without this you can't have non-shell SSH commands
@@ -176,8 +185,7 @@ local get_connection = function(ship, username, password)
       env.OUT = "/tmp/out-" .. session_id
 
       env.IN = "/tmp/in-" .. session_id
-      ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
-      fs[env.IN](false, 0)
+      fs[env.IN] = function() return false; end
 
       mission.on_login(ship)
       return function(command)
@@ -194,6 +202,8 @@ local get_connection = function(ship, username, password)
             end
          end
 
+         assert((not command) or (type(command)=="string"),
+           "Error trying to transmit non-text data")
          ship.target.os.shell.exec(fs, env, command, sandbox(ship, target))
          return output
       end
