@@ -66,7 +66,7 @@ local send_line = function(ship, input)
    end
 end
 
-local sandbox = function(ship, target)
+local sandbox = function(ship, env, target)
    local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
    local sb = {
       buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
@@ -85,6 +85,7 @@ local sandbox = function(ship, target)
       set_prompt = ship.api.editor.set_prompt,
       get_prompt = ship.api.editor.get_prompt,
       pps = function(x) return serpent.block(x, serpent_opts) end,
+      original_env = utils.readonly_proxy(env),
    }
    sb.pp = function(x) sb.print(serpent.block(x, serpent_opts)) end
 
@@ -93,7 +94,7 @@ local sandbox = function(ship, target)
       ship.comm_connected = false
    end
 
-   if(ship.target and ship.target.subnet) then
+   if(ship.target and ship.target.subnet and env.USER=="subnet") then
       sb.subnet = lume.fn(services.subnet.request, ship)
    end
 
@@ -118,7 +119,7 @@ end
 local lisp_login = function(fs, env, ship, command)
    local buffer = {}
    local max_buffer_size = 1024
-   local sb = sandbox(ship, ship.target)
+   local sb = sandbox(ship, env, ship.target)
    local write = ship.api.write
    env.IN = function(...)
       local arg = {...}
@@ -163,7 +164,7 @@ local orb_login = function(fs, env, ship, command)
    assert((not command) or (type(command)=="string"),
      "Error transmitting non-text data")
    -- TODO: improve error handling for problems in smashrc
-   ship.target.os.process.spawn(fs, env, command, sandbox(ship, ship.target))
+   ship.target.os.process.spawn(fs, env, command, sandbox(ship, env, ship.target))
    -- without this you can't have non-shell SSH commands
    ship.target.os.process.scheduler(fs)
 end
@@ -204,7 +205,7 @@ local get_connection = function(ship, username, password)
 
          assert((not command) or (type(command)=="string"),
            "Error trying to transmit non-text data")
-         ship.target.os.shell.exec(fs, env, command, sandbox(ship, target))
+         ship.target.os.shell.exec(fs, env, command, sandbox(ship, env, target))
          return output
       end
    else
