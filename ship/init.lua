@@ -117,7 +117,20 @@ local sandbox = function(ship)
                           end
                           return ship.api.editor.invisible
                        end,
-                       setmetatable = setmetatable,
+                       setmetatable = function(obj, t)
+                         t.__gc = nil
+                         t.__metatable_is_set_by_bussard_user = true
+                         setmetatable(obj, t)
+                       end,
+                       getmetatable = function(obj)
+                         local t = getmetatable(obj)
+                         if ((type(t)=="table")
+                             and t.__metatable_is_set_by_bussard_user) then
+                           return t
+                         else
+                           return "Inaccessible metatable"
+                         end
+                       end,
                      })
 end
 
