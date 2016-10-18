@@ -180,7 +180,7 @@ return {
    fuel_tank = { stats = { fuel_capacity = 128, mass = 32, } },
    solar_panel = { stats = { solar = 30, mass = 32 }},
    life_support = { stats = { mass = 8 },
-                    action = function(temp, humidity)
+                    action = function(_, temp, humidity)
                        if(temp == nil and humidity == nil) then
                           return { temp = climate.temp,
                                    humidity = climate.humidity }
