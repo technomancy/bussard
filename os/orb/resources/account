@@ -1,8 +1,8 @@
 -- -*- lua -*-
 
-local _f, _env, args = ...
+-- local _f, _env, args = ...
 
-local _command, username, password = unpack(args)
+-- local _command, username, password = unpack(args)
 
 print("Account purchases are temporarily offline.")
 
