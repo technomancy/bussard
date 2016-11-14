@@ -1,0 +1,19 @@
+buy_upgrade = function(kind, max)
+  if kind then
+    local price = ship.status.target.upgrade_prices[kind]
+    if max and (price>max) then
+      error("Price " .. price .. " is higher than maximum " .. max)
+    end
+    print(ssh_get_connection("guest", "")("upgrade buy " .. kind))
+  else
+    print(ssh_get_connection("guest", "")("upgrade list"))
+  end
+end
+
+buy_all_upgrades = function()
+  ssh_connect("guest","")
+  for kind, _ in pairs(ship.status.target.upgrade_prices) do
+    ssh_send_line("upgrade buy " .. kind)
+  end
+  logout(ship, ship.status.target)
+end

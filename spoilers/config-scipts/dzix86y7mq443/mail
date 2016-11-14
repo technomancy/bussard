@@ -1,0 +1,32 @@
+message_get_id = function(msg) 
+  return msg:match("Message[-][Ii]d: ([^\n]*)")
+end
+
+deliver_message = function(msg, afolder)
+   local id = message_get_id(msg)
+   local folder = afolder
+   if (type(folder)=="string") then
+      ship.docs.mail[folder] = 
+         ship.docs.mail[folder] or {_unread={}}
+      folder = ship.docs.mail[folder]
+   end
+   if (id and not folder[id]) then
+      folder[id] = msg
+      folder._unread[id] = id
+   end
+end
+
+known_ids = function(root)
+   local res = {}
+   for _, obj in pairs(root) do
+     if(type(obj)=="string") then 
+       local id = message_get_id(obj)
+       if(id) then table.insert(res,id) end
+     elseif (type(obj)=="table") then
+       for _,id in ipairs(known_ids(obj)) do
+         table.insert(res,id)
+       end
+     end
+   end
+   return res
+end

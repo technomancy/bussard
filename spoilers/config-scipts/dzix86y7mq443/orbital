@@ -1,0 +1,107 @@
+heaviest_body = function()
+  max = -1
+  argmax = nil
+  for _, b in pairs(ship.status.bodies) do
+    if b.mass > max then
+      max = b.mass
+      argmax = b
+    end
+  end
+  return argmax
+end
+
+kinetic_energy_wrt = function(reference, target)
+  target = target or ship.status
+  return 0.5 * target.mass * lume.distance(
+    target.dx, target.dy,
+    reference.dx, reference.dy,
+    true
+    )
+end
+
+gravitational_energy_wrt = function(reference, target)
+  target = target or ship.status
+  return - target.mass * reference.mass * universe.g /
+    lume.distance(
+      target.x, target.y, reference.x, reference.y
+      )
+end
+
+total_energy_wrt = function(reference, target)
+  return kinetic_energy_wrt(reference, target) + 
+    gravitational_energy_wrt(reference, target)
+end
+
+is_gravitationally_bound = function(reference, target)
+  return total_energy_wrt(reference, target)<0
+end
+
+orbit_center = function(target, closed)
+  local target = target or ship.status
+  local res = nil
+  local q = 0
+  for _, b in pairs(ship.status.bodies) do
+    local r2 = vector_functions.difference(b, target):sqr()
+    if (r2>1e-20) and 
+        (is_gravitationally_bound(b, target) or not closed) then 
+      local b_q = b.mass / r2^1.25
+      if b_q > q then
+        res = b
+        q = b_q
+      end
+    end
+  end
+  return res
+end
+
+calculateOrbit = function(M,v,r)
+  local L = r:area_with(v)
+  local k = M*universe.g;
+  local E = v:sqr()/2-M*universe.g/r:abs()
+  local a = 0
+	if (math.abs(L)>1e-10) then
+          a=math.abs(k/L)
+        end
+  local D = 2*E+a*a;
+  local v1 = 0;
+  local v2 = 0;
+  local r1 = 0;
+  local r2 = 0;
+	if(D>0) then
+		v1 = a-math.sqrt(D);
+		v2 = a+math.sqrt(D);
+	end
+	if(math.abs(v1)>1e-20) then r1 = L/v1 end
+	if(math.abs(v2)>1e-20) then r2 = L/v2 end
+  local b = 0
+	if(math.abs(E)>1e-20) then 
+          b = L / math.sqrt(math.abs(E*2)) 
+        end
+        axisVector = v:prod(L):rotate_deg(-90):difference(
+          r:normalized():mul(k))
+	orbitDirection = axisVector:direction_deg()
+	if(L<0) then orbitDirection=orbitDirection+180 end
+	return {
+		direction= orbitDirection,
+		r1= r1,
+		r2= r2,
+		v1= v1,
+		v2= v2,
+		a= (r1+r2)/2,
+		b= b,
+		c= (r1-r2)/2,
+		d= r2,
+	}
+end
+
+velocity_vector = function(obj)
+  return vector(obj.dx, obj.dy)
+end
+
+current_orbit = function(target,reference, closed)
+  target = target or ship.status
+  reference = reference or orbit_center(target, closed)
+  return calculateOrbit(reference.mass,
+      velocity_vector(target):sub(velocity_vector(reference)),
+    vector_functions.difference(target, reference))
+end

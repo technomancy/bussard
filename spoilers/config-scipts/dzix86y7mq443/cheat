@@ -1,0 +1,16 @@
+cheat_teleport = function()
+  ship.cheat.x = ship.status.target.x + math.sqrt(ship.status.target.mass)
+  ship.cheat.y = ship.status.target.y + math.sqrt(ship.status.target.mass)
+  ship.cheat.dx = ship.status.target.dx
+  ship.cheat.dy = ship.status.target.dy
+end
+
+cheat_use = function()
+  cheat_teleport()
+  ship.cheat.battery = ship.status.battery_capacity
+  ssh_create_raskin()
+  ssh_raskin()
+end
+
+bind("flight", "ctrl-t", cheat_teleport)
+bind("flight", "ctrl-u", cheat_use)

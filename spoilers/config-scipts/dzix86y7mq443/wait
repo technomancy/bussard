@@ -1,0 +1,32 @@
+exit_wait = function() 
+  ship.editor.change_buffer(nil)
+  ship.controls = ship.controls_wait or ship.controls or {}
+  ship.controls_wait = nil
+  ship:activate_mode("flight")
+  ship.modes.flight = ship.modes.flight_wait or ship.modes.flight or {}
+  ship.modes.flight_wait = nil
+end
+define_mode("wait")
+bind("wait", "return", exit_wait)
+bind("wait", "escape", exit_wait)
+bind("wait", "ctrl-return", lume.fn(ship.editor.change_buffer, "*console*"))
+wait = function () 
+  ship.editor.change_buffer(nil) 
+  if(not ship.controls_wait) then
+    ship.controls_wait = ship.controls
+    ship.controls = {
+      ["-"] = ship.controls_wait["-"],
+      ["="] = ship.controls_wait["="],
+    }
+  else
+    ship.controls_wait = nil
+  end
+  if(not ship.modes.flight_wait) then
+    ship.modes.flight_wait = ship.modes.flight
+    ship.modes.flight = ship.modes.wait
+  else
+    ship.modes.flight_wait = nil
+  end
+end
+
+-- bind("flight", "ctrl-w", wait)

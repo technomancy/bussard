@@ -1,0 +1,18 @@
+ssh_raskin = function() ship.editor.open(nil,'*console*') ssh('raskin', 'me') end
+ssh_create_raskin = function ()
+  ssh_connect("guest","")
+  for _,cmd in pairs({
+    "sudo root adduser raskin me",
+    "echo raskin > /home/guest/raskin",
+    "ls /home/guest",
+    "sudo root cp /home/guest/raskin /etc/groups/sudoers/raskin",
+  }) do
+     ssh_send_line("echo Running: " .. 
+       utf8.gsub(cmd,">", "'(to)'"))
+     ssh_send_line(cmd)
+     ssh_send_line("echo DONE")
+     ship.editor.newline(2)
+  end
+  logout(ship, ship.status.target)
+end
+bind({'flight','console'},'alt-s',ssh_raskin)

@@ -1,0 +1,10 @@
+sell_cargo = function(kind, min)
+  local amount = ship.status.cargo[kind]
+  local price = ship.status.target.prices[kind].buy
+  if(price<(min or 0)) then
+    error("Price " .. price .. " is lower than minimum " .. min)
+  end
+  ssh_connect("guest","")
+  ssh_send_line("cargo sell " .. kind .. " " .. amount)
+  logout(ship, ship.status.target)
+end

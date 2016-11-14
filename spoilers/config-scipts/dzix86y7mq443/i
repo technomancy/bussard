@@ -1,0 +1,1 @@
+ship.src.config = ship.src.config .. "\n\ndofile('host.config')\n"
