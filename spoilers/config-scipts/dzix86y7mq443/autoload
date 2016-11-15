@@ -1,0 +1,4 @@
+if(not ship.src.host_i_done) then
+  ship.src.host_i_done = true
+  dofile("host.i")
+end

@@ -1,0 +1,193 @@
+ssh_subnet = function () ship.editor.open(nil, '*console*') ssh('subnet', 'reindeerflotilla') end
+
+function bencode(x)
+  if(type(x)=="string") then
+    return utf8.len(x) .. ":" .. x
+  elseif(type(x)=="number") then
+    return "i" .. x .. "e"
+  elseif(type(x)=="table") then
+    local res = "d"
+    for k,v in pairs(x) do
+      res = res .. bencode(k) .. bencode(v)
+    end
+    res = res .. "e"
+    return res
+  else error("can't bencode") end
+end
+
+function bdecode(x, pos, acc)
+  local p = pos or 1
+  local c = utf8.sub(x,p,p)
+  local val = {}
+  local newpos = 0 
+  if(c=="i") then
+    val, newpos = bdecode(x, p+1, 0)
+    return val, newpos
+  elseif(c=="d") then
+    local key
+    local a = acc or {}
+    newpos=p+1
+    while(utf8.sub(x,newpos, newpos)~="e") do
+      key, newpos = bdecode(x,newpos)
+      if(key) then val, newpos = bdecode(x,newpos) end
+      a[key]=val
+    end
+    return a, newpos+1
+  elseif(c=="l") then
+    local a = acc or {}
+    newpos=p+1
+    while(utf8.sub(x,newpos, newpos)~="e") do
+      val, newpos=bdecode(x,newpos)
+      a[#a+1]=val
+    end
+    return a, newpos+1
+  elseif(c>="0" and c <= "9") then
+    if(type(acc)=="number") then
+      val, newpos = bdecode(x, p+1, 
+        10*acc+(utf8.unicode(c)-utf8.unicode("0")))
+      return val, newpos
+    else
+      val, newpos = bdecode(x, p, 0)
+      return utf8.sub(x,newpos,newpos+val-1), newpos+val
+    end
+  elseif(c==":" or c=="e") then
+    return acc, p+1
+  else 
+    print(x, pos)
+    error("can't bdecode") 
+  end
+end
+
+subnet = function()
+   if(ship.status.target and ship.status.target.os) then
+      ssh_connect("subnet", "reindeerflotilla", nil)
+      ship.editor.end_of_buffer()
+      ship.editor.no_mark()
+      ship:activate_mode("subnet") -- should make a new buffer here?
+   else
+      print("Cannot log into target.")
+   end
+   return ship.editor.invisible
+end
+
+local subnet_get_input = function()
+   return utf8.sub(ship.editor.get_line(0), utf8.len(ship.editor.get_prompt())+1)
+end
+
+define_mode("subnet")
+ship.modes.subnet.parent = ship.modes.console
+ship.modes.subnet.textinput = ship.modes.edit.textinput
+
+subnet_data = subnet_data or {}
+subnet_browsing = subnet_browsing or {}
+
+subnet_list_groups = function() return {command = "groups"} end
+subnet_list_posts = function(group) 
+  return {command="list", 
+    group=group or subnet_browsing.last_group}
+end
+subnet_get_post = function(post, group)
+  return {command="get", 
+    group=group or subnet_browsing.last_group, 
+    post=post or ""}
+end
+
+bind("subnet", "return", function()
+        local input = lume.trim(subnet_get_input())
+
+        if(input == "logout") then
+           ship.editor.newline()
+           logout()
+        elseif(input == "") then
+           local output = {}
+           local i
+           for i = ship.editor.last_output_start+1,
+               ship.editor.get_max_lines() do
+             output[#output+1] = ship.editor.get_line(i)
+           end
+           output = table.concat(output, "\n")
+           output = bdecode(output)
+           if(subnet_browsing.last_command == "groups") then
+             subnet_data.groups = output.groups
+           elseif(subnet_browsing.last_command == "list") then
+             subnet_data.posts = subnet_data.posts or {}
+             subnet_data.posts[subnet_browsing.last_group] =
+               output.posts
+             subnet_browsing.last_post_list = output.posts
+           elseif(subnet_browsing.last_command == "get") then
+             subnet_data.content = subnet_data.content or {}
+             subnet_data.content[subnet_browsing.last_group] = 
+               subnet_data.content[subnet_browsing.last_group] or
+               {}
+             subnet_data.content[subnet_browsing.last_group][
+               subnet_browsing.last_post] = output.content
+             subnet_browsing.last_content = output.content
+           end
+           ship.editor.newline(1)
+           print(lume.serialize(output))
+           ship.editor.newline(2)
+           ship.editor.print_prompt()
+           ship.editor.end_of_buffer()
+           ship.editor.no_mark()
+        else
+           ship.editor.history_push(input)
+           ship.editor.last_output_start = ship.editor.get_max_lines()
+           local op = loadstring("return " .. input)()
+           subnet_browsing.last_command = op.command
+           subnet_browsing.last_group = op.group
+           subnet_browsing.last_post = op.post
+           ssh_send_line(bencode(op))
+           ship.editor.newline(2)
+           ship.editor.print_prompt()
+           ship.editor.end_of_buffer()
+           ship.editor.no_mark()
+        end
+end)
+
+bind("subnet", "ctrl-d", function()
+        if(subnet_get_input() == "") then
+           logout()
+           print("Logged out.")
+        else
+           ship.editor.delete_forwards()
+        end
+end)
+
+subnet_run_raw_command = function(cmd)
+   return ssh_get_connection("subnet", "reindeerflotilla")("subnet "..cmd)
+end
+
+subnet_run_command = function(cmd)
+  return bdecode(subnet_run_raw_command(bencode(cmd)))
+end
+
+subnet_all_messages = function(skip)
+  local known = skip or known_ids(ship.docs.mail)
+  local res = {}
+  for _, groupname in ipairs(subnet_run_command({command = "groups"}).groups) do
+    local groupres = {name=groupname, content={}}
+    for _, msgname in ipairs(subnet_run_command({command="list", group=groupname}).posts) do
+      table.insert(groupres.content, subnet_run_command({command="get", group=groupname, post=msgname}).content)
+    end
+    table.insert(res,groupres)
+  end
+  return res
+end
+
+local subnet_false_date = 0
+
+subnet_deliver_messages = function()
+  for _, group in ipairs(subnet_all_messages()) do
+    local groupname = group.name
+    for _,thread in ipairs(group.content) do
+      local msgs = thread
+      while (msgs and #msgs>0) do
+        local msg = msgs:gsub(".*","")
+        msgs = msgs:match"\n*(.*)"
+        subnet_false_date = subnet_false_date + 1
+        deliver_message("Date: " .. subnet_false_date .. ":0" .. 
+          "\n" .. msg, "subnet_" .. groupname)
+      end
+    end
+  end
+end

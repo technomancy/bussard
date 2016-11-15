@@ -1,0 +1,7 @@
+ship.controls.lalt = ship.actions.laser
+ship.controls.ralt = ship.actions.fuel_charger
+
+bind("flight", "ctrl-9", function() ship.actions.underclocker(ship.status.time_factor * 1.1) end)
+bind("flight", "ctrl-0", function() ship.actions.underclocker(ship.status.time_factor / 1.1) end)
+
+bind("flight", "ctrl-4", lume.fn(sell_cargo, "ore"))

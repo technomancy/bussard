@@ -1,0 +1,126 @@
+vector_functions = {
+        data = function (v)
+                return {x=v.x, y=v.y}
+        end,
+
+        copy = function (v)
+                return vector(v.x, v.y)
+        end,
+
+        add = function(u, v)
+                u.x = u.x+ v.x
+                u.y = u.y+ v.y
+                return u
+        end,
+
+        sum = function(u, v)
+                return vector(u.x+v.x, u.y+v.y)
+        end,
+
+        sqr = function(v)
+                return v.x*v.x + v.y*v.y
+        end,
+
+        abs = function(v)
+                return math.sqrt(vector_functions.sqr(v))
+        end,
+
+        mul = function(v, k)
+                v.x = v.x*k
+                v.y = v.y*k
+                return v
+        end,
+
+        prod = function(v, k)
+                return vector(v.x*k,v.y*k)
+        end,
+
+        neg = function(v)
+                v.x = - v.x
+                v.y = - v.y
+                return v
+        end,
+
+        negated = function(v)
+                return vector(-v.x, -v.y)
+        end,
+
+        sub = function (u,v)
+                u.x = u.x - v.x
+                u.y = u.y - v.y
+                return u
+        end,
+
+        difference = function (u,v)
+                return vector (u.x-v.x, u.y-v.y)
+        end,
+
+        rotate = function(u,a)
+                x1 = math.cos(a)*u.x-math.sin(a)*u.y
+                y1 = math.cos(a)*u.y+math.sin(a)*u.x
+                u.x, u.y = x1, y1
+                return u
+        end,
+
+        rotated = function(u,a)
+                x1 = math.cos(a)*u.x-math.sin(a)*u.y
+                y1 = math.cos(a)*u.y+math.sin(a)*u.x
+                return vector(x1, y1)
+        end,
+
+        rotate_deg = function(u,a)
+                return vector_functions.rotate(u,a*math.pi/180)
+        end,
+
+        rotated_deg = function(u,a)
+                return vector_functions.rotated(u,a*math.pi/180)
+        end,
+
+        describe = function(v)
+                return "{ x=" .. v.x .. ", y=" .. v.y .. " }"
+        end,
+
+        area_with = function (u,v)
+                return u.x*v.y - u.y*v.x
+        end,
+
+        normalize = function(v)
+                return vector_functions.mul(v,
+                        1/vector_functions.abs(v))
+        end,
+
+        normalized = function(v)
+                return vector_functions.prod(v,
+                        1/vector_functions.abs(v))
+        end,
+
+        direction = function(v)
+                if vector_functions.abs(v)>1e-20 then
+                        return math.atan2(v.x, v.y)
+                else
+                        return 0
+                end
+        end,
+
+        direction_deg = function(v)
+                return vector_functions.direction(v)*180/math.pi
+        end,
+
+        assign = function (u, v)
+                u.x = v.x
+                u.y = v.y
+                return u
+        end,
+}
+
+vector = function(x,y)
+        res = { x=x, y=y }
+        if setmetatable then 
+                setmetatable(res, {__index = vector_functions})
+        else 
+                for k,v in pairs(vector_functions) do
+                        res[k]=v
+                end
+        end
+        return res
+end

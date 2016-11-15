@@ -1,0 +1,100 @@
+ship.navigation_ui_helpers = ship.navigation_ui_helpers or {}
+ship.navigation_ui_helpers.max_accel_zone = function()
+  local sun = ship.status.bodies[1]
+  local tgt = ship.status.target
+  graphics.setColor(255,127,0,10)
+  graphics.circle("fill", 
+    sun.x-ship.status.x, sun.y-ship.status.y, 
+    math.sqrt(sun.mass*universe.g/(universe.max_accel or 10)))
+  if (tgt and (sun.x ~= tgt.x or sun.y ~= tgt.y)) then
+    graphics.circle("fill", 
+      tgt.x-ship.status.x, tgt.y-ship.status.y, 
+      math.sqrt(tgt.mass*universe.g/(universe.max_accel or 10)))
+  end
+end
+
+ship.navigation_ui_helpers.target_aoi = function()
+  local tgt = ship.status.target
+  local center = orbit_center(tgt, false)
+  if center and tgt and (center.mass > tgt.mass) then
+    local r_aoi = vector_functions.difference(tgt,center):abs()*
+      (tgt.mass/center.mass)^(2/5)
+    local r_max_df = vector_functions.difference(tgt,center):abs()*
+      (tgt.mass/center.mass)^(1/3)
+    local r_max_f = vector_functions.difference(tgt,center):abs()*
+      (tgt.mass/center.mass)^(1/2)
+    local r_tgt = vector_functions.difference(tgt, ship.status):
+      data()
+    graphics.push()
+      graphics.translate(r_tgt.x, r_tgt.y)
+      graphics.setColor(0,255,200,3)
+      graphics.circle("fill", 0, 0, r_max_df)
+      graphics.circle("fill", 0, 0, r_aoi)
+      graphics.circle("fill", 0, 0, r_max_f)
+    graphics.pop()
+  end
+end
+
+ship.navigation_ui_helpers.ship_orbit = function()
+  local center = orbit_center(ship.status, true)
+  if center then
+    local orbit_data = current_orbit(nil, center)
+    local r = vector_functions.difference(center, ship.status):
+      data()
+    graphics.push()
+    graphics.translate(r.x, r.y)
+    graphics.rotate((-90-orbit_data.direction)*math.pi/180)
+    graphics.setColor(0,255,127,40)
+    graphics.ellipse("line",
+      orbit_data.c,0, orbit_data.a,orbit_data.b,
+      360)
+    graphics.pop()
+  end
+  local center_open = orbit_center(ship.status, false)
+  if center_open and (not center or
+    vector_functions.difference(center_open, center):
+      abs()>1e-10) then
+    local orbit_data = current_orbit(nil, center_open)
+    local r = vector_functions.difference(
+      center_open, ship.status):data()
+    graphics.push()
+    graphics.translate(r.x, r.y)
+    graphics.rotate((-90-orbit_data.direction)*math.pi/180)
+    graphics.setColor(0,255,127,40)
+    graphics.half_hyperbola("line", orbit_data.c,0,
+      -orbit_data.a, orbit_data.b, 360)
+    graphics.pop()
+  end
+  center = orbit_center(ship.status.target, true)
+  if center and ship.status.target and 
+      (ship.status.target.mass < center.mass) then
+    orbit_data = current_orbit(ship.status.target, center)
+    r = vector_functions.difference(
+      center, ship.status):data()
+    graphics.push()
+    graphics.translate(r.x, r.y)
+    graphics.rotate((-90-orbit_data.direction)*math.pi/180)
+    graphics.setColor(0,255,127,40)
+    graphics.ellipse("line",
+      orbit_data.c,0, orbit_data.a,orbit_data.b,
+      360)
+    graphics.pop()
+  end
+end
+
+vector_line = function (u, v, color)
+  graphics.setColor(unpack(color))
+  graphics.line(u.x, u.y, v.x, v.y)
+end
+
+ship.navigation_ui_helpers.velocity_wrt_target = function()
+  if ship.status.target then
+    local v = velocity_vector(ship.status):sub(
+      velocity_vector(ship.status.target))
+    vector_line(vector(0,0),v:prod(5), {255,0,0,100})
+    vector_line(v:prod(5), v:prod(20), {0,255,0,100})
+    vector_line(v:prod(20), v:prod(100), {0,0,255,100})
+  end
+end
+
+ship.trajectory_visible = false

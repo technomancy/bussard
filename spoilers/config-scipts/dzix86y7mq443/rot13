@@ -1,0 +1,21 @@
+rot13_char=function(c) 
+  n = string.byte(c)
+  block = {'A','Z'}
+  if (n>=string.byte(block[1]) and n<=string.byte(block[2])) then
+    return string.char(((n-string.byte(block[1])+13) % (string.byte(block[2])-string.byte(block[1])+1)) + string.byte(block[1]))
+  end
+  block = {'a','z'}
+  if (n>=string.byte(block[1]) and n<=string.byte(block[2])) then
+    return string.char(((n-string.byte(block[1])+13) % (string.byte(block[2])-string.byte(block[1])+1)) + string.byte(block[1]))
+  end
+  return c
+end
+
+rot13 = function (s)
+  res = ""
+  for i = 1,string.len(s) do
+    res = res .. rot13_char(string.sub(s,i,i))
+  end
+  return res
+end
+

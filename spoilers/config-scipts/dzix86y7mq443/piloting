@@ -1,0 +1,132 @@
+turn_retrograde_update = function(ship, dt, reference)
+  local ref = reference or {x=0, y=0, dx=0, dy=0}
+  local speed_angle = math.atan2(ship.status.dy-ref.dy, ship.status.dx-ref.dx)
+  local ship_angle = -ship.status.heading - math.pi/2
+  local delta = ship_angle - speed_angle
+  while(delta>math.pi) do delta= delta - 2*math.pi end
+  while(delta<-math.pi) do delta= delta + 2*math.pi end
+  if(delta<0) then 
+    ship.actions.right(true) 
+    ship.actions.left(false) 
+  end
+  if(delta>0) then 
+    ship.actions.left(true) 
+    ship.actions.right(false) 
+  end
+  return delta
+end
+
+turn_retrograde_updater_eps = function(eps, name, controls)
+  return function(ship,dt)
+    local delta = turn_retrograde_update(ship,dt)
+    if(math.abs(delta)<(eps or {})) then
+      ship.updaters[name] = nil
+      ship.actions.left(false)
+      ship.actions.right(false)
+      reactivate_controls_by_names(controls)
+      if(callback) then callback() end
+    end
+  end
+end
+
+install_retrograde_updater = function (eps, name, controls, callback)
+  local thename = name or "turn_retrograde"
+  ship.updaters[thename] = turn_retrograde_updater_eps(eps, thename, controls, callback)
+  deactivate_controls_by_names(controls)
+end
+
+ship.deactivated_controls = ship.deactivated_controls or {}
+
+deactivate_control_by_name = function(name)
+  ship.deactivated_controls[name] = ship.deactivated_controls[name] or ship.controls[name]
+  ship.controls[name] = nil
+end
+
+reactivate_control_by_name = function(name)
+  ship.controls[name] = ship.controls[name] or ship.deactivated_controls[name]
+  ship.deactivated_controls[name] = nil
+end
+
+reactivate_controls_by_names = function(names)
+  for k,v in pairs(names or {}) do
+    if type(v)=="function" then 
+      reactivate_control_by_name(k)
+    else 
+      reactivate_control_by_name(v)
+    end
+  end
+end
+
+deactivate_controls_by_names = function(names)
+  for k,v in pairs(names or {}) do
+    if type(v)=="function" then 
+      deactivate_control_by_name(k)
+    else 
+      deactivate_control_by_name(v)
+    end
+  end
+end
+
+reactivate_all_controls = function()
+  ship.controls = lume.merge(ship.controls, ship.deactivated_controls)
+  ship.deactivated_controls = {}
+end
+
+brake_updater = function(aeps, veps, reference, name, controls, callback)
+  return function (ship, dt)
+    local ref = reference or {x=0, y=0, dx=0, dy=0}
+    local v = lume.distance(ship.status.dx, ship.status.dy, ref.dx, ref.dy)
+    if(v<veps) then
+      ship.updaters[name] = nil
+      ship.actions.forward(false)
+      ship.actions.left(false)
+      ship.actions.right(false)
+      reactivate_controls_by_names(controls)
+      if(callback) then callback() end
+      return nil
+    end
+    local adelta = turn_retrograde_update(ship, dt, ref)
+    if(math.abs(adelta)<aeps) then
+      ship.actions.forward(true)
+    end
+  end
+end
+
+install_brake_updater = function (aeps, veps, reference, name, controls, callback)
+  local thename = name or "brake"
+  ship.updaters[thename] = brake_updater(aeps, veps, reference, thename, controls, callback)
+  deactivate_controls_by_names(controls)
+end
+
+brake_at_updater = function(aeps, veps, qeps, t, qref, reference, name, controls, callback)
+  return function (ship, dt)
+    local ref = reference or {x=0, y=0, dx=0, dy=0}
+    local q = lume.distance(ship.status.x, ship.status.y, ref.x, ref.y)
+    local tt=t*100*math.sqrt(q/qref)
+    local v_ideal = {dx=ref.dx-(ship.status.x-ref.x)/tt, dy=ref.dy-(ship.status.y-ref.y)/tt}
+    local v = lume.distance(ship.status.dx, ship.status.dy, v_ideal.dx, v_ideal.dy)
+    if(q<qeps and v<veps) then
+      ship.updaters[name] = nil
+      ship.actions.forward(false)
+      ship.actions.left(false)
+      ship.actions.right(false)
+      reactivate_controls_by_names(controls)
+      if(callback) then callback() end
+      return nil
+    end
+    local adelta = turn_retrograde_update(ship, dt, v_ideal)
+    if((math.abs(adelta)<aeps) and (v>veps)) then
+      ship.actions.forward(true)
+    end
+  end
+end
+
+install_brake_at_updater = function (aeps, veps, qeps, t, reference, name, controls, callback)
+  local thename = name or "brake"
+  local ref = reference or {x=0,y=0,dx=0,dy=0}
+  ship.updaters[thename] = brake_at_updater(
+    aeps, veps, qeps, t, 
+    lume.distance(ship.status.x, ship.status.y, ref.x, ref.y), 
+    reference, thename, controls, callback)
+  deactivate_controls_by_names(controls)
+end
