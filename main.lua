@@ -12,6 +12,8 @@ local pause = require "pause"
 local systems = require("data.systems")
 local utils = require("utils")
 
+require "conics"
+
 local stars
 
 local quit = function()
