@@ -372,6 +372,8 @@ local ship = {
    realdofile = function(ship, x) dofile(x) ship.api.ui.play() end,
    realrequire = require,
    love = love,
+   setmetatable = setmetatable,
+   getmetatable = getmetatable,
 }
 
 -- everything in here is exposed to the sandbox. this table *is* `ship`, as far
