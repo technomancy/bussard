@@ -116,7 +116,22 @@ local sandbox = function(ship)
                              ship.api.editor.print(k .. "   " .. type(v))
                           end
                           return ship.api.editor.invisible
-                       end,})
+                       end,
+                       setmetatable = function(obj, t)
+                         t.__gc = nil
+                         t.__metatable_is_set_by_bussard_user = true
+                         setmetatable(obj, t)
+                       end,
+                       getmetatable = function(obj)
+                         local t = getmetatable(obj)
+                         if ((type(t)=="table")
+                             and t.__metatable_is_set_by_bussard_user) then
+                           return t
+                         else
+                           return "Inaccessible metatable"
+                         end
+                       end,
+                     })
 end
 
 local target_dt = 1/33
