@@ -328,7 +328,7 @@ return {
          format_time = format_time,
          parse_time = parse_time,
       },
-      lume = lume,
+      lume = lume.clone(lume),
    },
 
    completions_for = completions_for,
