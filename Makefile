@@ -31,7 +31,7 @@ check:
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --globals lume utf8 pack ship define_mode bind utils realprint pp pps \
 	            mail ssh ssh_connect portal logout ssh_send_line reply \
-	            graphics editor toggle_fps replyable \
+	            universe graphics editor toggle_fps replyable \
 	  -- $(IN_SHIP_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --exclude-files=*.lsp \
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel pps \
