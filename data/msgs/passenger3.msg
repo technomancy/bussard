@@ -8,4 +8,5 @@ Pick up: Apkabar Station (Luyten's Star system)
 Drop off: Mirduka Station (L 668-21 system)
 Fare payment: 325
 Passenger names: Merous Kiebeb
+
 Special passenger requirements: none

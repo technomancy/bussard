@@ -8,6 +8,7 @@ Pick up: Tana Prime (Tana system)
 Drop off: Apkabar Station (Luyten's Star system)
 Fare payment: 250
 Passenger names: Nari Phouen
+
 Special passenger requirements: I'm a bit of an old-fashioned traveler,
   so I won't step aboard any ship without first meeting the captain
   face-to-face. Please meet me in the promenade at the port in Tana

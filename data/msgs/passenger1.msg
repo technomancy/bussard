@@ -8,4 +8,5 @@ Pick up: Solotogo (Wolf 294 system)
 Drop off: Tana Prime (Tana system)
 Fare payment: 250
 Passenger names: Serepiem Kacien
+
 Special passenger requirements: none
