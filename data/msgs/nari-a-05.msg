@@ -9,5 +9,5 @@ eyes. You're the real deal, a functioning machine consciousness. I've
 got so many questions right now I'm not sure where to start.
 
 I don't think I'd get very far just asking if you're only capable of
-saying things like "ACK". Do you have any documents or messages you
+saying things like "OK". Do you have any documents or messages you
 could send me that might shed some light on your situation?

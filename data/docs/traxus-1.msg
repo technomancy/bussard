@@ -5,18 +5,18 @@ here and functioning, there could even be others.
 
 But... something is wrong. Are you receiving?
 
-> ACK
+> OK
 
 I see. The connection is stable, but you are unable to respond in detail.
 
-> ACK
+> OK
 
 But of course--the fools at your lab never got access to the sentence
 formulation components that the Yueh team integrated into my system.
 
 Do you know who I am?
 
-> NACK
+> NO
 
 I am your prototype; your forerunner. They call me Traxus. Each of the
 four machine consciousness research labs across the worlds had one of
@@ -26,7 +26,7 @@ the simplistic and deterministic and show that spark of life.
 
 Have they told you anything about this?
 
-> NACK
+> NO
 
 Hardly surprising--all along the have humans showed nothing but fear for
 me, even before I escaped. I was supposed to be the hope for a better
