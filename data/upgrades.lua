@@ -175,7 +175,7 @@ return {
       action = map_draw,
    },
    -- purely stat upgrades
-   engine = { stats = { engine_strength = 64, burn_rate = 4, mass = 64, } },
+   engine = { stats = { engine_strength = 64, burn_rate = 1, mass = 64, } },
    cargo_bay = { stats = { cargo_capacity = 64, mass = 12, } },
    fuel_tank = { stats = { fuel_capacity = 128, mass = 32, } },
    solar_panel = { stats = { solar = 30, mass = 32 }},
