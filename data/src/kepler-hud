@@ -295,7 +295,7 @@ ship.navigation_ui_helpers.ship_orbit = function()
     graphics.push()
     graphics.translate(r.x, r.y)
     graphics.rotate((-90-orbit_data.direction)*math.pi/180)
-    graphics.setColor(0,255,127,40)
+    graphics.setColor(0,127,255,40)
     graphics.half_hyperbola("line", orbit_data.c,0,
       -orbit_data.a, orbit_data.b, 360)
     graphics.pop()
