@@ -54,6 +54,11 @@ bind("flight", "ctrl-q", ship.ui.quit)
 
 -- contains configuration for heads-up display during flight mode.
 dofile("src.hud")
+dofile("src.kepler-hud")
+
+-- Switch off the expensive calculation of the future trajectory
+-- Change to true to re-enable
+ship.trajectory_visible = false
 
 -- other modes
 dofile("src.edit") -- editor
