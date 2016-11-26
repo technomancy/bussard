@@ -1059,6 +1059,8 @@ return {
       b.props.render_lines = colorize_lua(b.lines, colors.lua)
    end,
 
+   colors = colors,
+
    debug = debug,
 
    -- deprecated
