@@ -22,7 +22,8 @@ It may be expedient to run `ship.cheat.comm_range = 9999999` in order to make
 testing login interaction easier.
 
 You can also use `ship.cheat.realdofile` to reload some file from the game
-source and `ship.cheat.realrequire` to load modules.
+source and `ship.cheat.realrequire` to load modules. Note that certain modules
+are stateful and will behave unpredictably when reloaded. TODO: list in detail.
 
 For story, background and guidelines, look at the dev guide in `spoilers/`.
 
@@ -44,7 +45,7 @@ get by a real play-through of the game up to that point.
 
 Any changes made to the stock config in `data/src` will not be visible to games
 begun before the changes were made. Use `ctrl-f1` to update your in-game config
-with the latest stock. Your old config files will be backed up, and the
+with the latest stock files. Your old config files will be backed up, and the
 `ship.host` table will remain between wiping save games.
 
 You may find the contents of `spoilers/solutions` useful during development.
