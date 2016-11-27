@@ -142,7 +142,7 @@ local sys = {
            image_name="sun",
            name="L 668-21", star=true },
           {r=20000, mass=700, station=true,
-           image_name="station-pointed",
+           image_name="station-pointed", subnet=true,
            name="Mirduka Station", os=orb, world=true,
 
            industry=4,tech=3,

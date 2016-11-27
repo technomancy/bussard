@@ -24,8 +24,8 @@ venantius.m@wonderchannel.net.sol writes:
 > OK, fine. Listen, there isn't any single point of connection, because it's a
 > distributed system, right? But you'll find relays scattered around if you know
 > what to look for. Usually they tend to stick to stations rather than planets
-> where possible. I don't think there are any in the core systems either--Sol
-> and the Terran Union systems keep a tighter eye on their networks than the
+> where possible. I don't think there are any in the central systems either--Sol
+> and the Terran Republic systems keep a tighter eye on their networks than the
 > outer systems.
 >
 > Anyway, if you find a station that runs a relay, you'll need to log in with
