@@ -141,8 +141,8 @@ return {
       update = function(ship, dt)
          if(ship.api.fuel_charger_on and
             ship.fuel < ship.fuel_capacity and ship.battery > 0) then
-            ship.fuel = ship.fuel + (ship.recharge_rate * dt * 1/3)
-            ship.battery = ship.battery - dt
+            ship.fuel = ship.fuel + (ship.recharge_rate * dt * 2)
+            ship.battery = ship.battery - 10*dt
          end
       end,
    },
