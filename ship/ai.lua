@@ -47,7 +47,7 @@ local draw = function(ship, sx, sy)
    love.graphics.push()
    love.graphics.setColor(50, 120, 50);
    love.graphics.translate(ship.x-sx, ship.y-sy)
-   love.graphics.scale(ship.math or 64)
+   love.graphics.scale(ship.mass / 2)
    love.graphics.rotate(math.pi - (ship.rotation or 0))
    love.graphics.polygon("fill", 0, -6, -4, 10, 4, 10)
    if(ship.engine_on) then
@@ -75,13 +75,12 @@ local make = function(ship, bodies, name, from_portal)
    return {
       ship = true,
       update = update,
-      mass = love.math.randomNormal(12, 64),
       draw = draw,
 
       x = from.x,
       y = from.y,
       dx=0, dy=0,
-      mass = 128,
+      mass = love.math.randomNormal(24, 64),
       name = name,
       bodies = targets,
       engine_strength = 512,
