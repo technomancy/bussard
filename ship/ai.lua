@@ -1,7 +1,6 @@
 local utils = require("utils")
 local body = require("body")
 
-local ship_img = love.graphics and love.graphics.newImage("assets/ship.png")
 local names = lume.array(love.filesystem.lines("data/ships.txt"))
 
 local normalize = function(t)
@@ -44,6 +43,22 @@ local update = function(self, dt)
    end
 end
 
+local draw = function(ship, sx, sy)
+   love.graphics.push()
+   love.graphics.setColor(50, 120, 50);
+   love.graphics.translate(ship.x-sx, ship.y-sy)
+   love.graphics.scale(ship.math or 64)
+   love.graphics.rotate(math.pi - (ship.rotation or 0))
+   love.graphics.polygon("fill", 0, -6, -4, 10, 4, 10)
+   if(ship.engine_on) then
+      love.graphics.setColor(255, 255, 255);
+      love.graphics.setLineWidth(1)
+      love.graphics.line(-4, 11, 4, 11)
+   end
+   love.graphics.setColor(255,255,255);
+   love.graphics.pop()
+end
+
 local make = function(ship, bodies, name, from_portal)
    local targets = lume.filter(bodies, "os")
    local target, from = targets[love.math.random(#targets)]
@@ -60,9 +75,8 @@ local make = function(ship, bodies, name, from_portal)
    return {
       ship = true,
       update = update,
-      image_name = "ship", scale = 10,
-      ox = ship_img and ship_img:getWidth() / 2,
-      oy = ship_img and ship_img:getHeight() / 2,
+      mass = love.math.randomNormal(12, 64),
+      draw = draw,
 
       x = from.x,
       y = from.y,

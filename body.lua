@@ -71,6 +71,7 @@ end
 
 return {
    draw = function(body, x, y)
+      if(body.draw) then return body:draw(x, y) end
       body.image = body.image or love.graphics.newImage("assets/" ..
                                                            body.image_name .. ".png")
       local scale = body.scale or 1
