@@ -1,7 +1,7 @@
 dependencies:
   pre:
-    - apt-get update -qq > /dev/null && apt-get install -y luarocks love > /dev/null
-    - luarocks install luacheck > /dev/null && luarocks install lunatest > /dev/null
+    - sudo apt-get update -qq > /dev/null && sudo apt-get install -y luarocks love > /dev/null
+    - sudo luarocks install luacheck > /dev/null && sudo luarocks install lunatest > /dev/null
 
 test:
   override:
