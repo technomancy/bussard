@@ -1,0 +1,8 @@
+dependencies:
+  pre:
+    - apt-get update -qq > /dev/null && apt-get install -y luarocks love > /dev/null
+    - luarocks install luacheck > /dev/null && luarocks install lunatest > /dev/null
+
+test:
+  override:
+    - make ci
