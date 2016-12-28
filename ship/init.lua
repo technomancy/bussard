@@ -230,9 +230,11 @@ local ship = {
          if(portal) then
             ship.x, ship.y = portal.x + 100, portal.y + 100
             ship.dx, ship.dy = portal.dx, portal.dy
-         else
-            ship.x = love.math.random(30000) + 10000
-            ship.y = love.math.random(30000) + 10000
+         else -- seed to bottom-left quadrant
+            ship.r = 16831
+            body.seed_pos(ship, ship.bodies[1])
+            ship.x, ship.y = -(math.abs(ship.x)), math.abs(ship.y)
+            ship.dx, ship.dy = -(math.abs(ship.dx)), math.abs(ship.dy)
          end
          ai.seed(ship)
       end
