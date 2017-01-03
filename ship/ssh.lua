@@ -25,8 +25,10 @@ local sessions = {}
 -- uses the sandbox below.
 
 local logout = function(ship, target)
-   ship.api:activate_mode("console")
-   ship.api.editor.set_prompt("> ")
+   ship.api.editor.with_current_buffer("*console*", function()
+                                          ship.api:activate_mode("console")
+                                          ship.api.editor.set_prompt("> ")
+   end)
    if(not target) then return ship.api.editor.invisible end
    local session = sessions[target.name]
    if(session) then
@@ -42,8 +44,6 @@ local logout = function(ship, target)
    else
       (ship.api or ship).print("| Not logged in.")
    end
-   ship.api:activate_mode("console")
-   ship.api.editor.set_prompt("> ")
    return ship.api.editor.invisible
 end
 
