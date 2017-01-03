@@ -320,6 +320,3 @@ ship.navigation_ui_helpers.velocity_wrt_target = function()
     vector_line(v:prod(20), v:prod(100), {0,0,255,100})
   end
 end
-
--- Uncomment to remove the striped blue trajectory line
--- ship.trajectory_visible = false

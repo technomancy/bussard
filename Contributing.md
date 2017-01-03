@@ -11,15 +11,14 @@ Our goal is compatibility with LÖVE 0.9.0+, but 0.10.x is pretty close to 0.9.x
 so it should be fine to test primarily in that. A few non-essential features
 that only work in 0.10.x are OK but should be noted with comments.
 
-During development you can enable cheating (`ship.cheat`) to make debugging
-easier. To enable cheating run Bussard with `--cheat` argument; you can
-disable it again by running with `--no-cheat` argument. The state of cheating
-is saved when you restart the game without parameters, resetting the game
-switches cheating off again. The `ship.cheat` variable provides access to the
-real, read-write unfiltered `ship` object.
-
-It may be expedient to run `ship.cheat.comm_range = 9999999` in order to make
-testing login interaction easier.
+During development you can enable cheating (via the `ship.cheat` field) to make
+debugging easier. To enable cheating run Bussard with `--cheat` argument; you
+can disable it again by running with `--no-cheat` argument. The state of
+cheating is saved when you restart the game without parameters, resetting the
+game switches cheating off again. The `ship.cheat` variable provides access to
+the real, read-write unfiltered `ship` object. For instance, it may be expedient
+to run `ship.cheat.comm_range = 9999999` in order to make testing login
+interaction easier.
 
 You can also use `ship.cheat.realdofile` to reload some file from the game
 source and `ship.cheat.realrequire` to load modules. Note that certain modules
@@ -43,12 +42,14 @@ In order to skip around in the game for debugging, you can run `love . --act 1`
 to set all the event flags and deliver all the messages that you would normally
 get by a real play-through of the game up to that point.
 
-Any changes made to the stock config in `data/src` will not be visible to games
-begun before the changes were made. Use `ctrl-f1` to update your in-game config
-with the latest stock files. Your old config files will be backed up, and the
-`ship.host` table will remain between wiping save games.
+The stock config in `data/src` is copied into the save directory when a new game
+is started. Therefore changes to the source will not be visible to in-progress
+games unless you use `ctrl-f1` to update your in-game config with the latest
+stock files. Your old config files will be backed up. The `ship.host` table
+is populated with the contents of the `host_fs` directory inside Bussard's save
+dir; it will persist between wiping save games.
 
-You may find the contents of `spoilers/solutions` useful during development.
+You may find the code in `spoilers/solutions` useful during development.
 
 ## Self-hosting
 
@@ -59,10 +60,6 @@ are running from a checkout. Symlink your checkout to `game` inside the save
 directory. When you press `ctrl-o` to open a file, put a `/` in front of the
 path of any files inside the checkout of the game to open it in the editor; for
 instance, `/Contributing.md` would open this file.
-
-If you want to use Bussard solely as a text editor, launch it with the `--no-game`
-argument and the update loop will be adjusted to use much less CPU by leaving
-out all the game calculations.
 
 ## Code style
 
@@ -106,7 +103,8 @@ changes to check for simple mistakes that can be caught with static analysis,
 like typos or accidental globals. It also catches certain style issues.
 
 You'll need [luarocks](https://luarocks.org), which hopefully is provided by
-your package manager.
+your package manager. Ensure the `bin` directory of luarocks (typically
+`~/.luarocks/bin`) is on your `$PATH`.
 
     $ luarocks install --local luacheck && luarocks install --local lunatest
     [...]
@@ -257,14 +255,14 @@ See the comments at the top of `ship/ssh.lua` for details about how I/O works.
 
 ### Editor
 
-The onboard computer uses the `ship/editor.lua` interface for everything, not
+The onboard computer uses [polywell](https://gitlab.com/technomancy/polywell) as
+the interface for everything, not
 just editing code. Lua console sessions are run in an editor buffer, as are SSH
 sessions which connect you to worlds and the messaging system. The user is free
 to define their own modes as well. Key presses are translated by the editor into
 text insertions or commands based on the keymap for the current mode; a system
 which is largely based on Emacs. See `find_binding`, `define_mode`, and `bind`
-in `ship/editor.lua`, and `data/src/config` for a usage example. The commands
-which the non-flight modes bind are typically defined in `ship/editor.lua`.
+in `polywell/init.lua`, and `data/src/config` for a usage example.
 
 ### Save
 

@@ -123,6 +123,9 @@ return {
          local dumped = love.filesystem.read("buffers/" .. b)
          ship.api.editor.load_buffer(ship.api, dumped)
       end
+      ship.api.editor.open(ship.api, "*console*")
+      ship:dofile("src.config")
+      ship.api.editor.open(ship.api, "*flight*", "flight")
       ship.api.editor.print_prompt()
       for system_name,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do

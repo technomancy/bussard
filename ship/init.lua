@@ -14,7 +14,7 @@ local host_fs_proxy = require("host_fs_proxy")
 local asteroid = require("asteroid")
 local body = require("body")
 
-local editor = require("ship.editor")
+local editor = require("polywell")
 
 local with_traceback = lume.fn(utils.with_traceback, editor.print)
 
@@ -106,6 +106,7 @@ local sandbox = function(ship)
                        reply = lume.fn(mail.reply, ship),
                        replyable = mail.replyable,
                        graphics = love.graphics,
+                       flight_draw = require("draw"),
                        is_key_down = love.keyboard.isDown,
                        pps = function(x)
                           return serpent.block(x, serpent_opts) end,
@@ -422,8 +423,9 @@ ship.api = {
       end,
    },
 
-   find = function(s, path)
+   find = function(s, path, use_rawget)
       if(path == ".") then return s end
+      if(type(path) ~= "string") then return end
       if(path:find("^/")) then
          if(love.filesystem.isFile(path)) then
             return love.filesystem.read(path)
@@ -440,13 +442,35 @@ ship.api = {
          local parts = lume.split(path, ".")
          local target = s
          for _,p in ipairs(parts) do
+            if(use_rawget) then
+               -- special-case to bypass metatable __index recursion
+               target, use_rawget = rawget(target, p), false
+            elseif(type(target) == "table" and p ~= "") then
+               target = target[p]
+            elseif(p ~= "") then
+               return nil
+            end
+            -- print(p, target, use_rawget)
+         end
+         return target
+      end
+   end,
+
+   set = function(s, path, contents)
+      if(path:find("^/")) then
+         assert(love.filesystem.write(path, contents))
+      else
+         local parts = lume.split(path, ".")
+         local basename = table.remove(parts, #parts)
+         local target = s
+         for _,p in ipairs(parts) do
             if(type(target) == "table" and p ~= "") then
                target = target[p]
             elseif(p ~= "") then
                return nil
             end
          end
-         return target
+         rawset(target, basename, contents)
       end
    end,
 
@@ -475,7 +499,7 @@ ship.api = {
    trajectory_step_size = 0.1,
    trajectory_seconds = 128, -- how far out the trajectory should go
    trajectory_auto = true, -- turn this off to disable auto-adjustment
-   trajectory_visible = true, -- turn this off to disable trajectory
+   trajectory_visible = false, -- for the old, slow trajectory
 
    fuel_to_stop = function(s)
       -- no idea where this 20 factor comes from
@@ -502,5 +526,14 @@ ship.api = {
       love.graphics.print(ship.api.editor.last_line(), 20, y)
    end,
 }
+
+-- polywell requires a table where you can just lookup key values with []
+-- so our logic of turning "key1.key2" keys into nested operations happens
+-- in the ship.find and ship.set functions
+setmetatable(ship.api, {
+                __index = function(_, path) return ship.api:find(path, true) end,
+                __newindex = function(_, path, contents)
+                   ship.api:set(path, contents) end,
+})
 
 return ship

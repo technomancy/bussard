@@ -22,13 +22,8 @@ ship.controls["right"] = ship.actions.right
 ship.controls["="] = zoom_in
 ship.controls["-"] = zoom_out
 
-local draw = function()
-   local y = (graphics:getHeight() - graphics.getFont():getHeight() * 2)
-   graphics.print(ship.editor.last_line(), 20, y)
-end
-
 ---- Flight mode
-define_mode("flight", nil, {draw=draw})
+define_mode("flight", nil, {draw=flight_draw, transparency=false})
 
 -- bind is for commands that only call their functions once even when held.
 -- it takes the name of a mode, a key combo, and a function to run when pressed.
@@ -38,6 +33,9 @@ bind("flight", "escape", ship.ui.pause)
 bind("flight", "ctrl-return", function()
         editor.change_buffer(editor.last_buffer() or "*console*")
 end)
+
+bind("flight", "ctrl-pageup", lume.fn(editor.next_buffer, -1))
+bind("flight", "ctrl-pagedown", editor.next_buffer)
 
 -- the mouse wheel is handled just like any other key press.
 bind("flight", "wheelup", lume.fn(zoom_in, true, 0.5))
@@ -55,10 +53,6 @@ bind("flight", "ctrl-q", ship.ui.quit)
 -- contains configuration for heads-up display during flight mode.
 dofile("src.hud")
 dofile("src.kepler-hud")
-
--- Switch off the expensive calculation of the future trajectory
--- Change to true to re-enable
-ship.trajectory_visible = false
 
 -- other modes
 dofile("src.edit") -- editor

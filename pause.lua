@@ -1,6 +1,6 @@
 local lume = require "lume"
-local colorize = require "ship.editor.colorize_lua"
-local editor = require "ship.editor"
+local colorize = require "polywell.colorize"
+local editor = require "polywell"
 
 local starfield = require "starfield"
 local stars = {}

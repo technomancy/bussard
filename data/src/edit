@@ -9,7 +9,7 @@ define_mode("edit")
 
 local exit = function()
    editor.save()
-   editor.change_buffer(nil) -- nil buffer means flight mode
+   editor.change_buffer("*flight*")
 end
 
 bind("edit", "escape", exit)
