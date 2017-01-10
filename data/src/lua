@@ -7,7 +7,8 @@ keywords.comment_pattern = "[-][-]"
 
 editor.define_mode("lua", "edit",
                    {on_change = lume.fn(editor.colorize, keywords),
-                    activate = lume.fn(editor.colorize, keywords)})
+                    activate = lume.fn(editor.colorize, keywords),
+                    keywords = keywords,})
 
 -- change colors:           red green blue
 editor.set_color("lua", {text={0, 180 ,0},

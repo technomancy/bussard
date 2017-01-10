@@ -10,22 +10,12 @@ love.graphics = mock
 local seed = tonumber(os.getenv("BUSSARD_FUZZ_SEED") or os.time())
 print("seeding with", seed)
 math.randomseed(seed)
+love.math.setRandomSeed(seed)
 
 local function vals(t)
    local rtn = {}
    for k,v in pairs(t) do rtn[#rtn + 1] = v end
    return rtn
-end
-
-local function binding_for(mode, command)
-   for mn,m in pairs({main=mode.map, ctrl=mode.ctrl,
-                      alt=mode.alt, ctrl_alt=mode["ctrl-alt"]}) do
-      for k,v in pairs(m) do
-         if(v == command) then return mn .. "-" .. k end
-      end
-   end
-   if(mode.parent) then return binding_for(mode.parent, command) end
-   return "none"
 end
 
 local try = function(f)
@@ -53,13 +43,28 @@ local random_text = function()
 end
 
 local commands_by_mode = {}
+local binding_for = {}
 local function commands_for(mode)
    if(commands_by_mode[mode]) then return commands_by_mode[mode] end
    -- smush together all the different sub-maps (ctrl, alt, ctrl-alt)
-   local commands = lume.concat(vals(mode.map), vals(mode.ctrl),
-                                      vals(mode.alt), vals(mode["ctrl-alt"]))
-   commands_by_mode[mode] = lume.concat(commands, mode.parent and
-                                           commands_for(mode.parent))
+   local commands = lume.merge(mode.map, mode.ctrl,
+                               mode.alt, mode["ctrl-alt"])
+   local parent = mode.parent and editor.debug("modes")[mode.parent]
+   commands_by_mode[mode] = lume.concat(vals(commands),
+                                        parent and commands_for(parent))
+   for key,command in pairs(commands) do
+      if(lume.find(mode.ctrl, command)) then key = "ctrl-" .. key
+      elseif(lume.find(mode.alt, command)) then key = "alt-" .. key
+      elseif(lume.find(mode["ctrl-alt"], command)) then key = "ctrl-alt" .. key
+      end
+      binding_for[command] = key
+   end
+   for i,c in lume.ripairs(commands_by_mode[mode]) do
+      if(type(c) == "table") then -- prefix maps
+         lume.extend(commands_by_mode[mode],
+                     table.remove(commands_by_mode[mode], i))
+      end
+   end
    return commands_by_mode[mode]
 end
 
@@ -67,14 +72,16 @@ local function fuzz(n)
    for i=1,n do
       if(#editor.buffer_names() == 1 and
          editor.current_buffer_path ~= "minibuffer") then
+         print("opening newfile")
          editor.open(ship.api, "newfile")
       end
 
-      local mode = editor.mode()
-      local command = lume.randomchoice(commands_for(mode))
+      local mode = editor.debug("modes")[editor.current_mode_name()]
+      local command = assert(lume.randomchoice(commands_for(mode)),
+                             "no command in " .. mode.name)
 
-      print("run " .. binding_for(mode, command) .. " in mode " .. mode.name)
-      try(lume.fn(editor.wrap, command))
+      print("run " .. binding_for[command] .. " in mode " .. mode.name)
+      try(lume.fn(editor.debug("wrap"), command))
 
       -- the minibuffer doesn't activate till you run this to work around
       -- a race condition in keyboard input.
@@ -82,7 +89,7 @@ local function fuzz(n)
 
       -- sometimes we should try inserting some text too
       if(love.math.random(5) == 1) then
-         try(lume.fn(editor.handle_textinput, random_text()))
+         try(lume.fn(editor.textinput, random_text()))
       end
    end
 end

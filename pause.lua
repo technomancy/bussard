@@ -123,8 +123,11 @@ return function(resume, quit, resize_fn, font_path)
              starfield.new(10, 0.1, 255), }
    actions.resume, actions.quit = resume, quit
    love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw,nil
-   text, line = lume.split(love.filesystem.read(random_choice(files)), "\n"), 1
-   if(love._version_major > 0 or love._version_minor >= 10) then
-      colored_text = colorize(text, editor.colors.lua)
+   local file = random_choice(files)
+   text, line = lume.split(love.filesystem.read(file), "\n"), 1
+   if(love._version_major > 0 or love._version_minor >= 10 and
+      file:match("%.lua")) then
+      local keywords = editor.get_mode_prop("lua", "keywords")
+      colored_text = colorize(keywords, editor.colors.lua, text)
    end
 end
