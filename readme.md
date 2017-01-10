@@ -44,7 +44,6 @@ this is the vision behind Polywell.
 * Undo
 * Emacs key bindings (optional)
 
-* TODO: UI for screen splits
 * TODO: smarter lua-aware indentation
 * TODO: fuzzy-matching opening files and switching buffers
 

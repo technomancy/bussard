@@ -47,10 +47,3 @@ editor.bind("edit", "ctrl-x 2", lume.fn(editor.split, "vertical"))
 editor.bind("edit", "ctrl-x 3", lume.fn(editor.split, "horizontal"))
 editor.bind("edit", "ctrl-x 4", lume.fn(editor.split, "triple"))
 editor.bind("edit", "ctrl-x o", editor.focus_next)
-
--- insert a page-break character, rendered as a horizontal line.
-editor.bind("edit", "ctrl-l", function()
-        editor.newline()
-        editor.textinput("\f")
-        editor.newline()
-end)

@@ -1,5 +1,5 @@
 local polywell = require("polywell")
-local fs_for = require("fs")
+local fs_for = require("polywell.fs")
 
 love.keyreleased = polywell.keyreleased
 love.keypressed = polywell.keypressed
@@ -46,7 +46,7 @@ love.load = function()
    love.keyboard.setTextInput(true)
    love.keyboard.setKeyRepeat(true)
 
-   local init_file = os.getenv("HOME") .. "/.polywell/init.lua"
+   local init_file = love.filesystem.getUserDirectory() .. "/.polywell/init.lua"
    local ok, err = pcall(dofile, init_file)
    if(not ok) then
       multiprint(err)
