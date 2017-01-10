@@ -1,6 +1,5 @@
 local lume = require("polywell.lume")
 local has_lfs, lfs = pcall(require, "lfs") -- optional dependency
-local original_pairs = pairs -- this might get monkeypatched
 
 local function fs_for(base_path)
    local get_path = function(path)

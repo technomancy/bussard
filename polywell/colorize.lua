@@ -46,7 +46,8 @@ end
 local comment_match
 
 local colorize_comment = function(keywords, colors, l)
-   comment_match = string.find(l, keywords.comment_pattern)
+   comment_match = (keywords.comment_pattern and
+                       string.find(l, keywords.comment_pattern))
    if(comment_match == 1) then
       return {colors.comment, l}
    elseif(comment_match) then

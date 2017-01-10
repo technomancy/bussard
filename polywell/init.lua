@@ -103,9 +103,25 @@ local function get_prop(prop, default, buffer, mode)
    else return default end
 end
 
+local function get_mode_prop(mode_name, prop)
+   local mode = assert(modes[mode_name], mode_name)
+   local parent = mode and mode.parent
+   return mode.props and mode.props[prop] or
+      parent and get_mode_prop(parent, prop)
+end
+
 local state = function()
    return {lines = lume.clone(b.lines),
            point = b.point, point_line = b.point_line}
+end
+
+local run_on_change = function()
+   local on_change = get_prop("on_change")
+   if(type(on_change) == "function") then
+      on_change()
+   elseif(type(on_change) == "table") then
+      for _,f in pairs(on_change) do f() end
+   end
 end
 
 local undo = function()
@@ -114,10 +130,15 @@ local undo = function()
    if(b.undo_at < #b.history) then b.undo_at = b.undo_at + 1 end
    if(prev) then
       b.lines, b.point, b.point_line = prev.lines, prev.point, prev.point_line
+      run_on_change()
    end
 end
 
-local debug = function()
+local wrap
+
+local debug = function(arg)
+   if(arg == "modes") then return modes end
+   if(arg == "wrap") then return wrap end
    if(not os.getenv("DEBUG")) then return end
    print("---------------", b.path, b.point_line, b.point, b.mark_line, b.mark)
    for _,line in ipairs(b.lines) do
@@ -133,7 +154,9 @@ end
 local bounds_check = function()
    -- The first one is a normal occurance; the second two should never happen,
    -- but let's be forgiving instead of asserting.
-   if(#b.lines[b.point_line] and b.point > #b.lines[b.point_line]) then
+   if(b.point_line > #b.lines) then
+      b.point_line = #b.lines
+   elseif(#b.lines[b.point_line] and b.point > #b.lines[b.point_line]) then
       b.point = #b.lines[b.point_line]
    elseif(b.mark_line and b.mark and out_of_bounds(b.mark_line, b.mark)) then
       dprint("Mark out of bounds!", b.mark_line, #b.lines)
@@ -150,7 +173,7 @@ end
 
 -- all edits (commands and insertions) run inside this function; it handles
 -- tracking undo status as well as enforcing certain rules.
-local wrap = function(fn, ...)
+wrap = function(fn, ...)
    if(not b) then return fn(...) end -- no undo tracking for default mode
    b.dirty = false
    local last_state = b and state()
@@ -166,12 +189,7 @@ local wrap = function(fn, ...)
    if(not b) then return end -- did we switch to default mode?
    if(b.dirty) then
       table.insert(b.history, last_state)
-      local on_change = get_prop("on_change")
-      if(type(on_change) == "function") then
-         on_change()
-      elseif(type(on_change) == "table") then
-         for _,f in pairs(on_change) do f() end
-      end
+      run_on_change()
    end
    if(#b.history > history_max) then
       table.remove(b.history, 1)
@@ -422,7 +440,7 @@ local save = function(this_fs, this_path)
       for _,part in ipairs(parts) do
          target = target[part]
       end
-      target[filename] = table.concat(this_b.lines, "\n")
+      target[filename] = table.concat(this_b.lines, "\n") .. "\n"
    end
 end
 
@@ -483,6 +501,21 @@ end
 
 local with_traceback = lume.fn(utils.with_traceback, the_print)
 
+local function merge_parent_prefix_maps(prefix_map, mode, key, ctrl, alt)
+   if(not mode) then return prefix_map end
+   local map = (ctrl and alt and mode["ctrl-alt"]) or
+      (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
+   if(type(map and map[key]) == "table") then
+      return merge_parent_prefix_maps(lume.merge(prefix_map, map[key]),
+                                      modes[mode.parent], key, ctrl, alt)
+   elseif((map and map[key]) == nil) then -- keep going
+      return merge_parent_prefix_maps(prefix_map,
+                                      modes[mode.parent], key, ctrl, alt)
+   else
+      return prefix_map
+   end
+end
+
 local function find_binding(key, the_mode)
    local mode = active_prefix or the_mode or get_current_mode() or modes.default
    local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
@@ -492,6 +525,9 @@ local function find_binding(key, the_mode)
 
    if(map and not map[key] and map["__any"]) then
       return lume.fn(map["__any"], key)
+   elseif(type(map and map[key]) == "table") then
+      return merge_parent_prefix_maps(map[key], modes[mode.parent],
+                                      key, ctrl, alt)
    else
       return (map and map[key]) or
          (mode.parent and find_binding(key, modes[mode.parent]))
@@ -557,9 +593,9 @@ local exit_minibuffer = function(cancel)
    local input, callback = get_input(), b.callback
    local completer = b.props and b.props.completer
    for k in pairs(b.props and b.props.bind or {}) do
-      bind("minibuffer", k, nil) -- undo one-off bindings created in read_line
+      bind("minibuffer", k, false) -- undo one-off bindings created in read_line
    end
-   if(completer) then
+   if(completer and not cancel) then
       local completion = completer(input)[1]
       if(completion and
          completion:find(get_separator(behind_minibuffer.fs) .. "$")) then
@@ -607,7 +643,6 @@ end
 
 define_mode("minibuffer")
 bind("minibuffer", "return", exit_minibuffer)
--- TODO: broken when there is no matching input
 bind("minibuffer", "escape", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "ctrl-g", lume.fn(exit_minibuffer, true))
 bind("minibuffer", "backspace", delete_backwards)
@@ -722,6 +757,7 @@ return {
       local split_pos = find_split(b)
       if(confirm or not b.needs_save) then
          lume.remove(buffers, b)
+         if(last_edit_buffer == b) then last_edit_buffer = nil end
          b = last_edit_buffer or buffers[#buffers]
          if(split_pos) then splits[split_pos][2] = b end
       end
@@ -833,6 +869,11 @@ return {
 
    newline_and_indent = function()
       local indentation = utf8.len(utf8.match(b.lines[b.point_line], "^ +") or "")
+      local line_up_to = utf8.sub(b.lines[b.point_line], 1, b.point)
+      local trailing_space = utf8.match(line_up_to, " +$")
+      if(trailing_space) then
+         delete(b.point_line, b.point - #trailing_space, b.point_line, b.point)
+      end
       newline()
       local existing_indentation = utf8.len(utf8.match(b.lines[b.point_line],
                                                        "^ +") or "")
@@ -1014,6 +1055,7 @@ return {
    end,
 
    get_prop = get_prop,
+   get_mode_prop = get_mode_prop,
    set_prop = function(prop, value) b.props[prop] = value end,
 
    save_excursion = save_excursion,
