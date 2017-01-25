@@ -72,14 +72,8 @@ progress. Eventually the goal is that you will be able to learn it without any
 **Q:** How do I change the controls?  
 **A:** Press `ctrl-o` then type "src.config" to open the main config file. The keys here are mostly for flight mode. At the bottom you can see where it loads other modes in files like "src.edit" or "src.mail". Open these other files with `ctrl-o` if you want to change keys for those modes. Find the key binding you want to change, and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` to go back to flight mode, and then press `ctrl-r` to load them. Note that after using the editor you may need to press `ctrl-pagedown` or `ctrl-pageup` a few times to get back to console, as console is just a buffer called `*console*` in the editor.
 
-**Q:** What can I do to improve the frame rate?  
-**A:** The biggest performance drag is calculating trajectories. Reduce the calculations with `ship.trajectory = 32` and you should notice a dramatic speed boost. If you drop the trajectory length, you may want to boost the `ship.trajectory_step_size` to compensate.
-
 **Q:** How do you match orbit with the station?  
-**A:** Remember that newtonian motion means your controls affect your velocity rather than directly controlling your motion. Don't accelerate towards the station; instead accelerate so your trajectories line up. The stripes on your ship's trajectory and the station's trajectory represent equal amounts of time, if your trajectories cross at the same stripe it means you will be in the same place at the same time.
-
-**Q:** Why does my trajectory sometimes wobble a lot?  
-**A:** High velocity movement near the base of a gravity well can be non-deterministic, which throws off the estimated trajectory.
+**A:** Remember that newtonian motion means your controls affect your velocity rather than directly controlling your motion. Don't accelerate towards the station; instead accelerate so your trajectories cross at the same point.
 
 **Q:** Where are the missions?  
 **A:** There are currently only a few missions. The main chain starts at Tana Prime. Open up the "jobs" folder in your mail client to see available missions.

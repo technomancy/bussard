@@ -91,6 +91,8 @@ local get_current_mode = function(buffer)
    return modes[buffer and buffer.mode or "default"]
 end
 
+local set_prop = function(prop, value) b.props[prop] = value return value end
+
 local function get_prop(prop, default, buffer, mode)
    buffer = buffer or b
    mode = mode or get_current_mode(buffer)
@@ -101,6 +103,10 @@ local function get_prop(prop, default, buffer, mode)
    elseif(mode.parent) then
       return get_prop(prop, default, buffer, assert(modes[mode.parent]))
    else return default end
+end
+
+local vary_prop = function(prop, f, ...)
+   return set_prop(prop, f(get_prop(prop), ...))
 end
 
 local function get_mode_prop(mode_name, prop)
@@ -497,6 +503,7 @@ local the_print = function(...)
    texts[1] = "\n" .. texts[1]
    io_write(unpack(lume.map(texts, tostring)))
    inhibit_read_only = read_only
+   return invisible
 end
 
 local with_traceback = lume.fn(utils.with_traceback, the_print)
@@ -700,9 +707,9 @@ local activate_mode = function(mode_name)
    if(get_prop("activate")) then get_prop("activate")() end
 end
 
-local handler_for = function(event_name)
+local handler_for = function(event_name, mode_override)
    return function(...)
-      local fn = find_binding(event_name)
+      local fn = find_binding(event_name, mode_override)
       if(fn) then
          if(os.getenv("DEBUG")) then
             wrap(fn, ...)
@@ -1029,7 +1036,7 @@ return {
    get_line = function(n)
       if(not b) then return end
       if(not n) then return b.lines[b.point_line] end
-      if(n < 1) then n = #b.lines - n end
+      if(n < 1) then n = #b.lines + n end
       return b.lines[n]
    end,
 
@@ -1054,9 +1061,10 @@ return {
       return val
    end,
 
-   get_prop = get_prop,
+   get_prop = get_prop, get = get_prop,
+   set_prop = set_prop, set = set_prop,
+   vary_prop = vary_prop, vary = vary_prop,
    get_mode_prop = get_mode_prop,
-   set_prop = function(prop, value) b.props[prop] = value end,
 
    save_excursion = save_excursion,
 
@@ -1204,6 +1212,13 @@ return {
    mousereleased = handler_for("mouse_released"),
    mousemoved = handler_for("mouse_moved"),
    mousefocus = handler_for("mouse_focus"),
+
+   -- invoke a handler function directly.
+   -- you can call this if you want to wrap a parent mode's binding for
+   -- a specific event.
+   invoke_handler = function(mode_name, event, ...)
+      handler_for(event, modes[mode_name])(...)
+   end,
 
    set_colors = function(new_colors)
       lume.extend(colors, new_colors)

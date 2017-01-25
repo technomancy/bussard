@@ -50,21 +50,6 @@ return function(dt)
       love.graphics.setLineWidth(1)
    end
 
-   -- save battery by disabling trajectory when not in flight mode
-   if((ship.api.editor.current_mode_name() == "flight")) then
-      if(ship.api.trajectory_visible) then -- old trajectory
-         hud.trajectory(ship, ship.bodies, ship.api.trajectory,
-                        ship.api.trajectory_step_size,
-                        {190, 190, 255}, {99, 99, 168},
-                        {90, 90, 155}, {60, 60, 102})
-      end
-      local y = (love.graphics:getHeight() -
-                    love.graphics.getFont():getHeight() * 2)
-      local get_line = function() return ship.api.editor.get_line(-1) or "" end
-      local line = ship.api.editor.with_current_buffer("*console*", get_line)
-      love.graphics.print(line, 20, y)
-   end
-
    love.graphics.setColor(255, 255, 255)
    for _,b in pairs(ship.bodies) do
       body.draw(b, ship.x, ship.y, b == ship.target)
@@ -111,6 +96,13 @@ return function(dt)
    end
 
    love.graphics.pop()
+
+   local y = (love.graphics:getHeight() -
+                 love.graphics.getFont():getHeight() * 2)
+   local get_line = function() return ship.api.editor.get_line(-1) or "" end
+   local line = ship.api.editor.with_current_buffer("*console*", get_line)
+   love.graphics.setColor(ship.api.editor.colors.flight_text)
+   love.graphics.print(line, 20, y)
 
    local ok, err = pcall(function() hud.render(ship) end)
    if(not ok) then

@@ -136,20 +136,6 @@ local sandbox = function(ship)
                      })
 end
 
-local target_dt = 1/33
-
-local trajectory_auto = function(ship, dt)
-   if(dt > target_dt * 1.3 * ship.status.time_factor) then
-      ship.trajectory = ship.trajectory * 0.8
-      ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
-   elseif(dt < target_dt * 0.7 * ship.status.time_factor) then
-      ship.trajectory = ship.trajectory * 1.2
-      ship.trajectory_step_size = ship.trajectory_seconds / ship.trajectory
-   else -- if we've stabilized our FPS sufficiently, disable adjustment
-      ship.updaters.trajectory_auto = nil
-   end
-end
-
 local ship = {
    base_stats = base_stats,
 
@@ -204,10 +190,6 @@ local ship = {
       assert(ship.systems[system_name], system_name .. " not found.")
       if(not suppress_message) then
          ship.api.editor.print("Entering the " .. system_name .. " system.")
-      end
-
-      if(ship.api.trajectory_auto) then
-         ship.api.updaters.trajectory_auto = trajectory_auto
       end
 
       -- stuff these things in there to expose to in-ship APIs
@@ -480,9 +462,7 @@ ship.api = {
    -- for user files
    src = {},
    docs = {},
-   persist = {"persist", "scale", "src", "docs", "trajectory_seconds",
-              "trajectory", "trajectory_step_size", "trajectory_auto",
-              "trajectory_visible"},
+   persist = {"persist", "scale", "src", "docs"},
    persist_buffers = {"*console*"},
 
    -- added by loading config
@@ -493,14 +473,6 @@ ship.api = {
 
    ui_helpers = {},
    navigation_ui_helpers = {},
-
-   -- trajectory plotting is the single biggest perf drain by far
-   -- these numbers will be changed if the frame rate is too low
-   trajectory = 256,
-   trajectory_step_size = 0.1,
-   trajectory_seconds = 128, -- how far out the trajectory should go
-   trajectory_auto = true, -- turn this off to disable auto-adjustment
-   trajectory_visible = false, -- for the old, slow trajectory
 
    fuel_to_stop = function(s)
       -- no idea where this 20 factor comes from

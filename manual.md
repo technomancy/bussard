@@ -13,15 +13,15 @@ Most upgrades that you purchase will come with new manuals too.
 
 The first thing you'll see when you launch your ship is its
 heads-up-display. A targeting indicator will point from your ship in the
-direction of your current target (changed by pressing tab). If you are
-within range of a target you can act upon, the indicator will change
-color depending on the type of the target. The upper left shows basic
-velocity, local coordinates, fuel and battery readout, credits, and a
-clock, while the upper right shows target details if a target is
-selected. A light blue striped path plots a trajectory estimate of where
-you're headed, while a darker blue striped path plots one for your
-target, if applicable. You can switch it by setting `ship.trajectory` to
-`false`.
+direction of your current target (changed by pressing tab). If you are within
+range of a target you can act upon, the indicator will change color depending
+on the type of the target. The upper left shows basic velocity, local
+coordinates, fuel and battery readout, credits, and a clock, while the upper
+right shows target details if a target is selected. One trajectory shows your
+ship's projected orbit around the star, while another shows your target's
+projected path, if applicable. If you're close enough to your target to orbit
+it, your ship's trajectory will shift to show your orbit around your target
+instead.
 
 ## Helm control
 
