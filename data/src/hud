@@ -19,7 +19,7 @@ local quickref = "tab: next target\n" ..
 
 local target_type = function()
    if(ship.status.target) then
-      for _,t in ipairs({"ship", "star", "asteroid",
+      for _,t in ipairs({"ship", "star", "asteroid", "rover",
                          "portal", "station", "world"}) do
          if(ship.status.target[t]) then return t end
       end

@@ -1,6 +1,7 @@
 local lume = require "lume"
 local body = require "body"
 local ai = require "ship.ai"
+local rovers = require "rovers"
 local utils = require "utils"
 local orb = require "os.orb"
 local ship_init = require "data.ship_init"
@@ -10,7 +11,7 @@ local ship_fields = {
    "x", "y", "dx", "dy", "heading", "mail_delivered",
    "battery", "fuel", "credits", "system_name", "active_missions",
    "humans", "humans_left_at", "upgrade_names", "cargo", "target_number",
-   "events", "flag", "name",
+   "events", "flag", "name", "rovers", "rover_clearance"
 }
 
 local body_fields = {
@@ -27,7 +28,11 @@ local fs_filename = function(b)
 end
 
 local body_data = function(b)
-   return lume.pick(b, unpack(body_fields))
+   if(b.to_save) then
+      return b:to_save()
+   else
+      return lume.pick(b, unpack(body_fields))
+   end
 end
 
 return {
@@ -109,6 +114,16 @@ return {
                local other = ai.make(ship, ship.bodies, data.name)
                lume.extend(other, data)
                ship.bodies[i] = other
+            elseif(data.rover) then
+               local target
+               for _,b in pairs(ship.bodies) do
+                  if(b.name == data.landed_on) then
+                     target = b
+                  end
+               end
+               local rover = rovers.make(ship, target)
+               lume.extend(rover, data)
+               ship.bodies[i] = rover
             else
                ship.bodies[i] = data
             end

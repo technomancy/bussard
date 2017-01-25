@@ -31,7 +31,7 @@ return function(dt)
    if(ship.target) then -- directional target indicator
       -- you can log into portals, but this isn't obvious at first
       if(ship:in_range(ship.target) and ship.target.os and
-         not ship.target.portal) then
+         not ship.target.portal and not ship.target.rover) then
          love.graphics.setColor(10, 200, 10)
       elseif(ship.target.asteroid and
              ship:in_range(ship.target, ship.scoop_range)) then
@@ -39,6 +39,10 @@ return function(dt)
       elseif(ship.target.portal and
              ship:in_range(ship.target, ship.portal_range)) then
          love.graphics.setColor(10, 10, 100)
+      elseif(ship.target.rover and ship:in_range(ship.target)) then
+         love.graphics.setColor(142, 0, 190)
+      elseif(ship.target.rover) then
+         love.graphics.setColor(75, 0, 100)
       elseif(ship.target.os) then
          love.graphics.setColor(80, 120, 80)
       else

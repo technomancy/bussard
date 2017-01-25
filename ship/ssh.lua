@@ -10,7 +10,7 @@ local sessions = {}
 -- The I/O model for SSH sessions is pretty confusing, so listen up. Logging
 -- in involves attempting to authenticate with the target, and storing a tuple
 -- of {fs, env, fs_raw} in the sessions table. The first fs is a proxied table
--- which enforces access limitations.
+-- which enforces access limitations for multi-user OSes.
 
 -- From there it logs into orb (portal logins are different; using lisp_login)
 -- by setting env.IN and env.OUT; the former to a FIFO file node, and the
@@ -171,8 +171,7 @@ end
 
 local get_connection = function(ship, username, password)
    if(not ship:in_range(ship.target)) then
-      ship.api.editor.print("| Out of communications range.")
-      return
+      return ship.api.editor.print("| Out of communications range.")
    end
 
    assert(ship.target.os.name == "orb", "TODO: support non-orb")
@@ -217,8 +216,7 @@ return {
    connect = function(ship, username, password, command)
       ship.api.closest_cycle = 1
       if(not ship:in_range(ship.target)) then
-         ship.api.editor.print("| Out of communications range.")
-         return
+         return ship.api.editor.print("| Out of communications range.")
       end
 
       local fs_raw = body.login(ship, ship.target, username, password)
@@ -244,6 +242,7 @@ return {
       end
    end,
 
+   -- for non-interactive use
    get_connection = get_connection,
 
    send_line = send_line,

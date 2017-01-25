@@ -49,6 +49,7 @@ local max_accel = 100
 
 -- return the acceleration felt at (x,y) due to body
 local gravitate = function(body, x, y)
+   if(body.mass == 0) then return 0, 0 end
    -- a vector that points from (x,y) to the body
    local dx = (body.x - x)
    local dy = (body.y - y)

@@ -1,6 +1,5 @@
 local utf8 = require("utf8.init")
 local lume = require("lume")
-local body = require("body")
 
 local vector_size, font_width = 50, nil
 local w, h

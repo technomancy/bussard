@@ -360,6 +360,12 @@ return {
       return t
    end,
 
+   copy_keys = function(to, from, ...)
+      for _,k in ipairs({...}) do
+         to[k] = from[k]
+      end
+   end,
+
    pad_to = pad_to,
    buffer = buffer,
 

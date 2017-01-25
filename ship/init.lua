@@ -6,6 +6,7 @@ local help = require("doc")
 local upgrade = require("data.upgrades")
 local ai = require("ship.ai")
 local ssh = require("ship.ssh")
+local rovers = require("rovers")
 local mail = require("mail")
 local mission = require("mission")
 local host_fs_proxy = require("host_fs_proxy")
@@ -164,6 +165,8 @@ local ship = {
    events={},
    humans={},
    humans_left_at={},
+   rovers={simple=4},
+   rover_clearance={"Lioboro"},
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
@@ -487,6 +490,12 @@ ship.api = {
 
    host = host_fs_proxy.create("host_fs"),
    game = love.filesystem.exists("game") and host_fs_proxy.create("game"),
+
+   rovers = {
+      deploy = lume.fn(rovers.deploy, ship),
+      recover = lume.fn(rovers.recover, ship),
+      list = lume.fn(rovers.list, ship),
+   },
 
    -- deprecated:
    modes = editor.modes,
