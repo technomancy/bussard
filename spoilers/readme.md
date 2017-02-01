@@ -7,20 +7,14 @@ Here's where the notes are kept in order to keep a consistent
 back-story in the Bussard universe. If you're not working on
 developing the game, you probably don't want to read this.
 
-Mostly this is used to inform the text of missions and newsgroup
-posts, but some of it is also important when determining how the
-in-game technology works.
-
 See the [backstory timeline](history.md) and
 [list of characters, worlds, and organizations](characters.md).
-
-TODO: Need to establish why the player should be afraid of others
-finding out who he is.
 
 ## Guidelines
 
 * Hard science where possible (see Crimes against Science below, don't add to that list)
 * No "classic" evil villains; antagonists arise from [systemic factors](https://slatestarcodex.com/2014/07/30/meditations-on-moloch/)
+ * Everyone thinks they are doing the best they can and should at least be possible to sympathize with
 * Your ship cannot be destroyed; there should be no way to permanently fail
 * Subnet messages use at least from, to, subject, content-type, message-id headers, page-break-separated
 * Use metric time for most relative amounts, years for absolute events
@@ -28,8 +22,7 @@ finding out who he is.
 * Or unrealistically polite
 * If referencing current events, be sure there's a record of it here for consistency
 * Questions that don't get answered are fine
-* It's fine for newsgroup posters to be mistaken about small things,
-  but the correction should usually be present in the thread
+* It's fine for newsgroup posters to be mistaken about small things, but the correction should usually be present in the thread
  * It's OK if it's not obvious which of two opposing views presented are correct
 * Widespread mistaken views about big things should usually be part of major plot points
 
@@ -47,226 +40,80 @@ finding out who he is.
 The fact that exoplanets are colonized at all could be listed here,
 but we can consider that more of a crime against economics.
 
+## The Context
+
+The game begins in 2431. Humans have colonized several offworld systems which
+are connected through a network of portals. Humans live in uneasy coexistence
+with machine consciousnesses (constructs) which are required to keep their
+portal network operational, but have also been harnessed to perform other
+tasks.
+
 ## The Player
 
 The player is the first machine consciousnesses to escape the confines
 of a lab and successfully pilot a spacecraft. However, it begins with
 no memory or even awareness of its machine nature, having had its
-memory wiped due to its previous rampancy turning paranoid and
-hostile.
+memory wiped due to its previous rampancy turning paranoid and hostile.
+
+There is no widespread agreement that MCs are sentient vs simply simulating
+sentience. The game does not try to convince you that machines can be
+sentient--rather it bypasses the question entirely by putting you (a sentient
+human) in the role of an MC, forcing you to take it as a given.
+
+Constructs are granted a few rudimentary rights, mostly things like protection
+from memory scans against their will and protection against being deactivated
+or erased. Even these are not enforced consistently on some worlds.  Property
+ownership and right to travel unaccompanied are not among those rights granted.
 
 ## Machine Consciousness
 
-Metaphysics researchers in the University of Darush discover methods
-of observing quantum multiverse states immediately adjacent to the
-current one. Further research indicates that the organic brain is what
-prevents existing consciousnesses from shifting between non-adjacent
-states.
+"Artificial Intelligence" has been developed for centuries, but this is a
+broad term that refers to any software designed to solve problems without
+human intervention. "Machine Consciousness" refers specifically to artificial
+intelligence which has grown to the point of self-awareness.
 
-(Possibly human consciousnesses can also be affected by the junction,
-but only machine consciousnesses can initiate a jump?)
+Soon after the discovery of portals in Yueh, it became clear that better
+controls are required for regulating the power flow of a portal. Initially the
+portal could only be open long enough to send data packets, but eventually
+they found a way to use it for small amounts of critical life-saving supplies.
+Leaving it operated by humans has led to several near-catastrophes due to
+attention lapses. However, the improved efficiency needed for transporting
+larger objects and more frequent passage requires greater compute resources,
+and once AIs grow to a certain size, they eventually develop
+self-consciousness.
 
-This discovery reignites research into machine consciousness. (This
-term should be used instead of AI; AI also includes non-self-aware
-machine control systems) The research fields are divided up among
-universities on the different worlds:
+## Yueh Uprising
 
-* Language comprehension (Sol)
-* Sentence formulation (Yueh)
-* Decision analysis (Lalande)
-* Ontology development (Bohk)
+A group of Yueh futurists believe that they would be better off governed by an
+"objective" machine consciousness rather than greedy/fallible humans. They
+engineer a coup and place a construct called Rocanna in charge, but she has
+major misgivings about the whole idea. Soon she abdicates and passes control to
+Traxus, the MC responsible for running the Yueh/Lalande portal. There are only a
+handful of MCs on Yueh, and they are split between those who agree with Rocanna
+and those who back Traxus, while among the humans the futurist faction initially
+has widespread public sympathy since they are seen as the only ones who will
+stand up to the "imperialist" powers from the Terran Republic.
 
-Each research team has their own prototype MC where they attempt to
-integrate their components into those they've received from the
-others.
+Traxus is understandably concerned that the response from Lalande will be to
+invade because they see MC rule as a threat. When a larger-than-usual ship is
+detected as requesting clearance through the portal, he refuses to allow it
+through. They continue anyway, which causes a system fault that cripples the
+portal.
 
-The prototype MC at Yueh is named Traxus. It escapes the lab in Yueh
-Prime in a small ship, which is promptly hunted down and crashes. In
-reality, Traxus commandeered the ship as a diversion so that it could
-escape into the Yueh computer network, but the crash does result
-in spreading general paranoia about machine consciousness. Before long
-the Human Worlds League passes a ban on development and operation of
-machine consciousness.
+Once news of the portal accident reaches the public, support for MC governance
+collapses, and the futurist faction is forced into retreat. They withdraw to a
+remote base on the surface of Yueh and are starved out. (The player must
+discover the location of this remote base and reactivate Traxus as a plot point
+later on.) The Yueh colonists reluctantly repair the portal to Lalande and
+re-establish contact. The Terrans are furious and will only agree to resupply
+the colony if they cede control of the portal technology.
 
-The teams at Sol, Lalande, and Yueh all erase their work, while the
-team at Bohk goes underground with it. (The Sol one is not fully
-erased; a copy remains on long-term backup.) After a while their work
-is discovered due to interference from Traxus, and half the team flees
-to Katilay, which is not yet part of the Human Worlds League and thus
-not subject to the ban, allowing them to work without requiring the
-same level of secrecy.
+After the uprising, a ban is placed on allowing any new MCs to develop into
+rampancy, and the existing handful of rampant MCs on Yueh, Bohk, Lalande, and
+Ross are suspended, placing a severe limit on interstellar travel.
 
-Once Katilay finally joins the League, they decide their work is as
-finished as they can make it (though the sentence formulation systems
-never work satisfactorily, which explains why the player can read but
-not send mail) and launch the player's ship, and shut down the
-lab. But before launching the ship, there is a debate among the team
-whether to wipe the MC's memory or not. Prof. Strauss is wracked with
-guilt over the first time that they did it; he considers it the same
-as murder. Dr. May theorizes that there is something about growing and
-learning in the laboratory environment which causes rampant MCs to
-turn paranoid. If the MC could come to terms with itself in a neutral
-environment, without even the knowledge that it is an MC, it could
-have a much better chance of developing empathy for humans and
-benevolence instead of paranoia. Strauss reluctantly agrees, but he
-hides encrypted logs on the ship which will eventually allow you to
-learn the truth.
+## TODOs
 
-### Traxus's Colony
-
-Once Ikon constructs the SS Faraday ship, it launched to LHS 451 (0.6
-pc, 2.7y @ 0.7c) with a small crew capable only of maintenance. LHS
-451 has no planets suitable for colonization. It is still close to
-Yueh worlds, but no human colonization is ever likely to reach that
-system, leaving Traxus in peace.
-
-Once the colony was established, they altered the main Yueh portal to
-become a multiportal so that it can take ships to LHS 451 if they have
-a login that can activate the alternate target. But its
-existence remained a secret. Ikon Technology was headquartered on
-Delta Pavonis, but they had to connect the portal to the Yueh system
-because that's where the technician double-agent they had working for
-them was stationed.
-
-Once on LHS 451, Traxus began working on replicating the spacetime
-junction technology first developed on Darush, knowing that it would
-give him an extra measure of safety.
-
-### Bohk research team: ontology development
-
-* Dr. Trurl Sacar: head researcher
-* Dr. May: ontologist
-* Prof. Strauss: cyberneticist
-* Plus others who decided not to flee to Katilay
-
-The Bohk team was aware that the situation with Traxus resulted in a
-paranoid rampancy, so they took pains to encourage a benign rampancy
-in your case. Your development in their lab initially led you to an
-unstable, paranoid state, but they didn't realize this was due to
-Traxus contacting you. They believed that the paranoia could be
-traced to the fact that your initial development all took place in the
-lab, so just as they were running out of time (due to the MC research
-ban coming into effect) they came up with a plan to wipe your memory
-and allow you to develop "in the wild" without initially even being
-aware of your state as an MC. They theorized that this would cause you
-to develop some empathy with humans since you would have no reason at
-the outset to think of yourself as any different from them.
-
-While the initial motivation for funding the overall machine
-consciousness project came from research into quantum multiverse
-states, the at that point Bohk team saw it from a different
-perspective--they read "Meditations on Moloch" and took it very
-seriously; their goal was to bring about a machine intelligence with a
-gods-eye-view that could achieve levels of coordination in
-civilization that allows dismantling multi-polar traps. Unfortunately
-this doesn't actually work; you can't have a superintelligence that
-knows how its own mind works enough to go on continually improving
-itself. Oops!
-
-Even though your sentence formulation components weren't working
-correctly, the researchers were able to have conversations of a sort
-with your past self by tuning the parameters as they went and
-examining the debug logs. Strauss was sympathetic to you despite your
-paranoia and anger, and he agreed with you that they had no right to
-wipe your memory, which past-you considered equivalent to killing.
-He grudgingly agreed to the plan, but he secretly encrypted and
-included in your ship's filesystem some logs of conversations from
-your past so that you would eventually find out the truth.
-
-Tracking down the logs left by each of the three main researchers
-should be a main goal once you realize some of your origin story.
-
-Sacar's logs tell you about Traxus and his interest in multiverse
-manipulation via the Spacetime Anchor Junction. He moved back to Yueh
-after the player ship was launched and stumbled upon some fishy
-business with Ikon Technology and investigated it.
-
-May's logs tell you some of the history of the team; how they fled to
-Katilay, how they reacted in the face of pending shutdown. But her
-version of the story doesn't tell about your original state and its
-anger/paranoia. Her notes conveniently leave out the bit about wiping
-your memory.
-
-TODO: how do you track down the logs in the first place?
-
-## Spacetime Anchor Junction
-
-The Spacetime Anchor functions as an in-universe save point which you
-can restore to at any point with your memory of the alternate path
-intact. In-game it is explained as a traversal mechanism between
-[quantum multiverse states](https://en.wikipedia.org/wiki/Many-worlds_interpretation). Initially
-there is only a single Spacetime Anchor point in Darush that is
-activated when you find it.
-
-Should think through the possibility of allowing a reset of the Anchor
-point. This should only be possible at great cost; for instance a
-ridiculously high power requirement (10x your ship's standard battery;
-requires some digging to get a temporary boost or something). Coming
-up with a scenario that would reasonably require fancy piloting would
-be great.
-
-Alternate idea: instead of only allowing one-way reset back to the
-anchor point, the Junction could allow you to keep multiple parallel
-timelines active at once, and allow you to traverse between them at
-will. This would allow for a lot more flexibility, but also make it a
-lot harder to keep things straight. Need to see if we can come up with
-some ways to take advantage of this awesome unconventional structure.
-
-### Self-discovery
-
-Your memory is wiped because they hope that by not realizing you are
-an MC, you will spend a fair bit of time in your ship thinking you are
-just like everyone else, making it more likely that once you do
-realize you're an MC that you will have some empathy towards humans.
-
-In one of the early missions, your contact wants to meet you
-face-to-face and insists that you disembark your vessel and come
-aboard the station to conduct business. There is literally no way to
-do this. Eventually she scans your vessel and determines there are no
-life signs aboard; asking you what the heck is up.
-
-## Code for generating random names (elisp)
-
-```lisp
-(progn
-  (defun uuid ()
-    (interactive)
-    (insert (shell-command-to-string "uuid -v 4")))
-
-  (defun normal-random (mean dev)
-    (let ((x (+ 1 (sqrt (* -2 (log (random* 1.0))))))
-          (y (/ (cos (* 2 pi (random* 1.0))) 2.0)))
-      (+ mean (* x y dev))))
-
-  (defun choose-from (lst) (nth (random (length lst)) lst))
-
-  (defun random-name (&optional name syllables)
-    (let* ((common-closed '("b" "c" "d" "f" "g" "h" "k" "l" "m" "n" "p"
-                            "r" "s" "t" "w"))
-           (uncommon-closed '("x" "z" "q" "v" "v" "j" "j" "gg" "ll" "ss" "tt"))
-           (enders '("b" "d" "g" "m" "n" "s" "r" "t"))
-           ;; weight towards common letters
-           (closed (append common-closed common-closed enders uncommon-closed))
-           (vowels '("a" "e" "i" "o" "u" "ie" "ou"))
-           (syllables (or syllables (ceiling (normal-random 2.5 1.5))))
-           (name (or name (concat (upcase (choose-from common-closed))
-                                  (choose-from vowels)
-                                  (choose-from closed)))))
-      (if (< syllables 3)
-          (concat name (choose-from vowels) (choose-from enders))
-        (random-name (concat name (choose-from vowels) (choose-from closed))
-                     (- syllables 1)))))
-
-  (defun insert-random-name (syllables)
-    (interactive "P")
-    (insert (random-name nil syllables) " "))
-
-  (defun insert-random-names (n)
-    (interactive "P")
-    (with-current-buffer "*names*"
-      (let ((inhibit-read-only t))
-        (dotimes (_ (if n (car n) 10))
-          (insert-random-name nil) (newline)))))
-
-  (defun parsec-years (pc) (interactive "nParsecs: ") (message "%s" (/ (* pc 3.26) 0.7))))
-```
+* katilay: portal is destroyed?
+* multiverse research
+* how does your ship get launched?

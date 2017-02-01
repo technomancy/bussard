@@ -97,7 +97,7 @@ progress. Eventually the goal is that you will be able to learn it without any
 
 ## Licenses
 
-Original code, prose, and images copyright © 2015-2016 Phil Hagelberg and contributors
+Original code, prose, and images copyright © 2015-2017 Phil Hagelberg and contributors
 
 Distributed under the GNU General Public License version 3 or later; see file COPYING.
 

@@ -50,3 +50,5 @@ console. (Easiest solution; most hacky.)
 ## Password dictionary attack (???)
 
 ## Buffer overflow attack (???)
+
+## Leave a rover on a planet in order to impersonate and MITM

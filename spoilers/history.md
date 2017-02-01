@@ -1,6 +1,6 @@
 # Bussard Historical Background
 
-![Interstellar map](img src="https://p.hagelb.org/bussard_map.png)
+![Interstellar map](https://p.hagelb.org/bussard_map.png)
 
 ## Early colonization Timeline
 
@@ -42,7 +42,7 @@ deposits lead to it becoming an industrial powerhouse.
 * 2175 - SS Bradbury launched from Lalande to Bohk (2 pc @ 0.6 c, 10.8y, γ=1.3)
 
 * 2187 - SS Bradbury colony ship arrives in Bohk, establishes
-  independent colony
+  colony, promptly declares independence
 
 * 2194 - News of Bohk's independence reaches Lalande
 
@@ -59,25 +59,15 @@ deposits lead to it becoming an industrial powerhouse.
   pressure on colonists not to declare independence
 
 * 2272 - SS Ptolemy departs to bring portal tech to Lalande
-  (2.9 pc, 0.6c, 15.7y)
-
-Dr. Jameson, chief scientists on board the Ptolemy, is actually from
-Bohk originally. He wants Yueh to be independent the same way Bohk
-was. The remains of the portal research lab are discovered (by Jameson
-or Capt. Armiger; it's historically unclear); Armiger insists the
-findings are property of the military, but Jameson wants to keep it to
-the colonists. Jameson ends up killing Armiger to prevent it falling
-into what he thinks of as the wrong hands.
+  (2.9 pc, 0.6c, 15.7y), Yueh colony left ill-equipped
 
 ## Third Wave: portals
 
-The initial discovery of the portals had enough parts for three
-portals to be constructed. The Ptolemy returns to Lalande not because
-they want Lalande to gain access to the portals, but because they are
-worried their colony will not survive without supplies from a more
-established civilization.
+The Ptolemy returns to Lalande not because they want Lalande to gain access to
+the portals, but because they are worried their colony will not survive
+without supplies from a more established civilization.
 
-* 2287 - SS Ptolemy returns to Lalande
+* 2287 - SS Ptolemy arrives back at Lalande
 
 * 2291 - First portal between Yueh and Lalande operational
 
@@ -90,39 +80,30 @@ established civilization.
 
 * 2300 - SS Ptolemy distress signal received; SS Goddard launched to rescue
 
+* 2307 - Yueh returns cargo ship SS Oberth to Bohk with portal tech
+  (1.2 pc, 0.7c, 5.5y, γ=1.4), launches colonizer SS Kepler to Kowlu
+  (2.4 pc, 0.7c, 11y)
+
 * 2308 - SS Euclid arrives at Ross, portal becomes operational
 
 * Lalande, Ross, Yueh grow powerful thru portal trade, Sol's power wanes
 
-## War!
-
-After the war, the story is that Lalande had found and studied the
-portals from the beginning. Everyone on Yueh knows that it was those
-from Yueh (Jameson) that actually discovered how to bring them online.
-
 * 2310 - SS Goddard reaches stranded SS Ptolemy
 
-* 2311 - Yueh scientists independently replicate portal tech
+* 2313 - SS Oberth arrives in Bohk, portal to Yueh becomes operational
 
-* 2312 - Yueh returns cargo ship SS Oberth to Bohk with portal tech
-  (1.2 pc, 0.7c, 5.5y, γ=1.4), launches colonizer SS Kepler to Kowlu
-  (2.4 pc, 0.7c, 11y)
-
-* 2313 - Lalande attacks Yueh, dropping asteroids on them from orbit
-
-* 2314 - Peace between Yueh and Lalande, Yueh becomes independent, but
-  under the agreement that Lalande controls all existing portals
-  (except Yueh/Bohk and Yueh/Kowlu) and retains a monopoly on
-  newly-constructed ones
+* 2314 - Yueh Uprising, Yueh becomes independent, but under the agreement
+  that Lalande controls all existing portals (except Yueh/Bohk and Yueh/Kowlu)
+  and retains a monopoly on newly-constructed ones
 
 * 2317 - Bohk, Yueh, and Terrans found Human Worlds League in an
-  uneasy alliance
+  uneasy alliance, non-proliferation MC treaty
 
-* 2318 - SS Oberth arrives in Bohk, first human-constructed portal
-  (to Yueh) operational
+* 2318 - SS Kepler arrives in Kowlu, first portal-colony started
 
-* 2320 - SS Goddard returns to Sol, Lalande/Sol portal operational
-  but Sol secedes from Terran Republic when they find about the war
+* 2320 - SS Goddard returns to Sol, Lalande/Sol portal operational but Sol
+  secedes from Terran Republic when they find out how Lalande has basically
+  declared themselves the new center of power
 
 ## Fourth Wave: constructing portals and Katilay crisis
 
@@ -131,8 +112,6 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 
 * 2323 - Portal between Ross and Sol operational; also constructed
   without portal ship
-
-* 2323 - SS Kepler arrives in Kowlu, colonizes it
 
 * 2325 - Metaphysics researchers at University of Darush discover
   evidence of another multiverse
@@ -146,7 +125,7 @@ from Yueh (Jameson) that actually discovered how to bring them online.
 * 2344 - Bohk luanches SS Cherenkov colonizer to Mecalle
   (0.8 pc, 0.7 c, 3.7y)
 
-* 2345 - Metaverse traversal discovered to only be possible for
+* 2345 - Multiverse traversal discovered to only be possible for
   machine consciousness; research begins
 
 * 2348 - SS Pythagoras arrives in Katilay and colonizes, but its portal

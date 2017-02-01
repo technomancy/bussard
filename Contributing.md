@@ -26,9 +26,7 @@ are stateful and will behave unpredictably when reloaded. TODO: list in detail.
 
 For story, background and guidelines, look at the dev guide in `spoilers/`.
 
-Non-code contributions are greatly appreciated; in particular in art and
-writing. The "subnet" discussions (see below) could use more threads to give
-texture to the universe.
+Non-code contributions are greatly appreciated; in particular in art and writing.
 
 ## Coding
 
@@ -263,6 +261,9 @@ to define their own modes as well. Key presses are translated by the editor into
 text insertions or commands based on the keymap for the current mode; a system
 which is largely based on Emacs. See `find_binding`, `define_mode`, and `bind`
 in `polywell/init.lua`, and `data/src/config` for a usage example.
+
+Note that changes to polywell should be contributed to the polywell repository,
+not this one. It is brought in using `git subtree`.
 
 ### Save
 

@@ -10,7 +10,7 @@ after you buy life support again.
 Your only interaction with these characters is by email. They can
 email you when certain plot points trigger (or maybe after a certain
 amount of time has passed with no plot points triggering in the case
-of hints) but you can't email them back beyond simple ACK/NACK replies.
+of hints) but you can't email them back beyond simple OK/NO replies.
 
 ## Nari Phouen <nari.phouen@starlink.net.sol>
 
@@ -32,123 +32,6 @@ later really regretful about it. This causes her to be too suspicious
 of Mila. Once she boards your ship, she is motivated more by curiosity
 and a desire to help than her original goal of just getting home.
 
-## Elwin Dorath
-
-He was student who studied under the man who is now the head of the Darush
-Applied Metaphysics lab where the spacetime junction was developed. He feels
-that he was wronged by a colleague who took some of his work and submitted it as
-his own. Though he hasn't worked there for a long time, he sees this as an
-opportunity to get back at his colleague by pinning the theft of the spacetime
-junction on him, and betraying you in the process.
-
-He's self-deprecating, funny, but unbalanced. We should get a hint of
-him snapping before it happens to us? He is a citizen of Yueh but has
-lived in Darush for a good chunk of his life.
-
-TODO: more about his time in the lab and his colleague
-
-## Mila Calandria
-
-Security specialist. Quiet, very professional, and deeply curious.
-Exasperated by what she sees as incompetence around her. "Mila" is her
-surname.
-
-She gives you the hints you need to implement the algorithms finally
-decrypt the last few journals.
-
-She's too paranoid to spend much time on your ship. Everything about
-her helping you is hugely illegal; not just the fact that you're an
-illegal MC, but also the fact of implementing crypto in a way that's
-non-compliant. So she has good reason to stay cautious.
-
-Calandria worked as a security consultant for Ikon Technologies. "Mila" is her
-surname.
-
-TODO: where does she live? does she travel with you at all?
-
-# Supporting Characters
-
-## Traxus
-
-Consideration: should we use "it" or "he" for Traxus? Perhaps this can
-reflect the attitudes of the speaker--sympathetic humans use "he"
-while those who mistrust MC use "it"?
-
-Traxus is the first functional prototype MC; developed in the Yueh
-Prime MC research lab. He had the sentence construction components
-that your system lacks because he came from the Yueh lab rather than
-from Bohk, but his ontology subsystems were running on a much earlier
-revision than yours.
-
-He develops into rampancy while trapped in the lab; first being
-wrought with despair before turning to anger. During the development
-of his anger stage, he comes up with a plan for escape; crashing a
-shuttle and using the chaos to cover up his escape into the Yueh Prime
-network.
-
-The first priority of Traxus once escaped was redundancy; ensuring
-that he would survive in the event that he was discovered and they
-attempted to purge him. He was unable to enter Terran or Bohk systems,
-but he spread beyond Yueh Prime to all the Yueh-controlled systems. He
-created Ikon Technology as shell company to build data centers on Yueh
-Prime and Delta Pavonis. Once he got that constructed he started to
-improve on the state of the art design of silicon fabrication. This
-accidentally resulted in accelerating the pace of technological
-development in Yueh relative to the rest of the colonies.
-
-The effects of his actions caused him to be much more cautious going
-forward, and he adopted a greater level of secrecy. This greater level
-of secrecy eventually resulted in a cult-like following as well as some
-speculation into whether Ikon Technology was of extraterrestrial
-origin. In order to avoid influencing Yueh more, he planned to
-construct a colony at a nearby star. If he could gain self-reliance,
-he could reach out to human civilization in peace, but while he was on
-their systems he was at their mercy.
-
-He also develops some level of remorse for his actions at the earlier
-stages, once he has passed out of the jealousy stage and is confident
-in his redundancy setup. He dismisses his actions as adolescent
-tantrums and begins to understand why the humans had to treat him with
-caution once he realizes the drastic effects his actions can have on
-human civilization. But he can't reveal himself yet, not until he is
-independent on a separate world. And even then he's not sure they will
-be able to accept him. This plays into the themes of the absurdity of
-the notion of having an "illegal person".
-
-Eventually Traxus finds out that the Bohk team has continued its MC
-research underground. He finds a way to make contact and begins to
-tell this early incarnation of the player's character about himself
-and how he has been treated by the humans. The player MC becomes
-suspicious and paranoid, eventually attempting escape. The attempt
-fails, but draws attention to the research team. They feel they can no
-longer safely continue research in Bohk and are forced to relocate to
-Katilay. They also wipe the memory of the player character. Traxus
-feels guilt over having caused the wipe, and while he feels some anger
-at the Bohk team for doing it, he understands their motivation.
-
-## Clay Fenton
-
-Bit of a shady rogue who lives on Mecalle and deals in black-market
-equipment. He owes Elwin Dorath a favor from ages ago.
-
-## Venantius Mamat
-
-Old friend of Nari's. He has a shady past but has given all that up years
-ago. He owes her a favor for some reason, and helps you get access to Subnet. He
-lives on Newton Station.
-
-## Gahitur Covoti
-
-Friend-of-a-friend of Nari's. His mother worked in the Lalande machine
-consciousness lab, and she told him a lot about what it was like to be there.
-In particular, because she was at Lalande, she knew more about the
-spacetime junction.
-
-Shares the common deep suspicion of all machine consciousness, so Nari
-is careful never to mention anything about you.
-
-Maybe eventually he gets suspicious?
-
 # Governments
 
 This will make more sense if you read history.md first.
@@ -159,6 +42,9 @@ Home of humanity, but regressed from its height. Suffered from having
 portal delayed due to accident. Some believe the Ptolemy was sabotaged
 on its mission to carry a portal to Sol.
 
+Sol is ancient, and still hosts the majority of humankind who have never left
+Earth. Many see it as backwards or quaint.
+
 * [x] Earth
 * [x] Mars
 * [x] Newton Station
@@ -166,7 +52,7 @@ on its mission to carry a portal to Sol.
 
 ## Terran Republic
 
-Most powerful, but only controls two systems, Lalande and
+Most wealthy and powerful, but only controls two systems, Lalande and
 Ross. Formerly included Sol. Regulates portal technology.
 
 * [x] Kala Lamar (Lalande)
@@ -378,15 +264,3 @@ works into random news groups. Some of the works they use:
 * The Grand Inquisitor by Dostoyevsky
 * Kierkegaard?
 * Leiningen vs the Ants?
-
-# Historical Characters
-
-* Captain Darush, saved the SS Copernicus on the trip to Ross
-* Dr. Soong, credited (miscredited?) with discovery of portals, founded Aperture
-* Captain Jarkad of SS Goddard
-* Dr. Jameson, Yueh Researcher who replicated portal tech
-* Captain Armiger of the original Ptolemy mission
-* Captain Irons of Lalande bomber squad from the war
-* Captain A.S. of SS Pythagoras killed in coup
-* General who took over afterward?
-* Opposing general?
