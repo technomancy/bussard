@@ -124,7 +124,8 @@ return {
       for _,b in pairs(bodies) do
          if(b.update) then
             b:update(dt)
-         elseif(b.os) then
+         end
+         if(b.os) then
             local fs = filesystems[b.name]
             if fs then b.os.process.scheduler(fs) end
          end

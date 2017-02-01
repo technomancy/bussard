@@ -1,4 +1,6 @@
 -- a fake lil' OS
+local serpent = require("serpent")
+local utils = require("utils")
 
 assert(setfenv, "Needs lua 5.1; sorry.")
 
@@ -9,49 +11,59 @@ require("os.orb.fs")
 require("os.orb.shell")
 require("os.orb.process")
 
--- for interactive use, but also as a sample of how the API works:
--- start with an empty filesystem
--- f_raw = orb.fs.new_raw()
--- f0 = orb.fs.seed(orb.fs.proxy(f_raw, "root", f_raw),
---                  {technomancy = "hogarth",
---                   buddyberg = "hello"})
--- orb.fs.add_user(f0, "zacherson", "robot")
--- f1 = orb.fs.proxy(f_raw, "technomancy", f_raw)
--- e0 = orb.shell.new_env("root")
--- e1 = orb.shell.new_env("technomancy")
+orb.sandbox = function(ship, env, fs_raw, disconnect)
+   local services = require("services")
+   local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
+   local sb = {
+      buy_user = lume.fn(services.buy_user, ship, ship.target, fs_raw),
+      buy_upgrade = lume.fn(services.buy_upgrade, ship),
+      sell_upgrade = lume.fn(services.sell_upgrade, ship),
+      refuel = lume.fn(services.refuel, ship, ship.target),
+      cargo_transfer = lume.fn(services.cargo_transfer, ship.target, ship),
 
--- -- Open an interactive shell
--- orb.shell.exec(f1, e1, "smash")
+      upgrade_help = ship.api.help.get,
+      station = utils.readonly_proxy(ship.target),
+      ship = ship.api,
+      distance = lume.fn(utils.distance, ship, ship.target),
+      os = {time = lume.fn(utils.time, ship)},
+      term = { set_prompt = ship.api.editor.set_prompt,
+               get_prompt = ship.api.editor.get_prompt },
+      set_prompt = ship.api.editor.set_prompt,
+      get_prompt = ship.api.editor.get_prompt,
+      pps = function(x) return serpent.block(x, serpent_opts) end,
+      original_env = utils.readonly_proxy(env),
+   }
+   sb.pp = function(x) sb.print(serpent.block(x, serpent_opts)) end
 
--- -- co = orb.process.spawn(f1, e1, "smash")
--- -- -- till we have non-blocking io.read, the scheduler isn't going to do
--- -- -- jack when run from regular stdin
--- -- while coroutine.status(co) ~= "dead" do orb.process.scheduler(f0) end
+   ship.sandbox.logout = function()
+      disconnect()
+      ship.comm_connected = false
+   end
 
--- -- tests
--- t_groups = orb.shell.groups(f0, "technomancy")
--- assert(orb.utils.includes(t_groups, "technomancy"))
--- assert(orb.utils.includes(t_groups, "all"))
--- assert(not orb.utils.includes(t_groups, "zacherson"))
+   if(ship.target and ship.target.subnet and env.USER=="subnet") then
+      sb.subnet = lume.fn(services.subnet.request, ship)
+   end
 
--- orb.shell.exec(f1, e1, "mkdir mydir")
--- orb.shell.exec(f1, e1, "mkdir /tmp/hi")
--- orb.shell.exec(f1, e1, "ls /tmp/hi")
--- orb.shell.exec(f1, e1, "/bin/ls > /tmp/mydir")
--- orb.shell.exec(f1, e0, "ls /etc > /tmp/ls-etc")
--- orb.shell.exec(f1, e1, "cat /bin/cat > /tmp/cat")
+   return lume.merge(utils.sandbox, sb)
+end
 
--- f1["/home/technomancy/bin"].bye = "print \"good bye\""
--- orb.shell.exec(f1, e1, "bye")
-
--- assert(orb.fs.readable(f0, f1["/home/technomancy"], "technomancy"))
--- assert(orb.fs.readable(f0, f1["/bin"], "technomancy"))
--- assert(orb.fs.readable(f0, f1["/bin"], "zacherson"))
--- assert(orb.fs.writeable(f0, f1["/home/technomancy"], "technomancy"))
--- assert(orb.fs.writeable(f0, f1["/tmp"], "technomancy"))
-
--- -- assert(not orb.fs.writeable(f0, f1["/etc"], "technomancy"))
--- -- assert(not orb.fs.writeable(f0, f1["/home/zacherson"], "technomancy"))
--- -- assert(not orb.fs.readable(f0, f1["/home/zacherson"], "technomancy"))
+orb.login = function(fs, env, fs_raw, disconnect, ship, command)
+   env.IN, env.OUT = "/tmp/in", "/tmp/out"
+   orb.shell.exec(fs, env, "mkfifo " .. env.IN)
+   fs[env.OUT] = ship.api.write
+   local fifo = fs[env.IN]
+   fs[env.IN] = function(x)
+     assert((not x) or (type(x)=="string") or
+         ((type(x)=="table") and not pairs(x)(x)),
+       "Error transmitting non-text data")
+     return fifo(x)
+   end
+   assert((not command) or (type(command)=="string"),
+      "Error running non-string command.")
+   orb.process.spawn(fs, env, command,
+                     orb.sandbox(ship, env, fs_raw, disconnect))
+   -- without this you can't have non-shell SSH commands
+   orb.process.scheduler(fs)
+end
 
 return orb

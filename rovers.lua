@@ -2,7 +2,7 @@ local utils = require("utils")
 local lume = require("lume")
 local os = require("os.rover")
 
-local make = function(ship, target, rover_type, n)
+local make = function(_ship, target, rover_type, n)
    local is_saved_field = function(x)
       return type(x) ~= "function" and x ~= os
    end

@@ -4,7 +4,7 @@ VERSION=beta-2
 
 SHIP_LUA=ship/*.lua doc/init.lua
 ENGINE_LUA=*.lua
-OS_LUA=os/orb/*.lua os/lisp/*.lua
+OS_LUA=os/orb/*.lua os/lisp/*.lua os/rover/*.lua
 IN_OS_LUA=os/orb/resources/*
 IN_SHIP_LUA=data/src/*
 DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua \

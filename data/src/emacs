@@ -1,5 +1,4 @@
 -- Emacs keys -*- lua -*-
-
 bind("edit", "ctrl-h", editor.delete_backwards)
 bind("edit", "ctrl-d", editor.delete_forwards)
 bind("edit", "ctrl-k", editor.kill_line)
@@ -34,13 +33,14 @@ bind("edit", "ctrl-s", editor.search)
 bind("edit", "ctrl-r", lume.fn(editor.search, -1))
 bind("edit", "alt-5", editor.replace)
 
-bind("edit", "ctrl-alt-b", editor.switch_buffer)
-bind("edit", "ctrl-alt-s", editor.save)
-bind("edit", "alt-k", editor.close)
+bind("edit", "ctrl-x ctrl-f", editor.find_file)
+bind("edit", "ctrl-x b", editor.switch_buffer)
+bind("edit", "ctrl-x ctrl-s", editor.save)
+bind("edit", "ctrl-x k", editor.close)
+bind("edit", "ctrl-x ctrl-c", function() editor.save() os.exit() end)
 
--- insert a page-break character, rendered as a horizontal line.
-bind("edit", "ctrl-l", function()
-        editor.newline()
-        editor.textinput("\f")
-        editor.newline()
-end)
+bind("edit", "ctrl-x 1", editor.split)
+bind("edit", "ctrl-x 2", lume.fn(editor.split, "vertical"))
+bind("edit", "ctrl-x 3", lume.fn(editor.split, "horizontal"))
+bind("edit", "ctrl-x 4", lume.fn(editor.split, "triple"))
+bind("edit", "ctrl-x o", editor.focus_next)

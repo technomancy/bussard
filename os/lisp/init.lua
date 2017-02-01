@@ -1,6 +1,8 @@
 local _, compiler = require("os.lisp.l2l.compat"), require("os.lisp.l2l.compiler")
 local reader = require("os.lisp.l2l.reader")
 local lume = require("lume")
+local utils = require("utils")
+
 local portal_rc = love.filesystem.read("os/lisp/resources/portal.lsp")
 
 local id_for = function(p)
@@ -50,6 +52,30 @@ local run = function(_, env, sandbox, code)
    return result
 end
 
+local sandbox = function(ship, _, target, disconnect)
+   local services = require("services")
+   local sb = {}
+   sb.body = ship.target
+   sb.portal_target = ship.target.portal
+   sb.no_trip_clearance = lume.fn(services.no_trip_clearance, ship,
+                                  ship.system_name, ship.target.portal)
+   sb.set_beams = function(n)
+      target.beam_count = ((n or 0) * 9) / ship.portal_time
+   end
+   sb.portal_activate = function() ship:enter(target.portal, true) end
+   sb.draw_power = function(power)
+      assert(ship.battery - power >= 0, "Insufficient power.")
+      ship.portal_target = target
+      ship.battery = ship.battery - power
+   end
+   sb.disconnect = disconnect
+   sb.os = {time = lume.fn(utils.time, ship)}
+   sb.distance = lume.fn(utils.distance, ship, ship.target)
+   sb.ship = ship.api
+
+   return lume.merge(utils.sandbox, sb)
+end
+
 return {
    shell = {
       auth = function(fs, username, password)
@@ -61,12 +87,12 @@ return {
       new_env = function(user)
          return {USER = user, LOGIN = portal_rc}
       end,
-      spawn = function(fs, env, sandbox, command)
+      spawn = function(fs, env, sb, command)
          local co
-         if(sandbox.portal_target and env.USER ~= "root") then
-            co = coroutine.create(lume.fn(run, fs, env, sandbox, portal_rc))
+         if(sb.portal_target and env.USER ~= "root") then
+            co = coroutine.create(lume.fn(run, fs, env, sb, portal_rc))
          else
-            co = coroutine.create(lume.fn(repl, fs, env, sandbox, command))
+            co = coroutine.create(lume.fn(repl, fs, env, sb, command))
          end
          local id = id_for(co)
          fs.proc[id] = { thread = co, id = id }
@@ -99,6 +125,32 @@ return {
          fs.etc = { motd = ";; Welcome to the lisp REPL." }
       end,
    },
+
+   login = function(fs, env, _, disconnect, ship, command)
+      local buffer = {}
+      local max_buffer_size = 1024
+      local sb = sandbox(ship, env, ship.target, disconnect)
+      local write = ship.api.write
+      env.IN = function(...)
+         local arg = {...}
+         if(#arg == 0) then
+            while #buffer == 0 do coroutine.yield() end
+            return table.remove(buffer, 1)
+         elseif(arg[1] == {}) then
+            return buffer
+         else -- write
+            while(#buffer > max_buffer_size) do coroutine.yield() end
+            for _,output in pairs(arg) do
+               table.insert(buffer, output)
+            end
+         end
+      end
+
+      sb.io = sb.io or { read = env.IN, write = write }
+      sb.print = ship.api.print
+
+      ship.target.os.shell.spawn(fs, env, sb, command)
+   end,
 
    name = "lisp",
 }

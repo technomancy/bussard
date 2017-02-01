@@ -24,11 +24,8 @@ local in_stock = function(station, ship, good, amount, direction)
 end
 
 return {
-   buy_user = function(ship, target, sessions, username, password)
+   buy_user = function(ship, target, fs_raw, username, password)
       if(target.account_price and ship.credits >= target.account_price) then
-         local session = sessions[ship.target.name]
-         assert(session, "Not logged in to " .. ship.target.name)
-         local fs_raw = session[3]
          local fs = target.os.fs.proxy(fs_raw, "root", fs_raw)
          target.os.fs.add_user(fs, username, password)
          ship.credits = ship.credits - target.account_price

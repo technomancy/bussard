@@ -48,6 +48,8 @@ bind("ssh", "ctrl-d", function()
         if(line == editor.get_max_line() and
            editor.get_input() == "") then
            logout()
+           ship:activate_mode("console")
+           ship.editor.set_prompt("> ")
            print("Logged out.")
         else
            editor.delete_forwards()

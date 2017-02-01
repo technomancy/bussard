@@ -1,9 +1,5 @@
-local lume = require("lume")
-local utils = require("utils")
 local mission = require("mission")
 local body = require("body")
-local services = require("services")
-local serpent = require("serpent")
 
 local sessions = {}
 
@@ -33,6 +29,7 @@ local logout = function(ship, target)
    local session = sessions[target.name]
    if(session) then
       local fs, env = unpack(session)
+      -- guest account files are wiped on logout
       if(env.USER == "guest") then
          for k,_ in pairs(fs["/home/guest"] or {}) do
             if(k ~= "_user" and k ~= "_group") then
@@ -51,122 +48,25 @@ local send_line = function(ship, input)
    if(not ship.comm_connected) then
       logout(ship, nil) -- shouldn't happen, but get out of ssh mode anyway
    elseif(not ship:in_range(ship.target)) then
-      ship.api.print("| Out of range. Run `logout` to disconnect or move back in range.")
+      ship.api.print("| Out of range. Run `logout` to disconnect" ..
+                        " or move back in range.")
    elseif(not sessions[ship.target.name]) then
       ship.api.print("Not logged in to " .. ship.target.name ..
                         ". Run `logout` to disconnect.")
    else
       local fs, env = unpack(sessions[ship.target.name])
       assert(fs and env, "Not logged into " .. ship.target.name)
-      if(fs[env.IN]) then
-         fs[env.IN](input)
-      else
-         env.IN(input)
-      end
+      local handle = fs[env.IN] or env.IN
+      handle(input)
    end
 end
 
-local sandbox = function(ship, env, target)
-   local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
-   local sb = {
-      buy_user = lume.fn(services.buy_user, ship, ship.target, sessions),
-      buy_upgrade = lume.fn(services.buy_upgrade, ship),
-      sell_upgrade = lume.fn(services.sell_upgrade, ship),
-      refuel = lume.fn(services.refuel, ship, ship.target),
-      cargo_transfer = lume.fn(services.cargo_transfer, ship.target, ship),
-
-      upgrade_help = ship.api.help.get,
-      station = utils.readonly_proxy(ship.target),
-      ship = ship.api,
-      distance = lume.fn(utils.distance, ship, ship.target),
-      os = {time = lume.fn(utils.time, ship)},
-      term = { set_prompt = ship.api.editor.set_prompt,
-               get_prompt = ship.api.editor.get_prompt },
-      set_prompt = ship.api.editor.set_prompt,
-      get_prompt = ship.api.editor.get_prompt,
-      pps = function(x) return serpent.block(x, serpent_opts) end,
-      original_env = utils.readonly_proxy(env),
-   }
-   sb.pp = function(x) sb.print(serpent.block(x, serpent_opts)) end
-
-   ship.sandbox.logout = function()
-      logout(ship, target)
-      ship.comm_connected = false
-   end
-
-   if(ship.target and ship.target.subnet and env.USER=="subnet") then
-      sb.subnet = lume.fn(services.subnet.request, ship)
-   end
-
-   if(ship.target and ship.target.portal) then
-      sb.body = ship.target
-      sb.portal_target = ship.target.portal
-      sb.no_trip_clearance = lume.fn(services.no_trip_clearance, ship,
-                                     ship.system_name, ship.target.portal)
-      sb.set_beams = function(n)
-         target.beam_count = ((n or 0) * 9) / ship.portal_time
-      end
-      sb.portal_activate = function() ship:enter(target.portal, true) end
-      sb.draw_power = function(power)
-         assert(ship.battery - power >= 0, "Insufficient power.")
-         ship.portal_target = target
-         ship.battery = ship.battery - power
-      end
-   end
-   return lume.merge(utils.sandbox, sb)
-end
-
-local lisp_login = function(fs, env, ship, command)
-   local buffer = {}
-   local max_buffer_size = 1024
-   local sb = sandbox(ship, env, ship.target)
-   local write = ship.api.write
-   env.IN = function(...)
-      local arg = {...}
-      if(#arg == 0) then
-         while #buffer == 0 do coroutine.yield() end
-         return table.remove(buffer, 1)
-      elseif(arg[1] == {}) then
-         return buffer
-      else -- write
-         while(#buffer > max_buffer_size) do coroutine.yield() end
-         for _,output in pairs(arg) do
-            table.insert(buffer, output)
-         end
-      end
-   end
-
-   sb.disconnect = function()
-      ship.api.editor.with_current_buffer("*console*", function()
-                                             ship.api:activate_mode("console")
-                                             ship.api.editor.set_prompt("> ")
-      end)
-      logout(ship, ship.target)
-   end
-
-   sb.io = sb.io or { read = env.IN, write = write }
-   sb.print = ship.api.print
-
-   ship.target.os.shell.spawn(fs, env, sb, command)
-end
-
-local orb_login = function(fs, env, ship, command)
-   env.IN, env.OUT = "/tmp/in", "/tmp/out"
-   ship.target.os.shell.exec(fs, env, "mkfifo " .. env.IN)
-   fs[env.OUT] = ship.api.write
-   local old_in = fs[env.IN]
-   fs[env.IN] = function(x)
-     assert((not x) or (type(x)=="string") or
-         ((type(x)=="table") and not pairs(x)(x)),
-       "Error transmitting non-text data")
-     return old_in(x)
-   end
-   assert((not command) or (type(command)=="string"),
-     "Error transmitting non-text data")
-   -- TODO: improve error handling for problems in smashrc
-   ship.target.os.process.spawn(fs, env, command, sandbox(ship, env, ship.target))
-   -- without this you can't have non-shell SSH commands
-   ship.target.os.process.scheduler(fs)
+local disconnect = function(ship)
+   ship.api.editor.with_current_buffer("*console*", function()
+                                          ship.api:activate_mode("console")
+                                          ship.api.editor.set_prompt("> ")
+   end)
+   logout(ship, ship.target)
 end
 
 local get_connection = function(ship, username, password)
@@ -180,7 +80,6 @@ local get_connection = function(ship, username, password)
       local fs = ship.target.os.fs.proxy(fs_raw, username, fs_raw)
       local env = ship.target.os.shell.new_env(username)
       local session_id = tostring(love.math.random(99999999))
-      local target = ship.target
       env.HOST = body.hostname(ship.target.name)
       env.OUT = "/tmp/out-" .. session_id
 
@@ -203,8 +102,10 @@ local get_connection = function(ship, username, password)
          end
 
          assert((not command) or (type(command)=="string"),
-           "Error trying to transmit non-text data")
-         ship.target.os.shell.exec(fs, env, command, sandbox(ship, env, target))
+            "Error running non-string command.")
+         local sandbox = ship.target.os.sandbox
+         ship.target.os.shell.exec(fs, env, command,
+                                   sandbox(ship, env, fs_raw, logout))
          return output
       end
    else
@@ -228,14 +129,9 @@ return {
          sessions[ship.target.name] = {fs, env, fs_raw}
          ship.comm_connected = ship.target.name
 
-         if(ship.target.os.name == "orb") then
-            orb_login(fs, env, ship, command)
-         elseif(ship.target.os.name == "lisp") then
-            lisp_login(fs, env, ship, command)
-         else
-            error("Unknown OS: " .. ship.target.os.name)
-         end
-
+         assert(ship.target.os.login, "Unknown OS.")
+         ship.target.os.login(fs, env, fs_raw, lume.fn(disconnect, ship),
+                              ship, command)
          mission.on_login(ship)
       else
          ship.api.print("Login failed.")
