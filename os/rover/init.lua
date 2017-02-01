@@ -11,7 +11,7 @@ local id_for = function(p)
 end
 
 local eval = function(input, sb)
-   local chunk, err = sb.loadstring("return " .. input)
+   local chunk, err = sb:loadstring("return " .. input)
 
    if(err and not chunk) then -- maybe it's a statement, not an expression
       chunk, err = sb.loadstring(input)
@@ -31,6 +31,10 @@ local eval = function(input, sb)
       while i <= #result do
          output = output .. ', ' .. pps(result[i])
          i = i + 1
+      end
+      if(result[2] == sb.invisible) then
+         sb.print_prompt()
+         return true
       end
       sb.print(output)
    else
@@ -67,8 +71,16 @@ local sandbox = function(ship, logout)
          end)
          logout(ship, ship.target)
       end,
-      loadstring = loadstring, -- TODO: fix
    }
+   sb.loadstring = function(sandbox, code, chunkname)
+      local chunk, err = loadstring(code, chunkname)
+      if(chunk) then
+         setfenv(chunk, sandbox)
+         return chunk
+      else
+         return chunk, err
+      end
+   end
    return lume.merge(utils.sandbox, sb)
 end
 
@@ -117,6 +129,8 @@ return {
 
       sb.io = sb.io or { read = env.IN, write = write }
       sb.print = ship.api.print
+      sb.invisible = ship.api.editor.invisible
+      sb.print_prompt = ship.api.editor.print_prompt
 
       ship.api.editor.set_prompt(">> ")
       spawn(fs, env, sb, command)
