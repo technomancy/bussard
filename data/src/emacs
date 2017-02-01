@@ -37,7 +37,7 @@ bind("edit", "ctrl-x ctrl-f", editor.find_file)
 bind("edit", "ctrl-x b", editor.switch_buffer)
 bind("edit", "ctrl-x ctrl-s", editor.save)
 bind("edit", "ctrl-x k", editor.close)
-bind("edit", "ctrl-x ctrl-c", function() editor.save() os.exit() end)
+bind("edit", "ctrl-x ctrl-c", function() editor.save() ship.ui.quit() end)
 
 bind("edit", "ctrl-x 1", editor.split)
 bind("edit", "ctrl-x 2", lume.fn(editor.split, "vertical"))

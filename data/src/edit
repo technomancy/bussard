@@ -14,6 +14,7 @@ end
 
 bind("edit", "escape", exit)
 bind("edit", "ctrl-return", exit)
+bind("edit", "ctrl-o", editor.find_file)
 
 bind({"edit", "minibuffer"}, "ctrl-q", function()
       editor.save()
@@ -79,10 +80,6 @@ bind("edit", "alt-g", function()
                             if(not cancel) then
                                editor.go_to(tonumber(l)) end end)
 end)
-
-dofile("src.lua")
-
--- editor.set_color("text", {200, 255, 200})
 
 -- uncomment this out to enable Emacs key bindings, which conflict with
 -- some of the more conventional bindings.
