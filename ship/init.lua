@@ -150,7 +150,7 @@ local ship = {
    target = nil,
    mass = 128,
    battery = 128,
-   upgrades = {},
+   upgrades = {}, -- map of upgrade name -> upgrade map
    time_factor = 10,
    base_time_factor = 10,
 
@@ -158,15 +158,15 @@ local ship = {
    fuel = 128,
    credits = 1024,
    time_offset = utils.game_start,
-   cargo = {},
-   upgrade_names={},
-   active_missions={},
-   mail_delivered={},
-   events={},
-   humans={},
-   humans_left_at={},
-   rovers={simple=4},
-   rover_clearance={"Lioboro"},
+   cargo = {}, -- map of cargo name -> tons number
+   upgrade_names={}, -- array of upgrade names
+   active_missions={start={}}, -- map of mission id -> mission record map
+   mail_delivered={}, -- map of message name -> true
+   events={}, -- map of event names -> timestamps
+   humans={}, -- array of human names
+   humans_left_at={}, -- map of human name -> world name
+   rovers={}, -- map of type -> number
+   rover_clearance={}, -- array of world names
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)
@@ -221,11 +221,11 @@ local ship = {
             ship.r = 16831
             body.seed_pos(ship, ship.bodies[1])
             ship.x, ship.y = -(math.abs(ship.x)), math.abs(ship.y)
-            ship.dx, ship.dy = -(math.abs(ship.dx)), math.abs(ship.dy)
+            ship.dx, ship.dy = math.abs(ship.dx), math.abs(ship.dy)
          end
          ai.seed(ship)
       end
-      ship.api.on_enter(system_name)
+      if(ship.api.on_enter) then ship.api.on_enter(system_name) end
    end,
 
    update = function(ship, dt)

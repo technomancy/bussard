@@ -175,9 +175,9 @@ return {
          ship.api.src.bak[v] = ship.api.src[v]
          ship.api.src[v] = love.filesystem.read("data/src/" .. v)
       end
-      ship.api.src.config = "-- Your ship's config has been reverted to stock.\n" ..
-         "-- The original files have been moved to the ship.src.bak directory." ..
-         "\n\n" .. ship.api.src.config
+      ship.api.src.config = "-- Your -*- lua -*- config has been reverted.\n" ..
+         "-- The original files have been moved to the ship.src.bak directory."
+         .. "\n\n" .. ship.api.src.config
       ship.api.print("Backed up config and restored to stock settings.")
       ship:configure(ship.systems, ship.api.ui)
       ship.api.dofile("src.config")

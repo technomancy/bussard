@@ -2,8 +2,7 @@
 
 <img src="https://p.hagelb.org/bussard.png" alt="screenshot" />
 
-A spaceflight programming adventure. Mine, trade, upgrade, and unlock the
-potential of your spacecraft by hacking on the code that makes it tick.
+A spaceflight programming adventure.
 
 Read the [in-game manual](manual.md) for a taste of how the game works.
 
@@ -32,8 +31,8 @@ fit too.
 
 Releases for each platform are [on itch.io](https://technomancy.itch.io/bussard).
 Windows and Mac OS X releases are standalone, but `.love` file releases require having
-[LÖVE](https://love2d.org). Version 0.9.x is supported, but 0.10.0 is recommended
-for syntax highlighting support.
+[LÖVE](https://love2d.org). Version 0.9.x is supported, but 0.10.x or higher is
+recommended for syntax highlighting support.
 
 When running from source, type `love .` from a checkout.
 
@@ -72,7 +71,7 @@ progress. Eventually the goal is that you will be able to learn it without any
 **Q:** How do I change the controls?  
 **A:** Press `ctrl-o` then type "src.config" to open the main config file. The keys here are mostly for flight mode. At the bottom you can see where it loads other modes in files like "src.edit" or "src.mail". Open these other files with `ctrl-o` if you want to change keys for those modes. Find the key binding you want to change, and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` to go back to flight mode, and then press `ctrl-r` to load them. Note that after using the editor you may need to press `ctrl-pagedown` or `ctrl-pageup` a few times to get back to console, as console is just a buffer called `*console*` in the editor.
 
-**Q:** How do you match orbit with the station?  
+**Q:** How do you match orbit with a station or planet?  
 **A:** Remember that newtonian motion means your controls affect your velocity rather than directly controlling your motion. Don't accelerate towards the station; instead accelerate so your trajectories cross at the same point.
 
 **Q:** Where are the missions?  
@@ -94,6 +93,7 @@ progress. Eventually the goal is that you will be able to learn it without any
 * [Atomic Rockets](http://www.projectrho.com/public_html/rocket/) (science)
 * [Planescape: Torment](https://www.gog.com/game/planescape_torment) (story, gameplay)
 * [Meditations on Moloch](https://slatestarcodex.com/2014/07/30/meditations-on-moloch/) (philosophy)
+* [SpaceChem](https://www.gog.com/game/spacechem) (puzzle design)
 
 ## Licenses
 
