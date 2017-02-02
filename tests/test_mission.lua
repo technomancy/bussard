@@ -53,7 +53,7 @@ function test_missions()
    t.assert_number(lume.find(ship.upgrade_names, "life_support"))
    portal("Portal: Tana")
    mail.reply(ship, "d6069254-4182-4f96-a145-df309a992798") -- passenger2
-   t.assert_equal(lume.count(ship.active_missions), 1)
+   t.assert_equal(lume.count(ship.active_missions), 2)
    t.assert_true(ship.mail_delivered["nari-a-01"])
    ssh_run(ship, "Tana Prime")
    ship:update(64)

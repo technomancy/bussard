@@ -27,7 +27,7 @@ local status_whitelist = {
    "engine_on", "turning_right", "turning_left", "credits", "upgrade_names",
    "cargo", "cargo_capacity", "solar",
    "engine_strength", "turning_speed", "cpuinfo",
-   "recharge_rate", "burn_rate", "comm_connected", "comm_range", "scoop_range",
+   "recharge_rate", "burn_rate", "comm_connected", "comm_range",
    "portal_range", "portal_time", "flag", "target", "comm_boost",
    "time_factor", "base_time_factor"
 }
@@ -36,7 +36,6 @@ local base_stats = {
    mass = 128,
    cargo_capacity = 64,
    fuel_capacity = 192,
-   scoop_range = 0,
    comm_range = 2048,
    recharge_rate = 1/2,
    burn_rate = 1,

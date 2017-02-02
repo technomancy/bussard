@@ -1,6 +1,6 @@
 local lume = require("lume")
 
-local upgrades = {"laser", "engine", "cargo_bay", "fuel_tank", "fuel_charger",
+local upgrades = {"engine", "cargo_bay", "fuel_tank", "fuel_charger",
                   "solar_panel", "comm_boost", "map", "jeejah", "life_support",
                   "bencode_decoder", "underclocker", }
 
@@ -26,7 +26,6 @@ local pages = {
    luabook5 = "doc/lua-5-tables.md",
    luabook6 = "doc/lua-6-libs.md",
 
-   laser = "doc/laser.md",
    engine = "doc/engine.md",
    cargo_bay = "doc/cargo_bay.md",
    fuel_tank = "doc/fuel_tank.md",

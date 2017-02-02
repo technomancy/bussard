@@ -6,7 +6,6 @@ return {
    medicine = 20,
    account = 256,
    upgrades = {
-      laser = 256,
       engine = 1024,
       cargo_bay = 768,
       fuel_tank = 1024,

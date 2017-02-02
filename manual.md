@@ -277,11 +277,11 @@ introduce completely new components or improve the effectiveness of
 existing components.
 
 Once you have logged into a station that sells upgrades, you can run
-the `upgrade` script to see their prices. Run `upgrade buy laser`, for
-instance, to purchase a laser, provided you have enough credits. Once
+the `upgrade` script to see their prices. Run `upgrade buy map`, for
+instance, to purchase a map, provided you have enough credits. Once
 you have purchased an upgrade, you can usually view its documentation
 by logging out of the station and accessing its manual page with
-`man("laser")`, etc. Many upgrades will require making changes to your
+`man("map")`, etc. Many upgrades will require making changes to your
 ship's config code to use; the changes will be described in the manual.
 
 ### Mail
