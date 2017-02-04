@@ -179,12 +179,21 @@ return {
       end
    end,
 
-   no_trip_clearance = function(ship, from, to)
-      for check, reason in pairs(clearances[from .. ":" .. to] or {}) do
-         if(type(check) == "string" and not ship.events[check]) then
-            return reason
-         elseif(type(check) == "function" and not check(ship)) then
-            return reason
+   no_trip_clearance = function(ship, from, to, is_interportal)
+      for _, place in ipairs({clearances[from .. ":" .. to] or {},
+                              is_interportal and clearances["interportal"] or {},
+                              clearances["any"],}) do
+         for _, check in ipairs(place) do
+            if(type(check) == "function") then
+               local reason = check(ship)
+               if(reason) then return reason end
+            else
+               for event, reason in pairs(check) do
+                  if(type(check) == "string" and not ship.events[event]) then
+                     return reason
+                  end
+               end
+            end
          end
       end
       return false

@@ -2,6 +2,7 @@ local _, compiler = require("os.lisp.l2l.compat"), require("os.lisp.l2l.compiler
 local reader = require("os.lisp.l2l.reader")
 local lume = require("lume")
 local utils = require("utils")
+local mail = require("mail")
 
 local portal_rc = love.filesystem.read("os/lisp/resources/portal.lsp")
 
@@ -58,11 +59,18 @@ local sandbox = function(ship, _, target, disconnect)
    sb.body = ship.target
    sb.portal_target = ship.target.portal
    sb.no_trip_clearance = lume.fn(services.no_trip_clearance, ship,
-                                  ship.system_name, ship.target.portal)
+                                  ship.system_name, ship.target.portal,
+                                  ship.target.interportal)
    sb.set_beams = function(n)
       target.beam_count = ((n or 0) * 9) / ship.portal_time
    end
-   sb.portal_activate = function() ship:enter(target.portal, true) end
+   sb.portal_activate = function()
+      ship:enter(target.portal, true)
+      if(lume.count(ship.humans) == 0) then
+         ship.fine = ship.fine + 2460
+         mail.deliver_msg(ship, "unauthorized-portal.msg", true)
+      end
+   end
    sb.draw_power = function(power)
       assert(ship.battery - power >= 0, "Insufficient power.")
       ship.portal_target = target

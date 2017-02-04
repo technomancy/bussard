@@ -1,8 +1,8 @@
 From: support@kosaga.com.bohk
 To: captain@adahn.local
-Date: 2372:30,486,891
 Content-Type: text/plain; charset=UTF-8
 Subject: Congratulations on the purchase of your spacecraft
+Date: 2372:30,486,891
 Message-Id: c692e8cf-f99b-446e-88e0-390909f659a5
 
 Congratulations on the purchase of your Kosaga Shipyards Bussard-class
@@ -20,10 +20,10 @@ running this in your console:
 
     man("manual")
 
-Please enjoy your new spacecraft; with care and proper adherence to
-safety and maintenance features it will give you gigaseconds of reliable
-service. Note that to be eligible for warranty coverage, your craft must
-be registered within 2 megaseconds of purchase.
+Please enjoy your new spacecraft; with care and proper adherence to safety and
+maintenance features it will serve you reliably. Note that to be eligible for
+warranty coverage, your craft must be registered within 2 megaseconds of
+purchase.
 
 Sincerely,
 Your friends at Kosaga Shipyards

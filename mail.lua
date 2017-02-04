@@ -18,19 +18,22 @@ local folder_for = function(msg)
    end
 end
 
-local add_date = function(msg, date)
-   if(msg:match("\nDate:")) then return msg end
+local add_header = function(msg, header, value)
    local parts = lume.split(msg, "\n\n")
-   parts[1] = parts[1] .. "\nDate: " .. utils.format_time(date)
+   if(parts[1]:match("\n" .. header .. ": ")) then return msg end
+   parts[1] = parts[1] .. "\n" .. header .. ": " .. tostring(value)
    return table.concat(parts, "\n\n")
 end
 
-local deliver_msg = function(ship, msg_name)
+local deliver_msg = function(ship, msg_name, allow_multiple)
    local msg = read(msg_name)
    msg_name = msg_name:gsub(".msg$", "")
+   if(allow_multiple) then msg_name = lume.uuid() end
    if(msg and not ship.mail_delivered[msg_name]) then
       local folder = folder_for(msg)
-      ship.api.docs.mail[folder][msg_name] = add_date(msg, utils.time(ship))
+      msg = add_header(msg, "Date", utils.time(ship))
+      msg = add_header(msg, "Message-Id", msg_name)
+      ship.api.docs.mail[folder][msg_name] = msg
       ship.api.docs.mail[folder]._unread[msg_name] = true
       ship.mail_delivered[msg_name] = true
       return true
@@ -56,6 +59,7 @@ return {
       end
    end,
 
+   add_header = add_header,
    deliver_msg = deliver_msg,
 
    reply = function(ship, msg_id)

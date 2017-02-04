@@ -1,8 +1,8 @@
 From: strauss@katilaycollege.edu.katilay
 To: captain@adahn.local
-Date: 2386:18,575,241
 Content-Type: text/plain; charset=UTF-8
 Subject: Forgive me
+Date: 2386:18,575,241
 Message-Id: 124ced33-46eb-48f8-a3e6-e22e54202336
 
 So, you found this. Not exactly a secure channel, but your ship is about

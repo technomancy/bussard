@@ -84,32 +84,5 @@ bind("console", "return", function()
         editor.print_prompt()
 end)
 
--- auto-completion saves you typing!
-local complete = function()
-   local point, point_line = editor.point()
-   -- only complete if you're on the last line (input area)
-   if(point_line ~= editor.get_max_line()) then return end
-   -- strip out the prompt.
-   local line = utf8.sub(editor.get_line(0),
-                         utf8.len(editor.get_prompt()) + 1, point)
-   -- what's the expression being completed?
-   local entered = lume.last(lume.array((line):gmatch("[._%a0-9]+"))) or ""
-   -- only complete if something is entered
-   if(#entered < 1) then return end
-   local completions = utils.completions_for(entered, _G, ".")
-
-   -- if there's only one completion candidate, insert it. otherwise insert the
-   -- longest unambiguous substring and display a list of candidates.
-   if(#completions == 1) then
-      editor.textinput(utf8.sub(completions[1], #entered + 1))
-   elseif(#completions > 0) then
-      local common = utils.longest_common_prefix(completions)
-      if(common == entered) then
-         print(table.concat(completions, " "))
-      else
-         editor.textinput(utf8.sub(common, #entered + 1))
-      end
-   end
-end
 bind("console", "tab", editor.complete)
 bind("console", "ctrl-i", editor.complete)

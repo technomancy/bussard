@@ -32,9 +32,9 @@ end
 
 editor.search = function(original_direction)
    local lines, point, point_line = editor.get_lines(), editor.point()
-   local continue_from, path = point_line, e.current_buffer_path()
+   local continue_from, path = point_line, editor.current_buffer_path()
    local on_change = function(find_next, new_direction)
-      local input = e.get_input()
+      local input = editor.get_input()
       local direction = new_direction or original_direction or 1
       local to = (direction < 1) and 1 or #lines
       if(input == "") then return end
@@ -43,7 +43,7 @@ editor.search = function(original_direction)
          local match_point = lines[i]:find(input)
          if(match_point) then
             continue_from = i + direction
-            return e.go_to(i, match_point-1, path)
+            return editor.go_to(i, match_point-1, path)
          end
       end
       -- wrap around to beginning if not found

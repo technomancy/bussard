@@ -1,11 +1,11 @@
-From: leeft.com
+From: dispatch@leeft.com
 To: jobs@news.local
 Content-Type: text/plain; charset=UTF-8
-Subject: Passenger run from Tana Prime to Apkabar Station
+Subject: Passenger run from Tana Prime to Lioboro
 Message-Id: d6069254-4182-4f96-a145-df309a992798
 
 Pick up: Tana Prime (Tana system)
-Drop off: Apkabar Station (Luyten's Star system)
+Drop off: Lioboro (Tana system)
 Fare payment: 250
 Passenger names: Nari Phouen
 

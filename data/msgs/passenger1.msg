@@ -1,4 +1,4 @@
-From: leeft.com
+From: dispatch@leeft.com
 To: jobs@news.local
 Content-Type: text/plain; charset=UTF-8
 Subject: Passenger run from Solotogo to Tana Prime

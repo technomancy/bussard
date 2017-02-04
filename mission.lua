@@ -26,7 +26,7 @@ local lume = require("lume")
 -- * success_events: array of events to set upon success
 -- * success_message: prints upon mission success
 -- * fail_message: prints upon mission failure
-
+-- * invisible: don't show in mission listing
 
 local fail = function(ship, mission, aborted)
    if(mission.on_fail) then
@@ -107,7 +107,9 @@ local succeed = function(ship, mission)
    end
 
    ship.credits = ship.credits + (mission.credits or 0)
-   ship.api.print("Mission success: " .. (mission.success_message or "OK."))
+   if(not mission.invisible) then
+      ship.api.print("Mission success: " .. (mission.success_message or "OK."))
+   end
    ship.active_missions[mission.id] = nil
 end
 
@@ -115,7 +117,9 @@ local on_login = function(ship)
    for mission_id,record in pairs(ship.active_missions) do
       local mission = find(ship, mission_id)
       record_destination(record, ship.comm_connected, ship)
-      if(mission.on_login) then mission.on_login(ship, ship.comm_connected) end
+      if(mission.on_login) then
+         mission.on_login(ship, ship.comm_connected, record)
+      end
       if(check_success(ship, mission)) then succeed(ship, mission) end
    end
 end
@@ -175,13 +179,15 @@ local list = function(ship)
    else
       for mission_id in pairs(ship.active_missions) do
          local mission = find(ship, mission_id)
-         ship.api.print("\n")
-         ship.api.print(mission.name)
-         if(mission.description) then
-            ship.api.print(mission.description)
-         end
-         if(mission.credits) then
-            ship.api.print("Credits: " .. mission.credits)
+         if(not mission.invisible) then
+            ship.api.print("\n")
+            ship.api.print(mission.name)
+            if(mission.description) then
+               ship.api.print(mission.description)
+            end
+            if(mission.credits) then
+               ship.api.print("Credits: " .. mission.credits)
+            end
          end
       end
    end
@@ -210,7 +216,9 @@ local readout = function(ship)
    local s = ""
    for mission_id in pairs(ship.active_missions) do
       local this_mission = find(ship, mission_id)
-      s = s .. "\n- " .. this_mission.name
+      if(not this_mission.invisible) then
+         s = s .. "\n- " .. this_mission.name
+      end
    end
    return s
 end

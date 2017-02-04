@@ -32,6 +32,7 @@ local portal = function(target, fail_ok)
       local target_system = target:gsub("Inter", ""):gsub("[pP]ortal: ", "")
       t.assert_equal(target_system, ship.system_name)
    end
+   return target_system == ship.system_name
 end
 
 local ssh_run = function(ship, target, command)
@@ -51,9 +52,20 @@ function test_missions()
    ship:enter("L 668-21", true)
    ssh_run(ship, "Mirduka Station", "upgrade buy life_support")
    t.assert_number(lume.find(ship.upgrade_names, "life_support"))
+
    portal("Portal: Tana")
+
+   t.assert_equal(2460, ship.fine)
+   t.assert_equal(false, portal("Portal: Wolf 294", true))
+   ssh_run(ship, "Tana Prime", "port fine")
+   t.assert_equal(2460, ship.fine)
+   ssh_run(ship, "Tana Prime", "loan borrow 2460")
+   t.assert_not_equal(0, ship.loan)
+   ssh_run(ship, "Tana Prime", "port fine")
+   t.assert_equal(0, ship.fine)
+
    mail.reply(ship, "d6069254-4182-4f96-a145-df309a992798") -- passenger2
-   t.assert_equal(lume.count(ship.active_missions), 2)
+   t.assert_equal(lume.count(ship.active_missions), 1)
    t.assert_true(ship.mail_delivered["nari-a-01"])
    ssh_run(ship, "Tana Prime")
    ship:update(64)

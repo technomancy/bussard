@@ -42,7 +42,7 @@ local sys = {
    ["Tana"] =
       {gov="Tana", capitol = true,
        x = -5.8, y=-2.4,
-       asteroids = 2,
+       asteroids = 4,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=230000,
            image_name="sun",
