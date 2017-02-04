@@ -52,3 +52,5 @@ console. (Easiest solution; most hacky.)
 ## Buffer overflow attack (???)
 
 ## Leave a rover on a planet in order to impersonate and MITM
+
+## Convince a portal that you have a human on board in order to allow passage

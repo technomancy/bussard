@@ -334,6 +334,7 @@ local ship = {
    end,
 
    long_update = function(ship, dt)
+      asteroid.recycle(ship)
       utils.run_handlers(ship.api, "long_updaters", "broken_updaters",
          {ship.api, dt}, editor.print)
    end,

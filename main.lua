@@ -4,7 +4,6 @@ _, lume = require("metatable_monkey"), require("lume")
 local body = require "body"
 local ai = require "ship.ai"
 local ship = require "ship"
-local asteroid = require "asteroid"
 local save = require "save"
 local pause = require "pause"
 local systems = require("data.systems")
@@ -160,13 +159,18 @@ end
 
 love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end
 
+local timestep, elapsed = 0.01, 0
+
 local update = safely(function(dt)
-      local real_time_factor = ship.time_factor * dt
-      ship:update(real_time_factor)
-      body.update(ship.bodies, real_time_factor)
-      body.gravitate_all(ship.bodies, ship, real_time_factor)
-      asteroid.recycle(ship)
-      ai.update(ship, ship.bodies, real_time_factor)
+      elapsed = elapsed + dt
+      while(elapsed > timestep) do -- fixed timestep
+         elapsed = elapsed - timestep
+         local real_time_factor = ship.time_factor * timestep
+         ship:update(real_time_factor)
+         body.update(ship.bodies, real_time_factor)
+         body.gravitate_all(ship.bodies, ship, real_time_factor)
+         ai.update(ship, ship.bodies, real_time_factor)
+      end
 end)
 
 -- for commands that don't need repeat
