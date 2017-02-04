@@ -145,4 +145,6 @@ return {
    logout = logout,
 
    logout_all = function() end,
+
+   test_sessions = sessions, -- for tests only!
 }

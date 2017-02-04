@@ -68,14 +68,4 @@ function test_missions()
    t.assert_equal("companion", ship.humans.nari)
    mail.reply(ship, "c83c2439-f4cf-475f-95a6-f15cafc3db16") -- nari-a-05
    t.assert_true(ship.mail_delivered["c83c2439-f4cf-475f-95a6-f15cafc3db16"])
-
-   portal("Portal: Luyten's Star")
-   portal("Interportal: Sol")
-   ssh_run(ship, "Newton Station")
-   t.assert_true(ship.mail_delivered["nari-a-09"])
-   t.assert_true(ship.events["passenger2"])
-
-   -- ACT 2
-   mail.reply(ship, "c369f9dc-9041-4672-8d0c-b7d28894e20d") -- nari-a-09
-   t.assert_true(ship.events["rot13-decrypt-accept"])
 end

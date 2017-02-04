@@ -111,7 +111,7 @@ return {
       local buffer = {}
       local max_buffer_size = 1024
       local sb = sandbox(ship, logout)
-      local write = ship.api.write
+
       env.IN = function(...)
          local arg = {...}
          if(#arg == 0) then
@@ -127,10 +127,11 @@ return {
          end
       end
 
-      sb.io = sb.io or { read = env.IN, write = write }
+      sb.io = sb.io or { read = env.IN, write = ship.api.write }
       sb.print = ship.api.print
       sb.invisible = ship.api.editor.invisible
       sb.print_prompt = ship.api.editor.print_prompt
+      env.sb = sb -- for tests only
 
       ship.api.editor.set_prompt(">> ")
       spawn(fs, env, sb, command)

@@ -1,0 +1,11 @@
+-- -*- lua -*-
+
+local _f, _env, args = ...
+
+if(args[1] == "fine" and #args == 1) then
+   print(port("fine"))
+else
+   print("Port authority interface")
+   print("Usage:")
+   print("  port fine # pay off any outstanding fine balance.")
+end

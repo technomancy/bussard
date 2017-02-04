@@ -11,7 +11,7 @@ local ship_fields = {
    "x", "y", "dx", "dy", "heading", "mail_delivered",
    "battery", "fuel", "credits", "system_name", "active_missions",
    "humans", "humans_left_at", "upgrade_names", "cargo", "target_number",
-   "events", "flag", "name", "rovers", "rover_clearance"
+   "events", "flag", "name", "rovers", "rover_clearance", "loan", "fine",
 }
 
 local body_fields = {

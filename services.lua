@@ -23,6 +23,40 @@ local in_stock = function(station, ship, good, amount, direction)
    return from.cargo[good] and (from.cargo[good] >= amount)
 end
 
+local loan_borrow = function(ship, amount_string)
+   local amount = tonumber(amount_string)
+   if(not amount) then return "Please provide a numeric amount."
+   elseif(amount <= 0) then return "Please provide a positive amount."
+   elseif(amount ~= math.floor(amount)) then return "Please provide an integer amount."
+   elseif(ship.loan + amount > 4096) then return "Credit limit exceeded."
+   else
+      ship.credits = ship.credits + amount
+      ship.loan = ship.loan + math.ceil(amount * 1.2)
+      return "OK, current loan balance is " .. ship.loan .. "."
+   end
+end
+
+local loan_repay = function(ship, amount_string)
+   local amount = tonumber(amount_string)
+   if(not amount) then return "Please provide a numeric amount."
+   elseif(amount <= 0) then return "Please provide a positive amount."
+   elseif(amount ~= math.floor(amount)) then return "Please provide an integer amount."
+   elseif(amount > ship.loan) then return nil, "Can't repay more than you owe."
+   else
+      ship.credits = ship.credits - amount
+      ship.loan = ship.loan - amount
+      return "OK, current loan balance is " .. ship.loan .. "."
+   end
+end
+
+local loan_balance = function(ship)
+   if(ship.loan == 0) then
+      return "No active loans at this time."
+   else
+      return "Current loan balance: " .. ship.loan
+   end
+end
+
 return {
    buy_user = function(ship, target, fs_raw, username, password)
       if(target.account_price and ship.credits >= target.account_price) then
@@ -90,6 +124,31 @@ return {
          ship:recalculate()
          ship.credits = ship.credits + price
          return price
+      end
+   end,
+
+   port = function(ship, command)
+      if(command ~= "fine") then
+         return "Unknown command"
+      elseif(ship.fine == 0) then
+         return "No outstanding fines."
+      elseif(ship.credits < ship.fine) then
+         return "Insufficient credits. Fine balance: " .. ship.fine
+      else
+         ship.credits = ship.credits - ship.fine
+         ship.fine = 0
+         return "Fine paid: " .. ship.fine
+      end
+   end,
+
+   fine = function(ship, amount)
+      ship.fine = ship.fine + amount
+   end,
+
+   loan = function(ship, command, ...)
+      if(command == "borrow") then return loan_borrow(ship, ...)
+      elseif(command == "repay") then return loan_repay(ship, ...)
+      elseif(command == "balance") then return loan_balance(ship, ...)
       end
    end,
 

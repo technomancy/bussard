@@ -1,0 +1,17 @@
+-- -*- lua -*-
+
+local _f, _env, args = ...
+
+if((args[1] == "borrow" or args[1] == "repay") and #args == 2) then
+   print(loan(unpack(args)))
+elseif(args[1] == "balance" and #args == 1) then
+   print(loan("balance"))
+else
+   print("Loan center.")
+   print("Take a loan out with your ship or other goods as collateral.")
+   print("Current rate: 20% one-time fee.")
+   print("Usage:")
+   print("  loan borrow AMOUNT")
+   print("  loan repay AMOUNT")
+   print("  loan balance")
+end

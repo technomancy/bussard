@@ -36,7 +36,7 @@ check:
 	luacheck --no-color --std luajit --ignore 21/_.* --exclude-files=*.lsp \
 	  --globals lume pack orb station buy_user ship cargo_transfer refuel pps \
 	            accept_mission term buy_upgrade sell_upgrade \
-	            subnet logout upgrade_help \
+	            subnet logout upgrade_help port loan \
 	  -- $(IN_OS_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --globals love lume term \
 	  -- $(DATA_LUA)

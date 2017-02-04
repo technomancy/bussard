@@ -155,17 +155,19 @@ local ship = {
 
    -- keep around
    fuel = 128,
-   credits = 1024,
+   credits = 640,
    time_offset = utils.game_start,
    cargo = {}, -- map of cargo name -> tons number
    upgrade_names={}, -- array of upgrade names
-   active_missions={start={}}, -- map of mission id -> mission record map
+   active_missions={}, -- map of mission id -> mission record map
    mail_delivered={}, -- map of message name -> true
    events={}, -- map of event names -> timestamps
    humans={}, -- array of human names
    humans_left_at={}, -- map of human name -> world name
    rovers={}, -- map of type -> number
-   rover_clearance={}, -- array of world names
+   rover_clearance={}, -- map of world names -> true
+   loan=0,
+   fine=0,
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
    configure = function(ship, systems, ui)

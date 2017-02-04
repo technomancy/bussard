@@ -20,6 +20,8 @@ orb.sandbox = function(ship, env, fs_raw, disconnect)
       sell_upgrade = lume.fn(services.sell_upgrade, ship),
       refuel = lume.fn(services.refuel, ship, ship.target),
       cargo_transfer = lume.fn(services.cargo_transfer, ship.target, ship),
+      port = lume.fn(services.port, ship),
+      loan = lume.fn(services.loan, ship),
 
       upgrade_help = ship.api.help.get,
       station = utils.readonly_proxy(ship.target),
