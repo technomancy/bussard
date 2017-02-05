@@ -1,4 +1,4 @@
-local utf8 = require("utf8.init")
+local utf8 = require("polywell.utf8")
 local socket = require("socket")
 local lume = require("lume")
 local serpent = require("serpent")

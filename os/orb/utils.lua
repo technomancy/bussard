@@ -1,7 +1,7 @@
 -- utils
 
 local md5 = require("md5")
-local utf8 = require("utf8.init")
+local utf8 = require("polywell.utf8")
 
 -- mostly functions which are inexplicable omissions from the lua standard lib
 

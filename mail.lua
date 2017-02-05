@@ -1,5 +1,5 @@
 local lume = require("lume")
-local utf8 = require("utf8.init")
+local utf8 = require("polywell.utf8")
 local timed_msgs = require("data.msgs.timed")
 local event_msgs = require("data.msgs.events")
 local utils = require("utils")

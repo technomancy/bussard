@@ -1,4 +1,4 @@
-local utf8 = require("utf8.init")
+local utf8 = require("polywell.utf8")
 local lume = require("lume")
 
 local vector_size, font_width = 50, nil
