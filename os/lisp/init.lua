@@ -66,10 +66,10 @@ local sandbox = function(ship, _, target, disconnect)
    end
    sb.portal_activate = function()
       ship:enter(target.portal, true)
-      if(lume.count(ship.humans) == 0) then
-         ship.fine = ship.fine + 2460
-         mail.deliver_msg(ship, "unauthorized-portal.msg", true)
-      end
+      -- if(lume.count(ship.humans) == 0) then
+      --    ship.fine = ship.fine + 2460
+      --    mail.deliver_msg(ship, "unauthorized-portal.msg", true)
+      -- end
    end
    sb.draw_power = function(power)
       assert(ship.battery - power >= 0, "Insufficient power.")
