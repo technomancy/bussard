@@ -2,7 +2,6 @@ local _, compiler = require("os.lisp.l2l.compat"), require("os.lisp.l2l.compiler
 local reader = require("os.lisp.l2l.reader")
 local lume = require("lume")
 local utils = require("utils")
-local mail = require("mail")
 
 local portal_rc = love.filesystem.read("os/lisp/resources/portal.lsp")
 
