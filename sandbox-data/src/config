@@ -1,0 +1,82 @@
+-- This -*- lua -*- code is the entry point for your ship's computer's config.
+
+-- It sets up the keys for flight mode and loads files containing definitions
+-- of other modes.
+
+local zoom_in = function(pressed, dt)
+   if(pressed) then
+      ship.scale = ship.scale - dt / ship.status.time_factor
+   end
+end
+
+local zoom_out = function(pressed, dt)
+   if(pressed) then
+      ship.scale = ship.scale + dt / ship.status.time_factor
+   end
+end
+
+-- controls are for keys that need to keep activating when held down.
+ship.controls["up"] = ship.actions.forward
+ship.controls["left"] = ship.actions.left
+ship.controls["right"] = ship.actions.right
+ship.controls["="] = zoom_in
+ship.controls["-"] = zoom_out
+
+---- Flight mode
+define_mode("flight", nil, {draw=flight_draw, transparency=false})
+
+-- bind is for commands that only call their functions once even when held.
+-- it takes the name of a mode, a key combo, and a function to run when pressed.
+bind("flight", "escape", ship.ui.pause)
+
+-- you can bind keys to existing functions or inline functions.
+bind("flight", "ctrl-return", function()
+        editor.change_buffer(editor.last_buffer() or "*console*")
+end)
+
+bind("flight", "ctrl-pageup", lume.fn(editor.next_buffer, -1))
+bind("flight", "ctrl-pagedown", editor.next_buffer)
+
+-- the mouse wheel is handled just like any other key press.
+bind("flight", "wheelup", lume.fn(zoom_in, true, 0.5))
+bind("flight", "wheeldown", lume.fn(zoom_out, true, 0.5))
+
+-- regular tab selects next target in order of distance from the star.
+bind("flight", "tab", ship.actions.next_target)
+
+-- ctrl-tab selects next closest target in order of distance from your ship.
+bind("flight", "ctrl-tab", ship.actions.closest_target)
+
+-- quit auto-saves; don't worry.
+bind("flight", "ctrl-q", ship.ui.quit)
+
+-- contains configuration for heads-up display during flight mode.
+dofile("src.hud")
+dofile("src.kepler-hud")
+
+-- other modes
+dofile("src.edit") -- editor
+dofile("src.lua")
+dofile("src.mail") -- mail client
+dofile("src.console") -- console for interacting with ship's computer
+dofile("src.ssh") -- ssh mode for interacting with station/planet computers
+
+-- bindings can affect more than one mode at a time:
+bind({"flight", "edit"}, "ctrl-m", mail)
+
+-- to open a file.
+bind({"flight", "edit"}, "ctrl-o", editor.find_file)
+
+-- reload config
+bind({"flight", "edit"}, "ctrl-r", editor.reload)
+
+-- connect to target over ssh.
+bind("flight", "ctrl-s", ssh)
+
+-- activate portal sequence.
+bind("flight", "ctrl-p", portal)
+
+-- If you keep your customizations in this file, they will be preserved even if
+-- you start a new game, and they can be edited in an external editor; all files
+-- under "host." are stored in the host_fs/ directory in the game save directory
+-- dofile("host.config")

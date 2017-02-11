@@ -1,0 +1,78 @@
+-- -*- lua -*-
+
+local unread_count = function(ship)
+   local unread = lume.count(ship.docs.mail.inbox._unread)
+   if(unread > 0) then
+      return unread .. " unread messages"
+   else
+      return ""
+   end
+end
+
+local quickref = "tab: next target\n" ..
+   "ctrl-enter: editor/console\n" ..
+   "ctrl-m: read mail\n" ..
+   "ctrl-s: ssh login\n" ..
+   "ctrl-p: portal\n" ..
+   "ctrl-o: open file\n" ..
+   "ctrl-r: reload config"
+
+local target_type = function()
+   if(ship.status.target) then
+      for _,t in ipairs({"ship", "star", "asteroid", "rover",
+                         "portal", "station", "world"}) do
+         if(ship.status.target[t]) then return t end
+      end
+      return "unknown"
+   end
+end
+
+ship.hud = {
+   { x=60, y=3, type="text",
+     format="x: %5.0f y: %5.0f\nepoch: %s\ncredits: %s",
+     values={"status.x", "status.y",
+             function() return utils.format_time(os.time()) end,
+             "status.credits"}
+   },
+   { x=5, y=5, type="vector",
+     values={"status.dx", "status.dy", 0.1},
+     width=3, color={50, 255, 50}
+   },
+   { x=-5, y=5, type="vector",
+     values={"status.target.dx", "status.target.dy", 0.1},
+     width=3, color={50, 255, 150}
+   },
+
+   { x=-70, y=5, type="text", align="right",
+     format="%s: %s\ndistance: %0.0f\nmass: %0.0f",
+     values={"status.target.name", target_type,
+             function(s)
+                return s.status.target and utils.distance(s.status,
+                                                          s.status.target)
+                                   end, "status.target.mass"}
+   },
+   { x=5,y=60, type="bar",
+     values={"status.fuel", "status.fuel_capacity", ship.fuel_to_stop},
+     color={255, 20, 20}
+   },
+   { x=5, y=75, type="bar",
+     values={"status.battery", "status.battery_capacity"},
+     color={20, 255, 20}, h=6,
+   },
+   {x=-200, y=200, type="text", format=quickref, values={1}},
+   {x=-300, y=-125, type="text", format="%s",
+    values = {unread_count}, color={200,0,0},
+   },
+   ship.mission.hud,
+}
+
+toggle_fps = function()
+   local h = ship.hud[1]
+   if(h.format:find("FPS")) then
+      h.format = "x: %5.0f y: %5.0f\nepoch: %s\ncredits: %s"
+      h.values[5] = nil
+   else
+      h.format = "x: %5.0f y: %5.0f\nepoch: %s\ncredits: %s   FPS: %s"
+      h.values[5] = ship.ui.get_fps
+   end
+end

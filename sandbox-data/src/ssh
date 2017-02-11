@@ -1,0 +1,57 @@
+-- This -*- lua -*- defines a mode based on console mode, but for communicating
+-- with another OS over an SSH connection.
+
+-- initiate the connection. command may be nil.
+ssh = function(username, password, command)
+   editor.change_buffer("*console*")
+   if(ship.status.target and ship.status.target.os) then
+      ssh_connect(username or "guest", password or "", command)
+      editor.end_of_buffer()
+      editor.no_mark()
+      editor.activate_mode("ssh")
+   else
+      print("Cannot log into target.")
+   end
+   return editor.invisible
+end
+
+portal = function()
+   if(ship.status.target and ship.status.target.portal) then
+      ssh_connect("guest", "")
+   else
+      print("Cannot activate portal.")
+   end
+   return editor.invisible
+end
+
+define_mode("ssh", "console") -- inherit bindings from console
+
+-- send input to whatever remote OS you're connected to.
+bind("ssh", "return", function()
+        local input = lume.trim(editor.get_input())
+
+        if(input == "logout") then
+           editor.newline()
+           logout()
+        else
+           editor.history_push(input)
+           ssh_send_line(input)
+           editor.newline(2)
+           editor.print_prompt()
+           editor.end_of_buffer()
+           editor.no_mark()
+        end
+end)
+
+bind("ssh", "ctrl-d", function()
+        local _, line = editor.point()
+        if(line == editor.get_max_line() and
+           editor.get_input() == "") then
+           logout()
+           ship:activate_mode("console")
+           ship.editor.set_prompt("> ")
+           print("Logged out.")
+        else
+           editor.delete_forwards()
+        end
+end)

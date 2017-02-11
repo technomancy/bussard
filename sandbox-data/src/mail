@@ -1,0 +1,194 @@
+-- This -*- lua -*- code defines your message client.
+
+-- There are two modes; mail and view. The first is for listing/navigating your
+-- mail, and the second defines a mode for reading messages.
+
+mail = function()
+   editor.open(nil, "*mail*")
+   ship:activate_mode("mail")
+end
+
+local targets = {} -- things you can press enter to open
+
+local header = function(lines, header)
+   for _,line in ipairs(lines) do
+      local match = utf8.match(line, header .. ": (.+)")
+      if(match) then return match end
+   end
+end
+
+-- returns a string which summarizes a message in a single line for folder view.
+local describe = function(msg)
+   local lines = lume.split(msg, "\n")
+   local date = utils.pad_to(header(lines, "Date") or "", 17)
+   local from = utils.pad_to(header(lines, "From"), 42)
+   local subject = header(lines, "Subject")
+   return date .. " | " .. from .. " | " .. subject
+end
+
+-- return a sorted table of messages by date field, if present.
+local subjects_by_date = function(msgs)
+   local by_date, names = {}, {}
+   for name, msg in pairs(msgs) do
+      if(name ~= "_unread") then
+         local date = header(lume.split(msg, "\n"), "Date")
+         local key = date and utils.parse_time(date) or
+            header(lume.split(msg, "\n"), "Subject")
+         by_date[key or 0] = name
+      end
+   end
+   for _, date in ipairs(lume.sort(lume.keys(by_date))) do
+      table.insert(names, by_date[date])
+   end
+   return names
+end
+
+local archive_key = "alt-a"
+
+-- sometimes the modeline should show a hint hint for the archive command.
+local set_modeline = function(folder)
+   if(folder == "archive") then
+      editor.set_modeline(function(b)
+            return utf8.format(" %s  -  (%s/%s)  %s",
+                               folder, b.point_line, #b.lines,
+                               b.mode, archive_key) end)
+   else
+      editor.set_modeline(function(b)
+            return utf8.format(" %s  -  (%s/%s)  %s   Press %s to archive.",
+                               folder or "folders", b.point_line, #b.lines,
+                               b.mode, archive_key) end)
+   end
+end
+
+local open_folder = function(folder)
+   editor.set_prop("read_only", false)
+   editor.end_of_buffer()
+   local point, point_line = editor.point()
+   editor.delete(1, 0, point_line, point)
+   set_modeline(folder)
+
+   local p = function(x) editor.raw_write(x .. "\n") end
+   targets = {}
+
+   if(folder) then -- display the contents of the current folder.
+      p("Folder: " .. folder .. "\n")
+      local msgs = ship.docs.mail[folder]
+      ship.docs.mail[folder]._unread = ship.docs.mail[folder]._unread or {}
+      for _,name in ipairs(subjects_by_date(msgs)) do
+         local msg = msgs[name]
+         if(name ~= "_unread") then
+            table.insert(targets, {folder, name})
+            if(ship.docs.mail[folder]._unread[name]) then
+               p(" * " .. describe(msg))
+            else
+               p(" - " .. describe(msg))
+            end
+         end
+      end
+   else -- display a list of folders.
+      p("Folders\n")
+      local folder_list = lume.sort(lume.keys(ship.docs.mail))
+      lume.remove(folder_list, "inbox")
+      table.insert(folder_list, 1, "inbox")
+      for _,name in ipairs(folder_list) do
+         table.insert(targets, name)
+         local unread_count = lume.count(ship.docs.mail[name]._unread or {})
+         local count = lume.count(ship.docs.mail[name]) - 1
+         p(" [" .. unread_count .. "/" .. count .. "] " .. name)
+      end
+   end
+   editor.beginning_of_buffer()
+   editor.next_line()
+   editor.next_line()
+   editor.set_prop("read_only", true)
+end
+
+-- inherit most bindings from edit, but disable text insertion
+define_mode("mail", "edit", {activate=open_folder})
+
+local reply_key = "alt-enter"
+
+local view_modeline = function(b)
+   local id = header(b.lines, "Message.Id")
+   local subject = header(b.lines, "Subject")
+   if(replyable(id)) then
+      return utf8.format(" %s  (%s/%s)  %s   Press %s to reply.",
+                         subject, b.point_line, #b.lines, b.mode, reply_key)
+   else
+      return utf8.format(" %s  (%s/%s)  %s",
+                         subject, b.point_line, #b.lines, b.mode)
+   end
+end
+
+local open_message_or_folder = function()
+   local line = editor.get_line_number()
+   local target = targets[line-2] -- two lines at the top before listing
+
+   if(type(target) == "table") then -- two values means open individual msg
+      local folder, name = unpack(target)
+      ship.docs.mail[folder]._unread[name] = nil
+      open_folder(folder)
+      editor.open(ship, "docs.mail." .. folder .. "." .. name)
+      ship:activate_mode("view")
+      editor.set_prop("read_only", true)
+      editor.set_modeline(view_modeline)
+   else -- single value means open a folder
+      open_folder(target)
+   end
+end
+
+bind("mail", "return", open_message_or_folder)
+bind("mail", "alt-up", open_folder)
+
+local archive_from_folder = function()
+   local line = editor.get_line_number()
+   local target = targets[line-2] -- two lines at the top before listing
+   if(type(target) == "table") then -- two values means a message
+      local folder, name = unpack(target)
+      ship.docs.mail.archive[name] = ship.docs.mail[folder][name]
+      ship.docs.mail[folder][name] = nil
+      ship.docs.mail[folder]._unread[name] = nil
+      open_folder(folder)
+   end
+end
+
+bind("mail", archive_key, archive_from_folder)
+
+-- inherit most bindings from edit, but disable text insertion
+define_mode("view", "edit", true)
+
+local open_up_folder = function()
+   local path = editor.current_buffer_path()
+   local folder = path:match("docs.mail.([^\\.]+).")
+   editor.open(nil, "*mail*")
+   ship:activate_mode("mail")
+   open_folder(folder)
+end
+
+local archive = function()
+   local path = editor.current_buffer_path()
+   local _, _, folder, name = unpack(lume.split(path, "."))
+   ship.docs.mail.archive[name] = ship.docs.mail[folder][name]
+   ship.docs.mail[folder]._unread[name] = nil
+   ship.docs.mail[folder][name] = nil
+   editor.close()
+   editor.change_buffer("*mail*")
+   open_folder(folder)
+end
+
+bind("view", "alt-a", archive)
+bind("view", "alt-up", open_up_folder)
+
+local reply = function()
+   local id = header(editor.get_lines(), "Message.Id")
+   local success, status = reply(id)
+   editor.close()
+   editor.open(ship, "*console*")
+   if(success) then
+      print("Replied.", status)
+   else
+      print(status)
+   end
+end
+
+bind("view", reply_key, reply)
