@@ -1,11 +1,11 @@
-local lume = require "lume"
-local body = require "body"
-local ai = require "ship.ai"
-local rovers = require "rovers"
-local utils = require "utils"
-local orb = require "os.orb"
-local ship_init = require "data.ship_init"
-local acts = require "data.acts"
+local lume = require("lume")
+local body = require("body")
+local ai = require("ship.ai")
+local utils = require("utils")
+local rovers = require("rovers")
+local orb = require("os.orb")
+local ship_init = require("data.ship_init")
+local acts = require("data.acts")
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading", "mail_delivered",

@@ -1,15 +1,13 @@
 -- need to fix pairs before loading lume
 _, lume = require("metatable_monkey"), require("lume")
 
-local body = require "body"
-local ai = require "ship.ai"
-local ship = require "ship"
-local save = require "save"
-local pause = require "pause"
-local systems = require("data.systems")
+local body = require("body")
+local ai = require("ship.ai")
+local ship = require("ship")
+local save = require("save")
+local pause = require("pause")
 local flight_draw = require("draw")
-
-require "conics"
+local systems = require("data.systems")
 
 local quit = function()
    save.save(ship)
@@ -129,22 +127,24 @@ love.load = function()
    local i = 2
    while (i <= #arg) do
      local current_argument = arg[i]
-     if (current_argument == "--test") then
+     if(current_argument == "--test") then
        options.test = true
-     elseif (current_argument == "--backup") then
+     elseif(current_argument == "--data") then
+        i=i+1 -- this arg must be handled earlier in conf.lua
+     elseif(current_argument == "--backup") then
        options.backup = arg[i+1]
        i=i+1
-     elseif (current_argument == "--wipe") then
+     elseif(current_argument == "--wipe") then
        options.wipe = true
-     elseif (current_argument == "-debug") then
+     elseif(current_argument == "-debug") then
        options.debug = true
-     elseif (current_argument == "--debug") then
+     elseif(current_argument == "--debug") then
        options.debug = true
-     elseif (current_argument == "--fuzz") then
+     elseif(current_argument == "--fuzz") then
        options.fuzz = true
-     elseif (current_argument == "--cheat") then
+     elseif(current_argument == "--cheat") then
        options.cheat = true
-     elseif (current_argument == "--no-cheat") then
+     elseif(current_argument == "--no-cheat") then
        options.nocheat = true
      else
        print("Unknown argument: " .. current_argument)
@@ -183,6 +183,8 @@ love.load = function()
 
    resize()
    ui.set_font(16)
+
+   if(love.graphics) then love.graphics.half_hyperbola = require("conics") end
 
    ui.play()
 end
