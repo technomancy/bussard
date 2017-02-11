@@ -125,14 +125,44 @@ local safely = function(f)
 end
 
 love.load = function()
-   if(arg[#arg] == "--test") then save.abort(ship) end
+   local options = {}
+   local i = 2
+   while (i <= #arg) do
+     local current_argument = arg[i]
+     if (current_argument == "--test") then
+       options.test = true
+     elseif (current_argument == "--backup") then
+       options.backup = arg[i+1]
+       i=i+1
+     elseif (current_argument == "--wipe") then
+       options.wipe = true
+     elseif (current_argument == "-debug") then
+       options.debug = true
+     elseif (current_argument == "--debug") then
+       options.debug = true
+     elseif (current_argument == "--fuzz") then
+       options.fuzz = true
+     elseif (current_argument == "--cheat") then
+       options.cheat = true
+     elseif (current_argument == "--no-cheat") then
+       options.nocheat = true
+     else
+       print("Unknown argument: " .. current_argument)
+     end
+     i = i+1
+   end
+
+   if(options.backup) then save.backup(options.backup) end
+   if(options.test) then save.abort(ship) end
 
    love.keyboard.setKeyRepeat(true)
    love.keyboard.setTextInput(true) -- needed for mobile
    ship:configure(systems, ui)
 
-   if(arg[#arg-1] == "--backup") then save.backup(arg[#arg]) end
-   if(arg[#arg] == "--wipe") then save.abort(ship) love.event.quit() end
+   if(options.wipe) then
+     save.abort(ship)
+     love.event.quit()
+   end
 
    save.load_into(ship)
    if(ship.api.host.autoload) then ship:dofile("host.autoload") end
@@ -141,13 +171,13 @@ love.load = function()
       require("localhacks")(ship)
    end
 
-   if(arg[#arg] == "-debug") then require("mobdebug").start() end
-   if(arg[#arg] == "--test") then return require("tests") end
-   if(arg[#arg] == "--fuzz") then return require("tests.fuzz") end
+   if(options.debug) then require("mobdebug").start() end
+   if(options.test) then return require("tests") end
+   if(options.fuzz) then return require("tests.fuzz") end
 
-   if(arg[#arg] == "--cheat") then
+   if(options.cheat) then
       ship.api.cheat = ship
-   elseif(arg[#arg] == "--no-cheat") then
+   elseif(options.nocheat) then
       ship.api.cheat = nil
    end
 
