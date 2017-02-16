@@ -50,7 +50,7 @@ function test_missions()
    t.assert_equal(lume.count(ship.events), 0)
    t.assert_equal(lume.count(ship.mail_delivered), 0)
    ship:enter("L 668-21", true)
-   ssh_run(ship, "Mirduka Station", "upgrade buy life_support")
+   ssh_run(ship, "Merdeka Station", "upgrade buy life_support")
    t.assert_number(lume.find(ship.upgrade_names, "life_support"))
 
    portal("Portal: Tana")

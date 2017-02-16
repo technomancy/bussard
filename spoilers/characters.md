@@ -55,16 +55,16 @@ Earth. Many see it as backwards or quaint.
 Most wealthy and powerful, but only controls two systems, Lalande and
 Ross. Formerly included Sol. Regulates portal technology.
 
-* [x] Kala Lamar (Lalande)
-* [x] Pinan (Lalande)
-* [x] Kuchang Station (Ross)
+* [x] Sungai (Lalande)
+* [x] Bendera (Lalande)
+* [x] Kuching Station (Ross)
 
-## Principality of Darush
+## Principality of Istana
 
 Independent station in a Terran system (Ross). Grandfathered into
 independence early on. Isolated, wealthy, and small.
 
-* [x] Darush (Ross)
+* [x] Istana (Ross)
 
 ## Kingdom of Bohk
 
@@ -113,8 +113,8 @@ transport, leaving it quite vulnerable.
 * [x] Lioboro (Tana)
 * [x] Kenapa Station (Tana)
 * [x] Solotogo (Wolf 294)
-* [x] Apkabar Station (Luyten)
-* [x] Mirduka Station (L 668-21)
+* [x] Kembali Station (Luyten)
+* [x] Merdeka Station (L 668-21)
 
 Tana has the most worlds, but the smallest population.
 

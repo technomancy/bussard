@@ -3,7 +3,7 @@ local mail = require("mail")
 
 return {
    name="passenger2",
-   description="Passenger run from Tana Prime to Apkabar Station",
+   description="Passenger run from Tana Prime to Kembali Station",
    id="d6069254-4182-4f96-a145-df309a992798",
    destinations={"Tana Prime", "Newton Station"},
    credits=250,

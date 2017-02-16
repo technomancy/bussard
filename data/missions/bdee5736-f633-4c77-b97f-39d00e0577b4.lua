@@ -1,10 +1,10 @@
 return {
    name="passenger3",
-   description="Passenger run from Apkabar Station to Mirduka Station",
+   description="Passenger run from Kembali Station to Merdeka Station",
    id="bdee5736-f633-4c77-b97f-39d00e0577b4",
-   destinations={"Apkabar Station", "Mirduka Station"},
-   destination_msgs={["Apkabar Station"] = "Merous Kiebeb has boarded.",
-   ["Mirduka Station"] = "Merous Kiebeb has disembarked."},
+   destinations={"Kembali Station", "Merdeka Station"},
+   destination_msgs={["Kembali Station"] = "Merous Kiebeb has boarded.",
+   ["Merdeka Station"] = "Merous Kiebeb has disembarked."},
    credits=325,
    success_events={"passenger3"},
 

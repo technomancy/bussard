@@ -15,18 +15,18 @@ The establishment of the Terran Republic.
 
 * 2110 - Nee Soon Station operational, outer reaches of Sol system
 
-* 2117 - SS Lorentz arrives, colonizes Kala Lamar in Lalande
+* 2117 - SS Lorentz arrives, colonizes Sungai in Lalande
 
 * 2128 - SS Copernicus colony ship launches from Sol to Ross
   (1.6 pc @ 0.5 c, 10y, γ=1.2)
 
 * 2138 - SS Copernicus arrives, colonizes Ross
 
-* 2143 - Errant cargo shuttle threatens Ross colony; Captain Darush
+* 2143 - Errant cargo shuttle threatens Ross colony; Captain
   saves the colony by colliding his ship into the shuttle to push it
   off course, leading to stricter safety regulations
 
-* 2153 - Darush is granted independence due to heroism of
+* 2153 - Istana is granted independence due to heroism of
   captain; station in Ross system remains under Terran control
 
 * ... 20 years: Slow trade routes between Sol, Lalande, Ross grow
@@ -34,7 +34,7 @@ The establishment of the Terran Republic.
 ## Second Wave of slow colonization
 
 Ross rises to prominence through its academic institutions, including
-Kuchang Station, which is well-situated to study many phenomena. Most
+Kuching Station, which is well-situated to study many phenomena. Most
 slow-colonized worlds tend to lack close ties with their colonizing
 power, but Ross and Lalande grow close. Lalande's great mineral
 deposits lead to it becoming an industrial powerhouse.
@@ -113,7 +113,7 @@ without supplies from a more established civilization.
 * 2323 - Portal between Ross and Sol operational; also constructed
   without portal ship
 
-* 2325 - Metaphysics researchers at University of Darush discover
+* 2325 - Metaphysics researchers at University of Istana discover
   evidence of another multiverse
 
 * 2330 - Lalande launches SS Pythagoras to Katilay (4 pc, 0.7c, 18y, 12.8ly)
@@ -149,7 +149,7 @@ without supplies from a more established civilization.
 * 2368 - Machine Consciousness Research and Operation Ban passes,
          Bohk team goes underground
 
-* 2368 - Colonists from Kala Lamar found Pinan colony in Lalande
+* 2368 - Colonists from Sungai found Bendera colony in Lalande
 
 * 2369 - Lalande/Sol relations improve somewhat
 

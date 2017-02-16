@@ -18,7 +18,7 @@ local _ = { r=0, mass=0,
 
 ---- inputs:
 -- this is not a linear scale; Earth has 10 billion people, while the largest
--- extrasolar worlds (Kala Lamar, Yueh Prime) have about 100 million.
+-- extrasolar worlds (Sungai, Yueh Prime) have about 100 million.
 -- pop: 1: 1000, 2: 10,000, 3: 100,000, 4: 1m, 5: 10m, 6: 100m, 7: 1b, 8: 10b
 -- total: 10,216,655,000, total off-earth: 216,655,000
 --
@@ -114,7 +114,7 @@ local sys = {
            name="Luyten's Star", star=true },
           {r=32000, mass=120,
            image_name="station-pointed", station=true,
-           name="Apkabar Station", os=orb, world=true, subnet=true,
+           name="Kembali Station", os=orb, world=true, subnet=true,
 
            industry=6,tech=6,
            remote=5, pop=2,
@@ -123,7 +123,7 @@ local sys = {
           },
           {r=12000, mass=520,
            image_name="shaber2", world=true,
-           name="Malong",},
+           name="Bangunan",},
           {name = "Portal: Tana",
            image_name="portal-1",
            r=25000, mass=60, portal="Tana", os=lisp},
@@ -142,7 +142,7 @@ local sys = {
            name="L 668-21", star=true },
           {r=20000, mass=700, station=true,
            image_name="station-pointed", subnet=true,
-           name="Mirduka Station", os=orb, world=true,
+           name="Merdeka Station", os=orb, world=true,
 
            industry=4,tech=3,
            remote=7, pop=2,
@@ -251,7 +251,7 @@ local sys = {
                       name="Lalande 25372", star=true},
                      {r=14000, mass=200,
                       image_name="shaber8",
-                      name="Pinan", os=orb, world=true,
+                      name="Bendera", os=orb, world=true,
 
                       industry=6,tech=7,
                       remote=2, pop=3,
@@ -260,7 +260,7 @@ local sys = {
                      },
                      {r=37000, mass=200,
                       image_name="planet-1",
-                      name="Kala Lamar", os=orb, world=true,
+                      name="Sungai", os=orb, world=true,
 
                       industry=7,tech=8,
                       remote=2, pop=6,
@@ -293,7 +293,7 @@ local sys = {
                    name="Ross 128", star=true},
                   {r=35000, mass=200, gov="darush",
                    image_name="shaber3", -- dark red volcanic
-                   name="Darush", os=orb, world=true,
+                   name="Istana", os=orb, world=true,
 
                    industry=4,tech=6,
                    remote=4, pop=3,
@@ -302,7 +302,7 @@ local sys = {
                   },
                   {r=17000, mass=110,
                    image_name="tribase", station=true,
-                   name="Kuchang Station", os=orb, world=true,
+                   name="Kuching Station", os=orb, world=true,
 
                    industry=3,tech=5,
                    remote=4, pop=4,

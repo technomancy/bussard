@@ -36,10 +36,6 @@ other imperative dynamic language that leans heavily on closures. The only parts
 that use advanced language features (metatables and coroutines) are the OS
 filesystem and scheduler, and the read-only proxy tables like `ship.api.status`.
 
-In order to skip around in the game for debugging, you can run `love . --act 1`
-to set all the event flags and deliver all the messages that you would normally
-get by a real play-through of the game up to that point.
-
 The stock config in `data/src` is copied into the save directory when a new game
 is started. Therefore changes to the source will not be visible to in-progress
 games unless you use `ctrl-f1` to update your in-game config with the latest

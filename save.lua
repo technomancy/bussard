@@ -5,7 +5,6 @@ local utils = require("utils")
 local rovers = require("rovers")
 local orb = require("os.orb")
 local ship_init = require("data.ship_init")
-local acts = require("data.acts")
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading", "mail_delivered",
@@ -70,15 +69,6 @@ return {
    load_into = function(ship)
       ship.load_time = os.time()
 
-      -- cheat to load in all the events needed for a specific act
-      local act_pos = lume.find(arg, "--act")
-      if(act_pos) then
-         ship_init(ship)
-         for i=1,tonumber(arg[act_pos+1]) do
-            acts[i](ship)
-         end
-      end
-
       if(love.filesystem.isFile(ship_filename)) then
          local ship_data_string = love.filesystem.read(ship_filename)
          local ship_data = lume.deserialize(ship_data_string)
@@ -123,7 +113,7 @@ return {
                lume.extend(rover, data)
                ship.bodies[i] = rover
             else
-               ship.bodies[i] = data
+               print("Discarding unknown system body", data.name)
             end
          end
          ship:recalculate()
@@ -147,6 +137,10 @@ return {
             if(love.filesystem.isFile(fs_filename(b))) then
                local fs_data = love.filesystem.read(fs_filename(b))
                body.filesystems[b.name] = lume.deserialize(fs_data)
+            end
+            if(system_name == ship.system_name and
+               not (b.x and b.y and b.dx and b.dy)) then
+               body.seed_pos(b, s.bodies[1])
             end
          end
       end
