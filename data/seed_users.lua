@@ -9,7 +9,7 @@ local subnet_user = { username="subnet",
 
 local go4_source = love.filesystem.read("os/orb/resources/gangof4")
 
-local go4_files = {files={["/home/guest/bin/gangof4"] = go4_source}}
+local go4 = {files={["/home/guest/bin/gangof4"] = go4_source}}
 
 local data = { ["Merdeka Station"] = { root = go4_files },
    ["Kembali Station"] = { root = go4_files },

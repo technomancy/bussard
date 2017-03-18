@@ -22,10 +22,6 @@ local body_fields = {
 local ship_filename = "ship_data.lua"
 local system_filename = "system_data.lua"
 
-local fs_filename = function(b)
-   return "fs/" .. b.name .. ".lua"
-end
-
 local body_data = function(b)
    if(b.to_save) then
       return b:to_save()
@@ -51,18 +47,6 @@ return {
          local path = "buffers/" .. buffer
          love.filesystem.createDirectory("buffers")
          love.filesystem.write(path, ship.api.editor.dump_buffer(buffer))
-      end
-
-      love.filesystem.createDirectory("fs")
-      for _,s in pairs(ship.systems) do
-         for _,b in pairs(s.bodies) do
-            local fs = body.filesystems[b.name]
-            if(fs) then
-               orb.fs.strip_special(fs, {ship.api})
-               local fs_data = lume.serialize(fs)
-               love.filesystem.write(fs_filename(b), fs_data)
-            end
-         end
       end
    end,
 
@@ -112,7 +96,7 @@ return {
                local rover = rovers.make(ship, target)
                lume.extend(rover, data)
                ship.bodies[i] = rover
-            else
+            elseif(data.world) then
                print("Discarding unknown system body", data.name)
             end
          end
@@ -134,10 +118,6 @@ return {
             if(b.portal) then assert(b.os, "OS-less portal") end
             if(b.fixed) then assert(not b.os, "OS on a fixed body") end
 
-            if(love.filesystem.isFile(fs_filename(b))) then
-               local fs_data = love.filesystem.read(fs_filename(b))
-               body.filesystems[b.name] = lume.deserialize(fs_data)
-            end
             if(system_name == ship.system_name and
                not (b.x and b.y and b.dx and b.dy)) then
                body.seed_pos(b, s.bodies[1])

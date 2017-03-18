@@ -1,39 +1,10 @@
 local utils = require("utils")
 
-local base_prices = require("data.prices")
-local seed_users = require("data.seed_users")
 local portal_motd = "Connected to portal, checking for clearance..."
 
 local hostname = function(body_name)
    return body_name:lower():gsub(" ", "-")
 end
-
-local seed = function(os, body_name)
-   local raw = os.fs.new_raw()
-   local proxy = os.fs.proxy(raw, "root", raw)
-   local users = {guest = ""}
-   for name,u in pairs(seed_users[body_name] or {}) do
-      if(name ~= "root") then
-         users[u.username] = u.password
-      end
-   end
-   os.fs.seed(proxy, users)
-
-   for _,user in pairs(seed_users[body_name] or {}) do
-      for name,contents in pairs(user.files) do
-         local dir,_ = os.fs.dirname(name)
-         os.fs.mkdir(proxy, dir)
-         proxy[name] = contents
-      end
-   end
-
-   if(love.filesystem.isFile("data/motd/" .. body_name)) then
-      proxy.etc.motd = love.filesystem.read("data/motd/" .. body_name)
-   end
-   return raw
-end
-
-local filesystems = {}
 
 local g = 4196
 
@@ -68,6 +39,11 @@ local is_gravitated_by = function(from, to)
    elseif(to.star) then return false
    elseif((to.world or to.portal) and not from.star) then return false
    else return true end
+end
+
+local kinds = {"ship", "rover", "asteroid", "world", "star"}
+local kind = function(b)
+   for _,k in ipairs(kinds) do if b[k] then return b[k] end end
 end
 
 return {
@@ -106,71 +82,12 @@ return {
       end
    end,
 
-   login = function(_, body, username, password)
-      if((not body) or not body.os) then return false end
-      if(not filesystems[body.name] and body.os.fs and body.os.fs.seed) then
-         filesystems[body.name] = seed(body.os, body.name, body.portal)
-      end
-
-      if(body.portal) then
-         filesystems[body.name].etc.motd = portal_motd
-      end
-
-      return body.os.shell.auth(filesystems[body.name], username, password) and
-         filesystems[body.name]
-   end,
-
    update = function(bodies, dt)
       for _,b in pairs(bodies) do
-         if(b.update) then
+         if(b.update) then -- currently only used by AI ships
             b:update(dt)
          end
-         if(b.os) then
-            local fs = filesystems[b.name]
-            if fs then b.os.process.scheduler(fs) end
-         end
       end
-   end,
-
-   seed_cargo = function(b, no_cargo)
-      if(not b.os or b.os.name ~= "orb") then return end
-      local equipment_factor = (math.log(b.remote / 2) + 4) *
-         (3 / (b.industry + b.tech)) + 0.5
-
-      b.fuel_price = math.ceil(base_prices.fuel *
-                                  (math.log(b.remote / 2) + 1) * (5 / b.industry))
-      b.account_price = math.floor(base_prices.account *
-                                      (math.log(math.max(b.remote, 2) * 0.5) + 1))
-      b.upgrade_prices = { life_support = 512 } -- everyone sells this
-
-      for _,u in ipairs(b.upgrades) do
-         b.upgrade_prices[u] = math.floor(base_prices.upgrades[u] *
-                                             equipment_factor)
-      end
-
-      if(no_cargo) then return end
-
-      b.prices = {}
-      local price_difference = 1.2 -- should be dynamic?
-      local price = function(good, base)
-         b.prices[good] = { buy = base, sell = math.ceil(base * price_difference) }
-      end
-      price("ore", math.floor(base_prices.ore * (math.log(10 - b.mineral) +1)))
-      price("food", math.floor(base_prices.food * (math.log(10 - b.agri) +1)))
-      price("medicine", math.floor(base_prices.medicine *
-                                      (math.log(b.pop / 4 + b.remote + 2) + 1)))
-      price("equipment", math.floor(base_prices.equipment * equipment_factor))
-
-      b.cargo = {}
-      for _,name in ipairs({"ore", "food", "equipment", "medicine"}) do
-         b.cargo[name] = love.math.random(20)
-      end
-
-      -- print("\n" .. b.name, equipment_factor)
-      -- for k,v in pairs(b.prices) do print(k,v) end
-      -- print("fuel", b.fuel_price)
-      -- print("account", b.account_price)
-      -- for k,v in pairs(b.upgrade_prices) do print(k,v) end
    end,
 
    seed_pos = function(b, star)
@@ -193,11 +110,24 @@ return {
       for _,b in pairs(bodies) do if(b.name == name) then return b end end
    end,
 
-   filesystems = filesystems,
-
-   base_prices = base_prices,
-
+   kind = kind,
    hostname = hostname,
+
+   stop = function(b)
+      if(b.thread) then
+         love.thread.getChannel(b.thread):push({command = "kill"})
+         b.thread = nil
+      end
+   end,
+
+   start = function(b)
+      if(b.world and not b.thread) then
+         b.thread = love.thread.newThread("os/orb/thread.lua")
+         b.thread:start()
+         local ch = love.thread.getChannel(tostring(b.thread))
+         ch:push({command="init", name=b.name})
+      end
+   end,
 
    g = g,
    max_accel = max_accel,

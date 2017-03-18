@@ -36,7 +36,7 @@ local base_stats = {
    mass = 128,
    cargo_capacity = 64,
    fuel_capacity = 192,
-   comm_range = 2048,
+   comm_range = 204800,
    recharge_rate = 1/2,
    burn_rate = 1,
    engine_strength = 512,
@@ -191,6 +191,9 @@ local ship = {
       if love.keyreleased then love.keyreleased() end
 
       local from = ship.system_name
+      if(from ~= ship.system_name) then
+         for _,b in ipairs(ship.bodies) do body.stop(b) end
+      end
       assert(ship.systems[system_name], system_name .. " not found.")
       if(not suppress_message) then
          ship.api.editor.print("Entering the " .. system_name .. " system.")
@@ -199,6 +202,8 @@ local ship = {
       -- stuff these things in there to expose to in-ship APIs
       ship.bodies = ship.systems[system_name].bodies
       ship.system_name = system_name
+
+      for _,b in ipairs(ship.bodies) do body.start(b) end
 
       ssh.logout_all(ship)
       ship:recalculate()
@@ -210,7 +215,6 @@ local ship = {
          asteroid.populate(ship.systems[ship.system_name])
          for _,b in pairs(ship.bodies) do
             body.seed_pos(b, ship.bodies[1])
-            body.seed_cargo(b)
          end
 
          local portal = lume.match(ship.bodies,

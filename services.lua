@@ -2,9 +2,9 @@
 -- have access to functionality that isn't exposed inside the OS sandbox.
 
 local utils = require("utils")
-local body = require("body")
 local bencode = require("bencode")
 local clearances = require("data.clearances")
+local base_prices = require("data.prices")
 local upgrades = require("data.upgrades")
 local mission = require("mission")
 
@@ -113,7 +113,7 @@ return {
       local target = ship.target
       local price = math.floor(((target.upgrade_prices and
                                     target.upgrade_prices[name]) or
-               body.base_prices.upgrades[name]) * 0.85)
+               base_prices.upgrades[name]) * 0.85)
       if(not price) then
          return false, "This upgrade is not for sale."
       elseif(not utils.includes(ship.upgrade_names, name)) then

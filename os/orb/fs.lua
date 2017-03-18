@@ -221,6 +221,7 @@ orb.fs = {
    -- requires access to the "/etc/groups" directory, which is why this
    -- function takes a raw_root argument as well.
    proxy = function(raw, user, raw_root)
+      raw_root = raw_root or raw
       local descend = function(f, path, descending_user)
          local target = f
          for _,d in pairs(orb.utils.split(path, "/")) do
