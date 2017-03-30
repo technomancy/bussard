@@ -1,9 +1,9 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local env, args = ...
 if(#args == 2) then
-   local to_dir, to_base = orb.dirname(orb.normalize(args[2], env.CWD))
-   f[to_dir][to_base] = f[orb.normalize(args[1], env.CWD)]
+   local contents = io.readfile(args[1], env.CWD)
+   io.writefile(args[2], env.CWD, contents)
 else
    print("Copy files.\n")
    print("Usage:")

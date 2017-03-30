@@ -1,18 +1,18 @@
  -- -*- lua -*-
 
-local f, env, args = ...
+local env, args = ...
 
-if(#args == 0 or orb.utils.includes(args, "--help")) then
+if(#args == 0 or lume.find(args, "--help")) then
    print("Run a command as another user.")
    print("You may only run sudo if you are a member of the sudoers group.\n")
    print("Usage:")
    print("  sudo USER COMMAND [ARG]...")
-   if(orb.in_group(f, env.USER, "sudoers")) then
+   if(orb.in_group(env.USER, "sudoers")) then
       print("You are a member of sudoers.")
    else
       print("You are not a member of sudoers.")
    end
 else
    local user = table.remove(args, 1)
-   orb.sudo(f, env, user, args, orb.extra_sandbox)
+   orb.sudo(env, user, args, orb.extra_sandbox)
 end

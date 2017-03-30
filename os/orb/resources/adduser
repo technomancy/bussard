@@ -1,9 +1,9 @@
  -- -*- lua -*-
 
-local f, _env, args = ...
+local _env, args = ...
 
 if(#args == 2) then
-   orb.add_user(f, args[1], args[2])
+   orb.add_user(args[1], args[2])
 else
    print("Add a new user. Requires sudo privileges.\n")
    print("Usage:")

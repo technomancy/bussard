@@ -1,6 +1,6 @@
 -- -*- lua -*-
 
-local _f, env, args = ...
+local env, args = ...
 
 if(args[1] == "--help") then
    print("Print all environment variables.")

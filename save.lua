@@ -3,7 +3,6 @@ local body = require("body")
 local ai = require("ship.ai")
 local utils = require("utils")
 local rovers = require("rovers")
-local orb = require("os.orb")
 local ship_init = require("data.ship_init")
 
 local ship_fields = {
@@ -38,7 +37,7 @@ return {
       ship_data.api = lume.pick(ship.api, unpack(ship.api.persist))
       ship_data.meta = {version = ship.api.ui.version}
       if(ship.api.cheat) then ship_data.api.cheat = true end
-      orb.fs.strip_special(ship_data.api, {})
+
       love.filesystem.write(ship_filename, lume.serialize(ship_data))
       love.filesystem.write(system_filename,
                             lume.serialize(lume.map(ship.bodies, body_data)))
@@ -129,9 +128,18 @@ return {
    abort = function(ship)
       love.filesystem.remove(ship_filename)
       love.filesystem.remove(system_filename)
-      for _,b in ipairs(love.filesystem.getDirectoryItems("fs")) do
-         love.filesystem.remove("fs/" .. b)
+      local function rm_rf(dir)
+         for _,base in ipairs(love.filesystem.getDirectoryItems(dir)) do
+            local entry = dir .. "/" .. base
+            if(love.filesystem.isFile(entry)) then
+               love.filesystem.remove(entry)
+            elseif(love.filesystem.isDirectory(entry)) then
+               rm_rf(entry)
+            end
+         end
       end
+      rm_rf("fs")
+
       for _,b in ipairs(love.filesystem.getDirectoryItems("buffers")) do
          love.filesystem.remove("buffers/" .. b);
       end

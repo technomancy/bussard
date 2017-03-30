@@ -1,12 +1,12 @@
  -- -*- lua -*-
 
-local _f, _env, args = ...
+local _env, args = ...
 
 if(lume.find(args, "--help")) then
    print("Establish raw subnet connection.")
 elseif(#args == 0) then
    while true do
-      term.set_prompt("@ ")
+      set_prompt("@ ")
       local input = io.read()
       if(not input or input == "exit" or input == "logout") then
          return

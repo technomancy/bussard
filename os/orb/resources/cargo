@@ -1,6 +1,6 @@
 -- -*- lua -*-
 
-local _f, _env, args = ...
+local _env, args = ...
 
 if(not station.prices) then
    print("This station does not sell cargo.")

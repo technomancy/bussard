@@ -1,7 +1,5 @@
 local utils = require("utils")
 
-local portal_motd = "Connected to portal, checking for clearance..."
-
 local hostname = function(body_name)
    return body_name:lower():gsub(" ", "-")
 end
@@ -122,10 +120,9 @@ return {
 
    start = function(b)
       if(b.world and not b.thread) then
-         b.thread = love.thread.newThread("os/orb/thread.lua")
-         b.thread:start()
-         local ch = love.thread.getChannel(tostring(b.thread))
-         ch:push({command="init", name=b.name})
+         b.input, b.output = love.thread.newChannel(), love.thread.newChannel()
+         b.thread = love.thread.newThread("os/server.lua")
+         b.thread:start(b.input, b.output, b.os, hostname(b.name))
       end
    end,
 

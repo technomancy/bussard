@@ -1,6 +1,6 @@
 -- -*- lua -*-
 
-local _f, _env, args = ...
+local _env, args = ...
 
 if(args[1] == "-n") then
    table.remove(args, 1)

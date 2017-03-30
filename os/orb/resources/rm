@@ -1,13 +1,13 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local env, args = ...
+
 if(args[1] == "--help") then
    print("Remove files.\n")
    print("Usage:")
    print("  rm FILE1 [FILE2...]")
 else
    for _,filename in pairs(args) do
-      local dir, base = orb.dirname(orb.normalize(filename, env.CWD))
-      f[orb.normalize(dir, env.CWD)][base] = nil
+      io.rm(filename, env.CWD)
    end
 end

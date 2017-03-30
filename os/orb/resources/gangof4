@@ -1,7 +1,7 @@
 -- -*- lua -*-
 
-local original_prompt = term.get_prompt()
-term.set_prompt("] ")
+local original_prompt = get_prompt()
+set_prompt("] ")
 
 local clone = function(x)
    return lume.deserialize(lume.serialize(x))
@@ -311,7 +311,7 @@ local function round(hands, turn, played, players)
                p:close()
             end
          end
-         term.set_prompt(original_prompt)
+         set_prompt(original_prompt)
       else
          local play = get_cards(hand, input)
          printall(players, "Player " .. turn .. " played: " ..
@@ -350,7 +350,7 @@ local begin = function(players, seed)
    return round(hands, starting_player, {}, players)
 end
 
-local _f, _env, args = ...
+local _env, args = ...
 
 if(args[1] == "--help") then
    print("Play a card game.")

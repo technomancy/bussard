@@ -1,11 +1,11 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local env, args = ...
 if(#args == 0 or args[1] == "--help") then
    print("Move files.\n")
    print("Usage:")
    print("  mv FROM TO")
 else
-   orb.exec(f, env, "cp " .. args[1] .. " " .. args[2])
-   orb.exec(f, env, "rm " .. args[1])
+   orb.exec(env, "cp " .. args[1] .. " " .. args[2])
+   orb.exec(env, "rm " .. args[1])
 end

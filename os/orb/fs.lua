@@ -1,299 +1,211 @@
--- fake lil filesystem
+-- Wrapping access to the real filesystem to check permissions and such.
 local globtopattern = require("globtopattern").globtopattern
+local lume = require("lume")
+local lfs = require("love.filesystem")
 
-orb.fs = {
+local fs = {}
 
-   -- This gives us a raw filesystem that's just a table with permissions data
-   new_raw = function()
-      return {_user = "root", _group = "all", proc = {
-                 _user = "root", _group = "all"
-      }}
-   end,
+local realpath = function(path, cwd)
+   return "fs/" .. fs.hostname .. "/" .. fs.normalize(path, cwd)
+end
 
-   mkdir = function(f, path, env)
-      assert(f and path)
-      if(not getmetatable(f)) then
-         f = orb.fs.proxy(f, "root", f)
-      end
-      if(path == "/") then return end
-      local dir,base = orb.fs.dirname(orb.fs.normalize(path, env and env.CWD))
-      if(not f[dir]) then orb.fs.mkdir(f, dir, env) end
+-- Actually returns both the dirname and the basename.
+-- for instance, "/path/to/file" returns "/path/to" and "file"
+fs.dirname = function(path)
+   local t = lume.split(path, "/")
+   local basename = t[#t]
+   table.remove(t, #t)
 
-      local parent = f[dir]
-      if(parent[base]) then return parent[base] end
+   return "/" .. table.concat(t, "/"), basename
+end
 
-      parent[base] = {
-         _user = parent._user,
-         _group = parent._group,
-      }
-
-      return parent[base]
-   end,
-
-   -- Actually returns both the dirname and the basename.
-   -- for instance, "/path/to/file" returns "/path/to" and "file"
-   dirname = function(path)
-      local t = orb.utils.split(path, "/")
-      local basename = t[#t]
-      table.remove(t, #t)
-
-      return "/" .. table.concat(t, "/"), basename
-   end,
-
-   expand_globs = function(f, cmd, env)
-      local segments = orb.utils.split(cmd, " ")
-      local expand = function(token)
-         local matches = {}
-         if(token:match("*")) then
-            local pattern = globtopattern(token)
-            -- TODO: glob into directories
-            for name,_ in pairs(f[env.CWD]) do
-               if(name:match(pattern) and not name:match("^_")) then
-                  table.insert(matches, name)
-               end
+fs.expand_globs = function(input, env)
+   local segments = lume.split(input, " ")
+   local expand = function(token)
+      local matches = {}
+      if(token:match("*")) then
+         local pattern = globtopattern(token)
+         -- TODO: glob into directories
+         for _,name in ipairs(lfs.getDirectoryItems(realpath(env.CWD))) do
+            if(name:match(pattern) and not name:match("^_")) then
+               table.insert(matches, name)
             end
-            return table.concat(matches, " ")
-         else
-            return token
          end
-      end
-      return table.concat(lume.map(segments, expand), " ")
-   end,
-
-   -- read/write/append here are wrappers that help you work with
-   -- function files, which is how pipes and other special devices are
-   -- implemented.  When dealing with regular files, you can just grab
-   -- them straight out of the filesystem as strings to read or drop strings
-   -- into the directory to write.
-   read = function(f, path)
-      if(not path) then return io.read() end
-      local contents = f[path]
-      if(type(contents) == "string" or type(contents) == "number" or
-         type(contents) == "boolean") then
-         return contents
-      elseif(type(contents) == "function") then
-         return contents()
+         return table.concat(matches, " ")
       else
-         error("Tried to read " .. type(contents) .. " at " .. path)
+         return token
       end
-   end,
+   end
+   return table.concat(lume.map(segments, expand), " ")
+end
 
-   write = function(f, path, content)
-      if(not path) then io.write(content) return end
-      local dir, base = orb.fs.dirname(path)
-      local target = f[path]
-      if(not target) then
-         f[dir][base] = content
-      elseif(type(target) == "string") then
-         f[dir][base] = f[dir][base] .. content
-      elseif(type(target) == "function") then
-         target(content)
+fs.ls = function(path, cwd)
+   local items = lfs.getDirectoryItems(realpath(path, cwd))
+   local no_meta = function(entry)
+      return not entry:match("/_meta$") and not entry:match("^_meta$")
+   end
+   return lume.filter(items, no_meta)
+end
+
+fs.read = function(path, cwd)
+   assert(not path:match("/_meta$"), "Don't mess with fs meta!")
+   local contents, _ = lfs.read(realpath(path, cwd))
+   return contents
+end
+
+fs.write = function(path, cwd, content)
+   assert(not path:match("/_meta$"), "Don't mess with fs meta!")
+   return lfs.write(realpath(path, cwd), content)
+end
+
+fs.chown = function(path, cwd, user, group, group_write)
+   assert(lfs.write(realpath(path .. "/_meta", cwd),
+                    lume.serialize({user=user,group=group,
+                                    group_write=group_write})))
+end
+
+fs.exists = function(path, cwd)
+   return lfs.exists(realpath(path, cwd))
+end
+
+fs.isdir = function(path, cwd)
+   return lfs.isDirectory(realpath(path, cwd))
+end
+
+fs.rm = function(path, cwd)
+   lfs.remove(realpath(path, cwd))
+end
+
+fs.mkdir = function(path, cwd, env)
+   if(fs.isdir(path, cwd)) then return end
+   -- TODO: create dir meta for parents that lack it
+   lfs.createDirectory(realpath(path, cwd))
+   if(env) then
+      fs.chown(path, cwd, env.USER, env.USER)
+   else
+      fs.chown(path, cwd, "root", "root")
+   end
+end
+
+fs.dir_meta = function(dir, cwd)
+   assert(lfs.isDirectory(realpath(dir, cwd)), dir .. " is not a directory.")
+   assert(lfs.isFile(realpath(dir .. "/_meta", cwd)), dir .. " has no meta.")
+   return lume.deserialize(lfs.read(realpath(dir .. "/_meta", cwd)))
+end
+
+fs.get_password_hash = function(u, p)
+   return require("md5").sumhexa(u .. ":" .. p)
+end
+
+fs.add_user = function(user, password)
+   local home = "/home/" .. user
+   fs.mkdir(home)
+   fs.chown(home, "/", user, user)
+   fs.mkdir(home .. "/bin", "/")
+   fs.add_to_group(user, user)
+   fs.add_to_group(user, "all")
+   fs.write("/etc/passwords/" .. user, "/",
+            fs.get_password_hash(user, password))
+end
+
+fs.add_to_group = function(user, group)
+   assert(type(user) == "string" and type(group) == "string")
+   local group_dir = "/etc/groups/" .. group
+
+   if(not lfs.isDirectory(group_dir)) then
+      fs.mkdir(group_dir, "/")
+      fs.chown(group_dir, "/", user, user)
+   end
+
+   fs.write(group_dir .. "/" .. user, "/", "")
+end
+
+local load_bin = function()
+   local files = lfs.getDirectoryItems("os/orb/resources/")
+   for _,path in ipairs(files) do
+      local real_path = "os/orb/resources/" .. path
+      fs.write("/bin/" .. path, "/", assert(lfs.read(real_path)))
+   end
+end
+
+-- Load up an empty filesystem. Provided users will be added as sudoers.
+fs.seed = function(users)
+   for _,d in pairs({"/", "/etc", "/home", "/tmp", "/bin"}) do
+      fs.mkdir(d, "/")
+      fs.chown(d, "/", "root", "all")
+   end
+
+   fs.mkdir("/etc/passwords", "/")
+   fs.mkdir("/etc/groups", "/")
+   fs.chown("/tmp", "/", "root", "all", true)
+
+   for user, password in pairs(users or {}) do
+      fs.add_user(user, password)
+      fs.add_to_group(user, "sudoers")
+   end
+
+   load_bin()
+end
+
+fs.normalize = function(path, cwd)
+   if(path == ".") then return cwd end
+   if(not path:match("^/")) then path = assert(cwd) .. "/" .. path end
+
+   local final = {}
+   for _,segment in pairs(lume.split(path, "/")) do
+      if(segment == "..") then
+         table.remove(final, #final)
       else
-         error("Tried to append to " .. type(target) .. " at " .. path)
+         final[#final + 1] = segment
       end
-   end,
+   end
 
-   add_user = function(f, user, password)
-      local home = "/home/" .. user
-      orb.fs.mkdir(f, home)
-      f[home]._user = user
-      f[home]._group = user
-      orb.fs.mkdir(f, home .. "/bin")
-      orb.fs.add_to_group(f, user, user)
-      orb.fs.add_to_group(f, user, "all")
-      orb.fs.mkdir(f, "/proc/" .. user)
-      f.proc[user]._user = user
-      f.proc[user]._group = user
-      f.etc.passwords[user] = orb.utils.get_password_hash(user, password)
-   end,
+   return "/" .. table.concat(final, "/")
+end
 
-   add_to_group = function(f, user, group)
-      assert(type(user) == "string" and type(group) == "string")
-      local group_dir = f[orb.fs.normalize("/etc/groups/" .. group)]
+fs.in_group = function(user, group)
+   local group_dir = realpath("/etc/groups/" .. group)
+   return lfs.isDirectory(group_dir) and lfs.isFile(group_dir .. "/" .. user)
+end
 
-      if(not group_dir) then
-         group_dir = orb.fs.mkdir(f, "/etc/groups/" .. group)
-         group_dir._user = user
-      end
+fs.readable = function(dir, user)
+   if(user == "root") then return true end
+   local m = fs.dir_meta(dir)
+   return m.user == nil or m.user == user or fs.in_group(user, m.group)
+end
 
-      group_dir._group = group
-      group_dir[user] = user
-   end,
+fs.writeable = function(dir, user)
+   if(user == "root") then return true end
+   local m = fs.dir_meta(dir)
+   return m.user == nil or m.user == user or
+      (m.group_write and fs.in_group(user, m.group))
+end
 
-   load_bin = function(f)
-      local files = love.filesystem.getDirectoryItems(orb.dir.."/resources/")
-      for _,path in ipairs(files) do
-         local real_path = orb.dir .. "/resources/" .. path
-         f.bin[path] = assert(love.filesystem.read(real_path))
-      end
-   end,
+fs.if_readable = function(user, f, for_dir)
+   return function(path, cwd)
+      local dir = for_dir and fs.dirname(path) or path
+      assert(fs.readable(dir, user), dir .. " is not readable by " .. user)
+      return f(path, cwd)
+   end
+end
 
-   -- Load up an empty filesystem. Provided users will be added as sudoers.
-   seed = function(f, users)
-      for _,d in pairs({"/etc", "/home", "/tmp", "/bin"}) do
-         orb.fs.mkdir(f, d)
-         f[d]._group = "all"
-      end
+fs.if_writeable = function(user, f, for_dir)
+   return function(path, cwd, ...)
+      local dir = for_dir and fs.dirname(path) or path
+      assert(fs.writeable(dir, user), dir .. " is not writeable by " .. user)
+      return f(path, cwd, ...)
+   end
+end
 
-      orb.fs.mkdir(f, "/etc/passwords")
-      orb.fs.mkdir(f, "/etc/groups")
-      f["/tmp"]._group_write = "true"
+fs.init_if_needed = function(hostname)
+   if(fs.hostname) then
+      assert(hostname == fs.hostname,
+             "Hostname mismatch! " .. hostname .. " / " .. fs.hostname)
+   else
+      fs.hostname = hostname
+      fs.seed()
+      fs.add_user("guest", "")
+   end
+end
 
-      for user, password in pairs(users) do
-         orb.fs.add_user(f, user, password)
-         orb.fs.add_to_group(f, user, "sudoers")
-      end
-
-      orb.fs.load_bin(f)
-      return f
-   end,
-
-   normalize = function(path, cwd)
-      if(path == ".") then return cwd end
-      if(not path:match("^/")) then path = cwd .. "/" .. path end
-
-      local final = {}
-      for _,segment in pairs(orb.utils.split(path, "/")) do
-         if(segment == "..") then
-            table.remove(final, #final)
-         else
-            final[#final + 1] = segment
-         end
-      end
-
-      return "/" .. table.concat(final, "/")
-   end,
-
-   dir_meta = function(dir)
-      assert(dir, "Directory not found.")
-      return dir._user, dir._group, dir._group_write
-   end,
-
-   readable = function(f, dir, user)
-      if(user == "root") then return true end
-      local owner, group = orb.fs.dir_meta(dir)
-      return owner == nil or owner == user or orb.shell.in_group(f, user, group)
-   end,
-
-   writeable = function(f, dir, user)
-      if(user == "root") then return true end
-      local owner, group, group_write = orb.fs.dir_meta(dir)
-      return owner == nil or owner == user or
-         (group_write and orb.shell.in_group(f, user, group))
-   end,
-
-   reloaders = (orb.fs and orb.fs.reloaders) or {},
-
-   -- Reload all of orb's own code, and reset the /bin directory.
-   reloader = function(f)
-      return function()
-         dofile(orb.dir .. "/init.lua")
-         orb.fs.load_bin(f)
-      end
-   end,
-
-   strip_special = function(f, blacklist)
-      for k,v in pairs(f) do
-         if(lume.find(blacklist, v)) then
-            f[k] = nil
-         elseif(type(v) == "table") then
-            orb.fs.strip_special(v, blacklist)
-         elseif(type(v) ~= "string" and type(v) ~= "number"
-                and type(v) ~= "boolean") then
-            f[k] = nil
-         end
-      end
-   end,
-
-   -- Proxying a raw filesystem has two purposes: one is to enforce filesystem
-   -- permissions rules (this is done using a metatable) and one is to allow
-   -- access using full filenames. For instance, these are equivalent:
-   --
-   -- f.home.technomancy.bin["myls"]
-   -- f["/home/technomancy/bin/myls"]
-   --
-   -- Raw filesystems require the first style, but the latter works with
-   -- proxied filesystems.
-   --
-   -- Be aware that f["/home"] will return another proxied subfilesystem
-   -- that looks like a filesystem but is actually just sliced off at
-   -- a subdirectory. This is a bit of a problem since calculating permissions
-   -- requires access to the "/etc/groups" directory, which is why this
-   -- function takes a raw_root argument as well.
-   proxy = function(raw, user, raw_root)
-      raw_root = raw_root or raw
-      local descend = function(f, path, descending_user)
-         local target = f
-         for _,d in pairs(orb.utils.split(path, "/")) do
-            if(d == "") then break end
-            assert(target, "Not found: " .. path)
-            -- readable here needs a fully-rooted fs to read groups
-            assert(type(target) == "string" or
-                      orb.fs.readable(raw_root, target, descending_user),
-                   ("Not readable: " .. path .. " d: " .. d))
-            target = target[d]
-         end
-         return target
-      end
-
-      local unreadable = function(_, v)
-         return {_user = v._user, _group = v._group}
-      end
-
-      local f = {}
-      local mt = {
-         __index = function(_, path)
-            local target = descend(raw, path, user)
-            if(type(target) == "table") then
-               return orb.fs.proxy(target, user, raw_root)
-            else
-               return target
-            end
-         end,
-
-         __newindex = function(_, path, content)
-            local segments = orb.utils.split(path, "/")
-            local base = table.remove(segments, #segments)
-            local target = descend(raw, "/"..table.concat(segments,"/"), user)
-
-            assert(orb.fs.writeable(raw_root, target, user),
-                   "Not writeable: " .. path)
-            target[base] = content
-         end,
-
-         -- Unfortunately Lua 5.1 has no way to specify an iterator from the
-         -- metatable, so this only works with our monkeypatched pairs. =(
-         __pairs = function(_)
-            assert(orb.fs.readable(raw_root, raw, user), "Not readable")
-            local f2 = {}
-            for k,v in pairs(raw) do
-               if(type(v) == "string" or type(v) == "function" or
-                  type(v) == "number" or type(v) == "boolean" or
-                  type(v) == "thread") then
-                  f2[k] = v
-               elseif(type(v) == "table" and
-                      orb.fs.readable(raw_root, v, user)) then
-                  f2[k] = orb.fs.proxy(v, user, raw_root)
-               elseif(type(v) == "table") then
-                  f2[k] = unreadable(k, v)
-               else
-                  print("Unknown file type: " .. k)
-                  print(v)
-               end
-            end
-            return next,f2,nil
-         end,
-
-         -- if getmetatable ever leaks into the sandbox, this leaks too
-         raw_root = raw_root,
-      }
-      setmetatable(f, mt)
-
-      -- Only need this for fs roots.
-      if(raw == raw_root) then
-         orb.fs.reloaders[f] = orb.fs.reloader(raw_root)
-      end
-
-      return f
-   end,
-}
+return fs

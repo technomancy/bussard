@@ -11,10 +11,10 @@ local go4_source = love.filesystem.read("os/orb/resources/gangof4")
 
 local go4 = {files={["/home/guest/bin/gangof4"] = go4_source}}
 
-local data = { ["Merdeka Station"] = { root = go4_files },
-   ["Kembali Station"] = { root = go4_files },
-   ["Kenapa Station"] = { root = go4_files },
-   ["Earth"] = { root = go4_files },}
+local data = { ["Merdeka Station"] = { root = go4 },
+   ["Kembali Station"] = { root = go4 },
+   ["Kenapa Station"] = { root = go4 },
+   ["Earth"] = { root = go4 },}
 
 for _,sys in pairs(systems) do
    for _,body in pairs(sys.bodies) do

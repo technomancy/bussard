@@ -5,7 +5,7 @@ local serpent = require("serpent")
 local help = require("doc")
 local upgrade = require("data.upgrades")
 local ai = require("ship.ai")
-local ssh = require("ship.ssh")
+local client = require("os.client")
 local rovers = require("rovers")
 local mail = require("mail")
 local mission = require("mission")
@@ -100,10 +100,8 @@ local sandbox = function(ship)
                        man = lume.fn(help.man, ship),
                        define_mode = editor.define_mode,
                        bind = editor.bind,
-                       ssh_connect = lume.fn(ssh.connect, ship),
-                       ssh_send_line = lume.fn(ssh.send_line, ship),
-                       ssh_get_connection = lume.fn(ssh.get_connection, ship),
-                       logout = lume.fn(ssh.logout_all, ship),
+                       ssh_connect = lume.fn(client.connect, ship),
+                       logout = lume.fn(client.connect, ship),
                        reply = lume.fn(mail.reply, ship),
                        replyable = mail.replyable,
                        graphics = love.graphics,
@@ -205,7 +203,7 @@ local ship = {
 
       for _,b in ipairs(ship.bodies) do body.start(b) end
 
-      ssh.logout_all(ship)
+      -- TODO: ssh.logout_all(ship)
       ship:recalculate()
 
       if(reseed) then

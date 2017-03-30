@@ -1,10 +1,10 @@
  -- -*- lua -*-
 
-local f, env, args = ...
+local env, args = ...
 local perms = args[1]
-local dirname = args[2] or env.CWD
-local dir = f[orb.normalize(dirname, env.CWD)]
+local dir = orb.normalize(args[2] or ".", env.CWD)
 
+-- TODO: fix
 local usage = function()
    print("Add or remove group write privileges to a directory.\n")
    print("Usage:")
@@ -14,7 +14,7 @@ end
 if(#args < 1 or args[1] == "--help") then
    usage()
 elseif(not dir) then
-   print("Not found: " .. dirname)
+   print("Not found: " .. dir)
 elseif(perms == "+") then
    dir._group_write = "true"
 elseif(perms == "-") then

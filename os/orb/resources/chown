@@ -1,9 +1,11 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local env, args = ...
 local user = args[1]
 local dirname = args[2] or env.CWD
-local dir = f[orb.normalize(dirname, env.CWD)]
+local dir = orb.normalize(dirname, env.CWD)
+
+-- TODO: fix
 
 if(not args[1] or args[1] == "--help") then
    print("Change the owner of a given directory or current directory.\n")

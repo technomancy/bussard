@@ -1,6 +1,8 @@
  -- -*- lua -*-
 
-local f, env, args = ...
+local env, args = ...
+
+local f = {} -- TODO: fix
 
 if(args[1] == "--help" or #args == 0) then
    print("Kill a process. Use `ps' to list processes.\n")

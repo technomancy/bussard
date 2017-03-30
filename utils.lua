@@ -3,7 +3,11 @@ local socket = require("socket")
 local lume = require("lume")
 local serpent = require("serpent")
 
-function pp(x) print(serpent.block(x, {maxlevel=8,maxnum=64,nocode=true})) end
+local pps = function(x)
+   return serpent.block(x, {maxlevel=8,maxnum=64,nocode=true})
+end
+
+function pp(x) print(pps(x)) end
 
 local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
 
@@ -329,6 +333,7 @@ return {
          parse_time = parse_time,
       },
       lume = lume.clone(lume),
+      pps = pps,
    },
 
    completions_for = completions_for,

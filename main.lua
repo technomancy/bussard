@@ -8,6 +8,7 @@ local save = require("save")
 local pause = require("pause")
 local flight_draw = require("draw")
 local systems = require("data.systems")
+local os_client = require("os.client")
 
 local quit = function()
    save.save(ship)
@@ -202,6 +203,7 @@ local update = safely(function(dt)
          body.update(ship.bodies, real_time_factor)
          body.gravitate_all(ship.bodies, ship, real_time_factor)
          ai.update(ship, ship.bodies, real_time_factor)
+         os_client.update(ship, dt)
       end
 end)
 
@@ -234,5 +236,3 @@ ui.play = function()
    love.update,love.keypressed,love.wheelmoved,love.textinput,love.draw =
       update, keypressed, wheelmoved, textinput, safely(draw)
 end
-
-return ship -- for headless.lua

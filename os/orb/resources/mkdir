@@ -1,12 +1,12 @@
 -- -*- lua -*-
 
-local f, env, args = ...
+local env, args = ...
 if(args[1] == "--help" or #args == 0) then
    print("Create a directory, and its parent directories if needed.\n")
    print("Usage:")
    print("  mkdir DIR [DIR2...]")
 else
    for _,d in ipairs(args) do
-      orb.mkdir(f, d, env)
+      io.mkdir(d, env.CWD, env)
    end
 end

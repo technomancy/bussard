@@ -2,15 +2,14 @@
 -- with another OS over an SSH connection.
 
 -- initiate the connection. command may be nil.
-ssh = function(username, password, command)
+ssh = function(username, password)
    editor.change_buffer("*console*")
-   if(ship.status.target and ship.status.target.os) then
-      ssh_connect(username or "guest", password or "", command)
+   local send = ssh_connect(username or "guest", password or "")
+   if(send) then
+      editor.activate_mode("ssh")
       editor.end_of_buffer()
       editor.no_mark()
-      editor.activate_mode("ssh")
-   else
-      print("Cannot log into target.")
+      editor.set_prop("ssh_send", send)
    end
    return editor.invisible
 end
@@ -30,16 +29,16 @@ define_mode("ssh", "console") -- inherit bindings from console
 bind("ssh", "return", function()
         local input = lume.trim(editor.get_input())
 
-        if(input == "logout") then
+        editor.history_push(input)
+        local send = editor.get_prop("ssh_send")
+        if(input and send) then
+           send(input)
            editor.newline()
-           logout()
-        else
-           editor.history_push(input)
-           ssh_send_line(input)
-           editor.newline(2)
            editor.print_prompt()
            editor.end_of_buffer()
            editor.no_mark()
+        elseif(input) then
+           print("Not connected.")
         end
 end)
 

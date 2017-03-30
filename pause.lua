@@ -13,8 +13,7 @@ local scroll = 0
 local files = {"main.lua","main.lua","main.lua","main.lua","main.lua",
                "main.lua","main.lua","main.lua","main.lua","main.lua",
                "main.lua","main.lua","main.lua","main.lua","main.lua",
-               "asteroid.lua","body.lua","mission.lua", "save.lua",
-               "services.lua","pause.lua",
+               "asteroid.lua","body.lua","mission.lua", "save.lua", "pause.lua",
 }
 
 local buttons = {"resume", "credits", "license", "toggle fullscreen", "quit"}

@@ -1,24 +1,28 @@
 -- -*- lua -*-
 
-local f, orig_env, args = ...
-local env = orb.utils.shallow_copy(orig_env)
+local orig_env, args = ...
+local env = lume.merge({}, orig_env)
+
+local interp = function(s, tab)
+   return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end))
+end
 
 if(args[1] == "--help") then
    print("An interactive command shell.\n")
    print("Usage:")
    print("  smash")
 else
-   local smashrc = f[env.HOME .. "/_smashrc"]
-   if(smashrc) then
-      assert(loadstring(smashrc))(f, env, args)
+   if(io.exists(env.HOME .. "/_smashrc")) then
+      assert(loadstring(io.readfile(env.HOME .. "/_smashrc")))(env, args)
    else
-      print("\n" .. f.etc.motd .. "\nType \"logout\" to exit and \"ls /bin\"" ..
+      local motd = io.exists("/etc/motd") and io.readfile("/etc/motd") or ""
+      print("\n" .. motd .. "\nType \"logout\" to exit and \"ls /bin\"" ..
                " to see commands available.")
    end
 
    while true do
-      term.set_prompt(orb.utils.interp(env.PROMPT, env))
-      local input = orb.expand_globs(f, orb.utils.interp(io.read(), env), env)
+      set_prompt(interp(env.PROMPT, env))
+      local input = orb.expand_globs(interp(io.read(), env), env)
       if not input or input == "exit" or input == "logout" then return end
 
       local var, value = input:match("export (.+)=(.*)")
@@ -28,16 +32,16 @@ else
       -- inlining primitives this way is kinda tacky
       if(input == "cd") then
          env.CWD = env.HOME
-      elseif(change_dir and not f[change_dir]) then
+      elseif(change_dir and not io.exists(change_dir)) then
          print(change_dir .. " not found.")
-      elseif(change_dir and type(f[change_dir]) ~= "table") then
+      elseif(change_dir and type(io.isdir(change_dir))) then
          print(change_dir .. " is not a directory")
       elseif(change_dir) then
          env.CWD = change_dir
       elseif(var) then
          env[var] = value
       elseif(not input:match("^ *$")) then
-         local success, msg = orb.pexec(f, env, input, orb.extra_sandbox)
+         local success, msg = orb.pexec(env, input, orb.extra_sandbox)
          if(not success) then
             print(msg)
             env.LAST_ERROR = msg

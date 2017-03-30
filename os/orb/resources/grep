@@ -1,6 +1,6 @@
 -- -*- lua -*-
 
-local _f, _env, args = ...
+local _env, args = ...
 
 if(args[1] == "--help") then
    print("Print all lines from input which patch a pattern.\n")
@@ -9,7 +9,7 @@ if(args[1] == "--help") then
 else
    local lines = {}
    local read_line = function()
-      if(#lines == 0) then lines = orb.utils.split(io.read(), "\n") end
+      if(#lines == 0) then lines = lume.split(io.read(), "\n") end
       return table.remove(lines, 1)
    end
 
