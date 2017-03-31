@@ -2,9 +2,10 @@
 
 local lume = require("lume")
 local shell = require("os.orb.shell")
+local rpcs = require("os.orb.rpcs")
 local fs = require("os.orb.fs")
 
-local env, command, stdin, output, hostname, rpcs = ...
+local env, command, stdin, output, hostname = ...
 
 local read = function() return stdin:demand() end
 
@@ -22,8 +23,8 @@ local add_rpc = function(acc, name)
    return acc
 end
 
-local err_handler = function(e) print(e, debug.traceback()) end
+local ok, err = pcall(fs.init_if_needed, hostname)
+if(not ok) then print("init err:", err) return false end
 
-xpcall(fs.init_if_needed, err_handler, hostname)
-xpcall(shell.exec, err_handler,
+xpcall(shell.exec, function(e) print(e, debug.traceback()) end,
        env, command, lume.reduce(rpcs, add_rpc, {read = read, write = write}))

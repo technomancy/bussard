@@ -6,10 +6,6 @@ local output, input, os_name, hostname = ...
 local os_ok, os = pcall(require, "os." .. os_name .. ".init")
 if(not os_ok) then print("Couldn't load OS:", os) return end
 
-local is_authorized = function(username, password)
-   return (username == "guest" and password == "")
-end
-
 local sessions = {}
 
 local new_session = function(username)
@@ -25,13 +21,12 @@ while true do
    print(">", require("lume").serialize(msg))
    if(msg.op == "kill") then return
    elseif(msg.op == "login") then
-      if(is_authorized(msg.username, msg.password)) then
+      if(os.is_authorized(hostname, msg.username, msg.password)) then
          local trace = nil
          local handle = function() trace = debug.traceback() end
          local ok, session_id = xpcall(new_session, handle, msg.username)
          if(ok) then
-            output:push({op="status", out="Success.", ok=true,
-                         ["new-session"] = session_id})
+            output:push({op="status", ok=true, ["new-session"] = session_id})
          else
             output:push({op="status", out="Error: " .. trace})
          end

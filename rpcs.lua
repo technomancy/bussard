@@ -177,8 +177,9 @@ return {
       end
    end,
 
-   no_trip_clearance = function(ship, _, from, to, is_interportal)
-      for _, place in ipairs({clearances[from .. ":" .. to] or {},
+   no_trip_clearance = function(ship, portal)
+      local to, is_interportal = portal.portal, portal.interportal
+      for _, place in ipairs({clearances[ship.system_name .. ":" .. to] or {},
                               is_interportal and clearances["interportal"] or {},
                               clearances["any"],}) do
          for _, check in ipairs(place) do
@@ -197,6 +198,20 @@ return {
       return false
    end,
 
+   set_beams = function(ship, portal, n)
+      portal.beam_count = ((n or 0) * 9) / ship.portal_time
+   end,
+
+   draw_power = function(ship, portal, power)
+      assert(ship.battery - power >= 0, "Insufficient power.")
+      ship.portal_target = portal
+      ship.battery = ship.battery - power
+   end,
+
+   portal_activate = function(ship, portal)
+      ship:enter(portal.portal, true)
+   end,
+
    set_prompt = function(ship, _, prompt)
       ship.api.editor.set_prompt(prompt)
    end,
@@ -204,6 +219,16 @@ return {
    get_prompt = function(ship, _)
       return ship.api.editor.get_prompt()
    end,
+
+   time = function(ship, _)
+      return utils.time(ship)
+   end,
+
+   ship_status = function(ship, _, field)
+      return ship.api.status[field]
+   end,
+
+   distance = utils.distance,
 
    subnet = {
       request = function(ship, input_string)

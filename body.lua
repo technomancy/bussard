@@ -119,7 +119,7 @@ return {
    end,
 
    start = function(b)
-      if(b.world and not b.thread) then
+      if(b.os and not b.thread) then
          b.input, b.output = love.thread.newChannel(), love.thread.newChannel()
          b.thread = love.thread.newThread("os/server.lua")
          b.thread:start(b.input, b.output, b.os, hostname(b.name))
