@@ -200,15 +200,18 @@ return {
 
    set_beams = function(ship, portal, n)
       portal.beam_count = ((n or 0) * 9) / ship.portal_time
+      return ship.portal_range >= utils.distance(ship, portal)
    end,
 
    draw_power = function(ship, portal, power)
-      assert(ship.battery - power >= 0, "Insufficient power.")
+      if(ship.battery - power < 0) then return false end
       ship.portal_target = portal
       ship.battery = ship.battery - power
+      return true
    end,
 
    portal_activate = function(ship, portal)
+      portal.beam_count = nil
       ship:enter(portal.portal, true)
    end,
 
