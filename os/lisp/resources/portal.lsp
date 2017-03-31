@@ -1,6 +1,6 @@
 (let (fail-conditions (lambda (power)
-                        (cond (> (distance) (ship_status "portal_range"))
-                              "Out of range."
+                        (cond ;; (> (distance) (ship_status "portal_range"))
+                              ;; "Out of range."
                               (> 0 (- (ship_status "battery") power))
                               "Insufficient power."))
       activate (lambda ()

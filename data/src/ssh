@@ -33,7 +33,7 @@ bind("ssh", "return", function()
         local send = editor.get_prop("ssh_send")
         if(input and send) then
            send(input)
-           editor.newline()
+           editor.newline(2)
            editor.print_prompt()
            editor.end_of_buffer()
            editor.no_mark()
@@ -46,9 +46,10 @@ bind("ssh", "ctrl-d", function()
         local _, line = editor.point()
         if(line == editor.get_max_line() and
            editor.get_input() == "") then
-           logout()
            ship:activate_mode("console")
            ship.editor.set_prompt("> ")
+           local send = editor.get_prop("ssh_send")
+           send(nil) -- sending "EOF" is how you log out
            print("Logged out.")
         else
            editor.delete_forwards()

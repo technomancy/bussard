@@ -101,7 +101,6 @@ local sandbox = function(ship)
                        define_mode = editor.define_mode,
                        bind = editor.bind,
                        ssh_connect = lume.fn(client.connect, ship),
-                       logout = lume.fn(client.connect, ship),
                        reply = lume.fn(mail.reply, ship),
                        replyable = mail.replyable,
                        graphics = love.graphics,
@@ -203,7 +202,6 @@ local ship = {
 
       for _,b in ipairs(ship.bodies) do body.start(b) end
 
-      -- TODO: ssh.logout_all(ship)
       ship:recalculate()
 
       if(reseed) then

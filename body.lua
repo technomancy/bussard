@@ -113,7 +113,7 @@ return {
 
    stop = function(b)
       if(b.thread) then
-         love.thread.getChannel(b.thread):push({command = "kill"})
+         love.thread.getChannel(b.thread):push({op = "kill"})
          b.thread = nil
       end
    end,

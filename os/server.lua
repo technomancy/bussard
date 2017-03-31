@@ -6,6 +6,8 @@ local output, input, os_name, hostname = ...
 local os_ok, os = pcall(require, "os." .. os_name .. ".init")
 if(not os_ok) then print("Couldn't load OS:", os) return end
 
+local dbg = function() end
+-- dbg = print
 local sessions = {}
 
 local new_session = function(username)
@@ -18,7 +20,7 @@ end
 
 while true do
    local msg = input:demand()
-   print(">", require("lume").serialize(msg))
+   dbg(">", require("lume").serialize(msg))
    if(msg.op == "kill") then return
    elseif(msg.op == "login") then
       if(os.is_authorized(hostname, msg.username, msg.password)) then
