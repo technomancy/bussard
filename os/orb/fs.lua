@@ -129,7 +129,7 @@ local load_bin = function()
 end
 
 -- Load up an empty filesystem. Provided users will be added as sudoers.
-fs.seed = function(users)
+fs.seed = function(hostname, users)
    for _,d in pairs({"/", "/etc", "/home", "/tmp", "/bin"}) do
       fs.mkdir(d, "/")
       fs.chown(d, "/", "root", "all")
@@ -142,6 +142,9 @@ fs.seed = function(users)
    for user, password in pairs(users or {}) do
       fs.add_user(user, password)
       fs.add_to_group(user, "sudoers")
+   end
+   if(lfs.exists("data/motd/" .. hostname)) then
+      fs.write("/etc/motd", "/", lfs.read("data/motd/" .. hostname))
    end
 
    load_bin()
@@ -168,14 +171,16 @@ fs.in_group = function(user, group)
    return lfs.isDirectory(group_dir) and lfs.isFile(group_dir .. "/" .. user)
 end
 
-fs.readable = function(dir, user)
+fs.readable = function(f, user)
    if(user == "root") then return true end
+   local dir = lfs.isDirectory(realpath(f)) and f or fs.dirname(f)
    local m = fs.dir_meta(dir)
    return m.user == nil or m.user == user or fs.in_group(user, m.group)
 end
 
-fs.writeable = function(dir, user)
+fs.writeable = function(f, user)
    if(user == "root") then return true end
+   local dir = lfs.isDirectory(realpath(f)) and f or fs.dirname(f)
    local m = fs.dir_meta(dir)
    return m.user == nil or m.user == user or
       (m.group_write and fs.in_group(user, m.group))
@@ -183,7 +188,7 @@ end
 
 fs.if_readable = function(user, f, for_dir)
    return function(path, cwd)
-      local dir = for_dir and fs.dirname(path) or path
+      local dir = for_dir and path or fs.dirname(path)
       assert(fs.readable(dir, user), dir .. " is not readable by " .. user)
       return f(path, cwd)
    end
@@ -191,7 +196,7 @@ end
 
 fs.if_writeable = function(user, f, for_dir)
    return function(path, cwd, ...)
-      local dir = for_dir and fs.dirname(path) or path
+      local dir = for_dir and path or fs.dirname(path)
       assert(fs.writeable(dir, user), dir .. " is not writeable by " .. user)
       return f(path, cwd, ...)
    end
@@ -203,7 +208,7 @@ fs.init_if_needed = function(hostname)
              "Hostname mismatch! " .. hostname .. " / " .. fs.hostname)
    else
       fs.hostname = hostname
-      fs.seed()
+      fs.seed(hostname)
       fs.add_user("guest", "")
    end
 end

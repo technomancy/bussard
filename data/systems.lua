@@ -362,7 +362,7 @@ local sys = {
                          name="New Phobos 4523", star=true},
                         {r=18000, mass=630,
                          image_name = "shaber4",
-                         name="Sutap", os="orb", world=true,
+                         name="Sutep", os="orb", world=true,
 
                          industry=2,tech=4,
                          remote=4, pop=3,

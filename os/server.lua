@@ -20,6 +20,7 @@ end
 
 while true do
    local msg = input:demand()
+   -- TODO: range check
    dbg(">", require("lume").serialize(msg))
    if(msg.op == "kill") then return
    elseif(msg.op == "login") then

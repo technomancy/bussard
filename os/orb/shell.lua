@@ -24,9 +24,7 @@ shell.exec = function(orig_env, command, extra_sandbox)
          -- getting the filesystem metatable would be a security leak
          assert(not box.getmetatable, "Sandbox leak")
          setfenv(chunk, box)
-         print("running", executable_name)
          chunk(env, args)
-         print("ran")
          return true
       end
    end
