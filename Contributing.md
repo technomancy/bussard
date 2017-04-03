@@ -22,11 +22,8 @@ interaction easier.
 
 You can also use `ship.cheat.realdofile` to reload some file from the game
 source and `ship.cheat.realrequire` to load modules. Note that certain modules
-are stateful and will behave unpredictably when reloaded. TODO: list in detail.
-
-For story, background and guidelines, look at the dev guide in `spoilers/`.
-
-Non-code contributions are greatly appreciated; in particular in art and writing.
+like `ship` and `polywell` are stateful and will behave unpredictably if
+reloaded.
 
 ## Coding
 
@@ -228,24 +225,33 @@ without `Date:` headers.
 
 ### OS and SSH
 
-The worlds you SSH into mostly run the Orb unix-like operating system, which is
-found in `os/orb`. All the scripts that run inside the OS are found in
-`resources` in that directory. The portals run the `os/lisp` operating system,
-and the `os/forth` OS will be used later on.
+The worlds you SSH into mostly run the Orb unix-like operating system, which
+is found in `os/orb`. All the scripts that run inside the OS (userspace) are
+found in `resources` in that directory. The portals run the `os/lisp`
+operating system, and the `os/rover` OS will be used for rovers.
 
-The code that runs inside SSH connections is sandboxed similarly to code that
-runs on the ship's computer, but a different set of functions is exposed; see
-`sandbox` in `ship/ssh.lua`. Each world you log into offers services you can
-access using shell commands (cargo, upgrades, refueling, etc.) when you log in;
-the underlying (out-of-userspace, and therefore cheat-proof) functionality for
-these is implemented in `services.lua` and placed in the sandbox table so
-scripts in `/bin` can call them.
+All OS code is isolated by running it in separate LÖVE threads. Each thread
+can communicate with others only by channels. The `os.client` module is the
+bit which is exposed to your ship's sandbox and the main thread, and the
+`os.server` module runs in the isolated thread and delegates to the
+appropriate OS for whatever is on the other side. Each world has an
+`os.server` thread for accepting connections, and when a new connection is
+made, a session-specific thread is started.
+
+Mostly the communication consists of "standard IO"--lines of text sent and
+received. (`op="stdin"` or `op="stdout"`) However, the protocol is simply
+tables sent and received, and other operations can be invoked. The code
+running on the remote OS must occasionally invoke functions on the main
+thread, (such as cargo transfers or refueling) and this is done by sending
+`op="rpc"` messages across the channels, which invoke a set of whitelisted
+RPC-able functions in the top-level `rpcs` module. All RPC functions have the
+first two args locked to `ship` and `port`, which is the table for whatever
+world on which the OS is running. Each OS exposes a different set of RPC
+functions to code running in its threads.
 
 The UI side of the SSH client is defined in `data/src/ssh`; it is based on the
-ship's computer's console mode, but it calls `ssh_send_line` from the ship's own
-sandbox rather than eval when you press enter.
-
-See the comments at the top of `ship/ssh.lua` for details about how I/O works.
+ship's computer's console mode, but it sends input across the SSH channel
+rather than eval when you press enter.
 
 ### Editor
 
@@ -269,12 +275,10 @@ not everything is saved between exits. (See `ship_fields` and `body_fields` in
 listed in `ship.api.persist`, allowing the player to declare additional fields
 as persistent.
 
-Ship fields go in `ship_data.lua` in Love's save directory, while status of the
-current system goes in `system_data.lua`. The OS filesystems and editor buffers
-are also saved off into their own files. Nothing is saved from the status of
-systems other than the current one except the filesystems. Filesystems are
-created on-demand, which means that bodies which haven't been logged into yet
-aren't saved.
+Ship fields go in `ship_data.lua` in Love's save directory, while status of
+the current system goes in `system_data.lua`. The editor buffers are also
+saved off into their own files. Nothing is saved from the status of systems
+other than the current one except the filesystems.
 
 ## License
 

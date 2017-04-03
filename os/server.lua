@@ -2,20 +2,21 @@ require("love.filesystem")
 require("love.math")
 require("love.thread")
 
+local dbg = os.getenv("DEBUG") and print or function() end
 local output, input, os_name, hostname = ...
 local os_ok, os = pcall(require, "os." .. os_name .. ".init")
 if(not os_ok) then print("Couldn't load OS:", os) return end
 
-local dbg = function() end
--- dbg = print
 local sessions = {}
 
-local new_session = function(username)
+local new_session = function(username, password)
+   if(not os.is_authorized(hostname, username, password)) then return false end
    local session_id = string.format("%x", love.math.random(4294967296))
    local stdin = love.thread.newChannel()
    sessions[session_id] = os.new_session(stdin, output, username, hostname)
    sessions[session_id].stdin = stdin
-   return session_id
+   output:push({op="status", ok=true, ["new-session"] = session_id})
+   return true
 end
 
 while true do
@@ -24,16 +25,8 @@ while true do
    dbg(">", require("lume").serialize(msg))
    if(msg.op == "kill") then return
    elseif(msg.op == "login") then
-      if(os.is_authorized(hostname, msg.username, msg.password)) then
-         local trace = nil
-         local handle = function() trace = debug.traceback() end
-         local ok, session_id = xpcall(new_session, handle, msg.username)
-         if(ok) then
-            output:push({op="status", ok=true, ["new-session"] = session_id})
-         else
-            output:push({op="status", out="Error: " .. trace})
-         end
-      else
+      local handle = function() print(debug.traceback()) end
+      if(not xpcall(new_session, handle, msg.username, msg.password)) then
          output:push({op="status", out="Login failed."})
       end
    elseif(msg.op == "stdin") then

@@ -18,7 +18,13 @@ local add_rpc = function(acc, name)
    acc[name] = function(...)
       local chan = love.thread.newChannel()
       output:push({op="rpc", fn=name, args={...}, chan=chan})
-      return unpack(chan:demand())
+      local response = chan:demand()
+      if(response[1] == "_error") then
+         table.remove(response, 1)
+         error(unpack(response))
+      else
+         return unpack(response)
+      end
    end
    return acc
 end
