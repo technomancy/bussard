@@ -27,7 +27,7 @@ return {
    on_accept = function(ship)
       mail.deliver_msg(ship, "nari-a-01.msg")
       local m = ship.active_missions["d6069254-4182-4f96-a145-df309a992798"]
-      if(ship.comm_connected == "Tana Prime") then m.pickup = 0 end
+      if(ship.target.name == "Tana Prime") then m.pickup = 0 end
    end,
 
    update = function(ship, dt)

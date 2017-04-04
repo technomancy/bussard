@@ -116,9 +116,9 @@ end
 local on_login = function(ship)
    for mission_id,record in pairs(ship.active_missions) do
       local mission = find(ship, mission_id)
-      record_destination(record, ship.comm_connected, ship)
+      record_destination(record, ship.target.name, ship)
       if(mission.on_login) then
-         mission.on_login(ship, ship.comm_connected, record)
+         mission.on_login(ship, ship.target.name, record)
       end
       if(check_success(ship, mission)) then succeed(ship, mission) end
    end

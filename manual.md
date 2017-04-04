@@ -168,7 +168,6 @@ its upgrades as well as its flight through space and the objects nearby.
 * `burn_rate`: how quickly your engine uses fuel; turn thrusters use negligible fuel.
 * `recharge_rate`: how quickly your collector replenishes your fuel.
 * `solar`: how quickly your battery charges (based on distance from star).
-* `comm_connected`: whether or not the comm system is connected.
 * `comm_range`: the maximum distance at which your comm is effective.
 * `scoop_range`: the maximum distance at which you can collect mined asteroid ore.
 * `in_range`: function (takes ship and body) returning boolean for

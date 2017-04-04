@@ -141,7 +141,6 @@ local ship = {
    engine_on = false,
    turning_right = false,
    turning_left = false,
-   comm_connected = false,
    target_number = 0,
    target = nil,
    mass = 128,
@@ -205,7 +204,7 @@ local ship = {
       ship:recalculate()
 
       if(reseed) then
-         ship.comm_connected, ship.target_number, ship.target = false, 0, nil
+         ship.target_number, ship.target = 0, nil
 
          -- re-seed system-level things
          asteroid.populate(ship.systems[ship.system_name])
@@ -350,7 +349,7 @@ local ship = {
       local m = ship.humans[human]
       ship.humans[human] = nil
       if(m == "companion") then
-         ship.humans_left_at[human] = assert(ship.comm_connected,
+         ship.humans_left_at[human] = assert(ship.target,
                                              "Can't disembark nowhere.")
          mission.accept(ship, "recover_" .. human)
          mail.deliver_msg(ship, "recover_" .. human .. ".msg")
