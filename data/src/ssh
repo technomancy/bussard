@@ -55,3 +55,11 @@ bind("ssh", "ctrl-d", function()
            editor.delete_forwards()
         end
 end)
+
+bind("ssh", "tab", function()
+        local input = lume.trim(editor.get_input())
+        local send = editor.get_prop("ssh_send")
+        if(input and send) then
+           send({op="complete", input=input}, true)
+        end
+end)

@@ -17,22 +17,24 @@ end
 
 local queued = {}
 
-local send = function(channel, session, get_distance, range, data)
-   if(type(data) == "string") then
-      local msg = {op="stdin", stdin=data, session=session}
+local function send(channel, session, get_distance, range, data)
+   if(type(data) == "table" and data.op) then
+      data.session = session
       queued[channel] = queued[channel] or {}
       local queue = queued[channel]
       if(transmit_success(get_distance(), range)) then
          lume.map(queue, lume.fn(channel.push, channel))
          lume.clear(queue)
-         channel:push(msg)
+         channel:push(data)
       else
-         table.insert(queue, 1, msg)
+         table.insert(queue, 1, data)
       end
    elseif(data == nil) then
       channel:push({op="kill", session=session})
-   elseif(data.__get_response) then -- for debugging/tests
-      session.input:demand()
+   elseif(type(data) == "string") then
+      send({op="stdin", stdin=data, session=session})
+   elseif(type(data) == "table" and data.__get_response) then
+      session.input:demand() -- for debugging/tests
    else
       error("Unsupported message type: " .. tostring(data))
    end
