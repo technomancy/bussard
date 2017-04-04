@@ -125,6 +125,26 @@ return {
       end
    end,
 
+   list_upgrades = function(_, port)
+      return port.upgrade_prices or {}
+   end,
+
+   fuel_price = function(_, port)
+      return port.fuel_price or 0
+   end,
+
+   cargo_prices = function(_, port)
+      return port.prices
+   end,
+
+   cargo_amounts = function(_, port)
+      return port.cargo
+   end,
+
+   cargo_hold = function(ship, _)
+      return ship.cargo
+   end,
+
    port = function(ship, _, command)
       if(command ~= "fine") then
          return "Unknown command"

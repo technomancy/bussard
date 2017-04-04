@@ -4,7 +4,7 @@ local _env, args = ...
 
 if(args[1] == "list" and #args == 1) then
    print("Prices:")
-   for name,price in pairs(station.upgrade_prices or {}) do
+   for name,price in pairs(list_upgrades()) do
       print("  " .. name .. ": " .. price)
    end
    print("\nRun `upgrade manual NAME` to read the manual for an upgrade before buying.")

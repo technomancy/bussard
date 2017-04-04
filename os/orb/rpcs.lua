@@ -2,5 +2,6 @@
 return {
    "get_prompt", "set_prompt",
    "cargo_transfer", "loan", "fine", "port",
-   "buy_upgrade", "sell_upgrade", "buy_users", "refuel"
+   "buy_upgrade", "sell_upgrade", "list_upgrades", "buy_users",
+   "refuel", "fuel_price", "cargo_prices", "cargo_amounts", "cargo_hold",
 }

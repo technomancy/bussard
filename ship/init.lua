@@ -210,6 +210,7 @@ local ship = {
          asteroid.populate(ship.systems[ship.system_name])
          for _,b in pairs(ship.bodies) do
             body.seed_pos(b, ship.bodies[1])
+            body.seed_cargo(b)
          end
 
          local portal = lume.match(ship.bodies,
@@ -468,6 +469,10 @@ ship.api = {
    docs = {},
    persist = {"persist", "scale", "src", "docs"},
    persist_buffers = {"*console*"},
+
+   reload_file = function(name)
+      ship.api.src[name] = love.filesystem.read("data/src/" .. name)
+   end,
 
    -- added by loading config
    controls = {},

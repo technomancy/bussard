@@ -10,8 +10,9 @@ else
    print("Purchase fuel for your ship.\n")
    print("Usage:")
    print("  refuel AMOUNT")
-   if(station.fuel_price) then
-      print("Fuel here is sold for " .. station.fuel_price)
+   local price = fuel_price()
+   if(price) then
+      print("Fuel here is sold for " .. price)
    else
       print("This station does not sell fuel.")
    end

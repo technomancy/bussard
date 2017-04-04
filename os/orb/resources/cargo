@@ -2,7 +2,9 @@
 
 local _env, args = ...
 
-if(not station.prices) then
+local prices = cargo_prices()
+
+if(not prices) then
    print("This station does not sell cargo.")
    return
 end
@@ -10,17 +12,17 @@ end
 -- TODO: better message when amount is missing
 if(args[1] == "list") then
    print("Prices: (buy/sell)")
-   for good, prices in pairs(station.prices) do
-      print("  " .. good .. ": " .. prices.buy .. "/" .. prices.sell)
+   for good, price in pairs(prices) do
+      print("  " .. good .. ": " .. price.buy .. "/" .. price.sell)
    end
 
    print("Stock:")
-   for good, amount in pairs(station.cargo) do
+   for good, amount in pairs(cargo_amounts()) do
       print("  " .. good .. ": " .. amount)
    end
 
    print("Your hold:")
-   for good, amount in pairs(ship.status.cargo) do
+   for good, amount in pairs(cargo_hold()) do
       print("  " .. good .. ": " .. amount)
    end
 elseif(args[1] == "buy" or args[1] == "sell") then

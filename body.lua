@@ -1,3 +1,4 @@
+local base_prices = require("data.prices")
 local utils = require("utils")
 
 local hostname = function(body_name)
@@ -102,6 +103,45 @@ return {
          b.dx = math.sin(theta + math.pi / 2) * v
          b.dy = math.cos(theta + math.pi / 2) * v
       end
+   end,
+
+   seed_cargo = function(b)
+      if(not b.os or b.os ~= "orb") then return end
+      local equipment_factor = (math.log(b.remote / 2) + 4) *
+         (3 / (b.industry + b.tech)) + 0.5
+
+      b.fuel_price = math.ceil(base_prices.fuel *
+                                  (math.log(b.remote / 2) + 1) * (5 / b.industry))
+      b.account_price = math.floor(base_prices.account *
+                                      (math.log(math.max(b.remote, 2) * 0.5) + 1))
+      b.upgrade_prices = { life_support = 512 } -- everyone sells this
+
+      for _,u in ipairs(b.upgrades) do
+         b.upgrade_prices[u] = math.floor(base_prices.upgrades[u] *
+                                             equipment_factor)
+      end
+
+      b.prices = {}
+      local price_difference = 1.2 -- should be dynamic?
+      local price = function(good, base)
+         b.prices[good] = { buy = base, sell = math.ceil(base * price_difference) }
+      end
+      price("ore", math.floor(base_prices.ore * (math.log(10 - b.mineral) +1)))
+      price("food", math.floor(base_prices.food * (math.log(10 - b.agri) +1)))
+      price("medicine", math.floor(base_prices.medicine *
+                                      (math.log(b.pop / 4 + b.remote + 2) + 1)))
+      price("equipment", math.floor(base_prices.equipment * equipment_factor))
+
+      b.cargo = {}
+      for _,name in ipairs({"ore", "food", "equipment", "medicine"}) do
+         b.cargo[name] = love.math.random(20)
+      end
+
+      -- print("\n" .. b.name, equipment_factor)
+      -- for k,v in pairs(b.prices) do print(k,v) end
+      -- print("fuel", b.fuel_price)
+      -- print("account", b.account_price)
+      -- for k,v in pairs(b.upgrade_prices) do print(k,v) end
    end,
 
    find = function(bodies,name)

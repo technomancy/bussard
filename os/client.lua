@@ -94,8 +94,10 @@ return {
                   ship.api.editor.with_current_buffer("*console*",
                                                       disconnect, ship)
                elseif(msg.op == "rpc") then
-                  msg.chan:push({rpcs[msg.fn](ship, session.port,
-                                              unpack(msg.args or {}))})
+                  local resp = {rpcs[msg.fn](ship, session.port,
+                                             unpack(msg.args or {}))}
+                  dbg(">", require("serpent").block(resp))
+                  msg.chan:push(resp)
                end
             end
          end
