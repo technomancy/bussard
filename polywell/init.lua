@@ -1280,4 +1280,9 @@ return {
          love.load()
       end
    end,
+
+   get_wh = function()
+      local _,_,w,h = graphics.getScissor()
+      if(not w and not w) then w,h = love.window.getMode() end
+   end,
 }

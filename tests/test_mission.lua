@@ -2,9 +2,9 @@ local t = require("lunatest")
 
 local ship = require("ship")
 local body = require("body")
-local ssh = require("ship.ssh")
 local mail = require("mail")
 local mission = require("mission")
+local client = require("os.client")
 
 local d = lume.fn(ship.api.editor.with_current_buffer, "*console*",
                   ship.api.editor.debug)
@@ -37,12 +37,13 @@ end
 
 local ssh_run = function(ship, target, command)
    move_to(target)
-   ship.sandbox.ssh_connect("guest", "")
-   t.assert_equal(target, ship.comm_connected)
-   ship.sandbox.ssh_send_line(command or "echo greetings")
+   local send = ship.sandbox.ssh_connect("guest", "")
+   t.assert_function(send)
+   send(command or "echo greetings")
    mission.update(ship, 1)
-   body.update(ship.bodies, 1)
-   ssh.logout_all(ship)
+   client.update(ship, 1)
+   love.timer.sleep(0.2)
+   send(nil)
 end
 
 function test_missions()

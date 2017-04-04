@@ -31,6 +31,8 @@ local send = function(channel, session, get_distance, range, data)
       end
    elseif(data == nil) then
       channel:push({op="kill", session=session})
+   elseif(data.__get_response) then -- for debugging/tests
+      session.input:demand()
    else
       error("Unsupported message type: " .. tostring(data))
    end
