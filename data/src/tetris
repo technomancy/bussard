@@ -1,0 +1,109 @@
+-- -*- lua -*-
+local rows, cols, size = 20, 10, 25
+local x_offset, y_offset = 10, 10 + rows * size
+local shapes = {i={{x=0,y=0}, {x=0,y=1}, {x=0,y=2}, {x=0,y=3}},
+                o={{x=0,y=0}, {x=0,y=1}, {x=1,y=0}, {x=1,y=1}},
+                t={{x=0,y=0}, {x=0,y=1}, {x=0,y=2}, {x=1,y=1}},
+                j={{x=1,y=0}, {x=1,y=1}, {x=1,y=2}, {x=0,y=0}},
+                l={{x=0,y=0}, {x=0,y=1}, {x=0,y=2}, {x=1,y=0}},
+                s={{x=1,y=0}, {x=1,y=1}, {x=0,y=2}, {x=0,y=1}},
+                z={{x=0,y=0}, {x=0,y=1}, {x=1,y=2}, {x=1,y=1}}}
+local colors = {i={0,153,255}, o={233,255,0}, t={203,0,255},
+                j={0,0,255}, l={255,127,0}, s={0,255,0}, z={255,0,0}}
+
+local board, piece = nil, nil
+
+local draw = function()
+   local square = function(x, y, color)
+      graphics.setColor(unpack(color))
+      graphics.rectangle("fill", x*25 + x_offset, y_offset - y*25, size, size)
+   end
+
+   local draw_row = function(y, row)
+      for x,color in pairs(row) do square(x, y, color) end
+   end
+
+   local draw_piece = function()
+      for _,s in pairs(piece.shape) do
+         square(piece.x+s.x, piece.y+s.y, piece.color)
+      end
+   end
+
+   graphics.setColor(255,255,255)
+   graphics.rectangle("line", x_offset + size, 10, cols*size, rows*size)
+   for y, row in ipairs(board) do draw_row(y, row) end
+   if(piece) then draw_piece() end
+end
+
+local new_piece = function()
+   local shape = lume.randomchoice(lume.keys(shapes))
+   return {x = cols / 2, y = rows, shape = shapes[shape], color = colors[shape]}
+end
+
+local width = function() return #lume.set(lume.map(piece.shape, "x")) end
+
+local rotate = function()
+   local w = width()
+   for _,s in pairs(piece.shape) do
+      s.x, s.y = s.y, w - s.x - 1
+   end
+end
+
+local touching = function()
+   if(piece.y == 1) then return true end
+   for _,s in pairs(piece.shape) do
+      local row = board[piece.y + s.y - 1]
+      if(row and row[piece.x + s.x]) then return true end
+   end
+end
+
+local drop = function() if(not touching()) then piece.y = piece.y - 1 end end
+
+local gap = function(row)
+   for i=1,cols do
+      if(not row[i]) then return true end
+   end
+end
+
+local tick = function()
+   if(touching()) then
+      for _,s in pairs(piece.shape) do
+         board[piece.y + s.y] = board[piece.y + s.y] or {}
+         board[piece.y + s.y][piece.x + s.x] = piece.color
+      end
+      local clears = 0
+      for _,s in pairs(piece.shape) do
+         local row = board[s.y - clears]
+         if(row and not gap(row)) then
+            table.remove(board, s.y - clears)
+            clears = clears + 1
+         end
+      end
+      piece = new_piece()
+   else
+      piece.y = piece.y - 1
+   end
+end
+
+local side = function(n)
+   for _, s in pairs(piece.shape) do
+      local row = board[piece.y + s.y]
+      if(row and row[piece.x + s.x + n]) then return end
+   end
+   piece.x = lume.clamp(piece.x + n, 1, cols - width() + 1)
+end
+
+define_mode("tetris", nil, {draw=draw})
+bind("tetris", "left", lume.fn(side, -1))
+bind("tetris", "right", lume.fn(side, 1))
+bind("tetris", "up", rotate)
+bind("tetris", "down", drop)
+bind("tetris", "space", tick) -- for now, since we don't have update
+
+tetris = function()
+   editor.open(nil, "*tetris*", "tetris")
+   board, piece = {{}}, new_piece()
+end
+
+bind("tetris", "return", tetris)
+bind("tetris", "escape", function() editor.change_buffer("*console*") end)
