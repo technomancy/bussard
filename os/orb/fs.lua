@@ -102,6 +102,7 @@ fs.add_user = function(user, password)
    fs.mkdir(home)
    fs.chown(home, "/", user, user)
    fs.mkdir(home .. "/bin", "/")
+   fs.chown(home .. "/bin", "/", user, user)
    fs.add_to_group(user, user)
    fs.add_to_group(user, "all")
    fs.write("/etc/passwords/" .. user, "/",

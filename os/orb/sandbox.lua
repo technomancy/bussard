@@ -38,8 +38,8 @@ return {
                            read = extra.read,
 
                            exists = fs.if_readable(env.USER, fs.exists, true),
-                           isdir = fs.if_readable(env.USER, fs.isdir, true),
                            ls = fs.if_readable(env.USER, fs.ls, true),
+                           isdir = fs.if_readable(env.USER, fs.isdir),
                            readfile = fs.if_readable(env.USER, fs.read),
 
                            writefile = fs.if_writeable(env.USER, fs.write),
