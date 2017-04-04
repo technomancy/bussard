@@ -11,6 +11,9 @@ local systems = require("data.systems")
 local os_client = require("os.client")
 
 local quit = function()
+   ship.api.editor.set_prompt("> ")
+   ship.api.editor.newline()
+   ship.api.editor.print_prompt()
    save.save(ship)
    love.event.quit()
 end
