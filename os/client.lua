@@ -32,7 +32,8 @@ local function send(channel, session, get_distance, range, data)
    elseif(data == nil) then
       channel:push({op="kill", session=session})
    elseif(type(data) == "string") then
-      send({op="stdin", stdin=data, session=session})
+      send(channel, session, get_distance, range,
+           {op="stdin", stdin=data, session=session})
    elseif(type(data) == "table" and data.__get_response) then
       session.input:demand() -- for debugging/tests
    else
