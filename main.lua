@@ -207,6 +207,7 @@ local update = safely(function(dt)
          body.gravitate_all(ship.bodies, ship, real_time_factor)
          ai.update(ship, ship.bodies, real_time_factor)
          os_client.update(ship, dt)
+         ship.api.editor.update(dt)
       end
 end)
 

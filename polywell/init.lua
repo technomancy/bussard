@@ -1285,4 +1285,11 @@ return {
       local _,_,w,h = graphics.getScissor()
       if(not w and not w) then w,h = love.window.getMode() end
    end,
+
+   update = function(dt)
+      local fn = find_binding("update")
+      if(fn) then
+         with_traceback(get_prop("wrap", wrap), fn, dt)
+      end
+   end,
 }
