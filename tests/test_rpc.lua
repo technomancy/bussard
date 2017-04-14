@@ -5,12 +5,17 @@ local ship = require("ship")
 local body = require("body")
 
 local exec = function(command)
-   local send = ship.sandbox.ssh_connect("guest", "")
-   t.assert_function(send)
-   return send({__get_response=true})
+   local send, recv = ship.sandbox.ssh_connect("guest", "")
+   assert(send, "Could not connect")
+   recv(true) recv(true) -- discard motd, set_prompt
+   send(command)
+   local val = recv(true)
+   send("logout")
+   recv(true) recv(true) -- discard set_prompt, etc
+   return val
 end
 
-function test_loans()
+local function test_loans()
    ship:enter("Wolf 294", true, true)
    local solotogo = ship.bodies[2]
    ship.x, ship.y, ship.target = solotogo.x, solotogo.y, solotogo
@@ -32,3 +37,5 @@ function test_loans()
    t.assert_equal(102, ship.credits)
    t.assert_equal(0, ship.loan)
 end
+
+return {test_loans=test_loans}

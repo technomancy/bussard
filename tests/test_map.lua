@@ -3,7 +3,7 @@ local t = require("lunatest")
 local ship = require("ship")
 local editor = ship.api.editor
 
-function test_map()
+local function test_map()
    ship.sandbox.dofile("/spoilers/solutions/map")
    local chunk, err = ship.sandbox.loadstring("map()")
    if(err) then error(err) end
@@ -15,3 +15,5 @@ function test_map()
    editor.keypressed("escape")
    t.assert_not_equal("map", editor.current_mode_name())
 end
+
+return {test_map=test_map}

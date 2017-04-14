@@ -17,6 +17,11 @@ end
 
 local queued = {}
 
+local disconnect = function(ship)
+   ship.api:activate_mode("console")
+   ship.api.editor.set_prompt("> ")
+end
+
 local function send(channel, session, get_distance, range, data)
    if(type(data) == "table" and data.op) then
       data.session = session
@@ -34,10 +39,27 @@ local function send(channel, session, get_distance, range, data)
    elseif(type(data) == "string") then
       send(channel, session, get_distance, range,
            {op="stdin", stdin=data, session=session})
-   elseif(type(data) == "table" and data.__get_response) then
-      session.input:demand() -- for debugging/tests
    else
       error("Unsupported message type: " .. tostring(data))
+   end
+end
+
+local function recv(ship, port, channel, blocking)
+   local msg = channel:pop()
+   if(msg) then
+      dbg("<", require("serpent").block(msg))
+      if(msg.out) then ship.api.write(msg.out) end
+      if(msg.op == "disconnect") then
+         ship.api.editor.with_current_buffer("*console*", disconnect, ship)
+      elseif(msg.op == "rpc") then
+         local resp = {rpcs[msg.fn](ship, port, unpack(msg.args or {}))}
+         dbg(">", require("serpent").block(resp))
+         msg.chan:push(resp)
+      end
+      return msg
+   elseif(blocking) then
+      love.timer.sleep(0.1)
+      return recv(ship, port, channel, blocking)
    end
 end
 
@@ -51,11 +73,6 @@ local try_sending_queued_msgs = function(session, distance, range)
          return -- don't let messages be delivered out of order
       end
    end
-end
-
-local disconnect = function(ship)
-   ship.api:activate_mode("console")
-   ship.api.editor.set_prompt("> ")
 end
 
 return {
@@ -72,14 +89,14 @@ return {
       end
       o:push({op="login", username=username, password=password})
       local response = i:demand()
-      dbg("<", require("serpent").block(response))
+      dbg("<<", require("serpent").block(response))
       ship.api.print(response.out)
       if(response.ok) then
          sessions[response["new-session"]] = {input=i, output=o,
                                               port=ship.target}
          return lume.fn(send, o, response["new-session"] or "session",
                         lume.fn(utils.distance, ship, ship.target),
-                        ship.comm_range)
+                        ship.comm_range), lume.fn(recv, ship, ship.target, i)
       else
          return false
       end
@@ -89,22 +106,9 @@ return {
       for _, session in pairs(sessions) do
          local distance = utils.distance(ship, session.port)
          try_sending_queued_msgs(session, distance, ship.comm_range)
-         if(session.input:peek() and transmit_success(distance,
-                                                      ship.comm_range)) then
-            local msg = session.input:pop()
-            if(msg) then
-               dbg("<", require("serpent").block(msg))
-               if(msg.out) then ship.api.write(msg.out) end
-               if(msg.op == "disconnect") then
-                  ship.api.editor.with_current_buffer("*console*",
-                                                      disconnect, ship)
-               elseif(msg.op == "rpc") then
-                  local resp = {rpcs[msg.fn](ship, session.port,
-                                             unpack(msg.args or {}))}
-                  dbg(">", require("serpent").block(resp))
-                  msg.chan:push(resp)
-               end
-            end
+         if(session.input:peek() and
+               transmit_success(distance, ship.comm_range)) then
+            recv(ship, session.port, session.input)
          end
       end
    end,

@@ -46,9 +46,9 @@ local ssh_run = function(ship, target, command)
    send(nil)
 end
 
-function test_missions()
+local function test_missions()
    -- ACT 1
-   t.assert_equal(lume.count(ship.events), 0)
+   t.assert_equal(lume.count(ship.events))
    t.assert_equal(lume.count(ship.mail_delivered), 0)
    ship:enter("L 668-21", true)
    ssh_run(ship, "Merdeka Station", "upgrade buy life_support")
@@ -82,3 +82,7 @@ function test_missions()
    mail.reply(ship, "c83c2439-f4cf-475f-95a6-f15cafc3db16") -- nari-a-05
    t.assert_true(ship.mail_delivered["c83c2439-f4cf-475f-95a6-f15cafc3db16"])
 end
+
+-- this is all going away
+
+return {} -- {test_missions=test_missions}
