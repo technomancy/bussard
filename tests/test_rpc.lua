@@ -3,6 +3,7 @@ local lume = require("lume")
 
 local ship = require("ship")
 local body = require("body")
+local client = require("os.client")
 
 local exec = function(command)
    local send, recv = ship.sandbox.ssh_connect("guest", "")
@@ -13,6 +14,11 @@ local exec = function(command)
    send("logout")
    recv(true) recv(true) -- discard set_prompt, etc
    return val
+end
+
+local eval = function(code)
+   local chunk = assert(ship.sandbox.loadstring(code))
+   return chunk()
 end
 
 local function test_loans()
@@ -38,4 +44,26 @@ local function test_loans()
    t.assert_equal(0, ship.loan)
 end
 
-return {test_loans=test_loans}
+local test_completion = function()
+   ship:enter("Wolf 294", true, true)
+   local solotogo = ship.bodies[2]
+   ship.x, ship.y, ship.target = solotogo.x, solotogo.y, solotogo
+   ship.target_number, ship.target = 2, solotogo
+
+   eval("ssh()")
+   ship.api.editor.end_of_buffer()
+   ship.api.editor.textinput("/bin/up", true)
+   ship.api.editor.keypressed("tab")
+   love.timer.sleep(0.1)
+   client.update(ship, true)
+   -- ship.api.editor.debug(true)
+   local completed = ship.api.editor.get_line()
+   love.timer.sleep(0.1)
+   client.update(ship, true)
+   ship.api.editor.get("ssh_send")("logout")
+   love.timer.sleep(0.1)
+   client.update(ship, true)
+   t.assert_equal("/home/guest $ /bin/upgrade", completed)
+end
+
+return {test_loans=test_loans, test_completion=test_completion}

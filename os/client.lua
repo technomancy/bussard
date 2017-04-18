@@ -100,13 +100,20 @@ return {
       end
    end,
 
-   update = function(ship, _dt)
+   update = function(ship, all)
       for _, session in pairs(sessions) do
          local distance = utils.distance(ship, session.port)
          try_sending_queued_msgs(session, distance, ship.comm_range)
-         if(session.input:peek() and
+         if(all) then
+            while(session.input:peek() and
+               transmit_success(distance, ship.comm_range)) do
+               recv(ship, session.port, session.input)
+            end
+         else
+            if(session.input:peek() and
                transmit_success(distance, ship.comm_range)) then
-            recv(ship, session.port, session.input)
+               recv(ship, session.port, session.input)
+            end
          end
       end
    end,

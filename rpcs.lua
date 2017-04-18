@@ -7,6 +7,7 @@ local clearances = require("data.clearances")
 local base_prices = require("data.prices")
 local upgrades = require("data.upgrades")
 local mission = require("mission")
+local utf8 = require("polywell.utf8")
 
 local get_price = function(good, amount, prices, direction)
    local other_direction = direction == "sell" and "buy" or "sell"
@@ -252,6 +253,22 @@ return {
    end,
 
    distance = utils.distance,
+
+   completions = function(ship, _, completions, entered)
+      -- if the last command was not complete, then don't do anything
+      if(ship.api.editor.last_command() ~=
+         ship.api.editor.get("complete")) then return end
+      if(#completions == 1) then
+         ship.api.editor.textinput(utf8.sub(completions[1], #entered + 1), true)
+      elseif(#completions > 0) then
+         local common = utils.longest_common_prefix(completions)
+         if(common == entered) then
+            ship.api.editor.echo(table.concat(completions, " "))
+         else
+            ship.api.editor.textinput(utf8.sub(common, #entered + 1), true)
+         end
+      end
+   end,
 
    subnet = {
       request = function(ship, input_string)

@@ -45,5 +45,7 @@ while true do
       end
    elseif(msg.op == "debug") then
       pp(sessions)
+   elseif(msg.op and os.handlers and os.handlers[msg.op]) then
+      os.handlers[msg.op](sessions[msg.session], msg, output)
    end
 end

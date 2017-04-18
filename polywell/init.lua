@@ -15,7 +15,7 @@ local history_max = 128
 
 local kill_ring = {}
 local moved_last_point, moved_last_line
-local last_mode
+local last_mode, last_command
 
 -- allows for multi-step key bindings a la Emacs ctrl-x ctrl-s
 local active_prefix, active_prefix_deactivate
@@ -145,7 +145,7 @@ local wrap
 local debug = function(arg)
    if(arg == "modes") then return modes end
    if(arg == "wrap") then return wrap end
-   if(not os.getenv("DEBUG")) then return end
+   if(not (arg or os.getenv("DEBUG"))) then return end
    print("---------------", b.path, b.point_line, b.point, b.mark_line, b.mark)
    for _,line in ipairs(b.lines) do
       print(line)
@@ -181,7 +181,7 @@ end
 -- tracking undo status as well as enforcing certain rules.
 wrap = function(fn, ...)
    if(not b) then return fn(...) end -- no undo tracking for default mode
-   b.dirty = false
+   last_command, b.dirty = fn, false
    local last_state = b and state()
    if(fn ~= undo) then b.undo_at = 0 end
    fn(...)
@@ -1292,4 +1292,6 @@ return {
          with_traceback(get_prop("wrap", wrap), fn, dt)
       end
    end,
+
+   last_command = function() return last_command end,
 }

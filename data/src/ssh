@@ -23,7 +23,14 @@ portal = function()
    return editor.invisible
 end
 
-define_mode("ssh", "console") -- inherit bindings from console
+local complete = function()
+   local input = lume.trim(editor.get_input())
+   local send = editor.get_prop("ssh_send")
+   if(input and send) then send({op="complete", input=input}) end
+end
+
+-- inherit bindings from console
+define_mode("ssh", "console", {complete=complete})
 
 -- send input to whatever remote OS you're connected to.
 bind("ssh", "return", function()
@@ -56,10 +63,4 @@ bind("ssh", "ctrl-d", function()
         end
 end)
 
-bind("ssh", "tab", function()
-        local input = lume.trim(editor.get_input())
-        local send = editor.get_prop("ssh_send")
-        if(input and send) then
-           send({op="complete", input=input}, true)
-        end
-end)
+bind("ssh", "tab", complete)
