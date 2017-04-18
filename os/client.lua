@@ -86,7 +86,8 @@ return {
          return
       end
       o:push({op="login", username=username, password=password})
-      local response = i:demand()
+      local response = i:pop()
+      while not response do response = i:pop() love.timer.sleep (0.01) end
       dbg("<<", require("serpent").block(response))
       ship.api.print(response.out)
       if(response.ok) then

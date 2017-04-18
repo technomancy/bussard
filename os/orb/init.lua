@@ -3,8 +3,6 @@ local fs = require("os.orb.fs")
 local lume = require("lume")
 local utf8 = require("polywell.utf8")
 
-local pp = function(x) print(lume.serialize(x)) end
-
 local function completions_for(input, dir, prefixes)
    local input_parts = lume.split(input, "/")
    if(#input_parts == 1) then
@@ -13,6 +11,7 @@ local function completions_for(input, dir, prefixes)
          if(fs.exists(v, dir) and utf8.sub(v, 1, #input) == input) then
             local parts = lume.clone(prefixes)
             table.insert(parts, v)
+            if(fs.isdir(v, dir)) then table.insert(parts, "") end
             table.insert(matches, table.concat(parts, "/"))
          end
       end

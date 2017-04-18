@@ -21,6 +21,11 @@ local eval = function(code)
    return chunk()
 end
 
+local pass = function()
+   love.timer.sleep(0.1)
+   client.update(ship, true)
+end
+
 local function test_loans()
    ship:enter("Wolf 294", true, true)
    local solotogo = ship.bodies[2]
@@ -54,16 +59,24 @@ local test_completion = function()
    ship.api.editor.end_of_buffer()
    ship.api.editor.textinput("/bin/up", true)
    ship.api.editor.keypressed("tab")
-   love.timer.sleep(0.1)
-   client.update(ship, true)
+   pass()
+
+   local first_completed = ship.api.editor.get_line()
+   ship.api.editor.keypressed("return")
+   pass()
+
+   ship.api.editor.textinput("bi", true)
+   ship.api.editor.end_of_buffer()
    -- ship.api.editor.debug(true)
-   local completed = ship.api.editor.get_line()
-   love.timer.sleep(0.1)
-   client.update(ship, true)
+   ship.api.editor.keypressed("tab")
+   pass()
+
+   local second_completed = ship.api.editor.get_line()
    ship.api.editor.get("ssh_send")("logout")
-   love.timer.sleep(0.1)
-   client.update(ship, true)
-   t.assert_equal("/home/guest $ /bin/upgrade", completed)
+   pass()
+
+   t.assert_equal("/home/guest $ /bin/upgrade", first_completed)
+   t.assert_equal("/home/guest $ bin/", second_completed)
 end
 
 return {test_loans=test_loans, test_completion=test_completion}
