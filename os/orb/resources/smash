@@ -34,7 +34,7 @@ else
          env.CWD = env.HOME
       elseif(change_dir and not io.exists(change_dir)) then
          print(change_dir .. " not found.")
-      elseif(change_dir and type(io.isdir(change_dir))) then
+      elseif(change_dir and not io.isdir(change_dir)) then
          print(change_dir .. " is not a directory")
       elseif(change_dir) then
          env.CWD = change_dir

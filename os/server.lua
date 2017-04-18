@@ -24,8 +24,11 @@ while true do
    -- TODO: range check
    dbg(">", require("lume").serialize(msg))
    if(msg.op == "kill") then
-      for _,session in pairs(sessions) do
-         if(os.kill) then os.kill(session) end
+      for session_id,session in pairs(sessions) do
+         if(os.kill) then
+            os.kill(session)
+            sessions[session_id] = nil
+         end
       end
       return
    elseif(msg.op == "login") then

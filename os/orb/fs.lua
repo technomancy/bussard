@@ -6,7 +6,8 @@ local lfs = require("love.filesystem")
 local fs = {}
 
 local realpath = function(path, cwd)
-   return "fs/" .. fs.hostname .. "/" .. fs.normalize(path, cwd)
+   -- fs.normalize always returns a value starting with /
+   return "fs/" .. fs.hostname .. fs.normalize(path, cwd)
 end
 
 -- Actually returns both the dirname and the basename.
@@ -159,7 +160,7 @@ fs.normalize = function(path, cwd)
    for _,segment in pairs(lume.split(path, "/")) do
       if(segment == "..") then
          table.remove(final, #final)
-      else
+      elseif(segment ~= "") then
          final[#final + 1] = segment
       end
    end
