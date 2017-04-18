@@ -34,8 +34,6 @@ local function send(channel, session, get_distance, range, data)
       else
          table.insert(queue, 1, data)
       end
-   elseif(data == nil) then
-      channel:push({op="kill", session=session})
    elseif(type(data) == "string") then
       send(channel, session, get_distance, range,
            {op="stdin", stdin=data, session=session})
@@ -54,7 +52,7 @@ local function recv(ship, port, channel, blocking)
       elseif(msg.op == "rpc") then
          local resp = {rpcs[msg.fn](ship, port, unpack(msg.args or {}))}
          dbg(">", require("serpent").block(resp))
-         msg.chan:push(resp)
+         if(msg.chan) then msg.chan:push(resp) end
       end
       return msg
    elseif(blocking) then

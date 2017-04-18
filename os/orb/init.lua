@@ -13,5 +13,8 @@ return {
       local ok, err = pcall(fs.init_if_needed, hostname)
       if(not ok) then print("auth err", err) return false end
       return shell.auth(username, password)
-   end
+   end,
+
+   -- This will only kill threads that are smash sessions; ugh.
+   kill = function(session) session.stdin:push("logout") end,
 }

@@ -23,7 +23,11 @@ while true do
    local msg = input:demand()
    -- TODO: range check
    dbg(">", require("lume").serialize(msg))
-   if(msg.op == "kill") then return
+   if(msg.op == "kill") then
+      for _,session in pairs(sessions) do
+         if(os.kill) then os.kill(session) end
+      end
+      return
    elseif(msg.op == "login") then
       local handle = function() print(debug.traceback()) end
       if(not xpcall(new_session, handle, msg.username, msg.password)) then
