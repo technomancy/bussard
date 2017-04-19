@@ -36,16 +36,14 @@ while true do
       if(not xpcall(new_session, handle, msg.username, msg.password)) then
          output:push({op="status", out="Login failed."})
       end
-   elseif(msg.op == "stdin") then
+   elseif(msg.op == "stdin" or msg.ssrpc) then -- ssrpc for server-side RPC
       local session = sessions[msg.session]
       if(session) then
-         session.stdin:push(msg.stdin)
+         session.stdin:push(msg)
       else
          print("Warning: no session", msg.session)
       end
    elseif(msg.op == "debug") then
       pp(sessions)
-   elseif(msg.op and os.handlers and os.handlers[msg.op]) then
-      os.handlers[msg.op](sessions[msg.session], msg, output)
    end
 end

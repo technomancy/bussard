@@ -257,8 +257,8 @@ return {
    completions = function(ship, _, completions, entered)
       -- if the last command was not complete, then don't do anything
       if(ship.api.editor.last_command() ~=
-         ship.api.editor.get("complete")) then return end
-      if(#completions == 1) then
+         ship.api.editor.get("complete")) then return
+      elseif(#completions == 1) then
          ship.api.editor.textinput(utf8.sub(completions[1], #entered + 1), true)
       elseif(#completions > 0) then
          local common = utils.longest_common_prefix(completions)

@@ -26,7 +26,7 @@ end
 local complete = function()
    local input = lume.trim(editor.get_input())
    local send = editor.get_prop("ssh_send")
-   if(input and send) then send({op="complete", input=input}) end
+   if(input and send) then send({op="complete", ssrpc=true, input=input}) end
 end
 
 -- inherit bindings from console

@@ -56,9 +56,11 @@ local test_completion = function()
    ship.target_number, ship.target = 2, solotogo
 
    eval("ssh()")
-   ship.api.editor.end_of_buffer()
    ship.api.editor.textinput("/bin/up", true)
+   ship.api.editor.end_of_buffer()
+   pass()
    ship.api.editor.keypressed("tab")
+   ship.api.editor.end_of_buffer()
    pass()
 
    local first_completed = ship.api.editor.get_line()
