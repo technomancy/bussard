@@ -25,7 +25,7 @@ local function completions_for(input, dir, prefixes)
       local first_part = table.remove(input_parts, 1)
       table.insert(prefixes, first_part)
       return completions_for(table.concat(input_parts, "/"),
-                             dir .. first_part, prefixes)
+                             dir .. "/" .. first_part, prefixes)
    end
 end
 
