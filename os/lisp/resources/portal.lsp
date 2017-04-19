@@ -12,6 +12,6 @@
   (if clearance_problem
       (do (print clearance_problem)
           (disconnect))
-    (do (print "Cleared for portal; standby for activation...")
+    (do (print "\nCleared for portal; standby for activation...")
         (disconnect)
         (looper (time) looper))))
