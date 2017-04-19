@@ -81,4 +81,8 @@ local test_completion = function()
    t.assert_equal("/home/guest $ bin/", second_completed)
 end
 
-return {test_loans=test_loans, test_completion=test_completion}
+if(love.getVersion and love.getVersion():match("^0.1")) then
+   return {test_loans=test_loans, test_completion=test_completion}
+else
+   return {}
+end
