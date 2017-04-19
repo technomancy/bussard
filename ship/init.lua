@@ -390,10 +390,10 @@ ship.api = {
       next_target = function()
          if(love.keyboard.isDown("lshift", "rshift")) then
             ship.target_number = ((ship.target_number - 1) %
-                  (table.length(ship.bodies) + 1))
+                  (#ship.bodies + 1))
          else
             ship.target_number = ((ship.target_number + 1) %
-                  (table.length(ship.bodies) + 1))
+                  (#ship.bodies + 1))
          end
          ship.api.closest_cycle = 1
          ship.target = ship.bodies[ship.target_number]

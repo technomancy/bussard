@@ -28,11 +28,4 @@ if(not patched) then pairs = mtpairs end
 for _ in ipairs(t) do ipatched = true end
 if(not ipatched) then ipairs = mtipairs end
 
-table.length = function(tab)
-   if(not getmetatable(tab)) then return #tab end
-   local n = 0
-   for _ in mtipairs(tab) do n = n + 1 end
-   return n
-end
-
 return {original_pairs, original_ipairs}
