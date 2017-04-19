@@ -36,7 +36,7 @@ check:
 	            ssh_get_connection rover_operate tetris \
 	  -- $(IN_SHIP_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --exclude-files=*.lsp \
-	  --globals lume orb station buy_user ship cargo_transfer pps \
+	  --globals io lume orb station buy_user ship cargo_transfer pps \
 	            accept_mission get_prompt set_prompt buy_upgrade sell_upgrade \
 	            list_upgrades subnet logout upgrade_help port loan \
 	            cargo_prices cargo_amounts cargo_hold refuel fuel_price \
