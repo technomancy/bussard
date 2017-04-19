@@ -10,8 +10,10 @@ if(not os_ok) then print("Couldn't load OS:", os) return end
 local sessions = {}
 
 local new_session = function(username, password)
-   if(not os.is_authorized(hostname, username, password)) then return false end
-   local session_id = string.format("%x", love.math.random(4294967296))
+   if(not os.is_authorized(hostname, username, password)) then
+      return output:push({op="status", out="Login failed."})
+   end
+   local session_id = string.format("%x", love.math.random(42949672))
    local stdin = love.thread.newChannel()
    sessions[session_id] = os.new_session(stdin, output, username, hostname)
    sessions[session_id].stdin = stdin
@@ -34,7 +36,7 @@ while true do
    elseif(msg.op == "login") then
       local handle = function() print(debug.traceback()) end
       if(not xpcall(new_session, handle, msg.username, msg.password)) then
-         output:push({op="status", out="Login failed."})
+         output:push({op="status", out="Login error."})
       end
    elseif(msg.op == "stdin" or msg.ssrpc) then -- ssrpc for server-side RPC
       local session = sessions[msg.session]
