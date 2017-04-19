@@ -1,7 +1,6 @@
 -- -*- lua -*-
 
-local orig_env, args = ...
-local env = lume.merge({}, orig_env)
+local env, args = ...
 
 local interp = function(s, tab)
    return (s:gsub('($%b{})', function(w) return tab[w:sub(3, -2)] or w end))

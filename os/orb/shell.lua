@@ -12,8 +12,7 @@ shell.new_env = function(user, host)
             USER = user, HOST = host }
 end
 
-shell.exec = function(orig_env, command, extra_sandbox)
-   local env = lume.merge({}, orig_env)
+shell.exec = function(env, command, extra_sandbox)
    local args = lume.array((command.." "):gmatch("(.-)( +)"))
    local executable_name = table.remove(args, 1)
    local try_run = function(executable_path)
