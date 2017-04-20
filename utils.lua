@@ -353,6 +353,13 @@ return {
       end)
    end,
 
+   rfn = function(fn, ...)
+      local partial_args = {...}
+      return function(...)
+         return fn(unpack(lume.concat({...}, partial_args)))
+      end
+   end,
+
    find_by = function(ts, key, value)
       for _,t in ipairs(ts) do
          if(t[key] == value) then return t end

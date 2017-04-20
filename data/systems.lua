@@ -34,11 +34,18 @@ local _ = { r=0, mass=0,
 --   comm_boost (must be unlocked)
 --   map
 
+-- The positions for these systems are based on a listing of all habitable stars
+-- within 20 light years of Sol from Project Rho:
+-- http://www.projectrho.com/public_html/starmaps/mapindex.php#winch
+-- Most but not all of the stars have been given colloquial names, a couple have
+-- been omitted to tidy things up a bit, compare
+-- https://p.hagelb.org/starmap.png vs https://p.hagelb.org/bussard_map.png
+
 local sys = {
    -- Tana
    ["Tana"] =
       {gov="Tana", capitol = true,
-       x = -5.8, y=-2.4,
+       x = -4.8, y=-2.4,
        asteroids = 4,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=230000,

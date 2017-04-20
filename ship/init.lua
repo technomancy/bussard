@@ -14,6 +14,7 @@ local host_fs_proxy = require("host_fs_proxy")
 -- for shuffling systems upon entry
 local asteroid = require("asteroid")
 local body = require("body")
+local systems = require("data.systems")
 
 local editor = require("polywell")
 
@@ -77,9 +78,17 @@ local sandbox_require = function(ship, mod_name)
    sandbox_loaded[mod_name] = true
 end
 
+local expose_system = function(sys)
+   local fields = {"x", "y", "r", "mass", "name", "pop",
+                   "portal", "world", "station", "star"}
+   local bodies = lume.map(sys.bodies, utils.rfn(lume.pick, unpack(fields)))
+   return lume.merge({bodies=bodies}, lume.pick(sys, "x", "y", "gov"))
+end
+
 local universe_api = utils.readonly_proxy {
    g = body.g,
    max_accel = body.max_accel,
+   systems = lume.map(systems, expose_system),
 }
 
 local sandbox = function(ship)
