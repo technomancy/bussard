@@ -46,6 +46,8 @@ local function read()
          print("OS handler error:", err)
          output:push({op="status", status="err", out=err})
       end
+   elseif(msg.op == "kill") then
+      error("session terminated")
    else
       print("Unknown op!", lume.serialize(msg))
    end
@@ -57,8 +59,8 @@ local write = function(...)
    output:push({ op = "stdout", out = out })
 end
 
-local add_rpc = function(acc, name)
-   acc[name] = function(...)
+local add_rpc = function(sandbox, name)
+   sandbox[name] = function(...)
       local chan = love.thread.newChannel()
       output:push({op="rpc", fn=name, args={...}, chan=chan})
       local response = chan:demand()
@@ -69,7 +71,7 @@ local add_rpc = function(acc, name)
          return unpack(response)
       end
    end
-   return acc
+   return sandbox
 end
 
 local ok, err = pcall(fs.init_if_needed, hostname)

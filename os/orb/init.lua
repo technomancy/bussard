@@ -15,6 +15,5 @@ return {
       return shell.auth(username, password)
    end,
 
-   -- This will only kill threads that are smash sessions; ugh.
-   kill = function(session) session.stdin:push("logout") end,
+   kill = function(session) session.stdin:push({op="kill"}) end,
 }

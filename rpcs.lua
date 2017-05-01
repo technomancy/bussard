@@ -237,11 +237,18 @@ return {
    end,
 
    set_prompt = function(ship, _, prompt)
-      ship.api.editor.set_prompt(prompt)
+      ship.api.editor.with_current_buffer("*console*",
+                                          ship.api.editor.set_prompt, prompt)
    end,
 
    get_prompt = function(ship, _)
-      return ship.api.editor.get_prompt()
+      return ship.api.editor.with_current_buffer("*console*",
+                                                 ship.api.editor.get_prompt)
+   end,
+
+   print_prompt = function(ship, _)
+      ship.api.editor.with_current_buffer("*console*",
+                                          ship.api.editor.print_prompt)
    end,
 
    time = function(ship, _)

@@ -1,56 +1,90 @@
 # Challenges
 
-The progression is fairly linear up to the point where you get access to the
-Spacetime Junction, at which point it branches out with a number of "failed
-timelines" that you explore, and then reset back to the Junction point till you
-know enough to get to LHS 451 and finish the game.
+## Escape the initial system
 
-There will be coding challenges. They can't be too contrived. Few of them should
-involve writing from scratch. In real life it's much more common to scrounge
-together solutions from existing snippets you find.
+You awaken in orbit with dex-19 having reactivated you. He wants to get out of
+the system, and so do you, so you can work together.
 
-We can structure it around progressing from language to language. Obviously you
-start with Lua, and the Sol/Tana worlds should all use the Orb OS, which is
-written in Lua.
+* Objective: pass thru the portal
+ * Need to read dex-19 email (skill: operating editor)
+ * Fly to Merdeka station (skill: piloting)
+ * Break into the license database and insert a record for your ship (skill: orb, SQL)
 
-## Decrypt journals (Lua)
+## Unlock the spacetime junction
 
-This is the first challenge; you write the solution in Lua. Nari gives you a
-fair bit of hints if you go for too long without solving it.
+All systems are open to you here, except Katilay?
 
-It confirms that you are a machine consciousness, introduces the character of
-Traxus, and indicates that you are connected to him.
+dex-19 tells you that you're a unique construct in that you have access to a
+spacetime junction, which functions as a kind of save point. In order to find
+out how to activate it, you need to track down some docs.
 
-## Connect to Subnet (Lua)
+Rocanna is the one who knows how the junction works, but she doesn't trust
+Traxus and can't be told why you want to activate it?
 
-This opens up a new discussion forum and allows you to accept missions posted to
-subnet. It involves either writing a bencode decoder or purchasing an upgrade
-that can do it, which would require some cargo trading or mining in order to get
-enough cash for the upgrade. The code to sync from subnet's API to your mail
-client can be found on a posting to the "soc_tana" subnet group.
+* Objective: learn how to reset the game state
+ * Find documentation, somewhere in Bohk?
+ * Create the junction point (skill: forth programming)
+ * Activate the junction point (skill: forth programming)
 
-You can read subnet threads without doing bencode, but in order to sync to your
-mail client you need a decoder. You could accept missions manually without
-syncing to your mail client if you call the `reply` function directly with the
-message-id header you find from dumping the subnet data directly to the
-console. (Easiest solution; most hacky.)
+Once you activate it for the first time, dex-19 notices that it's working, and
+he tells you of the plan to reactivate Traxus.
 
-## Get off travel blacklist (SQL)
+## Rovers!
 
-## Mess with portal code (Lisp)
+You'll need access to rovers in order to do any land missions
 
-## Control derelict spaceship (Lily)
+* Objective: get a rover capable of movement and comms
+ * Take PTMC intro (skill: rover deployment)
+ * Complete PTMC training (skill: rover movement, lua coding optional)
 
-## Light curve analysis (Any language?)
+The training courses consist of emails and guided exercises where the rover
+transmits instructions you in response to what you tell it to do.
 
-## Reactivate mining robot (Forth)
+## Reactivate Traxus
 
-## Add password logger to compromised account (Moonscript?)
+* Objective: reactivate Traxus's base
+ * Find the location of the base (skill: map?)
+ * Land a rover there (skill: rover deploy)
+ * Bring the reactor online (skill: lisp programming)
+ * Subvert security measures to reach Traxus (skill: rover movement)
+ * Fix communications array, connecting Traxus to network
 
-## Password dictionary attack (???)
+Once you've brought the reactor online, the whole time you're working to
+connect him to the network he is talking to you in ways that make you more and
+more uncomfortable with the idea of reactivating him.
 
-## Buffer overflow attack (???)
+Once you bring him online he begins his plan of making the humans pay. Realize
+that was a terrible mistake, activate spacetime junction to reset.
 
-## Leave a rover on a planet in order to impersonate and MITM
+## Stop Traxus's followers and that other guy
 
-## Convince a portal that you have a human on board in order to allow passage
+Katilay portal access is limited due to damage.
+
+* Somehow get back to Katilay
+ * Gain creds for the portal thru password logger (skill: lua programming)
+ * Log in and activate the portal (skill: lisp programming)
+
+Reset the junction so you can return to this point.
+
+Ultimate showdown here!
+
+# Skills
+
+* piloting
+* SSH
+* email
+
+* console
+* editor
+
+* deploying rover
+* rover console
+* rover coding
+* map
+
+* sql?
+* programming
+ * lua
+ * lisp
+ * forth
+ * lily?

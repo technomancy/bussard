@@ -15,6 +15,7 @@ local new_session = function(username, password)
    end
    local session_id = string.format("%x", love.math.random(42949672))
    local stdin = love.thread.newChannel()
+   -- TODO: all sessions share the same output channel currently
    sessions[session_id] = os.new_session(stdin, output, username, hostname)
    sessions[session_id].stdin = stdin
    output:push({op="status", ok=true, ["new-session"] = session_id})

@@ -169,15 +169,15 @@ local ship = {
    events={}, -- map of event names -> timestamps
    humans={}, -- array of human names
    humans_left_at={}, -- map of human name -> world name
-   rovers={}, -- map of type -> number
+   rovers={basic=1}, -- map of type -> number
    rover_clearance={}, -- map of world names -> true
    loan=0,
    fine=0,
 
    cpuinfo = {processors=64, arch="arm128-ng", mhz=2800},
-   configure = function(ship, systems, ui)
+   configure = function(ship, sys, ui)
       ship.api.ui = ui
-      ship.systems = systems
+      ship.systems = sys
 
       ship.sandbox = sandbox(ship)
       ship.sandbox["_G"] = ship.sandbox

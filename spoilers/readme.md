@@ -13,18 +13,10 @@ See the [backstory timeline](history.md) and
 ## Guidelines
 
 * Hard science where possible (see Crimes against Science below, don't add to that list)
-* No "classic" evil villains; antagonists arise from [systemic factors](https://slatestarcodex.com/2014/07/30/meditations-on-moloch/)
- * Everyone thinks they are doing the best they can and should at least be possible to sympathize with
 * Your ship cannot be destroyed; there should be no way to permanently fail
-* Subnet messages use at least from, to, subject, content-type, message-id headers, page-break-separated
 * Use metric time for most relative amounts, years for absolute events
-* Don't make newsgroup postings unrealistically knowledgeable
-* Or unrealistically polite
 * If referencing current events, be sure there's a record of it here for consistency
 * Questions that don't get answered are fine
-* It's fine for newsgroup posters to be mistaken about small things, but the correction should usually be present in the thread
- * It's OK if it's not obvious which of two opposing views presented are correct
-* Widespread mistaken views about big things should usually be part of major plot points
 
 ## Crimes against Science
 

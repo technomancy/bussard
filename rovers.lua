@@ -1,21 +1,21 @@
 local utils = require("utils")
 local lume = require("lume")
-local os = require("os.rover")
+local body = require("body")
 
 local make = function(_ship, target, rover_type, n)
    local is_saved_field = function(x)
-      return type(x) ~= "function" and x ~= os
+      return type(x) ~= "function" and type(x) ~= "userdata"
    end
 
    return {
-      x = target.x, y = target.y, dx = 0, dy = 0, mass = 0,
-      name = n and "Rover " .. n,
+      x = target.x, y = target.y, dx = 0, dy = 0, mass = 1,
+      name = string.format("Rover %s-%s", rover_type, n),
       update = function(r) utils.copy_keys(r, target, "x", "y", "dx", "dy") end,
       draw = function() end,
       rover_type = rover_type,
       landed_on = target.name,
       rover = true,
-      os = os,
+      os = "rover",
       to_save = function(r) return lume.filter(r, is_saved_field, true) end,
    }
 end
@@ -28,8 +28,8 @@ local rovers = {
          return ship.api.print("Usage: deploy(rover_type)")
       elseif(utils.distance(ship, ship.target) > ship.comm_range) then
          return ship.api.print("Out of range")
-      elseif(not ship.rover_clearance[ship.target.name]) then
-         return ship.api.print("Not cleared to land on", ship.target.name)
+      -- elseif(not ship.rover_clearance[ship.target.name]) then
+      --    return ship.api.print("Not cleared to land on", ship.target.name)
       elseif((ship.rovers[rover_type] or 0) < 1) then
          return ship.api.print("Out of stock of", rover_type)
       end
@@ -37,6 +37,7 @@ local rovers = {
                                    rover_type, ship.target.name))
       local r = make(ship, ship.target, rover_type, ship.rovers[rover_type])
       table.insert(ship.bodies, r)
+      body.start(r)
       ship.rovers[rover_type] = ship.rovers[rover_type] - 1
       ship.target, ship.target_number = r, lume.find(ship.bodies, r)
       return ship.api.editor.invisible
@@ -63,6 +64,7 @@ local rovers = {
       for rover_type, count in pairs(ship.rovers) do
          ship.api.print(rover_type, ":", count)
       end
+      return ship.api.editor.invisible
    end,
 
    make = make,

@@ -1,7 +1,7 @@
 -- -*- lua -*-
 
 local original_prompt = get_prompt()
-set_prompt("] ")
+set_prompt("=] ")
 
 local clone = function(x)
    return lume.deserialize(lume.serialize(x))
