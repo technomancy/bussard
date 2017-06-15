@@ -118,4 +118,10 @@ return {
          end
       end
    end,
+
+   is_connected = function(ship, target)
+      for _,s in pairs(sessions) do
+         if(target == s.port.name) then return true end
+      end
+   end,
 }

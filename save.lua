@@ -79,7 +79,6 @@ return {
          local system_data = lume.deserialize(system_data_string)
          for i,data in ipairs(system_data) do
             local existing = utils.find_by(ship.bodies, "name", data.name)
-            print("restoring body", i, data.name)
             if(existing) then
                lume.extend(existing, data)
             elseif(data.ship) then
@@ -96,6 +95,8 @@ return {
                local rover = rovers.make(ship, target)
                lume.extend(rover, data)
                table.insert(ship.bodies, rover)
+            elseif(data.asteroid) then
+               table.insert(ship.bodies, data)
             else -- if(data.world) then
                print("Discarding unknown system body", data.name)
             end
@@ -108,9 +109,9 @@ return {
          local dumped = love.filesystem.read("buffers/" .. b)
          ship.api.editor.load_buffer(ship.api, dumped)
       end
-      ship.api.editor.open(ship.api, "*console*")
       ship:dofile("src.config")
       ship.api.editor.open(ship.api, "*flight*", "flight")
+      ship.api.editor.open(ship.api, "*console*")
       ship.api.editor.print_prompt()
       for system_name,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do

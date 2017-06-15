@@ -7,6 +7,7 @@ return {
    account = 256,
    upgrades = {
       engine = 1024,
+      battery = 512,
       cargo_bay = 768,
       fuel_tank = 1024,
       fuel_charger = 768,

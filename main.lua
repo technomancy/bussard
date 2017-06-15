@@ -185,12 +185,12 @@ love.load = function()
       ship.api.cheat = nil
    end
 
-   resize()
-   ui.set_font(16)
-
-   if(love.graphics) then love.graphics.half_hyperbola = require("conics") end
-
-   ui.play()
+   if(love.graphics) then
+      resize()
+      ui.set_font(16)
+      love.graphics.half_hyperbola = require("conics")
+      ui.play()
+   end
 end
 
 love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end

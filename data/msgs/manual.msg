@@ -21,7 +21,7 @@ running this in your console:
     man("manual")
 
 Please enjoy your new spacecraft; with care and proper adherence to safety and
-maintenance features it will serve you reliably. Note that to be eligible for
+maintenance schedules it will serve you reliably. Note that to be eligible for
 warranty coverage, your craft must be registered within 2 megaseconds of
 purchase.
 

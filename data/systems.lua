@@ -151,7 +151,7 @@ local sys = {
            industry=4,tech=3,
            remote=7, pop=2,
            agri=0, mineral=6,
-           upgrades={},
+           upgrades={"battery"},
           },
           {name = "Portal: Tana",
            image_name="portal-1",

@@ -124,6 +124,7 @@ return {
    cargo_bay = { stats = { cargo_capacity = 64, mass = 12, } },
    fuel_tank = { stats = { fuel_capacity = 128, mass = 32, } },
    solar_panel = { stats = { solar = 30, mass = 32 }},
+   battery = { stats = { battery_capacity = 64, mass = 48 }},
    life_support = { stats = { mass = 8 },
                     action = function(_, temp, humidity)
                        if(temp == nil and humidity == nil) then

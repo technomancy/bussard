@@ -241,14 +241,21 @@ end
 
 local with_traceback = function(print2, f, ...)
    local args = {...}
+   local wrapped = function()
+      if(type(f) == "function") then
+         return f(unpack(args))
+      else
+         return coroutine.yield(f, unpack(args))
+      end
+   end
    -- TODO: sandboxed traceback which trims out irrelevant layers
-   return xpcall(function() return f(unpack(args)) end, function(e)
-         print(debug.traceback())
-         print(e)
-         if(print2) then
-            print2(debug.traceback())
-            print2(e)
-         end
+   return xpcall(wrapped, function(e)
+                    print(debug.traceback())
+                    print(e)
+                    if(print2) then
+                       print2(debug.traceback())
+                       print2(e)
+                    end
    end)
 end
 

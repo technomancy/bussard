@@ -13,5 +13,7 @@ love.conf = function(t)
    if(lume.find(arg, "--test") or lume.find(arg, "--fuzz")) then
       t.window, t.modules.window, t.modules.graphics = false, false, false
       t.identity = "bussard-test"
+   elseif(lume.find(arg, "--wipe")) then
+      t.window, t.modules.window, t.modules.graphics = false, false, false
    end
 end

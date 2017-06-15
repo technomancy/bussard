@@ -42,7 +42,7 @@ local base_stats = {
    burn_rate = 1,
    engine_strength = 512,
    turning_speed = 1/2,
-   battery_capacity = 128,
+   battery_capacity = 64,
    solar = 30,
 
    portal_range = 1024,
@@ -153,7 +153,7 @@ local ship = {
    target_number = 0,
    target = nil,
    mass = 128,
-   battery = 128,
+   battery = 64,
    upgrades = {}, -- map of upgrade name -> upgrade map
    time_factor = 10,
    base_time_factor = 10,
@@ -171,6 +171,7 @@ local ship = {
    humans_left_at={}, -- map of human name -> world name
    rovers={basic=1}, -- map of type -> number
    rover_clearance={}, -- map of world names -> true
+   updaters={}, -- system-level coros
    loan=0,
    fine=0,
 
@@ -247,6 +248,9 @@ local ship = {
             with_traceback(f, love.keyboard.isDown(k), dt)
          end
       end
+
+      -- out of sandbox
+      utils.run_handlers(ship, "updaters", "broken_updaters", {}, print)
 
       -- this seems overcomplicated at first glance--why are we
       -- setting an engine_on bit in the ship.controls handler and
@@ -418,6 +422,9 @@ ship.api = {
          end
          ship.api.closest_cycle = ship.api.closest_cycle + 1
       end,
+      select_target = function(i)
+         ship.target, ship.target_number = ship.bodies[i], i
+      end,
    },
 
    find = function(s, path, use_rawget)
@@ -510,6 +517,12 @@ ship.api = {
       deploy = lume.fn(rovers.deploy, ship),
       recover = lume.fn(rovers.recover, ship),
       list = lume.fn(rovers.list, ship),
+   },
+
+   engine = {
+      restart = function()
+         mission.record_event(ship, "reactor_restart")
+      end,
    },
 
    -- deprecated:

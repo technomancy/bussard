@@ -47,6 +47,11 @@ bind("flight", "tab", ship.actions.next_target)
 -- ctrl-tab selects next closest target in order of distance from your ship.
 bind("flight", "ctrl-tab", ship.actions.closest_target)
 
+-- numbers select ordered by distance from star
+for i=0,9 do
+   bind("flight", tostring(i), function() ship.actions.select_target(i) end)
+end
+
 -- quit auto-saves; don't worry.
 bind("flight", "ctrl-q", ship.ui.quit)
 
