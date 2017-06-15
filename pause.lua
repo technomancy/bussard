@@ -100,9 +100,11 @@ local draw = function()
       if(text[line+i-1]) then
          if((love._version_major > 0 or love._version_minor < 10) or
             colored_text[line+i-1] == nil) then
-            love.graphics.print(text[line+i-1], 300, 100+i*font_height)
+            love.graphics.print(text[line+i-1], 300,
+                                100+(i-scroll)*font_height)
          else
-            love.graphics.print(colored_text[line+i-1], 300, 100+i*font_height)
+            love.graphics.print(colored_text[line+i-1], 300,
+                                100+(i-scroll)*font_height)
          end
       end
    end
