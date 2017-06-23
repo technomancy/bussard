@@ -1,4 +1,4 @@
-run: ; love .
+run: ; love . --cheat
 
 VERSION=beta-3-pre
 

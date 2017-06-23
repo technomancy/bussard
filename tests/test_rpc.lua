@@ -55,7 +55,7 @@ local test_completion = function()
    ship.x, ship.y, ship.target = solotogo.x, solotogo.y, solotogo
    ship.target_number, ship.target = 2, solotogo
 
-   eval("ssh()")
+   eval("ssh_activate('guest', '')")
    ship.api.editor.textinput("/bin/up", true)
    ship.api.editor.end_of_buffer()
    pass()

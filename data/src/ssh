@@ -1,16 +1,32 @@
 -- This -*- lua -*- defines a mode based on console mode, but for communicating
 -- with another OS over an SSH connection.
 
--- initiate the connection. command may be nil.
-ssh = function(username, password)
+ssh_activate = function(username, password)
    editor.change_buffer("*console*")
-   local send = ssh_connect(username or "guest", password or "")
+   local send = ssh_connect(username, password)
    if(send) then
       editor.activate_mode("ssh")
       editor.end_of_buffer()
       editor.no_mark()
       editor.set_prop("ssh_send", send)
    end
+end
+
+ssh = function()
+   if(not ship.status.target or not ship.status.target.os) then
+      print("No target host; cannot log in.")
+      return
+   end
+   local callback = function(username, cancel)
+      if(cancel) then return end
+      if(username == "") then username = "guest" end
+      local callback2 = function(password, cancel2)
+         if(cancel2) then return end
+         ssh_activate(username, password)
+      end
+      editor.read_line("Password: ", callback2)
+   end
+   editor.read_line("SSH username (defaults to guest): ", callback)
    return editor.invisible
 end
 
