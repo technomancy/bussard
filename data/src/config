@@ -67,6 +67,15 @@ dofile("src.console") -- console for interacting with ship's computer
 dofile("src.ssh") -- ssh mode for interacting with station/planet computers
 
 -- bindings can affect more than one mode at a time:
+bind({"edit", "flight"}, "f1",
+   function() editor.change_buffer("*flight*") end)
+
+bind({"edit", "flight"}, "f2",
+   function() editor.change_buffer("*console*") end)
+
+bind({"edit", "flight"}, "f3", mail)
+
+-- mail client
 bind({"flight", "edit"}, "ctrl-m", mail)
 
 -- to open a file.

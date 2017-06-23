@@ -5,9 +5,9 @@ local utils = require("utils")
 local lume = require("lume")
 
 -- # Mission structure
--- required fields: name, description, id
 
--- optional callbacks:
+-- callbacks:
+-- * init(ship): runs when accepted and when loading saved games
 -- * on_accept(ship)
 -- * check_prereq(ship) -> boolean
 -- * update(ship, dt)
@@ -17,6 +17,8 @@ local lume = require("lume")
 -- * on_fail(ship)
 
 -- other optional fields:
+-- * description: required for non-invisible
+-- * name: required for non-invisible
 -- * time_limit: number of in-game seconds allowed to finish
 -- * credits: to gain upon success
 -- * destinations: a table of body names you must visit, in order
@@ -32,7 +34,7 @@ local fail = function(ship, mission, aborted)
    if(mission.on_fail) then
       mission.on_fail(ship, aborted)
    end
-   if(not aborted) then
+   if(not aborted and not mission.invisible) then
       ship.api.print("Mission failed: " .. mission.fail_message or mission.name)
    end
    for good, amt in pairs(mission.cargo or {}) do
@@ -80,8 +82,11 @@ local find = function(ship, id)
    -- generated to remind you that you need to come back to that planet and pick
    -- them back up once you purchase life support again.
    if(id and id:match("^recover")) then return recover(ship, id) end
-   return id and love.filesystem.isFile("data/missions/" .. id .. ".lua") and
-      require("data.missions." .. id)
+   if(id and love.filesystem.isFile("data/missions/" .. id .. ".lua")) then
+      local m = require("data.missions." .. id)
+      m.id = id
+      return m
+   end
 end
 
 local check_success = function(ship, mission)
@@ -100,7 +105,7 @@ end
 
 local succeed = function(ship, mission)
    if(mission.on_success) then mission.on_success(ship) end
-   lume.map(mission.success_events, lume.fn(record_event, ship))
+   lume.map(mission.success_events or {}, lume.fn(record_event, ship))
    for good, amt in pairs(mission.cargo or {}) do
       ship.cargo[good] = ship.cargo[good] - amt
       assert(ship.cargo[good] >= 0, "Negative cargo amount.")
@@ -150,18 +155,20 @@ local accept = function(ship, message_id)
       end
    end
 
-   -- TODO: do missions really need name and id? name must be unique already
-   ship.active_missions[mission.id] = { start = utils.time(ship),
-                                        destinations =
-                                           lume.clone(mission.destinations or {}),
-                                        msgs = mission.destination_msgs or {},
-                                      }
+   -- mission record
+   local record = { start = utils.time(ship),
+                    destinations =
+                       lume.clone(mission.destinations or {}),
+                    msgs = mission.destination_msgs or {},
+                  }
+   ship.active_missions[mission.id] = record
 
    for good, amt in pairs(mission.cargo or {}) do
       ship:move_cargo(good, amt)
    end
 
    if(mission.on_accept) then mission.on_accept(ship) end
+   if(mission.init) then mission.init(ship, record) end
    return true, "Mission accepted."
 end
 
@@ -223,6 +230,15 @@ local readout = function(ship)
    return s
 end
 
+local init_active = function(ship)
+   for mission_id,record in pairs(ship.active_missions) do
+      local this_mission = find(ship, mission_id)
+      if(this_mission.init) then
+         this_mission.init(ship, record)
+      end
+   end
+end
+
 return {
    accept = accept,
    on_login = on_login,
@@ -232,4 +248,5 @@ return {
    readout = readout,
    find = find,
    record_event = record_event,
+   init_active = init_active,
 }

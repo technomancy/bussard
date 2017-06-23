@@ -81,10 +81,6 @@ bind("edit", "alt-g", function()
                                editor.go_to(tonumber(l)) end end)
 end)
 
--- bind f2 in two both modes
-bind({"edit", "flight"}, "f2",
-   function() editor.change_buffer("*console*") end)
-
 -- uncomment this out to enable Emacs key bindings, which conflict with
 -- some of the more conventional bindings.
 -- dofile("src.emacs")

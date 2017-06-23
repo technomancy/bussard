@@ -1,6 +1,6 @@
 run: ; love .
 
-VERSION=beta-2
+VERSION=beta-3-pre
 
 SHIP_LUA=ship/*.lua doc/init.lua os/client.lua
 ENGINE_LUA=*.lua
@@ -18,7 +18,7 @@ ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
 
 PROSE=manual.md doc/*.md data/msgs/* data/motd/* data/subnet/* data/ships.txt data/docs/*
 MEDIA=assets/* assets/fonts/*
-META=readme.md LICENSE credits.md Changelog.md bussard.el
+META=readme.md LICENSE credits.md Changelog.md
 
 todo: ; grep -nH -e TODO $(GAME_LUA)
 blockers: ; grep TODO/blocker $(GAME_LUA)

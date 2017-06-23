@@ -250,7 +250,7 @@ local ship = {
       end
 
       -- out of sandbox
-      utils.run_handlers(ship, "updaters", "broken_updaters", {}, print)
+      utils.run_handlers(ship, "updaters", "broken_updaters", {ship, dt}, print)
 
       -- this seems overcomplicated at first glance--why are we
       -- setting an engine_on bit in the ship.controls handler and
@@ -280,7 +280,8 @@ local ship = {
          ship.battery = ship.battery + (dt / math.log(dist*2)) * ship.solar
       end
 
-      utils.run_handlers(ship.api, "updaters", "broken_updaters", {ship.api, dt}, editor.print)
+      utils.run_handlers(ship.api, "updaters", "broken_updaters",
+                         {ship.api, dt}, editor.print)
 
       for _,u in pairs(ship.upgrades) do
          if(u.update) then u.update(ship, dt) end
@@ -521,7 +522,8 @@ ship.api = {
 
    engine = {
       restart = function()
-         mission.record_event(ship, "reactor_restart")
+         mission.record_event(ship, "engine_restart")
+         return "ok"
       end,
    },
 

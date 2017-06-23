@@ -1,7 +1,6 @@
 -- for a new game
-local lume = require("lume")
+local mission = require("mission")
 local mail = require("mail")
-local client = require("os.client")
 
 local statuses = {
    " Press ctrl-enter to toggle flight mode\n\n" ..
@@ -27,7 +26,7 @@ local statuses = {
    "Main battery...            ", "[ FAIL ]\n",
    "Auxiliary battery...       ", "[ WARN ]\n",
    "\nRepair systems offline; engaging emergency maintenance protocols.\n",
-   "Received mail; press ctrl-m to view.\n"
+   "Received mail; press f3 to view.\n"
 }
 
 return function(ship)
@@ -45,22 +44,6 @@ return function(ship)
       ship.api.src[v] = ship.api.src[v] or love.filesystem.read("data/src/"..v)
    end
 
-   local function deliver_on_login()
-      if(client.is_connected(ship, "Merdeka Station")) then
-         mail.deliver_msg(ship, "dex19-3.msg")
-         lume.remove(ship.api.updaters, deliver_on_login)
-      end
-   end
-
-   local function engine_disabled()
-      ship.engine_on = false
-      if(ship.events.engine_restart) then
-         mail.deliver_msg(ship, "dex19-2.msg")
-         lume.remove(ship.api.updaters, engine_disabled)
-         table.insert(ship.api.updaters, deliver_on_login)
-      end
-   end
-
    local t = -1
    local function print_statuses(_, dt)
       t = t + dt
@@ -70,11 +53,11 @@ return function(ship)
                                              table.remove(statuses, 1))
          if(#statuses == 0) then
             mail.deliver_msg(ship, "dex19-1.msg")
-            lume.remove(ship.api.updaters, print_statuses)
-            table.insert(ship.api.updaters, engine_disabled)
+            lume.remove(ship.updaters, print_statuses)
          end
          t = 0
       end
    end
-   table.insert(ship.api.updaters, print_statuses)
+   mission.accept(ship, "init")
+   table.insert(ship.updaters, print_statuses)
 end

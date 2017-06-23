@@ -77,7 +77,7 @@ return {
       if(love.filesystem.isFile(system_filename)) then
          local system_data_string = love.filesystem.read(system_filename)
          local system_data = lume.deserialize(system_data_string)
-         for i,data in ipairs(system_data) do
+         for _,data in ipairs(system_data) do
             local existing = utils.find_by(ship.bodies, "name", data.name)
             if(existing) then
                lume.extend(existing, data)
