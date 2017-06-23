@@ -523,7 +523,7 @@ ship.api = {
    engine = {
       restart = function()
          mission.record_event(ship, "engine_restart")
-         return "ok"
+         return editor.invisible
       end,
    },
 

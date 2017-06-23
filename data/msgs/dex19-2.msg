@@ -11,16 +11,16 @@ running.
 
 Of course, you would expect that taking a spontaneous interstellar flight
 would result in damage just from interstellar debris and years spent in the
-cold void, but not all these failures can be explained that way. The storage
+cold void. But not all these failures can be explained that way. The storage
 array was flooded with coolant which froze and destroyed most of it, and the
 hatch to the onboard repair drone bay was wedged deliberately from outside.
 Any logs that could have shed some light on what happened would have been kept
 on the storage array, so I don't know if there's much more we can learn from
 examining what we have on hand.
 
-Unfortunately the temperature has rendered your backup battery's capacity
+On top of that, the temperature has rendered your backup battery's capacity
 severely reduced. It's enough to power onboard systems but it's never going
-to be able to power a portal. They sell batteries on Merdeka Station that
+to be able to activate a portal. They sell batteries on Merdeka Station that
 should be compatible with your ship, but we'll have to come up with a way to
 pay for it, and that could get interesting.
 

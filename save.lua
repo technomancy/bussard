@@ -4,6 +4,7 @@ local ai = require("ship.ai")
 local utils = require("utils")
 local rovers = require("rovers")
 local ship_init = require("data.ship_init")
+local mission = require("mission")
 
 local ship_fields = {
    "x", "y", "dx", "dy", "heading", "mail_delivered",
@@ -113,6 +114,7 @@ return {
       ship.api.editor.open(ship.api, "*flight*", "flight")
       ship.api.editor.open(ship.api, "*console*")
       ship.api.editor.print_prompt()
+      mission.init_active(ship)
       for system_name,s in pairs(ship.systems) do
          for _,b in pairs(s.bodies) do
             b.system, b.gov = system_name, s.gov

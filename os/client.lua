@@ -119,7 +119,7 @@ return {
       end
    end,
 
-   is_connected = function(ship, target)
+   is_connected = function(_, target)
       for _,s in pairs(sessions) do
          if(target == s.port.name) then return true end
       end
