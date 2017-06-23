@@ -546,6 +546,7 @@ setmetatable(ship.api, {
                 __index = function(_, path) return ship.api:find(path, true) end,
                 __newindex = function(_, path, contents)
                    ship.api:set(path, contents) end,
+                __separator = ".",
 })
 
 return ship

@@ -604,8 +604,8 @@ local exit_minibuffer = function(cancel)
    end
    if(completer and not cancel) then
       local completion = completer(input)[1]
-      if(completion and
-         completion:find(get_separator(behind_minibuffer.fs) .. "$")) then
+      if((utf8.sub((completion or ""), -1, -1) ==
+          get_separator(behind_minibuffer.fs))) then
          b.lines[#b.lines] = b.prompt .. completion
          b.point = #b.lines[#b.lines]
       else

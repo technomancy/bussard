@@ -221,6 +221,8 @@ local keypressed = safely(function(key)
       end
 end)
 
+local keyreleased = safely(ship.api.editor.keyreleased)
+
 local wheelmoved = safely(ship.api.editor.wheelmoved)
 
 local textinput = safely(ship.api.editor.textinput)
@@ -237,6 +239,7 @@ end
 
 ui.play = function()
    ui.set_font(16)
-   love.update,love.keypressed,love.wheelmoved,love.textinput,love.draw =
-      update, keypressed, wheelmoved, textinput, safely(draw)
+   love.update, love.keypressed, love.keyreleased, love.wheelmoved,
+   love.textinput,love.draw =
+      update, keypressed, keyreleased, wheelmoved, textinput, safely(draw)
 end
