@@ -16,6 +16,10 @@ ssh = function()
    if(not ship.status.target or not ship.status.target.os) then
       print("No target host; cannot log in.")
       return
+   elseif(utils.distance(ship.status, ship.status.target) >
+          ship.status.comm_range) then
+      print("Target out of range.")
+      return
    end
    local callback = function(username, cancel)
       if(cancel) then return end
