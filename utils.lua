@@ -385,6 +385,13 @@ return {
       end
    end,
 
+   get_in = function(t, ...)
+      for _,k in ipairs({...}) do
+         t = type(t) == "table" and t[k]
+      end
+      return t
+   end,
+
    pad_to = pad_to,
    buffer = buffer,
 

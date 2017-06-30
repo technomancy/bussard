@@ -12,7 +12,8 @@ ssh_activate = function(username, password)
    end
 end
 
-ssh = function()
+ssh = function(username, password)
+   if(username) then return ssh_activate(username, password or "") end
    if(not ship.status.target or not ship.status.target.os) then
       print("No target host; cannot log in.")
       return

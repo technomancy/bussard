@@ -1,7 +1,7 @@
 return {
    new_session = function(stdin, output, _username, hostname)
       local thread = love.thread.newThread("os/rover/session.lua")
-      thread:start(stdin, output, hostname)
+      thread:start(nil, nil, stdin, output, hostname)
       return {}
    end,
 

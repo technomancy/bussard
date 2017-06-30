@@ -3,15 +3,30 @@ local utils = require("utils")
 local serpent = require("serpent")
 local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
 local rpcs = require("os.rover.rpcs")
+local map = require("os.rover.map")
 local motd = love.filesystem.read("os/rover/motd")
 
-local stdin, output, hostname = ...
+local _, _, stdin, output, hostname = ...
 
-print("session", hostname)
+local print_trace = function(e) print(e, debug.traceback()) end
+
+local ok, state = xpcall(map.load, print_trace, hostname)
+
+local pack = function(...) return {...} end
+local pps = function(x) return serpent.block(x, serpent_opts) end
 
 local write = function(...)
    local out = table.concat(lume.map({...}, tostring), " ")
    output:push({ op = "stdout", out = out })
+end
+
+local round = function(x) return math.floor(x+0.5) end
+
+local forward = function(dist)
+   local dist = dist or 1
+   assert(map.move(state, "s",
+                   round(dist*math.sin(state.dir)),
+                   round(dist*-math.cos(state.dir))))
 end
 
 local sandbox = {write = write,
@@ -29,9 +44,14 @@ local sandbox = {write = write,
                        return chunk, err
                     end
                  end,
+                 forward = forward,
+                 left = function() state.dir = state.dir - math.pi/2 end,
+                 right = function() state.dir = state.dir + math.pi/2 end,
 }
 
 function sandbox.read()
+   -- TODO: send status report over output channel
+   write(map.tostring(state).."\n" .. "dir: "..state.dir.."\n")
    local msg = stdin:demand()
    if(msg.op == "stdin") then
       return msg.stdin
@@ -54,9 +74,6 @@ function sandbox.read()
    end
    return sandbox.read()
 end
-
-local pack = function(...) return {...} end
-local pps = function(x) return serpent.block(x, serpent_opts) end
 
 local eval = function(input)
    local chunk, err = sandbox:loadstring("return " .. input, "repl")
@@ -121,5 +138,4 @@ end
 
 output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
 sandbox.print(string.format(motd, hostname))
-xpcall(repl, function(e) print(e, debug.traceback()) end,
-       lume.reduce(rpcs, add_rpc, sandbox))
+xpcall(repl, print_trace, lume.reduce(rpcs, add_rpc, sandbox))
