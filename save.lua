@@ -61,6 +61,13 @@ return {
          lume.extend(ship.api, api_data)
          if(ship.api.cheat) then ship.api.cheat = ship end
 
+         if(ship_data.meta.version ~= ship.api.ui.version) then
+            print("WARNING: you are loading an old save from version " ..
+                     ship_data.meta.version)
+            print("There are likely to be incompatibilities; " ..
+                     "press ctrl-f1 to reset config.")
+         end
+
          ship_data.api, ship_data.meta = nil, nil
          lume.extend(ship, ship_data)
 

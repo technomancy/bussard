@@ -51,7 +51,7 @@ local resize = function()
 end
 
 local ui = {
-   version = "beta-2",
+   version = "beta-3-pre",
 
    quit = quit,
    abort = function(confirm)
@@ -214,7 +214,7 @@ end)
 -- for commands that don't need repeat
 local keypressed = safely(function(key)
       -- need hard-coded reset for recovering from bad config bugs
-      if(key == "f1" and love.keyboard.isDown("lctrl", "rctrl")) then
+      if(key == "f1" and love.keyboard.isDown("lctrl", "rctrl", "capslock")) then
          ship.api.ui.config_reset()
       else
          ship.api.editor.keypressed(key)

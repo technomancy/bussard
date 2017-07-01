@@ -1,5 +1,7 @@
 # Bussard changelog: history of user-visible changes
 
+## beta-3 / ???
+
 ## beta-2 / 2016-08-13
 
 * Added alt-up key binding to go up a folder in mail mode.
