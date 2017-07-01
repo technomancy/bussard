@@ -52,4 +52,6 @@ return {
       state[y][x] = "s"
       return table.concat(lines, "\n")
    end,
+
+   find_pos = find_pos,
 }

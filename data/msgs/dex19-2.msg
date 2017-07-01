@@ -19,10 +19,10 @@ on the storage array, so I don't know if there's much more we can learn from
 examining what we have on hand.
 
 On top of that, the temperature has rendered your backup battery's capacity
-severely reduced. It's enough to power onboard systems but it's never going
-to be able to activate a portal. They sell batteries on Merdeka Station that
-should be compatible with your ship, but we'll have to come up with a way to
-pay for it, and that could get interesting.
+severely reduced. It's enough to power onboard systems but it's never going to
+be able to activate a portal to leave the system. They sell batteries on
+Merdeka Station that should be compatible with your ship, but we'll have to
+come up with a way to pay for it, and that could get interesting.
 
 Fly over to the station and log in. I'll see what I can come up with.
 

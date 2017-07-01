@@ -4,16 +4,16 @@ local serpent = require("serpent")
 local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
 local rpcs = require("os.rover.rpcs")
 local map = require("os.rover.map")
-local motd = love.filesystem.read("os/rover/motd")
 
 local _, _, stdin, output, hostname = ...
 
-local print_trace = function(e) print(e, debug.traceback()) end
-
-local ok, state = xpcall(map.load, print_trace, hostname)
-
+local dbg = os.getenv("DEBUG") and print or function() end
 local pack = function(...) return {...} end
 local pps = function(x) return serpent.block(x, serpent_opts) end
+local print_trace = function(e) print(e, debug.traceback()) end
+
+local map_ok, state = xpcall(map.load, print_trace, hostname)
+if(not map_ok) then print(state) end
 
 local write = function(...)
    local out = table.concat(lume.map({...}, tostring), " ")
@@ -23,10 +23,16 @@ end
 local round = function(x) return math.floor(x+0.5) end
 
 local forward = function(dist)
-   local dist = dist or 1
-   assert(map.move(state, "s",
+   dist = dist or 1
+   assert(map.move(state, "r",
                    round(dist*math.sin(state.dir)),
                    round(dist*-math.cos(state.dir))))
+   local x, y = assert(map.find_pos(state, "r"))
+   if(state.messages and state.messages[x.."x"..y]) then
+      write(state.messages[x.."x"..y] .. "\n")
+      state.messages[x.."x"..y] = nil
+   end
+end
 end
 
 local sandbox = {write = write,
@@ -49,9 +55,11 @@ local sandbox = {write = write,
                  right = function() state.dir = state.dir + math.pi/2 end,
 }
 
+sandbox.f, sandbox.l, sandbox.r = sandbox.forward, sandbox.left, sandbox.right
+
 function sandbox.read()
    -- TODO: send status report over output channel
-   write(map.tostring(state).."\n" .. "dir: "..state.dir.."\n")
+   write("\n"..map.tostring(state).."\n")
    local msg = stdin:demand()
    if(msg.op == "stdin") then
       return msg.stdin
@@ -137,5 +145,5 @@ local add_rpc = function(sb, name)
 end
 
 output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
-sandbox.print(string.format(motd, hostname))
+sandbox.print((state.motd or "") .. "\n")
 xpcall(repl, print_trace, lume.reduce(rpcs, add_rpc, sandbox))

@@ -12,15 +12,18 @@ ssh_activate = function(username, password)
    end
 end
 
-ssh = function(username, password)
-   if(username) then return ssh_activate(username, password or "") end
+ssh = function(username1, password1)
+   if(username1) then
+      ssh_activate(username1, password1 or "")
+      return editor.invisible
+   end
    if(not ship.status.target or not ship.status.target.os) then
       print("No target host; cannot log in.")
-      return
+      return editor.invisible
    elseif(utils.distance(ship.status, ship.status.target) >
           ship.status.comm_range) then
       print("Target out of range.")
-      return
+      return editor.invisible
    end
    local callback = function(username, cancel)
       if(cancel) then return end

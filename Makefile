@@ -10,7 +10,7 @@ IN_SHIP_LUA=data/src/*
 DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua \
 	serpent/*.lua bencode/init.lua jeejah/init.lua
 MISSION_LUA=data/missions/*.lua
-DATA_LUA=data/*.lua data/msgs/*.lua $(MISSION_LUA)
+DATA_LUA=data/*.lua data/msgs/*.lua data/maps/*.lua $(MISSION_LUA)
 POLYWELL=polywell/*.lua polywell/lume/init.lua polywell/utf8/init.lua
 
 GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) $(DATA_LUA) os/lisp/resources/portal.lsp
