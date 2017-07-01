@@ -18,7 +18,7 @@ local new_session = function(username, password)
    -- TODO: all sessions share the same output channel currently
    sessions[session_id] = os.new_session(stdin, output, username, hostname)
    sessions[session_id].stdin = stdin
-   output:push({op="status", ok=true, ["new-session"] = session_id})
+   output:push({op="status", ok=true, session_id = session_id})
    return true
 end
 
@@ -40,11 +40,11 @@ while true do
          output:push({op="status", out="Login error."})
       end
    elseif(msg.op == "stdin" or msg.ssrpc) then -- ssrpc for server-side RPC
-      local session = sessions[msg.session]
+      local session = sessions[msg.session_id]
       if(session) then
          session.stdin:push(msg)
       else
-         print("Warning: no session", msg.session)
+         print("Warning: no session", msg.session_id)
       end
    elseif(msg.op == "debug") then
       pp(sessions)

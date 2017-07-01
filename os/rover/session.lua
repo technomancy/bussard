@@ -1,3 +1,4 @@
+require("love.timer")
 local lume = require("lume")
 local utils = require("utils")
 local serpent = require("serpent")
@@ -33,6 +34,45 @@ local forward = function(dist)
       state.messages[x.."x"..y] = nil
    end
 end
+
+local find_adjacent = function(target)
+   local x, y = assert(map.find_pos(state, "r"))
+   local adjacents = {{-1,0}, {1,0}, {0,-1}, {0, 1}}
+   for _,d in ipairs(adjacents) do
+      if(state[y+d[1]][x+d[2]] == target) then
+         return x+d[2].."x"..y+d[1]
+      end
+   end
+end
+
+local login = function(username, password)
+   username, password = username or "guest", password or ""
+   local terminal_position = find_adjacent("t")
+   local i, o = map.get_channels(terminal_position)
+   if(i and o) then
+      o:push({op="login", username=username, password=password})
+      local response = i:pop()
+      while not response do response = i:pop() love.timer.sleep(0.01) end
+      dbg("<<", pps(response))
+      write((response.out or "") .. "\n")
+      local session_id = response.session_id
+      if(response.ok) then
+         while not response or response.op ~= "disconnect" do
+            love.timer.sleep(0.1)
+            response = i:pop()
+            if(response) then output:push(response) end
+            local from_ship = stdin:pop()
+            if(from_ship) then
+               from_ship.session_id = session_id
+               o:push(from_ship)
+            end
+         end
+      else
+         write("Login problem:" .. pps(response) .. "\n")
+      end
+   else
+      error("No terminal found.")
+   end
 end
 
 local sandbox = {write = write,
@@ -53,6 +93,7 @@ local sandbox = {write = write,
                  forward = forward,
                  left = function() state.dir = state.dir - math.pi/2 end,
                  right = function() state.dir = state.dir + math.pi/2 end,
+                 login = login,
 }
 
 sandbox.f, sandbox.l, sandbox.r = sandbox.forward, sandbox.left, sandbox.right

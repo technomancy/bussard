@@ -12,7 +12,7 @@ return {
    "o   t o",
    "o  oooo",
    "o     o",
-   "o o s o",
+   "o o r o",
    "ooooooo",
 
    motd="Welcome to stage 1 of the PTMC bot operations training course.\n\n"..

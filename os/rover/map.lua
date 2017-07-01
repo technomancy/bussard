@@ -1,5 +1,7 @@
 local lume = require("lume")
 
+local threads = {}
+
 local find_pos = function(state, target)
    for y,line in ipairs(state) do
       for x,tile in ipairs(line) do
@@ -23,11 +25,19 @@ end
 
 return {
    load = function(name)
-      local state = {}
       local chunk = assert(love.filesystem.load("data/maps/" .. name .. ".lua"))
-      for i,line in ipairs(chunk()) do
+      local state = chunk()
+      for i,line in ipairs(state) do
          state[i] = {}
          for j=1,string.len(line) do state[i][j] = line:sub(j,j) end
+      end
+
+      for pos,host in pairs(state.hosts) do
+         local t = {}
+         t.input, t.output = love.thread.newChannel(), love.thread.newChannel()
+         t.thread = love.thread.newThread("os/server.lua")
+         t.thread:start(t.input, t.output, host.os, host.name)
+         threads[pos] = t
       end
 
       state.dir = 0
@@ -46,11 +56,17 @@ return {
    end,
 
    tostring = function(state)
-      local x, y = assert(find_pos(state, "s"))
+      local x, y = assert(find_pos(state, "r"))
       state[y][x] = dir_for(state.dir) or "x"
       local lines = lume.map(state, table.concat)
-      state[y][x] = "s"
+      state[y][x] = "r"
       return table.concat(lines, "\n")
+   end,
+
+   get_channels = function(pos)
+      if(threads[pos]) then
+         return threads[pos].input, threads[pos].output
+      end
    end,
 
    find_pos = find_pos,

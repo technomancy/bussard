@@ -22,9 +22,9 @@ local disconnect = function(ship)
    ship.api.editor.set_prompt("> ")
 end
 
-local function send(channel, session, get_distance, range, data)
+local function send(channel, session_id, get_distance, range, data)
    if(type(data) == "table" and data.op) then
-      data.session = session
+      data.session_id = session_id
       queued[channel] = queued[channel] or {}
       local queue = queued[channel]
       if(transmit_success(get_distance(), range)) then
@@ -35,8 +35,8 @@ local function send(channel, session, get_distance, range, data)
          table.insert(queue, 1, data)
       end
    elseif(type(data) == "string") then
-      send(channel, session, get_distance, range,
-           {op="stdin", stdin=data, session=session})
+      send(channel, session_id, get_distance, range,
+           {op="stdin", stdin=data, session_id=session_id})
    else
       error("Unsupported message type: " .. tostring(data))
    end
@@ -91,9 +91,9 @@ return {
       dbg("<<", require("serpent").block(response))
       ship.api.print(response.out)
       if(response.ok) then
-         sessions[response["new-session"]] = {input=i, output=o,
-                                              port=ship.target}
-         return lume.fn(send, o, response["new-session"] or "session",
+         sessions[response.session_id] = {input=i, output=o,
+                                          port=ship.target}
+         return lume.fn(send, o, response.session_id,
                         lume.fn(utils.distance, ship, ship.target),
                         ship.comm_range), lume.fn(recv, ship, ship.target, i)
       else
