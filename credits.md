@@ -42,6 +42,10 @@ Distributed under the GNU General Public License version 3 or later; see LICENSE
   Released under the SIL Open Font License
   https://www.google.com/fonts/specimen/Inconsolata
 
+* Deja Vu Sans Mono © 2004-2016 DejaVu fonts team
+  Released under Bitstream Vera Fonts Copyright
+  https://dejavu-fonts.github.io/
+
 ## 3rd-party prose
 
 * Lua Programming book copyright © 2013-2016 Mark Otaris and Wikibooks contributors,

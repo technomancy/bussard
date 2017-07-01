@@ -38,7 +38,7 @@ local base_stats = {
    cargo_capacity = 64,
    fuel_capacity = 192,
    comm_range = 2048,
-   recharge_rate = 1/2,
+   recharge_rate = 1/8,
    burn_rate = 1,
    engine_strength = 512,
    turning_speed = 1/2,
@@ -160,7 +160,7 @@ local ship = {
 
    -- keep around
    fuel = 128,
-   credits = 640,
+   credits = 512,
    time_offset = utils.game_start,
    cargo = {}, -- map of cargo name -> tons number
    upgrade_names={}, -- array of upgrade names

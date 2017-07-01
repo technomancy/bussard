@@ -2,6 +2,16 @@
 
 ## beta-3 / ???
 
+* Warn when loading save games from older versions.
+* Tab completion works on remote hosts.
+* Editor uses Polywell: https://gitlab.com/technomancy/polywell
+* Add rovers you can log into.
+* Include in-game tetris.
+* OSes on remote hosts now run in independent threads, can't hang main game.
+* New intro mission.
+* Dramatically improved HUD trajectory.
+* Add underclocker upgrade.
+
 ## beta-2 / 2016-08-13
 
 * Added alt-up key binding to go up a folder in mail mode.

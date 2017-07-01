@@ -225,7 +225,7 @@ return {
    end,
 
    draw_power = function(ship, portal, power)
-      if(ship.battery - power < 0) then return false end
+      if(ship.battery - power < 0 or power <= 0) then return false end
       ship.portal_target = portal
       ship.battery = ship.battery - power
       return true
