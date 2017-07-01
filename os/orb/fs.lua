@@ -212,7 +212,9 @@ fs.init_if_needed = function(hostname)
              "Hostname mismatch! " .. hostname .. " / " .. fs.hostname)
    else
       fs.hostname = hostname
-      fs.seed(hostname)
+      if(not fs.exists("/", "/")) then
+         fs.seed(hostname)
+      end
       fs.add_user("guest", "")
    end
 end
