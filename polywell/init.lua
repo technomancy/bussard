@@ -498,8 +498,8 @@ end
 
 local the_print = function(...)
    local texts, read_only = {...}, inhibit_read_only
-   inhibit_read_only = true
    if(texts[1] == invisible or texts[1] == nil) then return end
+   inhibit_read_only = true
    texts[1] = "\n" .. texts[1]
    io_write(unpack(lume.map(texts, tostring)))
    inhibit_read_only = read_only
