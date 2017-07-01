@@ -190,7 +190,8 @@ end
 
 fs.if_readable = function(user, f, for_dir)
    return function(path, cwd)
-      local dir = for_dir and path or fs.dirname(path)
+      local dir = for_dir and path or fs.dirname(path, cwd)
+      dir = fs.normalize(dir, cwd)
       assert(fs.readable(dir, user), dir .. " is not readable by " .. user)
       return f(path, cwd)
    end
@@ -198,7 +199,8 @@ end
 
 fs.if_writeable = function(user, f, for_dir)
    return function(path, cwd, ...)
-      local dir = for_dir and path or fs.dirname(path)
+      local dir = for_dir and path or fs.dirname(path, cwd)
+      dir = fs.normalize(dir, cwd)
       assert(fs.writeable(dir, user), dir .. " is not writeable by " .. user)
       return f(path, cwd, ...)
    end

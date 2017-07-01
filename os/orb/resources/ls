@@ -7,7 +7,7 @@ local ls = function(dirname)
       print(dirname .. " is not a directory")
    else
       for _,name in ipairs(io.ls(dirname, env.CWD)) do
-         if(io.isdir(dirname .. "/" .. name)) then
+         if(io.isdir(dirname .. "/" .. name, env.CWD)) then
             print(name .. "/")
          else
             print(name)
