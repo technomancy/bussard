@@ -16,7 +16,7 @@ engine back online. I need you to run this function using your console:
 
     ship.engine.restart()
 
-You can get back to the console by pressing F2. Use ctrl-pageup/pagedown to
+You can get back to the console by pressing f2. Use ctrl-pageup/pagedown to
 cycle thru the open buffers. I'll give you further instructions once the engine
 is back online; at that point you can press f3 to go back to the mail
 listing and then to the inbox.

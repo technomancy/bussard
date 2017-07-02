@@ -9,7 +9,10 @@ There's not much work available on this station that would be suitable for
 the likes of you or me, but I did find this posting from a few weeks back.
 
 Probably worth a shot; I don't see any other way of buying the battery
-we need to get out of this system.
+we need to get out of this system. Be sure you log out of your original
+connection before trying to log into the trainee account.
+
+dex19
 
 recruiting@ptmc.tana writes:
 

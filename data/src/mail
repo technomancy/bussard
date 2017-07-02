@@ -37,7 +37,7 @@ local subjects_by_date = function(msgs)
          by_date[key or 0] = name
       end
    end
-   for _, date in ipairs(lume.sort(lume.keys(by_date))) do
+   for _, date in lume.ripairs(lume.sort(lume.keys(by_date))) do
       table.insert(names, by_date[date])
    end
    return names

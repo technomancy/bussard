@@ -25,7 +25,7 @@ local add_header = function(msg, header, value)
    return table.concat(parts, "\n\n")
 end
 
-local deliver_msg = function(ship, msg_name, allow_multiple)
+local deliver_msg = function(ship, msg_name, allow_multiple, skip_notify)
    local msg = read(msg_name)
    msg_name = msg_name:gsub(".msg$", "")
    if(allow_multiple) then msg_name = lume.uuid() end
@@ -36,6 +36,9 @@ local deliver_msg = function(ship, msg_name, allow_multiple)
       ship.api.docs.mail[folder][msg_name] = msg
       ship.api.docs.mail[folder]._unread[msg_name] = true
       ship.mail_delivered[msg_name] = true
+      if(not skip_notify) then
+         ship.api.editor.print("Received mail; press f3 to view.")
+      end
       return true
    else
       return false, "No message."

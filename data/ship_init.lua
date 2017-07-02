@@ -26,7 +26,6 @@ local statuses = {
    "Main battery...            ", "[ FAIL ]\n",
    "Auxiliary battery...       ", "[ WARN ]\n",
    "\nRepair systems offline; engaging emergency maintenance protocols.\n",
-   "Received mail; press f3 to view.\n"
 }
 
 return function(ship)
