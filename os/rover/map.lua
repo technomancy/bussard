@@ -20,7 +20,7 @@ end
 local dirs = {[0]="^", [1]=">", [2]="v", [3]="<"}
 local dir_for = function(dir)
    dir = math.mod(dir+math.pi*2, math.pi*2)
-   return dirs[math.floor(dir/(math.pi/2)+0.5)]
+   return dirs[math.floor(dir/(math.pi/2)+0.5)] or "^"
 end
 
 return {

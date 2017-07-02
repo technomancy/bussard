@@ -123,7 +123,7 @@ code into your ship's computer, and the console prompt will change to
 `$`. Enter `logout` to terminate your session and return to your
 ship's computer.
 
-For non-interactive sessions, you can use `ssh_get_connection`, which
+For non-interactive sessions, you can use `ssh_connect`, which
 takes a username and password and returns a function that takes a
 command to run and returns its output.  This can be useful for writing
 programs to automate common tasks. Call the resulting function with

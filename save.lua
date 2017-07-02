@@ -146,6 +146,7 @@ return {
                love.filesystem.remove(entry)
             elseif(love.filesystem.isDirectory(entry)) then
                rm_rf(entry)
+               love.filesystem.remove(entry)
             end
          end
       end

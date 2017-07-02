@@ -79,3 +79,4 @@ if(not ok) then print("init err:", err) return false end
 
 xpcall(shell.exec, function(e) print(e, debug.traceback()) end,
        env, command, lume.reduce(rpcs, add_rpc, {read = read, write = write}))
+output:push({op="disconnect"})

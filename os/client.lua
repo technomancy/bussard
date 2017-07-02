@@ -20,6 +20,7 @@ local queued = {}
 local disconnect = function(ship)
    ship.api:activate_mode("console")
    ship.api.editor.set_prompt("> ")
+   ship.api.editor.print("Logged out.")
 end
 
 local function send(channel, session_id, get_distance, range, data)

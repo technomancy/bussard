@@ -77,11 +77,8 @@ bind("ssh", "ctrl-d", function()
         local _, line = editor.point()
         if(line == editor.get_max_line() and
            editor.get_input() == "") then
-           ship:activate_mode("console")
-           ship.editor.set_prompt("> ")
            local send = editor.get_prop("ssh_send")
            send("logout")
-           print("Logged out.")
         else
            editor.delete_forwards()
         end

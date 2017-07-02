@@ -45,36 +45,6 @@ local find_adjacent = function(target)
    end
 end
 
-local login = function(username, password)
-   username, password = username or "guest", password or ""
-   local terminal_position = find_adjacent("t")
-   local i, o = map.get_channels(terminal_position)
-   if(i and o) then
-      o:push({op="login", username=username, password=password})
-      local response = i:pop()
-      while not response do response = i:pop() love.timer.sleep(0.01) end
-      dbg("<<", pps(response))
-      write((response.out or "") .. "\n")
-      local session_id = response.session_id
-      if(response.ok) then
-         while not response or response.op ~= "disconnect" do
-            love.timer.sleep(0.1)
-            response = i:pop()
-            if(response) then output:push(response) end
-            local from_ship = stdin:pop()
-            if(from_ship) then
-               from_ship.session_id = session_id
-               o:push(from_ship)
-            end
-         end
-      else
-         write("Login problem:" .. pps(response) .. "\n")
-      end
-   else
-      error("No terminal found.")
-   end
-end
-
 local sandbox = {write = write,
                  print = function(...)
                     write(tostring(...) .. "\n")
@@ -93,10 +63,42 @@ local sandbox = {write = write,
                  forward = forward,
                  left = function() state.dir = state.dir - math.pi/2 end,
                  right = function() state.dir = state.dir + math.pi/2 end,
-                 login = login,
 }
 
 sandbox.f, sandbox.l, sandbox.r = sandbox.forward, sandbox.left, sandbox.right
+
+sandbox.login = function(username, password)
+   username, password = username or "guest", password or ""
+   local terminal_position = find_adjacent("t")
+   local i, o = map.get_channels(terminal_position)
+   if(i and o) then
+      o:push({op="login", username=username, password=password})
+      local response = i:pop()
+      while not response do response = i:pop() love.timer.sleep(0.01) end
+      dbg("<<", pps(response))
+      write((response.out or "") .. "\n")
+      local session_id = response.session_id
+      if(response.ok) then
+         while not response or response.op ~= "disconnect" do
+            love.timer.sleep(0.1)
+            if(response) then
+               output:push(response)
+            end
+            local from_ship = stdin:pop()
+            if(from_ship) then
+               from_ship.session_id = session_id
+               o:push(from_ship)
+            end
+            response = i:pop()
+         end
+         output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
+      else
+         write("Login problem:" .. pps(response) .. "\n")
+      end
+   else
+      error("No terminal found.")
+   end
+end
 
 function sandbox.read()
    -- TODO: send status report over output channel
@@ -163,10 +165,10 @@ local eval = function(input)
 end
 
 local repl = function()
-   while true do
-      local input = sandbox.read()
-      if(input == nil) then return end
+   local input = sandbox.read()
+   while input and input ~= "logout" and input ~= "exit" do
       eval(input)
+      input = sandbox.read()
    end
 end
 
@@ -188,3 +190,4 @@ end
 output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
 sandbox.print((state.motd or "") .. "\n")
 xpcall(repl, print_trace, lume.reduce(rpcs, add_rpc, sandbox))
+output:push({op="disconnect"})
