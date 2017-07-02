@@ -277,6 +277,10 @@ return {
       end
    end,
 
+   record_event = function(ship, event)
+      mission.record_event(ship, event)
+   end,
+
    subnet = {
       request = function(ship, input_string)
          local enc = function(x)

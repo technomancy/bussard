@@ -8,11 +8,19 @@ local help_time = 300
 
 return {
    init = function(ship, _record)
+      local function trainee_check()
+         if(ship.events.trainee01) then
+            mail.deliver_msg(ship, "ptmc-recruit.msg")
+            mission.record_event(ship, "finish_init")
+         end
+      end
+
       local function deliver_on_login()
          if(client.is_connected(ship, "Merdeka Station")) then
             mail.deliver_msg(ship, "dex19-3.msg")
             lume.remove(ship.updaters, deliver_on_login)
             mission.record_event(ship, "init_login")
+            table.insert(ship.updaters, trainee_check)
          elseif((utils.time(ship) - ship.events.engine_restart) > help_time
             and not ship.mail_delivered["dex19-2b"]) then
             mail.deliver_msg(ship, "dex19-2b.msg")
@@ -33,8 +41,12 @@ return {
          table.insert(ship.updaters, engine_disabled)
       elseif(not ship.events.init_login) then
          table.insert(ship.updaters, deliver_on_login)
+      elseif(not ship.events.trainee01) then
+         table.insert(ship.updaters, trainee_check)
       end
    end,
+
+   credits=512,
    invisible=true,
    objectives={"finish_init"},
 }
