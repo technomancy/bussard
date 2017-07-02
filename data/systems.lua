@@ -71,7 +71,7 @@ local sys = {
           },
           {r=33000, mass=100, station=true,
            image_name="station-pointed",
-           name="Kenapa Station", os="orb", world=true, subnet=true,
+           name="Kenapa Station", os="orb", world=true,
 
            industry=8,tech=6,
            remote=2, pop=1,
@@ -118,7 +118,7 @@ local sys = {
            name="Luyten's Star", star=true },
           {r=32000, mass=120,
            image_name="station-pointed", station=true,
-           name="Kembali Station", os="orb", world=true, subnet=true,
+           name="Kembali Station", os="orb", world=true,
 
            industry=6,tech=6,
            remote=5, pop=2,
@@ -145,7 +145,7 @@ local sys = {
            image_name="sun",
            name="L 668-21", star=true },
           {r=20000, mass=700, station=true,
-           image_name="station-pointed", subnet=true,
+           image_name="station-pointed",
            name="Merdeka Station", os="orb", world=true,
 
            industry=4,tech=3,
@@ -339,7 +339,7 @@ local sys = {
                    agri=4, mineral=2,
                    upgrades={"cargo_bay", "solar_panel", "map"},
                   },
-                  {r=20000, mass=100, station=true, subnet=true,
+                  {r=20000, mass=100, station=true,
                    image_name = "station-round",
                    name="Warnabu Station", os="orb", world=true,
 
@@ -431,7 +431,7 @@ local sys = {
                       upgrades={"map"},
                      },
                      {r=12000, mass=100, station=true,
-                      image_name="station-round", subnet=true,
+                      image_name="station-round",
                       name="Tamada Station", os="orb", world=true,
                       industry=3,tech=3,
                       remote=8, pop=3,
@@ -461,7 +461,7 @@ local sys = {
                    upgrades={"fuel_charger", "cargo_bay", "map"},
                   },
                   {r=22000, mass=100, station=true,
-                   image_name="station-green", subnet=true,
+                   image_name="station-green",
                    name="Da Kau Station", os="orb", world=true,
                    industry=6,tech=8,
                    remote=4, pop=1,

@@ -2,6 +2,7 @@
 local globtopattern = require("globtopattern").globtopattern
 local lume = require("lume")
 local lfs = require("love.filesystem")
+local seed_data = require("data.seed")
 
 local fs = {}
 
@@ -147,6 +148,16 @@ fs.seed = function(hostname, users)
    end
    if(lfs.exists("data/motd/" .. hostname)) then
       fs.write("/etc/motd", "/", lfs.read("data/motd/" .. hostname))
+   end
+
+   for user, data in pairs(seed_data[hostname] or {}) do
+      for name,content in pairs(data.files or {}) do
+         if(not fs.exists(fs.dirname(name))) then
+            fs.mkdir(fs.dirname(name), "/")
+            fs.chown(fs.dirname(name), user)
+         end
+         fs.write(name, "/", content)
+      end
    end
 
    load_bin()
