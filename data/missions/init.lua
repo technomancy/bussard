@@ -23,6 +23,7 @@ return {
          ship.engine_on = false
          if(ship.events.engine_restart) then
             mail.deliver_msg(ship, "dex19-2.msg")
+            mission.accept(ship, "buy_battery")
             lume.remove(ship.updaters, engine_disabled)
             table.insert(ship.updaters, deliver_on_login)
          end
