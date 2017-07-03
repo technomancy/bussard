@@ -73,7 +73,9 @@ return {
    end,
 
    refuel = function(ship, port, amount)
-      if(port.fuel_price) then
+      if(amount < 0) then
+         return false, "Nice try."
+      elseif(port.fuel_price) then
          local cost = port.fuel_price * amount
          local open_fuel_capacity = ship.fuel_capacity - ship.fuel
          if(open_fuel_capacity <= 0) then
