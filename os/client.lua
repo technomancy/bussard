@@ -78,13 +78,14 @@ return {
    connect = function(ship, username, password)
       if(not ship.target) then return end
       if(utils.distance(ship, ship.target) > ship.comm_range) then
-         return ship.api.editor.print("Out of range.")
+         ship.api.editor.print("Out of range.")
+         return false
       end
       ship.api.closest_cycle = 1
       local i, o = ship.target.input, ship.target.output
       if(not i and not o) then
          ship.api.print("Connection refused: " .. ship.target.name)
-         return
+         return false
       end
       o:push({op="login", username=username, password=password})
       local response = i:pop()
