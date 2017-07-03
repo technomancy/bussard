@@ -40,23 +40,23 @@ that you will fly harmlessly over it.
 
 ## Computer
 
-The heart of your ship is its onboard computer. The Bussard-class
-spacecraft is equipped with a LuaJIT-based control unit, offering a
-high degree of flexibility and customization without sacrificing
-performance.
+The heart of your ship is its onboard computer. The Bussard-class spacecraft
+is equipped with a LuaJIT-based control unit, offering a high degree of
+flexibility and customization without sacrificing performance.
 
-Pressing ctrl-enter toggles the ship's computer. While it is active, the
+Pressing `ctrl-enter` toggles the ship's computer. While it is active, the
 piloting controls for your ship will be unavailable until you go back to
-flight mode with the esc key. The computer starts off in console mode. While
-in the console, enter Lua code into the console to have it evaluated and
-the result shown. See the API section below to learn how to control your
-ship from code.
+flight mode with the `esc` key. The computer starts off in console mode. While
+in the console, enter Lua code into the console to have it evaluated and the
+result shown. See the API section below to learn how to control your ship from
+code.
 
 The console is just one of the buffers you can open in the ship's
-computer (it is called `*console*` as you can see at the bottom of the
+computer (it is called "*console*" as you can see at the bottom of the
 screen). When you activate the computer it will take you to the last
 active buffer; you may need to use `ctrl-pageup` or `ctrl-pagedown` a
-few times to find the console.
+few times to find the console. Pressing `f2` will take you to the
+console from any other buffer.
 
 Note that some of your ship's functions will also display messages to
 the console. The last line of the console output will be visible at
@@ -71,19 +71,20 @@ modes of interaction.
 ### Editor
 
 You can make changes to your configuration files using the onboard
-editor. Press ctrl-o to open a file; start with "src.config". You can
+editor. Press `ctrl-o` to open a file; start with "src.config". You can
 see where the flight mode is defined and how the flight controls and
 other commands are bound to keystrokes. The bind function can attach
 any function to a keystroke.
 
 Once you're done with your edits, press esc to go back to flight mode
-and load your changes with ctrl-r. You can edit other files anywhere in
+and load your changes with `ctrl-r`. You can edit other files anywhere in
 your ship, but by default only files in the "ship.src" and "ship.docs"
 tables will stay after your ship is restarted. You can configure it to
 save other tables by adding their names to the "ship.persist" table.
 
-You can open as many files in the editor as you need with ctrl-o. Use
-ctrl-pageup and ctrl-pagedown to cycle through them.
+You can open as many files in the editor as you need with `ctrl-o`. Use
+`ctrl-pageup` and `ctrl-pagedown` to cycle through them. Use `ctrl-w` to
+close the current buffer.
 
 ### Communication system
 
@@ -97,20 +98,20 @@ others.
 Your targeting indicator will turn light green when you are within
 range of a station that allows logins.
 
-Sessions are initiated using the ssh() function, which will log you
-into the currently-targeted planet or station with the provided
-username and password if you are within communications range. While
-you are logged in and stay within range, the port can send automated
-loaders to your ship to transfer cargo and passengers.
+Sessions are initiated using `ctrl-s`, which will prompt for a username
+and password and log you into the currently-targeted planet or station
+if you are within communications range. While you are logged in and stay
+within range, the port can send automated loaders to your ship to
+transfer cargo and passengers.
 
 Most stations allow limited access via a "guest" account with an empty
 password, which is the default if no username and password are
-provided. Files on guest accounts are wiped upon logout. Once you are
-logged in as a guest, you may have the option to purchase an account
-on that station or planet's computer system, which will grant you
-access to the rest of the services as well as persistent file
-storage. Please note that attempting to access accounts of others is
-strictly forbidden by interstellar law.
+provided. Files on guest accounts are wiped upon logging out. Once you
+are logged in as a guest, you may have the option to purchase an account
+on that station or planet's computer system, which will grant you access
+to the rest of the services as well as persistent file storage. Please
+note that attempting to access accounts of others is strictly forbidden
+by interstellar law.
 
 Services offered on stations vary by location, but most stations at
 least offer to buy and sell cargo. The cargo program takes list,
@@ -123,8 +124,8 @@ code into your ship's computer, and the console prompt will change to
 `$`. Enter `logout` to terminate your session and return to your
 ship's computer.
 
-For non-interactive sessions, you can use `ssh_connect`, which
-takes a username and password and returns a function that takes a
+For non-interactive sessions, you can use the `ssh_connect` function,
+which takes a username and password and returns a function that takes a
 command to run and returns its output.  This can be useful for writing
 programs to automate common tasks. Call the resulting function with
 "logout" to terminate the connection.
@@ -134,7 +135,7 @@ programs to automate common tasks. Call the resulting function with
 Your ship can travel to other star systems using the portal
 network. If your battery has enough charge, fly within range of a
 portal. You'll know when you are close enough because the targeting
-indicator will turn blue. Press ctrl-p to begin the portal
+indicator will turn blue. Press `ctrl-p` to begin the portal
 activation sequence. You will need to stay within range for a few
 seconds for it to complete.
 
@@ -147,13 +148,16 @@ through them.
 In your onboard computer, `ship` is a table representing the data and
 functionality that can be accessed by code you write.
 
+In the console you can use the tab key to autocomplete fields under your
+`ship` table as well as any global variables.
+
 #### ship.status
 
 These read-only fields primarily convey the status of your ship's components and
 its upgrades as well as its flight through space and the objects nearby.
 
 * `x`, `y`, `dx`, `dy`: position and velocity.
-* `heading`: direction pointing, in radians.
+* `heading`: direction pointing, in radians; zero is down.
 * `target`: table representing the body (planet, star, station, portal, etc.) targeted.
 * `system_name`: the name of the current system.
 * `bodies`: an array of bodies present in the current system.
@@ -169,7 +173,6 @@ its upgrades as well as its flight through space and the objects nearby.
 * `recharge_rate`: how quickly your collector replenishes your fuel.
 * `solar`: how quickly your battery charges (based on distance from star).
 * `comm_range`: the maximum distance at which your comm is effective.
-* `scoop_range`: the maximum distance at which you can collect mined asteroid ore.
 * `in_range`: function (takes ship and body) returning boolean for
   whether the body is in range of the communication system. An optional
   third argument can determine whether it's within an arbitrary range.
@@ -181,10 +184,9 @@ These functions affect changes to the ship's systems.
 * `forward`, `left`, `right`: accepts a boolean indicating whether to
   fire the given engine/thruster.
 * `next_target`: cycle sequentially through all the targets in the system.
-  tab by default, shift-tab to cycle in reverse.
-* `closest_target`: select the closest available target. ctrl-tab by default.
-* `ssh`: accepts optional username/password, attempts to establish an ssh
-  session with the target if possible.
+  `tab` by default, `shift-tab` to cycle in reverse.
+* `closest_target`: select the closest available target. `ctrl-tab` by default.
+* `select_target`: takes a numeric argument of which target to select.
 
 Upgrades often add new functions to this table. Consult the manual for
 any given upgrade for details.
@@ -285,15 +287,14 @@ ship's config code to use; the changes will be described in the manual.
 
 ### Mail
 
-Your ship also comes with a mail client allowing you to read and
-respond to messages you receive. Press ctrl-m from flight mode to
-activate it. You'll be shown a list of folders, each with an
-unread/total message count. Pressing enter on a folder opens it up and
-shows the date, sender, and subject of each message.
+Your ship also comes with a mail client allowing you to read and respond to
+messages you receive. Press `f3` to activate it. You'll be shown a list of
+folders, each with an unread/total message count. Pressing enter on a folder
+opens it up and shows the date, sender, and subject of each message.
 
 If a message offers a mission or makes some request of you, you can
 indicate your acceptance or acknowledgment by pressing
-alt-enter. Pressing alt-a will move the message to the "archive" folder.
+`alt-enter`. Pressing `alt-a` will move the message to the "archive" folder.
 
 ### Missions
 
@@ -335,7 +336,7 @@ It's possible for your changes to the ship's configuration to
 introduce bugs into the editor or console. In some cases, the bugs may
 interfere with your ability to fix those bugs.
 
-If this happens, you can perform a config reset with ctrl-f1. Your
+If this happens, you can perform a config reset with `ctrl-f1`. Your
 own configuration files will be moved to "ship.src.bak.config" etc,
 and "ship.src.config" will be replaced with the working stock code.
 From there you can continue your debugging. Note that this only

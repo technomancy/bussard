@@ -44,9 +44,6 @@ existing saved games will continue on using the same config. You can
 replace your ship's config with the current default config `ctrl-f1`;
 your existing config source will be backed up.
 
-If upgrading from an older version of Bussard, please see the
-[upgrade guide](Upgrading.md).
-
 ## Status
 
 Currently most of the engine features are coded, some more polished than
@@ -73,9 +70,6 @@ progress. Eventually the goal is that you will be able to learn it without any
 
 **Q:** How do you match orbit with a station or planet?  
 **A:** Remember that newtonian motion means your controls affect your velocity rather than directly controlling your motion. Don't accelerate towards the station; instead accelerate so your trajectories cross at the same point.
-
-**Q:** Where are the missions?  
-**A:** There are currently only a few missions. The main chain starts at Tana Prime. Open up the "jobs" folder in your mail client to see available missions.
 
 **Q:** I'm stuck on a mission!  
 **A:** If you've received a message, check the bottom of the screen when it's open to see if it's one that you can reply to by pressing `alt-enter`. This is how you initially accept missions, but some missions will need you to respond to messages you get in order to proceed.
