@@ -6,6 +6,9 @@ jobs:
       - image: lambdaindie/love2d:latest
     steps:
       - checkout
-      - run: sudo apt-get update -qq > /dev/null && sudo apt-get install -y luarocks love > /dev/null
-      - run: sudo luarocks install luacheck > /dev/null && sudo luarocks install lunatest > /dev/null
+      - run: |
+          apt-get update -qq > /dev/null && \
+          apt-get install -y luarocks > /dev/null && \
+          luarocks install luacheck > /dev/null && \
+          luarocks install lunatest > /dev/null
       - run: make ci
