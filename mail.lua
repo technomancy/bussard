@@ -37,7 +37,7 @@ local deliver_msg = function(ship, msg_name, allow_multiple, skip_notify)
       ship.api.docs.mail[folder]._unread[msg_name] = true
       ship.mail_delivered[msg_name] = true
       if(not skip_notify) then
-         ship.api.editor.print("Received mail; press f3 to view.")
+         ship.api.editor.print("Received mail; press f3 to view.\n")
       end
       return true
    else

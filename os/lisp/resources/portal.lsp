@@ -3,7 +3,7 @@
                (sleep 0.1)
                (let (time-since (- (time) init-time)
                      dt (- (time) last-time))
-                 (if (draw_power (* dt 16))
+                 (if (draw_power (* dt 8))
                      (if (set_beams time-since)
                          (if (> time-since (ship_status "portal_time"))
                              (portal_activate)

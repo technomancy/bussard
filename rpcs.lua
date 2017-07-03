@@ -277,7 +277,7 @@ return {
       end
    end,
 
-   record_event = function(ship, event)
+   record_event = function(ship, _, event)
       mission.record_event(ship, event)
    end,
 
