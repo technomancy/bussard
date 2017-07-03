@@ -37,15 +37,18 @@ local resize = function()
    if(love.filesystem.isFile("fullscreen")) then
       if(love.filesystem.read("fullscreen") == "true") then
          love.window.setMode(dw, dh, {fullscreen=true,
-                                      fullscreentype="desktop"})
+                                      fullscreentype="desktop",
+                                      highdpi=true,})
       else
-         love.window.setMode(w, h, {resizable=true})
+         love.window.setMode(w, h, {resizable=true, highdpi=true,})
       end
    else
       if(dh < 800) then
-         love.window.setMode(dw, dh, {fullscreen=true, fullscreentype="desktop"})
+         love.window.setMode(dw, dh, {fullscreen=true,
+                                      fullscreentype="desktop",
+                                      highdpi=true,})
       else
-         love.window.setMode(w, h, {resizable=true})
+         love.window.setMode(w, h, {resizable=true, highdpi=true,})
       end
    end
 end
@@ -187,7 +190,6 @@ love.load = function()
 
    if(love.graphics) then
       resize()
-      ui.set_font(16)
       love.graphics.half_hyperbola = require("conics")
       ui.play()
    end

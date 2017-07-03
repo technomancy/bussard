@@ -29,13 +29,13 @@ local target_type = function()
 end
 
 ship.hud = {
-   { x=60, y=3, type="text",
+   { x=60, y=35, type="text",
      format="x: %5.0f y: %5.0f\nepoch: %s\ncredits: %s",
      values={"status.x", "status.y",
              function() return utils.format_time(os.time()) end,
              "status.credits"}
    },
-   { x=5, y=5, type="vector",
+   { x=5, y=35, type="vector",
      values={"status.dx", "status.dy", 0.1},
      width=3, color={50, 255, 50}
    },
@@ -52,17 +52,17 @@ ship.hud = {
                                                           s.status.target)
                                    end, "status.target.mass"}
    },
-   { x=5,y=60, type="bar",
+   { x=5,y=5, type="bar",
      values={"status.fuel", "status.fuel_capacity", ship.fuel_to_stop},
      color={255, 20, 20}
    },
-   { x=5, y=75, type="bar",
+   { x=5, y=20, type="bar",
      values={"status.battery", "status.battery_capacity"},
      color={20, 255, 20}, h=6,
    },
-   {x=-200, y=200, type="text", format=quickref, values={1}},
-   {x=-300, y=-125, type="text", format="%s",
-    values = {unread_count}, color={200,0,0},
+   {x=-20, y=200, type="text", format=quickref, values={1}, align="right"},
+   {x=-20, y=-125, type="text", format="%s", align="right",
+    values={unread_count}, color={200,0,0},
    },
    ship.mission.hud,
 }

@@ -390,8 +390,8 @@ ship.api = {
    mission = {
       list = lume.fn(mission.list, ship),
       abort = lume.fn(mission.abort, ship),
-      hud = {x=-300, y=-100, type="text", format="Missions: %s",
-             values = {lume.fn(mission.readout, ship)}}
+      hud = {x=-20, y=-100, type="text", format="Missions: %s",
+             align="right", values={lume.fn(mission.readout, ship)}}
    },
 
    status = utils.whitelist_table(ship, status_whitelist, "status"),
