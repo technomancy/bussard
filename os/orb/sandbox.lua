@@ -55,6 +55,6 @@ return {
          return chunk
       end
 
-      return lume.merge(box, utils.sandbox, extra)
+      return lume.extend(box, utils.sandbox, extra)
    end
 }
