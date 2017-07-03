@@ -90,6 +90,9 @@ bind("flight", "ctrl-s", ssh)
 -- activate portal sequence.
 bind("flight", "ctrl-p", portal)
 
+bind({"flight", "edit"}, "ctrl-[", function() ship.ui.adjust_font(-2) end)
+bind({"flight", "edit"}, "ctrl-]", function() ship.ui.adjust_font(2) end)
+
 -- If you keep your customizations in this file, they will be preserved even if
 -- you start a new game, and they can be edited in an external editor; all files
 -- under "host." are stored in the host_fs/ directory in the game save directory

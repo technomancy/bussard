@@ -23,7 +23,7 @@ love.quit = function()
    return false
 end
 
-local font_path = "assets/fonts/inconsolata.ttf"
+local font_path, font_size = "assets/fonts/inconsolata.ttf", 16
 
 local resize = function()
    local dw, dh = love.window.getDesktopDimensions()
@@ -77,9 +77,10 @@ ui.set_font = function(path, size)
    -- if size is nil, assume path is size
    local font
    if(size == nil) then
+      font_size = path
       font = love.graphics.newFont(font_path, path)
    else
-      font_path = path
+      font_path, font_size = path, size
       font = love.graphics.newFont(path, size)
    end
    love.graphics.setFont(font)
@@ -89,6 +90,8 @@ ui.set_font = function(path, size)
    local djvu = love.graphics.newFont("assets/fonts/DejaVuSansMono.ttf", 16)
    if(font.setFallbacks) then font:setFallbacks(noto,djvu) end
 end
+
+ui.adjust_font = function(diff) ui.set_font(font_size + diff) end
 
 local safely = function(f)
    return function(...)
@@ -190,6 +193,7 @@ love.load = function()
 
    if(love.graphics) then
       resize()
+      font_size = love.graphics.getWidth() / 90
       love.graphics.half_hyperbola = require("conics")
       ui.play()
    end
@@ -240,7 +244,7 @@ local draw = function(dt)
 end
 
 ui.play = function()
-   ui.set_font(16)
+   ui.set_font(font_size)
    love.update, love.keypressed, love.keyreleased, love.wheelmoved,
    love.textinput,love.draw =
       update, keypressed, keyreleased, wheelmoved, textinput, safely(draw)

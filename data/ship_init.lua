@@ -3,7 +3,7 @@ local mission = require("mission")
 local mail = require("mail")
 
 local statuses = {
-   " Press ctrl-enter to toggle flight mode\n\n" ..
+   " Press ctrl-enter to toggle flight mode.\n\n" ..
       "Stellar proximity alert. Leaving hibernation mode.\n\n" ..
       "System diagnostics...\n" ..
       "Main engine...             " .. "[ FAIL ]\n" ..

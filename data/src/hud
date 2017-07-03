@@ -16,7 +16,9 @@ local quickref = "tab: next target\n" ..
    "ctrl-s: ssh login\n" ..
    "ctrl-p: portal\n" ..
    "ctrl-o: open file\n" ..
-   "ctrl-r: reload config"
+   "ctrl-r: reload config\n" ..
+   "ctrl-[,]: adjust font\n" ..
+   "=,-: zoom in and out"
 
 local target_type = function()
    if(ship.status.target) then
