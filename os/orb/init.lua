@@ -1,6 +1,6 @@
 local shell = require("os.orb.shell")
 local fs = require("os.orb.fs")
-local users = require("data.users.orb")
+local users = require("data.users")
 local utils = require("utils")
 
 return {
