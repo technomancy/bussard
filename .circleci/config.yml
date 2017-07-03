@@ -1,0 +1,11 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/bussard
+    docker:
+      - image: lambdaindie/love2d:latest
+    steps:
+      - checkout
+      - run: sudo apt-get update -qq > /dev/null && sudo apt-get install -y luarocks love > /dev/null
+      - run: sudo luarocks install luacheck > /dev/null && sudo luarocks install lunatest > /dev/null
+      - run: make ci
