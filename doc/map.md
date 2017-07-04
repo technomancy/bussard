@@ -8,7 +8,6 @@ affiliations of each system at the time of publication:
 * White: Solar Union
 * Green: Terran Republic
 * Yellow: Kingdom of Bohk
-* Red: Yueh
 * Purple: Republic of Katilay
 * Turquoise: Tana Protectorates
 

@@ -5,8 +5,6 @@
 
 local systems = require("data.systems")
 
-local no_yueh = "Your ship is not authorized for entry into Yueh."
-
 local no_fine = function(ship)
    if(ship.fine > 0) then
       return "You may not use any portals since you have " ..
@@ -24,9 +22,6 @@ local no_loan = function(ship)
 end
 
 return {
-   ["Bohk:Yueh"] = {{yueh_visa=no_yueh}},
-   ["Lalande:Yueh"] = {{yueh_visa=no_yueh}},
-
    any = {no_fine},
    interportal = {no_loan},
 }

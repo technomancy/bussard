@@ -15,7 +15,7 @@ local _ = { r=0, mass=0,
 
 ---- inputs:
 -- this is not a linear scale; Earth has 10 billion people, while the largest
--- extrasolar worlds (Sungai, Yueh Prime) have about 100 million.
+-- extrasolar worlds (Sungai, Bohk Prime) have about 100 million.
 -- pop: 1: 1000, 2: 10,000, 3: 100,000, 4: 1m, 5: 10m, 6: 100m, 7: 1b, 8: 10b
 -- total: 10,216,655,000, total off-earth: 216,655,000
 --
@@ -284,10 +284,7 @@ local sys = {
                       r=29000, mass=60, portal="Bohk", os="lisp"},
                      {name = "Interportal: Katilay",
                       image_name="portal-2", interportal=true,
-                      r=31000, mass=60, portal="Katilay", os="lisp"},
-                     {name = "Interportal: Yueh",
-                      image_name="portal-2", interportal=true,
-                      r=33000, mass=60, portal="Yueh", os="lisp"}},
+                      r=31000, mass=60, portal="Katilay", os="lisp"}},
    },
    ["Ross"] = {gov="Terran",
                x=0, y=-1.7, asteroids=2,
@@ -357,9 +354,6 @@ local sys = {
                   {name = "Portal: Mecalle",
                    image_name="portal-1",
                    r=34000, mass=60, portal="Mecalle", os="lisp"},
-                  {name = "Interportal: Yueh",
-                   image_name="portal-2", interportal=true,
-                   r=36000, mass=60, portal="Yueh", os="lisp"}
                },
    },
    ["New Phobos"] = {gov="Bohk", x=3.9, y=0.2, asteroids=5,
@@ -442,115 +436,6 @@ local sys = {
                       image_name="portal-2", interportal=true,
                       r=36000, mass=60, portal="Mecalle", os="lisp"}
                   }, -- quiet, isolated. internal conflict.
-   },
-
-
-   -- Yueh
-   ["Yueh"] = {gov="Yueh", capital=true, -- GI 674
-               x=4.3, y=-1.4, asteroids=2,
-               bodies = {
-                  {r=0, x=0, y=0, dx=0, dy=0, mass=390000,
-                   image_name="sun",
-                   name="Yueh 674", star=true},
-                  {r=19000, mass=350, asteroids=4,
-                   image_name="planet-6",
-                   name="Yueh Prime", os="orb", world=true,
-                   industry=7,tech=8,
-                   remote=3, pop=5.8,
-                   agri=3, mineral=3,
-                   upgrades={"fuel_charger", "cargo_bay", "map"},
-                  },
-                  {r=22000, mass=100, station=true,
-                   image_name="station-green",
-                   name="Da Kau Station", os="orb", world=true,
-                   industry=6,tech=8,
-                   remote=4, pop=1,
-                   agri=0, mineral=3,
-                   upgrades={"cargo_bay", "engine", "solar_panel"},
-                  },
-                  {r=8000, mass=220, world=true,
-                   image_name="planet-3", name="Ha'nur"},
-                  {name = "Interportal: Bohk",
-                   image_name="portal-2", interportal=true, os="lisp",
-                   r=38000, mass=60, portal="Bohk"},
-                  {name = "Interportal: Lalande",
-                   image_name="portal-2", interportal=true, os="lisp",
-                   r=28000, mass=60, portal="Lalande"},
-                  {name = "Portal: Kowlu",
-                   image_name="portal-3", os="lisp", multiportal=true,
-                   r=32000, mass=60, portal="Kowlu"},
-               }, -- Yueh capital
-   },
-   ["Kowlu"] = {gov="Yueh", -- GI 693
-                x= 5.4, y=-2.3, asteroids=6,
-                bodies = {
-                   {r=0, x=0, y=0, dx=0, dy=0, mass=440000,
-                    image_name="sun",
-                    name="Kowlu 693", star=true},
-                   {r=9000, mass=500,
-                    image_name="shaber6",
-                    name="Bata Beng", os="orb", world=true,
-                    industry=5, tech=4,
-                    remote=6, pop=4,
-                    agri=7, mineral=6,
-                    upgrades={"cargo_bay", "engine"},
-                   },
-                   {r=17000, mass=300,
-                    image_name="shaber9",
-                    name="Sim Roen", os="orb", world=true,
-                    industry=2, tech=3,
-                    remote=5, pop=1,
-                    agri=4, mineral=4,
-                    upgrades={"engine"},
-                   },
-                   {name = "Portal: Delta Pavonis",
-                    image_name="portal-1", os="lisp",
-                    r=22000, mass=60, portal="Delta Pavonis"},
-                   {name = "Portal: Yueh",
-                    image_name="portal-1", os="lisp",
-                    r=27000, mass=60, portal="Yueh"},
-                   {name = "Lueng Prabo", world=true,
-                    image_name="shaber5",
-                    r=31000, mass=240},
-                }, -- bustling trade hub
-   },
-   ["Delta Pavonis"] = {gov="Yueh",
-                        x=4.5, y=-2.6,
-                        bodies = {
-                           {r=0, x=0, y=0, dx=0, dy=0, mass=190000,
-                            image_name="sun",
-                            name="Delta Pavonis", star=true},
-                           {r=8000, mass=200, world=true,
-                            image_name="planet-3", name="Sav'nakat"},
-                           {r=12000, mass=100, station=true, world=true,
-                            image_name="station-green",
-                            name="Steele Station", os="lisp",},
-                           {r=18000, mass=300,
-                            image_name="v-surface",
-                            name="Packsi", os="orb", world=true,
-                            industry=2, tech=3,
-                            remote=6, pop=3,
-                            agri=3, mineral=4,
-                            upgrades={"engine", "fuel_charger", "map"},
-                           },
-                           {name = "Portal: Kowlu",
-                            image_name="portal-1", os="lisp",
-                            r=25000, mass=60, portal="Kowlu"},
-                        }
-   }, -- location of experimental "lisp" station
-
-   -- secret colonies
-   ["LHS 451"] = {gov="Ikon", -- GI 682
-                  x=4.9,y=-1.1, unmapped=true,
-                  bodies = {
-                     {r=0, x=0, y=0, dx=0, dy=0, mass=280000,
-                      image_name="sun",
-                      name="LHS 451", star=true},
-                     -- TODO: Traxus's station
-                     {name = "Portal: Yueh", multiportal=true,
-                      image_name="portal-3", os="lisp",
-                      r=22000, mass=60, portal="Yueh"},
-                  },
    },
 }
 
