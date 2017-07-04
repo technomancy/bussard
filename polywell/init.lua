@@ -145,6 +145,7 @@ local wrap
 local debug = function(arg)
    if(arg == "modes") then return modes end
    if(arg == "wrap") then return wrap end
+   if(arg == "lines") then return b.lines end
    if(not (arg or os.getenv("DEBUG"))) then return end
    print("---------------", b.path, b.point_line, b.point, b.mark_line, b.mark)
    for _,line in ipairs(b.lines) do

@@ -261,6 +261,7 @@ ship.navigation_ui_helpers.target_aoi = function()
 end
 
 ship.navigation_ui_helpers.ship_orbit = function()
+  if(not graphics.ellipse) then return end
   local center = orbit_center(ship.status, true)
   if center then
     local orbit_data = current_orbit(nil, center)

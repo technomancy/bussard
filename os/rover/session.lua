@@ -80,7 +80,7 @@ sandbox.login = function(username, password)
       local session_id = response.session_id
       if(response.ok) then
          while not response or response.op ~= "disconnect" do
-            love.timer.sleep(0.1)
+            love.timer.sleep(0.01)
             if(response) then
                output:push(response)
             end

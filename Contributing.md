@@ -7,10 +7,6 @@ useful for that too.
 Contributions are preferred as GitLab merge requests on feature branches.
 Emailing patches is OK too.
 
-Our goal is compatibility with LÖVE 0.9.0+, but 0.10.x is pretty close to 0.9.x,
-so it should be fine to test primarily in that. A few non-essential features
-that only work in 0.10.x are OK but should be noted with comments.
-
 During development you can enable cheating (via the `ship.cheat` field) to make
 debugging easier. To enable cheating run Bussard with `--cheat` argument; you
 can disable it again by running with `--no-cheat` argument. The state of

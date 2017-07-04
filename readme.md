@@ -29,10 +29,11 @@ fit too.
 
 ## Installation
 
-Releases for each platform are [on itch.io](https://technomancy.itch.io/bussard).
-Windows and Mac OS X releases are standalone, but `.love` file releases require having
-[LÖVE](https://love2d.org). Version 0.9.x is supported, but 0.10.x or higher is
-recommended for syntax highlighting support.
+Releases for each platform
+are [on itch.io](https://technomancy.itch.io/bussard).  Windows and Mac OS X
+releases are standalone, but `.love` file releases require
+having [LÖVE](https://love2d.org). Version 0.10.x or higher is strongly
+recommended for syntax highlighting and navigational trajectory support.
 
 When running from source, type `love .` from a checkout.
 
