@@ -437,9 +437,12 @@ local save = function(this_fs, this_path)
    if(not target or not this_b.needs_save) then return end
    this_b.needs_save = false
    if(this_b.path:find("^/")) then
-      if(not love.filesystem.write("game" .. this_b.path,
-                                   table.concat(this_b.lines, "\n") .. "\n")) then
-         print("Could not save " .. this_path or this_b.path)
+      if(not love.filesystem.isDirectory("game")) then
+         print("Missing game symlink in savedir; see Contributing.md.")
+      elseif(not love.filesystem.write("game" .. this_b.path,
+                                       table.concat(this_b.lines, "\n")
+                                       .. "\n")) then
+         print("Could not save " .. (this_path or this_b.path))
       end
    else
       local parts = lume.split(this_path or this_b.path, get_separator(target))
