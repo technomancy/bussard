@@ -27,7 +27,7 @@ If you have never coded Lua before, don't fret! It's a very simple language;
 once you learn how [tables](doc/lua-5-tables.md) work it's very much like any
 other imperative dynamic language that leans heavily on closures. The only parts
 that use advanced language features (metatables and coroutines) are the OS
-filesystem and scheduler, and the read-only proxy tables like `ship.api.status`.
+filesystem and the read-only proxy tables like `ship.api.status`.
 
 The stock config in `data/src` is copied into the save directory when a new game
 is started. Therefore changes to the source will not be visible to in-progress
@@ -60,8 +60,8 @@ instance, `/Contributing.md` would open this file.
 * The `local f = function() ... end` construct is preferred to `local function f() ... end` unless the latter is needed for recursion.
 
 The last rule exists to make recursive functions more obvious. If you see `local
-function f()`, you know to pay more attention because a recursive function is
-coming.
+function f()`, you know to pay more attention because a recursive function (or
+a function that needs self-reference for other reasons) is coming.
 
 There are three different code contexts (at the time of this writing; more may
 be introduced in the future): engine code, in-ship code, and OS code. The
@@ -136,12 +136,13 @@ When in doubt, do what Emacs does.
 The [overview diagram](https://p.hagelb.org/bussard-overview.jpg) shows how the
 different parts of the codebase are related to each other.
 
-The `ship` table (loaded from `ship/init.lua`) contains all game state. In
-particular, `ship.bodies` is the table for all the worlds, asteroids, and ships
-in the current system, and `ship.systems` contains all systems. (I guess it
-doesn't make all that much sense, but it's very convenient.) The `ship.systems`
-table is loaded from the `data/systems.lua` file; `ship.bodies` is set with the
-worlds of the current system when you enter it, plus asteroids and ships as needed.
+The `ship` table (loaded from `ship/init.lua`) contains all game state apart
+from host OSes like station computers and rovers. In particular, `ship.bodies`
+is the table for all the worlds, asteroids, and ships in the current system,
+and `ship.systems` contains all systems. (I guess it doesn't make all that
+much sense, but it's very convenient.) The `ship.systems` table is loaded from
+the `data/systems.lua` file; `ship.bodies` is set with the worlds of the
+current system when you enter it, plus asteroids and ships as needed.
 
 The `ship` table furthermore has a `.api` field on it which is the part of the
 ship which is exposed to the in-game sandboxed user code. Certain fields of
@@ -160,6 +161,10 @@ The player's progress through the game is tracked in the `ship.events` table,
 which keys strings to numbers which indicate when a specific event
 occurred. Events mostly affect mail and missions.
 
+Time in the game is represented as seconds since epoch, with the game set in
+the year 2431. There's a time factor meaning in-game time passes 10x faster
+than real time.
+
 Note that from an in-game perspective, the `ship.api` table is referred to as
 just `ship`.
 
@@ -167,7 +172,10 @@ just `ship`.
 
 The `data/` directory contains mostly non-code stuff like mail, missions, and
 definitions of star systems, but `data/src` also contains all the code that is
-loaded into the in-game computer by default and can be edited by the player.
+loaded into the onboard computer by default and can be edited by the
+player. The `host_src` directory contains source which exists on certain host
+computer systems in-game, while `os/orb/resources` contains code which is
+loaded onto all Orb OS systems.
 
 Theoretically, replacing the `assets`, `data`, and `doc` directories would give
 you a different game using the Bussard engine. Try to keep anything specific to
@@ -178,8 +186,7 @@ should be agnostic, dealing only with the engine.
 
 Missions are found in the `data/missions` directory. You accept them by replying
 to mail. The fields that a mission may have are all documented at the top of
-`mission.lua`. See `data/missions/passenger2` for an example of a complex
-mission. Usually completing a mission sets events, which allows for other
+`mission.lua`. Usually completing a mission sets events, which allows for other
 missions to come available through new mail.
 
 The `ship.active_missions` table stores a record about each mission that is
@@ -192,8 +199,8 @@ in `mission.update` and other functions.
 
 Mail is stored in-game in `ship.api.docs.mail`. There are basically 3 things
 that can trigger mail delivery: timed events based on `data/msgs/timed.lua`,
-replying to a message, or something happening within a mission. Messages are in
-`data/msgs`.
+replying to a message, or something happening within a mission. Messages are
+stored on disk in `data/msgs`.
 
 Certain messages are replyable. Pressing `alt-enter` when viewing them will
 either accept a mission (in `data/missions/` and named after the message-id of
@@ -205,19 +212,8 @@ you reply to in order to get it.
 Files in `data/missions` and `data/msgs` that are named after message-id headers
 should also have symlinks to them for human-readable names.
 
-Mail should stick to the typical header/body pattern; roughly RFC 822.
-
-#### Subnet
-
-Subnet is a usenet-like discussion platform in the game that is technically
-legal but has a reputation for being used for unsavory activities. Each subnet
-group corresponds to a directory in the `data/subnet` folder, and each file
-inside that corresponds to a thread in that group. Many threads are just random
-chatter to provide background and story, but some missions can only be accepted
-from subnet threads, and they also often contain useful code snippets.
-
-Subnet threads should be a series of line-break-delimited RFC 822-ish messages
-without `Date:` headers.
+Mail should stick to the typical header/body pattern; roughly RFC 822. Use the
+"In-Reply-To" headers for message threads.
 
 ### OS and SSH
 
@@ -281,3 +277,4 @@ other than the current one except the filesystems.
 By making contributions, you agree to allow your material to be
 distributed under the terms of the GNU General Public License, version
 3 or later; see the file LICENSE for details.
+

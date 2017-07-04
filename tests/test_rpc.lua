@@ -5,15 +5,23 @@ local ship = require("ship")
 local body = require("body")
 local client = require("os.client")
 
-local exec = function(command)
+local exec = function(command, reply_count)
    local send, recv = ship.sandbox.ssh_connect("guest", "")
-   assert(send, "Could not connect")
-   recv(true) recv(true) -- discard motd, set_prompt
+   if(not send) then
+      for _,l in ipairs(ship.api.editor.debug("lines")) do
+         print(l)
+      end
+      error("Could not connect")
+   end
+   assert(recv(true).op == "stdout", "error connecting")
+   assert(recv(true).op == "rpc", "error connecting")
    send(command)
-   local val = recv(true)
+   local vals = {}
+   for _=1,(reply_count or 0) do table.insert(vals, recv(true)) end
    send("logout")
-   recv(true) recv(true) -- discard set_prompt, etc
-   return val
+   assert(recv(true).op == "rpc", "error disconnecting.")
+   assert(recv(true).op == "disconnect", "error disconnecting.")
+   return vals
 end
 
 local eval = function(code)
@@ -34,17 +42,17 @@ local function test_loans()
    ship.credits, ship.loan = 128, 0
 
    -- initial borrow
-   exec("loan borrow 128")
+   exec("loan borrow 128", 2)
    t.assert_equal(256, ship.credits)
    t.assert_equal(154, ship.loan)
 
    -- attempting to exceed credit limit
-   exec("loan borrow 10000")
+   exec("loan borrow 10000", 2)
    t.assert_equal(256, ship.credits)
    t.assert_equal(154, ship.loan)
 
    -- repaying
-   exec("loan repay 154")
+   exec("loan repay 154", 2)
    t.assert_equal(102, ship.credits)
    t.assert_equal(0, ship.loan)
 end
