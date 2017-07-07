@@ -3,8 +3,9 @@
 editor.find_file = function()
    -- this is more complicated because it offers live feedback as you type.
    local callback = function(input, cancel)
+      local target = ship:find(input)
       -- open the file is given, but we don't support opening tables yet
-      if(not cancel and type(ship:find(input)) == "string") then
+      if(not cancel and type(target) == "string" or target == nil) then
          editor.open(ship, input)
       end
    end
