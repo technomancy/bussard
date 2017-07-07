@@ -20,15 +20,14 @@ To set up the map, load this code:
     end
 
     define_mode("map", nil, {read_only=true, draw=ship.actions.map})
-    bind("map", "escape", ship.editor.close)
+    bind("map", "escape", lume.fn(ship.editor.close, true))
     bind("map", "down", lume.fn(map_pan, 0, -0.1))
     bind("map", "up", lume.fn(map_pan, 0, 0.1))
     bind("map", "left", lume.fn(map_pan, -0.1, 0))
     bind("map", "right", lume.fn(map_pan, 0.1, 0))
 
     map = function()
-      ship.editor.open(nil, "*map*")
-      ship.editor.activate_mode("map")
+      ship.editor.open(nil, "*map*", "map")
     end
 
 It's recommended to place this in a new file called "src.map" and add
