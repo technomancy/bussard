@@ -65,10 +65,10 @@ count_prose: ; find $(PROSE) -type f -print0 | xargs -0 wc -l
 
 clean: ; rm -rf releases/
 
-FLAGS=-a 'Phil Hagelberg' -x spoilers --title "Bussard" \
+REL=".love-release/build/love-release.sh"
+FLAGS=-a 'Phil Hagelberg' -x spoilers -x savedir \
 	--description 'A space flight programming adventure game.' \
-	--love 0.10.2 --url "https://technomancy.itch.io/bussard" \
-	--version $(VERSION)
+	--love 0.10.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
 
 releases/bussard-$(VERSION).love: $(ALL_LUA) $(PROSE) $(MEDIA) $(META) $(POLYWELL) Makefile
 	mkdir -p releases/
@@ -78,11 +78,11 @@ releases/bussard-$(VERSION).love: $(ALL_LUA) $(PROSE) $(MEDIA) $(META) $(POLYWEL
 love: releases/bussard-$(VERSION).love
 
 mac: love
-	love-release $(FLAGS) -M
+	$(REL) $(FLAGS) -M
 	mv releases/Bussard-macosx-x64.zip releases/bussard-$(VERSION)-macosx-x64.zip
 
 windows: love
-	love-release $(FLAGS) -W -W32
+	$(REL) $(FLAGS) -W -W32
 	mv releases/Bussard-win32.zip releases/bussard-$(VERSION)-windows.zip
 
 deb: love
