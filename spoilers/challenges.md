@@ -1,5 +1,7 @@
 # Challenges
 
+The first has been implemented; the rest are just notes for possibilities.
+
 ## Escape the initial system
 
 You awaken in orbit with dex-19 having reactivated you. He wants to get out of
@@ -7,8 +9,33 @@ the system, and so do you, so you can work together.
 
 * Objective: pass thru the portal
  * Need to read dex-19 email (skill: operating editor)
+ * Restart engines (skill: editor/console)
  * Fly to Merdeka station (skill: piloting)
- * Break into the license database and insert a record for your ship (skill: orb, SQL)
+ * Log in and take the PTMC training course (skill: ssh, basic lua)
+ * Buy the battery upgrade (skill: ssh, orb)
+
+## Decode log
+
+After making it to Tana, dex-19 informs you that he's found a memory card
+wedged in the cargo bay, but it's an older style that he doesn't have the
+hardware to read. He suggests paying a visit to an old friend who can help
+read it. The friend is a bit of a recluse, so you need to land a rover to
+bring the memory card to them.
+
+* Objective: read log file
+ * Fly to Solotogo(?) (skill: piloting)
+ * Navigate the rover to the dwelling (skill: rover navigation)
+ * Once you have the file, decode the rot13 (skill: lua)
+
+Need to figure out how you get clearance to land the rover here.
+
+## Unlock interportal
+
+I think it makes sense to limit the game to the Tana systems as you're just
+getting started so you don't get disoriented or too far off track.
+
+* Objective: gain access to the interportal to Sol
+ * ???
 
 ## Unlock the spacetime junction
 
@@ -29,23 +56,12 @@ Traxus and can't be told why you want to activate it?
 Once you activate it for the first time, dex-19 notices that it's working, and
 he tells you of the plan to reactivate Traxus.
 
-## Rovers!
-
-You'll need access to rovers in order to do any land missions
-
-* Objective: get a rover capable of movement and comms
- * Take PTMC intro (skill: rover deployment)
- * Complete PTMC training (skill: rover movement, lua coding optional)
-
-The training courses consist of emails and guided exercises where the rover
-transmits instructions you in response to what you tell it to do.
-
 ## Reactivate Traxus
 
-* Objective: reactivate Traxus's base
+* Objective: reactivate Traxus's base on Sutep
  * Find the location of the base (skill: map?)
  * Land a rover there (skill: rover deploy)
- * Bring the reactor online (skill: lisp programming)
+ * Bring the reactor online (skill: lisp/forth programming?)
  * Subvert security measures to reach Traxus (skill: rover movement)
  * Fix communications array, connecting Traxus to network
 

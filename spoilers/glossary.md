@@ -15,7 +15,7 @@ plenty of this.
 * "g-well": world
 * "lock": portal
 * "무": nothing, emptiness
-* "bluescreen": derogatory term for machine consciousnesses
+* "bluescreen": derogatory term for constructs
 * "meatbag": derogatory term for humans
 
 * Expletives

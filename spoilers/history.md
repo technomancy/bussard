@@ -20,7 +20,7 @@ The establishment of the Terran Republic.
 * 2128 - SS Copernicus colony ship launches from Sol to Ross
   (1.6 pc @ 0.5 c, 10y, γ=1.2)
 
-* 2138 - SS Copernicus arrives, colonizes Ross
+* 2138 - SS Copernicus arrives, colonizes Kuching Station in Ross
 
 * 2143 - Errant cargo shuttle threatens Ross colony; Captain
   saves the colony by colliding his ship into the shuttle to push it
@@ -42,26 +42,22 @@ deposits lead to it becoming an industrial powerhouse.
 * 2175 - SS Bradbury launched from Lalande to Bohk (2 pc @ 0.6 c, 10.8y, γ=1.3)
 
 * 2187 - SS Bradbury colony ship arrives in Bohk, establishes
-  colony, promptly declares independence
+  Bohk Prime colony, promptly declares independence
 
 * 2194 - News of Bohk's independence reaches Lalande
 
 * 2200 - News of Bohk's independence reaches Sol
 
-* 2212 - Bohk launches SS Eratosthenes to New Phobos (1 pc, 0.5 c, 6.5y)
+* 2242 - Bohk launches SS Eratosthenes to New Phobos (1 pc, 0.5 c, 6.5y)
 
-* 2218 - SS Eratosthenes arrives, colonizes Changlun in New Phobos,
+* 2248 - SS Eratosthenes arrives, colonizes Changlun in New Phobos,
   maintains close ties with Bohk
 
-* 2254 - Lalande launches SS Ptolemy to Yueh (2.9 pc, 0.6 c, 15.7y)
-
-* 2269 - Yueh colonized by SS Ptolemy, portal technology discovered,
-  pressure on colonists not to declare independence
-
 * 2272 - SS Ptolemy departs to bring portal tech to Lalande
-  (2.9 pc, 0.6c, 15.7y), Yueh colony left ill-equipped
 
 ## Third Wave: portals
+
+TODO: this all needs to get rewritten without Yueh
 
 The Ptolemy returns to Lalande not because they want Lalande to gain access to
 the portals, but because they are worried their colony will not survive
@@ -97,7 +93,7 @@ without supplies from a more established civilization.
   and retains a monopoly on newly-constructed ones
 
 * 2317 - Bohk, Yueh, and Terrans found Human Worlds League in an
-  uneasy alliance, non-proliferation MC treaty
+  uneasy alliance, non-proliferation construct treaty
 
 * 2318 - SS Kepler arrives in Kowlu, first portal-colony started
 
@@ -126,7 +122,7 @@ without supplies from a more established civilization.
   (0.8 pc, 0.7 c, 3.7y)
 
 * 2345 - Multiverse traversal discovered to only be possible for
-  machine consciousness; research begins
+  constructs; research begins
 
 * 2348 - SS Pythagoras arrives in Katilay and colonizes, but its portal
   proves unstable, civil war ensued
@@ -144,9 +140,9 @@ without supplies from a more established civilization.
 * 2366 - Lalande launches SS Sagan colonizer from Kowlu to Delta Pavonis
   (0.7 pc, 0.7c, 3.2y)
 
-* 2367 - Traxus crashes a ship and escapes into the Yueh network
+* 2367 - Traxus crashes a ship and escapes into the network
 
-* 2368 - Machine Consciousness Research and Operation Ban passes,
+* 2368 - Construct Research and Operation Ban passes,
          Bohk team goes underground
 
 * 2368 - Colonists from Sungai found Bendera colony in Lalande
@@ -167,7 +163,7 @@ without supplies from a more established civilization.
   (Luyten), SS Planck (Tana), SS Poincare (L 668-21), and SS Rosen
   (Wolf 294)
 
-* 2379 - Traxus discovers player MC in Bohk lab, makes contact
+* 2379 - Traxus discovers player construct in Bohk lab, makes contact
 
 * 2380 - Bohk AC turns against research team, they move to Katilay and wipe memory
 

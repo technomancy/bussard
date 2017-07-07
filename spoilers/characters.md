@@ -26,11 +26,7 @@ Helps you realize who you are, decrypt your journals, and get a handle
 on coding. Grew up on Mars and is a citizen of Sol.
 
 She also offers to pretend to be the captain of the ship in any cases
-where an un-manned ship would raise too many suspicions. She helps you
-find Clay, and she is a little too trusting of Clay at first. She is
-later really regretful about it. This causes her to be too suspicious
-of Mila. Once she boards your ship, she is motivated more by curiosity
-and a desire to help than her original goal of just getting home.
+where an un-manned ship would raise too many suspicions.
 
 # Governments
 
@@ -70,29 +66,13 @@ independence early on. Isolated, wealthy, and small.
 
 Due to a lack of communication, developed fairly independently from
 the Terran Republic. Has two internal portals under oversight from
-Terrans. Helped Lalande re-establish contact with Katilay, and also
-helped Yueh establish its Delta Pavonis colony.
+Terrans. Helped Lalande re-establish contact with Katilay.
 
 * [x] Bohk Prime
 * [x] Warnabu Station
 * [x] Changlun (New Phobos)
 * [x] Sutap (New Phobos)
 * [x] Tirakir (Mecalle)
-
-## Yueh
-
-Source of where the portal tech was discovered. Runs two portals (Bohk
-and Delta Pavonis) and has one portal (Yueh/Kowlu) run by Lalande,
-which is a point of tension.
-
-* [ ] Yueh Prime
-* [ ] Da Kau Station
-* [ ] Bata Beng (Kowlu)
-* [ ] Sim Roen (Kowlu)
-* [ ] Packsi (Delta Pavonis)
-
-The portal to Delta Pavonis is secretly a multiportal; it can take you
-to other locations if you have proper access.
 
 ## Republic of Katilay
 
@@ -120,19 +100,15 @@ Tana has the most worlds, but the smallest population.
 
 ## Human Worlds League
 
-Originally the Terran Republic covered all inhabited worlds, but as
-new colonies sprung up independently or declared independence, Bohk
-and Yueh spearheaded the League soon after the war. Terran Republic
-was also a founding member. Sol joined upon its independence, Katilay
-joined several years after re-establishing connection. They oversee
-trade agreements, enact spaceflight safety regulations, administrate a
-unified currency, coordinate exploration efforts, and work to protect
-peace. Nominally they aim to advance shared scientific progress, but
-little of this happens in practice. The league is headquartered on
-Bohk Prime.
-
-TODO: Find a way to fit in significance of New Phobos, Kowlu, Delta Pavonis
-OR: Yueh maybe doesn't need so many worlds
+Originally the Terran Republic covered all inhabited worlds, but as new
+colonies sprung up independently or declared independence, Bohk spearheaded
+the League soon after the war. Terran Republic was also a founding member. Sol
+joined upon its independence, Katilay joined several years after
+re-establishing connection. They oversee trade agreements, enact spaceflight
+safety regulations, administrate a unified currency, coordinate exploration
+efforts, and work to protect peace. Nominally they aim to advance shared
+scientific progress, but little of this happens in practice. The league is
+headquartered on Bohk Prime.
 
 # Companies
 
@@ -151,13 +127,10 @@ OR: Yueh maybe doesn't need so many worlds
 
 * Kosaga Shipyards (small, Bohk)
   Started in order to create the New Phobos colony ship, but now only
-  focuses on interplanetary ships. Created two colony ships for Yueh.
+  focuses on interplanetary ships.
 
 * Ares Mineral Company (Lalande)
   Dominant mining company.
-
-* Allied Deliveries (Yueh)
-  Handles most eastern delivery routes.
 
 * Starlink (Sol)
   An ISP. (starlink.net.sol)
@@ -176,13 +149,6 @@ OR: Yueh maybe doesn't need so many worlds
   Works with Aperture to piggy-back data transmission on top of each
   portal open cycle.
 
-* Luminous Enterprises (Yueh)
-  Originally adapted portal technology for human construction. Barred
-  from further portal development by treaty, but continuing it
-  covertly. Can't colonize traditionally without constructing large
-  colony ships, which would be noticed, so they are researching
-  coldsleep as an alternative.
-
 * Post-Terran Mining Company (Tana)
   The primary driver behind the colonization of Tana. Government of
   Tana is arguably a front for PTMC.
@@ -193,10 +159,6 @@ OR: Yueh maybe doesn't need so many worlds
 
 * GNO Project (Sol)
   Responsible for maintaining software infrastrucutre such as the Orb OS.
-
-* TMRC (Bohk, Yueh)
-  Loose association of hackers, mostly interested in cool onboard computer
-  tricks, but also with some interest in security.
 
 # Universities
 
@@ -214,7 +176,7 @@ either planetary colonies or re-appropriated into orbital stations.
 
 * First Wave: SS Lorentz (Lalande, 0.3c), SS Copernicus (Ross, 0.5c)
 * Second Wave: SS Bradbury (Bohk, 0.6c),
-  SS Eratosthenes † (New Phobos, 0.5c), SS Ptolemy (Yueh, 0.6c)
+  SS Eratosthenes † (New Phobos, 0.5c)
 * Third Wave: SS Kepler † (Kowlu)
 * Fourth Wave: SS Las Casas (Katilay), SS Cherenkov † (Mecalle),
   SS Sagan (Delta Pavonis)
@@ -230,16 +192,12 @@ From third-wave on they all have portals onboard and fly at 0.7c.
 Newer colonizers have portals on them, but existing colonies need
 ships containing just the equipment needed to create the portal.
 
-* Original portal ship: SS Ptolemy (converted from Yueh colonization)
- * Yueh->Lalande
- * Lalande->Sol (accident)
 * Second portal ship: SS Euclid
  * Lalande->Ross
  * Bohk->New Phobos
  * Mecalle->Katilay
 * Ptolemy Rescue ship: SS Goddard
 * Bohk trade ship: SS Oberth
- * carries portal from Yueh back to Bohk
 
 ## Modern Interplanetary ships
 
