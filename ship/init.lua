@@ -259,7 +259,7 @@ local ship = {
       -- acceleration directly, you could write code that would make
       -- the engine arbitrarily powerful or use zero fuel or
       -- whatever. so these two steps must remain separate.
-      if(ship.engine_on and ship.fuel > 0) then
+      if(ship.engine_on and ship.fuel > 0 and not ship.locked_to) then
          local fx = (math.sin(ship.heading) * dt * ship.engine_strength)
          local fy = (math.cos(ship.heading) * dt * ship.engine_strength)
          ship.dx = ship.dx + fx / ship.mass
@@ -267,6 +267,15 @@ local ship = {
          ship.fuel = ship.fuel - (ship.burn_rate * dt)
       elseif(ship.fuel < ship.fuel_capacity) then
          ship.fuel = ship.fuel + (ship.recharge_rate * dt)
+      end
+
+      body.orbital_lock(ship, ship.locked_to)
+      if(ship.locked_to and ship.engine_on) then
+         local key = ship.api.editor.key_for(ship.api.orbital_lock)
+         if(key) then
+            ship.api.editor.print("Orbital lock engaged; disengage with "..
+                                     key .. " to use engines.")
+         end
       end
 
       if(ship.turning_left) then
@@ -526,6 +535,15 @@ ship.api = {
          return editor.invisible
       end,
    },
+
+   orbital_lock = function()
+      body.toggle_lock(ship, ship.target and ship.target.name)
+      if(ship.locked_to) then
+         ship.api.editor.print("Orbital lock engaged.")
+      else
+         ship.api.editor.print("Orbital lock disengaged.")
+      end
+   end,
 
    -- deprecated:
    modes = editor.modes,

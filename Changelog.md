@@ -2,6 +2,7 @@
 
 ## beta-3 / ???
 
+* Add orbital lock function to make it easier to remain in orbit.
 * Warn when loading save games from older versions.
 * Tab completion works on remote hosts.
 * Editor uses Polywell: https://gitlab.com/technomancy/polywell

@@ -7,7 +7,7 @@ local ship_init = require("data.ship_init")
 local mission = require("mission")
 
 local ship_fields = {
-   "x", "y", "dx", "dy", "heading", "mail_delivered",
+   "x", "y", "dx", "dy", "heading", "mail_delivered", "locked_to",
    "battery", "fuel", "credits", "system_name", "active_missions",
    "humans", "humans_left_at", "upgrade_names", "cargo", "target_number",
    "events", "flag", "name", "rovers", "rover_clearance", "loan", "fine",

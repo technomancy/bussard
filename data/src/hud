@@ -13,6 +13,7 @@ local quickref = "tab: next target\n" ..
    "f1: flight mode\n" ..
    "f2: console\n" ..
    "f3: read mail\n" ..
+   "f4: orbital lock toggle\n" ..
    "ctrl-s: ssh login\n" ..
    "ctrl-p: portal\n" ..
    "ctrl-o: open file\n" ..
@@ -62,7 +63,7 @@ ship.hud = {
      values={"status.battery", "status.battery_capacity"},
      color={20, 255, 20}, h=6,
    },
-   {x=-20, y=200, type="text", format=quickref, values={1}, align="right"},
+   {x=-25, y=200, type="text", format=quickref, values={1}, align="right"},
    {x=-20, y=-125, type="text", format="%s", align="right",
     values={unread_count}, color={200,0,0},
    },

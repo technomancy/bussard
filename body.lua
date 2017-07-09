@@ -6,6 +6,7 @@ local hostname = function(body_name)
 end
 
 local g = 4196
+local lock_range = 2048
 
 -- Without capping gravity accel, you run into a weird bug caused by
 -- the fact that we calculate gravitation discretely instead of
@@ -21,8 +22,7 @@ local max_accel = 100
 local gravitate = function(body, x, y)
    if(body.mass == 0) then return 0, 0 end
    -- a vector that points from (x,y) to the body
-   local dx = (body.x - x)
-   local dy = (body.y - y)
+   local dx, dy = (body.x - x), (body.y - y)
    local distance = utils.distance(dx, dy)
 
    -- the same vector but with unit length
@@ -164,6 +164,22 @@ return {
          b.thread = love.thread.newThread("os/server.lua")
          b.thread:start(b.input, b.output, b.os, hostname(b.name))
       end
+   end,
+
+   toggle_lock = function(ship, to_name)
+      local to = utils.find_by(ship.bodies, "name", to_name)
+      if(to_name == ship.locked_to or to == nil) then
+         ship.locked_to = nil
+      elseif(utils.distance(ship, to) < lock_range) then
+         ship.locked_to = to_name
+      end
+   end,
+
+   orbital_lock = function(ship, to_name)
+      local to = utils.find_by(ship.bodies, "name", to_name)
+      if(not to) then ship.locked_to = nil return end
+      if(utils.distance(ship, to) < lock_range * 0.8) then return end
+      ship.dx, ship.dy = to.dx, to.dy
    end,
 
    g = g,

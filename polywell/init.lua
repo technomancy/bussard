@@ -733,6 +733,21 @@ local auto_activate_mode = function(path)
    end
 end
 
+local mode_maps_names = {map=true,ctrl=true,["ctrl-alt"]=true,alt=true}
+local function key_for(fn, the_mode)
+   local mode = the_mode or get_current_mode() or modes.default
+
+   for which,map in pairs(mode) do
+      if(mode_maps_names[which]) then
+         for key,f in pairs(map) do
+            if(f == fn) then return key end
+         end
+      end
+   end
+
+   return mode.parent and key_for(fn, modes[mode.parent])
+end
+
 -- TODO: organize these better
 return {
    open = function(fs, path, mode)
@@ -1298,4 +1313,6 @@ return {
    end,
 
    last_command = function() return last_command end,
+
+   key_for = key_for,
 }
