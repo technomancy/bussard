@@ -16,10 +16,7 @@ return {
    "o o r o",
    "ooooooo",
 
-   motd="Welcome to stage 1 of the PTMC bot operations training course.\n\n"..
-      "You are currently logged in to an indoor training rover. There is a\n"..
-   "a terminal at the other end of this room. Pilot the rover to the spot\n"..
-      "next to the terminal using `forward()`, `left()`, and `right()`.",
+   motd=assert(love.filesystem.read("data/motd/merdeka-trainee1")),
 
    hosts={["5x2"]={name="trainee01", os="orb"}},
    messages=messages,

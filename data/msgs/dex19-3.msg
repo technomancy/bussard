@@ -12,6 +12,9 @@ Probably worth a shot; I don't see any other way of buying the battery
 we need to get out of this system. Be sure you log out of your original
 connection before trying to log into the trainee account.
 
+Once you complete the training they should pay you, then you can log into the
+station and run `upgrade buy battery`.
+
 dex19
 
 recruiting@ptmc.tana writes:
