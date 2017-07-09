@@ -1,3 +1,4 @@
+-- -*- lua -*-
 local vector, vector_functions
 
 vector_functions = {
@@ -159,7 +160,10 @@ local orbit_center = function(target, closed)
   local q = 0
   for _, b in pairs(ship.status.bodies) do
     local r2 = vector_functions.difference(b, target):sqr()
-    if (r2>1e-20) and
+    -- checking for b.ship here is not ideal, but if we leave it out there
+    -- are bugs where a station can be considered as orbiting a ship, which
+    -- doesn't make any sense and causes the station trajectory to disappear.
+    if (r2>1e-20) and not b.ship and
         (is_gravitationally_bound(b, target) or not closed) then
       local b_q = b.mass / r2^1.25
       if b_q > q then
