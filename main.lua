@@ -77,10 +77,10 @@ ui.set_font = function(path, size)
    -- if size is nil, assume path is size
    local font
    if(size == nil) then
-      font_size = path
+      font_size = math.max(6, path)
       font = love.graphics.newFont(font_path, path)
    else
-      font_path, font_size = path, size
+      font_path, font_size = path, math.max(6, size)
       font = love.graphics.newFont(path, size)
    end
    love.graphics.setFont(font)
