@@ -9,11 +9,10 @@ There's not much work available on this station that would be suitable for
 the likes of you or me, but I did find this posting from a few weeks back.
 
 Probably worth a shot; I don't see any other way of buying the battery
-we need to get out of this system. Be sure you log out of your original
-connection before trying to log into the trainee account.
+we need to get out of this system. Log into the station by pressing ctrl-s
+when the station is targeted and using the username and password below.
 
-Once you complete the training they should pay you, then you can log into the
-station and run `upgrade buy battery`.
+Good luck.
 
 dex19
 

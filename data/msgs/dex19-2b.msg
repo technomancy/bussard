@@ -9,8 +9,7 @@ In-Reply-To: 81299ce2-a9a0-43c2-b2d9-77e6fb05b47b
 
 Right, so maybe it wasn't quite obvious how to do this; it would probably be
 be helpful to go into a bit more detail. Go into flight mode by pressing f1,
-then press tab until the station is targeted. You can zoom in and out with the
-= and - keys.
+then press tab until the station is targeted.
 
 Fly over to it using the arrow keys. Remember that your engine only controls
 your acceleration; your actual movement is determined more by gravity and the
@@ -26,7 +25,8 @@ clockwise orbit when your target is counterclockwise is just going to burn
 thru your fuel.
 
 Once you get within communications range of the station, your targeting
-indicator will turn bright green. At that point you can press ctrl-s to log
-in. Just use the default username of "guest" and an empty password for now.
+indicator will turn bright green. At that point you should engage the orbital
+lock by pressing f4 so you don't drift out of range. Once you're in range I'll
+log in and see what I can do.
 
 dex19

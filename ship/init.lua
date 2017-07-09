@@ -45,7 +45,7 @@ local base_stats = {
    battery_capacity = 64,
    solar = 30,
 
-   portal_range = 1024,
+   portal_range = 2048,
    portal_time = 40, -- in-game seconds
 }
 

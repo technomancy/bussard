@@ -1,0 +1,14 @@
+
+Welcome to stage 1 of the PTMC bot operations training course.
+
+You are currently logged into an indoor training rover. Anything you type here
+is run in the context of the rover, which accepts Lua code. Your goal is to
+pilot the rover (indicated by ^) over to the terminal on the other side of the
+room marked with a t.
+
+You can execute any kind of code you want including numeric calculations or
+defining functions, but you will be most interested in calling the functions
+`forward()`, `left()`, and `right()` to move the rover around. Be sure to type
+these with the parentheses so that the functions will be called, but not with
+the `backtick` quotation marks.
+

@@ -179,6 +179,7 @@ return {
       local to = utils.find_by(ship.bodies, "name", to_name)
       if(not to) then ship.locked_to = nil return end
       if(utils.distance(ship, to) < lock_range * 0.8) then return end
+      ship.heading = math.atan2(to.x - ship.x, to.y - ship.y)
       ship.dx, ship.dy = to.dx, to.dy
    end,
 

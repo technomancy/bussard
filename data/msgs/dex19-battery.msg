@@ -4,11 +4,13 @@ Content-Type: text/plain; charset=UTF-8
 Subject: Getting out of here
 Message-Id: 3051ee3f-4703-4f57-b330-f8fb1b3ce2bb
 
-Nice job getting the battery. It's about time we got out of here.
+It's about time we got out of here.
 
-Fly over on an intercept course to the portal and try to match its orbital
-path. Press ctrl-p to activate the portal and we can start making our way
-back to civilization, or something approximating it.
+Disengage the orbital lock by pressing f4, then fly over on an intercept
+course to the portal. Press ctrl-p once you're in range of portal. You can use
+the orbital lock again if it helps.
+
+Now we can make way back to civilization, or something approximating it.
 
 dex19
 

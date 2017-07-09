@@ -10,9 +10,10 @@ trip. You've probably got a lot of questions, but your ship sustained a fair
 bit of damage on its trip, and the top priority is getting the backup systems
 online so we're in a less precarious situation.
 
-I've been able to log in using the emergency maintenance protocols, but I
-don't have access to initiate a reactor restart in order to bring the main
-engine back online. I need you to run this function using your console:
+I was able to log in using the emergency maintenance protocols when I found
+you drifting along, but I don't have access to initiate a reactor restart in
+order to bring the main engine back online. I need you to run this function
+using your console:
 
     ship.engine.restart()
 

@@ -1,22 +1,23 @@
 local lume = require("lume")
 local mail = require("mail")
 local mission = require("mission")
-local client = require("os.client")
 local utils = require("utils")
 
-local help_time = 300
+local help_time = 640
 
 return {
    init = function(ship, _record)
       local function trainee_check()
          if(ship.events.trainee01) then
+            mail.deliver_msg(ship, "dex19-4.msg.msg")
             mail.deliver_msg(ship, "ptmc-recruit.msg")
             mission.record_event(ship, "finish_init")
          end
       end
 
       local function deliver_on_login()
-         if(client.is_connected(ship, "Merdeka Station")) then
+         local merdeka = utils.find_by(ship.bodies, "name", "Merdeka Station")
+         if(ship:in_range(merdeka)) then
             mail.deliver_msg(ship, "dex19-3.msg")
             lume.remove(ship.updaters, deliver_on_login)
             mission.record_event(ship, "init_login")
