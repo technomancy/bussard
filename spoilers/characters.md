@@ -1,16 +1,13 @@
 # Companion Characters
 
-Certain characters can be recruited to join you on your ship, provided
-you have a life support upgrade installed. If you sell your life
-support, any humans onboard will be forced to disembark, aborting any
-passenger missions you may have accepted. If you have companions on
-board, they will send you irate emails asking you to pick them back up
-after you buy life support again.
-
 Your only interaction with these characters is by email. They can
 email you when certain plot points trigger (or maybe after a certain
 amount of time has passed with no plot points triggering in the case
 of hints) but you can't email them back beyond simple OK/NO replies.
+
+## dex19
+
+A curious little construct.
 
 ## Nari Phouen <nari.phouen@starlink.net.sol>
 
@@ -28,18 +25,22 @@ on coding. Grew up on Mars and is a citizen of Sol.
 She also offers to pretend to be the captain of the ship in any cases
 where an un-manned ship would raise too many suspicions.
 
-# Governments
+## rocanna7
+
+## traxus5
+
+# Systems by Government
 
 This will make more sense if you read history.md first.
 
+Each world has a file in data/motd which contains a brief description and is
+shown when logging into that world.
+
 ## Solar Union
 
-Home of humanity, but regressed from its height. Suffered from having
-portal delayed due to accident. Some believe the Ptolemy was sabotaged
-on its mission to carry a portal to Sol.
-
-Sol is ancient, and still hosts the majority of humankind who have never left
-Earth. Many see it as backwards or quaint.
+Home of humanity, but regressed from its height. Suffered from having portal
+delayed due to accident.Sol is ancient, and still hosts the majority of
+humankind, who have never left Earth. Many see it as backwards or quaint.
 
 * [x] Earth
 * [x] Mars
@@ -149,9 +150,9 @@ headquartered on Bohk Prime.
   Works with Aperture to piggy-back data transmission on top of each
   portal open cycle.
 
-* Post-Terran Mining Company (Tana)
-  The primary driver behind the colonization of Tana. Government of
-  Tana is arguably a front for PTMC.
+* Consolidated Mineral Exploitation Company (Tana)
+  The primary driver behind the colonization of Tana and the largest chunk of
+  its economy.
 
 * Orolo Research (Sol)
   Responsible for early sublight drives, recently assisting Luminous

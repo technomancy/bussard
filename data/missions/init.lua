@@ -10,7 +10,7 @@ return {
       local function trainee_check()
          if(ship.events.trainee01) then
             mail.deliver_msg(ship, "dex19-4.msg.msg")
-            mail.deliver_msg(ship, "ptmc-recruit.msg")
+            mail.deliver_msg(ship, "cmec-recruit.msg")
             mission.record_event(ship, "finish_init")
          end
       end

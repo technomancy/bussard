@@ -16,13 +16,13 @@ Good luck.
 
 dex19
 
-recruiting@ptmc.tana writes:
+recruiting@cmec.tana writes:
 
 > Help wanted for bot operations.
 >
 > This is an entry-level position suitable for humans and constructs. No
 > previous experience in mechanical maintenance or programming is required.
-> PTMC offers an initial skills training program, after which hires may
+> CMEC offers an initial skills training program, after which hires may
 > qualify for postings all over the Tana colonies.
 >
 > In order to sign up for the training program, log in to Merdeka Station with

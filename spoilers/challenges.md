@@ -11,7 +11,7 @@ the system, and so do you, so you can work together.
  * Need to read dex-19 email (skill: operating editor)
  * Restart engines (skill: editor/console)
  * Fly to Merdeka station (skill: piloting)
- * Log in and take the PTMC training course (skill: ssh, basic lua)
+ * Log in and take the CMEC training course (skill: ssh, basic lua)
  * Buy the battery upgrade (skill: ssh, orb)
 
 ## Decode log
