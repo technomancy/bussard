@@ -67,7 +67,9 @@ local touching = function()
    end
 end
 
-local drop = function() if(not touching()) then piece.y = piece.y - 1 end end
+local drop = function()
+   if(not touching()) then piece.y = piece.y - 1 end
+end
 
 local gap = function(row)
    for i=1,cols do
@@ -97,8 +99,8 @@ local last_update, tick_size = 0, 1
 local update = function(dt)
    last_update = last_update + dt
    if(last_update > tick_size) then
-     tick()
-     last_update = last_update - tick_size
+      tick()
+      last_update = last_update - tick_size
    end
 end
 

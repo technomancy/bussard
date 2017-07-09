@@ -79,12 +79,12 @@ editor.replace = function()
          if(match_point) then
             editor.go_to(i, match_point-1, path)
             editor.read_line("Replace? [Y/n] ", function(y, inner_cancel)
-                           if(not inner_cancel and y == "" or
-                              y:lower() == "y" or y:lower() == "yes") then
-                              local new_line = lines[i]:gsub(replace, with)
-                              editor.set_line(new_line, i, path)
-                              replacer(replace, with, false, i+1)
-                           end
+                                if(not inner_cancel and y == "" or
+                                   y:lower() == "y" or y:lower() == "yes") then
+                                   local new_line = lines[i]:gsub(replace, with)
+                                   editor.set_line(new_line, i, path)
+                                   replacer(replace, with, false, i+1)
+                                end
             end)
             return
          end
@@ -109,7 +109,7 @@ editor.switch_buffer = function()
       return utils.completions_for(input, editor.buffer_names())
    end
    editor.read_line("Switch to buffer (default: " .. last_buffer ..
-                            "): ", callback, {completer=completer})
+                       "): ", callback, {completer=completer})
 end
 
 editor.reload = function()

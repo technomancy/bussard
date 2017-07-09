@@ -52,7 +52,7 @@ ship.hud = {
              function(s)
                 return s.status.target and utils.distance(s.status,
                                                           s.status.target)
-                                   end, "status.target.mass"}
+             end, "status.target.mass"}
    },
    { x=5,y=5, type="bar",
      values={"status.fuel", "status.fuel_capacity", ship.fuel_to_stop},
