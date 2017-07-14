@@ -239,6 +239,10 @@ local init_active = function(ship)
    end
 end
 
+local wait_for = function(ship, event)
+   while(not ship.events[event]) do coroutine.yield() end
+end
+
 return {
    accept = accept,
    on_login = on_login,
@@ -249,4 +253,5 @@ return {
    find = find,
    record_event = record_event,
    init_active = init_active,
+   wait_for = wait_for,
 }

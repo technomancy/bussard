@@ -8,9 +8,9 @@ In-Reply-To: 81299ce2-a9a0-43c2-b2d9-77e6fb05b47b
 There's not much work available on this station that would be suitable for
 the likes of you or me, but I did find this posting from a few weeks back.
 
-Probably worth a shot; I don't see any other way of buying the battery
-we need to get out of this system. Log into the station by pressing ctrl-s
-when the station is targeted and using the username and password below.
+Probably worth a shot; I don't see any other way of buying the battery we need
+to get out of this system. Log into the station by pressing ctrl-s in flight
+mode when the station is targeted; try the username and password below.
 
 Good luck.
 

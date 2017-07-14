@@ -245,7 +245,7 @@ local with_traceback = function(print2, f, ...)
       if(type(f) == "function") then
          return f(unpack(args))
       else
-         return coroutine.yield(f, unpack(args))
+         return coroutine.resume(f, unpack(args))
       end
    end
    -- TODO: sandboxed traceback which trims out irrelevant layers

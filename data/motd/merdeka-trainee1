@@ -11,4 +11,3 @@ defining functions, but you will be most interested in calling the functions
 `forward()`, `left()`, and `right()` to move the rover around. Be sure to type
 these with the parentheses so that the functions will be called, but not with
 the `backtick` quotation marks.
-
