@@ -240,7 +240,12 @@ local init_active = function(ship)
 end
 
 local wait_for = function(ship, event)
-   while(not ship.events[event]) do coroutine.yield() end
+   assert(ship.ship)
+   if(type(event) == "string") then
+      while(not ship.events[event]) do coroutine.yield() end
+   else
+      while(not event(ship)) do coroutine.yield() end
+   end
 end
 
 return {

@@ -11,16 +11,14 @@ local coro = coroutine.create(function(ship)
       mail.deliver_msg(ship, "dex19-2.msg")
       mission.accept(ship, "buy_battery")
 
-      while(not ship.events.init_login) do
-         local merdeka = utils.find_by(ship.bodies, "name", "Merdeka Station")
-         if(ship:in_range(merdeka)) then
-            mail.deliver_msg(ship, "dex19-3.msg")
-            mission.record_event(ship, "init_login")
-         elseif(utils.time(ship) - ship.events.engine_restart > 640) then
-            mail.deliver_msg(ship, "dex19-2b.msg")
-         end
-         coroutine.yield()
-      end
+      mission.wait_for(ship, function()
+            if(utils.time(ship) - ship.events.engine_restart > 640) then
+               mail.deliver_msg(ship, "dex19-2b.msg")
+            end
+            return ship:in_range(utils.find_by(ship.bodies, "name",
+                                               "Merdeka Station"))
+      end)
+      mail.deliver_msg(ship, "dex19-3.msg")
 end)
 
 return {

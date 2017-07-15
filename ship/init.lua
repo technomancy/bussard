@@ -144,6 +144,7 @@ end
 
 local ship = {
    base_stats = base_stats,
+   ship=true,
 
    -- ephemeral
    x=0, y=0, dx=0, dy=-200, heading = math.pi,
