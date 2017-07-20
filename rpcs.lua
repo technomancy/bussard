@@ -283,6 +283,11 @@ return {
       mission.record_event(ship, event)
    end,
 
+   split_editor = function(ship, _, buffer_name, mode)
+      ship.api.editor.open_in_split(nil, buffer_name, mode)
+      ship.api.editor.focus_next()
+   end,
+
    subnet = {
       request = function(ship, input_string)
          local enc = function(x)

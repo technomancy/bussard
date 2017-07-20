@@ -98,7 +98,7 @@ local function get_prop(prop, default, buffer, mode)
    mode = mode or get_current_mode(buffer)
    if(buffer and buffer.props[prop]) then
       return buffer and buffer.props[prop]
-   elseif(mode.props and mode.props[prop]) then
+   elseif(mode.props and mode.props[prop] ~= nil) then
       return mode.props[prop]
    elseif(mode.parent) then
       return get_prop(prop, default, buffer, assert(modes[mode.parent]))
@@ -748,35 +748,37 @@ local function key_for(fn, the_mode)
    return mode.parent and key_for(fn, modes[mode.parent])
 end
 
+local open = function(fs, path, mode)
+   last_edit_buffer = b
+   b = get_buffer(path)
+   if(b) then
+      if(mode) then activate_mode(mode) end
+   else
+      if(fs and fs[path] and type(fs[path]) ~= "string") then
+         -- Could support opening tables as directories like dired?
+         echo("Tried to open a directory or something.")
+      else
+         b = make_buffer(fs, path)
+         table.insert(buffers, b)
+      end
+
+      local parts = lume.split(b.lines[1], "-*-")
+      local auto_mode = mode or (parts[2] and lume.trim(parts[2]))
+      if(auto_mode) then
+         activate_mode(auto_mode)
+      elseif(not auto_activate_mode(path)) then
+         activate_mode("edit")
+      end
+   end
+   if(splits) then
+      local last_pos = find_split(last_edit_buffer)
+      splits[last_pos or 1][2] = b
+   end
+end
+
 -- TODO: organize these better
 return {
-   open = function(fs, path, mode)
-      last_edit_buffer = b
-      b = get_buffer(path)
-      if(b) then
-         if(mode) then activate_mode(mode) end
-      else
-         if(fs and fs[path] and type(fs[path]) ~= "string") then
-            -- Could support opening tables as directories like dired?
-            echo("Tried to open a directory or something.")
-         else
-            b = make_buffer(fs, path)
-            table.insert(buffers, b)
-         end
-
-         local parts = lume.split(b.lines[1], "-*-")
-         local auto_mode = mode or (parts[2] and lume.trim(parts[2]))
-         if(auto_mode) then
-            activate_mode(auto_mode)
-         elseif(not auto_activate_mode(path)) then
-            activate_mode("edit")
-         end
-      end
-      if(splits) then
-         local last_pos = find_split(last_edit_buffer)
-         splits[last_pos or 1][2] = b
-      end
-   end,
+   open = open,
 
    close = function(confirm)
       if(b.prevent_close) then return echo("unsaved changes") end
@@ -962,11 +964,11 @@ return {
    undo = undo,
 
    draw = function(dt)
-      if(get_prop("draw")) then
-         get_prop("draw")(dt)
+      if(get_prop("full_draw")) then
+         get_prop("full_draw")(dt)
       elseif(b.path == "minibuffer" and
-             get_prop("draw", nil, behind_minibuffer)) then
-         get_prop("draw", nil, behind_minibuffer)()
+             get_prop("full_draw", nil, behind_minibuffer)) then
+         get_prop("full_draw", nil, behind_minibuffer)()
          draw(b, {}, echo_message, colors)
       else
          local w,h = love.window.getMode()
@@ -980,7 +982,7 @@ return {
                buffers_where[bufpos[1]] = bufpos[2]
             end
          end
-         draw(b, buffers_where, echo_message, colors)
+         draw(b, buffers_where, echo_message, colors, get_prop)
       end
       if(get_prop("over_draw")) then get_prop("over_draw")() end
    end,
@@ -1043,276 +1045,291 @@ return {
    -- normally you would use activate_mode; this is lower-level
    set_mode = function(mode_name) if(b) then b.mode = mode_name end end,
 
-   current_buffer_path = function() return b.path end,
+      current_buffer_path = function() return b.path end,
 
-   print = the_print,
+      print = the_print,
 
-   raw_write = write,
-   write = io_write,
+      raw_write = write,
+      write = io_write,
 
-   get_lines = function() return lume.clone(b.lines) end,
+      get_lines = function() return lume.clone(b.lines) end,
 
-   get_line = function(n)
-      if(not b) then return end
-      if(not n) then return b.lines[b.point_line] end
-      if(n < 1) then n = #b.lines + n end
-      return b.lines[n]
-   end,
+      get_line = function(n)
+         if(not b) then return end
+         if(not n) then return b.lines[b.point_line] end
+         if(n < 1) then n = #b.lines + n end
+         return b.lines[n]
+      end,
 
-   get_line_number = function() return b and b.point_line end,
+      get_line_number = function() return b and b.point_line end,
 
-   get_max_line = function() return b and #b.lines end,
+      get_max_line = function() return b and #b.lines end,
 
-   point = function() return b.point, b.point_line end,
+      point = function() return b.point, b.point_line end,
 
-   set_line = function(line, number, path)
-      local buffer = get_buffer(path) or b
-      buffer.lines[number] = line
-   end,
+      set_line = function(line, number, path)
+         local buffer = get_buffer(path) or b
+         buffer.lines[number] = line
+      end,
 
-   invisible = invisible,
+      invisible = invisible,
 
-   suppress_read_only = function(f, ...)
-      local read_only = inhibit_read_only
-      inhibit_read_only = true
-      local val = f(...)
-      inhibit_read_only = read_only
-      return val
-   end,
+      suppress_read_only = function(f, ...)
+         local read_only = inhibit_read_only
+         inhibit_read_only = true
+         local val = f(...)
+         inhibit_read_only = read_only
+         return val
+      end,
 
-   get_prop = get_prop, get = get_prop,
-   set_prop = set_prop, set = set_prop,
-   vary_prop = vary_prop, vary = vary_prop,
-   get_mode_prop = get_mode_prop,
+      get_prop = get_prop, get = get_prop,
+      set_prop = set_prop, set = set_prop,
+      vary_prop = vary_prop, vary = vary_prop,
+      get_mode_prop = get_mode_prop,
 
-   save_excursion = save_excursion,
+      save_excursion = save_excursion,
 
-   prompt = function() return (b and b.prompt) or "> " end,
-   get_prompt = function() return (b and b.prompt) or "> " end,
-   set_prompt = function(p)
-      if(not b) then return end
-      if(b.prompt) then
-         local line = b.lines[#b.lines]
-         b.lines[#b.lines] = p .. utf8.sub(line, utf8.len(b.prompt) + 1)
-      end
-      if(b.point_line == #b.lines) then b.point = utf8.len(p) end
-      b.prompt = p
-   end,
-   print_prompt = function()
-      local read_only = inhibit_read_only
-      printing_prompt, inhibit_read_only = true, true
-      b.mark, b.mark_line = nil, nil
-      delete(#b.lines, 0, #b.lines, #b.lines[#b.lines])
-      write(b.prompt)
-      b.point, b.point_line = #b.lines[#b.lines], #b.lines
-      printing_prompt, inhibit_read_only = false, read_only
-   end,
-   get_input = get_input,
+      prompt = function() return (b and b.prompt) or "> " end,
+      get_prompt = function() return (b and b.prompt) or "> " end,
+      set_prompt = function(p)
+         if(not b) then return end
+         if(b.prompt) then
+            local line = b.lines[#b.lines]
+            b.lines[#b.lines] = p .. utf8.sub(line, utf8.len(b.prompt) + 1)
+         end
+         if(b.point_line == #b.lines) then b.point = utf8.len(p) end
+         b.prompt = p
+      end,
+      print_prompt = function()
+         local read_only = inhibit_read_only
+         printing_prompt, inhibit_read_only = true, true
+         b.mark, b.mark_line = nil, nil
+         delete(#b.lines, 0, #b.lines, #b.lines[#b.lines])
+         write(b.prompt)
+         b.point, b.point_line = #b.lines[#b.lines], #b.lines
+         printing_prompt, inhibit_read_only = false, read_only
+      end,
+      get_input = get_input,
 
-   -- this is for feedback within the editor where print wouldn't make sense
-   echo = echo,
+      -- this is for feedback within the editor where print wouldn't make sense
+      echo = echo,
 
-   history_prev = function()
-      if b.input_history_pos + 1 <= b.input_history.entries then
-         b.input_history_pos = b.input_history_pos + 1
-         replace_input(b.input_history:get(-b.input_history_pos))
-      end
-   end,
-   history_next = function()
-      if b.input_history_pos - 1 > 0 then
-         b.input_history_pos = b.input_history_pos - 1
-         replace_input(b.input_history:get(-b.input_history_pos))
-      else
-         b.input_history_pos = 0
-         replace_input("")
-      end
-   end,
-   history_push = function(input)
-      b.input_history_pos = 0
-      b.input_history:append(input, true)
-   end,
-
-   set_modeline = function(modeline_function)
-      b.modeline = modeline_function
-   end,
-
-   with_current_buffer = with_current_buffer,
-   with_output_to = function(nb, f)
-      if(type(nb) == "string") then
-         nb = get_buffer(nb)
-      end
-      local old_b = output_to
-      output_to = nb
-      local val = f()
-      output_to = old_b
-      return val
-   end,
-
-   dump_buffer = function(name)
-      local to_dump = lume.pick(get_buffer(name), "prompt",
-                                "path", "mode", "lines", "point", "mark",
-                                "point_line", "mark_line", "input_history")
-      return lume.serialize(to_dump)
-   end,
-
-   load_buffer = function(fs, dumped)
-      local loaded = lume.deserialize(dumped)
-      local buffer = get_buffer(loaded.path) or make_buffer(fs, loaded.path)
-      lume.extend(buffer, loaded)
-      buffer.input_history = utils.buffer:new(loaded.input_history)
-      if(buffer.path == "*console*") then
-         buffer.prompt, buffer.mode = "> ", "console"
-      end
-   end,
-
-   buffer_names = function()
-      return lume.map(buffers, function(bu) return bu.path end)
-   end,
-
-   go_to = function(line, point, buffer_name)
-      local buffer = get_buffer(buffer_name) or b
-      if(type(point) == "number" and point >= 0 and
-         point <= #buffer.lines[buffer.point_line]) then
-         buffer.point = point
-      end
-      if(type(line) == "number" and line > 0 and line <= #buffer.lines) then
-         buffer.point_line = line
-      end
-   end,
-
-   activate_mode = activate_mode,
-
-   define_mode = define_mode,
-   bind = bind,
-   textinput = handle_textinput,
-
-   keypressed = function(key)
-      local fn = find_binding(key)
-      if(type(fn) == "function") then
-         if(os.getenv("DEBUG")) then
-            get_prop("wrap", wrap)(fn)
+      history_prev = function()
+         if b.input_history_pos + 1 <= b.input_history.entries then
+            b.input_history_pos = b.input_history_pos + 1
+            replace_input(b.input_history:get(-b.input_history_pos))
+         end
+      end,
+      history_next = function()
+         if b.input_history_pos - 1 > 0 then
+            b.input_history_pos = b.input_history_pos - 1
+            replace_input(b.input_history:get(-b.input_history_pos))
          else
+            b.input_history_pos = 0
+            replace_input("")
+         end
+      end,
+      history_push = function(input)
+         b.input_history_pos = 0
+         b.input_history:append(input, true)
+      end,
+
+      set_modeline = function(modeline_function)
+         b.modeline = modeline_function
+      end,
+
+      with_current_buffer = with_current_buffer,
+      with_output_to = function(nb, f)
+         if(type(nb) == "string") then
+            nb = get_buffer(nb)
+         end
+         local old_b = output_to
+         output_to = nb
+         local val = f()
+         output_to = old_b
+         return val
+      end,
+
+      dump_buffer = function(name)
+         local to_dump = lume.pick(get_buffer(name), "prompt",
+                                   "path", "mode", "lines", "point", "mark",
+                                   "point_line", "mark_line", "input_history")
+         return lume.serialize(to_dump)
+      end,
+
+      load_buffer = function(fs, dumped)
+         local loaded = lume.deserialize(dumped)
+         local buffer = get_buffer(loaded.path) or make_buffer(fs, loaded.path)
+         lume.extend(buffer, loaded)
+         buffer.input_history = utils.buffer:new(loaded.input_history)
+         if(buffer.path == "*console*") then
+            buffer.prompt, buffer.mode = "> ", "console"
+         end
+      end,
+
+      buffer_names = function()
+         return lume.map(buffers, function(bu) return bu.path end)
+      end,
+
+      go_to = function(line, point, buffer_name)
+         local buffer = get_buffer(buffer_name) or b
+         if(type(point) == "number" and point >= 0 and
+            point <= #buffer.lines[buffer.point_line]) then
+            buffer.point = point
+         end
+         if(type(line) == "number" and line > 0 and line <= #buffer.lines) then
+            buffer.point_line = line
+         end
+      end,
+
+      activate_mode = activate_mode,
+
+      define_mode = define_mode,
+      bind = bind,
+      textinput = handle_textinput,
+
+      keypressed = function(key)
+         local fn = find_binding(key)
+         if(type(fn) == "function") then
+            if(os.getenv("DEBUG")) then
+               get_prop("wrap", wrap)(fn)
+            else
+               with_traceback(get_prop("wrap", wrap), fn)
+            end
+            -- if we deactivate the active prefix now, textinput will trigger
+            active_prefix_deactivate = true
+         elseif(type(fn) == "table") then
+            active_prefix, active_prefix_deactivate = fn, false
+         else
+            active_prefix_deactivate = true
+         end
+      end,
+
+      keyreleased = function()
+         if(active_prefix_deactivate) then
+            active_prefix = nil
+         end
+      end,
+
+      wheelmoved = function(x, y)
+         local fn = find_binding("wheelmoved")
+         if(fn) then
             with_traceback(get_prop("wrap", wrap), fn)
+         else
+            local wheel_dir = nil
+            if(x < 0) then wheel_dir = "wheelleft"
+            elseif(x > 0) then wheel_dir = "wheelright"
+            elseif(y < 0) then wheel_dir = "wheeldown"
+            elseif(y > 0) then wheel_dir = "wheelup"
+            end
+            local dir_fn = find_binding(wheel_dir)
+            if(dir_fn) then
+               with_traceback(get_prop("wrap", wrap), dir_fn)
+            end
          end
-         -- if we deactivate the active prefix now, textinput will trigger
-         active_prefix_deactivate = true
-      elseif(type(fn) == "table") then
-         active_prefix, active_prefix_deactivate = fn, false
-      else
-         active_prefix_deactivate = true
-      end
-   end,
+      end,
 
-   keyreleased = function()
-      if(active_prefix_deactivate) then
-         active_prefix = nil
-      end
-   end,
+      mousepressed = handler_for("mouse_pressed"),
+      mousereleased = handler_for("mouse_released"),
+      mousemoved = handler_for("mouse_moved"),
+      mousefocus = handler_for("mouse_focus"),
 
-   wheelmoved = function(x, y)
-      local fn = find_binding("wheelmoved")
-      if(fn) then
-         with_traceback(get_prop("wrap", wrap), fn)
-      else
-         local wheel_dir = nil
-         if(x < 0) then wheel_dir = "wheelleft"
-         elseif(x > 0) then wheel_dir = "wheelright"
-         elseif(y < 0) then wheel_dir = "wheeldown"
-         elseif(y > 0) then wheel_dir = "wheelup"
+      -- invoke a handler function directly.
+      -- you can call this if you want to wrap a parent mode's binding for
+      -- a specific event.
+      invoke_handler = function(mode_name, event, ...)
+         handler_for(event, modes[mode_name])(...)
+      end,
+
+      set_colors = function(new_colors)
+         lume.extend(colors, new_colors)
+      end,
+
+      set_color = function(color, value)
+         if(type(color) == "string") then
+            colors[color] = value
+         else -- nested set
+            local target = colors
+            local last = table.remove(color, #color)
+            for _,v in ipairs(color) do
+               target = target[v] or {}
+            end
+            target[last] = value
          end
-         local dir_fn = find_binding(wheel_dir)
-         if(dir_fn) then
-            with_traceback(get_prop("wrap", wrap), dir_fn)
+      end,
+
+      colorize = function(keywords)
+         -- love 0.9.x doesn't have multi-colored print
+         if(love._version_major > 0 or love._version_minor < 10) then return end
+         local mode_colors = (b and b.mode and colors[b.mode]) or colors
+         b.props.render_lines = colorize(keywords, mode_colors, b.lines)
+      end,
+
+      debug = debug,
+
+      set_traceback = function(t) with_traceback = t end,
+
+      fullscreen = function()
+         local w,h = love.window.getDesktopDimensions()
+         love.window.setMode(w, h, {fullscreen=true, fullscreentype="desktop",
+                                    resizable=false})
+      end,
+
+      coroutines = {},
+
+      colors = colors,
+
+      set_state = function(s)
+         kill_ring, modes, auto_modes = s.kill_ring, s.modes, s.auto_modes
+         last_mode, b, buffers = s.last_mode, s.b, s.buffers
+         last_edit_buffer, splits = s.last_edit_buffer, s.splits
+         the_print("Reloaded!")
+      end,
+
+      reload = function(reinit)
+         local s = { kill_ring=kill_ring,
+                     modes=modes, auto_modes=auto_modes,
+                     last_mode=last_mode,
+                     colors=colors,
+                     b=b, buffers=buffers,
+                     last_edit_buffer=last_edit_buffer, splits=splits, }
+         package.loaded.polywell = nil
+         require("polywell").set_state(s)
+         -- We can't always assume main.lua is safe to re-run.
+         if(reinit) then
+            dofile("main.lua")
+            love.load()
          end
-      end
-   end,
+      end,
 
-   mousepressed = handler_for("mouse_pressed"),
-   mousereleased = handler_for("mouse_released"),
-   mousemoved = handler_for("mouse_moved"),
-   mousefocus = handler_for("mouse_focus"),
+      get_wh = function()
+         local _,_,w,h = love.graphics.getScissor()
+         if(not w and not w) then w,h = love.window.getMode() end
+         return w, h
+      end,
 
-   -- invoke a handler function directly.
-   -- you can call this if you want to wrap a parent mode's binding for
-   -- a specific event.
-   invoke_handler = function(mode_name, event, ...)
-      handler_for(event, modes[mode_name])(...)
-   end,
-
-   set_colors = function(new_colors)
-      lume.extend(colors, new_colors)
-   end,
-
-   set_color = function(color, value)
-      if(type(color) == "string") then
-         colors[color] = value
-      else -- nested set
-         local target = colors
-         local last = table.remove(color, #color)
-         for _,v in ipairs(color) do
-            target = target[v] or {}
+      update = function(dt)
+         local fn = find_binding("update")
+         if(fn) then
+            with_traceback(get_prop("wrap", wrap), fn, dt)
          end
-         target[last] = value
-      end
-   end,
+      end,
 
-   colorize = function(keywords)
-      -- love 0.9.x doesn't have multi-colored print
-      if(love._version_major > 0 or love._version_minor < 10) then return end
-      local mode_colors = (b and b.mode and colors[b.mode]) or colors
-      b.props.render_lines = colorize(keywords, mode_colors, b.lines)
-   end,
+      last_command = function() return last_command end,
 
-   debug = debug,
+      key_for = key_for,
 
-   set_traceback = function(t) with_traceback = t end,
+      open_in_split = function(...)
+         local current_b, w,h = b, love.window.getMode()
+         open(...)
+         splits = {{{10,10,w/2-10,h}, current_b},
+            {{w/2+10,10,w/2,h}, b},}
+      end,
 
-   fullscreen = function()
-      local w,h = love.window.getDesktopDimensions()
-      love.window.setMode(w, h, {fullscreen=true, fullscreentype="desktop",
-                                 resizable=false})
-   end,
-
-   coroutines = {},
-
-   colors = colors,
-
-   set_state = function(s)
-      kill_ring, modes, auto_modes = s.kill_ring, s.modes, s.auto_modes
-      last_mode, b, buffers = s.last_mode, s.b, s.buffers
-      last_edit_buffer, splits = s.last_edit_buffer, s.splits
-      the_print("Reloaded!")
-   end,
-
-   reload = function(reinit)
-      local s = { kill_ring=kill_ring,
-                  modes=modes, auto_modes=auto_modes,
-                  last_mode=last_mode,
-                  colors=colors,
-                  b=b, buffers=buffers,
-                  last_edit_buffer=last_edit_buffer, splits=splits, }
-      package.loaded.polywell = nil
-      require("polywell").set_state(s)
-      -- We can't always assume main.lua is safe to re-run.
-      if(reinit) then
-         dofile("main.lua")
-         love.load()
-      end
-   end,
-
-   get_wh = function()
-      local _,_,w,h = graphics.getScissor()
-      if(not w and not w) then w,h = love.window.getMode() end
-   end,
-
-   update = function(dt)
-      local fn = find_binding("update")
-      if(fn) then
-         with_traceback(get_prop("wrap", wrap), fn, dt)
-      end
-   end,
-
-   last_command = function() return last_command end,
-
-   key_for = key_for,
+      debug_split = function()
+         for _,pane in pairs(splits or {}) do
+            pp(pane[1])
+            print(pane[2].path)
+         end
+      end,
 }

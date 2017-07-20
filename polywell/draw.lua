@@ -10,9 +10,6 @@ local render_line = function(ln2, y)
 end
 
 local render_buffer = function(b, colors, x, y, bw, bh, focused)
-   love.graphics.push()
-   love.graphics.translate(x, y)
-   love.graphics.setScissor(x, y, bw, bh)
    local display_rows = math.floor(bh / row_height)
    local edge = math.ceil(display_rows * scroll_point)
    local offset = (b.point_line < edge and 0) or (b.point_line - edge)
@@ -43,8 +40,6 @@ local render_buffer = function(b, colors, x, y, bw, bh, focused)
          render_line(line, row_y)
       end
    end
-   love.graphics.pop()
-   love.graphics.setScissor()
 end
 
 local draw_scroll_bar = function(b, colors)
@@ -80,7 +75,7 @@ local draw_scroll_bar = function(b, colors)
    end
 end
 
-return function(b, buffers_where, echo_message, colors)
+return function(b, buffers_where, echo_message, colors, get_prop)
    row_height = love.graphics.getFont():getHeight()
    em = love.graphics.getFont():getWidth('a')
    w, h = love.window.getMode()
@@ -93,7 +88,16 @@ return function(b, buffers_where, echo_message, colors)
 
    for pos,buf in pairs(buffers_where) do
       local x,y,bw,bh = unpack(pos)
-      render_buffer(buf, colors, x, y, bw, bh, buf == b)
+      love.graphics.push()
+      love.graphics.translate(x, y)
+      love.graphics.setScissor(x, y, bw, bh)
+      if(get_prop("draw", nil, buf)) then
+         get_prop("draw", nil, buf)()
+      else
+         render_buffer(buf, colors, x, y, bw, bh, buf == b)
+      end
+      love.graphics.pop()
+      love.graphics.setScissor()
    end
 
    love.graphics.setColor(colors.minibuffer_bg)
