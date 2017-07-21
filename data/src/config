@@ -23,7 +23,7 @@ ship.controls["="] = zoom_in
 ship.controls["-"] = zoom_out
 
 ---- Flight mode
-define_mode("flight", nil, {draw=flight_draw, transparency=false})
+define_mode("flight", nil, {full_draw=flight_draw, transparency=false})
 
 -- bind is for commands that only call their functions once even when held.
 -- it takes the name of a mode, a key combo, and a function to run when pressed.
@@ -65,6 +65,7 @@ dofile("src.lua")
 dofile("src.mail") -- mail client
 dofile("src.console") -- console for interacting with ship's computer
 dofile("src.ssh") -- ssh mode for interacting with station/planet computers
+dofile("src.rover") -- for rendering rover position and sensor data
 
 -- bindings can affect more than one mode at a time:
 bind({"edit", "flight"}, "f1",

@@ -1,23 +1,26 @@
-local turn_first = "All right, so you turned first; that's fine. Use `forward()` and more\nturns to reach the terminal."
-local messages = {
-   ["5x4"]="Good; you successfully moved forward. Now turn with `left()` and go that way.",
-   ["4x4"]="You're getting the idea. A little further, then head around the corner.",
-   ["6x5"]=turn_first,
-   ["4x5"]=turn_first,
-   ["3x3"]="There are shorter aliases for `forward()`, `left()`, and `right()`:\n`f()`, `l()`, and `r()`",
-   ["4x2"]="You have reached the terminal. Run `login()` to connect.",
-}
-
 return {
-   "ooooooo",
-   "o   t o",
-   "o  oooo",
-   "o     o",
-   "o o r o",
-   "ooooooo",
+   rects = {
+      { 0, 0,70,10, color="green"},
+      { 0, 0,10,60, color="green"},
+      {60, 0,10,60, color="green"},
+      {0, 50,70,10, color="green"},
+      {20,40,10,10, color="green"},
+      {30,20,40,10, color="green"},
+      {50,10,10,10, color="blue"},
+   },
 
-   motd=assert(love.filesystem.read("data/motd/merdeka-trainee1")),
+   rover = {45,45,9,9},
+   motd = assert(love.filesystem.read("data/motd/merdeka-trainee1")),
+   hosts = {{50,20,10,10, name="trainee01", os="orb"}},
 
-   hosts={["5x2"]={name="trainee01", os="orb"}},
-   messages=messages,
+   messages = {
+      {50,40,10,10, msg="Good; you successfully moved forward. Now turn with `left()` and go that way."},
+      {40,40,10,10, msg="You're getting the idea. A little further, then head around the corner."},
+      {60,50,10,10, msg="All right, so you turned first; that's fine. " ..
+          "Use `forward()` and more\nturns to reach the terminal."},
+      {40,50,10,10, msg="All right, so you turned first; that's fine. " ..
+          "Use `forward()` and more\nturns to reach the terminal."},
+      {30,30,10,10, msg="There are shorter aliases for `forward()`, `left()`, and `right()`:\n`f()`, `l()`, and `r()`"},
+      {40,20,10,10, msg="You have reached the terminal. Run `login()` to connect."},
+   },
 }

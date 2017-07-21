@@ -24,8 +24,7 @@ end
 
 while true do
    local msg = input:demand()
-   -- TODO: range check
-   dbg(">", require("lume").serialize(msg))
+   dbg(">", require("serpent").block(msg))
    if(msg.op == "kill") then
       for session_id,session in pairs(sessions) do
          if(os.kill) then

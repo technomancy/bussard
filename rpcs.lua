@@ -288,6 +288,10 @@ return {
       ship.api.editor.focus_next()
    end,
 
+   rover_state = function(ship, _, state)
+      ship.api.rover_state = state
+   end,
+
    subnet = {
       request = function(ship, input_string)
          local enc = function(x)

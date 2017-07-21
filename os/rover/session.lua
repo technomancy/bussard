@@ -23,26 +23,27 @@ end
 
 local round = function(x) return math.floor(x+0.5) end
 
-local forward = function(dist)
-   dist = dist or 1
-   assert(map.move(state, "r",
-                   round(dist*math.sin(state.dir)),
-                   round(dist*-math.cos(state.dir))))
-   local x, y = assert(map.find_pos(state, "r"))
-   if(state.messages and state.messages[x.."x"..y]) then
-      write(state.messages[x.."x"..y] .. "\n")
-      state.messages[x.."x"..y] = nil
-   end
+local relativize = function(rover, rect)
+   local newrect = lume.extend({}, rect)
+   newrect[1], newrect[2] = newrect[1] - rover[1], newrect[2] - rover[2]
+   return newrect
 end
 
-local find_adjacent = function(target)
-   local x, y = assert(map.find_pos(state, "r"))
-   local adjacents = {{-1,0}, {1,0}, {0,-1}, {0, 1}}
-   for _,d in ipairs(adjacents) do
-      if(state[y+d[1]][x+d[2]] == target) then
-         return x+d[2].."x"..y+d[1]
-      end
-   end
+local send_state = function()
+   local rects = lume.map(state.rects, lume.fn(relativize, state.rover))
+   output:push({ op="rpc", fn="rover_state",
+                 args={{rects=rects, r=state.dir,
+                        w=state.rover[3], h=state.rover[4]}}})
+end
+
+local forward = function(dist)
+   dist = dist or 10
+   assert(map.move(state,
+                   round(dist*math.sin(state.dir)),
+                   round(dist*-math.cos(state.dir))))
+   local message = map.get_in_range(state, "messages")
+   if(message) then write(message.msg .. "\n") end
+   send_state()
 end
 
 local sandbox = {write = write,
@@ -61,16 +62,23 @@ local sandbox = {write = write,
                     end
                  end,
                  forward = forward,
-                 left = function() state.dir = state.dir - math.pi/2 end,
-                 right = function() state.dir = state.dir + math.pi/2 end,
+                 left = function()
+                    state.dir = state.dir - math.pi/2
+                    send_state()
+                 end,
+                 right = function()
+                    state.dir = state.dir + math.pi/2
+                    send_state()
+                 end,
 }
 
 sandbox.f, sandbox.l, sandbox.r = sandbox.forward, sandbox.left, sandbox.right
 
 sandbox.login = function(username, password)
    username, password = username or "guest", password or ""
-   local terminal_position = find_adjacent("t")
-   local i, o = map.get_channels(terminal_position)
+   -- TODO: no terminal found
+   local i, o = map.get_channels(map.get_in_range(state, "hosts"),
+                                 state.login_range)
    if(i and o) then
       o:push({op="login", username=username, password=password})
       local response = i:pop()
@@ -101,8 +109,6 @@ sandbox.login = function(username, password)
 end
 
 function sandbox.read()
-   -- TODO: send status report over output channel
-   write("\n"..map.tostring(state).."\n")
    local msg = stdin:demand()
    if(msg.op == "stdin") then
       return msg.stdin
@@ -157,9 +163,8 @@ local eval = function(input)
       -- display the error and stack trace.
       sandbox.print('! Evaluation error: ' .. err or "Unknown")
       local lines = lume.split(trace, "\n")
-      for i,l in pairs(lines) do
-         -- editor infrastructure wraps 8 levels of irrelevant gunk
-         if(i < #lines - 8) then sandbox.print(l) end
+      for _,l in pairs(lines) do
+         sandbox.print(l)
       end
    end
 end
@@ -189,5 +194,7 @@ end
 
 output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
 sandbox.print((state.motd or "") .. "\n")
+output:push({op="rpc", fn="split_editor", args={"*rover*", "rover"}})
+send_state()
 xpcall(repl, print_trace, lume.reduce(rpcs, add_rpc, sandbox))
 output:push({op="disconnect"})

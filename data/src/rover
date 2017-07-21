@@ -1,38 +1,52 @@
--- -*- lua -*- code for controlling rovers
+-- -*- lua -*-
 
--- local cell_size, rover_size = 32, 16
+local colors = {red={255, 10, 10}, green={10, 255, 10}, blue={10, 10, 255}}
 
-local draw = function()
-   local w,h = editor.get_wh()
-   local x,y = w/2, h/2
-   graphics.circle("fill", x, y, 16)
-end
+local shift, scale, xo, yo = 0.9, 5, 0, 0
 
-define_mode("rover", nil, {draw=draw,read_only=true})
-
-function rover_operate()
-   if(not ship.target) then print("No target") return end
-   if(not ship.target.rover) then print("Not a rover") return end
-   if(not editor.get("connection")) then
-      local send = ssh_connect("", "")
-      if(send) then
-         editor.set("rover_name", ship.target.name)
-         editor.set("send", send)
-         editor.open(nil, ship.target.name, "rover")
-      else
-         print("Connection to rover failed.")
+local draw_box = function(color, x, y, w, h)
+   graphics.setColor(colors[color] or {255,255,255})
+   graphics.rectangle("line", x, y, w, h)
+   graphics.rectangle("line", x*shift, y*shift, w*shift, h*shift)
+   for cx = 0,1 do
+      for cy = 0,1 do
+         graphics.line(x+cx*w, y+cy*h, (x+cx*w)*shift, (y+cy*h)*shift)
       end
    end
 end
 
-bind("rover", "escape", lume.fn(editor.change_buffer, "*flight*"))
-bind("rover", "ctrl-r", function()
-        ship.select_target(editor.get("rover_name"))
-        ship.rovers.recover()
-        editor.close(true)
-end)
+local rover_points = {0,-1, 1,-2, 3,2, 0,4, -3,2, -1,-2}
 
-bind("rover", "up", function() editor.get("conn")("up()") end)
-bind("rover", "down", function() editor.get("conn")("down()") end)
-bind("rover", "left", function() editor.get("conn")("left()") end)
-bind("rover", "right", function() editor.get("conn")("right()") end)
+local draw = function()
+   if(not ship.rover_state) then return end
+   local w, h = ship.editor.get_wh()
+   graphics.push()
+   graphics.translate(w/2+xo, h/2+yo)
+   graphics.scale(scale, scale)
+   for _,rect in ipairs(ship.rover_state.rects) do
+      draw_box(rect.color, unpack(rect))
+   end
+   graphics.setColor(colors.red)
+   graphics.rotate(ship.rover_state.r)
+   graphics.scale(ship.rover_state.w/10, ship.rover_state.h/10)
+   graphics.polygon("line", rover_points)
+   graphics.pop()
+end
+
+local move = function(dx, dy)
+   return function() xo, yo = xo + dx, yo + dy end
+end
+
+define_mode("rover", "flight", {draw=draw, full_draw=false, read_only=true})
+bind("rover", "up", move(0, -10))
+bind("rover", "down", move(0, 10))
+bind("rover", "left", move(-10, 0))
+bind("rover", "right", move(10, 0))
+
+bind("rover", "ctrl-x 1", editor.split)
+bind("rover", "ctrl-x 2", lume.fn(editor.split, "vertical"))
+bind("rover", "ctrl-x 3", lume.fn(editor.split, "horizontal"))
+bind("rover", "ctrl-x 4", lume.fn(editor.split, "triple"))
+bind("rover", "ctrl-x o", editor.focus_next)
+
+bind("rover", "escape", function() editor.change_buffer("*flight*") end)

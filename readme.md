@@ -16,7 +16,7 @@ When you're in flight mode, the arrow keys control the ship's engines
 and turning thrusters. Keys to access the ship's computer's various
 functions are listed on the side of the screen.
 
-The ship's computer can be accessed using `ctrl-enter`, and from
+The ship's computer can be accessed using `f2`, and from
 the console you can read the quick start guide by running `man("quickstart")`.
 The full reference manual is available with `man("manual")`, but you
 won't need that right away.
@@ -32,8 +32,12 @@ fit too.
 Releases for each platform
 are [on itch.io](https://technomancy.itch.io/bussard).  Windows and Mac OS X
 releases are standalone, but `.love` file releases require
-having [LÖVE](https://love2d.org). Version 0.10.x or higher is strongly
-recommended for syntax highlighting and navigational trajectory support.
+having [LÖVE](https://love2d.org) version 0.10.2 or newer. Users of Debian or
+Debian-derived OSes can
+install
+[liblove](https://bitbucket.org/rude/love/downloads/liblove0_0.10.2ppa1_amd64.deb) and
+[love](https://bitbucket.org/rude/love/downloads/love_0.10.2ppa1_amd64.deb)
+packages.
 
 When running from source, type `love .` from a checkout.
 

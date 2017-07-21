@@ -170,7 +170,7 @@ local ship = {
    events={}, -- map of event names -> timestamps
    humans={}, -- array of human names
    humans_left_at={}, -- map of human name -> world name
-   rovers={basic=1}, -- map of type -> number
+   rovers={basic=0}, -- map of type -> number
    rover_clearance={}, -- map of world names -> true
    updaters={}, -- system-level coros
    loan=0,

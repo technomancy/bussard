@@ -5,8 +5,8 @@
 * Add orbital lock function to make it easier to remain in orbit.
 * Warn when loading save games from older versions.
 * Tab completion works on remote hosts.
-* Editor uses Polywell: https://gitlab.com/technomancy/polywell
-* Add rovers you can log into.
+* Editor uses [Polywell](https://gitlab.com/technomancy/polywell)
+* Add rovers you can log into with vector-graphics sensor rendering.
 * Include in-game tetris.
 * OSes on remote hosts now run in independent threads, can't hang main game.
 * New intro mission.
@@ -41,8 +41,6 @@
 * Support toggling fullscreen, resizing game window.
 * Add archive feature to mail system.
 * Allow the font to be changed.
-
-If upgrading from beta-1 to beta-2, please see the [upgrade guide](Upgrading.md).
 
 ## beta-1 / 2016-05-17
 

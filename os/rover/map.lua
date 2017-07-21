@@ -1,73 +1,56 @@
-local lume = require("lume")
-
+local utils = require("utils")
 local threads = {}
 
-local find_pos = function(state, target)
-   for y,line in ipairs(state) do
-      for x,tile in ipairs(line) do
-         if(tile == target) then
-            return x, y
-         end
-      end
+local can_move_to = function(state, x, y)
+   for _,rect in pairs(state.rects) do
+      local rw, rh = state.rover[3], state.rover[4]
+      local rover = {x-rw/2, y-rh/2, rw, rh}
+      if(utils.rect_overlap(rect, rover)) then return false end
    end
-   return nil, "Not found: " .. target
-end
-
-local is_open = function(state, x, y)
-   return state[y][x] == " "
-end
-
-local dirs = {[0]="^", [1]=">", [2]="v", [3]="<"}
-local dir_for = function(dir)
-   dir = math.mod(dir+math.pi*2, math.pi*2)
-   return dirs[math.floor(dir/(math.pi/2)+0.5)] or "^"
+   return true
 end
 
 return {
    load = function(name)
       local chunk = assert(love.filesystem.load("data/maps/" .. name .. ".lua"))
       local state = chunk()
-      for i,line in ipairs(state) do
-         state[i] = {}
-         for j=1,string.len(line) do state[i][j] = line:sub(j,j) end
-      end
 
-      for pos,host in pairs(state.hosts) do
+      for _,host in pairs(state.hosts) do
          local t = {}
          t.input, t.output = love.thread.newChannel(), love.thread.newChannel()
          t.thread = love.thread.newThread("os/server.lua")
          t.thread:start(t.input, t.output, host.os, host.name)
-         threads[pos] = t
+         threads[host] = t
       end
 
-      state.dir = 0
+      state.dir, state.login_range = state.dir or 0, state.login_range or 5
       return state
    end,
 
-   move = function(state, item, dx, dy)
-      local x, y = assert(find_pos(state, item))
-      if(is_open(state, x+dx, y+dy)) then
-         state[y][x] = " "
-         state[y+dy][x+dx] = item
-         return true, x+dx, y+dy
+   move = function(state, dx, dy)
+      local new_x, new_y = state.rover[1]+dx, state.rover[2]+dy
+      if(can_move_to(state, new_x, new_y)) then
+         state.rover[1], state.rover[2] = new_x, new_y
+         return true
       else
-         return false, "obstructed at " .. x+dx .. "x" .. y+dy
+         return false, "obstructed at " .. new_x .. "x" .. new_y
       end
    end,
 
-   tostring = function(state)
-      local x, y = assert(find_pos(state, "r"))
-      state[y][x] = dir_for(state.dir) or "x"
-      local lines = lume.map(state, table.concat)
-      state[y][x] = "r"
-      return table.concat(lines, "\n")
-   end,
-
-   get_channels = function(pos)
-      if(threads[pos]) then
-         return threads[pos].input, threads[pos].output
+   get_in_range = function(state, field, range)
+      range = range or 0
+      local x, y = state.rover[1] - range, state.rover[2] - range
+      local w, h = state.rover[3] + range, state.rover[4] + range
+      for _,target in pairs(state[field] or {}) do
+         if(utils.rect_overlap(target, {x,y,w,h})) then
+            return target
+         end
       end
    end,
 
-   find_pos = find_pos,
+   get_channels = function(host)
+      if(threads[host]) then
+         return threads[host].input, threads[host].output
+      end
+   end,
 }

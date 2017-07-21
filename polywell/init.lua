@@ -1304,7 +1304,7 @@ return {
 
       get_wh = function()
          local _,_,w,h = love.graphics.getScissor()
-         if(not w and not w) then w,h = love.window.getMode() end
+         if(not w and not h) then w,h = love.window.getMode() end
          return w, h
       end,
 
