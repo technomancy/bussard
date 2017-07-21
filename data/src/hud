@@ -13,7 +13,7 @@ local quickref = "tab: next target\n" ..
    "f1: flight mode\n" ..
    "f2: console\n" ..
    "f3: read mail\n" ..
-   "f4: orbital lock\n" ..
+   "f4: orbital lock\n\n" ..
    "ctrl-s: ssh login\n" ..
    "ctrl-p: portal\n" ..
    "ctrl-o: open file\n" ..

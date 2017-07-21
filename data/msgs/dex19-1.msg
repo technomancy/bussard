@@ -22,6 +22,6 @@ parentheses on the end.
 
 Use ctrl-pageup/pagedown to cycle thru the open buffers. I'll give you further
 instructions once the engine is back online; at that point you can press f3 to
-go back to the mail listing and then to the inbox.
+go back to your inbox.
 
 dex19

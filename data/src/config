@@ -74,7 +74,7 @@ bind({"edit", "flight"}, "f1",
 bind({"edit", "flight"}, "f2",
    function() editor.change_buffer("*console*") end)
 
-bind({"edit", "flight"}, "f3", mail)
+bind({"edit", "flight"}, "f3", inbox)
 
 bind("flight", "f4", ship.orbital_lock)
 

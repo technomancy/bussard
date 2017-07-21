@@ -21,7 +21,7 @@ end
 local describe = function(msg)
    local lines = lume.split(msg, "\n")
    local date = utils.pad_to(header(lines, "Date") or "", 17)
-   local from = utils.pad_to(header(lines, "From"), 42)
+   local from = utils.pad_to(header(lines, "From"), 32)
    local subject = header(lines, "Subject")
    return date .. " | " .. from .. " | " .. subject
 end
@@ -101,6 +101,12 @@ local open_folder = function(folder)
    editor.next_line()
    editor.next_line()
    editor.set_prop("read_only", true)
+end
+
+inbox = function()
+   editor.open(nil, "*mail*")
+   ship:activate_mode("mail")
+   open_folder("inbox")
 end
 
 -- inherit most bindings from edit, but disable text insertion
