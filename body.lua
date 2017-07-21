@@ -168,17 +168,23 @@ return {
 
    toggle_lock = function(ship, to_name)
       local to = utils.find_by(ship.bodies, "name", to_name)
-      if(to_name == ship.locked_to or to == nil) then
+      if(ship.locked_to) then
          ship.locked_to = nil
-      elseif(utils.distance(ship, to) < lock_range) then
+         return "Orbital lock disengaged."
+      elseif(to == nil) then
+         return "Cannot lock without target."
+      elseif(utils.distance(ship, to) > lock_range) then
+         return "Orbital lock out of range."
+      else
          ship.locked_to = to_name
+         return "Orbital lock engaged."
       end
    end,
 
    orbital_lock = function(ship, to_name)
       local to = utils.find_by(ship.bodies, "name", to_name)
       if(not to) then ship.locked_to = nil return end
-      if(utils.distance(ship, to) < lock_range * 0.8) then return end
+      if(utils.distance(ship, to) < lock_range * 0.5) then return end
       ship.heading = math.atan2(to.x - ship.x, to.y - ship.y)
       ship.dx, ship.dy = to.dx, to.dy
    end,

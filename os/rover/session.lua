@@ -193,7 +193,7 @@ local add_rpc = function(sb, name)
 end
 
 output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
-sandbox.print((state.motd or "") .. "\n")
+sandbox.print((state.motd or ""))
 output:push({op="rpc", fn="split_editor", args={"*rover*", "rover"}})
 send_state()
 xpcall(repl, print_trace, lume.reduce(rpcs, add_rpc, sandbox))

@@ -538,12 +538,8 @@ ship.api = {
    },
 
    orbital_lock = function()
-      body.toggle_lock(ship, ship.target and ship.target.name)
-      if(ship.locked_to) then
-         ship.api.editor.print("Orbital lock engaged.")
-      else
-         ship.api.editor.print("Orbital lock disengaged.")
-      end
+      ship.api.editor.print(body.toggle_lock(ship, ship.target and
+                                                ship.target.name))
    end,
 
    -- deprecated:
