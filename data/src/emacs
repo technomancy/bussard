@@ -44,3 +44,5 @@ bind("edit", "ctrl-x 2", lume.fn(editor.split, "vertical"))
 bind("edit", "ctrl-x 3", lume.fn(editor.split, "horizontal"))
 bind("edit", "ctrl-x 4", lume.fn(editor.split, "triple"))
 bind("edit", "ctrl-x o", editor.focus_next)
+
+bind("edit", "alt-q", editor.wrap)

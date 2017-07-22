@@ -1332,4 +1332,43 @@ return {
             print(pane[2].path)
          end
       end,
+
+      wrap = function()
+         while(b.lines[b.point_line-1] ~= "" and b.point_line > 1) do
+            b.point_line = b.point_line - 1
+         end
+         local column = get_prop("wrap_column", 78)
+         local join = function()
+            b.point, b.point_line = 0, b.point_line+1
+            delete_backwards()
+            if(not utf8.find(point_over(), word_break)) then
+               insert({" "}, true)
+            end
+         end
+         local has_room = function()
+            return save_excursion(function()
+                  local room = column - #b.lines[b.point_line]
+                  b.point, b.point_line = 0, b.point_line+1
+                  forward_word()
+                  return b.point < room
+            end)
+         end
+         while(b.lines[b.point_line+1] ~= "" and b.point_line < #b.lines or
+               #b.lines[b.point_line] > column) do
+            if(#b.lines[b.point_line] < column and has_room()) then
+               join()
+            elseif(#b.lines[b.point_line] > column) then
+               b.point = column
+               if(not utf8.find(point_over(), word_break)) then
+                  backward_word()
+               end
+               newline()
+               forward_char()
+               delete_backwards()
+            else
+               b.point_line = b.point_line + 1
+            end
+         end
+      end,
 }
+
