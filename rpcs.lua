@@ -284,8 +284,12 @@ return {
    end,
 
    split_editor = function(ship, _, buffer_name, mode)
-      ship.api.editor.open_in_split(nil, buffer_name, mode)
-      ship.api.editor.focus_next()
+      if(buffer_name and mode) then
+         ship.api.editor.open_in_split(nil, buffer_name, mode)
+         ship.api.editor.focus_next()
+      else
+         ship.api.editor.split(nil)
+      end
    end,
 
    rover_state = function(ship, _, state)

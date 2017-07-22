@@ -6,7 +6,6 @@ define_mode("console", "edit") -- inherit bindings from edit
 local switch_to_last = function() editor.change_buffer(editor.last_buffer()) end
 
 bind("console", "ctrl-return", switch_to_last)
-bind("console", "escape", switch_to_last)
 
 bind("console", "ctrl-a", editor.beginning_of_input)
 bind("console", "home", editor.beginning_of_input)
