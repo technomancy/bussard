@@ -9,7 +9,7 @@ affiliations of each system at the time of publication:
 * Green: Terran Republic
 * Yellow: Kingdom of Bohk
 * Purple: Republic of Katilay
-* Turquoise: Tana Protectorates
+* Red: Tana Protectorates
 
 To set up the map, load this code:
 
