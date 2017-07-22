@@ -20,8 +20,8 @@ PROSE=manual.md doc/*.md data/msgs/* data/motd/* data/subnet/* data/ships.txt da
 MEDIA=assets/* assets/fonts/*
 META=readme.md LICENSE credits.md Changelog.md
 
-todo: ; grep -nH -e TODO $(GAME_LUA)
-blockers: ; grep TODO/blocker $(GAME_LUA)
+todo: ; grep -nH -e TODO $(GAME_LUA) || true
+blockers: ; grep TODO/blocker $(GAME_LUA) || true
 wipe_fs: ; rm -rf $(HOME)/.local/share/love/bussard/fs
 
 # different contexts have different rules about what's OK, globals, etc
@@ -31,7 +31,7 @@ check:
 	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA) # engine code
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --globals lume utf8 pack ship define_mode bind utils realprint pp pps \
-	            mail ssh ssh_connect ssh_activate portal logout ssh_send_line \
+	            mail ssh ssh_connect ssh_prompt portal logout ssh_send_line \
 	            universe graphics editor toggle_fps replyable flight_draw \
 	            tetris reply inbox \
 	  -- $(IN_SHIP_LUA)

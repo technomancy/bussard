@@ -34,6 +34,7 @@ local subjects_by_date = function(msgs)
          local date = header(lume.split(msg, "\n"), "Date")
          local key = date and utils.parse_time(date) or
             header(lume.split(msg, "\n"), "Subject")
+         assert(not by_date[key], "Duplicate subject!")
          by_date[key or 0] = name
       end
    end

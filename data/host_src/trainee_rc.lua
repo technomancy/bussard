@@ -1,5 +1,3 @@
--- TODO: this shouldn't be an RPC!
-
 record_event("trainee01")
 
 print("You made it to the terminal, nice work. You can log out of this session by")

@@ -76,7 +76,6 @@ sandbox.f, sandbox.l, sandbox.r = sandbox.forward, sandbox.left, sandbox.right
 
 sandbox.login = function(username, password)
    username, password = username or "guest", password or ""
-   -- TODO: no terminal found
    local i, o = map.get_channels(map.get_in_range(state, "hosts"),
                                  state.login_range)
    if(i and o) then

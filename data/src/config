@@ -88,7 +88,7 @@ bind({"flight", "edit"}, "ctrl-o", editor.find_file)
 bind({"flight", "edit"}, "ctrl-r", editor.reload)
 
 -- connect to target over ssh.
-bind("flight", "ctrl-s", ssh)
+bind("flight", "ctrl-s", ssh_prompt)
 
 -- activate portal sequence.
 bind("flight", "ctrl-p", portal)

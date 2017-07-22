@@ -20,7 +20,7 @@ return {
           "Use `forward()` and more\nturns to reach the terminal."},
       {40,50,10,10, msg="All right, so you turned first; that's fine. " ..
           "Use `forward()` and more\nturns to reach the terminal."},
-      {30,30,10,10, msg="There are shorter aliases for `forward()`, `left()`, and `right()`:\n`f()`, `l()`, and `r()`"},
-      {40,20,10,10, msg="You have reached the terminal. Run `login()` to connect."},
+      {30,30, 5, 5, msg="There are shorter aliases for `forward()`, `left()`, and `right()`:\n`f()`, `l()`, and `r()`"},
+      {45,20, 10, 10, msg="You have reached the terminal. Run `login()` to connect."},
    },
 }
