@@ -35,54 +35,47 @@ local portal = function(target, fail_ok)
    return target_system == ship.system_name
 end
 
-local ssh_run = function(ship, target, command)
+local ssh_run = function(ship, target, command, username, password)
    move_to(target)
-   local send = ship.sandbox.ssh_connect("guest", "")
+   local send = ship.sandbox.ssh_connect(username or "guest", password or "")
    t.assert_function(send)
    send(command or "echo greetings")
    mission.update(ship, 1)
    client.update(ship, 1)
-   love.timer.sleep(0.2)
-   send(nil)
+   love.timer.sleep(0.5)
+   send("logout")
 end
 
 local function test_missions()
    -- ACT 1
-   t.assert_equal(lume.count(ship.events))
-   t.assert_equal(lume.count(ship.mail_delivered), 0)
    ship:enter("L 668-21", true)
-   ssh_run(ship, "Merdeka Station", "upgrade buy life_support")
-   t.assert_number(lume.find(ship.upgrade_names, "life_support"))
+   t.assert_false(ship.mail_delivered["dex19-2"])
+
+   ship.api.engine.restart()
+   ship:update(64)
+   t.assert_true(ship.mail_delivered["dex19-2"])
+
+   ship:update(64)
+   t.assert_false(pcall(portal, "Portal: Tana"))
+
+   move_to("Merdeka Station")
+   ship:update(64)
+   t.assert_true(ship.mail_delivered["dex19-3"])
+
+   ssh_run(ship, "Merdeka Station",
+           "f() l() f(20) r() f(20) r() f(2) login()",
+           "trainee", "reindeerflotilla")
+   ship:update(64)
+   mission.update(ship, 1)
+   t.assert_number(ship.events["trainee01"])
+   t.assert_true(ship.credits > 512)
+   t.assert_true(ship.mail_delivered["dex19-4"])
+   t.assert_true(ship.mail_delivered["cmec-recruit"])
+
+   ssh_run(ship, "Merdeka Station", "upgrade buy battery")
+   t.assert_number(lume.find(ship.upgrade_names, "battery"))
 
    portal("Portal: Tana")
-
-   -- t.assert_equal(2460, ship.fine)
-   -- t.assert_equal(false, portal("Portal: Wolf 294", true))
-   -- ssh_run(ship, "Tana Prime", "port fine")
-   -- t.assert_equal(2460, ship.fine)
-   -- ssh_run(ship, "Tana Prime", "loan borrow 2460")
-   -- t.assert_not_equal(0, ship.loan)
-   -- ssh_run(ship, "Tana Prime", "port fine")
-   -- t.assert_equal(0, ship.fine)
-
-   mail.reply(ship, "d6069254-4182-4f96-a145-df309a992798") -- passenger2
-   t.assert_equal(lume.count(ship.active_missions), 1)
-   t.assert_true(ship.mail_delivered["nari-a-01"])
-   ssh_run(ship, "Tana Prime")
-   ship:update(64)
-   ship:update(64)
-   t.assert_true(ship.mail_delivered["nari-a-02"])
-   t.assert_true(ship.mail_delivered["nari-a-03"])
-
-   mail.reply(ship, "6e1b94ec-c317-487b-a00b-d410ae6bd495") -- nari-a-03
-   t.assert_true(ship.mail_delivered["6e1b94ec-c317-487b-a00b-d410ae6bd495"])
-   mail.reply(ship, "84f7b207-08e0-4a54-af7c-d6f97aedc703") -- nari-a-04
-   ssh_run(ship, "Tana Prime")
-   t.assert_equal("companion", ship.humans.nari)
-   mail.reply(ship, "c83c2439-f4cf-475f-95a6-f15cafc3db16") -- nari-a-05
-   t.assert_true(ship.mail_delivered["c83c2439-f4cf-475f-95a6-f15cafc3db16"])
 end
-
--- this is all going away
 
 return {} -- {test_missions=test_missions}

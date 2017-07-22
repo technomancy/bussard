@@ -191,6 +191,8 @@ local add_rpc = function(sb, name)
    return sb
 end
 
+lume.extend(sandbox, utils.sandbox)
+
 output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
 sandbox.print((state.motd or ""))
 output:push({op="rpc", fn="split_editor", args={"*rover*", "rover"}})

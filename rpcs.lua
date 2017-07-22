@@ -284,6 +284,7 @@ return {
    end,
 
    split_editor = function(ship, _, buffer_name, mode)
+      if(not love.window) then return end
       if(buffer_name and mode) then
          ship.api.editor.open_in_split(nil, buffer_name, mode)
          ship.api.editor.focus_next()

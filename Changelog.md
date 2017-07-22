@@ -2,6 +2,7 @@
 
 ## beta-3 / ???
 
+* Make it easy to adjust font size.
 * Add orbital lock function to make it easier to remain in orbit.
 * Warn when loading save games from older versions.
 * Tab completion works on remote hosts.
@@ -12,6 +13,7 @@
 * New intro mission.
 * Dramatically improved HUD trajectory.
 * Add underclocker upgrade.
+* Require version 0.10.2 or higher of LÖVE.
 
 ## beta-2 / 2016-08-13
 
