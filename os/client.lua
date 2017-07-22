@@ -7,12 +7,13 @@ local sessions = {}
 local dbg = os.getenv("DEBUG") and print or function() end
 
 -- TODO: try to unify send/receive a bit
--- TODO: limited retry, backoff?
 local transmit_success = function(distance, range)
+   -- TODO: re-enable once we can fix attempts to resend
+   -- currently resend attempt only happens when we try to send another msg
    -- this is checked several times per second
    local chance = love.math.random()
    local signal_strength = range * range * chance / (distance * distance)
-   return signal_strength > 1
+   return true or signal_strength > 1
 end
 
 local queued = {}

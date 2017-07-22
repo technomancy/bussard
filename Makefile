@@ -33,7 +33,7 @@ check:
 	  --globals lume utf8 pack ship define_mode bind utils realprint pp pps \
 	            mail ssh ssh_connect ssh_activate portal logout ssh_send_line \
 	            universe graphics editor toggle_fps replyable flight_draw \
-	            ssh_get_connection rover_operate tetris reply \
+	            tetris reply inbox \
 	  -- $(IN_SHIP_LUA)
 	luacheck --no-color --std luajit --ignore 21/_.* --exclude-files=*.lsp \
 	  --globals io lume orb station buy_user ship cargo_transfer pps \
