@@ -10,7 +10,7 @@ spacecraft! Your ship is equipped with state of the art components as
 well as the capacity to dynamically reconfigure to add new capabilities.
 
 The easiest way to get started is by reading the Quick Start Guide.
-Press ctrl-enter from flight mode to open the console, and then type this:
+Press f2 from flight mode to open the console, and then type this:
 
     man("quickstart")
 

@@ -302,7 +302,6 @@ return {
          local ok, input = pcall(bencode.decode, input_string)
          if(not ok) then return nil, input end
 
-         -- TODO: not all messages should be immediately accessible
          if(input.command == "groups") then
             local groups = fs.getDirectoryItems("data/subnet")
             groups = lume.filter(groups, function(g)
