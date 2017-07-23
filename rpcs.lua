@@ -132,6 +132,10 @@ return {
       return port.upgrade_prices or {}
    end,
 
+   upgrade_help = function(ship, _, upgrade_name)
+      return ship.api.help.get(upgrade_name)
+   end,
+
    fuel_price = function(_, port)
       return port.fuel_price or 0
    end,

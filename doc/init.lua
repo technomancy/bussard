@@ -76,7 +76,7 @@ return {
    end,
 
    get = function(page_name)
-      local p = love.filesystem.read(pages[page_name])
+      local p = love.filesystem.read(pages[page_name] .. ".md")
       return p
    end
 }
