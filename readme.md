@@ -12,9 +12,9 @@ Read
 
 ## Playing
 
-When you're in flight mode, the arrow keys control the ship's engines
-and turning thrusters. Keys to access the ship's computer's various
-functions are listed on the side of the screen.
+The game starts in the console, where you can interact with the ship's
+computer, but it has several other modes. Start the game by pressing `f3` to
+go to mail mode to read your messages.
 
 The ship's computer can be accessed using `f2`, and from
 the console you can read the quick start guide by running `man("quickstart")`.
@@ -74,10 +74,7 @@ progress. Eventually the goal is that you will be able to learn it without any
 **A:** Press `ctrl-o` then type "src.config" to open the main config file. The keys here are mostly for flight mode. At the bottom you can see where it loads other modes in files like "src.edit" or "src.mail". Open these other files with `ctrl-o` if you want to change keys for those modes. Find the key binding you want to change, and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` to go back to flight mode, and then press `ctrl-r` to load them. Note that after using the editor you may need to press `ctrl-pagedown` or `ctrl-pageup` a few times to get back to console, as console is just a buffer called `*console*` in the editor.
 
 **Q:** How do you match orbit with a station or planet?  
-**A:** Remember that newtonian motion means your controls affect your velocity rather than directly controlling your motion. Don't accelerate towards the station; instead accelerate so your trajectories cross at the same point.
-
-**Q:** I'm stuck on a mission!  
-**A:** If you've received a message, check the bottom of the screen when it's open to see if it's one that you can reply to by pressing `alt-enter`. This is how you initially accept missions, but some missions will need you to respond to messages you get in order to proceed.
+**A:** Remember that newtonian motion means your controls affect your velocity rather than directly controlling your motion. Don't accelerate towards the station; instead accelerate so your trajectories cross at the same point. Once you're in range, hit `f4` to toggle the orbital lock to prevent your craft from drifting away.
 
 ## Influences
 
