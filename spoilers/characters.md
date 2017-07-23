@@ -9,7 +9,7 @@ of hints) but you can't email them back beyond simple OK/NO replies.
 
 A curious little construct.
 
-## Nari Phouen <nari.phouen@starlink.net.sol>
+## Nari Phouen <nari.phouen@starlink.net>
 
 She is an older freelance repair tech with an amateur interest in
 historical computing. Gruff but kind at heart. She originally wants to

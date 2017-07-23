@@ -1,3 +1,5 @@
+local fs = require("love.filesystem")
+
 return {
    rects = {
       { 0, 0,70,10, color="green"},
@@ -10,7 +12,7 @@ return {
    },
 
    rover = {45,45,9,9},
-   motd = assert(love.filesystem.read("data/motd/merdeka-trainee1")),
+   motd = assert(fs.read("data/motd/merdeka-trainee1")),
    hosts = {{50,20,10,10, name="trainee01", os="orb"}},
 
    messages = {

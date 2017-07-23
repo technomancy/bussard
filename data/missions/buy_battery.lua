@@ -4,7 +4,8 @@ local mail = require("mail")
 local coro = coroutine.create(function(ship)
       while(not ship.upgrades["battery"]) do coroutine.yield() end
       mission.record_event(ship, "buy_battery")
-      mail.deliver_msg(ship, "dex19-battery.msg")
+      mail.deliver_msg(ship, "dex19-memory-1.msg")
+      mission.accept(ship, "memory_card")
 end)
 
 return {

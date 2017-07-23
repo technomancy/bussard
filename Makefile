@@ -5,12 +5,12 @@ VERSION=beta-3-pre
 SHIP_LUA=ship/*.lua doc/init.lua os/client.lua
 ENGINE_LUA=*.lua
 OS_LUA=os/orb/*.lua os/lisp/*.lua os/rover/*.lua os/server.lua
-IN_OS_LUA=os/orb/resources/*
+IN_OS_LUA=os/orb/resources/* data/host_src/*.lua data/maps/*.lua
 IN_SHIP_LUA=data/src/*
 DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua \
 	serpent/*.lua bencode/init.lua jeejah/init.lua
 MISSION_LUA=data/missions/*.lua
-DATA_LUA=data/*.lua data/msgs/*.lua data/maps/*.lua $(MISSION_LUA)
+DATA_LUA=data/*.lua data/msgs/*.lua $(MISSION_LUA)
 POLYWELL=polywell/*.lua polywell/lume/init.lua polywell/utf8/init.lua
 
 GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) $(DATA_LUA) os/lisp/resources/portal.lsp
@@ -22,6 +22,7 @@ META=readme.md LICENSE credits.md Changelog.md
 
 todo: ; grep -nH -e TODO $(GAME_LUA) || true
 blockers: ; grep TODO/blocker $(GAME_LUA) || true
+wipe: ; love . --wipe
 wipe_fs: ; rm -rf $(HOME)/.local/share/love/bussard/fs
 
 # different contexts have different rules about what's OK, globals, etc
@@ -38,10 +39,11 @@ check:
 	luacheck --no-color --std luajit --ignore 21/_.* --exclude-files=*.lsp \
 	  --globals io lume orb station buy_user ship cargo_transfer pps \
 	            accept_mission get_prompt set_prompt buy_upgrade sell_upgrade \
-	            list_upgrades subnet logout upgrade_help port loan \
+	            list_upgrades subnet logout upgrade_help port loan record_event \
 	            cargo_prices cargo_amounts cargo_hold refuel fuel_price \
 	  -- $(IN_OS_LUA)
-	luacheck --no-color --std luajit --ignore 21/_.* --globals love lume term \
+	luacheck --no-color --std luajit --ignore 21/_.* --globals love lume \
+				term \
 	  -- $(DATA_LUA)
 
 test: ; love . --test
@@ -65,7 +67,7 @@ count_prose: ; find $(PROSE) -type f -print0 | xargs -0 wc -l
 
 clean: ; rm -rf releases/
 
-REL=".love-release/build/love-release.sh"
+REL="love-release.sh"
 FLAGS=-a 'Phil Hagelberg' -x spoilers -x savedir \
 	--description 'A space flight programming adventure game.' \
 	--love 0.10.1 --url https://technomancy.itch.io/bussard --version $(VERSION)

@@ -6,5 +6,3 @@ Message-Id: fb362a35-4e8d-479f-a6d7-7dbc1addce9a
 
 Congratulations. We've transferred 512 credits to your account for finishing
 the initial training mission.
-
-Please proceed to Tana Prime for further missions.

@@ -24,9 +24,9 @@ to go around the star and rendezvous on the other side. Establishing a
 clockwise orbit when your target is counterclockwise is just going to burn
 thru your fuel.
 
-Once you get within communications range of the station, your targeting
-indicator will turn bright green. At that point you should engage the orbital
-lock by pressing f4 so you don't drift out of range. Once you're in range I'll
-log in and see what I can do.
+Use the = and - keys to zoom in and out. Once you get within communications
+range of the station, your targeting indicator will turn bright green. At that
+point you should engage the orbital lock by pressing f4 so you don't drift out
+of range. Once you're in range I'll log in and see what I can do.
 
 dex19

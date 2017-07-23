@@ -34,8 +34,13 @@ local subjects_by_date = function(msgs)
          local date = header(lume.split(msg, "\n"), "Date")
          local key = date and utils.parse_time(date) or
             header(lume.split(msg, "\n"), "Subject")
-         assert(not by_date[key], "Duplicate subject!")
-         by_date[key or 0] = name
+         if(by_date[key] and type(key) == "number") then
+            by_date[key+1] = name
+         elseif(by_date[key]) then
+            by_date[key .. "_"] = name
+         else
+            by_date[key or 0] = name
+         end
       end
    end
    for _, date in lume.ripairs(lume.sort(lume.keys(by_date))) do

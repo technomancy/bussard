@@ -184,9 +184,13 @@ return {
    orbital_lock = function(ship, to_name)
       local to = utils.find_by(ship.bodies, "name", to_name)
       if(not to) then ship.locked_to = nil return end
-      if(utils.distance(ship, to) < lock_range * 0.5) then return end
-      ship.heading = math.atan2(to.x - ship.x, to.y - ship.y)
-      ship.dx, ship.dy = to.dx, to.dy
+      local dist = utils.distance(ship, to)
+      if(dist > lock_range * 0.5) then
+         ship.heading = math.atan2(to.x - ship.x, to.y - ship.y)
+         ship.dx, ship.dy = to.dx, to.dy
+      -- elseif(dist < 100) then
+      --    ship.x, ship.y = to.x+250, to.y+250
+      end
    end,
 
    g = g,

@@ -1,8 +1,10 @@
-local trainee = {
-   password="reindeerflotilla",
-   session="os/rover/session.lua",
-}
-
 return {
-   ["merdeka-station"] = { trainee = trainee }
+   ["merdeka-station"] = { trainee = {
+                              password="reindeerflotilla",
+                              session="os/rover/session.lua",
+                         }},
+   ["solotogo"] = { nari02 = {
+                       password="mendaciouspolyglottal",
+                       session="os/rover/session.lua",
+                  }},
 }

@@ -16,7 +16,7 @@ The game starts in the console, where you can interact with the ship's
 computer, but it has several other modes. Start the game by pressing `f3` to
 go to mail mode to read your messages.
 
-The ship's computer can be accessed using `f2`, and from
+The ship's computer console can be accessed using `f2`, and from
 the console you can read the quick start guide by running `man("quickstart")`.
 The full reference manual is available with `man("manual")`, but you
 won't need that right away.
