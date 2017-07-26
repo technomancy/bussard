@@ -220,18 +220,19 @@ local ship = {
          -- re-seed system-level things
          asteroid.populate(ship.systems[ship.system_name])
          for _,b in pairs(ship.bodies) do
-            body.seed_pos(b, ship.bodies[1])
+            body.set_orbit(b, ship.bodies[1])
             body.seed_cargo(b)
          end
 
          local portal = lume.match(ship.bodies,
                                    function(b) return b.portal == from end)
          if(portal) then
-            ship.x, ship.y = portal.x + 100, portal.y + 100
-            ship.dx, ship.dy = portal.dx, portal.dy
+            body.set_orbit(ship, portal, 512)
+            ship.target = portal
+            ship.target_number = lume.find(ship.bodies, portal)
          else -- seed to bottom-left quadrant
             ship.r = 16831
-            body.seed_pos(ship, ship.bodies[1])
+            body.set_orbit(ship, ship.bodies[1])
             ship.x, ship.y = -(math.abs(ship.x)), math.abs(ship.y)
             ship.dx, ship.dy = math.abs(ship.dx), math.abs(ship.dy)
          end

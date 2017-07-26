@@ -130,7 +130,7 @@ return {
 
             if(system_name == ship.system_name and
                not (b.x and b.y and b.dx and b.dy)) then
-               body.seed_pos(b, s.bodies[1])
+               body.set_orbit(b, s.bodies[1])
             end
          end
       end

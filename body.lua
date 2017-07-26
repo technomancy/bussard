@@ -89,19 +89,18 @@ return {
       end
    end,
 
-   seed_pos = function(b, star)
+   set_orbit = function(b, around, r, theta)
       if(b.star) then
          b.x, b.y = 0, 0
-      elseif(b.r or (b.x and b.y)) then
-         assert(star.star, star.name .. " is not a star.")
+      elseif(b.r or r or (b.x and b.y)) then
+         b.r = b.r or r or utils.distance(b.x, b.y)
+         theta = theta or love.math.random() * math.pi * 2
+         local v = math.sqrt((g*around.mass)/b.r)
 
-         b.r = b.r or utils.distance(b.x, b.y)
-         local v = math.sqrt((g*star.mass)/b.r)
-         local theta = love.math.random() * math.pi * 2
-
-         b.x, b.y = math.sin(theta) * b.r, math.cos(theta) * b.r
-         b.dx = math.sin(theta + math.pi / 2) * v
-         b.dy = math.cos(theta + math.pi / 2) * v
+         b.x = around.x + math.sin(theta) * b.r
+         b.y = around.y + math.cos(theta) * b.r
+         b.dx = around.dx + math.sin(theta + math.pi / 2) * v
+         b.dy = around.dy + math.cos(theta + math.pi / 2) * v
       end
    end,
 
