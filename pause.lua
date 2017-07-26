@@ -74,10 +74,12 @@ local keypressed = function(key)
       input = ""
    elseif(key == "escape") then
       actions["resume"]()
-   elseif(key == "q" and love.keyboard.isDown("lctrl", "rctrl")) then
+   elseif(key == "q" and love.keyboard.isScancodeDown("lctrl", "rctrl",
+                                                      "capslock")) then
       love.event.quit()
    elseif(#key == 1) then
-      input = input .. (love.keyboard.isDown("lshift") and key:upper() or key)
+      input = input .. (love.keyboard.isDown("lshift", "rshift") and
+                           key:upper() or key)
    end
 end
 

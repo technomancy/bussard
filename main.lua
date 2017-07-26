@@ -18,6 +18,10 @@ local quit = function()
    love.event.quit()
 end
 
+local is_ctrl = function()
+   return love.keyboard.isScancodeDown("lctrl", "rctrl", "capslock")
+end
+
 love.quit = function()
    save.save(ship)
    return false
@@ -121,10 +125,10 @@ local safely = function(f)
       love.keypressed = function(key)
          if(key == "return") then ui.quit(ui)
          elseif(key == "escape") then love.event.quit()
-         elseif(key == "w" and love.keyboard.isDown("lctrl", "rctrl")) then
+         elseif(key == "w" and is_ctrl()) then
             save.abort(ship)
             love.event.quit()
-         elseif(key == "r" and love.keyboard.isDown("lctrl", "rctrl")) then
+         elseif(key == "r" and is_ctrl()) then
             save.config_reset(ship)
          end
       end
@@ -220,7 +224,7 @@ end)
 -- for commands that don't need repeat
 local keypressed = safely(function(key)
       -- need hard-coded reset for recovering from bad config bugs
-      if(key == "f1" and love.keyboard.isDown("lctrl", "rctrl", "capslock")) then
+      if(key == "f1" and is_ctrl()) then
          ship.api.ui.config_reset()
       else
          ship.api.editor.keypressed(key)
@@ -248,4 +252,9 @@ ui.play = function()
    love.update, love.keypressed, love.keyreleased, love.wheelmoved,
    love.textinput,love.draw =
       update, keypressed, keyreleased, wheelmoved, textinput, safely(draw)
+end
+
+local major, minor, patch = love.getVersion()
+if(major == 0) then
+   assert(minor > 10 or minor == 10 and patch >= 2, "Need LÖVE 0.10.2+")
 end

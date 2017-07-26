@@ -529,8 +529,8 @@ end
 
 local function find_binding(key, the_mode)
    local mode = active_prefix or the_mode or get_current_mode() or modes.default
-   local ctrl = love.keyboard.isDown("lctrl", "rctrl", "capslock")
-   local alt = love.keyboard.isDown("lalt", "ralt")
+   local ctrl = love.keyboard.isScancodeDown("lctrl", "rctrl", "capslock")
+   local alt = love.keyboard.isScancodeDown("lalt", "ralt")
    local map = (ctrl and alt and mode["ctrl-alt"]) or
       (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
 

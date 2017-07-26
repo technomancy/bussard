@@ -2,6 +2,7 @@
 
 ## beta-3 / ???
 
+* Position ship better after portal; prevents getting caught in gravity well.
 * Make it easy to adjust font size.
 * Add orbital lock function to make it easier to remain in orbit.
 * Warn when loading save games from older versions.
