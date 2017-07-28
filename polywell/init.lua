@@ -1333,7 +1333,7 @@ return {
          end
       end,
 
-      wrap = function()
+      word_wrap = function()
          while(b.lines[b.point_line-1] ~= "" and b.point_line > 1) do
             b.point_line = b.point_line - 1
          end
