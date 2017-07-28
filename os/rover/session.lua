@@ -13,6 +13,10 @@ local pack = function(...) return {...} end
 local pps = function(x) return serpent.block(x, serpent_opts) end
 local print_trace = function(e) print(e, debug.traceback()) end
 
+local rpc = function(fn, ...)
+   output:push({op="rpc", fn=fn, args=lume.serialize({...})})
+end
+
 local map_ok, state = xpcall(map.load, print_trace, hostname)
 if(not map_ok) then print(state) end
 
@@ -31,9 +35,8 @@ end
 
 local send_state = function()
    local rects = lume.map(state.rects, lume.fn(relativize, state.rover))
-   output:push({ op="rpc", fn="rover_state",
-                 args={{rects=rects, r=state.dir,
-                        w=state.rover[3], h=state.rover[4]}}})
+   rpc("rover_state", {rects=rects, r=state.dir,
+                       w=state.rover[3], h=state.rover[4]})
 end
 
 local forward = function(dist)
@@ -98,7 +101,7 @@ sandbox.login = function(username, password)
             end
             response = i:pop()
          end
-         output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
+         rpc("set_prompt", sandbox.prompt)
       else
          write("Login problem:" .. pps(response) .. "\n")
       end
@@ -116,8 +119,7 @@ function sandbox.read()
       -- will likely turn out to regret! but it's our only entry point now.
       local ok, err = pcall(function()
             local targets = utils.completions_for(msg.input, sandbox, ".", {})
-            output:push({op="rpc", fn="completions",
-                         args={targets, msg.input}})
+            rpc("completions", targets, msg.input)
       end)
       if(not ok) then
          print("OS handler error:", err)
@@ -179,7 +181,7 @@ end
 local add_rpc = function(sb, name)
    sb[name] = function(...)
       local chan = love.thread.newChannel()
-      output:push({op="rpc", fn=name, args={...}, chan=chan})
+      output:push({op="rpc", fn=name, args=lume.serialize({...}), chan=chan})
       local response = chan:demand()
       if(response[1] == "_error") then
          table.remove(response, 1)
@@ -193,10 +195,10 @@ end
 
 lume.extend(sandbox, utils.sandbox)
 
-output:push({op="rpc", fn="set_prompt", args={sandbox.prompt}})
+rpc("set_prompt", sandbox.prompt)
 sandbox.print((state.motd or ""))
-output:push({op="rpc", fn="split_editor", args={"*rover*", "rover"}})
+rpc("split_editor", "*rover*", "rover")
 send_state()
 xpcall(repl, print_trace, lume.reduce(rpcs, add_rpc, sandbox))
-output:push({op="rpc", fn="split_editor", args={}})
+rpc("split_editor")
 output:push({op="disconnect"})

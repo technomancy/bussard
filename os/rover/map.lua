@@ -2,7 +2,7 @@ local utils = require("utils")
 local threads = {}
 
 local can_move_to = function(state, x, y)
-   for _,rect in pairs(state.rects) do
+   for _,rect in pairs(state.rects or {}) do
       local rw, rh = state.rover[3], state.rover[4]
       local rover = {x-rw/2, y-rh/2, rw, rh}
       if(utils.rect_overlap(rect, rover)) then return false end
@@ -15,7 +15,7 @@ return {
       local chunk = assert(love.filesystem.load("data/maps/" .. name .. ".lua"))
       local state = chunk()
 
-      for _,host in pairs(state.hosts) do
+      for _,host in pairs(state.hosts or {}) do
          local t = {}
          t.input, t.output = love.thread.newChannel(), love.thread.newChannel()
          t.thread = love.thread.newThread("os/server.lua")

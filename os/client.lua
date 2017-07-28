@@ -52,7 +52,8 @@ local function recv(ship, port, channel, blocking)
       if(msg.op == "disconnect") then
          ship.api.editor.with_current_buffer("*console*", disconnect, ship)
       elseif(msg.op == "rpc") then
-         local resp = {rpcs[msg.fn](ship, port, unpack(msg.args or {}))}
+         local args = msg.args and lume.deserialize(msg.args)
+         local resp = {rpcs[msg.fn](ship, port, unpack(args or {}))}
          dbg("r>", require("serpent").block(resp))
          if(msg.chan) then msg.chan:push(resp) end
       end

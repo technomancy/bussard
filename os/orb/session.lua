@@ -40,7 +40,7 @@ local function read()
             local dir = msg.input:match("^/") and "" or env.CWD
             local completions = completions_for(msg.input, dir, {})
             output:push({op="rpc", fn="completions",
-                         args={completions, msg.input}})
+                         args=lume.serialize({completions, msg.input})})
       end)
       if(not ok) then
          print("OS handler error:", err)
@@ -62,7 +62,7 @@ end
 local add_rpc = function(sandbox, name)
    sandbox[name] = function(...)
       local chan = love.thread.newChannel()
-      output:push({op="rpc", fn=name, args={...}, chan=chan})
+      output:push({op="rpc", fn=name, args=lume.serialize({...}), chan=chan})
       local response = chan:demand()
       if(response[1] == "_error") then
          table.remove(response, 1)

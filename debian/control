@@ -11,7 +11,7 @@ Vcs-Browser: https://gitlab.com/technomancy/bussard
 
 Package: bussard
 Architecture: all
-Depends: love (>=0.9.1), ${misc:Depends}, fonts-noto, fonts-inconsolata, lua-socket
+Depends: love (>=0.10.0), ${misc:Depends}, fonts-noto, fonts-inconsolata, lua-socket
 Description: Bussard is a space flight programming adventure
  A space flight programming adventure game. Mine, trade, upgrade, and unlock
  the potential of your spacecraft by hacking on the code that makes it tick.

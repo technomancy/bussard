@@ -60,7 +60,7 @@ end
 local add_rpc = function(acc, name)
    acc[name] = function(...)
       local chan = love.thread.newChannel()
-      output:push({op="rpc", fn=name, args={...}, chan=chan})
+      output:push({op="rpc", fn=name, args=lume.serialize({...}), chan=chan})
       return unpack(chan:demand())
    end
    return acc
