@@ -26,7 +26,7 @@ wipe: ; love . --wipe
 wipe_fs: ; rm -rf $(HOME)/.local/share/love/bussard/fs
 
 # different contexts have different rules about what's OK, globals, etc
-check:
+luacheck:
 	luacheck --no-color --std luajit --ignore 21/_.* \
 	  --exclude-files metatable_monkey.lua --globals love lume orb pp _ \
 	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA) # engine code
@@ -50,7 +50,7 @@ test: ; love . --test
 
 fuzz: ; love . --fuzz
 
-ci: check test fuzz
+ci: luacheck test fuzz
 
 count: ; cloc --force-lang=lua $(GAME_LUA)
 
@@ -65,7 +65,7 @@ count_all: ; cloc $(ALL_LUA)
 
 count_prose: ; find $(PROSE) -type f -print0 | xargs -0 wc -l
 
-clean: ; rm -rf releases/
+clean: ; rm -rf releases/ bussard.love
 
 REL="$(PWD)/love-release.sh"
 FLAGS=-a 'Phil Hagelberg' -x spoilers -x savedir \

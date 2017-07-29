@@ -1,11 +1,11 @@
 Source: bussard
 Section: games
 Priority: extra
-Maintainer: Debian Games Team <pkg-games-devel@lists.alioth.debian.org>
+Maintainer: Phil Hagelberg <technomancy@gmail.com>
 Uploaders: Phil Hagelberg <technomancy@gmail.com>
 Build-Depends: debhelper (>= 9), zip
 Standards-Version: 3.9.7
-Homepage: https://gitlab.com/technomancy/bussard
+Homepage: https://technomancy.itch.io/bussard
 Vcs-Git: https://gitlab.com/technomancy/bussard.git
 Vcs-Browser: https://gitlab.com/technomancy/bussard
 

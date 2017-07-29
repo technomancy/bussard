@@ -118,10 +118,6 @@ headquartered on Bohk Prime.
   ones. All long-haul cargo ships made here. Located in the asteroid
   belt.
 
-* Consolidated Shipping (Ross)
-  Runs most inner-system routes. Starting to break into Tana lines,
-  but only slowly.
-
 * Songket Shipyards (Lalande)
   Responsible for most later colony ships, but also creates many
   interplanetary cargo ships.
@@ -138,9 +134,6 @@ headquartered on Bohk Prime.
 
 * WonderChannel
   Another ISP. (wonderchannel.net.sol)
-
-* Leeft (Sol)
-  Interplanetary and interstellar passenger runs.
 
 * Aperture Technology (Lalande)
   Caretaker of portal artifacts, researches and maintains portal
