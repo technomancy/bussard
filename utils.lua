@@ -375,7 +375,7 @@ return {
 
    find_kv_by = function(ts, field, value)
       for k,v in ipairs(ts) do
-         if(t[field] == value) then return k,v end
+         if(v[field] == value) then return k,v end
       end
    end,
 
