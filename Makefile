@@ -67,10 +67,10 @@ count_prose: ; find $(PROSE) -type f -print0 | xargs -0 wc -l
 
 clean: ; rm -rf releases/
 
-REL="love-release.sh"
+REL="$(PWD)/love-release.sh"
 FLAGS=-a 'Phil Hagelberg' -x spoilers -x savedir \
 	--description 'A space flight programming adventure game.' \
-	--love 0.10.1 --url https://technomancy.itch.io/bussard --version $(VERSION)
+	--love 0.10.2 --url https://technomancy.itch.io/bussard --version $(VERSION)
 
 releases/bussard-$(VERSION).love: $(ALL_LUA) $(PROSE) $(MEDIA) $(META) $(POLYWELL) Makefile
 	mkdir -p releases/
@@ -102,3 +102,7 @@ pushwindows: windows
 
 push: pushmac pushwindows
 	echo "Upload releases/bussard-$(VERSION).love manually in the browser for now."
+
+# upload prerelease versions to scratch site instead of itch.io
+preupload: love mac windows
+	scp releases/bussard-$(VERSION)-* p.hagelb.org:p/

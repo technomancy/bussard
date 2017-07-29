@@ -1,6 +1,6 @@
-# Tenagra Enterprises Life Support System
+# Tenagra Systems Life Support System
 
-The Tenagra Enterprises Life Support System ensures safe, reliable
+The Tenagra Systems Life Support System ensures safe, reliable
 conditions for the life forms on board your ship. Capable of
 maintaining an Earth-temperate climate with adjustable temperature and
 relative humidity levels, it also recycles carbon dioxide into oxygen
@@ -18,4 +18,4 @@ the boundaries of what is safe for human life, while multiple levels
 of redundancy and battery backup ensure that the system will continue
 to operate in the event of a malfunction.
 
-Copyright © 2422 Tenagra Enterprises, All Rights Reserved
+Copyright © 2422 Tenagra Systems, All Rights Reserved

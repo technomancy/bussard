@@ -18,7 +18,7 @@ dex19
 
 recruiting@cmec.tana writes:
 
-> Help wanted for bot operations.
+> Help wanted for bot operations at Consolidated Mineral Exploitation Company
 >
 > This is an entry-level position suitable for humans and constructs. No
 > previous experience in mechanical maintenance or programming is required.

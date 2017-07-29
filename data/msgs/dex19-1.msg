@@ -5,10 +5,10 @@ Subject: Greetings
 Message-Id: 124ced33-46eb-48f8-a3e6-e22e54202336
 
 Oh wow, it looks like you're coming around. I wasn't sure if this rescue was
-actually going to work--your craft was not designed for such a long
-interstellar trip. You've probably got a lot of questions, but your ship
-sustained a fair bit of damage on its trip, and the top priority is getting
-the backup systems online so we're in a less precarious situation.
+actually going to work--your craft was not prepared for an interstellar trip
+like that. You've probably got a lot of questions, but your ship sustained a
+fair bit of damage on its trip, and the top priority is getting the backup
+systems online so we're in a less precarious situation.
 
 I was able to log in using the emergency maintenance protocols when I found
 you drifting along, but I don't have access to initiate a reactor restart in

@@ -5,11 +5,13 @@ Subject: Fwd: Re: a favor
 Message-Id: 47856155-9a8a-4a75-8a81-96a7c5cc10c4
 In-Reply-To: c6c2c6b2-b661-4bad-94d3-8dee5968d89c
 
+So my friend is ... well ... see for yourself:
+
 > nari.phouen@starlink.net writes:
 >
 > dex you อาเจียน ลิง, I told you not to contact me. I really don't want to get
-> dragged into whatever you've got going on.
-
+> dragged into this.
+>
 > Listen; I'll see what I can do about your memory card if it gets you out
 > of my hair. But I am *not* coming along on whatever scheme you've planned.
 >
@@ -17,7 +19,7 @@ In-Reply-To: c6c2c6b2-b661-4bad-94d3-8dee5968d89c
 > "nari02" with "mendanciouspolyglottal" as the password.
 >
 > Use the code below to transfer the card to the rover, then navigate it up
-> to my compound at 42x207. Once I get my hands on the card I'll mail you
+> to my compound at 42x207. Once I get my hands on the card I'll email you
 > the contents.
 
 ----------------------------------------------------------------------
