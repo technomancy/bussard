@@ -433,8 +433,15 @@ ship.api = {
          end
          ship.api.closest_cycle = ship.api.closest_cycle + 1
       end,
-      select_target = function(i)
-         ship.target, ship.target_number = ship.bodies[i], i
+      select_target = function(t)
+         if(type(t) == "string") then
+            ship.target_number, ship.target =
+               utils.find_kv_by(ship.bodies, "name", t)
+         elseif(type(t) == "number") then
+            ship.target, ship.target_number = ship.bodies[t], t
+         else
+            error("unknown target type: " .. t)
+         end
       end,
    },
 

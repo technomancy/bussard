@@ -373,6 +373,12 @@ return {
       end
    end,
 
+   find_kv_by = function(ts, field, value)
+      for k,v in ipairs(ts) do
+         if(t[field] == value) then return k,v end
+      end
+   end,
+
    sort_by = function(orig, f)
       local t = lume.clone(orig)
       table.sort(t, function(a, b) return f(a) < f(b) end)
