@@ -19,16 +19,18 @@ local rover_points = {0,-1, 1,-2, 3,2, 0,4, -3,2, -1,-2}
 
 local draw = function()
    if(not ship.rover_state) then return end
-   local w, h = ship.editor.get_wh()
+   local state, x,y,w,h = ship.rover_state, unpack(ship.rover_state.rover)
    graphics.push()
-   graphics.translate(w/2+xo, h/2+yo)
+   local ew, eh = ship.editor.get_wh()
+   graphics.translate(ew/2+xo, eh/2+yo)
+   graphics.print(string.format("x: %s y: %s", x,y), -ew/2+10, -eh/2+10)
    graphics.scale(scale, scale)
-   for _,rect in ipairs(ship.rover_state.rects) do
+   for _,rect in ipairs(state.rects) do
       draw_box(rect.color, unpack(rect))
    end
    graphics.setColor(colors.red)
-   graphics.rotate(ship.rover_state.r)
-   graphics.scale(ship.rover_state.w/10, ship.rover_state.h/10)
+   graphics.rotate(state.r)
+   graphics.scale(w/10, h/10)
    graphics.polygon("line", rover_points)
    graphics.pop()
 end
@@ -50,3 +52,4 @@ bind("rover", "ctrl-x 4", lume.fn(editor.split, "triple"))
 bind("rover", "ctrl-x o", editor.focus_next)
 
 bind("rover", "escape", function() editor.change_buffer("*flight*") end)
+

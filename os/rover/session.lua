@@ -35,8 +35,7 @@ end
 
 local send_state = function()
    local rects = lume.map(state.rects, lume.fn(relativize, state.rover))
-   rpc("rover_state", {rects=rects, r=state.dir,
-                       w=state.rover[3], h=state.rover[4]})
+   rpc("rover_state", {rects=rects, r=state.dir, rover=state.rover})
 end
 
 local forward = function(dist)
