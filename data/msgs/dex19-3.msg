@@ -1,4 +1,4 @@
-From: dex19@localhost
+From: dex19@adahn.local
 To: captain@adahn.local
 Content-Type: text/plain; charset=UTF-8
 Subject: Fwd: Operators wanted!

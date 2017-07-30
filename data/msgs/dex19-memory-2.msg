@@ -1,4 +1,4 @@
-From: dex19@localhost
+From: dex19@adahn.local
 To: captain@adahn.local
 Content-Type: text/plain; charset=UTF-8
 Subject: Fwd: Re: a favor
@@ -19,20 +19,5 @@ So my friend is ... well ... see for yourself:
 > "nari02" with "mendanciouspolyglottal" as the password.
 >
 > Use the code below to transfer the card to the rover, then navigate it up
-> to my compound at 42x207. Once I get my hands on the card I'll email you
+> to my compound at 42x107. Once I get my hands on the card I'll email you
 > the contents.
-
-----------------------------------------------------------------------
-
-Thanks for playing the Bussard beta!
-
-This is as far as the missions go so far, but keep an eye on the game as it
-progresses; there will be a lot more.
-
-If you have feedback on the game, please leave a comment on
-https://technomancy.itch.io/bussard or open a bug report at
-https://gitlab.com/technomancy/bussard.
-
-Since the game is free and open source software, we also welcome contributions
-from anyone who wants to help improve the game, from programming to artwork to
-writing.
