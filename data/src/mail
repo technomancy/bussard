@@ -1,11 +1,10 @@
 -- This -*- lua -*- code defines your message client.
 
--- There are two modes; mail and view. The first is for listing/navigating your
--- mail, and the second defines a mode for reading messages.
+-- There are two modes; mail and message. The first is for listing/navigating
+-- your mail folders, and the second defines a mode for reading messages.
 
 mail = function()
-   editor.open(nil, "*mail*")
-   ship:activate_mode("mail")
+   editor.open(nil, "*mail*", "mail")
 end
 
 local targets = {} -- things you can press enter to open
@@ -66,8 +65,7 @@ local set_modeline = function(folder)
    end
 end
 
-local open_folder = function(folder)
-   editor.set_prop("read_only", false)
+local open_folder_fn = function(folder)
    editor.end_of_buffer()
    local point, point_line = editor.point()
    editor.delete(1, 0, point_line, point)
@@ -106,17 +104,16 @@ local open_folder = function(folder)
    editor.beginning_of_buffer()
    editor.next_line()
    editor.next_line()
-   editor.set_prop("read_only", true)
 end
 
+local open_folder = lume.fn(editor.suppress_read_only, open_folder_fn)
+
 inbox = function()
-   editor.open(nil, "*mail*")
-   ship:activate_mode("mail")
+   editor.open(nil, "*mail*", "mail")
    open_folder("inbox")
 end
 
--- inherit most bindings from edit, but disable text insertion
-define_mode("mail", "edit", {activate=open_folder})
+define_mode("mail", "edit", {activate=open_folder, read_only=true})
 
 local reply_key = "alt-enter"
 
@@ -141,7 +138,7 @@ local open_message_or_folder = function()
       ship.docs.mail[folder]._unread[name] = nil
       open_folder(folder)
       editor.open(ship, "docs.mail." .. folder .. "." .. name)
-      ship:activate_mode("view")
+      ship:activate_mode("message")
       editor.set_prop("read_only", true)
       editor.set_modeline(view_modeline)
    else -- single value means open a folder
@@ -166,8 +163,31 @@ end
 
 bind("mail", archive_key, archive_from_folder)
 
+local colorize_message = function(_, colors, lines)
+   local headers = {"From", "To", "Content.Type", "Subject", "Date",
+                    "Message.Id", "In.Reply.To",}
+   local colorize_line = function(line)
+      if(line:find("^>")) then return {colors.quote, line} end
+      for _,h in pairs(headers) do
+         local start, len = line:find("^"..h..":")
+         if(start) then return {colors.header, line:sub(1,len),
+                                colors.text, line:sub(len+1, -1)}
+         end
+      end
+      return {colors.text, line}
+   end
+   return lume.map(lines, colorize_line)
+end
+
 -- inherit most bindings from edit, but disable text insertion
-define_mode("view", "edit", true)
+define_mode("message", "edit", {read_only=true,
+                                activate = editor.colorize,
+                                colorize = colorize_message})
+
+-- mail-specific colors
+editor.set_color("message", {header={0,255,0},
+                             text={0,200,0},
+                             quote={200,100,0}})
 
 local open_up_folder = function()
    local path = editor.current_buffer_path()
@@ -188,8 +208,8 @@ local archive = function()
    open_folder(folder)
 end
 
-bind("view", "alt-a", archive)
-bind("view", "alt-up", open_up_folder)
+bind("message", "alt-a", archive)
+bind("message", "alt-up", open_up_folder)
 
 local reply = function()
    local id = header(editor.get_lines(), "Message.Id")
@@ -203,4 +223,4 @@ local reply = function()
    end
 end
 
-bind("view", reply_key, reply)
+bind("message", reply_key, reply)

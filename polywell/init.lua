@@ -1262,7 +1262,8 @@ return {
          -- love 0.9.x doesn't have multi-colored print
          if(love._version_major > 0 or love._version_minor < 10) then return end
          local mode_colors = (b and b.mode and colors[b.mode]) or colors
-         b.props.render_lines = colorize(keywords, mode_colors, b.lines)
+         local color = get_prop("colorize", colorize)
+         b.props.render_lines = color(keywords, mode_colors, b.lines)
       end,
 
       debug = debug,
