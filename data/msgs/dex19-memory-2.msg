@@ -16,6 +16,6 @@ So my friend is ... well ... see for yourself:
 > of my hair. But I am *not* coming along on whatever scheme you've planned.
 >
 > I've got a spare short-range rover parked at the Solotogo port; log in as
-> "nari02" with "mendanciouspolyglottal" as the password, then navigate it up
+> "nari02" with "mendanciouspolyglottal" as the password, then navigate it
 > to my compound at 40x100. Once I get my hands on the card I'll email you
 > the contents.

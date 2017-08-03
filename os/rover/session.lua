@@ -45,6 +45,8 @@ local forward = function(dist)
                    round(dist*-math.cos(state.dir))))
    local message = map.get_in_range(state, "messages")
    if(message) then write(message.msg .. "\n") end
+   local event = map.get_in_range(state, "events")
+   if(event and event.event) then rpc("record_event", event.event) end
    send_state()
 end
 

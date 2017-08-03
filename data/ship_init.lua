@@ -19,7 +19,8 @@ local statuses = {
       "Helm controls...           " .. "[ WARN ]\n" ..
       "Life support...            " .. "[ WARN ]\n" ..
       "Cargo loader...            " .. "[  ok  ]\n" ..
-      "Auxiliary expansion bay... " .. "[  ok  ]\n", -- this is you!
+      "Primary expansion bay...   " .. "[  ok  ]\n", -- this is you!
+   "Secondary expansion bay... ", "[  ok  ]\n", -- spacetime junction
    "Automated repair...        ", "[ FAIL ]\n",
    "Solar panel...             ", "[  ok  ]\n",
    "Reaction mass collector... ", "[  ok  ]\n",

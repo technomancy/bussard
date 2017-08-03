@@ -3,8 +3,8 @@
 local colors = {red={255, 10, 10}, green={10, 255, 10}, blue={10, 10, 255}}
 local base_shift = 0.9
 
-local draw_box = function(color, x, y, w, h, zh)
-   local shift = (zh or 1) * base_shift
+local draw_box = function(color, x, y, w, h, d)
+   local shift = (d or 0) + base_shift
    graphics.setColor(colors[color] or {255,255,255})
    graphics.rectangle("line", x, y, w, h)
    graphics.rectangle("line", x*shift, y*shift, w*shift, h*shift)
@@ -49,6 +49,13 @@ bind("rover", "down", move(0, 10))
 bind("rover", "left", move(-10, 0))
 bind("rover", "right", move(10, 0))
 
+bind("rover", "wheel_up", function(direction)
+        editor.vary_prop("scale", function(s) return (s or 5) + 0.5 end)
+end)
+bind("rover", "wheel_down", function(direction)
+        editor.vary_prop("scale", function(s) return (s or 5) - 0.5 end)
+end)
+
 bind("rover", "ctrl-x 1", editor.split)
 bind("rover", "ctrl-x 2", lume.fn(editor.split, "vertical"))
 bind("rover", "ctrl-x 3", lume.fn(editor.split, "horizontal"))
@@ -56,4 +63,3 @@ bind("rover", "ctrl-x 4", lume.fn(editor.split, "triple"))
 bind("rover", "ctrl-x o", editor.focus_next)
 
 bind("rover", "escape", function() editor.change_buffer("*flight*") end)
-

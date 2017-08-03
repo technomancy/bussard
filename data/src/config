@@ -78,19 +78,15 @@ bind({"edit", "flight"}, "f3", inbox)
 
 bind("flight", "f4", ship.orbital_lock)
 
--- mail client
-bind({"flight", "edit"}, "ctrl-m", mail)
-
--- to open a file.
 bind({"flight", "edit"}, "ctrl-o", editor.find_file)
 
--- reload config
+-- reload config (this file and all files it loads)
 bind({"flight", "edit"}, "ctrl-r", editor.reload)
 
--- connect to target over ssh.
+-- prompt for username/password for SSH connection
 bind("flight", "ctrl-s", ssh_prompt)
 
--- activate portal sequence.
+-- activate portal sequence
 bind("flight", "ctrl-p", portal)
 
 bind({"flight", "edit"}, "ctrl-[", function() ship.ui.adjust_font(-2) end)

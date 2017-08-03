@@ -12,5 +12,8 @@ return {
       " to find out what it says.",
 
    objectives={"memory_card_delivered"},
-   on_success = function(ship) mail.deliver_msg(ship, "nari-memory-01.msg") end,
+   on_success = function(ship)
+      mail.deliver_msg(ship, "nari-memory-01.msg")
+      -- mail.deliver_msg(ship, "nari-memory-02.msg")
+   end,
 }

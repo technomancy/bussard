@@ -53,16 +53,6 @@ bind("mapper", "mouse_released", function(x, y, btn)
         end
 end)
 
-bind("mapper", "wheel_moved", function(direction)
-        local ds
-        if(direction == "wheelup") then
-           ds = 2
-        elseif(direction == "wheeldown") then
-           ds = -2
-        end
-        editor.vary_prop("scale", function(s) return (s or 5) + ds end)
-end)
-
 bind("mapper", "a", function()
         if(target) then target[5] = (target[5] or 1) + 0.25 end
 end)
@@ -71,6 +61,5 @@ bind("mapper", "z", function()
         if(target) then target[5] = math.max((target[5] or 1) - 0.25, 0) end
 end)
 
-dofile "host.rover"
 bind("mapper", "ctrl-r", function() dofile("host.mapper") end)
 editor.open(nil, "*mapper*", "mapper")

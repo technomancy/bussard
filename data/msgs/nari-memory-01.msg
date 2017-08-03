@@ -9,7 +9,9 @@ In-Reply-To: 67b1f706-73e1-47bb-8111-41fafba10334
 You're completely mad; you know that, right?
 
 I do not want to know where you found this memory card. But here's the
-contents of the file on it. We're even now, so go on and get lost.
+contents of the first file on it. There was one other file; just a jumble of
+alphanumerics, but I'll send that in a second email. We're even now, so go
+on and get lost.
 
 -Nari
 
@@ -31,27 +33,17 @@ contents of the file on it. We're even now, so go on and get lost.
 >
 > The ship doesn't have enough fuel to turn around and get back to where we
 > launched from. But it looks like the way we're traveling now will put us on a
-> course for Bohk, probably for a planned rendezvous. The last thing I want is
+> course for Ross, probably for a planned rendezvous. The last thing I want is
 > for the Junction to fall into their hands. I don't need to stop the ship; I
 > just need to throw it off course.
 >
 > Blowing the airlock might do that, especially if I disable the repair
-> drone. Getting the ship into a spin might force him to use up fuel righting
-> it. I wouldn't survive it, but I wouldn't survive anyway.
+> drone. Getting the ship into a spin might force the remaining fuel to be
+> spent righting it. I wouldn't survive it, but I wouldn't survive anyway.
+>
+> As a last resort I've included a scrambled copy of the Junction manual on
+> this card. It's just rot13, but it's better than nothing.
+>
+> Here we go.
 >
 > -Strauss
-
-----------------------------------------------------------------------
-
-Thanks for playing the Bussard beta!
-
-This is as far as the missions go so far, but keep an eye on the game as it
-progresses; there will be more.
-
-If you have feedback on the game, please leave a comment on
-https://technomancy.itch.io/bussard or open a bug report at
-https://gitlab.com/technomancy/bussard.
-
-Since the game is free and open source software, we also welcome contributions
-from anyone who wants to help improve the game, from programming to artwork to
-writing.

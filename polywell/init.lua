@@ -1212,15 +1212,15 @@ return {
       end,
 
       wheelmoved = function(x, y)
-         local fn = find_binding("wheelmoved")
+         local fn = find_binding("wheel_moved")
          if(fn) then
             with_traceback(get_prop("wrap", wrap), fn)
          else
             local wheel_dir = nil
-            if(x < 0) then wheel_dir = "wheelleft"
-            elseif(x > 0) then wheel_dir = "wheelright"
-            elseif(y < 0) then wheel_dir = "wheeldown"
-            elseif(y > 0) then wheel_dir = "wheelup"
+            if(x < 0) then wheel_dir = "wheel_left"
+            elseif(x > 0) then wheel_dir = "wheel_right"
+            elseif(y < 0) then wheel_dir = "wheel_down"
+            elseif(y > 0) then wheel_dir = "wheel_up"
             end
             local dir_fn = find_binding(wheel_dir)
             if(dir_fn) then

@@ -11,7 +11,8 @@ end
 
 local folder_for = function(msg)
    local to = msg:match("To: ([^\n]+)")
-   if(to == "captain@adahn.local") then
+   if(to == "captain@adahn.local" or
+      msg:match("Cc: ([^\n]+)") == "captain@adahn.local") then
       return "inbox"
    else
       return utf8.gsub(to, "@news.local", "")
