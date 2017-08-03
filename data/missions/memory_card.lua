@@ -1,4 +1,3 @@
-local mission = require("mission")
 local mail = require("mail")
 
 local coro = coroutine.create(function(ship)

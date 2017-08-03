@@ -1,0 +1,76 @@
+-- -*- lua -*- code for creating maps
+
+define_mode("mapper", "rover")
+
+local press, target = nil
+
+local find_rect = function(x, y)
+   for _,r in pairs(ship.rover_state.rects) do
+      if(utils.rect_overlap(r, {x, y, 1, 1})) then return r end
+   end
+end
+
+local scale = function(x, y)
+   local s = editor.get_prop("scale", 5)
+   local xo = editor.get_prop("x_offset", 5)
+   local yo = editor.get_prop("y_offset", 5)
+   local ew, eh = ship.editor.get_wh()
+   return (x - ew/2 + xo) / s, (y - eh/2 + yo) / s
+end
+
+-- dump stuff to test in here
+ship.rover_state = ship.rover_state or {
+   rects = {
+      {0,-10,120,10},
+      {20, 20, 20, 20}, {80, 20, 20, 20},
+      {20, 50, 30, 20}, {80, 80, 20, 20},
+      {0, 80, 20, 20},
+      {40,100,10,10, color="green"},
+   },
+   rover = {5,5,9,9}, r=0,
+}
+
+bind("mapper", "mouse_pressed", function(x, y)
+        x, y = scale(x, y)
+        target, press = find_rect(x, y), {x, y}
+end)
+
+bind("mapper", "mouse_released", function(x, y, btn)
+        x, y = scale(x, y)
+        local dx, dy = press[1] - x, press[2] - y
+        if(btn == 1 and target) then -- move
+           target[1], target[2] = target[1] - dx, target[2] - dy
+        elseif(btn == 2 and target) then -- resize
+           target[3], target[4] = target[3] - dx, target[4] - dy
+        elseif(btn == 3 and target) then -- delete
+           lume.remove(ship.rover_state.rects, target)
+        elseif(btn == 1 and math.abs(dx) > 10 and math.abs(dy) > 10) then
+           local r = {math.min(press[1], x), math.min(press[2], y),
+                      math.abs(dx), math.abs(dy)}
+           table.insert(ship.rover_state.rects, r)
+        else
+           target = nil
+        end
+end)
+
+bind("mapper", "wheel_moved", function(direction)
+        local ds
+        if(direction == "wheelup") then
+           ds = 2
+        elseif(direction == "wheeldown") then
+           ds = -2
+        end
+        editor.vary_prop("scale", function(s) return (s or 5) + ds end)
+end)
+
+bind("mapper", "a", function()
+        if(target) then target[5] = (target[5] or 1) + 0.25 end
+end)
+
+bind("mapper", "z", function()
+        if(target) then target[5] = math.max((target[5] or 1) - 0.25, 0) end
+end)
+
+dofile "host.rover"
+bind("mapper", "ctrl-r", function() dofile("host.mapper") end)
+editor.open(nil, "*mapper*", "mapper")

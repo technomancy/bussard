@@ -50,6 +50,14 @@ local pad_to = function(s, width, padding)
    return s
 end
 
+local fnil = function(f, val)
+   return function(possibly_nil, ...)
+      return f((possibly_nil == nil) and val or possibly_nil, ...)
+   end
+end
+
+local adder = function(x) return function(y) return x + y end end
+
 local find_common = function(a, b)
    for i=math.min(#a, #b),1,-1 do
       if(utf8.sub(a,1,i) == utf8.sub(b,1,i)) then
@@ -239,6 +247,12 @@ local timer = function(period, callback)
    end
 end
 
+local rect_overlap = function(r1, r2)
+   local x1, y1, w1, h1 = unpack(r1)
+   local x2, y2, w2, h2 = unpack(r2)
+   return x1 < x2+w2 and x1+w1 > x2 and y1 < y2+h2 and y1+h1 > y2
+end
+
 local with_traceback = function(print2, f, ...)
    local args = {...}
    local wrapped = function()
@@ -338,6 +352,9 @@ return {
          distance = distance,
          format_time = format_time,
          parse_time = parse_time,
+         rect_overlap = rect_overlap,
+         fnil = fnil,
+         adder = adder,
       },
       lume = lume.clone(lume),
       pps = pps,
@@ -398,14 +415,13 @@ return {
       return t
    end,
 
+   fnil = fnil,
+   adder = adder,
+
    pad_to = pad_to,
    buffer = buffer,
 
-   rect_overlap = function(r1, r2)
-      local x1, y1, w1, h1 = unpack(r1)
-      local x2, y2, w2, h2 = unpack(r2)
-      return x1 < x2+w2 and x1+w1 > x2 and y1 < y2+h2 and y1+h1 > y2
-   end,
+   rect_overlap = rect_overlap,
 
    with_traceback = with_traceback,
 

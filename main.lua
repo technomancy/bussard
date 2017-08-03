@@ -232,9 +232,9 @@ local keypressed = safely(function(key)
 end)
 
 local keyreleased = safely(ship.api.editor.keyreleased)
-
 local wheelmoved = safely(ship.api.editor.wheelmoved)
-
+local mousepressed = safely(ship.api.editor.mousepressed)
+local mousereleased = safely(ship.api.editor.mousereleased)
 local textinput = safely(ship.api.editor.textinput)
 
 local draw = function(dt)
@@ -250,8 +250,9 @@ end
 ui.play = function()
    ui.set_font(font_size)
    love.update, love.keypressed, love.keyreleased, love.wheelmoved,
-   love.textinput,love.draw =
-      update, keypressed, keyreleased, wheelmoved, textinput, safely(draw)
+   love.mousepressed, love.mousereleased, love.textinput,love.draw =
+      update, keypressed, keyreleased, wheelmoved,
+   mousepressed, mousereleased, textinput, safely(draw)
 end
 
 local major, minor, patch = love.getVersion()

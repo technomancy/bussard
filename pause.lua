@@ -93,8 +93,6 @@ local keypressed = function(key)
 end
 
 local draw = function()
-   local w,h = love.window.getMode()
-
    love.graphics.draw(title, 30, 30)
 
    love.graphics.setFont(choices_font)

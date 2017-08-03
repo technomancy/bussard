@@ -16,7 +16,7 @@ return {
    hosts = {{50,20,10,10, name="trainee01", os="orb"}},
 
    messages = {
-      {50,40,10,10, msg="Good; you successfully moved forward. Now turn with `left()` and go that way."},
+      {50,40,10,10, msg="Good; you moved forward. Now turn with `left()` and go that way."},
       {40,40,10,10, msg="You're getting the idea. A little further, then head around the corner."},
       {60,50,10,10, msg="All right, so you turned first; that's fine. " ..
           "Use `forward()` and more\nturns to reach the terminal."},

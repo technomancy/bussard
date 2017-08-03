@@ -1,10 +1,10 @@
 -- -*- lua -*-
 
 local colors = {red={255, 10, 10}, green={10, 255, 10}, blue={10, 10, 255}}
+local base_shift = 0.9
 
-local shift, scale, xo, yo = 0.9, 5, 0, 0
-
-local draw_box = function(color, x, y, w, h)
+local draw_box = function(color, x, y, w, h, zh)
+   local shift = (zh or 1) * base_shift
    graphics.setColor(colors[color] or {255,255,255})
    graphics.rectangle("line", x, y, w, h)
    graphics.rectangle("line", x*shift, y*shift, w*shift, h*shift)
@@ -22,21 +22,25 @@ local draw = function()
    local state, x,y,w,h = ship.rover_state, unpack(ship.rover_state.rover)
    graphics.push()
    local ew, eh = ship.editor.get_wh()
-   graphics.translate(ew/2+xo, eh/2+yo)
+   graphics.translate(ew/2-editor.get_prop("x_offset", 0),
+                      eh/2-editor.get_prop("y_offset", 0))
    graphics.print(string.format("x: %s y: %s", x,y), -ew/2+10, -eh/2+10)
-   graphics.scale(scale, scale)
+   graphics.scale(editor.get_prop("scale", 5))
    for _,rect in ipairs(state.rects) do
       draw_box(rect.color, unpack(rect))
    end
    graphics.setColor(colors.red)
-   graphics.rotate(state.r)
+   graphics.rotate(state.r or 0)
    graphics.scale(w/10, h/10)
    graphics.polygon("line", rover_points)
    graphics.pop()
 end
 
 local move = function(dx, dy)
-   return function() xo, yo = xo + dx, yo + dy end
+   return function()
+      editor.vary_prop("x_offset", utils.fnil(utils.adder(dx), 0))
+      editor.vary_prop("y_offset", utils.fnil(utils.adder(dy), 0))
+   end
 end
 
 define_mode("rover", "flight", {draw=draw, full_draw=false, read_only=true})

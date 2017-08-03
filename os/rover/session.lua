@@ -195,7 +195,7 @@ end
 lume.extend(sandbox, utils.sandbox)
 
 rpc("set_prompt", sandbox.prompt)
-sandbox.print((state.motd or ""))
+sandbox.print("\n" .. (state.motd or ""))
 rpc("split_editor", "*rover*", "rover")
 send_state()
 xpcall(repl, print_trace, lume.reduce(rpcs, add_rpc, sandbox))

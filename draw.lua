@@ -5,9 +5,9 @@ local utils = require("utils")
 local starfield = require("starfield")
 
 local stars = { starfield.new(7, 0.01, 100),
+                starfield.new(18, 0.03, 125),
                 starfield.new(10, 0.05, 175),
-                starfield.new(15, 0.1, 225),
-                starfield.new(12, 0.3, 255), }
+                starfield.new(15, 0.1, 225), }
 
 local portal_offsets = {
    {0, -200}, {-141, -141}, {-200, 0}, {-141, 141},
