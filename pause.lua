@@ -2,9 +2,6 @@ local lume = require "lume"
 local colorize = require "polywell.colorize"
 local editor = require "polywell"
 
-local starfield = require "starfield"
-local stars = {}
-
 local title, choices_font, text_font, font_height, resize
 
 local text, colored_text, line = {}, {}, 1
@@ -16,7 +13,14 @@ local files = {"main.lua","main.lua","main.lua","main.lua","main.lua",
                "asteroid.lua","body.lua","mission.lua", "save.lua", "pause.lua",
 }
 
-local buttons = {"resume", "credits", "license", "toggle fullscreen", "quit"}
+local buttons = {"resume", "credits", "license", "toggle fullscreen",
+                 "wipe save", "quit"}
+
+local replace_button = function(from, to)
+   local i = lume.find(buttons, from)
+   if(i) then buttons[i] = to end
+end
+
 local actions = {resume=function() end,
                  credits=function()
                     text, line = lume.split(love.filesystem.read("credits.md"), "\n"), 1
@@ -35,7 +39,12 @@ local actions = {resume=function() end,
                     end
                     resize()
                  end,
+                 ["wipe save"] = lume.fn(replace_button, "wipe save", "confirm wipe"),
+                 ["confirm wipe"] = function()
+                    require("ship").api.ui.abort(true)
+                 end,
                  quit = love.event.quit,}
+
 local selected = 1
 
 local x,dx,y,dy = 0,0,0,0
@@ -85,7 +94,6 @@ end
 
 local draw = function()
    local w,h = love.window.getMode()
-   for _,s in pairs(stars) do starfield.render(s, x, y, w, h) end
 
    love.graphics.draw(title, 30, 30)
 
@@ -120,10 +128,6 @@ return function(resume, quit, resize_fn, font_path)
    choices_font = love.graphics.newFont(font_path, 20)
    text_font = love.graphics.newFont(font_path, 14)
    font_height = text_font:getHeight()
-   stars = { starfield.new(10, 0.005, 75),
-             starfield.new(10, 0.01, 100),
-             starfield.new(10, 0.05, 175),
-             starfield.new(10, 0.1, 255), }
    actions.resume, actions.quit = resume, quit
    love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw,nil
    local file = random_choice(files)
@@ -133,4 +137,5 @@ return function(resume, quit, resize_fn, font_path)
       local keywords = editor.get_mode_prop("lua", "keywords")
       colored_text = colorize(keywords, editor.colors.lua, text)
    end
+   replace_button("confirm wipe", "wipe save")
 end
