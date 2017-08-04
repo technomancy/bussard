@@ -17,7 +17,6 @@ local _ = { r=0, mass=0,
 -- this is not a linear scale; Earth has 10 billion people, while the largest
 -- extrasolar worlds (Sungai, Bohk Prime) have about 100 million.
 -- pop: 1: 1000, 2: 10,000, 3: 100,000, 4: 1m, 5: 10m, 6: 100m, 7: 1b, 8: 10b
--- total: 10,216,655,000, total off-earth: 216,655,000
 --
 -- pop
 -- industry
@@ -31,8 +30,8 @@ local _ = { r=0, mass=0,
 --   engine
 --   solar_panel
 --   fuel_charger
---   comm_boost (must be unlocked)
---   map
+--   life_support (available everywhere)
+--   map (available everywhere)
 
 -- The positions for these systems are based on a listing of all habitable stars
 -- within 20 light years of Sol from Project Rho:
@@ -67,7 +66,7 @@ local sys = {
            industry=8,tech=6,
            remote=2, pop=4,
            agri=4, mineral=2,
-           upgrades={"engine", "cargo_bay", "map"},
+           upgrades={"engine", "cargo_bay"},
           },
           {r=33000, mass=100, station=true,
            image_name="station-pointed",
@@ -123,7 +122,7 @@ local sys = {
            industry=6,tech=6,
            remote=5, pop=2,
            agri=0, mineral=2,
-           upgrades={"engine", "fuel_tank", "map"},
+           upgrades={"engine", "fuel_tank"},
           },
           {r=12000, mass=520,
            image_name="shaber2", world=true,
@@ -180,7 +179,7 @@ local sys = {
                   industry=9,tech=7,
                   remote=1, pop=8,
                   agri=9, mineral=2,
-                  upgrades={"fuel_tank","engine", "map"},
+                  upgrades={"fuel_tank","engine"},
                  },
                  {r=25000, mass=120,
                   image_name="newton", station=true,
@@ -189,7 +188,7 @@ local sys = {
                   industry=7,tech=9,
                   remote=1, pop=4,
                   agri=0, mineral=4,
-                  upgrades={"fuel_charger", "fuel_tank", "map"},
+                  upgrades={"fuel_charger", "fuel_tank"},
                  },
                  {r=29000, mass=310,
                   image_name="mars",
@@ -198,7 +197,7 @@ local sys = {
                   industry=8,tech=6,
                   remote=1, pop=4,
                   agri=0, mineral=5,
-                  upgrades={"engine", "map"},
+                  upgrades={"engine"},
                  },
                  {r=44000, mass=900,
                   image_name="jupiter", world=true,
@@ -269,7 +268,7 @@ local sys = {
                       industry=7,tech=8,
                       remote=2, pop=6,
                       agri=4, mineral=3,
-                      upgrades={"cargo_bay", "fuel_charger", "map"},
+                      upgrades={"cargo_bay", "fuel_charger"},
                      },
                      {r=42000, mass=440, world=true,
                       image_name="planet-15", name="Ipah"},
@@ -331,7 +330,7 @@ local sys = {
                    industry=6,tech=6,
                    remote=4, pop=6,
                    agri=4, mineral=2,
-                   upgrades={"cargo_bay", "solar_panel", "map"},
+                   upgrades={"cargo_bay", "solar_panel"},
                   },
                   {r=20000, mass=100, station=true,
                    image_name = "station-round",
@@ -365,7 +364,7 @@ local sys = {
                          industry=2,tech=4,
                          remote=4, pop=3,
                          agri=6, mineral=3,
-                         upgrades={"map"},
+                         upgrades={},
                         },
                         {r=30000, mass=440, world=true,
                          image_name = "shaber7",
@@ -374,7 +373,7 @@ local sys = {
                          industry=2,tech=6,
                          remote=4, pop=4,
                          agri=5, mineral=4,
-                         upgrades={"cargo_bay", "fuel_tank", "map"},
+                         upgrades={"cargo_bay", "fuel_tank"},
                         },
                         {name = "Portal: Bohk",
                          image_name="portal-1",
@@ -419,7 +418,7 @@ local sys = {
                       industry=2,tech=1,
                       remote=8, pop=2,
                       agri=2, mineral=3,
-                      upgrades={"map"},
+                      upgrades={},
                      },
                      {r=12000, mass=100, station=true,
                       image_name="station-round",
