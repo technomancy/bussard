@@ -1021,7 +1021,7 @@ return {
       local current = lume.find(buffers, b) - 1
       local split_pos = find_split(b)
       if(current + (n or 1) < 0) then current = current + #buffers end
-      b = buffers[math.mod(current + (n or 1), #buffers) + 1]
+      b = buffers[((current + (n or 1)) % #buffers) + 1]
       if(split_pos) then splits[split_pos][2] = b end
    end,
 

@@ -49,10 +49,10 @@ bind("rover", "down", move(0, 10))
 bind("rover", "left", move(-10, 0))
 bind("rover", "right", move(10, 0))
 
-bind("rover", "wheel_up", function(direction)
+bind("rover", "wheel_up", function()
         editor.vary_prop("scale", function(s) return (s or 5) + 0.5 end)
 end)
-bind("rover", "wheel_down", function(direction)
+bind("rover", "wheel_down", function()
         editor.vary_prop("scale", function(s) return (s or 5) - 0.5 end)
 end)
 

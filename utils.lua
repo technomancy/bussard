@@ -108,7 +108,7 @@ end
 
 local format_time = function(s)
    local years = math.floor(s / seconds_per_year) + 1970
-   local seconds = math.mod(s, seconds_per_year)
+   local seconds = s % seconds_per_year
    local formatted, k = tostring(math.ceil(seconds))
    while k ~= 0 do
       formatted, k = string.gsub(formatted, "(-?%d+)(%d%d%d)", '%1,%2')

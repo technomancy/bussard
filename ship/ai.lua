@@ -4,7 +4,7 @@ local body = require("body")
 local names = lume.array(love.filesystem.lines("data/ships.txt"))
 
 local normalize = function(t)
-   return math.mod(t + math.pi, math.pi * 2) - math.pi
+   return ((t + math.pi) % (math.pi * 2)) - math.pi
 end
 
 local update = function(self, dt)
