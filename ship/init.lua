@@ -92,7 +92,7 @@ local universe_api = utils.readonly_proxy {
 }
 
 local sandbox = function(ship)
-   local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
+   local serpent_opts = {maxlevel=8,maxnum=64,nocode=true,comment=false,}
    return lume.merge(utils.sandbox,
                      { help = help.message,
                        print = ship.api.editor.print,

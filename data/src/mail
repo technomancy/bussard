@@ -164,7 +164,7 @@ end
 bind("mail", archive_key, archive_from_folder)
 
 local colorize_message = function(_, colors, lines)
-   local headers = {"From", "To", "Content.Type", "Subject", "Date",
+   local headers = {"From", "To", "Cc", "Content.Type", "Subject", "Date",
                     "Message.Id", "In.Reply.To",}
    local colorize_line = function(line)
       if(line:find("^>")) then return {colors.quote, line} end

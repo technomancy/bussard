@@ -54,7 +54,7 @@ return {
          if(type(when) == "number" and offset > when) then
             deliver_msg(ship, name)
          elseif(type(when) == "table" and ship.events[when[1]]) then
-            -- can be timed for N milliseconds after an event, too
+            -- can be timed for N seconds after an event, too
             local event_time = ship.events[when[1]] + when[2]
             if(utils.time(ship) > event_time) then
                deliver_msg(ship, name)
