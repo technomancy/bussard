@@ -1,4 +1,4 @@
-From: nari.phouen@starlink.net writes:
+From: nari.phouen@starlink.net:
 To: dex19@adahn.local
 Cc: captain@adahn.local
 Content-Type: text/plain; charset=UTF-8
@@ -42,7 +42,7 @@ on and get lost.
 > spent righting it. I wouldn't survive it, but I wouldn't survive anyway.
 >
 > As a last resort I've included a scrambled copy of the Junction manual on
-> this card. It's just rot13, but it's better than nothing.
+> this card. No time for anything but rot13, but that's better than nothing.
 >
 > Here we go.
 >
