@@ -1,6 +1,6 @@
 # Bussard changelog: history of user-visible changes
 
-## beta-3 / ???
+## beta-3 / 2017-08-06
 
 * Colorize mail messages.
 * Add pause-screen command to wipe save state and restart.

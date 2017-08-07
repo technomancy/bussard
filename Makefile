@@ -1,6 +1,6 @@
 run: ; love . --cheat
 
-VERSION=beta-3-pre
+VERSION=beta-3
 
 SHIP_LUA=ship/*.lua doc/init.lua os/client.lua
 ENGINE_LUA=*.lua
