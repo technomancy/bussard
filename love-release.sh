@@ -242,6 +242,7 @@ read_options () {
                 fi
                 shift 2 ;;
             -l|--${pre}love )         if ! gen_version "$2"; then exit_module "version"; fi; shift 2 ;;
+            -f|--${pre}lovefile )     LOVEFILE="$2"; shift 2 ;;
             -p|--${pre}pkg )          IDENTITY="$2"; shift 2 ;;
             -r|--${pre}release )      RELEASE_DIR="$2"; shift 2 ;;
             -t|--${pre}title )        TITLE="$2"; shift 2 ;;
@@ -350,17 +351,21 @@ init_module () {
 # Create the LÖVE file
 ## $1: Compression level 0-9
 create_love_file () {
-    local dotfiles=()
-    for file in .*; do
-        if [[ $file == '.' || $file == '..' ]]; then continue; fi
-        if [[ -d $file ]]; then file="$file/*"; fi
-        dotfiles+=( "$file" )
-    done
-    local release_dir="$(readlink -m "$RELEASE_DIR")"
-    local wd="$(readlink -m "$PWD")"
-    zip -FS -$1 -r "$RELEASE_DIR/$LOVE_FILE" \
-        -x "$0" "${release_dir//$wd\/}/*" "${dotfiles[@]}" "${EXCLUDE[@]}" @ \
-        "${FILES[@]}"
+    if [[ -r $LOVEFILE ]]; then
+        cp $LOVEFILE $RELEASE_DIR/$LOVE_FILE
+    else
+        local dotfiles=()
+        for file in .*; do
+            if [[ $file == '.' || $file == '..' ]]; then continue; fi
+            if [[ -d $file ]]; then file="$file/*"; fi
+            dotfiles+=( "$file" )
+        done
+        local release_dir="$(readlink -m "$RELEASE_DIR")"
+        local wd="$(readlink -m "$PWD")"
+        zip -FS -$1 -r "$RELEASE_DIR/$LOVE_FILE" \
+            -x "$0" "${release_dir//$wd\/}/*" "${dotfiles[@]}" "${EXCLUDE[@]}" @ \
+            "${FILES[@]}"
+    fi
 }
 
 # Exit module
@@ -416,7 +421,7 @@ FILES=()
 EXCLUDE=()
 
 OPTIONS="W::MDALa:d:e:hi:l:p:r:t:u:v:x:"
-LONG_OPTIONS="Wauthor:,Wclean,Wdescription:,Wemail:,Wexclude:,Whelp,Wicon:,Wlove:,Wpkg:,Wrelease:,Wtitle:,Wurl:,Wversion:,Wappid:,Winstaller,Mauthor:,Mclean,Mdescription:,Memail:,Mexclude:,Mhelp,Micon:,Mlove:,Mpkg:,Mrelease:,Mtitle:,Murl:,Mversion:,Dauthor:,Dclean,Ddescription:,Demail:,Dexclude:,Dhelp,Dicon:,Dlove:,Dpkg:,Drelease:,Dtitle:,Durl:,Dversion:,Aauthor:,Aclean,Adescription:,Aemail:,Aexclude:,Ahelp,Aicon:,Alove:,Apkg:,Arelease:,Atitle:,Aurl:,Aversion:,Aactivity:,Aupdate,author:,clean,description:,email:,exclude:,help,icon:,love:,pkg:,release:,title:,url:,version:"
+LONG_OPTIONS="Wauthor:,Wclean,Wdescription:,Wemail:,Wexclude:,Whelp,Wicon:,Wlove:,Wlovefile:,Wpkg:,Wrelease:,Wtitle:,Wurl:,Wversion:,Wappid:,Winstaller,Mauthor:,Mclean,Mdescription:,Memail:,Mexclude:,Mhelp,Micon:,Mlove:,Mlovefile:,Mpkg:,Mrelease:,Mtitle:,Murl:,Mversion:,Dauthor:,Dclean,Ddescription:,Demail:,Dexclude:,Dhelp,Dicon:,Dlove:,Dlovefile:,Dpkg:,Drelease:,Dtitle:,Durl:,Dversion:,Aauthor:,Aclean,Adescription:,Aemail:,Aexclude:,Ahelp,Aicon:,Alove:,Alovefile:,Apkg:,Arelease:,Atitle:,Aurl:,Aversion:,Aactivity:,Aupdate,author:,clean,description:,email:,exclude:,help,icon:,love:,lovefile:,pkg:,release:,title:,url:,version:"
 ARGS=$(getopt -o "$OPTIONS" -l "$LONG_OPTIONS" -n 'love-release' -- "$@")
 if (( $? != 0 )); then short_help; exit_module "options"; fi
 eval set -- "$ARGS"

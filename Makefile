@@ -80,11 +80,11 @@ releases/bussard-$(VERSION).love: $(ALL_LUA) $(PROSE) $(MEDIA) $(META) $(POLYWEL
 love: releases/bussard-$(VERSION).love
 
 mac: love
-	$(REL) $(FLAGS) -M
+	$(REL) $(FLAGS) --lovefile releases/bussard-$(VERSION).love -M
 	mv releases/Bussard-macosx-x64.zip releases/bussard-$(VERSION)-macosx-x64.zip
 
 windows: love
-	$(REL) $(FLAGS) -W -W32
+	$(REL) $(FLAGS) --lovefile releases/bussard-$(VERSION).love -W32
 	mv releases/Bussard-win32.zip releases/bussard-$(VERSION)-windows.zip
 
 deb: love
