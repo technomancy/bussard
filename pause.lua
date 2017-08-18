@@ -63,6 +63,7 @@ end
 local input = ""
 
 local keypressed = function(key)
+   local is_down = love.keyboard.isScancodeDown or love.keyboard.isDown
    if(key == "up") then
       selected = selected - 1
       if(selected == 0) then selected = #buttons end
@@ -83,12 +84,10 @@ local keypressed = function(key)
       input = ""
    elseif(key == "escape") then
       actions["resume"]()
-   elseif(key == "q" and love.keyboard.isScancodeDown("lctrl", "rctrl",
-                                                      "capslock")) then
+   elseif(key == "q" and is_down("lctrl", "rctrl", "capslock")) then
       love.event.quit()
    elseif(#key == 1) then
-      input = input .. (love.keyboard.isDown("lshift", "rshift") and
-                           key:upper() or key)
+      input = input .. (is_down("lshift", "rshift") and key:upper() or key)
    end
 end
 

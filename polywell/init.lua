@@ -528,9 +528,10 @@ local function merge_parent_prefix_maps(prefix_map, mode, key, ctrl, alt)
 end
 
 local function find_binding(key, the_mode)
+   local is_down = love.keyboard.isScancodeDown or love.keyboard.isDown
    local mode = active_prefix or the_mode or get_current_mode() or modes.default
-   local ctrl = love.keyboard.isScancodeDown("lctrl", "rctrl", "capslock")
-   local alt = love.keyboard.isScancodeDown("lalt", "ralt")
+   local ctrl = is_down("lctrl", "rctrl", "capslock")
+   local alt = is_down("lalt", "ralt")
    local map = (ctrl and alt and mode["ctrl-alt"]) or
       (ctrl and mode.ctrl) or (alt and mode.alt) or mode.map
 

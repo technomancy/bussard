@@ -19,7 +19,7 @@ local quit = function()
 end
 
 local is_ctrl = function()
-   return love.keyboard.isScancodeDown("lctrl", "rctrl", "capslock")
+   return (love.keyboard.isScancodeDown or love.keyboard.isDown)("lctrl", "rctrl", "capslock")
 end
 
 love.quit = function()
@@ -256,6 +256,6 @@ ui.play = function()
 end
 
 local major, minor, patch = love.getVersion()
-if(major == 0) then
-   assert(minor > 10 or minor == 10 and patch >= 2, "Need LÖVE 0.10.2+")
+if(major == 0 and (minor > 10 or minor == 10 and patch >= 2)) then
+   print("Need LÖVE 0.10.2+")
 end
