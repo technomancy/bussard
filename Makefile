@@ -8,7 +8,7 @@ OS_LUA=os/orb/*.lua os/lisp/*.lua os/rover/*.lua os/server.lua
 IN_OS_LUA=os/orb/resources/* data/host_src/*.lua data/maps/*.lua
 IN_SHIP_LUA=data/src/*
 DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua \
-	serpent/*.lua bencode/init.lua jeejah/init.lua
+	serpent/*.lua bencode/init.lua jeejah/init.lua os/rover/smolforth/init.lua
 MISSION_LUA=data/missions/*.lua
 DATA_LUA=data/*.lua data/msgs/*.lua $(MISSION_LUA)
 POLYWELL=polywell/*.lua polywell/lume/init.lua polywell/utf8/init.lua

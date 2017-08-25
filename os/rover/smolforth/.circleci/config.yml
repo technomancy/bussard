@@ -1,0 +1,9 @@
+version: 2
+jobs:
+  build:
+    working_directory: ~/smolforth
+    docker:
+      - image: yangm97/luacheck:latest
+    steps:
+      - checkout
+      - run: make ci
