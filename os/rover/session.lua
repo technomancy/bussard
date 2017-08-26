@@ -1,6 +1,5 @@
 require("love.timer")
 local lume = require("lume")
-local utils = require("utils")
 local serpent = require("serpent")
 local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
 local map = require("os.rover.map")

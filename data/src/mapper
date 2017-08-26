@@ -83,13 +83,12 @@ end)
 
 local round = function(x) return math.floor((x+5)/10)*10 end
 
-map_snap_to_fit = function()
+bind("mapper", "ctrl-f", function()
    for _,r in pairs(ship.rover_state.rects) do
       for i,n in ipairs(r) do
         r[i] = round(n)
       end
    end
-end
-
+end)
 bind("mapper", "ctrl-r", function() dofile("host.mapper") end)
 editor.open(nil, "*mapper*", "mapper")

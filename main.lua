@@ -256,6 +256,6 @@ ui.play = function()
 end
 
 local major, minor, patch = love.getVersion()
-if(major == 0 and (minor > 10 or minor == 10 and patch >= 2)) then
+if(major == 0 and not (minor > 10 or minor == 10 and patch >= 2)) then
    print("Need LÖVE 0.10.2+")
 end
