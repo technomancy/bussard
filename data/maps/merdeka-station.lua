@@ -2,27 +2,27 @@ local fs = require("love.filesystem")
 
 return {
    rects = {
-      { 0, 0,70,10, color="green"},
-      { 0, 0,10,60, color="green"},
-      {60, 0,10,60, color="green"},
-      {0, 50,70,10, color="green"},
-      {20,40,10,10, color="green"},
-      {30,20,40,10, color="green"},
-      {50,10,10,10, color="blue"},
+      {0,0,7,1, color="green"},
+      {0,0,1,6, color="green"},
+      {6,0,1,6, color="green"},
+      {0,5,7,1, color="green"},
+      {2,4,1,1, color="green"},
+      {3,2,4,1, color="green"},
+      {5,1,1,1, color="blue"},
    },
 
-   rover = {45,45,9,9},
+   rover = {4.5,4.5,0.9,0.9},
    motd = assert(fs.read("data/motd/merdeka-trainee1")),
-   hosts = {{50,20,10,10, name="trainee01", os="orb"}},
+   hosts = {{5,2,1,1, name="trainee01", os="orb"}},
 
    messages = {
-      {50,40,10,10, msg="Good; you moved forward. Now turn with `left` and go forward that way."},
-      {40,40,10,10, msg="You're getting the idea. A little further, then head around the corner."},
-      {60,50,10,10, msg="All right, so you turned first; that's fine. " ..
+      {5,4,1,1, msg="Good; you moved forward. Now turn with `left` and go forward that way."},
+      {4,4,1,1, msg="You're getting the idea. A little further, then head around the corner."},
+      {6,5,1,1, msg="All right, so you turned first; that's fine. " ..
           "Use `forward` and more\nturns to reach the terminal."},
-      {40,50,10,10, msg="All right, so you turned first; that's fine. " ..
+      {4,5,1,1, msg="All right, so you turned first; that's fine. " ..
           "Use `forward` and more\nturns to reach the terminal."},
-      {30,30, 5, 5, msg="There are shorter aliases for `forward`, `left`, and `right`: `f`, `l`, and `r`"},
-      {45,20, 10, 10, msg="You have reached the terminal. Run `login` to connect."},
+      {3,3,0.5,0.5, msg="There are shorter aliases for `forward`, `left`, and `right`: `f`, `l`, and `r`"},
+      {4.5,2,1,1, msg="You have reached the terminal. Run `login` to connect."},
    },
 }

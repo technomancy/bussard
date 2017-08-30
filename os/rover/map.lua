@@ -2,9 +2,9 @@ local utils = require("utils")
 local threads = {}
 
 local can_move_to = function(state, x, y)
+   local rw, rh = state.rover[3], state.rover[4]
+   local rover = {x-rw/2, y-rh/2, rw, rh}
    for _,rect in pairs(state.rects or {}) do
-      local rw, rh = state.rover[3], state.rover[4]
-      local rover = {x-rw/2, y-rh/2, rw, rh}
       if(utils.rect_overlap(rect, rover)) then return false end
    end
    return true
@@ -53,4 +53,6 @@ return {
          return threads[host].input, threads[host].output
       end
    end,
+
+   can_move_to = can_move_to,
 }

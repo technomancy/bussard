@@ -37,7 +37,7 @@ local send_state = function()
 end
 
 local forward = function()
-   local dist = 10
+   local dist = 1
    assert(map.move(state,
                    round(dist*math.sin(state.dir)),
                    round(dist*-math.cos(state.dir))))
@@ -50,7 +50,6 @@ end
 
 local sandbox = {
    prompt = "] ",
-   hostname = function() return hostname end,
    forward = forward,
    left = function()
       state.dir = state.dir - math.pi/2

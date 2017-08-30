@@ -21,15 +21,17 @@ local draw = function()
    if(not ship.rover_state) then return end
    local state, x,y,w,h = ship.rover_state, unpack(ship.rover_state.rover)
    graphics.push()
+   graphics.setLineWidth(0.05)
    local ew, eh = ship.editor.get_wh()
    graphics.translate(ew/2-editor.get_prop("x_offset", 0),
                       eh/2-editor.get_prop("y_offset", 0))
    graphics.print(string.format("x: %s y: %s", x,y), -ew/2+10, -eh/2+10)
-   graphics.scale(editor.get_prop("scale", 5))
+   graphics.scale(editor.get_prop("scale", 64))
    for _,rect in ipairs(state.rects) do
       draw_box(rect.color, unpack(rect))
    end
    graphics.setColor(colors.red)
+   graphics.setLineWidth(0.5)
    graphics.rotate(state.r or 0)
    graphics.scale(w/10, h/10)
    graphics.polygon("line", rover_points)
@@ -44,10 +46,10 @@ local move = function(dx, dy)
 end
 
 define_mode("rover", "flight", {draw=draw, full_draw=false, read_only=true})
-bind("rover", "up", move(0, -10))
-bind("rover", "down", move(0, 10))
-bind("rover", "left", move(-10, 0))
-bind("rover", "right", move(10, 0))
+bind("rover", "up", move(0, -1))
+bind("rover", "down", move(0, 1))
+bind("rover", "left", move(-1, 0))
+bind("rover", "right", move(1, 0))
 
 bind("rover", "wheel_up", function()
         editor.vary_prop("scale", function(s) return (s or 5) + 0.5 end)
