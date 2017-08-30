@@ -1,6 +1,6 @@
 #!/usr/bin/env lua
-local lume = require("lib.lume")
-local t = require("lib.lunatest")
+local lume = require("lume")
+local t = require("lunatest")
 local f = require("init")
 
 assert_stack = function(expected_stack, code)

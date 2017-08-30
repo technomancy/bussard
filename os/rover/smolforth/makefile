@@ -1,5 +1,5 @@
 CODE=init.lua
-DEPS=lib/*lua
+DEPS=lume.lua lunatest.lua
 LUA=luajit
 
 run:
