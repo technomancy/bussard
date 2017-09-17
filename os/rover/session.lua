@@ -113,7 +113,7 @@ rpc("split_editor", "*rover*", "rover")
 send_state()
 
 local ok, env = pcall(forth.make_env, read, write, sandbox,
-                      "os/rover/smolforth/smolforth.fs")
+                      "os/rover/init.fs")
 if(not ok) then print(env) end
 xpcall(forth.repl, print_trace, env)
 

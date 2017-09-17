@@ -5,23 +5,15 @@ return {test_booleans=
               assert_stack({true, false}, "true false or false false or")
               assert_stack({true, false}, "true true and false true and")
            end,
-        test_if=
+        test_string=
            function()
-              assert_stack({2}, "true if 2 then")
-              assert_stack({}, "false if 2 3 then")
-              assert_stack({2, 8}, "true if 2 8 else 4 then")
-              assert_stack({4}, "false if 2 1 else 4 then")
-              assert_stack({92}, "true if 3 2 1 + = if 92 else 2 then then")
+              assert_stack({"hey", "there"}, '"hey" "there"')
+              assert_stack({"hey there"}, '"hey " "there" ..')
            end,
         test_comments=
            function()
               assert_stack({}, "( this is a comment )")
               assert_stack({3, 4}, "3 ( a comment in between ) 4")
-           end,
-        test_nested_if=
-           function()
-              assert_stack({32}, "false if 77 2 1 + = if 92 else 2 then "..
-                 " else 32 then")
            end,
         test_stack_manipulation=
            function()
@@ -47,5 +39,34 @@ return {test_booleans=
               assert_stack({false}, "2 3 =")
               assert_stack({true, false}, "2 3 < 2 3 >")
               assert_stack({true, false, true}, "2 3 <= 2 3 >= 1 1 >=")
+           end,
+        test_define=
+           function()
+              assert_stack({5}, ": f 3 2 + ; f ")
+              assert_stack({5, 5}, ": f 3 2 + ; : g f ( lol ) f ; g")
+           end,
+        test_if=
+           function()
+              assert_stack({1, 2}, "1 : f true if 2 then ; f")
+              assert_stack({1}, "1 : f false if 2 3 then ; f")
+              assert_stack({2, 8}, ": f true if 2 8 else 4 then ; f")
+              assert_stack({4}, ": f false if 2 1 else 4 then ; f")
+              assert_stack({92},
+                 "true : f if 3 2 1 + = if 92 else 2 then then ; f")
+              assert_stack({32},
+                 ": f false if 77 2 1 + = if 92 else 2 then else 32 then ; f")
+           end,
+        test_do=
+           function()
+              assert_stack({55}, ": f 0 10 1 do i + loop ; f")
+              assert_stack({6}, ": f 1 do + loop ; 1 2 3 2 f")
+              assert_stack({4, 5, 6},
+                 ": inclast3 3 1 do rot 1 + loop ; 1 2 3 " ..
+                    ": f 3 1 do inclast3 loop ; f ")
+              assert_stack({1, 2, 3, 4}, ": f 4 1 do i loop ; f")
+           end,
+        test_begin=
+           function()
+              assert_stack({8}, ": f begin 1 - dup 4 % 0 = until ; 11 f")
            end,
 }
