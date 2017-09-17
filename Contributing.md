@@ -27,14 +27,16 @@ If you have never coded Lua before, don't fret! It's a very simple language;
 once you learn how [tables](doc/lua-5-tables.md) work it's very much like any
 other imperative dynamic language that leans heavily on closures. The only parts
 that use advanced language features (metatables and coroutines) are the OS
-filesystem and the read-only proxy tables like `ship.api.status`.
+filesystem and the read-only proxy tables like `ship.api.status` and certain
+mission status checks.
 
 The stock config in `data/src` is copied into the save directory when a new game
 is started. Therefore changes to the source will not be visible to in-progress
 games unless you use `ctrl-f1` to update your in-game config with the latest
 stock files. Your old config files will be backed up. The `ship.host` table
 is populated with the contents of the `host_fs` directory inside Bussard's save
-dir; it will persist between wiping save games.
+dir; it will persist between wiping save games. This is useful mostly during
+development. You can trigger the load of `host_fs/config` with `ctrl-tilde`.
 
 You may find the code in `spoilers/solutions` useful during development.
 
@@ -63,8 +65,8 @@ The last rule exists to make recursive functions more obvious. If you see `local
 function f()`, you know to pay more attention because a recursive function (or
 a function that needs self-reference for other reasons) is coming.
 
-There are three different code contexts (at the time of this writing; more may
-be introduced in the future): engine code, in-ship code, and OS code. The
+There are four different code contexts (at the time of this writing; more may
+be introduced in the future): engine code, in-ship code, rover code, and OS code. The
 standards for the engine code are the strictest; no new globals may be
 introduced. Inside the ship or OS sandboxes, it is often OK to introduce new
 "global" functions because their scope is much more limited.
@@ -95,15 +97,7 @@ your package manager. Ensure the `bin` directory of luarocks (typically
 
     $ luarocks install --local luacheck && luarocks install --local lunatest
     [...]
-    $ make check test
-
-If you make changes to the editor, try fuzzing it a few times to ensure none of
-the commands can crash if given random input:
-
-    $ make fuzz
-
-Note that this will only catch problems in commands which are bound to keys in
-the default config.
+    $ make ci
 
 ## Philosophy
 
@@ -134,7 +128,8 @@ When in doubt, do what Emacs does.
 ## Code Organization
 
 The [overview diagram](https://p.hagelb.org/bussard-overview.jpg) shows how the
-different parts of the codebase are related to each other.
+different parts of the codebase are related to each other. (The OS/services
+parts are a bit out of date, so see the stuff about RPCs below.)
 
 The `ship` table (loaded from `ship/init.lua`) contains all game state apart
 from host OSes like station computers and rovers. In particular, `ship.bodies`
@@ -228,7 +223,7 @@ bit which is exposed to your ship's sandbox and the main thread, and the
 `os.server` module runs in the isolated thread and delegates to the
 appropriate OS for whatever is on the other side. Each world has an
 `os.server` thread for accepting connections, and when a new connection is
-made, a session-specific thread is started.
+made, a session-specific thread (running `os.rover.session`, etc) is started.
 
 Mostly the communication consists of "standard IO"--lines of text sent and
 received. (`op="stdin"` or `op="stdout"`) However, the protocol is simply
@@ -240,6 +235,11 @@ RPC-able functions in the top-level `rpcs` module. All RPC functions have the
 first two args locked to `ship` and `port`, which is the table for whatever
 world on which the OS is running. Each OS exposes a different set of RPC
 functions to code running in its threads.
+
+Note that versions of LÖVE prior to 0.10.2 would not allow tables to be sent
+over channels if they included other tables inside them. Dropping the flat
+tables requirement for channels was done by accident. We want to avoid sending
+non-flat tables over channels if possible for compatibility with 0.10.1.
 
 The UI side of the SSH client is defined in `data/src/ssh`; it is based on the
 ship's computer's console mode, but it sends input across the SSH channel
@@ -261,11 +261,11 @@ not this one. It is brought in using `git subtree`.
 
 ### Save
 
-Certain fields of `ship` are saved off when you quit, but there is a whitelist;
-not everything is saved between exits. (See `ship_fields` and `body_fields` in
-`save.lua`.) Within user data of `ship.api`, the fields that get persisted are
-listed in `ship.api.persist`, allowing the player to declare additional fields
-as persistent.
+Certain fields of `ship` and various planets/stations/other ships are saved
+off when you quit, but there is a whitelist; not everything is saved between
+exits. (See `ship_fields` and `body_fields` in `save.lua`.) Within user data
+of `ship.api`, the fields that get persisted are listed in `ship.api.persist`,
+allowing the player to declare additional fields as persistent.
 
 Ship fields go in `ship_data.lua` in Love's save directory, while status of
 the current system goes in `system_data.lua`. The editor buffers are also

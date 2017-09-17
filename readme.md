@@ -89,7 +89,8 @@ progress. Eventually the goal is that you will be able to learn it without any
 * [Atomic Rockets](http://www.projectrho.com/public_html/rocket/) (science)
 * [Planescape: Torment](https://www.gog.com/game/planescape_torment) (story, gameplay)
 * [Meditations on Moloch](https://slatestarcodex.com/2014/07/30/meditations-on-moloch/) (philosophy)
-* [SpaceChem](https://www.gog.com/game/spacechem) (puzzle design)
+* [TIS-100](http://www.zachtronics.com/tis-100/) (puzzle design)
+* [Duskers](http://duskers.misfits-attic.com/) (gameplay)
 
 ## Licenses
 

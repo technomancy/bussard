@@ -65,3 +65,5 @@ Distributed under the GNU General Public License version 3 or later; see LICENSE
 * Atomic Rockets (science)
 * Planescape: Torment (story, gameplay)
 * Meditations on Moloch (philosophy)
+* TIS-100 (puzzle design)
+* Duskers (gameplay)
