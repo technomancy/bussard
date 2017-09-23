@@ -1,3 +1,7 @@
+local lume = require("lume")
+local t = require("lunatest")
+local f = require("init")
+
 return {test_booleans=
            function()
               assert_stack({true, false}, "true false")
@@ -68,5 +72,28 @@ return {test_booleans=
         test_begin=
            function()
               assert_stack({8}, ": f begin 1 - dup 4 % 0 = until ; 11 f")
+           end,
+        test_sandbox=
+           function()
+              local x = 0
+              local fn = f.stack_fn(1, function(y) x = y return y end)
+              local env = f.make_env(nil, io.write, {fn=fn})
+              f.exec(env, "38 fn")
+              t.assert_equal(38, x)
+           end,
+        test_save=
+           function()
+              local env = f.make_env(nil, io.write, {print=print})
+              f.exec(env, ": f 2 1 + ; f")
+              t.assert_string(f.save(env, {"print"}))
+           end,
+        test_load=
+           function()
+              local env = f.make_env(nil, io.write)
+              f.exec(env, ": f 2 1 + ; f")
+              local env2 = f.load(f.save(env), nil, io.write)
+              f.exec(env2, "f f * +")
+              t.assert_equal(1, #env2.stack)
+              t.assert_equal(12, env2.stack[1])
            end,
 }

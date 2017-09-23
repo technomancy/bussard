@@ -24,6 +24,7 @@ end
 
 love.quit = function()
    save.save(ship)
+   for _,b in ipairs(ship.bodies) do body.stop(b) end
    return false
 end
 

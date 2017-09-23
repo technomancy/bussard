@@ -1,4 +1,5 @@
 require("love.timer")
+require("love.filesystem")
 local lume = require("lume")
 local serpent = require("serpent")
 local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
@@ -6,6 +7,11 @@ local map = require("os.rover.map")
 local forth = require("os.rover.smolforth")
 
 local _, _, stdin, output, hostname = ...
+
+local save_file = "rovers/" .. hostname
+local save_map_file = save_file .. ".map"
+
+local sensor_range = 8
 
 local dbg = os.getenv("DEBUG") and print or function() end
 local pps = function(x) return serpent.block(x, serpent_opts) end
@@ -59,6 +65,18 @@ local sandbox = {
       state.dir = state.dir + math.pi/2
       send_state()
    end,
+   sense = function(stack)
+      local dist, inc = 0, 1
+      local x, y = unpack(state.rover)
+      while(dist < sensor_range and
+               map.can_move_to(state,
+                               round((x+dist+inc)*math.sin(state.dir)),
+                               round((y+dist+inc)*-math.cos(state.dir)))) do
+         dist = dist + inc
+      end
+
+      table.insert(stack, math.max(0, dist))
+   end,
 }
 
 sandbox.f, sandbox.l, sandbox.r = sandbox.forward, sandbox.left, sandbox.right
@@ -95,16 +113,29 @@ sandbox.login = function()
    end
 end
 
+local ok, env -- for loading forth env
+
 local function read()
    local msg = stdin:demand()
    if(msg.op == "stdin" and msg.stdin == "logout") then return nil
    elseif(msg.op == "stdin") then
       return msg.stdin
    elseif(msg.op == "kill") then
-      error("session terminated")
+      love.filesystem.createDirectory("rovers")
+      assert(love.filesystem.write(save_file,
+                                   forth.save(env, lume.keys(sandbox))))
+      assert(love.filesystem.write(save_map_file, lume.serialize(state)))
+      return nil
    else
       print("Unknown op!", lume.serialize(msg))
+      return read()
    end
+end
+
+if(love.filesystem.isFile(save_map_file)) then
+   local new_map = lume.deserialize(love.filesystem.read(save_map_file))
+   lume.clear(state)
+   lume.extend(state, new_map)
 end
 
 rpc("set_prompt", sandbox.prompt)
@@ -112,10 +143,18 @@ write("\n" .. (state.motd or "") .. "\n")
 rpc("split_editor", "*rover*", "rover")
 send_state()
 
-local ok, env = pcall(forth.make_env, read, write, sandbox,
-                      "os/rover/init.fs")
-if(not ok) then print(env) end
-xpcall(forth.repl, print_trace, env)
+if(love.filesystem.isFile(save_file)) then
+   ok, env = pcall(forth.load, love.filesystem.read(save_file),
+                   read, write, sandbox)
+else
+   ok, env = pcall(forth.make_env, read, write, sandbox, "os/rover/init.fs")
+end
+
+if(not ok) then
+   print(env)
+else
+   xpcall(forth.repl, print_trace, env)
+end
 
 rpc("split_editor")
 output:push({op="disconnect"})

@@ -2,6 +2,9 @@ local ship = require("ship")
 local lume = require("lume")
 local editor = ship.api.editor
 
+-- ctrl-` is bound to load host.config for dev convenience
+ship.api.host = {config="return nil"}
+
 local mock = {}
 setmetatable(mock, {__index= function() return function() return mock end end})
 love.graphics = mock

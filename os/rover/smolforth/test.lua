@@ -9,8 +9,7 @@ pp = function(x) print(s.block(x, s_opts)) end
 
 assert_stack = function(expected_stack, code)
    local env = f.make_env(nil, io.write)
-   env.input = code
-   f.exec(env)
+   f.exec(env, code)
    t.assert_equal(s.line(expected_stack, s_opts), s.line(env.stack, s_opts))
 end
 

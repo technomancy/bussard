@@ -77,7 +77,6 @@ local test_completion = function()
 
    ship.api.editor.textinput("bi", true)
    ship.api.editor.end_of_buffer()
-   -- ship.api.editor.debug(true)
    ship.api.editor.keypressed("tab")
    pass()
 

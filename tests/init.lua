@@ -9,9 +9,3 @@ end
 
 lunatest.run(nil, {"--verbose"})
 love.event.quit()
-
--- TODO: write tests for:
--- * missions
--- * services: cargo
--- * ship: disembark?
--- * fuzz the map

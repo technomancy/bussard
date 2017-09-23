@@ -10,6 +10,8 @@ local stack_fn = function(arg_count, f)
    end
 end
 
+-- since strings are immutable, replace env.input with the remainder after
+-- popping off a single token for returning
 local pop_token = function(env)
    local token, w = env.input:match("^(\"[^\"]+\")(%s*)")
    if(not token) then token, w = env.input:match("^(%S+)(%s*)") end
@@ -21,63 +23,6 @@ local function read_till(env, stoppers)
    local token = nil
    while not lume.find(stoppers, token) do token = pop_token(env) end
    return token
-end
-
-local function compile_token(token, env, exec_token)
-   if(not env.compiling) then return exec_token(env, token)
-   elseif(env.compilers[token]) then env.compilers[token](env.stack, env, token)
-   else table.insert(env.compiling, token) end
-end
-
-local function exec_word(body, env, exec_token)
-   table.insert(env.pos, 1)
-   while body[lume.last(env.pos)] do
-      local pos = lume.last(env.pos)
-      if(#env.conditionals == 0) then
-         exec_token(env, body[pos])
-      elseif(body[pos] == "then") then
-         assert(#env.conditionals > 0, "if/then mismatch")
-         table.remove(env.conditionals)
-      elseif(body[pos] == "else") then
-         assert(#env.conditionals > 0, "if/else mismatch")
-         env.conditionals[#env.conditionals] =
-            not env.conditionals[#env.conditionals]
-      elseif(lume.last(env.conditionals)) then
-         exec_token(env, body[pos])
-      elseif(body[pos] == "if") then
-         local word = body[pos]
-         while(word and word ~= "then") do
-            env.pos[#env.pos] = env.pos[#env.pos] + 1
-            word = body[env.pos[#env.pos]]
-         end
-      end
-      env.pos[#env.pos] = env.pos[#env.pos] + 1
-   end
-   table.remove(env.pos)
-end
-
-local function exec_token(env, token)
-   if(env.compiling) then return compile_token(token, env, exec_token) end
-   if(token:match("^([0-9]+[.0-9]*)$")) then
-      table.insert(env.stack, tonumber(token))
-   elseif(token:match("^\".*\"$")) then
-      table.insert(env.stack, token:sub(2, -2))
-   elseif(token == "true") then table.insert(env.stack, true)
-   elseif(token == "false") then table.insert(env.stack, false)
-   elseif(type(env.dictionary[token]) == "function") then
-      env.dictionary[token](env.stack, env)
-   elseif(type(env.dictionary[token]) == "table") then
-      exec_word(env.dictionary[token], env, exec_token)
-   else
-      error("unknown word: " .. token .. "\n")
-   end
-end
-
-local function exec(env, stoppers)
-   local token = pop_token(env)
-   if(not token or lume.find(stoppers or {}, token)) then return token end
-   exec_token(env, token)
-   return exec(env, stoppers)
 end
 
 local primitives = {
@@ -146,6 +91,8 @@ local primitives = {
    [".s"] = function(stack, env)
       env.write(table.concat(lume.map(stack, tostring), " ") .. "\n")
    end,
+   -- placeholders
+   ["then"] = function() end, ["else"] = function() end,
 }
 
 local compilers = {
@@ -153,11 +100,96 @@ local compilers = {
    ["("] = function(_,  env) read_till(env, {")"}) end,
 }
 
-local make_env = function(read, write, extra_entries, bootstrap_path)
+local is_literal = function(token)
+   return token:match("^([0-9]+[.0-9]*)$") or token:match("^\".*\"$") or
+      token == "true" or token == "false"
+end
+
+local function compile_token(token, env, exec_token)
+   -- should also support user-defined compile words
+   if(not env.compiling) then return exec_token(env, token)
+   elseif(compilers[token]) then compilers[token](env.stack, env, token)
+   elseif(env.dictionary[token] or is_literal(token)) then
+      table.insert(env.compiling, token)
+   else error("Unknown word: " .. token) end
+end
+
+local function exec_word(body, env, exec_token)
+   -- env.pos is our stack of instruction pointers
+   table.insert(env.pos, 1)
+   while body[lume.last(env.pos)] do
+      local pos = lume.last(env.pos)
+      if(#env.conditionals == 0) then
+         exec_token(env, body[pos])
+      elseif(body[pos] == "then") then
+         assert(#env.conditionals > 0, "if/then mismatch")
+         table.remove(env.conditionals)
+      elseif(body[pos] == "else") then
+         assert(#env.conditionals > 0, "if/else mismatch")
+         env.conditionals[#env.conditionals] =
+            not env.conditionals[#env.conditionals]
+      elseif(lume.last(env.conditionals)) then
+         exec_token(env, body[pos])
+      elseif(body[pos] == "if") then
+         local word = body[pos]
+         while(word and word ~= "then") do
+            env.pos[#env.pos] = env.pos[#env.pos] + 1
+            word = body[env.pos[#env.pos]]
+         end
+      end
+      env.pos[#env.pos] = env.pos[#env.pos] + 1
+   end
+   table.remove(env.pos)
+end
+
+-- store primitives in a separate table from env so env can be saved,
+-- but represent them in env so they're truly first-class
+local is_primitive = function(env, token)
+   return type(env.dictionary[token]) == "table" and
+      env.dictionary[token].__primitive
+end
+
+-- some primitives come from outside smolforth and live in the dictionary;
+-- it is the embedder's responsibility to add/remove these during save/load
+local is_external_primitive = function(env, token)
+   return type(env.dictionary[token]) == "function"
+end
+
+local function exec_token(env, token)
+   if(env.compiling) then return compile_token(token, env, exec_token)
+   elseif(token:match("^([0-9]+[.0-9]*)$")) then -- numbers
+      table.insert(env.stack, tonumber(token))
+   elseif(token:match("^\".*\"$")) then -- strings
+      table.insert(env.stack, token:sub(2, -2))
+   elseif(token == "true") then table.insert(env.stack, true) -- booleans
+   elseif(token == "false") then table.insert(env.stack, false)
+   elseif(is_primitive(env, token)) then -- primitives
+      primitives[env.dictionary[token].__primitive](env.stack, env)
+   elseif(is_external_primitive(env, token)) then -- external primitives
+      env.dictionary[token](env.stack, env)
+   elseif(type(env.dictionary[token]) == "table") then -- regular words
+      exec_word(env.dictionary[token], env, exec_token)
+   else
+      error("unknown word: " .. token .. "\n")
+   end
+end
+
+-- Public API:
+
+local function exec(env, input)
+   if(input) then env.input = input end
+   local token = pop_token(env)
+   if(token) then
+      exec_token(env, token)
+      return exec(env)
+   end
+end
+
+local make_env = function(read, write, dictionary, bootstrap_path)
    local env = {stack={}, read=read, write=write, compiling=false,
-                dictionary=lume.extend({}, primitives, extra_entries),
-                compilers=lume.extend({}, compilers),
+                dictionary=lume.extend({}, dictionary),
                 conditionals={}, loops={}, pos={}}
+   for p in pairs(primitives) do env.dictionary[p] = {__primitive=p} end
    for line in io.lines(bootstrap_path or "smolforth.fs") do
       env.input = line
       exec(env)
@@ -173,4 +205,22 @@ local function repl(env)
    return repl(env)
 end
 
-return {make_env=make_env, exec=exec, repl=repl, stack_fn=stack_fn}
+local save = function(env, omit_fields)
+   local to_save = lume.extend({}, env)
+   to_save.read, to_save.write = nil, nil
+   to_save.dictionary = lume.extend({}, env.dictionary)
+   for _,field in ipairs(omit_fields or {}) do
+      to_save.dictionary[field] = nil
+   end
+   return lume.serialize(to_save)
+end
+
+local load = function(env_str, read, write, dictionary)
+   local to_load = lume.deserialize(env_str)
+   for k,v in pairs(dictionary or {}) do to_load.dictionary[k] = v end
+   to_load.read, to_load.write = read, write
+   return to_load
+end
+
+return {make_env=make_env, exec=exec, repl=repl, stack_fn=stack_fn,
+        save=save, load=load}

@@ -63,7 +63,7 @@ return {
 
          if((ship_data.meta or {}).version ~= ship.api.ui.version) then
             print("WARNING: you are loading an old save from version " ..
-                     ship_data.meta and ship_data.meta.version)
+                     (ship_data.meta and ship_data.meta.version))
             print("There are likely to be incompatibilities; " ..
                      "press ctrl-f1 to reset config.")
          end

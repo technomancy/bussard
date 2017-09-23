@@ -35,22 +35,18 @@ local function test_failed_bad_creds()
    t.assert_true(not send)
 end
 
+local function test_rover_login()
+   ship:enter("Wolf 294", true, true)
+   local solotogo = ship.bodies[2]
+   ship.x, ship.y, ship.target = solotogo.x, solotogo.y, solotogo
+   local send = ship.sandbox.ssh_connect("nari02", "mendaciouspolyglottal")
+   -- t.assert_equal("function", type(send))
+
+   -- send("16 32 + .s")
+   -- t.assert_equal("48", ship.api.editor.get_line(-1))
+end
+
 return {test_range = test_range, test_guest_login = test_guest_login,
         test_failed_no_target = test_failed_no_target,
-        test_failed_bad_creds = test_failed_bad_creds }
-
--- local function test_rover_login()
---    ship:enter("Wolf 294", true, true)
---    local solotogo = ship.bodies[2]
---    ship.x, ship.y, ship.target = solotogo.x, solotogo.y, solotogo
---    ship.rovers.simple, ship.rover_clearance.Solotogo = 1, true
---    ship.api.rovers.deploy("simple")
---    t.assert_equal(0, ship.rovers.simple)
---    ship.target_number = #ship.bodies
---    ship.target = ship.bodies[ship.target_number]
---    local send = ship.sandbox.ssh_connect("guest", "")
---    t.assert_equal("function", type(send))
-
---    send("16 + 32")
---    t.assert_equal("48", ship.api.editor.get_line(-1))
--- end
+        test_failed_bad_creds = test_failed_bad_creds,
+        test_rover_login = test_rover_login}
