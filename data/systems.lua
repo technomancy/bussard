@@ -220,14 +220,8 @@ local sys = {
                  {r=70000, mass=700,
                   image_name="neptune", world=true,
                   name="Neptune", os="orb",
-
-                  -- a remote colony with negligible population and
-                  -- abundance of materials around
-                  --
-                  -- low energy setting promotes use of underclocking
                   industry = 2, tech = 5,
                   remote = 3, pop = 1, agri = 0, mineral = 7,
-                  upgrades = {"underclocker"},
                  },
                  {name = "Interportal: Luyten's Star",
                   image_name="portal-2",

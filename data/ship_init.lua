@@ -1,6 +1,7 @@
 -- for a new game
 local mission = require("mission")
 local mail = require("mail")
+local upgrade = require("data.upgrades")
 
 local statuses = {
    " Press ctrl-enter to toggle flight mode.\n\n" ..
@@ -40,6 +41,9 @@ return function(ship)
         jobs = { _unread = {} },
         archive = { _unread = {} },
       }
+   table.insert(ship.upgrade_names, "underclocker")
+   ship.api.actions.underclocker = upgrade.underclocker.action
+   ship.upgrades.underclolcker = upgrade.underclocker
    for _,v in pairs(love.filesystem.getDirectoryItems("data/src")) do
       ship.api.src[v] = ship.api.src[v] or love.filesystem.read("data/src/"..v)
    end

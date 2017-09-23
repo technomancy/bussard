@@ -16,6 +16,5 @@ return {
       map = 512,
       jeejah = 1024,
       bencode_decoder = 512,
-      underclocker = 128,
    },
 }
