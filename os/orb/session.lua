@@ -47,7 +47,7 @@ local function read()
          output:push({op="status", status="err", out=err})
       end
    elseif(msg.op == "kill") then
-      error("session terminated")
+      return nil
    else
       print("Unknown op!", lume.serialize(msg))
    end

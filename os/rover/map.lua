@@ -10,18 +10,22 @@ local can_move_to = function(state, x, y)
    return true
 end
 
+local init_hosts = function(state)
+   for _,host in pairs(state.hosts or {}) do
+      local t = {}
+      t.input, t.output = love.thread.newChannel(), love.thread.newChannel()
+      t.thread = love.thread.newThread("os/server.lua")
+      t.thread:start(t.input, t.output, host.os, host.name)
+      threads[host] = t
+   end
+end
+
 return {
    load = function(name)
       local chunk = assert(love.filesystem.load("data/maps/" .. name .. ".lua"))
       local state = chunk()
 
-      for _,host in pairs(state.hosts or {}) do
-         local t = {}
-         t.input, t.output = love.thread.newChannel(), love.thread.newChannel()
-         t.thread = love.thread.newThread("os/server.lua")
-         t.thread:start(t.input, t.output, host.os, host.name)
-         threads[host] = t
-      end
+      init_hosts(state)
 
       state.dir, state.login_range = state.dir or 0, state.login_range or 5
       return state
@@ -53,6 +57,8 @@ return {
          return threads[host].input, threads[host].output
       end
    end,
+
+   init_hosts = init_hosts,
 
    can_move_to = can_move_to,
 }

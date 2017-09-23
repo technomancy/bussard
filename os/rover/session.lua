@@ -136,6 +136,7 @@ if(love.filesystem.isFile(save_map_file)) then
    local new_map = lume.deserialize(love.filesystem.read(save_map_file))
    lume.clear(state)
    lume.extend(state, new_map)
+   map.init_hosts(state)
 end
 
 rpc("set_prompt", sandbox.prompt)
