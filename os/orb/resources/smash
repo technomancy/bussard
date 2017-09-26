@@ -21,7 +21,8 @@ else
 
    while true do
       set_prompt(interp(env.PROMPT, env))
-      local input = orb.expand_globs(interp(io.read(), env), env)
+      local input = io.read()
+      if(input) then input = orb.expand_globs(interp(input, env), env) end
       if not input or input == "exit" or input == "logout" then return end
 
       local var, value = input:match("export (.+)=(.*)")
