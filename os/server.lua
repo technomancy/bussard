@@ -3,7 +3,7 @@ require("love.math")
 require("love.thread")
 
 local dbg = os.getenv("DEBUG") and print or function() end
-local output, input, os_name, hostname = ...
+local output, input, os_name, hostname, rpcs = ...
 local os_ok, os = pcall(require, "os." .. os_name .. ".init")
 if(not os_ok) then print("Couldn't load OS:", os) return end
 
@@ -16,7 +16,7 @@ local new_session = function(username, password)
    local session_id = string.format("%x", love.math.random(42949672))
    local stdin = love.thread.newChannel()
    -- all sessions share the same output channel currently. is that bad?
-   sessions[session_id] = os.new_session(stdin, output, username, hostname)
+   sessions[session_id] = os.new_session(stdin, output, username, hostname, rpcs)
    sessions[session_id].stdin = stdin
    output:push({op="status", ok=true, session_id = session_id})
    return true

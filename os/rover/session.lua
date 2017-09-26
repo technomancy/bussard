@@ -5,6 +5,7 @@ local serpent = require("serpent")
 local serpent_opts = {maxlevel=8,maxnum=64,nocode=true}
 local map = require("os.rover.map")
 local forth = require("os.rover.smolforth")
+local inner_rpc = require("os.rover.inner_rpc")
 
 local _, _, stdin, output, hostname = ...
 
@@ -21,6 +22,7 @@ local rpc = function(fn, ...)
    output:push({op="rpc", fn=fn, args=lume.serialize({...})})
 end
 
+-- state here is map state but does not include the forth env below
 local map_ok, state = xpcall(map.load, print_trace, hostname)
 if(not map_ok) then print(state) end
 
@@ -79,7 +81,19 @@ local sandbox = {
    end,
 }
 
+local ok, env -- for loading forth env
+
 sandbox.f, sandbox.l, sandbox.r = sandbox.forward, sandbox.left, sandbox.right
+
+local call_inner_rpc = function(msg, session_id)
+   local vals = {pcall(inner_rpc[msg.fn], state,
+                      unpack(lume.deserialize(msg.args)))}
+   if(not vals[1]) then write(vals[2] .. "\n") end
+   send_state()
+   table.remove(vals, 1)
+   vals.session_id = session_id
+   return vals
+end
 
 sandbox.login = function()
    local i, o = map.get_channels(map.get_in_range(state, "hosts"),
@@ -94,7 +108,9 @@ sandbox.login = function()
       if(response.ok) then
          while not response or response.op ~= "disconnect" do
             love.timer.sleep(0.01)
-            if(response) then
+            if(response and inner_rpc[response.fn]) then
+               response.chan:push(call_inner_rpc(response, session_id))
+            elseif(response) then
                output:push(response)
             end
             local from_ship = stdin:pop()
@@ -112,8 +128,6 @@ sandbox.login = function()
       error("No terminal found.")
    end
 end
-
-local ok, env -- for loading forth env
 
 local function read()
    local msg = stdin:demand()

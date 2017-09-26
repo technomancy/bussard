@@ -3,10 +3,10 @@
 local lume = require("lume")
 local utf8 = require("polywell.utf8")
 local shell = require("os.orb.shell")
-local rpcs = require("os.orb.rpcs")
+local stock_rpcs = require("os.orb.rpcs")
 local fs = require("os.orb.fs")
 
-local env, command, stdin, output, hostname = ...
+local env, command, stdin, output, hostname, extra_rpcs = ...
 
 local function completions_for(input, dir, prefixes)
    local input_parts = lume.split(input, "/")
@@ -78,5 +78,6 @@ local ok, err = pcall(fs.init_if_needed, hostname)
 if(not ok) then print("init err:", err) return false end
 
 xpcall(shell.exec, function(e) print(e, debug.traceback()) end,
-       env, command, lume.reduce(rpcs, add_rpc, {read = read, write = write}))
+       env, command, lume.reduce(lume.concat(stock_rpcs, extra_rpcs or {}),
+                                 add_rpc, {read = read, write = write}))
 output:push({op="disconnect"})

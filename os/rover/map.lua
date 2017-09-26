@@ -1,11 +1,14 @@
+local lume = require("lume")
 local utils = require("utils")
+local rpcs = require("os.rover.inner_rpc")
 local threads = {}
 
 local can_move_to = function(state, x, y)
    local rw, rh = state.rover[3], state.rover[4]
    local rover = {x-rw/2, y-rh/2, rw, rh}
    for _,rect in pairs(state.rects or {}) do
-      if(utils.rect_overlap(rect, rover)) then return false end
+      if(not rect.open and
+         utils.rect_overlap(rect, rover)) then return false end
    end
    return true
 end
@@ -15,7 +18,7 @@ local init_hosts = function(state)
       local t = {}
       t.input, t.output = love.thread.newChannel(), love.thread.newChannel()
       t.thread = love.thread.newThread("os/server.lua")
-      t.thread:start(t.input, t.output, host.os, host.name)
+      t.thread:start(t.input, t.output, host.os, host.name, lume.keys(rpcs))
       threads[host] = t
    end
 end
