@@ -93,7 +93,7 @@ return {
       if(b.star) then
          b.x, b.y = 0, 0
       elseif(b.r or r or (b.x and b.y)) then
-         b.r = b.r or r or utils.distance(b.x, b.y)
+         b.r = r or b.r or utils.distance(b.x, b.y)
          theta = theta or love.math.random() * math.pi * 2
          local v = math.sqrt((g*around.mass)/b.r)
 
