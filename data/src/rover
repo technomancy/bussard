@@ -3,9 +3,9 @@
 local colors = {red={255, 10, 10}, green={10, 255, 10}, blue={10, 10, 255}}
 local base_shift = 0.9
 
-local draw_box = function(color, x, y, w, h, d)
+local draw_box = function(box, x, y, w, h, d)
    local shift = (d or 0) + base_shift
-   graphics.setColor(colors[color] or {255,255,255})
+   graphics.setColor(colors[box.color] or {255,255,255})
    graphics.rectangle("line", x, y, w, h)
    graphics.rectangle("line", x*shift, y*shift, w*shift, h*shift)
    for cx = 0,1 do
@@ -14,6 +14,35 @@ local draw_box = function(color, x, y, w, h, d)
       end
    end
 end
+
+local drawers = {
+   door = function(box, x, y, w, h, d)
+      local y2, h2
+      graphics.push()
+      if(box.vertical) then graphics.rotate(math.pi/2) end
+
+      if(box.open) then
+         y2, h, h2 = y + h*0.8, h*0.2, h*0.2
+      else
+         y2, h, h2 = y + h/2, h/2, h/2
+      end
+
+      draw_box(box, x, y, w, h2, d)
+      draw_box(box, x, y2, w, h, d)
+      graphics.pop()
+   end,
+
+   term = function(box, x, y, w, h, d)
+      x, y, w, h = x+0.1, y+0.1, w-0.2, h-0.2
+      draw_box(box, x, y, w, h, d)
+      graphics.setColor({0,0,0, 235})
+      graphics.rectangle("fill", x+0.02, y+0.02, w-0.04, h-0.04)
+      graphics.setColor(colors[box.color] or {255,255,255})
+      graphics.line(x+0.2, y+0.2, x+w/2, y+h/2)
+      graphics.line(x+0.2, y+h-0.2, x+w/2, y+h/2)
+      graphics.line(x+w/2, y+h-0.2, x+w-0.2, y+h-0.2)
+   end,
+}
 
 local rover_points = {0,-1, 1,-2, 3,2, 0,4, -3,2, -1,-2}
 
@@ -27,8 +56,12 @@ local draw = function()
                       eh/2-editor.get_prop("y_offset", 0))
    graphics.print(string.format("x: %s y: %s", x,y), -ew/2+10, -eh/2+10)
    graphics.scale(editor.get_prop("scale", 64))
-   for _,rect in ipairs(state.rects) do
-      draw_box(rect.color, unpack(rect))
+   for _,box in ipairs(state.rects) do
+      if(drawers[box.type]) then
+         drawers[box.type](box, unpack(box))
+      else
+         draw_box(box, unpack(box))
+      end
    end
    graphics.setColor(colors.red)
    graphics.setLineWidth(0.5)

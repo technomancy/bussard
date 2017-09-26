@@ -3,12 +3,15 @@ local fs = require("love.filesystem")
 return {
    rects = {
       {0,0,7,1, color="green"},
-      {0,0,1,6, color="green"},
-      {6,0,1,6, color="green"},
+      {0,1,1,4, color="green"},
+      {6,1,1,2, color="green"},
+      {6,4,1,1, color="green"},
       {0,5,7,1, color="green"},
       {2,4,1,1, color="green"},
-      {3,2,4,1, color="green"},
-      {5,1,1,1, color="blue"},
+      {3,2,3,1, color="green"},
+      {5,1,1,1, type="term"},
+      {3,1,1,1, vertical=false, open=true,  type="door", color="blue", door=1},
+      {6,3,1,1, vertical=false, open=false, type="door", color="blue", door=2},
    },
 
    rover = {4.5,4.5,0.9,0.9},

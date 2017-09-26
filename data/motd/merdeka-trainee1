@@ -4,7 +4,7 @@ Welcome to stage 1 of the CMEC bot operations training course.
 You are currently logged into an indoor training rover. Anything you type here
 is run in the context of the rover, which accepts Forth code. Your goal is to
 pilot the rover (which is red) next to the terminal on the other side of the
-room, marked with a blue box.
+room, marked with ">_".
 
 You can execute any kind of code you want including numeric calculations or
 defining functions, but you will be most interested in calling the functions
