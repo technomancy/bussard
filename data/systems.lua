@@ -52,7 +52,7 @@ local sys = {
            name="Tana", star=true },
           {r=15000, mass=500,
            image_name = "planet-9",
-           name="Lioboro", os="orb", world=true,
+           name="Malioboro", os="orb", world=true,
 
            industry=7,tech=5,
            remote=2, pop=3,
@@ -61,7 +61,7 @@ local sys = {
           },
           {r=45000, mass=400,
            image_name = "planet-3",
-           name="Tana Prime", os="orb", world=true,
+           name="Kota Baru", os="orb", world=true,
 
            industry=8,tech=6,
            remote=2, pop=4,
@@ -70,7 +70,7 @@ local sys = {
           },
           {r=33000, mass=100, station=true,
            image_name="station-pointed",
-           name="Kenapa Station", os="orb", world=true,
+           name="Telemoyo Station", os="orb", world=true,
 
            industry=8,tech=6,
            remote=2, pop=1,
@@ -382,7 +382,7 @@ local sys = {
                       name="Mecalle 8760", star=true},
                      {r=27000, mass=342,
                       image_name = "planet-11",
-                      name="Tirakir", os="orb", world=true,
+                      name="Rimoei", os="orb", world=true,
 
                       industry=2,tech=3,
                       remote=7, pop=3,
@@ -416,7 +416,7 @@ local sys = {
                      },
                      {r=12000, mass=100, station=true,
                       image_name="station-round",
-                      name="Tamada Station", os="orb", world=true,
+                      name="Mogok Station", os="orb", world=true,
                       industry=3,tech=3,
                       remote=8, pop=3,
                       agri=1, mineral=3,

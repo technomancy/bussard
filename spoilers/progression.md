@@ -11,7 +11,8 @@ the system, and so do you, so you can work together.
  * Need to read dex-19 email (skill: operating editor)
  * Restart engines (skill: editor/console)
  * Fly to Merdeka station (skill: piloting)
- * Log in and take the CMEC training course (skill: ssh, basic lua)
+ * Log in and take the CMEC training course (skill: ssh, basic forth)
+  * Need to extend the training course as rovers get new capabilities
  * Buy the battery upgrade (skill: ssh, orb)
 
 ## Decode log
@@ -20,10 +21,10 @@ After making it to Tana, dex-19 informs you that he's found a memory card
 wedged in the cargo bay, but it's an older style that he doesn't have the
 hardware to read. He suggests paying a visit to an old friend who can help
 read it. The friend is a bit of a recluse, so you need to land a rover to
-bring the memory card to them.
+bring the memory card to her.
 
 * Objective: read log file
- * Fly to Solotogo(?) (skill: piloting)
+ * Fly to Solotogo (skill: piloting)
  * Navigate the rover to the dwelling (skill: rover navigation)
  * Once you have the file, decode the rot13 (skill: lua)
 
@@ -83,24 +84,3 @@ Katilay portal access is limited due to damage.
 Reset the junction so you can return to this point.
 
 Ultimate showdown here!
-
-# Skills
-
-* piloting
-* SSH
-* email
-
-* console
-* editor
-
-* deploying rover
-* rover console
-* rover coding
-* map
-
-* sql?
-* programming
- * lua
- * lisp
- * forth
- * lily?

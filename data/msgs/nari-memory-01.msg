@@ -1,4 +1,4 @@
-From: nari.phouen@starlink.net:
+From: nari@starlink.net:
 To: dex19@adahn.local
 Cc: captain@adahn.local
 Content-Type: text/plain; charset=UTF-8
@@ -9,9 +9,7 @@ In-Reply-To: 67b1f706-73e1-47bb-8111-41fafba10334
 You're completely mad; you know that, right?
 
 I do not want to know where you found this memory card. But here's the
-contents of the first file on it. There was one other file; just a jumble of
-alphanumerics, but I'll send that in a second email. We're even now, so go
-on and get lost.
+contents of the file on it. We're even now, so go on and get lost.
 
 -Nari
 
@@ -40,9 +38,6 @@ on and get lost.
 > Blowing the airlock might do that, especially if I disable the repair
 > drone. Getting the ship into a spin might force the remaining fuel to be
 > spent righting it. I wouldn't survive it, but I wouldn't survive anyway.
->
-> As a last resort I've included a scrambled copy of the Junction manual on
-> this card. No time for anything but rot13, but that's better than nothing.
 >
 > Here we go.
 >

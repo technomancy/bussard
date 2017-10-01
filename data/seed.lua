@@ -8,7 +8,7 @@ local maze_files = {
 
 local data = { ["merdeka-station"] = { root = go4 },
    ["kembali-station"] = { root = go4 },
-   ["kenapa-station"] = { root = go4 },
+   ["telemoyo-station"] = { root = go4 },
    ["earth"] = { root = go4 },
    ["trainee01"] = {guest={files={["/home/guest/_smashrc"]=trainee_rc}},
                     root={files=maze_files}},

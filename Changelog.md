@@ -1,8 +1,15 @@
 # Bussard changelog: history of user-visible changes
 
+## beta-4 / ???
+
+* Rover mazes can have doors which open and close.
+* Time factor can be changed without buying an upgrade.
+* Rovers are now controlled using Forth instead of Lua.
+
 ## beta-3 / 2017-08-06
 
 * Colorize mail messages.
+* Map upgrade can be purchased anywhere.
 * Add pause-screen command to wipe save state and restart.
 * Position ship better after portal; prevents getting caught in gravity well.
 * Make it easy to adjust font size.

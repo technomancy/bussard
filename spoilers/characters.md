@@ -7,31 +7,25 @@ of hints) but you can't email them back beyond simple OK/NO replies.
 
 ## dex19
 
-A curious little construct.
+A curious little construct. Travels with you thru the whole (?) game.
 
 ## Nari Phouen <nari.phouen@starlink.net>
 
 She is an older freelance repair tech with an amateur interest in
-historical computing. Gruff but kind at heart. She originally wants to
-board your craft just to get passage to another system, but her
-old-fashioned style means she won't get on board without meeting the
-captain in-person first, which is obviously impossible in your
-case. At first she thinks it's a scam, but when she does a more
-detailed scan of your ship she realizes the truth (before you do).
-
-Helps you realize who you are, decrypt your journals, and get a handle
-on coding. Grew up on Mars and is a citizen of Sol.
-
-She also offers to pretend to be the captain of the ship in any cases
-where an un-manned ship would raise too many suspicions.
+historical computing. Gruff but kind at heart. She and dex19 used to work
+together in the past, but their partnership ran into some problems, and she
+just wants to be left alone with her family now.
 
 ## rocanna7
 
-## traxus5
+A construct who is somewhat elusive, having abdicated rulership of Bohk.
+
+## traxus4
+
+A construct who was ousted from ruling Bohk due to unchecked aggression, some
+in Bohk wish for traxus4 to return.
 
 # Systems by Government
-
-This will make more sense if you read history.md first.
 
 Each world has a file in data/motd which contains a brief description and is
 shown when logging into that world.
@@ -39,77 +33,74 @@ shown when logging into that world.
 ## Solar Union
 
 Home of humanity, but regressed from its height. Suffered from having portal
-delayed due to accident.Sol is ancient, and still hosts the majority of
+delayed due to accident. Sol is ancient, and still hosts the majority of
 humankind, who have never left Earth. Many see it as backwards or quaint.
 
-* [x] Earth
-* [x] Mars
-* [x] Newton Station
-* [x] Nee Soon Station
+* Earth
+* Mars
+* Newton Station
+* Nee Soon Station
 
 ## Terran Republic
 
 Most wealthy and powerful, but only controls two systems, Lalande and
 Ross. Formerly included Sol. Regulates portal technology.
 
-* [x] Sungai (Lalande)
-* [x] Bendera (Lalande)
-* [x] Kuching Station (Ross)
+* Sungai (Lalande)
+* Bendera (Lalande)
+* Kuching Station (Ross)
 
 ## Principality of Istana
 
 Independent station in a Terran system (Ross). Grandfathered into
 independence early on. Isolated, wealthy, and small.
 
-* [x] Istana (Ross)
+* Istana (Ross)
 
 ## Kingdom of Bohk
 
 Due to a lack of communication, developed fairly independently from
-the Terran Republic. Has two internal portals under oversight from
-Terrans. Helped Lalande re-establish contact with Katilay.
+the Terran Republic. Bohk is ruled by a majority of constructs, but it is the
+only place where they are allowed any form of authority.
 
-* [x] Bohk Prime
-* [x] Warnabu Station
-* [x] Changlun (New Phobos)
-* [x] Sutap (New Phobos)
-* [x] Tirakir (Mecalle)
+* Bohk Prime
+* Warnabu Station
+* Changlun (New Phobos)
+* Sutep (New Phobos)
+* Rimoei (Mecalle)
 
 ## Republic of Katilay
 
 Conflict-wracked even within a single system. Portal was faulty upon
-arrival; contact with Lalande only recently re-established.
+arrival; contact with Lalande only recently re-established. The core world
+prejudices against constructs aren't commonplace here.
 
-* [x] Katilay Prime
-* [x] Tamada Station
+* Katilay Prime
+* Mogok Station
 
 ## Tana Protectorates
 
-Newest government, close ties still to Solar Union. Rich in
-minerals. Terrans allow Sol to operate portals keeping Tana running,
-but Tana is completely dependent upon Sol for food and Terrans for
-transport, leaving it quite vulnerable.
+Newest government, close ties still to Solar Union. Rich in minerals. Terrans
+allow Sol to operate portals keeping Tana running, but Tana is completely
+dependent upon Sol for food and transport, leaving it quite vulnerable.
 
-* [x] Tana Prime (Tana)
-* [x] Lioboro (Tana)
-* [x] Kenapa Station (Tana)
-* [x] Solotogo (Wolf 294)
-* [x] Kembali Station (Luyten)
-* [x] Merdeka Station (L 668-21)
+* Kota Baru (Tana)
+* Malioboro (Tana)
+* Telemoyo Station (Tana)
+* Solotogo (Wolf 294)
+* Kembali Station (Luyten)
+* Merdeka Station (L 668-21)
 
 Tana has the most worlds, but the smallest population.
 
-## Human Worlds League
+## Inhabited Worlds League
 
 Originally the Terran Republic covered all inhabited worlds, but as new
-colonies sprung up independently or declared independence, Bohk spearheaded
-the League soon after the war. Terran Republic was also a founding member. Sol
-joined upon its independence, Katilay joined several years after
-re-establishing connection. They oversee trade agreements, enact spaceflight
-safety regulations, administrate a unified currency, coordinate exploration
-efforts, and work to protect peace. Nominally they aim to advance shared
-scientific progress, but little of this happens in practice. The league is
-headquartered on Bohk Prime.
+colonies sprung up independently or declared independence, the League has held
+things together. They oversee trade agreements, enact spaceflight safety
+regulations, administrate a unified currency, coordinate exploration efforts,
+and work to protect peace. Nominally they aim to advance shared scientific
+progress, but little of this happens in practice.
 
 # Companies
 
@@ -130,12 +121,12 @@ headquartered on Bohk Prime.
   Dominant mining company.
 
 * Starlink (Sol)
-  An ISP. (starlink.net.sol)
+  An ISP. (starlink.net)
 
 * WonderChannel
-  Another ISP. (wonderchannel.net.sol)
+  Another ISP. (wonderchannel.net)
 
-* Aperture Technology (Lalande)
+* Aperture Technology (Bohk)
   Caretaker of portal artifacts, researches and maintains portal
   technology. Closely guards what little they know of how they work.
 
@@ -151,12 +142,8 @@ headquartered on Bohk Prime.
   Responsible for early sublight drives, recently assisting Luminous
   with coldsleep research.
 
-* GNO Project (Sol)
-  Responsible for maintaining software infrastrucutre such as the Orb OS.
-
-# Universities
-
-...
+* GNO Project (Istana)
+  Responsible for maintaining software infrastructure such as the Orb OS.
 
 # Spaceships
 

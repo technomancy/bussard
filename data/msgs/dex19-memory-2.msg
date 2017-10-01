@@ -7,7 +7,7 @@ In-Reply-To: c6c2c6b2-b661-4bad-94d3-8dee5968d89c
 
 So my friend is ... well ... see for yourself:
 
-> nari.phouen@starlink.net writes:
+> nari@starlink.net writes:
 >
 > dex you อาเจียน ลิง, I told you not to contact me. I really don't want to get
 > dragged into this.
