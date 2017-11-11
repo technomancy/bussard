@@ -240,13 +240,13 @@ local ship = {
       if(ship.api.on_enter) then ship.api.on_enter(system_name) end
    end,
 
-   update = function(ship, dt)
+   update = function(ship, dt, real_dt)
       ship.api.dt = dt
 
       -- activate controls
       if(editor.current_mode_name() == "flight") then
          for k,f in pairs(ship.api.controls) do
-            with_traceback(f, love.keyboard.isDown(k), dt)
+            with_traceback(f, love.keyboard.isDown(k), real_dt)
          end
       end
 
@@ -280,9 +280,9 @@ local ship = {
       end
 
       if(ship.turning_left) then
-         ship.heading = ship.heading + (dt * ship.turning_speed)
+         ship.heading = ship.heading + (real_dt * ship.turning_speed)
       elseif(ship.turning_right) then
-         ship.heading = ship.heading - (dt * ship.turning_speed)
+         ship.heading = ship.heading - (real_dt * ship.turning_speed)
       end
 
       if(ship.battery < ship.battery_capacity) then
