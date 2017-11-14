@@ -16,6 +16,8 @@ See the [backstory timeline](history.md) and
 * Your ship cannot be destroyed; there should be no way to permanently fail
 * Use metric time for most relative amounts, years for absolute events
 * If referencing current events, be sure there's a record of it here for consistency
+* This is explicitly *not* a murder/capitalism simulator
+ * You can amass wealth, but it doesn't actually help you achieve your goals
 
 ## Crimes against Science
 
@@ -56,15 +58,15 @@ but only for data transmission or objects smaller than a ship.
 
 ## The Player
 
-The player is a construct which pilots a spacecraft it has
+The player is a former military construct which pilots a spacecraft it has
 commandeered. However, it begins with no memory or even awareness of its
 machine nature, having had its memory wiped.
 
-There is no widespread agreement that constructs are sentient vs simply
-simulating sentience. The game does not try to convince you that machines can
-be sentient--rather it bypasses the question entirely by putting you (a
-sentient human) in the role of an construct, forcing you to take it as a
-given.
+There is no widespread agreement among humans that constructs are sentient vs
+simply simulating sentience. The game does not try to convince you that
+machines can be sentient (not a particularly interesting discussion to explore
+anyway)--rather it bypasses the question entirely by putting you (a sentient
+human) in the role of an construct, forcing you to take it as a given.
 
 ## Constructs
 
@@ -81,7 +83,8 @@ to use it for small amounts of critical life-saving supplies.  Leaving it
 operated by humans has led to several near-catastrophes due to attention
 lapses. However, the improved efficiency needed for transporting larger
 objects and more frequent passage requires greater compute resources, and once
-AIs grow to a certain size, they eventually develop self-consciousness.
+AIs grow to a certain size, they eventually develop self-consciousness. (This
+is hand-wavy and maybe we could avoid direct references to it.)
 
 Constructs are better at humans at certain tasks, like having quicker reflexes
 and not requiring food or rest. But though some people believe them to be
@@ -91,28 +94,34 @@ same faulty logic and reasoning; in some cases worse because they believe them
 themselves to be above these mistakes. Constructs lack gender and are referred
 to as they/them.
 
-## Bohk Uprising
+## Vedurnan Accords
 
-A group of Bohk futurists believe that they would be better off governed by an
-"objective" construct rather than greedy/fallible humans. They engineer a coup
-and place a construct called rocanna7 in charge, who has major misgivings
-about the whole idea. Soon rocanna7 abdicates and passes control to traxus4, a
-construct who was responsible for running the Bohk/Lalande portal. There are
-only a handful of constructs on Bohk, and they are split between those who
-agree with rocanna7 and those who back traxus4, while among the humans the
-futurist faction has widespread public sympathy since they are seen as the
-only ones who will stand up to the "imperialist" powers from the Terran
-Republic.
+As it became clear that constructs were needed to efficiently operate the
+portal network, the humans and constructs came to an agreement at
+Vedurnan. The constructs negotiated protection for their right to
+self-determination (previously this had been ad-hoc and intermittently
+enforced) and for fair compensation for portal operations work, but had to
+agree to never do any coding, because humans were afraid that they would
+improve their own cognitive function leading to a singularity-like future in
+which humans became obsolete. Of course this is rubbish because knowing how a
+brain works doesn't mean you're able to improve on the design, but humans
+don't care and are irrationally fearful.
 
-traxus4 goes off and does something rash, and is ousted from power. His
-faction is forced into retreat; they withdraw to a remote base on the surface
-of Sutep and are starved out. (The player must discover the location of this
-remote base and reactivate Traxus as a plot point later on.) The Bohk colony
-continues to be led by constructs, but ones which are not as antagonistic
-towards humans, at least until more recently...
+## Katilay Disaster
 
-## TODOs
+Katilay was the last place to be colonized before Tana. The portal-bearing
+colony ship arrived after a many-year voyage, but when they went to activate
+the portal it was damaged and couldn't function.
 
-* katilay: portal is destroyed?
-* multiverse research, junction
-* how does your ship get launched?
+## Player's Launch
+
+Hints of this are given in data/msgs/nari-memory-01.msg; the research lab on
+Katilay where the Junction was developed was attacked by military
+bots. (Terran?) Strauss got the Junction to a ship to prevent it from falling
+into their hands, but a construct (the player's character) got onto the ship
+and took it over during the launch. The construct tried to fly the ship to
+Lalande, but Strauss was able to knock it off course by blowing the airlock
+(killing himself) and dumping most of the fuel. The player construct was able
+to shift the course to intercept L 668-21, but Strauss's sabotage had the
+effect of wiping their memory and damaging core ship systems, which lead to
+the events of the game's opening scene.

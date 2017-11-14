@@ -1,4 +1,4 @@
-From: nari@starlink.net:
+From: nim.pattachoti@starlink.net
 To: dex19@adahn.local
 Cc: captain@adahn.local
 Content-Type: text/plain; charset=UTF-8
@@ -11,7 +11,7 @@ You're completely mad; you know that, right?
 I do not want to know where you found this memory card. But here's the
 contents of the file on it. We're even now, so go on and get lost.
 
--Nari
+-Nim
 
 > So this is it then; I'll probably die in here.
 >

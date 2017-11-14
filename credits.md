@@ -1,6 +1,6 @@
 # Bussard credits
 
-Original code, art, and prose copyright © 2015-2016 Phil Hagelberg and contributors
+Original code, art, and prose copyright © 2015-2017 Phil Hagelberg and contributors
 https://gitlab.com/technomancy/bussard/graphs/master
 
 Distributed under the GNU General Public License version 3 or later; see LICENSE

@@ -8,12 +8,11 @@ end)
 return {
    init = function(ship) table.insert(ship.updaters, coro) end,
    name = "Access memory card",
-   description = "Take the memory card to Nari on Solotogo (Wolf 294 system)" ..
+   description = "Take the memory card to Nim on Solotogo (Wolf 294 system)" ..
       " to find out what it says.",
 
    objectives={"memory_card_delivered"},
    on_success = function(ship)
-      mail.deliver_msg(ship, "nari-memory-01.msg")
-      -- mail.deliver_msg(ship, "nari-memory-02.msg")
+      mail.deliver_msg(ship, "nim-memory-01.msg")
    end,
 }

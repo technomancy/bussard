@@ -73,6 +73,9 @@ progress. Eventually the goal is that you will be able to learn it without any
 **Q:** How do I change the controls?  
 **A:** Press `ctrl-o` then type "src.config" to open the main config file. The keys here are mostly for flight mode. At the bottom you can see where it loads other modes in files like "src.edit" or "src.mail". Open these other files with `ctrl-o` if you want to change keys for those modes. Find the key binding you want to change, and change the second argument to `define_key` to the keycode you want to use. For a complete list of keycodes, run `man("keycodes")`. Once you've made the changes, hit `esc` to go back to flight mode, and then press `ctrl-r` to load them. Note that after using the editor you may need to press `ctrl-pagedown` or `ctrl-pageup` a few times to get back to console, as console is just a buffer called `*console*` in the editor.
 
+**Q:** But I just want Emacs keys.  
+**A:** Oh, well in that case add `dofile("src.emacs")` to the bottom of your config and press `ctrl-r` to reload.
+
 **Q:** How do you match orbit with a station or planet?  
 **A:** Remember that newtonian motion means your controls affect your velocity rather than directly controlling your motion. Don't accelerate towards the station; instead accelerate so your trajectories cross at the same point. Once you're in range, hit `f4` to toggle the orbital lock to prevent your craft from drifting away.
 

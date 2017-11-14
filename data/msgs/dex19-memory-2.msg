@@ -7,7 +7,7 @@ In-Reply-To: c6c2c6b2-b661-4bad-94d3-8dee5968d89c
 
 So my friend is ... well ... see for yourself:
 
-> nari@starlink.net writes:
+> nim.pattachoti@starlink.net writes:
 >
 > dex you อาเจียน ลิง, I told you not to contact me. I really don't want to get
 > dragged into this.
@@ -16,6 +16,6 @@ So my friend is ... well ... see for yourself:
 > of my hair. But I am *not* coming along on whatever scheme you've planned.
 >
 > I've got a spare short-range rover parked at the Solotogo port; log in as
-> "nari02" with "mendaciouspolyglottal" as the password, then navigate it
+> "nim02" with "mendaciouspolyglottal" as the password, then navigate it
 > to my compound at 40x100. Once I get my hands on the card I'll email you
 > the contents.

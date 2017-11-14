@@ -9,12 +9,14 @@ of hints) but you can't email them back beyond simple OK/NO replies.
 
 A curious little construct. Travels with you thru the whole (?) game.
 
-## Nari Phouen <nari.phouen@starlink.net>
+## Nim Pattachoti (นิมปัตตะโชติ) <nim.pattachoti@starlink.net>
 
 She is an older freelance repair tech with an amateur interest in
 historical computing. Gruff but kind at heart. She and dex19 used to work
 together in the past, but their partnership ran into some problems, and she
 just wants to be left alone with her family now.
+
+Named after Sarit Pattachoti (https://www.nectec.or.th/it-standards/keyboard_layout/thai-key.html)
 
 ## rocanna7
 
@@ -142,7 +144,7 @@ progress, but little of this happens in practice.
   Responsible for early sublight drives, recently assisting Luminous
   with coldsleep research.
 
-* GNO Project (Istana)
+* Free Infrastructure Foundation (Istana)
   Responsible for maintaining software infrastructure such as the Orb OS.
 
 # Spaceships
