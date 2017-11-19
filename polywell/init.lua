@@ -39,7 +39,7 @@ local make_buffer = function(fs, path, lines, props)
             -- needs_save is an overall change flag.
             dirty = false, needs_save = false,
             -- console-style modes need input history tracking and a prompt
-            input_history = utils.buffer:new(), input_history_pos = 0,
+            input_history = {}, input_history_pos = 0, input_history_max = 64,
             prompt = nil,
             -- arbitrary key/value storage
             props = props or {},
@@ -1116,15 +1116,17 @@ return {
       echo = echo,
 
       history_prev = function()
-         if b.input_history_pos + 1 <= b.input_history.entries then
+         if b.input_history_pos < #b.input_history then
             b.input_history_pos = b.input_history_pos + 1
-            replace_input(b.input_history:get(-b.input_history_pos))
+            local n = #b.input_history-b.input_history_pos+1
+            replace_input(b.input_history[n])
          end
       end,
       history_next = function()
-         if b.input_history_pos - 1 > 0 then
+         if b.input_history_pos >= 0 then
             b.input_history_pos = b.input_history_pos - 1
-            replace_input(b.input_history:get(-b.input_history_pos))
+            local n = #b.input_history-b.input_history_pos+1
+            replace_input(b.input_history[n])
          else
             b.input_history_pos = 0
             replace_input("")
@@ -1132,7 +1134,10 @@ return {
       end,
       history_push = function(input)
          b.input_history_pos = 0
-         b.input_history:append(input, true)
+         table.insert(b.input_history, input)
+         if(#b.input_history > b.input_history_max) then
+            table.remove(b.input_history, 1)
+         end
       end,
 
       set_modeline = function(modeline_function)
@@ -1162,7 +1167,7 @@ return {
          local loaded = lume.deserialize(dumped)
          local buffer = get_buffer(loaded.path) or make_buffer(fs, loaded.path)
          lume.extend(buffer, loaded)
-         buffer.input_history = utils.buffer:new(loaded.input_history)
+         buffer.input_history = lume.clone(loaded.input_history)
          if(buffer.path == "*console*") then
             buffer.prompt, buffer.mode = "> ", "console"
          end

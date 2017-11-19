@@ -54,62 +54,9 @@ local function completions_for(input, context, separator, prefixes)
    end
 end
 
--- Circular buffer functionality
-local buffer = {}
-
-function buffer:new(ob)
-   local o = ob or {}
-   o.entries = #o
-   o.cursor = #o + 1
-   o.max = 32
-   setmetatable(o, self)
-   self.__index = self
-   return o
-end
-
-function buffer:append(entry, assume_newline)
-   if self[self.cursor] then
-      self[self.cursor] = entry
-      self.cursor = self.cursor + 1
-      if self.entries ~= self.max then
-         self.entries = self.entries + 1
-      end
-   elseif(self[#self] and self[#self]:byte(-1) ~= 10 and not assume_newline) then
-      self[#self] = self[#self] .. entry
-   else
-      table.insert(self, entry)
-      self.cursor = self.cursor + 1
-      if self.entries ~= self.max then
-         self.entries = self.entries + 1
-      end
-   end
-   if self.cursor == self.max + 1 then
-      self.cursor = 1
-   end
-end
-
-function buffer:get(idx)
-   -- Allow negative indexes
-   if idx < 0 then
-      idx = (self.entries + idx) + 1
-   end
-
-   if self.entries == self.max then
-      local c = self.cursor + idx - 1
-      if c > self.max then
-         c = c - self.max
-      end
-      return self[c]
-   else
-      return self[idx]
-   end
-end
-
 return {
    completions_for = completions_for,
    longest_common_prefix = longest_common_prefix,
-
-   buffer = buffer,
 
    with_traceback = function(print2, f, ...)
       local args = {...}
