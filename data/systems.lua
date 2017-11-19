@@ -51,7 +51,8 @@ local sys = {
            image_name="sun",
            name="Tana", star=true },
           {r=15000, mass=500,
-           image_name = "planet-9",
+           draw_type="gas",
+           -- image_name = "planet-9",
            name="Malioboro", os="orb", world=true,
 
            industry=7,tech=5,

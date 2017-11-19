@@ -5,18 +5,22 @@ https://gitlab.com/technomancy/bussard/graphs/master
 
 Distributed under the GNU General Public License version 3 or later; see LICENSE
 
-## 3rd-party code
+## 3rd-party code (direct dependencies listed; LÖVE has additional indirect ones)
 
+* LÖVE copyright © 2006-2016 LOVE Development Team, distributed under the zlib license
+  https://love2d.org
 * Lume library copyright © 2015 rxi, distributed under the MIT license
   https://github.com/rxi/lume
-* globtopattern copyright © 2011-2012 David Manura, distributed under the MIT license
-  https://github.com/davidm/lua-glob-pattern
 * serpent Copyright © 2011-2013 Paul Kulchenko, distributed under the MIT license
   https://github.com/pkulchenko/serpent
 * utf8.lua Copyright © 2016 Stepets, distributed under the MIT license
   https://github.com/Stepets/utf8.lua
 * l2l Copyright © 2012-2015, Eric Man and contributors, distributed under 2-clause BSD license
   https://github.com/meric/l2l
+* globtopattern copyright © 2011-2012 David Manura, distributed under the MIT license
+  https://github.com/davidm/lua-glob-pattern
+* renderplanet © 2017 Eric Man, distributed under the MIT license
+  https://github.com/meric/renderplanet
 
 ## 3rd-party art
 

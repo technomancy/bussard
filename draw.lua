@@ -1,8 +1,8 @@
 local ship = require("ship")
-local body = require("body")
 local hud = require("ship.hud")
 local utils = require("utils")
 local starfield = require("starfield")
+local planet = require("planet")
 
 local stars = { starfield.new(7, 0.01, 100),
                 starfield.new(18, 0.03, 125),
@@ -13,6 +13,45 @@ local portal_offsets = {
    {0, -200}, {-141, -141}, {-200, 0}, {-141, 141},
    {0, 200}, {141, 141}, {200, 0}, {141, -141},
 }
+
+local draw_npc = function(s)
+   love.graphics.push()
+   love.graphics.setColor(50, 120, 50);
+   love.graphics.translate(s.x, s.y)
+   love.graphics.scale(s.mass / 2)
+   love.graphics.rotate(math.pi - (s.rotation or 0))
+   love.graphics.polygon("fill", 0, -6, -4, 10, 4, 10)
+   if(s.engine_on) then
+      love.graphics.setColor(255, 255, 255);
+      love.graphics.setLineWidth(1)
+      love.graphics.line(-4, 11, 4, 11)
+   end
+   love.graphics.setColor(255,255,255);
+   love.graphics.pop()
+end
+
+local make_planet_draw = function(body, draw_type)
+   body.planet = planet.random(body.name, draw_type)
+   body.planet.x, body.planet.y = body.x, body.y
+   return lume.fn(planet.draw, body.planet)
+end
+
+local draw_body = function(body)
+   if(body.ship) then
+      draw_npc(body)
+   elseif(body.draw_type) then
+      body.draw = body.draw or make_planet_draw(body, body.draw_type)
+      body:draw()
+   else
+      body.image = body.image or
+         love.graphics.newImage("assets/" .. body.image_name .. ".png")
+      local scale = body.star and 3 or 1
+      body.ox = body.ox or body.image:getWidth() / 2
+      body.oy = body.oy or body.image:getHeight() / 2
+      love.graphics.draw(body.image, body.x, body.y,
+                         body.rotation, scale, scale, body.ox, body.oy)
+   end
+end
 
 return function(dt)
    local w,h = love.window.getMode()
@@ -56,9 +95,12 @@ return function(dt)
    end
 
    love.graphics.setColor(255, 255, 255)
+   love.graphics.push()
+   love.graphics.translate(-ship.x, -ship.y)
    for _,b in pairs(ship.bodies) do
-      body.draw(b, ship.x, ship.y, b == ship.target)
+      draw_body(b, ship.x, ship.y)
    end
+   love.graphics.pop()
 
    if(ship.target and ship.target.beam_count) then
       love.graphics.setLineWidth(10)

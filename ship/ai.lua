@@ -43,22 +43,6 @@ local update = function(self, dt)
    end
 end
 
-local draw = function(ship, sx, sy)
-   love.graphics.push()
-   love.graphics.setColor(50, 120, 50);
-   love.graphics.translate(ship.x-sx, ship.y-sy)
-   love.graphics.scale(ship.mass / 2)
-   love.graphics.rotate(math.pi - (ship.rotation or 0))
-   love.graphics.polygon("fill", 0, -6, -4, 10, 4, 10)
-   if(ship.engine_on) then
-      love.graphics.setColor(255, 255, 255);
-      love.graphics.setLineWidth(1)
-      love.graphics.line(-4, 11, 4, 11)
-   end
-   love.graphics.setColor(255,255,255);
-   love.graphics.pop()
-end
-
 local make = function(ship, bodies, name, from_portal)
    local targets = lume.filter(bodies, "os")
    local target, from = targets[love.math.random(#targets)]
@@ -75,7 +59,6 @@ local make = function(ship, bodies, name, from_portal)
    return {
       ship = true,
       update = update,
-      draw = draw,
 
       x = from.x,
       y = from.y,

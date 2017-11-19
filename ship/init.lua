@@ -280,9 +280,9 @@ local ship = {
       end
 
       if(ship.turning_left) then
-         ship.heading = ship.heading + (real_dt * ship.turning_speed)
+         ship.heading = ship.heading + (dt * ship.turning_speed)
       elseif(ship.turning_right) then
-         ship.heading = ship.heading - (real_dt * ship.turning_speed)
+         ship.heading = ship.heading - (dt * ship.turning_speed)
       end
 
       if(ship.battery < ship.battery_capacity) then

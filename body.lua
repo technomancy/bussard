@@ -1,5 +1,6 @@
 local base_prices = require("data.prices")
 local utils = require("utils")
+local planet = require("planet")
 
 local hostname = function(body_name)
    return body_name:lower():gsub(" ", "-")
@@ -46,17 +47,6 @@ local kind = function(b)
 end
 
 return {
-   draw = function(body, x, y)
-      if(body.draw) then return body:draw(x, y) end
-      body.image = body.image or love.graphics.newImage("assets/" ..
-                                                           body.image_name .. ".png")
-      local scale = body.scale or 1
-      body.ox = body.ox or body.image:getWidth() * scale / 2
-      body.oy = body.oy or body.image:getHeight() * scale / 2
-      love.graphics.draw(body.image, body.x - x, body.y - y,
-                         body.rotation, scale, scale, body.ox, body.oy)
-   end,
-
    gravitate = gravitate,
 
    gravitate_all = function(bodies, ship, dt)
@@ -85,6 +75,9 @@ return {
       for _,b in pairs(bodies) do
          if(b.update) then -- currently only used by AI ships
             b:update(dt)
+         elseif(b.planet) then
+            b.planet.x, b.planet.y = b.x, b.y
+            planet.update(b.planet, dt)
          end
       end
    end,
