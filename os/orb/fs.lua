@@ -95,8 +95,10 @@ fs.dir_meta = function(dir, cwd)
    return lume.deserialize(lfs.read(realpath(dir .. "/_meta", cwd)))
 end
 
-fs.get_password_hash = function(u, p)
-   return require("md5").sumhexa(u .. ":" .. p)
+fs.hash = function(s) -- extremely insecure, but fun!
+   local h = ""
+   for i = 1, #s do h = h .. tostring(string.byte(string.sub(seed, i, i))) end
+   return h
 end
 
 fs.add_user = function(user, password)
@@ -108,7 +110,7 @@ fs.add_user = function(user, password)
    fs.add_to_group(user, user)
    fs.add_to_group(user, "all")
    fs.write("/etc/passwords/" .. user, "/",
-            fs.get_password_hash(user, password))
+            fs.hash(user .. ":" .. password))
 end
 
 fs.add_to_group = function(user, group)

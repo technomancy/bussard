@@ -18,11 +18,6 @@ Copyright: 2011-2012 David Manura
 License: Expat
 Comment: https://github.com/davidm/lua-glob-pattern
 
-Files: md5/init.lua
-Copyright: 2013 Enrique García Cota, Adam Baldwin, hanzao, Equi 4 Software
-License: Expat
-Comment: https://github.com/kikito/md5.lua
-
 Files: serpent/init.lua
 Copyright: 2011-2013 Paul Kulchenko
 License: Expat

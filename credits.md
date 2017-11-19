@@ -11,9 +11,6 @@ Distributed under the GNU General Public License version 3 or later; see LICENSE
   https://github.com/rxi/lume
 * globtopattern copyright © 2011-2012 David Manura, distributed under the MIT license
   https://github.com/davidm/lua-glob-pattern
-* md5.lua copyright © 2013 Enrique García Cota + Adam Baldwin +
-    hanzao + Equi 4 Software, distributed under the MIT license
-  https://github.com/kikito/md5.lua
 * serpent Copyright © 2011-2013 Paul Kulchenko, distributed under the MIT license
   https://github.com/pkulchenko/serpent
 * utf8.lua Copyright © 2016 Stepets, distributed under the MIT license
