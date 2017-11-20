@@ -71,13 +71,13 @@ return {
       end
    end,
 
-   update = function(bodies, dt)
+   update = function(bodies, dt, real_dt)
       for _,b in pairs(bodies) do
          if(b.update) then -- currently only used by AI ships
             b:update(dt)
          elseif(b.planet) then
             b.planet.x, b.planet.y = b.x, b.y
-            planet.update(b.planet, dt)
+            planet.update(b.planet, real_dt)
          end
       end
    end,

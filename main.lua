@@ -214,7 +214,7 @@ local update = safely(function(dt)
          elapsed = elapsed - timestep
          local adjusted_dt = ship.time_factor * timestep
          ship:update(adjusted_dt, dt * ship.base_time_factor)
-         body.update(ship.bodies, adjusted_dt)
+         body.update(ship.bodies, adjusted_dt, dt)
          body.gravitate_all(ship.bodies, ship, adjusted_dt)
          ai.update(ship, ship.bodies, adjusted_dt)
          os_client.update(ship, dt)

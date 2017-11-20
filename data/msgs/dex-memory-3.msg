@@ -11,8 +11,6 @@ I wonder what this "Junction" he talks about is. It could be the device that's
 in the secondary expansion bay; that looks like it was installed in a hurry
 and doesn't resemble any standard equipment I've ever seen on a ship before.
 
-I have a few ideas about how we can unscramble this manual she sent me...
-
 ------------------------------------------------------------------------------
 
 > Thanks for playing the Bussard beta!
