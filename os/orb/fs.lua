@@ -97,7 +97,7 @@ end
 
 fs.hash = function(s) -- extremely insecure, but fun!
    local h = ""
-   for i = 1, #s do h = h .. tostring(string.byte(string.sub(seed, i, i))) end
+   for i = 1, #s do h = h .. tostring(string.byte(string.sub(s, i, i))) end
    return h
 end
 

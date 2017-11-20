@@ -48,7 +48,7 @@ shell.auth = function(user, password)
    assert(user, "No username provided")
    assert(password, "No password provided")
    return fs.read("/etc/passwords/" .. user) ==
-      fs.get_password_hash(user, password)
+      fs.hash(user..":"..password)
 end
 
 shell.sudo = function(env, user, args, extra_sandbox)
