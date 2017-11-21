@@ -175,7 +175,7 @@ return {
    underclocker = { stats = { mass = 1 },
                     action = function(ship, adjust)
                        local new = math.max(ship.time_factor * adjust,
-                                            ship.base_time_factor)
+                                            ship.min_time_factor)
                        ship.time_factor = math.min(256, new)
                     end
                   },

@@ -29,8 +29,7 @@ local status_whitelist = {
    "cargo", "cargo_capacity", "solar",
    "engine_strength", "turning_speed", "cpuinfo",
    "recharge_rate", "burn_rate", "comm_connected", "comm_range",
-   "portal_range", "portal_time", "flag", "target", "comm_boost",
-   "time_factor", "base_time_factor"
+   "portal_range", "portal_time", "flag", "target", "comm_boost", "time_factor",
 }
 
 local base_stats = {
@@ -156,7 +155,7 @@ local ship = {
    battery = 64,
    upgrades = {}, -- map of upgrade name -> upgrade map
    time_factor = 10,
-   base_time_factor = 10,
+   min_time_factor = 1,
 
    -- keep around
    fuel = 128,

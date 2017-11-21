@@ -207,13 +207,14 @@ end
 love.resize = function(w,h) love.filesystem.write("window", w .. " " .. h) end
 
 local timestep, elapsed = 0.01, 0
+local default_time_factor = 10
 
 local update = safely(function(dt)
       elapsed = elapsed + dt
       while(elapsed > timestep) do -- fixed timestep
          elapsed = elapsed - timestep
          local adjusted_dt = ship.time_factor * timestep
-         ship:update(adjusted_dt, dt * ship.base_time_factor)
+         ship:update(adjusted_dt, dt * default_time_factor)
          body.update(ship.bodies, adjusted_dt, dt)
          body.gravitate_all(ship.bodies, ship, adjusted_dt)
          ai.update(ship, ship.bodies, adjusted_dt)
