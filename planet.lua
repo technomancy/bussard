@@ -2,7 +2,9 @@
 -- their surfaces.
 -- Roughly based on code from https://github.com/meric/renderplanet/ except
 -- for the texture parts.
-local template_texture = love.graphics.newImage("assets/texture_template.png")
+if(not love.graphics) then return {} end
+local template_texture = love.graphics.newImage("assets/texture_template.png",
+                                                {linear=true})
 local shader_source = love.filesystem.read("planet_shader.glsl")
 
 local render_arc = function(planet, a, b)
