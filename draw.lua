@@ -30,17 +30,14 @@ local draw_npc = function(s)
    love.graphics.pop()
 end
 
-local make_planet_draw = function(body, draw_type)
-   body.planet = planet.random(body.name, draw_type)
-   body.planet.x, body.planet.y = body.x, body.y
-   return lume.fn(planet.draw, body.planet)
-end
-
 local draw_body = function(body)
    if(body.ship) then
       draw_npc(body)
-   elseif(body.draw_type) then
-      body.draw = body.draw or make_planet_draw(body, body.draw_type)
+   elseif(body.texture_type) then
+      body.draw = body.draw or lume.fn(planet.draw, planet.random(body))
+      body:draw()
+   elseif(body.texture_name) then
+      body.draw = body.draw or lume.fn(planet.draw, planet.make(body))
       body:draw()
    else
       body.image = body.image or

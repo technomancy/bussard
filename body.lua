@@ -1,6 +1,5 @@
 local base_prices = require("data.prices")
 local utils = require("utils")
-local planet = require("planet")
 
 local hostname = function(body_name)
    return body_name:lower():gsub(" ", "-")
@@ -71,13 +70,10 @@ return {
       end
    end,
 
-   update = function(bodies, dt, real_dt)
+   update = function(bodies, dt)
       for _,b in pairs(bodies) do
-         if(b.update) then -- currently only used by AI ships
+         if(b.update) then
             b:update(dt)
-         elseif(b.planet) then
-            b.planet.x, b.planet.y = b.x, b.y
-            planet.update(b.planet, real_dt)
          end
       end
    end,

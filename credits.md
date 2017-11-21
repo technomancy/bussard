@@ -30,10 +30,10 @@ Distributed under the GNU General Public License version 3 or later; see LICENSE
 * Other planet graphics copyright © 2013 GM Shaber, CC-BY licensed
   http://opengameart.org/content/27-planets-in-hi-res
 
-* Solar system graphics copyright © 2013 Inove, CC-BY licensed
-  http://www.solarsystemscope.com/nexus/resources/planet_images/
+* Solar system graphics copyright © 2013 Inove, CC-BY 4.0 licensed
+  https://www.solarsystemscope.com/textures (based on NASA imagery)
 
-* Station graphics copyright © 2014 MillionthVector, CC-BY licensed
+* Station/portal graphics copyright © 2014 MillionthVector, CC-BY licensed
   https://millionthvector.blogspot.de/p/free-sprites_12.html
 
 * Asteroid graphics copyright © 2014 para, CC0 licensed

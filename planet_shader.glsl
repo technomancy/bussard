@@ -51,7 +51,7 @@ vec4 effect( vec4 color, Image vectors, vec2 vectors_coords, vec2 screen_coords 
   light_coords = rotate_light_matrix * light_coords;
   number shadow = 0;
   shadow = 1-pow(distance(light_coords, shadow_coords)*0.9, 3);
-  if (shadow < 0.05) {
+  if (light_angle != 0 && shadow < 0.05) {
     shadow = 0.05;
   }
 
