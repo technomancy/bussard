@@ -46,6 +46,17 @@ local drawers = {
 
 local rover_points = {0,-1, 1,-2, 3,2, 0,4, -3,2, -1,-2}
 
+local draw_grid = function()
+   graphics.push()
+   graphics.scale(base_shift)
+   graphics.setColor({10,70,10})
+   for g=-10.5,10.5 do
+      graphics.line(g,-10.5,g,10.5)
+      graphics.line(-10.5,g,10.5,g)
+   end
+   graphics.pop()
+end
+
 local draw = function()
    if(not ship.rover_state) then return end
    local state, x,y,w,h = ship.rover_state, unpack(ship.rover_state.rover)
@@ -56,6 +67,7 @@ local draw = function()
                       eh/2-editor.get_prop("y_offset", 0))
    graphics.print(string.format("x: %s y: %s", x,y), -ew/2+10, -eh/2+10)
    graphics.scale(editor.get_prop("scale", 64))
+   draw_grid()
    for _,box in ipairs(state.rects) do
       if(drawers[box.type]) then
          drawers[box.type](box, unpack(box))
@@ -98,3 +110,4 @@ bind("rover", "ctrl-x 4", lume.fn(editor.split, "triple"))
 bind("rover", "ctrl-x o", editor.focus_next)
 
 bind("rover", "escape", function() editor.change_buffer("*flight*") end)
+

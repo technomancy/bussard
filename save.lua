@@ -151,10 +151,9 @@ return {
          end
       end
       rm_rf("fs")
+      rm_rf("buffers")
+      rm_rf("rovers")
 
-      for _,b in ipairs(love.filesystem.getDirectoryItems("buffers")) do
-         love.filesystem.remove("buffers/" .. b);
-      end
       ship.aborting = true
    end,
 
