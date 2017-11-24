@@ -35,12 +35,14 @@ local make = function(options)
          love.graphics.newImage("assets/" .. options.texture_name),
       template_texture = template_texture,
       time = 0,
-      speed = options.rot / 3600,
-      rotate_angle = options.angle,
+      speed = (options.rot or 16) / 3600,
+      rotate_angle = options.angle or 0,
       rotate_retrograde = options.retrograde or false,
       light_angle = options.light_angle or 0,
       size = height/2,
-      radius = options.star and 2048 or options.mass * 1.5,
+      radius = (options.star and 3048) or
+         (options.texture_type == "gas" and options.mass * 2.3) or
+         options.mass * 1.5,
    }
    local planet_shader_source = shader_source:format[[
         pixel.r *= shadow;
@@ -74,12 +76,26 @@ local draw = function(planet)
 end
 
 -- TODO: other texture generators
-local texture_fns = {gas=function(x,y)
-                        local r = love.math.noise(2*x,2*y)*100
-                        local g = love.math.noise(4*x,4*y)*100
-                        local b = love.math.noise(8*x,8*y)*100
-                        return {r,g,b}
-                    end}
+local texture_fns = {gas=
+                        function(_, x,y)
+                           local r = love.math.noise(2*x,2*y)*100
+                           local g = love.math.noise(4*x,4*y)*100
+                           local b = love.math.noise(8*x,8*y)*100
+                           return {r,g,b}
+                        end,
+                     grassy_oceany=
+                        function(r,x,y)
+                           local level = love.math.noise((r+4)*x, (r+2)*y)
+                           if(level > 0.5) then
+                              return {20, 205*(1.5-level), 50}
+                           else
+                              return {0, 0, 100+300*level}
+                           end
+                        end,
+                     -- star=function(_,x,y)
+                     --    local level = love.math.noise(x, y)
+                     -- end,
+                    }
 
 local random_texture = function(w,h,f)
    local data = love.image.newImageData(w,h)
@@ -105,9 +121,10 @@ local random = function(body)
    local r = love.math.randomNormal
    love.math.setRandomSeed(seed_for(body.name))
    local radius = r(128, 512)
-   local f = texture_fns[body.texture_type]
-   body.rot = body.rot or r(0.01, 0.03)
-   body.angle = body.angle or math.rad(r(30, 60))
+   if(body.texture_type == "gas") then radius = radius * 2 end
+   local f = lume.fn(texture_fns[body.texture_type], r(2,4))
+   body.rot = body.rot or r(64, 64)
+   body.angle = body.angle or math.rad(r(30, 45))
    body.texture = random_texture(radius,radius,f)
    love.math.setRandomSeed(love.timer.getTime())
    return make(body)

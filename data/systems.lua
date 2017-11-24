@@ -5,7 +5,7 @@
 -- equipment
 
 local _ = { r=0, mass=0,
-            image_name="",
+            texture_type="", -- or texture, occasionally
             name="", os="orb",
             industry=0, tech=0,
             remote=0, pop=0,
@@ -48,11 +48,9 @@ local sys = {
        asteroids = 4,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=230000,
-           image_name="sun",
            name="Tana", star=true },
-          {r=15000, mass=500,
-           texture_type="gas",
-           -- image_name = "planet-9",
+          {r=15000, mass=200,
+           texture_type="grassy_oceany",
            name="Malioboro", os="orb", world=true,
 
            industry=7,tech=5,
@@ -60,8 +58,8 @@ local sys = {
            agri=5, mineral=2,
            upgrades={"cargo_bay"},
           },
-          {r=45000, mass=400,
-           image_name = "planet-3",
+          {r=45000, mass=500,
+           texture_type="gas",
            name="Kota Baru", os="orb", world=true,
 
            industry=8,tech=6,
@@ -93,7 +91,6 @@ local sys = {
        asteroids = 7,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=160000,
-           image_name="sun",
            name="Wolf 294", star=true},
           {r=25000, mass=500,
            image_name="planet-14", -- ice
@@ -114,7 +111,6 @@ local sys = {
        asteroids = 3,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=290000,
-           image_name="sun",
            name="Luyten's Star", star=true },
           {r=32000, mass=120,
            image_name="station-pointed", station=true,
@@ -142,7 +138,6 @@ local sys = {
        asteroids = 12,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
-           image_name="sun",
            name="L 668-21", star=true },
           {r=20000, mass=700, station=true,
            image_name="station-pointed",
@@ -165,7 +160,7 @@ local sys = {
               x=0, y=0, asteroids = 1,
               bodies = {
                  {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
-                  texture_name="sol.jpg", angle=math.rad(7.25), rot=14.18,
+                  angle=math.rad(7.25), rot=14.18,
                   name="Sol", star=true},
                  {r=10000, mass=220, angle=math.rad(0.03), rot=6.14,
                   texture_name="mercury.jpg", world=true,
@@ -247,7 +242,6 @@ local sys = {
                   x=1.6, y=-0.4,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
-                      image_name="sun",
                       name="Lalande 25372", star=true},
                      {r=14000, mass=200,
                       image_name="shaber8",
@@ -283,7 +277,6 @@ local sys = {
                x=0, y=-1.7, asteroids=2,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=410000,
-                   image_name="sun",
                    name="Ross 128", star=true},
                   {r=35000, mass=200, gov="darush",
                    image_name="shaber3", -- dark red volcanic
@@ -318,7 +311,6 @@ local sys = {
                x=3.2, y=-0.6,
                bodies = {
                   {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
-                   image_name="sun",
                    name="Bohk 832", star=true},
                   {r=15000, mass=500,
                    image_name = "shaber1",
@@ -352,7 +344,6 @@ local sys = {
    ["New Phobos"] = {gov="Bohk", x=3.9, y=0.2, asteroids=5,
                      bodies = {
                         {r=0, x=0, y=0, dx=0, dy=0, mass=390000,
-                         image_name="sun",
                          name="New Phobos 4523", star=true},
                         {r=18000, mass=630,
                          image_name = "shaber4",
@@ -381,7 +372,6 @@ local sys = {
                   x=2.8, y=0.2,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=220000,
-                      image_name="sun",
                       name="Mecalle 8760", star=true},
                      {r=27000, mass=342,
                       image_name = "planet-11",
@@ -407,7 +397,6 @@ local sys = {
                   x=3.2, y=3.3, asteroids = 3,
                   bodies = {
                      {r=0, x=0, y=0, dx=0, dy=0, mass=210000,
-                      image_name="sun",
                       name="Katilay 103039", star=true},
                      {r=25000, mass=350,
                       image_name="shaber10",

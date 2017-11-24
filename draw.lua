@@ -39,7 +39,7 @@ local draw_body = function(body)
    elseif(body.texture_name) then
       body.draw = body.draw or lume.fn(planet.draw, planet.make(body))
       body:draw()
-   else
+   elseif(body.image or body.image_name) then
       body.image = body.image or
          love.graphics.newImage("assets/" .. body.image_name .. ".png")
       local scale = body.star and 3 or 1
@@ -47,6 +47,8 @@ local draw_body = function(body)
       body.oy = body.oy or body.image:getHeight() / 2
       love.graphics.draw(body.image, body.x, body.y,
                          body.rotation, scale, scale, body.ox, body.oy)
+   elseif(body.star) then
+      body.texture_name = body.texture_name or "sol.jpg"
    end
 end
 

@@ -288,7 +288,7 @@ return {
 
       -- tables
       coroutine = lume.clone(coroutine),
-      math = lume.clone(math),
+      math = lume.merge(lume.clone(math), love.math),
       table = lume.clone(table),
       string = lume.clone(string),
       utf8 = lume.clone(utf8),
