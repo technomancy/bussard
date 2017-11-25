@@ -3,8 +3,8 @@ jobs:
   build:
     working_directory: ~/bussard
     docker:
-      - image: lambdaindie/love2d:latest
+      - image: debian:sid-slim
     steps:
       - checkout
-      - run: apt-get update -qq && apt-get install -qq -y lua-check cloc
+      - run: sudo make apt_prereqs
       - run: make ci

@@ -1,6 +1,8 @@
-before_script:
-  - apt-get update -qq && apt-get install -y -qq lua-check love cloc
+image: debian:sid-slim
 
-luacheck:
+before_script:
+  - make apt_prereqs
+
+test:
   script:
     - make ci
