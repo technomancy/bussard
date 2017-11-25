@@ -1,7 +1,7 @@
 image: debian:sid-slim
 
 before_script:
-  - make apt_prereqs
+  - ./bootstrap-deb.sh
 
 test:
   script:

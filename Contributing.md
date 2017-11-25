@@ -92,10 +92,10 @@ simple mistakes that can be caught with static analysis, like typos or
 accidental globals. It also catches certain style issues. You can install it
 via your package manager or [luarocks](https://luarocks.org) To use it thru
 luarocks, ensure the `bin` directory of luarocks, typically
-`~/.luarocks/bin`, is on your `$PATH`.
+`~/.luarocks/bin`, is on your `$PATH`, then run `luarocks install --local luacheck`.
 
-    $ luarocks install --local luacheck && luarocks install --local lunatest
-    [...]
+Then do a full test run:
+
     $ make ci
 
 This will also run the [fuzz tests](https://technomancy.us/180). You can run

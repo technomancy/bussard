@@ -39,14 +39,6 @@ fuzz: ; love . --fuzz
 
 ci: luacheck test fuzz count_all
 
-apt_prereqs:
-	apt-get update -qq && apt-get install -qq lua-check cloc make wget
-	wget "https://bitbucket.org/rude/love/downloads/liblove0_0.10.2ppa1_amd64.deb"
-	wget "https://bitbucket.org/rude/love/downloads/love_0.10.2ppa1_amd64.deb"
-	dpgk -i liblove0_0.10.2ppa1_amd64.deb
-	dpkg -i love_0.10.2ppa1_amd64.deb
-	apt-get -f install
-
 count: ; cloc --force-lang=lua $(GAME_LUA)
 
 count_engine: ; cloc $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
