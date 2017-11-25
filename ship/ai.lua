@@ -7,25 +7,48 @@ local normalize = function(t)
    return ((t + math.pi) % (math.pi * 2)) - math.pi
 end
 
+local stuck_dist, unstuck_dist, stuck_time_limit = 4096, 10000, 80
+
+local thrust = function(self, dt)
+   local fx = (math.sin(self.rotation) * dt * self.engine_strength)
+   local fy = (math.cos(self.rotation) * dt * self.engine_strength)
+   self.dx = self.dx + fx / self.mass
+   self.dy = self.dy + fy / self.mass
+   self.engine_on = true
+end
+
+local escape_star = function(self, dt)
+   local theta_f = normalize(-math.atan2(self.dy, self.dx) + math.pi/2)
+   if(math.abs(theta_f - self.rotation) < 1) then
+      thrust(self, dt)
+   end
+end
+
 local update = function(self, dt)
    if(not self.from) then self.from = body.find(self.bodies, self.from_name) end
    if(not self.target) then self.from = body.find(self.bodies, self.target_name) end
+   self.engine_on = false
    local tx = self.target.x + self.target.dx * self.projection
    local ty = self.target.y + self.target.dy * self.projection
    local sx = self.x + self.dx * self.projection
    local sy = self.y + self.dy * self.projection
    local theta = normalize(-math.atan2(ty - sy, tx - sx) + math.pi/2)
    local dist = utils.distance({x=sx, y=sy}, {x=tx,y=ty})
-   if(dist > self.target_range) then
+   local star_dist = utils.distance(self.x, self.y)
+   if(star_dist < stuck_dist) then
+      self.stuck_time = (self.stuck_time or 0) + dt
+   elseif(star_dist > unstuck_dist) then
+      self.stuck_time = 0
+   end
+   if(self.stuck_time and (self.stuck_time > stuck_time_limit)) then
+      escape_star(self, dt)
+   elseif(dist > self.target_range) then
       local theta_v = normalize(-math.atan2(self.dy, self.dx) + math.pi/2)
       local v = utils.distance(self.dx, self.dy)
       local dv = v - utils.distance(self.target.dx, self.target.dy)
       if(not (math.abs(theta_v - theta) < 1 and dv > self.speed_limit)) then
          self.rotation = theta
-         local fx = (math.sin(self.rotation) * dt * self.engine_strength)
-         local fy = (math.cos(self.rotation) * dt * self.engine_strength)
-         self.dx = self.dx + fx / self.mass
-         self.dy = self.dy + fy / self.mass
+         thrust(self, dt)
       end
       self.projection = self.projection + 0.001
    elseif(self.projection > 1) then
