@@ -1,6 +1,7 @@
 -- These functions will be called by programs running on station OSes, but they
 -- have access to functionality that isn't exposed inside the OS sandbox.
 
+local lume = require("lume")
 local utils = require("utils")
 local bencode = require("bencode")
 local clearances = require("data.clearances")

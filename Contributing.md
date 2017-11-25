@@ -87,17 +87,19 @@ xUnit style tool. However, most work is not like that and relies on manual
 playtesting. This is OK. Please do *run* the existing tests before sending a
 patch though!
 
-You should also run [luacheck](https://github.com/mpeterv/luacheck) against your
-changes to check for simple mistakes that can be caught with static analysis,
-like typos or accidental globals. It also catches certain style issues.
-
-You'll need [luarocks](https://luarocks.org), which hopefully is provided by
-your package manager. Ensure the `bin` directory of luarocks (typically
-`~/.luarocks/bin`) is on your `$PATH`.
+We also run [luacheck](https://github.com/mpeterv/luacheck) to check for
+simple mistakes that can be caught with static analysis, like typos or
+accidental globals. It also catches certain style issues. You can install it
+via your package manager or [luarocks](https://luarocks.org) To use it thru
+luarocks, ensure the `bin` directory of luarocks, typically
+`~/.luarocks/bin`, is on your `$PATH`.
 
     $ luarocks install --local luacheck && luarocks install --local lunatest
     [...]
     $ make ci
+
+This will also run the [fuzz tests](https://technomancy.us/180). You can run
+individual test phases with `make luacheck`, `make test`, or `make fuzz`.
 
 ## Philosophy
 

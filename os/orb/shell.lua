@@ -56,7 +56,7 @@ shell.sudo = function(env, user, args, extra_sandbox)
    assert(fs.exists("/etc/passwords/" .. user) or user == "root",
           "User does not exist: " .. user)
    local new_env = shell.new_env(user, env.HOST)
-   orb.shell.exec(new_env, args, extra_sandbox)
+   shell.exec(new_env, args, extra_sandbox)
 end
 
 shell.change_password = function(user, old_password, new_password, repeat_new)

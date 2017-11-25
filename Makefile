@@ -7,13 +7,14 @@ ENGINE_LUA=*.lua
 OS_LUA=os/orb/*.lua os/lisp/*.lua os/rover/*.lua os/server.lua
 IN_OS_LUA=os/orb/resources/* data/host_src/*.lua data/maps/*.lua
 IN_SHIP_LUA=data/src/*
-DEPS_LUA=globtopattern/*.lua lume/*.lua md5/*.lua os/lisp/l2l/*.lua \
+DEPS_LUA=globtopattern/*.lua lume/*.lua os/lisp/l2l/*.lua \
 	serpent/*.lua bencode/init.lua jeejah/init.lua os/rover/smolforth/init.lua
 MISSION_LUA=data/missions/*.lua
 DATA_LUA=data/*.lua data/msgs/*.lua $(MISSION_LUA)
 POLYWELL=polywell/*.lua polywell/lume/init.lua polywell/utf8/init.lua
 
-GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) $(DATA_LUA) os/lisp/resources/portal.lsp
+GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) \
+	$(DATA_LUA) os/lisp/resources/portal.lsp
 ALL_LUA=$(GAME_LUA) $(DEPS_LUA)
 
 PROSE=manual.md doc/*.md data/msgs/* data/motd/* data/subnet/* data/ships.txt data/docs/*
@@ -25,36 +26,22 @@ blockers: ; grep TODO/blocker $(GAME_LUA) || true
 wipe: ; love . --wipe
 wipe_fs: ; rm -rf $(HOME)/.local/share/love/bussard/fs
 
-# different contexts have different rules about what's OK, globals, etc
+# rules for each section are defined in .luacheckrc
 luacheck:
-	luacheck --no-color --std luajit --ignore 21/_.* \
-	  --exclude-files metatable_monkey.lua --globals love lume orb pp _ \
-	  -- $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA) # engine code
-	luacheck --no-color --std luajit --ignore 21/_.* \
-	  --globals lume utf8 pack ship define_mode bind utils realprint pp pps \
-	            mail ssh ssh_connect ssh_prompt portal logout ssh_send_line \
-	            universe graphics editor toggle_fps replyable flight_draw \
-	            tetris reply inbox \
-	  -- $(IN_SHIP_LUA)
-	luacheck --no-color --std luajit --ignore 21/_.* --exclude-files=*.lsp \
-	  --globals io lume orb station buy_user ship cargo_transfer pps \
-	            accept_mission get_prompt set_prompt buy_upgrade sell_upgrade \
-	            list_upgrades subnet logout upgrade_help port loan record_event \
-	            cargo_prices cargo_amounts cargo_hold refuel fuel_price door \
-	  -- $(IN_OS_LUA)
-	luacheck --no-color --std luajit --ignore 21/_.* --globals love lume \
-				term \
-	  -- $(DATA_LUA)
+	luacheck --std luajit+engine $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
+	luacheck --std luajit+inship $(IN_SHIP_LUA)
+	luacheck --std luajit+inos   $(IN_OS_LUA)
+	luacheck --std luajit+data   $(DATA_LUA)
 
 test: ; love . --test
 
 fuzz: ; love . --fuzz
 
-ci: luacheck test fuzz
+ci: luacheck test fuzz count_all
 
 count: ; cloc --force-lang=lua $(GAME_LUA)
 
-count_engine: ; cloc $(ENGINE_LUA) $(SHIP_LUA)
+count_engine: ; cloc $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 
 count_data: ; cloc --force-lang=lua $(IN_SHIP_LUA) $(IN_OS_LUA) $(OS_LUA) \
 	  $(DATA_LUA)

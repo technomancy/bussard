@@ -1126,7 +1126,7 @@ return {
          if b.input_history_pos >= 0 then
             b.input_history_pos = b.input_history_pos - 1
             local n = #b.input_history-b.input_history_pos+1
-            replace_input(b.input_history[n])
+            replace_input(b.input_history[n] or "")
          else
             b.input_history_pos = 0
             replace_input("")

@@ -45,7 +45,5 @@ while true do
       else
          print("Warning: no session", msg.session_id)
       end
-   elseif(msg.op == "debug") then
-      pp(sessions)
    end
 end

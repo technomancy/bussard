@@ -36,7 +36,8 @@ shown when logging into that world.
 
 Home of humanity, but regressed from its height. Suffered from having portal
 delayed due to accident. Sol is ancient, and still hosts the majority of
-humankind, who have never left Earth. Many see it as backwards or quaint.
+humankind, many of whom have never left Earth. Many living elsewhere see it as
+backwards or quaint.
 
 * Earth
 * Mars

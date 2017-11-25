@@ -1,3 +1,4 @@
+local lume = require("lume")
 local ship = require("ship")
 local hud = require("ship.hud")
 local utils = require("utils")

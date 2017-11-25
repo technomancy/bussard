@@ -112,6 +112,7 @@ local sandbox = function(ship)
                        replyable = mail.replyable,
                        graphics = love.graphics,
                        image = love.image,
+                       hsv = utils.hsv,
                        flight_draw = require("draw"),
                        is_key_down = love.keyboard.isDown,
                        pps = function(x)

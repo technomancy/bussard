@@ -1,5 +1,5 @@
 -- need to fix pairs before loading lume
-_, lume = require("metatable_monkey"), require("lume")
+local _, lume = require("metatable_monkey"), require("lume")
 
 local body = require("body")
 local ai = require("ship.ai")

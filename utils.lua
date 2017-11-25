@@ -7,7 +7,7 @@ local pps = function(x)
    return serpent.block(x, {maxlevel=8,maxnum=64,nocode=true})
 end
 
-function pp(x) print(pps(x)) end
+_G["pp"] = function(x) print(pps(x)) end
 
 local original_pairs, original_ipairs = unpack(require("metatable_monkey"))
 

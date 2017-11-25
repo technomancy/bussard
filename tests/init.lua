@@ -1,4 +1,4 @@
-require("luarocks.loader")
+lume = require("lume")
 local lunatest = require("lunatest")
 
 for _,filename in ipairs(love.filesystem.getDirectoryItems("tests")) do

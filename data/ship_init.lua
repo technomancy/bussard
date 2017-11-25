@@ -2,6 +2,7 @@
 local mission = require("mission")
 local mail = require("mail")
 local upgrade = require("data.upgrades")
+local lume = require("lume")
 
 local statuses = {
    " Press ctrl-enter to toggle flight mode.\n\n" ..

@@ -88,8 +88,9 @@ local test_completion = function()
    t.assert_equal("/home/guest $ bin/", second_completed)
 end
 
-if(love.getVersion and ({love.getVersion()})[2] > 9) then
-   return {test_loans=test_loans, test_completion=test_completion}
-else
-   return {}
-end
+return {} -- these have been really problematic; flaky and hanging
+-- if(love.getVersion and ({love.getVersion()})[2] > 9) then
+--    return {test_loans=test_loans, test_completion=test_completion}
+-- else
+--    return {}
+-- end
