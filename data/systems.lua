@@ -48,7 +48,7 @@ local sys = {
        asteroids = 4,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=230000,
-           name="Tana", star=true },
+           name="Tana", star=true},
           {r=15000, mass=200,
            texture_type="grassy_oceany",
            name="Malioboro", os="orb", world=true,
@@ -61,7 +61,6 @@ local sys = {
           {r=45000, mass=500,
            texture_type="gas",
            name="Kota Baru", os="orb", world=true,
-
            industry=8,tech=6,
            remote=2, pop=4,
            agri=4, mineral=2,
@@ -161,7 +160,7 @@ local sys = {
               bodies = {
                  {r=0, x=0, y=0, dx=0, dy=0, mass=320000,
                   angle=math.rad(7.25), rot=14.18,
-                  name="Sol", star=true},
+                  name="Sol", star=true, texture_name="sol.jpg"},
                  {r=10000, mass=220, angle=math.rad(0.03), rot=6.14,
                   texture_name="mercury.jpg", world=true,
                   name="Mercury"},
