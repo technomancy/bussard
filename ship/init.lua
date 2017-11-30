@@ -196,6 +196,7 @@ local ship = {
       -- if something was waiting for a key release, let it get its
       -- event, as we are going to change context
       if love.keyreleased then love.keyreleased() end
+      ship.locked_to = nil
 
       local from = ship.system_name
       if(from ~= ship.system_name) then
