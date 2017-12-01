@@ -2,6 +2,8 @@
 
 ## beta-4 / ???
 
+* Render planets with textured spheres instead of sprites.
+* Prevent NPC ships from getting stuck in star gravity wells.
 * Rover mazes can have doors which open and close.
 * Time factor can be changed without buying an upgrade.
 * Rovers are now controlled using Forth instead of Lua.

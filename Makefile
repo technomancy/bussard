@@ -1,6 +1,6 @@
 run: ; love . --cheat
 
-VERSION=beta-3
+VERSION=beta-4-pre
 
 SHIP_LUA=ship/*.lua doc/init.lua os/client.lua
 ENGINE_LUA=*.lua
@@ -12,6 +12,7 @@ DEPS_LUA=globtopattern/*.lua lume/*.lua os/lisp/l2l/*.lua \
 MISSION_LUA=data/missions/*.lua
 DATA_LUA=data/*.lua data/msgs/*.lua $(MISSION_LUA)
 POLYWELL=polywell/*.lua polywell/lume/init.lua polywell/utf8/init.lua
+SHADERS=*.glsl
 
 GAME_LUA=$(SHIP_LUA) $(ENGINE_LUA) $(OS_LUA) $(IN_OS_LUA) $(IN_SHIP_LUA) \
 	$(DATA_LUA) os/lisp/resources/portal.lsp
@@ -59,9 +60,9 @@ FLAGS=-a 'Phil Hagelberg' -x spoilers -x savedir \
 	--description 'A space flight programming adventure game.' \
 	--love 0.10.2 --url https://technomancy.itch.io/bussard --version $(VERSION)
 
-releases/bussard-$(VERSION).love: $(ALL_LUA) $(PROSE) $(MEDIA) $(META) $(POLYWELL) Makefile
+releases/bussard-$(VERSION).love: $(ALL_LUA) $(SHADERS) $(PROSE) $(MEDIA) $(META) $(POLYWELL) Makefile
 	mkdir -p releases/
-	find $(ALL_LUA) $(PROSE) $(MEDIA) $(META) $(POLYWELL) -type f | LC_ALL=C sort | \
+	find $(ALL_LUA) $(SHADERS) $(PROSE) $(MEDIA) $(META) $(POLYWELL) -type f | LC_ALL=C sort | \
                env TZ=UTC zip -r -q -9 -X $@ -@
 
 love: releases/bussard-$(VERSION).love
