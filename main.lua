@@ -82,10 +82,10 @@ ui.set_font = function(path, size)
    -- if size is nil, assume path is size
    local font
    if(size == nil) then
-      font_size = math.max(6, path)
+      font_size = math.max(10, path)
       font = love.graphics.newFont(font_path, path)
    else
-      font_path, font_size = path, math.max(6, size)
+      font_path, font_size = path, math.max(10, size)
       font = love.graphics.newFont(path, size)
    end
    love.graphics.setFont(font)
@@ -198,7 +198,7 @@ love.load = function()
 
    if(love.graphics) then
       resize()
-      font_size = love.graphics.getWidth() / 90
+      font_size = math.max(12, love.graphics.getWidth() / 90)
       love.graphics.half_hyperbola = require("conics")
       ui.play()
    end
