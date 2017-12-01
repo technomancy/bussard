@@ -137,7 +137,7 @@ local sys = {
        asteroids = 12,
        bodies = {
           {r=0, x=0, y=0, dx=0, dy=0, mass=200000,
-           name="L 668-21", star=true },
+           name="L 668-21", star=true, texture_name="sol.jpg" },
           {r=20000, mass=700, station=true,
            image_name="station-pointed",
            name="Merdeka Station", os="orb", world=true,

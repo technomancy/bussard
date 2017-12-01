@@ -148,6 +148,7 @@ return {
    end,
 
    start = function(b)
+      if(b.star and not b.texture_name) then b.texture_name = "sol.jpg" end
       if(b.os and not b.thread) then
          b.input, b.output = love.thread.newChannel(), love.thread.newChannel()
          b.thread = love.thread.newThread("os/server.lua")

@@ -34,7 +34,6 @@ local make = function(options)
       y = options.y or 0,
       planet_texture = options.texture or
          love.graphics.newImage("assets/" .. options.texture_name),
-      template_texture = template_texture,
       time = 0,
       speed = (options.rot or 16) / 3600,
       rotate_angle = options.angle or 0,
@@ -58,13 +57,9 @@ local make = function(options)
    return planet
 end
 
-local render_template = function(planet)
-   love.graphics.draw(planet.template_texture, 0, 0)
-end
-
 local render_planet = function(planet)
    love.graphics.setShader(planet.planet_shader)
-   render_template(planet)
+   love.graphics.draw(template_texture, 0, 0)
    love.graphics.setShader()
 end
 

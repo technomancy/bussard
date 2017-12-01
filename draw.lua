@@ -15,26 +15,27 @@ local portal_offsets = {
    {0, 200}, {141, 141}, {200, 0}, {141, -141},
 }
 
+local draw_image = function(body)
+   local scale = body.star and 3 or 1
+   love.graphics.draw(body.image, body.x, body.y,
+                      body.rotation, scale, scale, body.ox, body.oy)
+end
+
 local draw_body = function(body)
-   if(body.texture_type) then
-      body.draw = body.draw or lume.fn(planet.draw, planet.random(body))
-      body:draw()
-   elseif(body.texture_name) then
-      body.draw = body.draw or lume.fn(planet.draw, planet.make(body))
-      body:draw()
-   elseif(body.image or body.image_name) then
-      body.image = body.image or
-         love.graphics.newImage("assets/" .. body.image_name .. ".png")
-      local scale = body.star and 3 or 1
-      body.ox = body.ox or body.image:getWidth() / 2
-      body.oy = body.oy or body.image:getHeight() / 2
-      love.graphics.draw(body.image, body.x, body.y,
-                         body.rotation, scale, scale, body.ox, body.oy)
-   elseif(body.star) then
-      body.texture_name = body.texture_name or "sol.jpg"
-   elseif(body.draw) then
-      body:draw()
+   if(not body.draw) then
+      if(body.texture_type) then
+         body.draw = lume.fn(planet.draw, planet.random(body))
+      elseif(body.texture_name) then
+         body.draw = lume.fn(planet.draw, planet.make(body))
+      elseif(body.image_name) then
+         body.image =
+            love.graphics.newImage("assets/" .. body.image_name .. ".png")
+         body.ox = body.ox or body.image:getWidth() / 2
+         body.oy = body.oy or body.image:getHeight() / 2
+         body.draw = draw_image
+      end
    end
+   if(body.draw) then body:draw() end
 end
 
 return function(dt)
