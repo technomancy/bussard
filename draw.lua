@@ -15,26 +15,8 @@ local portal_offsets = {
    {0, 200}, {141, 141}, {200, 0}, {141, -141},
 }
 
-local draw_npc = function(s)
-   love.graphics.push()
-   love.graphics.setColor(50, 120, 50);
-   love.graphics.translate(s.x, s.y)
-   love.graphics.scale(s.mass / 2)
-   love.graphics.rotate(math.pi - (s.rotation or 0))
-   love.graphics.polygon("fill", 0, -6, -4, 10, 4, 10)
-   if(s.engine_on) then
-      love.graphics.setColor(255, 255, 255);
-      love.graphics.setLineWidth(1)
-      love.graphics.line(-4, 11, 4, 11)
-   end
-   love.graphics.setColor(255,255,255);
-   love.graphics.pop()
-end
-
 local draw_body = function(body)
-   if(body.ship) then
-      draw_npc(body)
-   elseif(body.texture_type) then
+   if(body.texture_type) then
       body.draw = body.draw or lume.fn(planet.draw, planet.random(body))
       body:draw()
    elseif(body.texture_name) then
@@ -50,6 +32,8 @@ local draw_body = function(body)
                          body.rotation, scale, scale, body.ox, body.oy)
    elseif(body.star) then
       body.texture_name = body.texture_name or "sol.jpg"
+   elseif(body.draw) then
+      body:draw()
    end
 end
 
