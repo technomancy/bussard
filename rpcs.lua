@@ -27,10 +27,14 @@ end
 
 local loan_borrow = function(ship, amount_string)
    local amount = tonumber(amount_string)
-   if(not amount) then return "Please provide a numeric amount."
-   elseif(amount <= 0) then return "Please provide a positive amount."
-   elseif(amount ~= math.floor(amount)) then return "Please provide an integer amount."
-   elseif(ship.loan + amount > 4096) then return "Credit limit exceeded."
+   if(not amount) then
+      return "Please provide a numeric amount."
+   elseif(amount <= 0) then
+      return "Please provide a positive amount."
+   elseif(amount ~= math.floor(amount)) then
+      return "Please provide an integer amount."
+   elseif(ship.loan + amount > 4096) then
+      return "Credit limit exceeded."
    else
       ship.credits = ship.credits + amount
       ship.loan = ship.loan + math.ceil(amount * 1.2)
@@ -40,10 +44,14 @@ end
 
 local loan_repay = function(ship, amount_string)
    local amount = tonumber(amount_string)
-   if(not amount) then return "Please provide a numeric amount."
-   elseif(amount <= 0) then return "Please provide a positive amount."
-   elseif(amount ~= math.floor(amount)) then return "Please provide an integer amount."
-   elseif(amount > ship.loan) then return nil, "Can't repay more than you owe."
+   if(not amount) then
+      return "Please provide a numeric amount."
+   elseif(amount <= 0) then
+      return "Please provide a positive amount."
+   elseif(amount ~= math.floor(amount)) then
+      return "Please provide an integer amount."
+   elseif(amount > ship.loan) then
+      return "Can't repay more than you owe."
    else
       ship.credits = ship.credits - amount
       ship.loan = ship.loan - amount

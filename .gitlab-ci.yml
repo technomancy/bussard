@@ -1,7 +1,6 @@
-image: debian:sid-slim
+image: debian:stretch-slim
 
-before_script:
-  - ./bootstrap-deb.sh
+before_script: ./bootstrap-deb.sh
 
 test:
   script:

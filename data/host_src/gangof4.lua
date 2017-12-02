@@ -356,7 +356,8 @@ if(args[1] == "--help") then
    print("Play a card game.")
    print("Usage:")
    print("  gangof4 # play against 3 computer players")
-   print("  gangof4 computer local local local # play hot-seat with one computer player")
+   print("  gangof4 computer local local local " ..
+            "# play hot-seat with one computer player")
 elseif(#args ~= 0) then
    begin(lume.slice(arg, 1, 4), arg[5])
 else

@@ -29,16 +29,16 @@ wipe_fs: ; rm -rf $(HOME)/.local/share/love/bussard/fs
 
 # rules for each section are defined in .luacheckrc
 luacheck:
-	luacheck --std luajit+engine $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
+	luacheck --std luajit+love   $(ENGINE_LUA) $(SHIP_LUA) $(OS_LUA)
 	luacheck --std luajit+inship $(IN_SHIP_LUA)
 	luacheck --std luajit+inos   $(IN_OS_LUA)
-	luacheck --std luajit+data   $(DATA_LUA)
+	luacheck --std luajit+love   $(DATA_LUA)
 
 test: ; love . --test
 
 fuzz: ; love . --fuzz
 
-ci: luacheck test fuzz count_all
+ci: luacheck test fuzz count
 
 count: ; cloc --force-lang=lua $(GAME_LUA)
 

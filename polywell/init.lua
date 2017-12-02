@@ -228,7 +228,7 @@ local with_current_buffer = function(nb, f, ...)
 end
 
 local replace_input = function(input)
-   b.lines[#b.lines] = b.prompt .. input
+   b.lines[#b.lines] = b.prompt .. (input or "")
    b.point_line, b.point = #b.lines, #b.lines[#b.lines]
 end
 

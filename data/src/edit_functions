@@ -55,7 +55,8 @@ editor.search = function(original_direction)
    end
    editor.read_line("Search: ", callback,
                     {on_change=on_change,
-                     bind={["ctrl-g"]=function() editor.exit_minibuffer(true) end,
+                     bind={
+                        ["ctrl-g"]=function() editor.exit_minibuffer(true) end,
                         ["ctrl-n"]=function()
                            editor.exit_minibuffer()
                            editor.next_line()

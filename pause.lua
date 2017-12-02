@@ -2,6 +2,7 @@ local lume = require "lume"
 local colorize = require "polywell.colorize"
 local editor = require "polywell"
 
+local major, minor = love.getVersion()
 local title, choices_font, text_font, font_height, resize
 
 local text, colored_text, line = {}, {}, 1
@@ -23,11 +24,11 @@ end
 
 local actions = {resume=function() end,
                  credits=function()
-                    text, line = lume.split(love.filesystem.read("credits.md"), "\n"), 1
+                    text,line=lume.array(love.filesystem.lines("credits.md")),1
                     colored_text = {}
                  end,
                  license=function()
-                    text, line = lume.split(love.filesystem.read("LICENSE"), "\n"), 1
+                    text, line = lume.array(love.filesystem.lines("LICENSE")), 1
                     colored_text = {}
                  end,
                  ["toggle fullscreen"]=function()
@@ -39,7 +40,9 @@ local actions = {resume=function() end,
                     end
                     resize()
                  end,
-                 ["wipe save"] = lume.fn(replace_button, "wipe save", "confirm wipe"),
+                 ["wipe save"] = lume.fn(replace_button,
+                                         "wipe save",
+                                         "confirm wipe"),
                  ["confirm wipe"] = function()
                     require("ship").api.ui.abort(true)
                  end,
@@ -72,7 +75,7 @@ local keypressed = function(key)
    elseif(key == "return") then
       if(love.filesystem.isFile(input)) then
          text, line = lume.split(love.filesystem.read(input), "\n"), 1
-         if((love._version_major > 0 or love._version_minor >= 10) and
+         if((major > 0 or minor >= 10) and
             input:find("lua$")) then
             colored_text = colorize(text, editor.colors.lua)
          else
@@ -105,7 +108,7 @@ local draw = function()
    love.graphics.setFont(text_font)
    for i=1, math.floor((love.graphics.getHeight()-100) / font_height) do
       if(text[line+i-1]) then
-         if((love._version_major > 0 or love._version_minor < 10) or
+         if((major > 0 or minor < 10) or
             colored_text[line+i-1] == nil) then
             love.graphics.print(text[line+i-1], 300,
                                 100+(i-scroll)*font_height)
@@ -126,10 +129,11 @@ return function(resume, quit, resize_fn, font_path)
    text_font = love.graphics.newFont(font_path, 14)
    font_height = text_font:getHeight()
    actions.resume, actions.quit = resume, quit
-   love.update,love.keypressed,love.draw,love.textinput=update,keypressed,draw,nil
+   love.update, love.keypressed, love.draw, love.textinput =
+      update, keypressed, draw, nil
    local file = random_choice(files)
    text, line = lume.split(love.filesystem.read(file), "\n"), 1
-   if(love._version_major > 0 or love._version_minor >= 10 and
+   if(major > 0 or minor >= 10 and
       file:match("%.lua")) then
       local keywords = editor.get_mode_prop("lua", "keywords")
       colored_text = colorize(keywords, editor.colors.lua, text)

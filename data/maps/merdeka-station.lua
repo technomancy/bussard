@@ -19,13 +19,15 @@ return {
    hosts = {{5,2,1,1, name="trainee01", os="orb"}},
 
    messages = {
-      {5,4,1,1, msg="Good; you moved forward. Now turn with `left` and go forward that way."},
-      {4,4,1,1, msg="You're getting the idea. A little further, then head around the corner."},
+      {5,4,1,1, msg="Good; you moved forward. Now turn `left` and go that way."},
+      {4,4,1,1, msg="You're getting the idea. " ..
+       "A little further, then head around the corner."},
       {6,5,1,1, msg="All right, so you turned first; that's fine. " ..
           "Use `forward` and more\nturns to reach the terminal."},
       {4,5,1,1, msg="All right, so you turned first; that's fine. " ..
           "Use `forward` and more\nturns to reach the terminal."},
-      {3,3,0.5,0.5, msg="There are shorter aliases for `forward`, `left`, and `right`: `f`, `l`, and `r`"},
+      {3,3,0.5,0.5, msg="There are shorter aliases for " ..
+          "`forward`, `left`, and `right`: `f`, `l`, and `r`"},
       {4.5,2,1,1, msg="You have reached the terminal. Run `login` to connect."},
    },
 }

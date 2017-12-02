@@ -26,8 +26,10 @@ local escape_star = function(self, dt)
 end
 
 local update = function(self, dt)
-   if(not self.from) then self.from = body.find(self.bodies, self.from_name) end
-   if(not self.target) then self.from = body.find(self.bodies, self.target_name) end
+   if(not self.from) then
+      self.from = body.find(self.bodies, self.from_name) end
+   if(not self.target) then
+      self.from = body.find(self.bodies, self.target_name) end
    self.engine_on = false
    local tx = self.target.x + self.target.dx * self.projection
    local ty = self.target.y + self.target.dy * self.projection

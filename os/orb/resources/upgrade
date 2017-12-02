@@ -7,13 +7,15 @@ if(args[1] == "list" and #args == 1) then
    for name,price in pairs(list_upgrades()) do
       print("  " .. name .. ": " .. price)
    end
-   print("\nRun `upgrade manual NAME` to read the manual for an upgrade before buying.")
+   print("\nRun `upgrade manual NAME` to read the manual for an "..
+            "upgrade before buying.")
 elseif(args[1] == "buy" and #args == 2) then
    local success_price, msg = buy_upgrade(args[2])
 
    if(success_price) then
       print("Bought " .. args[2] .. " for " .. success_price .. ".")
-      print("Use man(\"" .. args[2].. "\") on your ship computer to read documentation.")
+      print("Use man(\"" .. args[2].. "\") on your ship computer to "..
+               "read documentation.")
    else
       print(msg)
    end

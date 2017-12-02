@@ -19,7 +19,8 @@ local quit = function()
 end
 
 local is_ctrl = function()
-   return (love.keyboard.isScancodeDown or love.keyboard.isDown)("lctrl", "rctrl", "capslock")
+   local f = love.keyboard.isScancodeDown or love.keyboard.isDown
+   return f("lctrl", "rctrl", "capslock")
 end
 
 love.quit = function()
@@ -31,6 +32,7 @@ end
 local font_path, font_size = "assets/fonts/inconsolata.ttf", 16
 
 local resize = function()
+   -- luacheck: ignore
    local dw, dh = love.window.getDesktopDimensions()
    local w, h = dw*0.9, dh*0.9
 
@@ -199,7 +201,6 @@ love.load = function()
    if(love.graphics) then
       resize()
       font_size = math.max(12, love.graphics.getWidth() / 90)
-      love.graphics.half_hyperbola = require("conics")
       ui.play()
    end
 end

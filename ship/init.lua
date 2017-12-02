@@ -10,6 +10,7 @@ local rovers = require("rovers")
 local mail = require("mail")
 local mission = require("mission")
 local host_fs_proxy = require("host_fs_proxy")
+local half_hyperbola = require("conics")
 
 -- for shuffling systems upon entry
 local asteroid = require("asteroid")
@@ -110,8 +111,9 @@ local sandbox = function(ship)
                        ssh_connect = lume.fn(client.connect, ship),
                        reply = lume.fn(mail.reply, ship),
                        replyable = mail.replyable,
-                       graphics = love.graphics,
-                       image = love.image,
+                       graphics = lume.merge(love.graphics or {},
+                                             {half_hyperbola=half_hyperbola}),
+                       image = lume.clone(love.image),
                        hsv = utils.hsv,
                        flight_draw = require("draw"),
                        is_key_down = love.keyboard.isDown,
@@ -195,7 +197,7 @@ local ship = {
    enter = function(ship, system_name, reseed, suppress_message)
       -- if something was waiting for a key release, let it get its
       -- event, as we are going to change context
-      if love.keyreleased then love.keyreleased() end
+      if(love.keyreleased) then love.keyreleased() end
       ship.locked_to = nil
 
       local from = ship.system_name

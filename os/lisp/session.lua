@@ -1,4 +1,5 @@
-local _, compiler = require("os.lisp.l2l.compat"), require("os.lisp.l2l.compiler")
+local _ = require("os.lisp.l2l.compat")
+local compiler = require("os.lisp.l2l.compiler")
 local reader = require("os.lisp.l2l.reader")
 local lume = require("lume")
 local utils = require("utils")

@@ -304,7 +304,7 @@ return {
 
       -- tables
       coroutine = lume.clone(coroutine),
-      math = lume.merge(lume.clone(math), love.math),
+      math = lume.merge(math, love.math),
       table = lume.clone(table),
       string = lume.clone(string),
       utf8 = lume.clone(utf8),
